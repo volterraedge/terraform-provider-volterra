@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/rate_limiters/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -2224,6 +2237,13 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "ioschemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -2474,6 +2494,66 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "rate_limiterInputHours": {
+            "type": "object",
+            "description": "Input Duration Hours",
+            "title": "Hours",
+            "x-displayname": "Hours",
+            "x-ves-proto-message": "ves.io.schema.rate_limiter.InputHours",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 48\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "48"
+                    }
+                }
+            }
+        },
+        "rate_limiterInputMinutes": {
+            "type": "object",
+            "description": "Input Duration Minutes",
+            "title": "Minutes",
+            "x-displayname": "Minutes",
+            "x-ves-proto-message": "ves.io.schema.rate_limiter.InputMinutes",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 60\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "60"
+                    }
+                }
+            }
+        },
+        "rate_limiterInputSeconds": {
+            "type": "object",
+            "description": "Input Duration Seconds",
+            "title": "Seconds",
+            "x-displayname": "Seconds",
+            "x-ves-proto-message": "ves.io.schema.rate_limiter.InputSeconds",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 300\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "300"
+                    }
+                }
+            }
+        },
         "rate_limiterListResponse": {
             "type": "object",
             "description": "This is the output message of 'List' RPC.",
@@ -2596,9 +2676,37 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "rate_limiterRateLimitBlockAction": {
+            "type": "object",
+            "description": "Action where a user is blocked from making further requests after exceeding rate limit threshold.",
+            "title": "RateLimitBlockAction",
+            "x-displayname": "Rate Limit Block Action",
+            "x-ves-oneof-field-block_duration_choice": "[\"hours\",\"minutes\",\"seconds\"]",
+            "x-ves-proto-message": "ves.io.schema.rate_limiter.RateLimitBlockAction",
+            "properties": {
+                "hours": {
+                    "description": "Exclusive with [minutes seconds]\n User block mitigation time in Hours",
+                    "title": "Hours",
+                    "$ref": "#/definitions/rate_limiterInputHours",
+                    "x-displayname": "Hours"
+                },
+                "minutes": {
+                    "description": "Exclusive with [hours seconds]\n User block mitigation time in Minutes",
+                    "title": "Minutes",
+                    "$ref": "#/definitions/rate_limiterInputMinutes",
+                    "x-displayname": "Minutes"
+                },
+                "seconds": {
+                    "description": "Exclusive with [hours minutes]\n User block mitigation time in Seconds",
+                    "title": "Seconds",
+                    "$ref": "#/definitions/rate_limiterInputSeconds",
+                    "x-displayname": "Seconds"
+                }
+            }
+        },
         "rate_limiterRateLimitPeriodUnit": {
             "type": "string",
-            "description": "Unit for the period per which the rate limit is applied.\n\n - SECOND: Second\n\nRate limit period is 1 second\n - MINUTE: Minute\n\nRate limit period is 1 minute\n - HOUR: Hour\n\nRate limit period is 1 hour\n - DAY: Day\n\nRate limit period is 1 day",
+            "description": "Unit for the period per which the rate limit is applied.\n\n - SECOND: Second\n\nRate limit period unit is seconds\n - MINUTE: Minute\n\nRate limit period unit is minutes\n - HOUR: Hour\n\nRate limit period unit is hours\n - DAY: Day\n\nRate limit period unit is days",
             "title": "RateLimitPeriodUnit",
             "enum": [
                 "SECOND",
@@ -2614,9 +2722,15 @@ var APISwaggerJSON string = `{
             "description": "A tuple consisting of a rate limit period unit and the total number of allowed requests for that period.",
             "title": "RateLimitValue",
             "x-displayname": "Rate Limit Value",
-            "x-ves-displayorder": "2,1,3",
+            "x-ves-oneof-field-action_choice": "[\"action_block\",\"disabled\"]",
             "x-ves-proto-message": "ves.io.schema.rate_limiter.RateLimitValue",
             "properties": {
+                "action_block": {
+                    "description": "Exclusive with [disabled]\n Blocks the user for a specified duration of time",
+                    "title": "Block Action",
+                    "$ref": "#/definitions/rate_limiterRateLimitBlockAction",
+                    "x-displayname": "Block"
+                },
                 "burst_multiplier": {
                     "type": "integer",
                     "description": " The maximum burst of requests to accommodate, expressed as a multiple of the rate.\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 100\n",
@@ -2629,12 +2743,29 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "100"
                     }
                 },
+                "disabled": {
+                    "description": "Exclusive with [action_block]\n",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "period_multiplier": {
+                    "type": "integer",
+                    "description": " This setting, combined with Per Period units, provides a duration \n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
+                    "title": "period_multiplier",
+                    "format": "int64",
+                    "x-displayname": "Periods",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0"
+                    }
+                },
                 "total_number": {
                     "type": "integer",
-                    "description": " The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 8192\n",
+                    "description": " The total number of allowed requests per rate-limiting period.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 8192\n",
                     "title": "total_number",
                     "format": "int64",
-                    "x-displayname": "Number",
+                    "x-displayname": "Number Of Requests",
                     "x-ves-example": "1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {

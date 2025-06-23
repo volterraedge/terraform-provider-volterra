@@ -90,6 +90,15 @@ func (c *CustomAPIGrpcClient) doRPCListAvailableAPIDefinitions(ctx context.Conte
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCSetL7DDoSRPSThreshold(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &SetL7DDoSRPSThresholdReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.SetL7DDoSRPSThresholdReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.SetL7DDoSRPSThreshold(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -131,6 +140,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["GetSecurityConfig"] = ccl.doRPCGetSecurityConfig
 
 	rpcFns["ListAvailableAPIDefinitions"] = ccl.doRPCListAvailableAPIDefinitions
+
+	rpcFns["SetL7DDoSRPSThreshold"] = ccl.doRPCSetL7DDoSRPSThreshold
 
 	ccl.rpcFns = rpcFns
 
@@ -652,6 +663,91 @@ func (c *CustomAPIRestClient) doRPCListAvailableAPIDefinitions(ctx context.Conte
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCSetL7DDoSRPSThreshold(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &SetL7DDoSRPSThresholdReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.http_loadbalancer.SetL7DDoSRPSThresholdReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("rps_threshold", fmt.Sprintf("%v", req.RpsThreshold))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &SetL7DDoSRPSThresholdRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.http_loadbalancer.SetL7DDoSRPSThresholdRsp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -688,6 +784,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["ListAvailableAPIDefinitions"] = ccl.doRPCListAvailableAPIDefinitions
 
+	rpcFns["SetL7DDoSRPSThreshold"] = ccl.doRPCSetL7DDoSRPSThreshold
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -723,6 +821,10 @@ func (c *customAPIInprocClient) GetSecurityConfig(ctx context.Context, in *GetSe
 func (c *customAPIInprocClient) ListAvailableAPIDefinitions(ctx context.Context, in *ListAvailableAPIDefinitionsReq, opts ...grpc.CallOption) (*ListAvailableAPIDefinitionsResp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.ListAvailableAPIDefinitions")
 	return c.CustomAPIServer.ListAvailableAPIDefinitions(ctx, in)
+}
+func (c *customAPIInprocClient) SetL7DDoSRPSThreshold(ctx context.Context, in *SetL7DDoSRPSThresholdReq, opts ...grpc.CallOption) (*SetL7DDoSRPSThresholdRsp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.http_loadbalancer.CustomAPI.SetL7DDoSRPSThreshold")
+	return c.CustomAPIServer.SetL7DDoSRPSThreshold(ctx, in)
 }
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
@@ -1040,6 +1142,55 @@ func (s *customAPISrv) ListAvailableAPIDefinitions(ctx context.Context, in *List
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsResp", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) SetL7DDoSRPSThreshold(ctx context.Context, in *SetL7DDoSRPSThresholdReq) (*SetL7DDoSRPSThresholdRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.views.http_loadbalancer.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *SetL7DDoSRPSThresholdRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.SetL7DDoSRPSThresholdReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.SetL7DDoSRPSThreshold' operation on 'http_loadbalancer'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.views.http_loadbalancer.CustomAPI.SetL7DDoSRPSThreshold"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.SetL7DDoSRPSThreshold(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.http_loadbalancer.SetL7DDoSRPSThresholdRsp", rsp)...)
 
 	return rsp, nil
 }
@@ -1636,6 +1787,106 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "HTTP Load Balancer Custom API",
             "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/http_loadbalancers/{name}/l7ddos_rps_threshold": {
+            "post": {
+                "summary": "Set L7 DDoS RPS Threshold",
+                "description": "Sets the L7 DDoS RPS threshold for HTTP load balancer",
+                "operationId": "ves.io.schema.views.http_loadbalancer.CustomAPI.SetL7DDoSRPSThreshold",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/http_loadbalancerSetL7DDoSRPSThresholdRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"default\"\nx-required\nNamespace scope of the request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Name\n\nx-example: \"lb_name\"\nx-required\nName of the HTTP loadbalancer",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/http_loadbalancerSetL7DDoSRPSThresholdReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-customapi-setl7ddosrpsthreshold"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.CustomAPI.SetL7DDoSRPSThreshold"
+            },
+            "x-displayname": "HTTP Load Balancer Custom API",
+            "x-ves-proto-service": "ves.io.schema.views.http_loadbalancer.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
     },
     "definitions": {
@@ -1924,6 +2175,57 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Available API Definitions"
                 }
             }
+        },
+        "http_loadbalancerSetL7DDoSRPSThresholdReq": {
+            "type": "object",
+            "description": "Request to set L7 DDoS RPS Threshold",
+            "title": "Set L7 DDoS RPS Threshold Request",
+            "x-displayname": "Set L7 DDoS RPS Threshold Request",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.SetL7DDoSRPSThresholdReq",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the HTTP loadbalancer\n\nExample: - \"lb_name\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "lb_name",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace scope of the request\n\nExample: - \"default\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "default",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "rps_threshold": {
+                    "type": "integer",
+                    "description": " The new RPS threshold to set\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 10000\n",
+                    "title": "RPS Threshold",
+                    "format": "int64",
+                    "x-displayname": "RPS Threshold",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "10000"
+                    }
+                }
+            }
+        },
+        "http_loadbalancerSetL7DDoSRPSThresholdRsp": {
+            "type": "object",
+            "description": "Response message for setting the RPS threshold",
+            "title": "SetL7DDoSRPSThresholdRsp",
+            "x-displayname": "Set RPS Threshold Response",
+            "x-ves-proto-message": "ves.io.schema.views.http_loadbalancer.SetL7DDoSRPSThresholdRsp"
         },
         "ioschemaEmpty": {
             "type": "object",

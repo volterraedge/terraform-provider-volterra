@@ -3033,7 +3033,7 @@ var APISwaggerJSON string = `{
             "title": "Rule Specification",
             "x-displayname": "Rule Specification",
             "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
-            "x-ves-oneof-field-scope_choice": "[\"cloud_connect\",\"network_interface\",\"segment\",\"virtual_network\"]",
+            "x-ves-oneof-field-scope_choice": "[\"cloud_connect\",\"node_interface\",\"segment\",\"virtual_network\"]",
             "x-ves-proto-message": "ves.io.schema.nat_policy.RuleType",
             "properties": {
                 "action": {
@@ -3047,7 +3047,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "cloud_connect": {
-                    "description": "Exclusive with [network_interface segment virtual_network]\n NAT rule is applied to packet coming from cloud connect",
+                    "description": "Exclusive with [node_interface segment virtual_network]\n NAT rule is applied to packet coming from cloud connect",
                     "title": "cloud connect",
                     "$ref": "#/definitions/schemaCloudConnectRefType",
                     "x-displayname": "Cloud Connect"
@@ -3081,20 +3081,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "network_interface": {
-                    "description": "Exclusive with [cloud_connect segment virtual_network]\n NAT rule is applied to packet coming from interface. If \"Action\" is \"Source Nat\", this scope should not be used",
-                    "title": "interface",
-                    "$ref": "#/definitions/schemaNetworkInterfaceRefType",
-                    "x-displayname": "Interface"
+                "node_interface": {
+                    "description": "Exclusive with [cloud_connect segment virtual_network]\n NAT rule is applied to packet coming from one or more interfaces of nodes",
+                    "title": "node interface",
+                    "$ref": "#/definitions/schemaNodeInterfaceType",
+                    "x-displayname": "Node Interface"
                 },
                 "segment": {
-                    "description": "Exclusive with [cloud_connect network_interface virtual_network]\n NAT rule is applied to packet in the segment. If \"Action\" is \"Virtual Subnet NAT\", this scope should not be used",
+                    "description": "Exclusive with [cloud_connect node_interface virtual_network]\n NAT rule is applied to packet in the segment",
                     "title": "segment",
                     "$ref": "#/definitions/schemaSegmentRefType",
                     "x-displayname": "Segment"
                 },
                 "virtual_network": {
-                    "description": "Exclusive with [cloud_connect network_interface segment]\n NAT rule is applied to packet in the virtual network. If \"Action\" is \"Virtual Subnet NAT\", this scope should not be used",
+                    "description": "Exclusive with [cloud_connect node_interface segment]\n NAT rule is applied to packet in the virtual network",
                     "title": "virtual network",
                     "$ref": "#/definitions/schemaVirtualNetworkReferenceType",
                     "x-displayname": "Virtual Network"
@@ -3358,24 +3358,66 @@ var APISwaggerJSON string = `{
         },
         "schemaNetworkInterfaceRefType": {
             "type": "object",
-            "description": "Reference to Network Interface Object",
+            "description": "x-displayName: \"NetworkInterface Reference Type\"\nReference to Network Interface Object",
             "title": "NetworkInterfaceRefType",
-            "x-displayname": "NetworkInterface Reference Type",
-            "x-ves-proto-message": "ves.io.schema.NetworkInterfaceRefType",
             "properties": {
                 "refs": {
                     "type": "array",
-                    "description": " Reference to Network Interface Object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": "x-displayName: \"Network Interface\"\nx-required\nReference to Network Interface Object",
                     "title": "Network Interface",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                }
+            }
+        },
+        "schemaNodeInterfaceInfo": {
+            "type": "object",
+            "description": "On a multinode site, this list holds the nodes and corresponding tunnel transport interface",
+            "title": "NodeInterfaceInfo",
+            "x-displayname": "Node Interface Info",
+            "x-ves-proto-message": "ves.io.schema.NodeInterfaceInfo",
+            "properties": {
+                "interface": {
+                    "type": "array",
+                    "description": " Interface reference on this node\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Interface",
                     "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
-                    "x-displayname": "Network Interface",
-                    "x-ves-required": "true",
+                    "x-displayname": "Interface",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "node": {
+                    "type": "string",
+                    "description": " Node name on this site\n\nExample: - \"master-0\"-",
+                    "title": "Node",
+                    "x-displayname": "Node",
+                    "x-ves-example": "master-0"
+                }
+            }
+        },
+        "schemaNodeInterfaceType": {
+            "type": "object",
+            "description": "On multinode site, this type holds the information about per node interfaces",
+            "title": "NodeInterfaceType",
+            "x-displayname": "NodeInterfaceType",
+            "x-ves-proto-message": "ves.io.schema.NodeInterfaceType",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "description": " On a multinode site, this list holds the nodes and corresponding networking_interface\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n",
+                    "title": "NodeInterfaceInfo",
+                    "maxItems": 8,
+                    "items": {
+                        "$ref": "#/definitions/schemaNodeInterfaceInfo"
+                    },
+                    "x-displayname": "NodeInterfaceInfo",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8"
                     }
                 }
             }

@@ -305,7 +305,12 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 				if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field keys")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					labelMatcher.Keys = ls
 				}
@@ -320,7 +325,12 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field ports")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		createSpec.Ports = ls
 
@@ -338,7 +348,7 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	remoteEndpointTypeFound := false
 
-	if v, ok := d.GetOk("ip_prefix_set"); ok && !remoteEndpointTypeFound {
+	if v, ok := d.GetOk("ip_prefix_set"); ok && !isIntfNil(v) && !remoteEndpointTypeFound {
 
 		remoteEndpointTypeFound = true
 		remoteEndpointInt := &ves_io_schema_network_policy_rule.CreateSpecType_IpPrefixSet{}
@@ -387,7 +397,7 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("prefix"); ok && !remoteEndpointTypeFound {
+	if v, ok := d.GetOk("prefix"); ok && !isIntfNil(v) && !remoteEndpointTypeFound {
 
 		remoteEndpointTypeFound = true
 		remoteEndpointInt := &ves_io_schema_network_policy_rule.CreateSpecType_Prefix{}
@@ -403,7 +413,12 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					remoteEndpointInt.Prefix.Ipv6Prefix = ls
 
@@ -413,7 +428,12 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					remoteEndpointInt.Prefix.Prefix = ls
 
@@ -424,7 +444,7 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("prefix_selector"); ok && !remoteEndpointTypeFound {
+	if v, ok := d.GetOk("prefix_selector"); ok && !isIntfNil(v) && !remoteEndpointTypeFound {
 
 		remoteEndpointTypeFound = true
 		remoteEndpointInt := &ves_io_schema_network_policy_rule.CreateSpecType_PrefixSelector{}
@@ -440,7 +460,12 @@ func resourceVolterraNetworkPolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field expressions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					remoteEndpointInt.PrefixSelector.Expressions = ls
 
@@ -588,7 +613,12 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 				if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field keys")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					labelMatcher.Keys = ls
 				}
@@ -602,7 +632,12 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field ports")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		updateSpec.Ports = ls
 
@@ -617,7 +652,7 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	remoteEndpointTypeFound := false
 
-	if v, ok := d.GetOk("ip_prefix_set"); ok && !remoteEndpointTypeFound {
+	if v, ok := d.GetOk("ip_prefix_set"); ok && !isIntfNil(v) && !remoteEndpointTypeFound {
 
 		remoteEndpointTypeFound = true
 		remoteEndpointInt := &ves_io_schema_network_policy_rule.ReplaceSpecType_IpPrefixSet{}
@@ -666,7 +701,7 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("prefix"); ok && !remoteEndpointTypeFound {
+	if v, ok := d.GetOk("prefix"); ok && !isIntfNil(v) && !remoteEndpointTypeFound {
 
 		remoteEndpointTypeFound = true
 		remoteEndpointInt := &ves_io_schema_network_policy_rule.ReplaceSpecType_Prefix{}
@@ -682,7 +717,12 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					remoteEndpointInt.Prefix.Ipv6Prefix = ls
 
@@ -692,7 +732,12 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					remoteEndpointInt.Prefix.Prefix = ls
 
@@ -703,7 +748,7 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("prefix_selector"); ok && !remoteEndpointTypeFound {
+	if v, ok := d.GetOk("prefix_selector"); ok && !isIntfNil(v) && !remoteEndpointTypeFound {
 
 		remoteEndpointTypeFound = true
 		remoteEndpointInt := &ves_io_schema_network_policy_rule.ReplaceSpecType_PrefixSelector{}
@@ -719,7 +764,12 @@ func resourceVolterraNetworkPolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field expressions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					remoteEndpointInt.PrefixSelector.Expressions = ls
 
@@ -756,5 +806,8 @@ func resourceVolterraNetworkPolicyRuleDelete(d *schema.ResourceData, meta interf
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra NetworkPolicyRule obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_network_policy_rule.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_network_policy_rule.ObjectType, namespace, name, opts...)
 }

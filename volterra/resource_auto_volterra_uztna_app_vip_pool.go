@@ -80,7 +80,7 @@ func resourceVolterraUztnaAppVipPool() *schema.Resource {
 
 										Type: schema.TypeList,
 
-										Required: true,
+										Optional: true,
 										Elem: &schema.Schema{
 											Type: schema.TypeString,
 										},
@@ -120,76 +120,6 @@ func resourceVolterraUztnaAppVipPool() *schema.Resource {
 															"addr": {
 																Type:     schema.TypeString,
 																Optional: true,
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"ipv6_vip": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"ipv6_prefix": {
-
-										Type: schema.TypeList,
-
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Schema{
-											Type: schema.TypeString,
-										},
-									},
-
-									"vip6_range": {
-
-										Type:       schema.TypeList,
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"end_address": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"addr": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-														},
-													},
-												},
-
-												"start_address": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"addr": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -288,7 +218,12 @@ func resourceVolterraUztnaAppVipPoolCreate(d *schema.ResourceData, meta interfac
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefix")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								ipVipInt.Ipv4Vip.Prefix = ls
 
@@ -327,84 +262,6 @@ func resourceVolterraUztnaAppVipPoolCreate(d *schema.ResourceData, meta interfac
 											sl := v.([]interface{})
 											startAddress := &ves_io_schema.Ipv4AddressType{}
 											vip4Range[i].StartAddress = startAddress
-											for _, set := range sl {
-												if set != nil {
-													startAddressMapStrToI := set.(map[string]interface{})
-
-													if w, ok := startAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
-														startAddress.Addr = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-									}
-								}
-
-							}
-
-						}
-					}
-
-				}
-
-				if v, ok := ipVersionMapStrToI["ipv6_vip"]; ok && !isIntfNil(v) && !ipVipTypeFound {
-
-					ipVipTypeFound = true
-					ipVipInt := &ves_io_schema_uztna_uztna_app_vip_pool.IPVersion_Ipv6Vip{}
-					ipVipInt.Ipv6Vip = &ves_io_schema_uztna_uztna_app_vip_pool.IPV6ApplicationVIP{}
-					ipVersion.IpVip = ipVipInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								ipVipInt.Ipv6Vip.Ipv6Prefix = ls
-
-							}
-
-							if v, ok := cs["vip6_range"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								vip6Range := make([]*ves_io_schema_uztna_uztna_app_vip_pool.VIP6PoolRange, len(sl))
-								ipVipInt.Ipv6Vip.Vip6Range = vip6Range
-								for i, set := range sl {
-									if set != nil {
-										vip6Range[i] = &ves_io_schema_uztna_uztna_app_vip_pool.VIP6PoolRange{}
-										vip6RangeMapStrToI := set.(map[string]interface{})
-
-										if v, ok := vip6RangeMapStrToI["end_address"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											endAddress := &ves_io_schema.Ipv6AddressType{}
-											vip6Range[i].EndAddress = endAddress
-											for _, set := range sl {
-												if set != nil {
-													endAddressMapStrToI := set.(map[string]interface{})
-
-													if w, ok := endAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
-														endAddress.Addr = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := vip6RangeMapStrToI["start_address"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											startAddress := &ves_io_schema.Ipv6AddressType{}
-											vip6Range[i].StartAddress = startAddress
 											for _, set := range sl {
 												if set != nil {
 													startAddressMapStrToI := set.(map[string]interface{})
@@ -559,7 +416,12 @@ func resourceVolterraUztnaAppVipPoolUpdate(d *schema.ResourceData, meta interfac
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefix")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								ipVipInt.Ipv4Vip.Prefix = ls
 
@@ -621,84 +483,6 @@ func resourceVolterraUztnaAppVipPoolUpdate(d *schema.ResourceData, meta interfac
 
 				}
 
-				if v, ok := ipVersionMapStrToI["ipv6_vip"]; ok && !isIntfNil(v) && !ipVipTypeFound {
-
-					ipVipTypeFound = true
-					ipVipInt := &ves_io_schema_uztna_uztna_app_vip_pool.IPVersion_Ipv6Vip{}
-					ipVipInt.Ipv6Vip = &ves_io_schema_uztna_uztna_app_vip_pool.IPV6ApplicationVIP{}
-					ipVersion.IpVip = ipVipInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["ipv6_prefix"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								ipVipInt.Ipv6Vip.Ipv6Prefix = ls
-
-							}
-
-							if v, ok := cs["vip6_range"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								vip6Range := make([]*ves_io_schema_uztna_uztna_app_vip_pool.VIP6PoolRange, len(sl))
-								ipVipInt.Ipv6Vip.Vip6Range = vip6Range
-								for i, set := range sl {
-									if set != nil {
-										vip6Range[i] = &ves_io_schema_uztna_uztna_app_vip_pool.VIP6PoolRange{}
-										vip6RangeMapStrToI := set.(map[string]interface{})
-
-										if v, ok := vip6RangeMapStrToI["end_address"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											endAddress := &ves_io_schema.Ipv6AddressType{}
-											vip6Range[i].EndAddress = endAddress
-											for _, set := range sl {
-												if set != nil {
-													endAddressMapStrToI := set.(map[string]interface{})
-
-													if w, ok := endAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
-														endAddress.Addr = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := vip6RangeMapStrToI["start_address"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											startAddress := &ves_io_schema.Ipv6AddressType{}
-											vip6Range[i].StartAddress = startAddress
-											for _, set := range sl {
-												if set != nil {
-													startAddressMapStrToI := set.(map[string]interface{})
-
-													if w, ok := startAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
-														startAddress.Addr = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-									}
-								}
-
-							}
-
-						}
-					}
-
-				}
-
 			}
 		}
 
@@ -730,5 +514,8 @@ func resourceVolterraUztnaAppVipPoolDelete(d *schema.ResourceData, meta interfac
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra UztnaAppVipPool obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_uztna_uztna_app_vip_pool.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_uztna_uztna_app_vip_pool.ObjectType, namespace, name, opts...)
 }

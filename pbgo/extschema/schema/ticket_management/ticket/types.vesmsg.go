@@ -187,6 +187,26 @@ func (v *ValidateGlobalSpecType) TicketTrackingSystemValidationRuleHandler(rules
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) AuthorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for author")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) IssueKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for issue_key")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -201,10 +221,28 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["author"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("author"))
+		if err := fv(ctx, m.GetAuthor(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["external_id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("external_id"))
 		if err := fv(ctx, m.GetExternalId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["issue_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("issue_key"))
+		if err := fv(ctx, m.GetIssueKey(), vOpts...); err != nil {
 			return err
 		}
 
@@ -276,6 +314,28 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["ticket_tracking_system"] = vFn
+
+	vrhAuthor := v.AuthorValidationRuleHandler
+	rulesAuthor := map[string]string{
+		"ves.io.schema.rules.string.email": "true",
+	}
+	vFn, err = vrhAuthor(rulesAuthor)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.author: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["author"] = vFn
+
+	vrhIssueKey := v.IssueKeyValidationRuleHandler
+	rulesIssueKey := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhIssueKey(rulesIssueKey)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.issue_key: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["issue_key"] = vFn
 
 	return v
 }()

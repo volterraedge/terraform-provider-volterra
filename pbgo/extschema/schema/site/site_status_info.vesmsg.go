@@ -24,6 +24,251 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *CheckSiteExistRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CheckSiteExistRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CheckSiteExistRequest) DeepCopy() *CheckSiteExistRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CheckSiteExistRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CheckSiteExistRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CheckSiteExistRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CheckSiteExistRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCheckSiteExistRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCheckSiteExistRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCheckSiteExistRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCheckSiteExistRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCheckSiteExistRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CheckSiteExistRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CheckSiteExistRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCheckSiteExistRequestValidator = func() *ValidateCheckSiteExistRequest {
+	v := &ValidateCheckSiteExistRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CheckSiteExistRequest.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CheckSiteExistRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CheckSiteExistRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
+	return v
+}()
+
+func CheckSiteExistRequestValidator() db.Validator {
+	return DefaultCheckSiteExistRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CheckSiteExistResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CheckSiteExistResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CheckSiteExistResponse) DeepCopy() *CheckSiteExistResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CheckSiteExistResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CheckSiteExistResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CheckSiteExistResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CheckSiteExistResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCheckSiteExistResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCheckSiteExistResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CheckSiteExistResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CheckSiteExistResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCheckSiteExistResponseValidator = func() *ValidateCheckSiteExistResponse {
+	v := &ValidateCheckSiteExistResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CheckSiteExistResponseValidator() db.Validator {
+	return DefaultCheckSiteExistResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SiteStatusMetricsRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

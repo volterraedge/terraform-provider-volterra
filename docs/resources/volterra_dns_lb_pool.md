@@ -17,23 +17,18 @@ Example Usage
 
 ```hcl
 resource "volterra_dns_lb_pool" "example" {
-  name                = "acmecorp-web"
-  namespace           = "staging"
+  name      = "acmecorp-web"
+  namespace = "staging"
+
   load_balancing_mode = ["load_balancing_mode"]
 
   // One of the arguments from this list "a_pool aaaa_pool cname_pool mx_pool srv_pool" must be set
 
-  a_pool {
-    // One of the arguments from this list "disable_health_check health_check" must be set
-
-    disable_health_check = true
-
+  mx_pool {
     max_answers = "1"
 
     members {
-      disable = true
-
-      ip_endpoint = "8.8.8.8"
+      domain = "mail.example.com"
 
       name = "web server 1"
 

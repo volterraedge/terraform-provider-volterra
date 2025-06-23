@@ -505,5 +505,8 @@ func resourceVolterraUztnaApplicationGroupDelete(d *schema.ResourceData, meta in
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra UztnaApplicationGroup obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_uztna_application_uztna_application_group.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_uztna_application_uztna_application_group.ObjectType, namespace, name, opts...)
 }

@@ -155,13 +155,6 @@ func resourceVolterraDnsLoadBalancer() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"nxdomain": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
 									"pool": {
 
 										Type:     schema.TypeList,
@@ -568,18 +561,6 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 
 							actionChoiceTypeFound := false
 
-							if v, ok := rulesMapStrToI["nxdomain"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
-
-								actionChoiceTypeFound = true
-
-								if v.(bool) {
-									actionChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_Nxdomain{}
-									actionChoiceInt.Nxdomain = &ves_io_schema.Empty{}
-									rules[i].ActionChoice = actionChoiceInt
-								}
-
-							}
-
 							if v, ok := rulesMapStrToI["pool"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
 
 								actionChoiceTypeFound = true
@@ -709,7 +690,12 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field expressions")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											clientChoiceInt.GeoLocationLabelSelector.Expressions = ls
 
@@ -777,7 +763,12 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											clientChoiceInt.IpPrefixList.IpPrefixes = ls
 
@@ -787,7 +778,12 @@ func resourceVolterraDnsLoadBalancerCreate(d *schema.ResourceData, meta interfac
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											clientChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
@@ -1092,18 +1088,6 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 
 							actionChoiceTypeFound := false
 
-							if v, ok := rulesMapStrToI["nxdomain"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
-
-								actionChoiceTypeFound = true
-
-								if v.(bool) {
-									actionChoiceInt := &ves_io_schema_dns_load_balancer.LoadBalancingRule_Nxdomain{}
-									actionChoiceInt.Nxdomain = &ves_io_schema.Empty{}
-									rules[i].ActionChoice = actionChoiceInt
-								}
-
-							}
-
 							if v, ok := rulesMapStrToI["pool"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
 
 								actionChoiceTypeFound = true
@@ -1233,7 +1217,12 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field expressions")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											clientChoiceInt.GeoLocationLabelSelector.Expressions = ls
 
@@ -1301,7 +1290,12 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											clientChoiceInt.IpPrefixList.IpPrefixes = ls
 
@@ -1311,7 +1305,12 @@ func resourceVolterraDnsLoadBalancerUpdate(d *schema.ResourceData, meta interfac
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											clientChoiceInt.IpPrefixList.Ipv6Prefixes = ls
 
@@ -1417,5 +1416,8 @@ func resourceVolterraDnsLoadBalancerDelete(d *schema.ResourceData, meta interfac
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra DnsLoadBalancer obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_dns_load_balancer.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_dns_load_balancer.ObjectType, namespace, name, opts...)
 }

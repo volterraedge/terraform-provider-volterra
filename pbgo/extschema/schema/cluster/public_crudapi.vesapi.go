@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/clusters/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -2477,6 +2490,11 @@ var APISwaggerJSON string = `{
                     "description": " TLS parameters to access upstream endpoints for this cluster",
                     "$ref": "#/definitions/schemaUpstreamTlsParamsType",
                     "x-displayname": "TLS Parameters"
+                },
+                "upstream_conn_pool_reuse_type": {
+                    "description": " Select upstream connection pool reuse state for every downstream connection\n This configuration choice is for HTTP(S) LB only.",
+                    "$ref": "#/definitions/schemaUpstreamConnPoolReuseType",
+                    "x-displayname": "Select upstream connection pool reuse state"
                 }
             }
         },
@@ -2798,6 +2816,11 @@ var APISwaggerJSON string = `{
                     "description": " TLS parameters to access upstream endpoints for this cluster",
                     "$ref": "#/definitions/schemaUpstreamTlsParamsType",
                     "x-displayname": "TLS Parameters"
+                },
+                "upstream_conn_pool_reuse_type": {
+                    "description": " Select upstream connection pool reuse state for every downstream connection\n This configuration choice is for HTTP(S) LB only.",
+                    "$ref": "#/definitions/schemaUpstreamConnPoolReuseType",
+                    "x-displayname": "Select upstream connection pool reuse state"
                 }
             }
         },
@@ -3207,6 +3230,11 @@ var APISwaggerJSON string = `{
                     "description": " TLS parameters to access upstream endpoints for this cluster",
                     "$ref": "#/definitions/schemaUpstreamTlsParamsType",
                     "x-displayname": "TLS Parameters"
+                },
+                "upstream_conn_pool_reuse_type": {
+                    "description": " Select upstream connection pool reuse state for every downstream connection\n This configuration choice is for HTTP(S) LB only.",
+                    "$ref": "#/definitions/schemaUpstreamConnPoolReuseType",
+                    "x-displayname": "Select upstream connection pool reuse state"
                 }
             }
         },
@@ -4291,6 +4319,28 @@ var APISwaggerJSON string = `{
                     "title": "validation_params",
                     "$ref": "#/definitions/schemaTlsValidationParamsType",
                     "x-displayname": "Root CA Validation parameters"
+                }
+            }
+        },
+        "schemaUpstreamConnPoolReuseType": {
+            "type": "object",
+            "description": "Select upstream connection pool reuse state for every downstream connection. This configuration choice is for HTTP(S) LB only.",
+            "title": "UpstreamConnPoolReuseType",
+            "x-displayname": "Select upstream connection pool reuse state",
+            "x-ves-oneof-field-map_downstream_to_upstream_conn_pool_type": "[\"disable_conn_pool_reuse\",\"enable_conn_pool_reuse\"]",
+            "x-ves-proto-message": "ves.io.schema.UpstreamConnPoolReuseType",
+            "properties": {
+                "disable_conn_pool_reuse": {
+                    "description": "Exclusive with [enable_conn_pool_reuse]\n Open new upstream connection pool for every new downstream connection",
+                    "title": "disable_conn_pool_reuse",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Connection Pool Reuse"
+                },
+                "enable_conn_pool_reuse": {
+                    "description": "Exclusive with [disable_conn_pool_reuse]\n Reuse upstream connection pool for multiple downstream connections",
+                    "title": "enable_conn_pool_reuse",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Connection Pool Reuse"
                 }
             }
         },

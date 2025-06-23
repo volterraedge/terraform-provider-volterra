@@ -349,81 +349,10 @@ func resourceVolterraK8SPodSecurityPolicy() *schema.Resource {
 							Optional: true,
 						},
 
-						"runtime_class": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"allowed_runtime_class_names": {
-
-										Type: schema.TypeList,
-
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Schema{
-											Type: schema.TypeString,
-										},
-									},
-
-									"default_runtime_class_name": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-								},
-							},
-						},
-
 						"no_se_linux_options": {
 
 							Type:     schema.TypeBool,
 							Optional: true,
-						},
-
-						"se_linux_options": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"level": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"role": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"rule": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"type": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"user": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-								},
-							},
 						},
 
 						"no_supplemental_groups": {
@@ -589,7 +518,7 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 
 	configMethodChoiceTypeFound := false
 
-	if v, ok := d.GetOk("psp_spec"); ok && !configMethodChoiceTypeFound {
+	if v, ok := d.GetOk("psp_spec"); ok && !isIntfNil(v) && !configMethodChoiceTypeFound {
 
 		configMethodChoiceTypeFound = true
 		configMethodChoiceInt := &ves_io_schema_k8s_pod_security_policy.CreateSpecType_PspSpec{}
@@ -625,7 +554,12 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field capabilities")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								allowedCapabilitiesChoiceInt.AllowedCapabilities.Capabilities = ls
 
@@ -652,7 +586,12 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field allowed_csi_drivers")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					configMethodChoiceInt.PspSpec.AllowedCsiDrivers = ls
 
@@ -662,7 +601,12 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field allowed_flex_volumes")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					configMethodChoiceInt.PspSpec.AllowedFlexVolumes = ls
 
@@ -695,7 +639,12 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field allowed_proc_mounts")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					configMethodChoiceInt.PspSpec.AllowedProcMounts = ls
 
@@ -705,7 +654,12 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field allowed_unsafe_sysctls")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					configMethodChoiceInt.PspSpec.AllowedUnsafeSysctls = ls
 
@@ -735,7 +689,12 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field capabilities")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								defaultCapabilitiesChoiceInt.DefaultCapabilities.Capabilities = ls
 
@@ -776,7 +735,12 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field capabilities")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								dropCapabilitiesChoiceInt.DropCapabilities.Capabilities = ls
 
@@ -803,7 +767,12 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field forbidden_sysctls")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					configMethodChoiceInt.PspSpec.ForbiddenSysctls = ls
 
@@ -979,39 +948,6 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 
 				}
 
-				if v, ok := cs["runtime_class"]; ok && !isIntfNil(v) && !runtimeClassChoiceTypeFound {
-
-					runtimeClassChoiceTypeFound = true
-					runtimeClassChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RuntimeClass{}
-					runtimeClassChoiceInt.RuntimeClass = &ves_io_schema_k8s_pod_security_policy.RuntimeClassStrategyOptions{}
-					configMethodChoiceInt.PspSpec.RuntimeClassChoice = runtimeClassChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["allowed_runtime_class_names"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								runtimeClassChoiceInt.RuntimeClass.AllowedRuntimeClassNames = ls
-
-							}
-
-							if v, ok := cs["default_runtime_class_name"]; ok && !isIntfNil(v) {
-
-								runtimeClassChoiceInt.RuntimeClass.DefaultRuntimeClassName = v.(string)
-
-							}
-
-						}
-					}
-
-				}
-
 				seLinuxChoiceTypeFound := false
 
 				if v, ok := cs["no_se_linux_options"]; ok && !isIntfNil(v) && !seLinuxChoiceTypeFound {
@@ -1022,53 +958,6 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 						seLinuxChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoSeLinuxOptions{}
 						seLinuxChoiceInt.NoSeLinuxOptions = &ves_io_schema.Empty{}
 						configMethodChoiceInt.PspSpec.SeLinuxChoice = seLinuxChoiceInt
-					}
-
-				}
-
-				if v, ok := cs["se_linux_options"]; ok && !isIntfNil(v) && !seLinuxChoiceTypeFound {
-
-					seLinuxChoiceTypeFound = true
-					seLinuxChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_SeLinuxOptions{}
-					seLinuxChoiceInt.SeLinuxOptions = &ves_io_schema_k8s_pod_security_policy.SELinuxStrategyOptions{}
-					configMethodChoiceInt.PspSpec.SeLinuxChoice = seLinuxChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["level"]; ok && !isIntfNil(v) {
-
-								seLinuxChoiceInt.SeLinuxOptions.Level = v.(string)
-
-							}
-
-							if v, ok := cs["role"]; ok && !isIntfNil(v) {
-
-								seLinuxChoiceInt.SeLinuxOptions.Role = v.(string)
-
-							}
-
-							if v, ok := cs["rule"]; ok && !isIntfNil(v) {
-
-								seLinuxChoiceInt.SeLinuxOptions.Rule = v.(string)
-
-							}
-
-							if v, ok := cs["type"]; ok && !isIntfNil(v) {
-
-								seLinuxChoiceInt.SeLinuxOptions.Type = v.(string)
-
-							}
-
-							if v, ok := cs["user"]; ok && !isIntfNil(v) {
-
-								seLinuxChoiceInt.SeLinuxOptions.User = v.(string)
-
-							}
-
-						}
 					}
 
 				}
@@ -1197,7 +1086,12 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field volumes")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					configMethodChoiceInt.PspSpec.Volumes = ls
 
@@ -1208,7 +1102,7 @@ func resourceVolterraK8SPodSecurityPolicyCreate(d *schema.ResourceData, meta int
 
 	}
 
-	if v, ok := d.GetOk("yaml"); ok && !configMethodChoiceTypeFound {
+	if v, ok := d.GetOk("yaml"); ok && !isIntfNil(v) && !configMethodChoiceTypeFound {
 
 		configMethodChoiceTypeFound = true
 		configMethodChoiceInt := &ves_io_schema_k8s_pod_security_policy.CreateSpecType_Yaml{}
@@ -1320,7 +1214,7 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 
 	configMethodChoiceTypeFound := false
 
-	if v, ok := d.GetOk("psp_spec"); ok && !configMethodChoiceTypeFound {
+	if v, ok := d.GetOk("psp_spec"); ok && !isIntfNil(v) && !configMethodChoiceTypeFound {
 
 		configMethodChoiceTypeFound = true
 		configMethodChoiceInt := &ves_io_schema_k8s_pod_security_policy.ReplaceSpecType_PspSpec{}
@@ -1356,7 +1250,12 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field capabilities")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								allowedCapabilitiesChoiceInt.AllowedCapabilities.Capabilities = ls
 
@@ -1383,7 +1282,12 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field allowed_csi_drivers")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					configMethodChoiceInt.PspSpec.AllowedCsiDrivers = ls
 
@@ -1393,7 +1297,12 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field allowed_flex_volumes")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					configMethodChoiceInt.PspSpec.AllowedFlexVolumes = ls
 
@@ -1426,7 +1335,12 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field allowed_proc_mounts")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					configMethodChoiceInt.PspSpec.AllowedProcMounts = ls
 
@@ -1436,7 +1350,12 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field allowed_unsafe_sysctls")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					configMethodChoiceInt.PspSpec.AllowedUnsafeSysctls = ls
 
@@ -1466,7 +1385,12 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field capabilities")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								defaultCapabilitiesChoiceInt.DefaultCapabilities.Capabilities = ls
 
@@ -1507,7 +1431,12 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field capabilities")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								dropCapabilitiesChoiceInt.DropCapabilities.Capabilities = ls
 
@@ -1534,7 +1463,12 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field forbidden_sysctls")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					configMethodChoiceInt.PspSpec.ForbiddenSysctls = ls
 
@@ -1710,39 +1644,6 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 
 				}
 
-				if v, ok := cs["runtime_class"]; ok && !isIntfNil(v) && !runtimeClassChoiceTypeFound {
-
-					runtimeClassChoiceTypeFound = true
-					runtimeClassChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_RuntimeClass{}
-					runtimeClassChoiceInt.RuntimeClass = &ves_io_schema_k8s_pod_security_policy.RuntimeClassStrategyOptions{}
-					configMethodChoiceInt.PspSpec.RuntimeClassChoice = runtimeClassChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["allowed_runtime_class_names"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								runtimeClassChoiceInt.RuntimeClass.AllowedRuntimeClassNames = ls
-
-							}
-
-							if v, ok := cs["default_runtime_class_name"]; ok && !isIntfNil(v) {
-
-								runtimeClassChoiceInt.RuntimeClass.DefaultRuntimeClassName = v.(string)
-
-							}
-
-						}
-					}
-
-				}
-
 				seLinuxChoiceTypeFound := false
 
 				if v, ok := cs["no_se_linux_options"]; ok && !isIntfNil(v) && !seLinuxChoiceTypeFound {
@@ -1753,53 +1654,6 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 						seLinuxChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_NoSeLinuxOptions{}
 						seLinuxChoiceInt.NoSeLinuxOptions = &ves_io_schema.Empty{}
 						configMethodChoiceInt.PspSpec.SeLinuxChoice = seLinuxChoiceInt
-					}
-
-				}
-
-				if v, ok := cs["se_linux_options"]; ok && !isIntfNil(v) && !seLinuxChoiceTypeFound {
-
-					seLinuxChoiceTypeFound = true
-					seLinuxChoiceInt := &ves_io_schema_k8s_pod_security_policy.PodSecurityPolicySpecType_SeLinuxOptions{}
-					seLinuxChoiceInt.SeLinuxOptions = &ves_io_schema_k8s_pod_security_policy.SELinuxStrategyOptions{}
-					configMethodChoiceInt.PspSpec.SeLinuxChoice = seLinuxChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["level"]; ok && !isIntfNil(v) {
-
-								seLinuxChoiceInt.SeLinuxOptions.Level = v.(string)
-
-							}
-
-							if v, ok := cs["role"]; ok && !isIntfNil(v) {
-
-								seLinuxChoiceInt.SeLinuxOptions.Role = v.(string)
-
-							}
-
-							if v, ok := cs["rule"]; ok && !isIntfNil(v) {
-
-								seLinuxChoiceInt.SeLinuxOptions.Rule = v.(string)
-
-							}
-
-							if v, ok := cs["type"]; ok && !isIntfNil(v) {
-
-								seLinuxChoiceInt.SeLinuxOptions.Type = v.(string)
-
-							}
-
-							if v, ok := cs["user"]; ok && !isIntfNil(v) {
-
-								seLinuxChoiceInt.SeLinuxOptions.User = v.(string)
-
-							}
-
-						}
 					}
 
 				}
@@ -1928,7 +1782,12 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field volumes")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					configMethodChoiceInt.PspSpec.Volumes = ls
 
@@ -1939,7 +1798,7 @@ func resourceVolterraK8SPodSecurityPolicyUpdate(d *schema.ResourceData, meta int
 
 	}
 
-	if v, ok := d.GetOk("yaml"); ok && !configMethodChoiceTypeFound {
+	if v, ok := d.GetOk("yaml"); ok && !isIntfNil(v) && !configMethodChoiceTypeFound {
 
 		configMethodChoiceTypeFound = true
 		configMethodChoiceInt := &ves_io_schema_k8s_pod_security_policy.ReplaceSpecType_Yaml{}
@@ -1976,5 +1835,8 @@ func resourceVolterraK8SPodSecurityPolicyDelete(d *schema.ResourceData, meta int
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra K8SPodSecurityPolicy obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_k8s_pod_security_policy.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_k8s_pod_security_policy.ObjectType, namespace, name, opts...)
 }

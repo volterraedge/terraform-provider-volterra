@@ -1603,6 +1603,37 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bgpBgpPeerProtocolState": {
+            "type": "string",
+            "description": "Status of BGP connection to this Peer\n\nConnection state is not known\nConnection state is Idle\nConnection state is Connecting\nConnection state is Active\nConnection state is Open Sent\nConnection state is Open Confirm\nConnection state is Established\nConnection state is Clearing\nConnection state is Deleted",
+            "title": "BGP Protocol Status",
+            "enum": [
+                "Unknown",
+                "Idle",
+                "Connect",
+                "Active",
+                "OpenSent",
+                "OpenConfirm",
+                "Established",
+                "Clearing",
+                "Deleted"
+            ],
+            "default": "Unknown",
+            "x-displayname": "BGP Peer Status",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BgpPeerProtocolState"
+        },
+        "bgpBgpPeerUpDownType": {
+            "type": "string",
+            "description": "Indicates the state of BGP Peering session\n\nPeering session is Down (not in Established state)\nPeering session is Up (in Established state)",
+            "title": "BGP Peer States",
+            "enum": [
+                "BGP_PEER_DOWN",
+                "BGP_PEER_UP"
+            ],
+            "default": "BGP_PEER_DOWN",
+            "x-displayname": "BGP Peer States",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BgpPeerUpDownType"
+        },
         "ioschemaEmpty": {
             "type": "object",
             "description": "This can be used for messages where no values are needed",
@@ -1738,12 +1769,13 @@ var APISwaggerJSON string = `{
         },
         "schemaCloudLinkState": {
             "type": "string",
-            "description": "State of the CloudLink connections\n\n - UP: Up\n\nCloudLink and their corresponding Direct Connect connections are up and healthy\n - DOWN: Down\n\nCloudLink and their corresponding Direct Connect connections are down\n - DEGRADED: Degraded\n\nSome of Direct Connect connections with the CloudLink are down",
+            "description": "State of the CloudLink connections\n\n - UP: Up\n\nCloudLink and their corresponding Direct Connect connections are up and healthy\n - DOWN: Down\n\nCloudLink and their corresponding Direct Connect connections are down\n - DEGRADED: Degraded\n\nSome of Direct Connect connections with the CloudLink are down\n - NOT_APPLICABLE: NotApplicable\n\nCloudLinkState not applicable",
             "title": "CloudLink State",
             "enum": [
                 "UP",
                 "DOWN",
-                "DEGRADED"
+                "DEGRADED",
+                "NOT_APPLICABLE"
             ],
             "default": "UP",
             "x-displayname": "CloudLink State",
@@ -2567,6 +2599,338 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemasiteGetSpecType": {
+            "type": "object",
+            "description": "Get of site",
+            "title": "Get Site",
+            "x-displayname": "Get Site",
+            "x-ves-proto-message": "ves.io.schema.site.GetSpecType",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Geographical Address",
+                    "x-ves-example": "123 Street, city, country, postal code",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "admin_user_credentials": {
+                    "description": " Setup user credentials to manage access to nodes belonging to the site.",
+                    "$ref": "#/definitions/viewsAdminUserCredentialsType",
+                    "x-displayname": "Admin User Credentials"
+                },
+                "bgp_peer_address": {
+                    "type": "string",
+                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "BGP Peer Address",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "bgp_peer_address_v6": {
+                    "type": "string",
+                    "description": " Optional bgp peer IPv6  address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer IPv6  address from site Object. This can be used to change peer IPv6  address per site in fleet.\n\nExample: - \"3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "BGP Peer IPv6 Address",
+                    "x-ves-example": "3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "bgp_router_id": {
+                    "type": "string",
+                    "description": " Optional bgp router id that can be used as parameter for BGP configuration when BGP is configurred to\n fetch BGP router ID from site object. This can be used to change router id per site in a fleet.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "BGP Router ID",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "ce_site_mode": {
+                    "description": " Customer Eddge Mode. Defines how the CE is being deployed. Invalid for RE Site",
+                    "$ref": "#/definitions/siteCeSiteMode",
+                    "x-displayname": "CE Site Mode"
+                },
+                "connected_re": {
+                    "type": "array",
+                    "description": " Following fields are only for customer edge sites\n List of REs to which to which this CE initiates IPSec/SSL connection to\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Connected REs",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "connected_re_for_config": {
+                    "type": "array",
+                    "description": " This field is valid only for CE site object\n List of REs which can send config to this CE site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "REs for Configuration",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "coordinates": {
+                    "description": " Site longitude and latitude co-ordinates",
+                    "$ref": "#/definitions/siteCoordinates",
+                    "x-displayname": "Co-ordinates"
+                },
+                "default_underlay_network": {
+                    "description": " Optional, virtual network to be used as underlay for different overlay protocols (SRv6, IP-in-IP tunnels for DC Cluster Group)\n Default is site-local-outside network",
+                    "$ref": "#/definitions/siteDefaultUnderlayNetworkType",
+                    "x-displayname": "Default Underlay Virtual Network"
+                },
+                "desired_pool_count": {
+                    "type": "integer",
+                    "description": " Desired pool count represent desired number of worker(non master) nodes\n for manual scaling of public cloud(AWS, GCP, Azure) sites. The desired count\n must be less than or equal to the maximum size of the scaling group for a\n given public cloud. One may also have to increase maximum scaling group size to\n effectively increase desired pool count.\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: -1\n  ves.io.schema.rules.int32.lte: 64\n",
+                    "format": "int32",
+                    "x-displayname": "Desired Pool Count",
+                    "x-ves-example": "0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.int32.gte": "-1",
+                        "ves.io.schema.rules.int32.lte": "64"
+                    }
+                },
+                "global_access_k8s_enabled": {
+                    "type": "boolean",
+                    "format": "boolean"
+                },
+                "inside_nameserver": {
+                    "type": "string",
+                    "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "DNS Server for Inside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "inside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS server IPv6 to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "DNS Server IPv6 for Inside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "inside_vip": {
+                    "type": "string",
+                    "description": " Optional Virtual IP to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "Inside VIP",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "inside_vip_v6": {
+                    "type": "string",
+                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "Inside IPv6 VIP",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "ipsec_ssl_nodes_fqdn": {
+                    "type": "array",
+                    "description": " FQDN resolves to responders node IP, if there are multiple nodes at site the resolution will give\n a list of all/some individual node IP. Multiple FQDN for same site is also allowed.\n\nExample: - \"re01-node.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "FQDN for IPSEC/SSL resolving to individual node IP",
+                    "x-ves-example": "re01-node.ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true"
+                    }
+                },
+                "kubernetes_upgrade_drain": {
+                    "description": " K8s Node drain during OS or SW upgrade",
+                    "$ref": "#/definitions/viewsKubernetesUpgradeDrain",
+                    "x-displayname": "Kubernetes Upgrade Drain"
+                },
+                "local_access_k8s_enabled": {
+                    "type": "boolean",
+                    "format": "boolean"
+                },
+                "local_k8s_access_enabled": {
+                    "type": "boolean",
+                    "description": " Lets user know if this site has local k8s cluster enabled via fleet configuration.",
+                    "format": "boolean",
+                    "x-displayname": "Local K8s Cluster Access Enabled"
+                },
+                "main_nodes": {
+                    "type": "array",
+                    "description": " Connectivity information of main/master nodes to create a full mesh of Phobos services across all CEs in a site-mesh-group or dc-cluster-group.",
+                    "items": {
+                        "$ref": "#/definitions/schemasiteNode"
+                    },
+                    "x-displayname": "Main Nodes"
+                },
+                "multus_enabled": {
+                    "type": "boolean",
+                    "description": " Indicates that Multus cni is enabled on the site",
+                    "format": "boolean",
+                    "x-displayname": "Multus support enabled"
+                },
+                "operating_system_version": {
+                    "type": "string",
+                    "description": " Desired Operating System version for this site.\n\nExample: - \"value\"-",
+                    "x-displayname": "Operating System Version",
+                    "x-ves-example": "value"
+                },
+                "outside_nameserver": {
+                    "type": "string",
+                    "description": " Optional DNS server IP to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "DNS Server for Outside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "outside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS server IPv6 to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "DNS Server IPv6 for Outside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "outside_vip": {
+                    "type": "string",
+                    "description": " Optional Virtual IP to be used as automatic VIP for site local outside network.\n See documentation for \"VIP\" in advertise policy to see when Outside VIP is used.\n When configured, this is used as VIP (depending on advertise policy configuration).\n When not configured, site local interface ip will be used as VIP.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "Outside VIP",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "outside_vip_v6": {
+                    "type": "string",
+                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local outside network.\n See documentation for \"VIP\" in advertise policy to see when Outside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "Outside IPv6 VIP",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "private_connectivity": {
+                    "description": " Private Connectivity Information like ADN network name and cloud link information",
+                    "$ref": "#/definitions/viewsPrivateConnectivityType",
+                    "x-displayname": "Private Connectivity Information"
+                },
+                "re_select": {
+                    "description": " Selection criteria for Regional Edge connectivity",
+                    "$ref": "#/definitions/viewsRegionalEdgeSelection",
+                    "x-displayname": "Regional Edge Selection"
+                },
+                "region": {
+                    "type": "string",
+                    "description": " Cloud Region. A region is a set of datacenters deployed within a latency-defined perimeter and connected through a dedicated regional low-latency network\n\nExample: - \"east-us-2\"-",
+                    "x-displayname": "Region",
+                    "x-ves-example": "east-us-2"
+                },
+                "site_state": {
+                    "description": " Site state defines its state machine and in which operational phase it is. It is for both Regional Edge\n as well as Customer Edge. Example flow is site is in PROVISIONING then goest to STANDBY and ONLINE. In case of\n switching to different Connected RE it goes back to PROVISIONING and ONLINE. If any of phase failes then it\n goest to FAILED.",
+                    "$ref": "#/definitions/siteSiteState",
+                    "x-displayname": "Site State"
+                },
+                "site_subtype": {
+                    "description": " Site subtype",
+                    "$ref": "#/definitions/siteSiteSubtype",
+                    "x-displayname": "Site Subtype"
+                },
+                "site_to_site_network_type": {
+                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
+                    "$ref": "#/definitions/schemaVirtualNetworkType",
+                    "x-displayname": "Site To Site Network Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1]"
+                    }
+                },
+                "site_to_site_tunnel_ip": {
+                    "type": "string",
+                    "description": " Optionsl, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "Site To Site Tunnel IP",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "site_type": {
+                    "description": " Site type which specifies whether it is RE or CE\n\nValidation Rules:\n  ves.io.schema.rules.enum.not_in: 0\n",
+                    "$ref": "#/definitions/siteSiteType",
+                    "x-displayname": "Site Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.not_in": "0"
+                    }
+                },
+                "tunnel_dead_timeout": {
+                    "type": "integer",
+                    "description": " Time interval, in millisec, within which any ipsec / ssl connection from the site going down is detected.\n When not set (== 0), a default value of 10000 msec will be used.\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 180000\n",
+                    "format": "int64",
+                    "x-displayname": "Tunnel Dead Timeout (msec)",
+                    "x-ves-example": "0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "180000"
+                    }
+                },
+                "tunnel_type": {
+                    "description": " Tunnel type specifies type of tunnels enabled from this site. The tunnel type is used for automatic tunnels\n created between regional-edge sites or between regional-edge and customer-edge sites\n\n A tunnel connects two sites. The tunnel types enabled for tunnel results from intersection of tunnel types\n enabled for the two sites. IPSec gets priority over SSL when both are enabled\n\n Note: Tunnels can also be configured via SiteMeshGroup. Tunnel type is not used for SiteMeshGroup tunnels\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2]\n",
+                    "$ref": "#/definitions/schemaSiteToSiteTunnelType",
+                    "x-displayname": "Site Tunnel Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1,2]"
+                    }
+                },
+                "vip_params_per_az": {
+                    "type": "array",
+                    "description": " Optional Publish VIP Parameters Per AZ for public cloud sites.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP or Outside VIP is used.\n When configured, the VIP(s) defined will be used to publish to external systems like K8s, Consul\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 0,1,2,3\n",
+                    "items": {
+                        "$ref": "#/definitions/sitePublishVIPParamsPerAz"
+                    },
+                    "x-displayname": "Publish VIP Params Per AZ",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.num_items": "0,1,2,3"
+                    }
+                },
+                "vip_selection": {
+                    "description": " Optional VIP Selection to choose from the available type of addresses - IPv4/IPv6/both\n This selections impacts all the VIPs - like configured VIPs (inside and outside) or VIPs\n discovered through K8s.",
+                    "$ref": "#/definitions/siteVIPSelection",
+                    "x-displayname": "VIP Selection"
+                },
+                "vip_vrrp_mode": {
+                    "description": " Optional VIP VRRP advertisement mode. This controls the ARP behavior for \"Outside VIP\" and \"Inside VIP\"\n addresses, when they are configured. When turned on, the Master VER would advertise gratuitous ARPs and\n would respond to ARP queries for these addresses. When turned off, ARP responses are not given by VER.\n\n If BGP is configured, the Inside VIP and outside VIP addresses will be advertised by BGP. This is\n irrespective of the vrrp mode.\n\n When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP.",
+                    "$ref": "#/definitions/schemaVipVrrpType",
+                    "x-displayname": "VIP Advertisement Mode"
+                },
+                "vm_enabled": {
+                    "type": "boolean",
+                    "description": " Indicates that virtual machine support is enabled on the site",
+                    "format": "boolean",
+                    "x-displayname": "Virtual Machine support enabled"
+                },
+                "volterra_software_overide": {
+                    "description": " Policy to pick F5XC software version between verion given in site and corresponding fleet object.",
+                    "$ref": "#/definitions/siteSiteSoftwareOverrideType",
+                    "x-displayname": "Site Software Version Override"
+                },
+                "volterra_software_version": {
+                    "type": "string",
+                    "description": " Desired F5XC software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
+                    "x-displayname": "Software Version",
+                    "x-ves-example": "value"
+                }
+            }
+        },
         "schemasiteNode": {
             "type": "object",
             "description": "Node Information for connectivity across sites.",
@@ -2591,6 +2955,220 @@ var APISwaggerJSON string = `{
                     "description": " Site Local Outside IP address.",
                     "title": "slo_address",
                     "x-displayname": "Site Local Outside IP addresses"
+                }
+            }
+        },
+        "schemasiteReplaceSpecType": {
+            "type": "object",
+            "description": "Replace Site will replace address, coordinates of site",
+            "title": "Replace Site",
+            "x-displayname": "Replace Site",
+            "x-ves-displayorder": "4,127,2,3,173,125,114,120,121,117,118,123,124,122,126,115",
+            "x-ves-proto-message": "ves.io.schema.site.ReplaceSpecType",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Geographical Address",
+                    "x-ves-example": "123 Street, city, country, postal code",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "bgp_peer_address": {
+                    "type": "string",
+                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "BGP Peer Address",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "bgp_peer_address_v6": {
+                    "type": "string",
+                    "description": " Optional bgp peer IPv6  address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer IPv6  address from site Object. This can be used to change peer IPv6  address per site in fleet.\n\nExample: - \"3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "BGP Peer IPv6 Address",
+                    "x-ves-example": "3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "bgp_router_id": {
+                    "type": "string",
+                    "description": " Optional bgp router id that can be used as parameter for BGP configuration when BGP is configurred to\n fetch BGP router ID from site object. This can be used to change router id per site in a fleet.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "BGP Router ID",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "coordinates": {
+                    "description": " Site longitude and latitude co-ordinates",
+                    "$ref": "#/definitions/siteCoordinates",
+                    "x-displayname": "Co-ordinates"
+                },
+                "default_underlay_network": {
+                    "description": " Optional, virtual network to be used as underlay for different overlay protocols (SRv6, IP-in-IP tunnels for DC Cluster Group)\n Default is site-local-outside network",
+                    "$ref": "#/definitions/siteDefaultUnderlayNetworkType",
+                    "x-displayname": "Default Underlay Virtual Network"
+                },
+                "desired_pool_count": {
+                    "type": "integer",
+                    "description": " Desired pool count represent desired number of worker(non master) nodes\n for manual scaling of public cloud(AWS, GCP, Azure) sites. The desired count\n must be less than or equal to the maximum size of the scaling group for a\n given public cloud. One may also have to increase maximum scaling group size to\n effectively increase desired pool count.\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: -1\n  ves.io.schema.rules.int32.lte: 64\n",
+                    "format": "int32",
+                    "x-displayname": "Desired Pool Count",
+                    "x-ves-example": "0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.int32.gte": "-1",
+                        "ves.io.schema.rules.int32.lte": "64"
+                    }
+                },
+                "inside_nameserver": {
+                    "type": "string",
+                    "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "DNS Server for Inside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "inside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS server IPv6 to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "DNS Server IPv6 for Inside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "inside_vip": {
+                    "type": "string",
+                    "description": " Optional Virtual IP to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "Inside VIP",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "inside_vip_v6": {
+                    "type": "string",
+                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "Inside IPv6 VIP",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "kubernetes_upgrade_drain": {
+                    "description": " K8s Node drain during OS or SW upgrade",
+                    "$ref": "#/definitions/viewsKubernetesUpgradeDrain",
+                    "x-displayname": "Kubernetes Upgrade Drain"
+                },
+                "operating_system_version": {
+                    "type": "string",
+                    "description": " Desired Operating System version for this site.\n\nExample: - \"value\"-",
+                    "x-displayname": "Operating System Version",
+                    "x-ves-example": "value"
+                },
+                "outside_nameserver": {
+                    "type": "string",
+                    "description": " Optional DNS server IP to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "DNS Server for Outside Network",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "outside_nameserver_v6": {
+                    "type": "string",
+                    "description": " Optional DNS server IPv6 to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "DNS Server IPv6 for Outside Network",
+                    "x-ves-example": "1001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "outside_vip": {
+                    "type": "string",
+                    "description": " Optional Virtual IP to be used as automatic VIP for site local outside network.\n See documentation for \"VIP\" in advertise policy to see when Outside VIP is used.\n When configured, this is used as VIP (depending on advertise policy configuration).\n When not configured, site local interface ip will be used as VIP.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "Outside VIP",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "outside_vip_v6": {
+                    "type": "string",
+                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local outside network.\n See documentation for \"VIP\" in advertise policy to see when Outside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "x-displayname": "Outside IPv6 VIP",
+                    "x-ves-example": "2001::1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6": "true"
+                    }
+                },
+                "region": {
+                    "type": "string",
+                    "description": " Cloud Region. A region is a set of datacenters deployed within a latency-defined perimeter and connected through a dedicated regional low-latency network\n\nExample: - \"east-us-2\"-",
+                    "x-displayname": "Region",
+                    "x-ves-example": "east-us-2"
+                },
+                "site_to_site_network_type": {
+                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
+                    "$ref": "#/definitions/schemaVirtualNetworkType",
+                    "x-displayname": "Site To Site Network Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1]"
+                    }
+                },
+                "site_to_site_tunnel_ip": {
+                    "type": "string",
+                    "description": " Optionsl, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "Site To Site Tunnel IP",
+                    "x-ves-example": "10.1.1.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "tunnel_dead_timeout": {
+                    "type": "integer",
+                    "description": " Time interval, in millisec, within which any ipsec / ssl connection from the site going down is detected.\n When not set (== 0), a default value of 10000 msec will be used.\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 180000\n",
+                    "format": "int64",
+                    "x-displayname": "Tunnel Dead Timeout (msec)",
+                    "x-ves-example": "0",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "180000"
+                    }
+                },
+                "tunnel_type": {
+                    "description": " Tunnel type specifies type of tunnels enabled from this site. The tunnel type is used for automatic tunnels\n created between regional-edge sites or between regional-edge and customer-edge sites\n\n A tunnel connects two sites. The tunnel types enabled for tunnel results from intersection of tunnel types\n enabled for the two sites. IPSec gets priority over SSL when both are enabled\n\n Note: Tunnels can also be configured via SiteMeshGroup. Tunnel type is not used for SiteMeshGroup tunnels\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2]\n",
+                    "$ref": "#/definitions/schemaSiteToSiteTunnelType",
+                    "x-displayname": "Site Tunnel Type",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[0,1,2]"
+                    }
+                },
+                "vip_selection": {
+                    "description": " Optional VIP Selection to choose from the available type of addresses - IPv4/IPv6/both\n This selections impacts all the VIPs - like configured VIPs (inside and outside) or VIPs\n discovered through K8s.",
+                    "$ref": "#/definitions/siteVIPSelection",
+                    "x-displayname": "VIP Selection"
+                },
+                "vip_vrrp_mode": {
+                    "description": " Optional VIP VRRP advertisement mode. This controls the ARP behavior for \"Outside VIP\" and \"Inside VIP\"\n addresses, when they are configured. When turned on, the Master VER would advertise gratuitous ARPs and\n would respond to ARP queries for these addresses. When turned off, ARP responses are not given by VER.\n\n If BGP is configured, the Inside VIP and outside VIP addresses will be advertised by BGP. This is\n irrespective of the vrrp mode.\n\n When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP.",
+                    "$ref": "#/definitions/schemaVipVrrpType",
+                    "x-displayname": "VIP Advertisement Mode"
+                },
+                "volterra_software_overide": {
+                    "description": " Policy to pick F5XC software version between verion given in site and corresponding fleet object.",
+                    "$ref": "#/definitions/siteSiteSoftwareOverrideType",
+                    "x-displayname": "Site Software Version Override"
+                },
+                "volterra_software_version": {
+                    "type": "string",
+                    "description": " Desired F5XC software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
+                    "x-displayname": "Software Version",
+                    "x-ves-example": "value"
                 }
             }
         },
@@ -3472,7 +4050,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the site",
                     "title": "spec",
-                    "$ref": "#/definitions/siteGetSpecType",
+                    "$ref": "#/definitions/schemasiteGetSpecType",
                     "x-displayname": "Spec"
                 },
                 "status": {
@@ -3505,338 +4083,6 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
-        },
-        "siteGetSpecType": {
-            "type": "object",
-            "description": "Get of site",
-            "title": "Get Site",
-            "x-displayname": "Get Site",
-            "x-ves-proto-message": "ves.io.schema.site.GetSpecType",
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "maxLength": 256,
-                    "x-displayname": "Geographical Address",
-                    "x-ves-example": "123 Street, city, country, postal code",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                },
-                "admin_user_credentials": {
-                    "description": " Setup user credentials to manage access to nodes belonging to the site.",
-                    "$ref": "#/definitions/viewsAdminUserCredentialsType",
-                    "x-displayname": "Admin User Credentials"
-                },
-                "bgp_peer_address": {
-                    "type": "string",
-                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "BGP Peer Address",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "bgp_peer_address_v6": {
-                    "type": "string",
-                    "description": " Optional bgp peer IPv6  address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer IPv6  address from site Object. This can be used to change peer IPv6  address per site in fleet.\n\nExample: - \"3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "BGP Peer IPv6 Address",
-                    "x-ves-example": "3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "bgp_router_id": {
-                    "type": "string",
-                    "description": " Optional bgp router id that can be used as parameter for BGP configuration when BGP is configurred to\n fetch BGP router ID from site object. This can be used to change router id per site in a fleet.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "BGP Router ID",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "ce_site_mode": {
-                    "description": " Customer Eddge Mode. Defines how the CE is being deployed. Invalid for RE Site",
-                    "$ref": "#/definitions/siteCeSiteMode",
-                    "x-displayname": "CE Site Mode"
-                },
-                "connected_re": {
-                    "type": "array",
-                    "description": " Following fields are only for customer edge sites\n List of REs to which to which this CE initiates IPSec/SSL connection to\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Connected REs",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "connected_re_for_config": {
-                    "type": "array",
-                    "description": " This field is valid only for CE site object\n List of REs which can send config to this CE site\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "REs for Configuration",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "coordinates": {
-                    "description": " Site longitude and latitude co-ordinates",
-                    "$ref": "#/definitions/siteCoordinates",
-                    "x-displayname": "Co-ordinates"
-                },
-                "default_underlay_network": {
-                    "description": " Optional, virtual network to be used as underlay for different overlay protocols (SRv6, IP-in-IP tunnels for DC Cluster Group)\n Default is site-local-outside network",
-                    "$ref": "#/definitions/siteDefaultUnderlayNetworkType",
-                    "x-displayname": "Default Underlay Virtual Network"
-                },
-                "desired_pool_count": {
-                    "type": "integer",
-                    "description": " Desired pool count represent desired number of worker(non master) nodes\n for manual scaling of public cloud(AWS, GCP, Azure) sites. The desired count\n must be less than or equal to the maximum size of the scaling group for a\n given public cloud. One may also have to increase maximum scaling group size to\n effectively increase desired pool count.\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: -1\n  ves.io.schema.rules.int32.lte: 64\n",
-                    "format": "int32",
-                    "x-displayname": "Desired Pool Count",
-                    "x-ves-example": "0",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.int32.gte": "-1",
-                        "ves.io.schema.rules.int32.lte": "64"
-                    }
-                },
-                "global_access_k8s_enabled": {
-                    "type": "boolean",
-                    "format": "boolean"
-                },
-                "inside_nameserver": {
-                    "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "DNS Server for Inside Network",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "inside_nameserver_v6": {
-                    "type": "string",
-                    "description": " Optional DNS server IPv6 to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "DNS Server IPv6 for Inside Network",
-                    "x-ves-example": "1001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "inside_vip": {
-                    "type": "string",
-                    "description": " Optional Virtual IP to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Inside VIP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "inside_vip_v6": {
-                    "type": "string",
-                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "Inside IPv6 VIP",
-                    "x-ves-example": "2001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "ipsec_ssl_nodes_fqdn": {
-                    "type": "array",
-                    "description": " FQDN resolves to responders node IP, if there are multiple nodes at site the resolution will give\n a list of all/some individual node IP. Multiple FQDN for same site is also allowed.\n\nExample: - \"re01-node.ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "FQDN for IPSEC/SSL resolving to individual node IP",
-                    "x-ves-example": "re01-node.ves.io",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.hostname": "true"
-                    }
-                },
-                "local_access_k8s_enabled": {
-                    "type": "boolean",
-                    "format": "boolean"
-                },
-                "local_k8s_access_enabled": {
-                    "type": "boolean",
-                    "description": " Lets user know if this site has local k8s cluster enabled via fleet configuration.",
-                    "format": "boolean",
-                    "x-displayname": "Local K8s Cluster Access Enabled"
-                },
-                "main_nodes": {
-                    "type": "array",
-                    "description": " Connectivity information of main/master nodes to create a full mesh of Phobos services across all CEs in a site-mesh-group or dc-cluster-group.",
-                    "items": {
-                        "$ref": "#/definitions/schemasiteNode"
-                    },
-                    "x-displayname": "Main Nodes"
-                },
-                "multus_enabled": {
-                    "type": "boolean",
-                    "description": " Indicates that Multus cni is enabled on the site",
-                    "format": "boolean",
-                    "x-displayname": "Multus support enabled"
-                },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version for this site.\n\nExample: - \"value\"-",
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
-                },
-                "outside_nameserver": {
-                    "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "DNS Server for Outside Network",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "outside_nameserver_v6": {
-                    "type": "string",
-                    "description": " Optional DNS server IPv6 to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "DNS Server IPv6 for Outside Network",
-                    "x-ves-example": "1001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "outside_vip": {
-                    "type": "string",
-                    "description": " Optional Virtual IP to be used as automatic VIP for site local outside network.\n See documentation for \"VIP\" in advertise policy to see when Outside VIP is used.\n When configured, this is used as VIP (depending on advertise policy configuration).\n When not configured, site local interface ip will be used as VIP.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Outside VIP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "outside_vip_v6": {
-                    "type": "string",
-                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local outside network.\n See documentation for \"VIP\" in advertise policy to see when Outside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "Outside IPv6 VIP",
-                    "x-ves-example": "2001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "private_connectivity": {
-                    "description": " Private Connectivity Information like ADN network name and cloud link information",
-                    "$ref": "#/definitions/viewsPrivateConnectivityType",
-                    "x-displayname": "Private Connectivity Information"
-                },
-                "proactive_monitoring": {
-                    "description": " Proactive Monitoring",
-                    "$ref": "#/definitions/viewsProactiveMonitoringChoice",
-                    "x-displayname": "Proactive Monitoring"
-                },
-                "re_select": {
-                    "description": " Selection criteria for Regional Edge connectivity",
-                    "$ref": "#/definitions/viewsRegionalEdgeSelection",
-                    "x-displayname": "Regional Edge Selection"
-                },
-                "region": {
-                    "type": "string",
-                    "description": " Cloud Region. A region is a set of datacenters deployed within a latency-defined perimeter and connected through a dedicated regional low-latency network\n\nExample: - \"east-us-2\"-",
-                    "x-displayname": "Region",
-                    "x-ves-example": "east-us-2"
-                },
-                "site_state": {
-                    "description": " Site state defines its state machine and in which operational phase it is. It is for both Regional Edge\n as well as Customer Edge. Example flow is site is in PROVISIONING then goest to STANDBY and ONLINE. In case of\n switching to different Connected RE it goes back to PROVISIONING and ONLINE. If any of phase failes then it\n goest to FAILED.",
-                    "$ref": "#/definitions/siteSiteState",
-                    "x-displayname": "Site State"
-                },
-                "site_subtype": {
-                    "description": " Site subtype",
-                    "$ref": "#/definitions/siteSiteSubtype",
-                    "x-displayname": "Site Subtype"
-                },
-                "site_to_site_network_type": {
-                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
-                    "$ref": "#/definitions/schemaVirtualNetworkType",
-                    "x-displayname": "Site To Site Network Type",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[0,1]"
-                    }
-                },
-                "site_to_site_tunnel_ip": {
-                    "type": "string",
-                    "description": " Optionsl, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Site To Site Tunnel IP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "site_type": {
-                    "description": " Site type which specifies whether it is RE or CE\n\nValidation Rules:\n  ves.io.schema.rules.enum.not_in: 0\n",
-                    "$ref": "#/definitions/siteSiteType",
-                    "x-displayname": "Site Type",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.not_in": "0"
-                    }
-                },
-                "tunnel_dead_timeout": {
-                    "type": "integer",
-                    "description": " Time interval, in millisec, within which any ipsec / ssl connection from the site going down is detected.\n When not set (== 0), a default value of 10000 msec will be used.\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 180000\n",
-                    "format": "int64",
-                    "x-displayname": "Tunnel Dead Timeout (msec)",
-                    "x-ves-example": "0",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "180000"
-                    }
-                },
-                "tunnel_type": {
-                    "description": " Tunnel type specifies type of tunnels enabled from this site. The tunnel type is used for automatic tunnels\n created between regional-edge sites or between regional-edge and customer-edge sites\n\n A tunnel connects two sites. The tunnel types enabled for tunnel results from intersection of tunnel types\n enabled for the two sites. IPSec gets priority over SSL when both are enabled\n\n Note: Tunnels can also be configured via SiteMeshGroup. Tunnel type is not used for SiteMeshGroup tunnels\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2]\n",
-                    "$ref": "#/definitions/schemaSiteToSiteTunnelType",
-                    "x-displayname": "Site Tunnel Type",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[0,1,2]"
-                    }
-                },
-                "vip_params_per_az": {
-                    "type": "array",
-                    "description": " Optional Publish VIP Parameters Per AZ for public cloud sites.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP or Outside VIP is used.\n When configured, the VIP(s) defined will be used to publish to external systems like K8s, Consul\n\nValidation Rules:\n  ves.io.schema.rules.repeated.num_items: 0,1,2,3\n",
-                    "items": {
-                        "$ref": "#/definitions/sitePublishVIPParamsPerAz"
-                    },
-                    "x-displayname": "Publish VIP Params Per AZ",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.num_items": "0,1,2,3"
-                    }
-                },
-                "vip_selection": {
-                    "description": " Optional VIP Selection to choose from the available type of addresses - IPv4/IPv6/both\n This selections impacts all the VIPs - like configured VIPs (inside and outside) or VIPs\n discovered through K8s.",
-                    "$ref": "#/definitions/siteVIPSelection",
-                    "x-displayname": "VIP Selection"
-                },
-                "vip_vrrp_mode": {
-                    "description": " Optional VIP VRRP advertisement mode. This controls the ARP behavior for \"Outside VIP\" and \"Inside VIP\"\n addresses, when they are configured. When turned on, the Master VER would advertise gratuitous ARPs and\n would respond to ARP queries for these addresses. When turned off, ARP responses are not given by VER.\n\n If BGP is configured, the Inside VIP and outside VIP addresses will be advertised by BGP. This is\n irrespective of the vrrp mode.\n\n When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP.",
-                    "$ref": "#/definitions/schemaVipVrrpType",
-                    "x-displayname": "VIP Advertisement Mode"
-                },
-                "vm_enabled": {
-                    "type": "boolean",
-                    "description": " Indicates that virtual machine support is enabled on the site",
-                    "format": "boolean",
-                    "x-displayname": "Virtual Machine support enabled"
-                },
-                "volterra_software_overide": {
-                    "description": " Policy to pick F5XC software version between verion given in site and corresponding fleet object.",
-                    "$ref": "#/definitions/siteSiteSoftwareOverrideType",
-                    "x-displayname": "Site Software Version Override"
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " Desired F5XC software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value"
-                }
-            }
         },
         "siteInterfaceStatus": {
             "type": "object",
@@ -4047,7 +4293,7 @@ var APISwaggerJSON string = `{
                 "get_spec": {
                     "description": " If ListRequest has any specified report_fields, it will appear in object",
                     "title": "get_spec",
-                    "$ref": "#/definitions/siteGetSpecType",
+                    "$ref": "#/definitions/schemasiteGetSpecType",
                     "x-displayname": "Get Specification"
                 },
                 "labels": {
@@ -4605,7 +4851,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the site",
                     "title": "spec",
-                    "$ref": "#/definitions/siteReplaceSpecType",
+                    "$ref": "#/definitions/schemasiteReplaceSpecType",
                     "x-displayname": "Spec"
                 }
             }
@@ -4613,215 +4859,6 @@ var APISwaggerJSON string = `{
         "siteReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.site.ReplaceResponse"
-        },
-        "siteReplaceSpecType": {
-            "type": "object",
-            "description": "Replace Site will replace address, coordinates of site",
-            "title": "Replace Site",
-            "x-displayname": "Replace Site",
-            "x-ves-displayorder": "4,127,2,3,125,114,120,121,117,118,123,124,122,126,115",
-            "x-ves-proto-message": "ves.io.schema.site.ReplaceSpecType",
-            "properties": {
-                "address": {
-                    "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "maxLength": 256,
-                    "x-displayname": "Geographical Address",
-                    "x-ves-example": "123 Street, city, country, postal code",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                },
-                "bgp_peer_address": {
-                    "type": "string",
-                    "description": " Optional bgp peer address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer address from site Object. This can be used to change peer addres per site in fleet.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "BGP Peer Address",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "bgp_peer_address_v6": {
-                    "type": "string",
-                    "description": " Optional bgp peer IPv6  address that can be used as parameter for BGP configuration when BGP is configured\n to fetch BGP peer IPv6  address from site Object. This can be used to change peer IPv6  address per site in fleet.\n\nExample: - \"3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "BGP Peer IPv6 Address",
-                    "x-ves-example": "3c0f:7554:352a:a2dc:333f:67c5:c2b5:7326",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "bgp_router_id": {
-                    "type": "string",
-                    "description": " Optional bgp router id that can be used as parameter for BGP configuration when BGP is configurred to\n fetch BGP router ID from site object. This can be used to change router id per site in a fleet.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "BGP Router ID",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "coordinates": {
-                    "description": " Site longitude and latitude co-ordinates",
-                    "$ref": "#/definitions/siteCoordinates",
-                    "x-displayname": "Co-ordinates"
-                },
-                "default_underlay_network": {
-                    "description": " Optional, virtual network to be used as underlay for different overlay protocols (SRv6, IP-in-IP tunnels for DC Cluster Group)\n Default is site-local-outside network",
-                    "$ref": "#/definitions/siteDefaultUnderlayNetworkType",
-                    "x-displayname": "Default Underlay Virtual Network"
-                },
-                "desired_pool_count": {
-                    "type": "integer",
-                    "description": " Desired pool count represent desired number of worker(non master) nodes\n for manual scaling of public cloud(AWS, GCP, Azure) sites. The desired count\n must be less than or equal to the maximum size of the scaling group for a\n given public cloud. One may also have to increase maximum scaling group size to\n effectively increase desired pool count.\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.int32.gte: -1\n  ves.io.schema.rules.int32.lte: 64\n",
-                    "format": "int32",
-                    "x-displayname": "Desired Pool Count",
-                    "x-ves-example": "0",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.int32.gte": "-1",
-                        "ves.io.schema.rules.int32.lte": "64"
-                    }
-                },
-                "inside_nameserver": {
-                    "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in inside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "DNS Server for Inside Network",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "inside_nameserver_v6": {
-                    "type": "string",
-                    "description": " Optional DNS server IPv6 to be used for name resolution in inside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "DNS Server IPv6 for Inside Network",
-                    "x-ves-example": "1001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "inside_vip": {
-                    "type": "string",
-                    "description": " Optional Virtual IP to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Inside VIP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "inside_vip_v6": {
-                    "type": "string",
-                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local inside network.\n See documentation for \"VIP\" in advertise policy to see when Inside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local inside interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "Inside IPv6 VIP",
-                    "x-ves-example": "2001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "operating_system_version": {
-                    "type": "string",
-                    "description": " Desired Operating System version for this site.\n\nExample: - \"value\"-",
-                    "x-displayname": "Operating System Version",
-                    "x-ves-example": "value"
-                },
-                "outside_nameserver": {
-                    "type": "string",
-                    "description": " Optional DNS server IP to be used for name resolution in outside network\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "DNS Server for Outside Network",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "outside_nameserver_v6": {
-                    "type": "string",
-                    "description": " Optional DNS server IPv6 to be used for name resolution in outside network\n\nExample: - \"1001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "DNS Server IPv6 for Outside Network",
-                    "x-ves-example": "1001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "outside_vip": {
-                    "type": "string",
-                    "description": " Optional Virtual IP to be used as automatic VIP for site local outside network.\n See documentation for \"VIP\" in advertise policy to see when Outside VIP is used.\n When configured, this is used as VIP (depending on advertise policy configuration).\n When not configured, site local interface ip will be used as VIP.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Outside VIP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "outside_vip_v6": {
-                    "type": "string",
-                    "description": " Optional Virtual IPv6 to be used as automatic VIP for site local outside network.\n See documentation for \"VIP\" in advertise policy to see when Outside VIP is used.\n When configured, this is used as IPv6 VIP (depending on advertise policy configuration).\n When not configured, site local interface ip will be used as VIP.\n See documentation for \"vip_selection\" on how IPv4 and IPv6 vips are selected\n\nExample: - \"2001::1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "x-displayname": "Outside IPv6 VIP",
-                    "x-ves-example": "2001::1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
-                    }
-                },
-                "region": {
-                    "type": "string",
-                    "description": " Cloud Region. A region is a set of datacenters deployed within a latency-defined perimeter and connected through a dedicated regional low-latency network\n\nExample: - \"east-us-2\"-",
-                    "x-displayname": "Region",
-                    "x-ves-example": "east-us-2"
-                },
-                "site_to_site_network_type": {
-                    "description": " Optional, virtual network type to be used for site to site tunnels created with SiteMeshGroup.\n Must be specified for CE site mesh group configuration\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1]\n",
-                    "$ref": "#/definitions/schemaVirtualNetworkType",
-                    "x-displayname": "Site To Site Network Type",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[0,1]"
-                    }
-                },
-                "site_to_site_tunnel_ip": {
-                    "type": "string",
-                    "description": " Optionsl, VIP in the site_to_site_network_type configured above used for terminating IPSec/SSL tunnels created with SiteMeshGroup.\n\nExample: - \"10.1.1.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Site To Site Tunnel IP",
-                    "x-ves-example": "10.1.1.1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "tunnel_dead_timeout": {
-                    "type": "integer",
-                    "description": " Time interval, in millisec, within which any ipsec / ssl connection from the site going down is detected.\n When not set (== 0), a default value of 10000 msec will be used.\n\nExample: - \"0\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 180000\n",
-                    "format": "int64",
-                    "x-displayname": "Tunnel Dead Timeout (msec)",
-                    "x-ves-example": "0",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "180000"
-                    }
-                },
-                "tunnel_type": {
-                    "description": " Tunnel type specifies type of tunnels enabled from this site. The tunnel type is used for automatic tunnels\n created between regional-edge sites or between regional-edge and customer-edge sites\n\n A tunnel connects two sites. The tunnel types enabled for tunnel results from intersection of tunnel types\n enabled for the two sites. IPSec gets priority over SSL when both are enabled\n\n Note: Tunnels can also be configured via SiteMeshGroup. Tunnel type is not used for SiteMeshGroup tunnels\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [0,1,2]\n",
-                    "$ref": "#/definitions/schemaSiteToSiteTunnelType",
-                    "x-displayname": "Site Tunnel Type",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.enum.in": "[0,1,2]"
-                    }
-                },
-                "vip_selection": {
-                    "description": " Optional VIP Selection to choose from the available type of addresses - IPv4/IPv6/both\n This selections impacts all the VIPs - like configured VIPs (inside and outside) or VIPs\n discovered through K8s.",
-                    "$ref": "#/definitions/siteVIPSelection",
-                    "x-displayname": "VIP Selection"
-                },
-                "vip_vrrp_mode": {
-                    "description": " Optional VIP VRRP advertisement mode. This controls the ARP behavior for \"Outside VIP\" and \"Inside VIP\"\n addresses, when they are configured. When turned on, the Master VER would advertise gratuitous ARPs and\n would respond to ARP queries for these addresses. When turned off, ARP responses are not given by VER.\n\n If BGP is configured, the Inside VIP and outside VIP addresses will be advertised by BGP. This is\n irrespective of the vrrp mode.\n\n When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP.",
-                    "$ref": "#/definitions/schemaVipVrrpType",
-                    "x-displayname": "VIP Advertisement Mode"
-                },
-                "volterra_software_overide": {
-                    "description": " Policy to pick F5XC software version between verion given in site and corresponding fleet object.",
-                    "$ref": "#/definitions/siteSiteSoftwareOverrideType",
-                    "x-displayname": "Site Software Version Override"
-                },
-                "volterra_software_version": {
-                    "type": "string",
-                    "description": " Desired F5XC software version for this site, a string matching released set of software components.\n\nExample: - \"value\"-",
-                    "x-displayname": "Software Version",
-                    "x-ves-example": "value"
-                }
-            }
         },
         "siteRouteServerPeeringStatusType": {
             "type": "object",
@@ -4917,6 +4954,34 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteSiteReachabilityStatus": {
+            "type": "object",
+            "description": "F5XC domain reachability in the site",
+            "title": "F5XC Site Reachability Scan Status",
+            "x-displayname": "F5XC Site Reachability Scan Status",
+            "x-ves-displayorder": "3,1,2",
+            "x-ves-proto-message": "ves.io.schema.site.SiteReachabilityStatus",
+            "properties": {
+                "error_message": {
+                    "type": "string",
+                    "description": " The error message during network reachbility scan",
+                    "title": "error_message",
+                    "x-displayname": "Error Message"
+                },
+                "node_name": {
+                    "type": "string",
+                    "description": " Name of the node on the site.",
+                    "title": "node_name",
+                    "x-displayname": "Node name"
+                },
+                "scan_result": {
+                    "type": "object",
+                    "description": " Result of the domain reachability scan",
+                    "title": "scan_result",
+                    "x-displayname": "Scan Result"
+                }
+            }
+        },
         "siteSiteSoftwareOverrideType": {
             "type": "string",
             "description": "Decide which software version takes effect in case of conflict between site and fleet\n\nSoftware version in site will take precedence.\nBetween site and fleet newer software version will take precedence.\nSoftware version in fleet will take precedence.",
@@ -4932,7 +4997,7 @@ var APISwaggerJSON string = `{
         },
         "siteSiteState": {
             "type": "string",
-            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration",
+            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.",
             "title": "SiteState",
             "enum": [
                 "ONLINE",
@@ -4943,7 +5008,16 @@ var APISwaggerJSON string = `{
                 "REREGISTRATION",
                 "WAITINGNODES",
                 "DECOMMISSIONING",
-                "WAITING_FOR_REGISTRATION"
+                "WAITING_FOR_REGISTRATION",
+                "ORCHESTRATION_IN_PROGRESS",
+                "ORCHESTRATION_COMPLETE",
+                "ERROR_IN_ORCHESTRATION",
+                "DELETING_CLOUD_RESOURCES",
+                "DELETED_CLOUD_RESOURCES",
+                "ERROR_DELETING_CLOUD_RESOURCES",
+                "VALIDATION_IN_PROGRESS",
+                "VALIDATION_SUCCESS",
+                "VALIDATION_FAILED"
             ],
             "default": "ONLINE",
             "x-displayname": "Site State",
@@ -4951,12 +5025,13 @@ var APISwaggerJSON string = `{
         },
         "siteSiteSubtype": {
             "type": "string",
-            "description": "Sit Subtype\n\nNo Subtype\nRegional Edge for ves-io use only\nCE running in Kubernetes",
+            "description": "Sit Subtype\n\nNo Subtype\nRegional Edge isn't ready yet. Configuration isn't propagated for this site.\nRegional Edge which is hidden from customer. Configuration will be propagated.\nCE running in Kubernetes",
             "title": "SiteSubtype",
             "enum": [
                 "NO_SUBTYPE",
                 "VES_IO_USE_RE",
-                "VES_IO_CE_IN_K8S"
+                "VES_IO_CE_IN_K8S",
+                "VES_IO_HIDDEN_RE"
             ],
             "default": "NO_SUBTYPE",
             "x-displayname": "Site Subtype",
@@ -5017,7 +5092,7 @@ var APISwaggerJSON string = `{
             "description": "Most recently observed status of site object",
             "title": "Site Status Object",
             "x-displayname": "Status",
-            "x-ves-displayorder": "1,3,5,13,6,7,8,12,9,10,11,14,15,16,17,18,19,20,21,22",
+            "x-ves-displayorder": "1,3,5,13,6,7,8,12,9,10,11,14,15,16,17,18,19,20,21,22,24",
             "x-ves-proto-message": "ves.io.schema.site.StatusObject",
             "properties": {
                 "certified_hardware": {
@@ -5130,6 +5205,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaSiteMeshGroupStatus",
                     "x-displayname": "Site Mesh Group Status"
                 },
+                "site_reachability_scan_status_list": {
+                    "type": "array",
+                    "description": " List of SiteReachabilityStatus status shows status of domain reachability during registration",
+                    "title": "Site Reachability Scan Status List",
+                    "items": {
+                        "$ref": "#/definitions/siteSiteReachabilityStatus"
+                    },
+                    "x-displayname": "Site Reachability Scan Status List"
+                },
                 "ver_master_status": {
                     "description": " Identify the master node in the cluster",
                     "title": "Ver Master Status",
@@ -5215,6 +5299,31 @@ var APISwaggerJSON string = `{
             "x-displayname": "Tunnel Connection Status",
             "x-ves-proto-message": "ves.io.schema.site.TunnelConnectionStatus",
             "properties": {
+                "bgp": {
+                    "type": "array",
+                    "description": " Internal reference to BGP object corresponding to this tunnel\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "BGP Object",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "BGP Object",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "bgp_peer_protocol_state": {
+                    "description": " Protocol state for each BGP peer connection established over this tunnel",
+                    "title": "BGP Peer Protocol Status",
+                    "$ref": "#/definitions/bgpBgpPeerProtocolState",
+                    "x-displayname": "BGP Peer Protocol Status"
+                },
+                "bgp_status": {
+                    "description": " BGP peer connection status established over this tunnel",
+                    "title": "BGP Peer Status",
+                    "$ref": "#/definitions/bgpBgpPeerUpDownType",
+                    "x-displayname": "BGP Peer Status"
+                },
                 "encap": {
                     "description": " Encapsulation type of tunnel",
                     "title": "encap",
@@ -5257,6 +5366,19 @@ var APISwaggerJSON string = `{
                     "title": "state",
                     "$ref": "#/definitions/siteTunnelState",
                     "x-displayname": "Connection State"
+                },
+                "tunnel": {
+                    "type": "array",
+                    "description": " Internal reference to Tunnel object corresponding to this status\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Tunnel Object",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Tunnel Object",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "tunnelName": {
                     "type": "string",
@@ -5605,6 +5727,15 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/siteTunnelConnectionStatus"
                     },
                     "x-displayname": "Configured Tunnel Connection Status"
+                },
+                "ext_connector_tunnel_status": {
+                    "type": "array",
+                    "description": " Status/details of every tunnel configured as external connector",
+                    "title": "external_connector_tunnel_status",
+                    "items": {
+                        "$ref": "#/definitions/siteTunnelConnectionStatus"
+                    },
+                    "x-displayname": "External Connector Tunnel Status"
                 },
                 "intf_status": {
                     "type": "array",
@@ -6132,6 +6263,77 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsKubernetesUpgradeDrain": {
+            "type": "object",
+            "description": "Specify how worker nodes within a site will be upgraded.",
+            "title": "Node by Node Upgrade",
+            "x-displayname": "Node by Node Upgrade",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-kubernetes_upgrade_drain_enable_choice": "[\"disable_upgrade_drain\",\"enable_upgrade_drain\"]",
+            "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrain",
+            "properties": {
+                "disable_upgrade_drain": {
+                    "description": "Exclusive with [enable_upgrade_drain]\n",
+                    "title": "Disable upgrade drain",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "enable_upgrade_drain": {
+                    "description": "Exclusive with [disable_upgrade_drain]\n",
+                    "title": "Enable Node by Node Upgrade",
+                    "$ref": "#/definitions/viewsKubernetesUpgradeDrainConfig",
+                    "x-displayname": "Enable"
+                }
+            }
+        },
+        "viewsKubernetesUpgradeDrainConfig": {
+            "type": "object",
+            "description": "Specify batch upgrade settings for worker nodes within a site.",
+            "title": "Enable Node by Node Upgrade",
+            "x-displayname": "Enable Node by Node Upgrade",
+            "x-ves-oneof-field-drain_max_unavailable_choice": "[\"drain_max_unavailable_node_count\"]",
+            "x-ves-oneof-field-vega_upgrade_mode_toggle_choice": "[\"disable_vega_upgrade_mode\",\"enable_vega_upgrade_mode\"]",
+            "x-ves-proto-message": "ves.io.schema.views.KubernetesUpgradeDrainConfig",
+            "properties": {
+                "disable_vega_upgrade_mode": {
+                    "description": "Exclusive with [enable_vega_upgrade_mode]\n Disable Vega Upgrade Mode",
+                    "title": "Disable Vega Upgrade Mode",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Vega Upgrade Mode"
+                },
+                "drain_max_unavailable_node_count": {
+                    "type": "integer",
+                    "description": "Exclusive with []\n\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 5000\n",
+                    "title": "Node Batch Size Count",
+                    "format": "int64",
+                    "x-displayname": "Node Batch Size Count",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "5000"
+                    }
+                },
+                "drain_node_timeout": {
+                    "type": "integer",
+                    "description": " Seconds to wait before initiating upgrade on the next set of nodes. Setting it to 0 will wait indefinitely for all services on nodes to be upgraded gracefully before proceeding to the next set of nodes.\n (Warning: It may block upgrade if services on a node cannot be gracefully upgraded. It is recommended to use the default value).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 900\n",
+                    "title": "Upgrade Wait Time",
+                    "format": "int64",
+                    "x-displayname": "Upgrade Wait Time",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "900"
+                    }
+                },
+                "enable_vega_upgrade_mode": {
+                    "description": "Exclusive with [disable_vega_upgrade_mode]\n Enable Vega Upgrade Mode\n When enabled, vega will inform RE to stop traffic to the specific node.",
+                    "title": "Enable Vega Upgrade Mode",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Vega Upgrade Mode"
+                }
+            }
+        },
         "viewsPrivateConnectivityType": {
             "type": "object",
             "description": "Private Connectivity Information like ADN network name and cloud link information",
@@ -6155,23 +6357,18 @@ var APISwaggerJSON string = `{
         },
         "viewsProactiveMonitoringChoice": {
             "type": "object",
-            "description": "Enable proactive collection of debuglogs from this Customer Edge site to enable faster troubleshooting and issue resolution.\nWhen enabled, nodes of this Customer Edge site will be able to stream required service debug logs to F5 Distributed Cloud.\nWhen disabled, nodes of this Customer Edge site will not be able to send any debug logs and might cause delays in troubleshooting and issue resolution.\nIt is recommended to have this setting enabled.\nNote: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted.",
+            "description": "x-displayName: \"Proactive Monitoring\"\nEnable proactive collection of debuglogs from this Customer Edge site to enable faster troubleshooting and issue resolution.\nWhen enabled, nodes of this Customer Edge site will be able to stream required service debug logs to F5 Distributed Cloud.\nWhen disabled, nodes of this Customer Edge site will not be able to send any debug logs and might cause delays in troubleshooting and issue resolution.\nIt is recommended to have this setting enabled.\nNote: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted.",
             "title": "Proactive Monitoring",
-            "x-displayname": "Proactive Monitoring",
-            "x-ves-oneof-field-proactive_monitoring_choice": "[\"proactive_monitoring_disable\",\"proactive_monitoring_enable\"]",
-            "x-ves-proto-message": "ves.io.schema.views.ProactiveMonitoringChoice",
             "properties": {
                 "proactive_monitoring_disable": {
-                    "description": "Exclusive with [proactive_monitoring_enable]\n Disable Proactive Monitoring",
+                    "description": "x-displayName: \"Disable\"\nDisable Proactive Monitoring",
                     "title": "disable",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "proactive_monitoring_enable": {
-                    "description": "Exclusive with [proactive_monitoring_disable]\n Enable Proactive Monitoring",
+                    "description": "x-displayName: \"Enable\"\nEnable Proactive Monitoring",
                     "title": "enable",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Enable"
+                    "$ref": "#/definitions/ioschemaEmpty"
                 }
             }
         },

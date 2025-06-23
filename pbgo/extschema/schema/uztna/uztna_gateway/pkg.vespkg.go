@@ -51,6 +51,14 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_gateway.API.Create"] = []string{
+		"spec.listeners.#.ipv6",
+	}
+
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_gateway.API.Replace"] = []string{
+		"spec.listeners.#.ipv6",
+	}
+
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

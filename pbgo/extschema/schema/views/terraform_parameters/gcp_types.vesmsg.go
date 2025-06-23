@@ -759,6 +759,15 @@ func (v *ValidateGCPVpcSiteType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["manual_routing"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("manual_routing"))
+		if err := fv(ctx, m.GetManualRouting(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["multi_node_non_std_az"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("multi_node_non_std_az"))

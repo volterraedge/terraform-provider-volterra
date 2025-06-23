@@ -264,6 +264,15 @@ func (v *ValidateCreateV2Request) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["tenant_metadata"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_metadata"))
+		if err := fv(ctx, m.GetTenantMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["user_details"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("user_details"))
@@ -432,4 +441,85 @@ var DefaultCreateV2ResponseValidator = func() *ValidateCreateV2Response {
 
 func CreateV2ResponseValidator() db.Validator {
 	return DefaultCreateV2ResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TenantMetadata) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TenantMetadata) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TenantMetadata) DeepCopy() *TenantMetadata {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TenantMetadata{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TenantMetadata) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TenantMetadata) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TenantMetadataValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTenantMetadata struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTenantMetadata) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TenantMetadata)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TenantMetadata got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["labels"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("labels"))
+		for key, value := range m.GetLabels() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTenantMetadataValidator = func() *ValidateTenantMetadata {
+	v := &ValidateTenantMetadata{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func TenantMetadataValidator() db.Validator {
+	return DefaultTenantMetadataValidator
 }

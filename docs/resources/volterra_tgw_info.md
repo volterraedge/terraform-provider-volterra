@@ -1,6 +1,6 @@
 ---
 
-page_title: "Volterra: volterra_tgw_info" 
+page_title: "Volterra: volterra_tgw_info"
 
 description: "The volterra_tgw_info runs SetTGWInfo custom api for a aws_tgw_site site"
 

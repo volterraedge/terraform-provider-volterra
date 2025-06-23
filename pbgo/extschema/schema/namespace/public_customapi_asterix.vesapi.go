@@ -153,6 +153,9 @@ func (c *NamespaceMLCustomAPIRestClient) doRPCGetApiEndpointsStats(ctx context.C
 		for _, item := range req.VhostsFilter {
 			q.Add("vhosts_filter", fmt.Sprintf("%v", item))
 		}
+		for _, item := range req.VhostsTypesFilter {
+			q.Add("vhosts_types_filter", fmt.Sprintf("%v", item))
+		}
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -914,13 +917,26 @@ var NamespaceMLCustomAPISwaggerJSON string = `{
                 },
                 "vhosts_filter": {
                     "type": "array",
-                    "description": " List of Virtual Hosts for current request\n If list empty or not sent, will sum of vhosts under requested namespace\n\nExample: - \"blogging-app, test-app\"-",
+                    "description": " List of Virtual Hosts for current request\n If the list is empty or not provided, it will return stats for all virtual hosts under the requested namespace.\n\nExample: - \"blogging-app, test-app\"-",
                     "title": "List Of Virtual Hosts Name",
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "List Of Virtual Hosts Name",
                     "x-ves-example": "blogging-app, test-app"
+                },
+                "vhosts_types_filter": {
+                    "type": "array",
+                    "description": " List of Virtual Hosts types for current request\n If the list is empty or not provided, it will return stats for all virtual hosts under the requested namespace.\n\nExample: - [\"HTTP_LOAD_BALANCER\", \"CDN_LOAD_BALANCER\"]-\n\nValidation Rules:\n  ves.io.schema.rules.enum.in: [1,6,7,8]\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Virtual Hosts Types Filter",
+                    "items": {
+                        "$ref": "#/definitions/virtual_hostVirtualHostType"
+                    },
+                    "x-displayname": "Virtual Hosts Types Filter",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.in": "[1,6,7,8]",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -1130,6 +1146,24 @@ var NamespaceMLCustomAPISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "virtual_hostVirtualHostType": {
+            "type": "string",
+            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block\n - BIGIP_VIRTUAL_SERVER: BIG-IP Virtual Server\n\nVirtual Host representing a BIG-IP Virtual Server\n - UDP_LOAD_BALANCER: UDP LoadBalancer\n\nVirtual Host used as Load Balancer",
+            "title": "VirtualHostType",
+            "enum": [
+                "VIRTUAL_SERVICE",
+                "HTTP_LOAD_BALANCER",
+                "API_GATEWAY",
+                "TCP_LOAD_BALANCER",
+                "PROXY",
+                "CDN_LOAD_BALANCER",
+                "NGINX_SERVER",
+                "UDP_LOAD_BALANCER"
+            ],
+            "default": "VIRTUAL_SERVICE",
+            "x-displayname": "Virtual Host Type",
+            "x-ves-proto-enum": "ves.io.schema.virtual_host.VirtualHostType"
         }
     },
     "x-displayname": "Namespace",

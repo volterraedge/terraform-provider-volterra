@@ -1,6 +1,6 @@
 ---
 
-page_title: "Volterra: active_network_policies" 
+page_title: "Volterra: active_network_policies"
 
 description: "The active_network_policies allows setting of Active Network Policies for a namespace on Volterra SaaS"
 

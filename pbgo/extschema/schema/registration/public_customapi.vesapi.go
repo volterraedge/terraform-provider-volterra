@@ -62,6 +62,15 @@ func (c *CustomAPIGrpcClient) doRPCGetImageDownloadUrl(ctx context.Context, yaml
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCGetRegistrationsBySiteToken(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetRegistrationsBySiteTokenReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.registration.GetRegistrationsBySiteTokenReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetRegistrationsBySiteToken(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCList(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &ListRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -160,6 +169,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["Get"] = ccl.doRPCGet
 
 	rpcFns["GetImageDownloadUrl"] = ccl.doRPCGetImageDownloadUrl
+
+	rpcFns["GetRegistrationsBySiteToken"] = ccl.doRPCGetRegistrationsBySiteToken
 
 	rpcFns["List"] = ccl.doRPCList
 
@@ -432,6 +443,89 @@ func (c *CustomAPIRestClient) doRPCGetImageDownloadUrl(ctx context.Context, call
 	pbRsp := &GetImageDownloadUrlResp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.GetImageDownloadUrlResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCGetRegistrationsBySiteToken(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetRegistrationsBySiteTokenReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.registration.GetRegistrationsBySiteTokenReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("site_token", fmt.Sprintf("%v", req.SiteToken))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetRegistrationsBySiteTokenResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.registration.GetRegistrationsBySiteTokenResp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1075,6 +1169,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["GetImageDownloadUrl"] = ccl.doRPCGetImageDownloadUrl
 
+	rpcFns["GetRegistrationsBySiteToken"] = ccl.doRPCGetRegistrationsBySiteToken
+
 	rpcFns["List"] = ccl.doRPCList
 
 	rpcFns["ListRegistrationsBySite"] = ccl.doRPCListRegistrationsBySite
@@ -1112,6 +1208,10 @@ func (c *customAPIInprocClient) Get(ctx context.Context, in *GetRequest, opts ..
 func (c *customAPIInprocClient) GetImageDownloadUrl(ctx context.Context, in *GetImageDownloadUrlReq, opts ...grpc.CallOption) (*GetImageDownloadUrlResp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.CustomAPI.GetImageDownloadUrl")
 	return c.CustomAPIServer.GetImageDownloadUrl(ctx, in)
+}
+func (c *customAPIInprocClient) GetRegistrationsBySiteToken(ctx context.Context, in *GetRegistrationsBySiteTokenReq, opts ...grpc.CallOption) (*GetRegistrationsBySiteTokenResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.CustomAPI.GetRegistrationsBySiteToken")
+	return c.CustomAPIServer.GetRegistrationsBySiteToken(ctx, in)
 }
 func (c *customAPIInprocClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.registration.CustomAPI.List")
@@ -1307,6 +1407,55 @@ func (s *customAPISrv) GetImageDownloadUrl(ctx context.Context, in *GetImageDown
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.GetImageDownloadUrlResp", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) GetRegistrationsBySiteToken(ctx context.Context, in *GetRegistrationsBySiteTokenReq) (*GetRegistrationsBySiteTokenResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.registration.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *GetRegistrationsBySiteTokenResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.registration.GetRegistrationsBySiteTokenReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.GetRegistrationsBySiteToken' operation on 'registration'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.registration.CustomAPI.GetRegistrationsBySiteToken"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetRegistrationsBySiteToken(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.registration.GetRegistrationsBySiteTokenResp", rsp)...)
 
 	return rsp, nil
 }
@@ -1756,6 +1905,90 @@ var CustomAPISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-customapi-getimagedownloadurl"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.GetImageDownloadUrl"
+            },
+            "x-displayname": "Registration",
+            "x-ves-proto-service": "ves.io.schema.registration.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/get-registrations-by-token": {
+            "post": {
+                "summary": "Get Registration UID by Site Token",
+                "description": "Returns list of registration uids that are using particular site token",
+                "operationId": "ves.io.schema.registration.CustomAPI.GetRegistrationsBySiteToken",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/registrationGetRegistrationsBySiteTokenResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/registrationGetRegistrationsBySiteTokenReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-registration-customapi-getregistrationsbysitetoken"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.registration.CustomAPI.GetRegistrationsBySiteToken"
             },
             "x-displayname": "Registration",
             "x-ves-proto-service": "ves.io.schema.registration.CustomAPI",
@@ -2900,6 +3133,44 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "registrationGetRegistrationsBySiteTokenReq": {
+            "type": "object",
+            "description": "Request to get registration uuids by site token",
+            "title": "Get registration uuids by site token request",
+            "x-displayname": "Get Registration UUIDs by Site Token Request",
+            "x-ves-proto-message": "ves.io.schema.registration.GetRegistrationsBySiteTokenReq",
+            "properties": {
+                "site_token": {
+                    "type": "string",
+                    "description": " site token to query on\n\nExample: - \"12345678-1234-1234-1234-1234567890ab\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Site token",
+                    "x-displayname": "Site Token",
+                    "x-ves-example": "12345678-1234-1234-1234-1234567890ab",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "registrationGetRegistrationsBySiteTokenResp": {
+            "type": "object",
+            "description": "Response for querying registration uuids by site token",
+            "title": "Get registration uuids by site token response",
+            "x-displayname": "Get Registration UUIDs by Site Token Response",
+            "x-ves-proto-message": "ves.io.schema.registration.GetRegistrationsBySiteTokenResp",
+            "properties": {
+                "registration_uuids": {
+                    "type": "array",
+                    "description": " Registration UUIDs that uses the site token",
+                    "title": "List of Registration UUIDs",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Registration UUIDs"
+                }
+            }
+        },
         "registrationGetResponse": {
             "type": "object",
             "description": "This is the output message of the 'Get' RPC",
@@ -2941,7 +3212,7 @@ var CustomAPISwaggerJSON string = `{
                     "title": "object",
                     "$ref": "#/definitions/registrationObject",
                     "x-displayname": "Object",
-                    "x-ves-deprecated": "Replaced by 'spec"
+                    "x-ves-deprecated": "Replaced by 'spec'"
                 },
                 "referring_objects": {
                     "type": "array",
@@ -3481,7 +3752,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "registrationProvider": {
             "type": "string",
-            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.\nRSeries Device\nOCI Cloud Instance\nNutanix instance\nOpenstack Instance",
+            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.\nRSeries Device\nOCI Cloud Instance\nNutanix instance\nOpenstack Instance\nEquinix Instance",
             "title": "Infrastructure provider",
             "enum": [
                 "UNKNOWN",
@@ -3506,7 +3777,8 @@ var CustomAPISwaggerJSON string = `{
                 "RSERIES",
                 "OCI",
                 "NUTANIX",
-                "OPENSTACK"
+                "OPENSTACK",
+                "EQUINIX"
             ],
             "default": "UNKNOWN",
             "x-displayname": "Infrastructure Provider",

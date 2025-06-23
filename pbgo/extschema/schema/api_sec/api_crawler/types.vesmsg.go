@@ -250,27 +250,6 @@ func (v *ValidateDomainConfiguration) DomainValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateDomainConfiguration) SimpleLoginValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for simple_login")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := SimpleLoginValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateDomainConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DomainConfiguration)
 	if !ok {
@@ -331,16 +310,7 @@ var DefaultDomainConfigurationValidator = func() *ValidateDomainConfiguration {
 	}
 	v.FldValidators["domain"] = vFn
 
-	vrhSimpleLogin := v.SimpleLoginValidationRuleHandler
-	rulesSimpleLogin := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhSimpleLogin(rulesSimpleLogin)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DomainConfiguration.simple_login: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["simple_login"] = vFn
+	v.FldValidators["simple_login"] = SimpleLoginValidator().Validate
 
 	return v
 }()
@@ -897,27 +867,6 @@ func (v *ValidateSimpleLogin) UserValidationRuleHandler(rules map[string]string)
 	return validatorFn, nil
 }
 
-func (v *ValidateSimpleLogin) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateSimpleLogin) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SimpleLogin)
 	if !ok {
@@ -967,8 +916,7 @@ var DefaultSimpleLoginValidator = func() *ValidateSimpleLogin {
 
 	vrhUser := v.UserValidationRuleHandler
 	rulesUser := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.max_len": "64",
 	}
 	vFn, err = vrhUser(rulesUser)
 	if err != nil {
@@ -977,16 +925,7 @@ var DefaultSimpleLoginValidator = func() *ValidateSimpleLogin {
 	}
 	v.FldValidators["user"] = vFn
 
-	vrhPassword := v.PasswordValidationRuleHandler
-	rulesPassword := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhPassword(rulesPassword)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleLogin.password: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["password"] = vFn
+	v.FldValidators["password"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
 }()

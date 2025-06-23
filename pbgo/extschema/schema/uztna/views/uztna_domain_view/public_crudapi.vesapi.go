@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/uztna_domain_views/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -1797,6 +1810,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.API.Create"
             },
             "x-displayname": "ZeroTrust Domain View",
@@ -1897,6 +1911,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.API.Replace"
             },
             "x-displayname": "ZeroTrust Domain View",
@@ -2013,6 +2028,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.API.List"
             },
             "x-displayname": "ZeroTrust Domain View",
@@ -2123,6 +2139,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.API.Get"
             },
             "delete": {
@@ -2216,6 +2233,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_domain_view-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.API.Delete"
             },
             "x-displayname": "ZeroTrust Domain View",
@@ -2954,7 +2972,7 @@ var APISwaggerJSON string = `{
         },
         "uztna_domain_viewDVCloudGatewayAdvertisement": {
             "type": "object",
-            "description": "\nGateways for Advertisemen",
+            "description": "\nGateways for Advertisement",
             "title": "CloudGatewayAdvertisement",
             "x-displayname": "Cloud Gateway Advertisement",
             "x-ves-oneof-field-cloud_gateway_choice": "[\"all_cloud\"]",
@@ -2964,7 +2982,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with []\n\n Advertise on all Cloud Gateways",
                     "title": "All",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Advertise on All Cloud Gateways"
+                    "x-displayname": "All Gateways"
                 }
             }
         },
@@ -3003,13 +3021,18 @@ var APISwaggerJSON string = `{
             "description": "This is used to select VIP Network and VIP Range from \nVIP Pool.",
             "title": "Application VIP Pool",
             "x-displayname": "Application VIP Pool",
+            "x-ves-oneof-field-ipaddress_type": "[\"ipv4_app_vip_pool\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewAppVIPPool",
             "properties": {
-                "app_vip_pool": {
-                    "description": " VIP Pools",
-                    "title": "Selected VIP Pool for Application",
+                "ipv4_app_vip_pool": {
+                    "description": "Exclusive with []\n Select or create new IPv4 App VIP pools\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "IPv4 App VIP Pool",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Selected VIP Pools"
+                    "x-displayname": "IPv4 App VIP Pool",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3024,7 +3047,7 @@ var APISwaggerJSON string = `{
                     "description": " Select/Add one or more TLS Certificate objects to associate with this ZeroTrust Domain",
                     "title": "TLS Certificates",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "TLS Certificates"
+                    "x-displayname": "TLS Certificate"
                 }
             }
         },
@@ -3043,18 +3066,35 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "uztna_domain_viewDomainViewDualStackAppVipPool": {
+            "type": "object",
+            "description": "x-displayName: \"Dual Stack App VIP Pools\"\n\nThis is used to import or create new IPv4 and Ipv6 App VIP Pools",
+            "title": "Dual Stack App VIP Pool",
+            "properties": {
+                "ipv4_app_vip_pool": {
+                    "description": "x-displayName: \"IPv4 App VIP Pool\"\nx-required\nSelect or create new IPv4 App VIP pools",
+                    "title": "IPv4 App VIP Pools",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "ipv6_app_vip_pool": {
+                    "description": "x-displayName: \"IPv6 App VIP Pool\"\nx-required\nSelect or create new IPv6 App VIP Pools",
+                    "title": "IPv6 App VIP Pool",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                }
+            }
+        },
         "uztna_domain_viewDomainViewDualStackLeasePool": {
             "type": "object",
             "description": "x-displayName: \"Dual Stack Lease Pools\"\n\nThis is used to import or create new IPv4 and Ipv6 Lease Pools",
             "title": "Dual Stack Lease Pool",
             "properties": {
                 "ipv4_leasepool": {
-                    "description": "x-displayName: \"IPv4 Lease Pools\"\nx-required\nSelect or create new IPv4 Leasepools",
+                    "description": "x-displayName: \"IPv4 Lease Pool\"\nx-required\nSelect or create new IPv4 Leasepools",
                     "title": "IPv4 Lease Pools",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "ipv6_leasepool": {
-                    "description": "x-displayName: \"IPv6 Lease Pools\"\nx-required\nSelect or create new IPv4 Lease Pools",
+                    "description": "x-displayName: \"IPv6 Lease Pool\"\nx-required\nSelect or create new IPv6 Lease Pools",
                     "title": "IPv6 Lease Pool",
                     "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
@@ -3062,7 +3102,7 @@ var APISwaggerJSON string = `{
         },
         "uztna_domain_viewDomainViewGateways": {
             "type": "object",
-            "description": "\nEach UZTNA ZeroTrust Domain will have one or more gateways associated with it.\nThe gateways represent the sites where the end user can connect to terminate \nthe mTLS/DTLS tunnels. The gateways associated with a UZTNA ZeroTrust Domain would all be front \nending the same set of applications and will enforce same set of policies for \nauthentication and authorisation to grant access to these applications.\nThis ensures same user experience no matter which gateway is reached for tunnel termination.\nEach Gateway will have a lease pool defined to allocate IP address to \nclient for the terminated tunne",
+            "description": "\nAccess FQDNs resolve to IP addresses on F5 Distributed Cloud or BIG-IP devices in customers' data centers. These devices, known as Gateways, establish secure connections with end users. This section allows users to specify Gateways for this ZeroTrust Domain.\nclient for the terminated tunnel",
             "title": "Gateways",
             "x-displayname": "Gateways",
             "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewGateways",
@@ -3073,14 +3113,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/uztna_domain_viewDVCloudGatewayAdvertisement",
                     "x-displayname": "Cloud Gateways"
                 },
-                "uztna_gateway": {
-                    "type": "array",
-                    "description": "\n Select BIG-IP Edge Gateway for Advertisement .",
-                    "title": "BigIP Edge Gateways",
-                    "items": {
-                        "$ref": "#/definitions/schemaviewsObjectRefType"
-                    },
-                    "x-displayname": "BIG-IP Edge Gateways"
+                "private_gateway": {
+                    "description": " Private gateways are gateways hosted within the customer's data centers and are typically accessed by users connected to their office or corporate network.",
+                    "title": "Private Gateways",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewPrivateGateways",
+                    "x-displayname": "Private Gateways"
                 }
             }
         },
@@ -3093,10 +3130,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewLeasePoolList",
             "properties": {
                 "ipv4_leasepool": {
-                    "description": "Exclusive with []\n\n Select or create new IPv4 Leasepools",
+                    "description": "Exclusive with []\n Select or create new IPv4 leasepool\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "IPv4 Lease Pool",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "IPv4 Lease Pool"
+                    "x-displayname": "IPv4 Lease Pool",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -3107,10 +3148,33 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewPolicy",
             "properties": {
                 "policy_name": {
-                    "description": "\n Select/Add ZTNA Policy to associate with this ZeroTrust Domain",
+                    "description": " \n The ZeroTrust Domain enforces an Access policy that all end users must comply with to access private and potentially public applications. The ZTNA policy allows the admin to set up the access policy for this ZeroTrust Domain",
                     "title": "ZTNA Policy",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "ZTNA Policy"
+                }
+            }
+        },
+        "uztna_domain_viewDomainViewPrivateGateways": {
+            "type": "object",
+            "description": "Private gateways are gateways hosted within the customer's data centers and are typically accessed by users connected to their office or corporate network.",
+            "title": "Private Gateways",
+            "x-displayname": "Private Gateways",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewPrivateGateways",
+            "properties": {
+                "uztna_gateway": {
+                    "type": "array",
+                    "description": "\n\nExample: - \"system/alon-ge\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4096\n",
+                    "title": "Private Gateway",
+                    "maxItems": 4096,
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Private Gateway",
+                    "x-ves-example": "system/alon-ge",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "4096"
+                    }
                 }
             }
         },
@@ -3393,25 +3457,27 @@ var APISwaggerJSON string = `{
             "properties": {
                 "access_url": {
                     "type": "string",
-                    "description": " Url to access the gateways\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.url_or_uri_ref: true\n",
-                    "maxLength": 1024,
-                    "x-displayname": "Access Url",
+                    "description": " The FQDN that users will configure on their Access Clients\n to connect to the ZTNA service.\n This URL would resolve to the Cloud or the Private Gateway\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Access FQDN",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "1024",
-                        "ves.io.schema.rules.string.url_or_uri_ref": "true"
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
                 "app_vip_pool": {
-                    "description": " Application VIP Pools ",
+                    "description": " Applications Onboarded to the ZTNA platform are assigned an IP \n address from this Pool as internal Virtual Server. \n Configure this option only if the default range is unacceptable.",
                     "$ref": "#/definitions/uztna_domain_viewDomainViewAppVIPPool",
                     "x-displayname": "Application VIP Pools"
                 },
                 "cert": {
-                    "description": " A ZTNA ZeroTrust Domain being a TLS Gateway requires a Valid \n Certificate associated with the Access FQDN. \n The approach to attach a certificate and key to a \n Domain in XC is an established pattern and we would reuse the same.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Select the certificate to be used for mTLS negotiation between clients\n and the server on Cloud and Private gateways\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/uztna_domain_viewDomainViewCertificate",
-                    "x-displayname": "Certificate",
+                    "x-displayname": "TLS Certificate",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3427,22 +3493,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "lease_pool": {
-                    "description": " The Lease Pool assigned to the Zero Trust Domain. \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " After a successful evaluation of the Access Policy,the\n end-user device is assigned private IP addressess. All \n application requests from this device will have this IP \n as their source. The admin can set up a subnet or IP address\n range using the leasepool for this assignment",
                     "$ref": "#/definitions/uztna_domain_viewDomainViewLeasePoolList",
-                    "x-displayname": "Lease Pool",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Lease Pools"
                 },
                 "policy": {
-                    "description": " The name of the ZTNA profile\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\n The name of the ZTNA profile",
                     "$ref": "#/definitions/uztna_domain_viewDomainViewPolicy",
-                    "x-displayname": "ZTNA Profile",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "ZTNA Profile"
                 }
             }
         },
@@ -3455,25 +3513,27 @@ var APISwaggerJSON string = `{
             "properties": {
                 "access_url": {
                     "type": "string",
-                    "description": " Url to access the gateways\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.url_or_uri_ref: true\n",
-                    "maxLength": 1024,
-                    "x-displayname": "Access Url",
+                    "description": " The FQDN that users will configure on their Access Clients\n to connect to the ZTNA service.\n This URL would resolve to the Cloud or the Private Gateway\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Access FQDN",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "1024",
-                        "ves.io.schema.rules.string.url_or_uri_ref": "true"
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
                 "app_vip_pool": {
-                    "description": " Application VIP Pools ",
+                    "description": " Applications Onboarded to the ZTNA platform are assigned an IP \n address from this Pool as internal Virtual Server. \n Configure this option only if the default range is unacceptable.",
                     "$ref": "#/definitions/uztna_domain_viewDomainViewAppVIPPool",
                     "x-displayname": "Application VIP Pools"
                 },
                 "cert": {
-                    "description": " A ZTNA ZeroTrust Domain being a TLS Gateway requires a Valid \n Certificate associated with the Access FQDN. \n The approach to attach a certificate and key to a \n Domain in XC is an established pattern and we would reuse the same.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Select the certificate to be used for mTLS negotiation between clients\n and the server on Cloud and Private gateways\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/uztna_domain_viewDomainViewCertificate",
-                    "x-displayname": "Certificate",
+                    "x-displayname": "TLS Certificate",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3489,22 +3549,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "lease_pool": {
-                    "description": " The Lease Pool assigned to the Zero Trust Domain. \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " After a successful evaluation of the Access Policy,the\n end-user device is assigned private IP addressess. All \n application requests from this device will have this IP \n as their source. The admin can set up a subnet or IP address\n range using the leasepool for this assignment",
                     "$ref": "#/definitions/uztna_domain_viewDomainViewLeasePoolList",
-                    "x-displayname": "Lease Pool",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Lease Pools"
                 },
                 "policy": {
-                    "description": " The name of the ZTNA profile\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\n The name of the ZTNA profile",
                     "$ref": "#/definitions/uztna_domain_viewDomainViewPolicy",
-                    "x-displayname": "ZTNA Profile",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "ZTNA Profile"
                 }
             }
         },
@@ -3517,25 +3569,22 @@ var APISwaggerJSON string = `{
             "properties": {
                 "access_url": {
                     "type": "string",
-                    "description": " Url to access the gateways\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.url_or_uri_ref: true\n",
-                    "maxLength": 1024,
-                    "x-displayname": "Access Url",
+                    "description": " The FQDN that users will configure on their Access Clients\n to connect to the ZTNA service.\n This URL would resolve to the Cloud or the Private Gateway\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Access FQDN",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "1024",
-                        "ves.io.schema.rules.string.url_or_uri_ref": "true"
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
-                "app_vip_pool": {
-                    "description": " Application VIP Pools ",
-                    "$ref": "#/definitions/uztna_domain_viewDomainViewAppVIPPool",
-                    "x-displayname": "Application VIP Pools"
-                },
                 "cert": {
-                    "description": " A ZTNA ZeroTrust Domain being a TLS Gateway requires a Valid \n Certificate associated with the Access FQDN. \n The approach to attach a certificate and key to a \n Domain in XC is an established pattern and we would reuse the same.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Select the certificate to be used for mTLS negotiation between clients\n and the server on Cloud and Private gateways\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/uztna_domain_viewDomainViewCertificate",
-                    "x-displayname": "Certificate",
+                    "x-displayname": "TLS Certificate",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3551,22 +3600,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "lease_pool": {
-                    "description": " The Lease Pool assigned to the Zero Trust Domain. \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " After a successful evaluation of the Access Policy,the\n end-user device is assigned private IP addressess. All \n application requests from this device will have this IP \n as their source. The admin can set up a subnet or IP address\n range using the leasepool for this assignment",
                     "$ref": "#/definitions/uztna_domain_viewDomainViewLeasePoolList",
-                    "x-displayname": "Lease Pool",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Lease Pools"
                 },
                 "policy": {
-                    "description": " The name of the ZTNA profile\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "\n The name of the ZTNA profile",
                     "$ref": "#/definitions/uztna_domain_viewDomainViewPolicy",
-                    "x-displayname": "ZTNA Profile",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "ZTNA Profile"
                 }
             }
         }

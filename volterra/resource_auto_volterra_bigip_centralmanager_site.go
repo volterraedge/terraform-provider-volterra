@@ -344,5 +344,8 @@ func resourceVolterraBigipCentralmanagerSiteDelete(d *schema.ResourceData, meta 
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra BigipCentralmanagerSite obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_views_bigip_centralmanager_site.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_views_bigip_centralmanager_site.ObjectType, namespace, name, opts...)
 }

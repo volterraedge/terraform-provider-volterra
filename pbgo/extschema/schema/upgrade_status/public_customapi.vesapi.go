@@ -34,6 +34,15 @@ type UpgradeStatusCustomApiGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *UpgradeStatusCustomApiGrpcClient) doRPCGetUpgradableSWVersions(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetUpgradableSWVersionsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.upgrade_status.GetUpgradableSWVersionsRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetUpgradableSWVersions(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *UpgradeStatusCustomApiGrpcClient) doRPCGetUpgradeStatus(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetUpgradeStatusRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -73,6 +82,8 @@ func NewUpgradeStatusCustomApiGrpcClient(cc *grpc.ClientConn) server.CustomClien
 		grpcClient: NewUpgradeStatusCustomApiClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["GetUpgradableSWVersions"] = ccl.doRPCGetUpgradableSWVersions
+
 	rpcFns["GetUpgradeStatus"] = ccl.doRPCGetUpgradeStatus
 
 	ccl.rpcFns = rpcFns
@@ -86,6 +97,90 @@ type UpgradeStatusCustomApiRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *UpgradeStatusCustomApiRestClient) doRPCGetUpgradableSWVersions(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &GetUpgradableSWVersionsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.upgrade_status.GetUpgradableSWVersionsRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("current_os_version", fmt.Sprintf("%v", req.CurrentOsVersion))
+		q.Add("current_sw_version", fmt.Sprintf("%v", req.CurrentSwVersion))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &GetUpgradableSWVersionsResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.upgrade_status.GetUpgradableSWVersionsResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *UpgradeStatusCustomApiRestClient) doRPCGetUpgradeStatus(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -196,6 +291,8 @@ func NewUpgradeStatusCustomApiRestClient(baseURL string, hc http.Client) server.
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["GetUpgradableSWVersions"] = ccl.doRPCGetUpgradableSWVersions
+
 	rpcFns["GetUpgradeStatus"] = ccl.doRPCGetUpgradeStatus
 
 	ccl.rpcFns = rpcFns
@@ -210,6 +307,10 @@ type upgradeStatusCustomApiInprocClient struct {
 	UpgradeStatusCustomApiServer
 }
 
+func (c *upgradeStatusCustomApiInprocClient) GetUpgradableSWVersions(ctx context.Context, in *GetUpgradableSWVersionsRequest, opts ...grpc.CallOption) (*GetUpgradableSWVersionsResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.upgrade_status.UpgradeStatusCustomApi.GetUpgradableSWVersions")
+	return c.UpgradeStatusCustomApiServer.GetUpgradableSWVersions(ctx, in)
+}
 func (c *upgradeStatusCustomApiInprocClient) GetUpgradeStatus(ctx context.Context, in *GetUpgradeStatusRequest, opts ...grpc.CallOption) (*GetUpgradeStatusResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.upgrade_status.UpgradeStatusCustomApi.GetUpgradeStatus")
 	return c.UpgradeStatusCustomApiServer.GetUpgradeStatus(ctx, in)
@@ -236,6 +337,55 @@ type upgradeStatusCustomApiSrv struct {
 	svc svcfw.Service
 }
 
+func (s *upgradeStatusCustomApiSrv) GetUpgradableSWVersions(ctx context.Context, in *GetUpgradableSWVersionsRequest) (*GetUpgradableSWVersionsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.upgrade_status.UpgradeStatusCustomApi")
+	cah, ok := ah.(UpgradeStatusCustomApiServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *UpgradeStatusCustomApiServer", ah)
+	}
+
+	var (
+		rsp *GetUpgradableSWVersionsResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.upgrade_status.GetUpgradableSWVersionsRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'UpgradeStatusCustomApi.GetUpgradableSWVersions' operation on 'upgrade_status'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.upgrade_status.UpgradeStatusCustomApi.GetUpgradableSWVersions"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetUpgradableSWVersions(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.upgrade_status.GetUpgradableSWVersionsResponse", rsp)...)
+
+	return rsp, nil
+}
 func (s *upgradeStatusCustomApiSrv) GetUpgradeStatus(ctx context.Context, in *GetUpgradeStatusRequest) (*GetUpgradeStatusResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.upgrade_status.UpgradeStatusCustomApi")
 	cah, ok := ah.(UpgradeStatusCustomApiServer)
@@ -311,8 +461,8 @@ var UpgradeStatusCustomApiSwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/sites/{name}/upgrade_status": {
             "get": {
-                "summary": "Released Signatures",
-                "description": "API to get Released Signatures",
+                "summary": "Get Upgrade Status",
+                "description": "API to get upgrade status of a site",
                 "operationId": "ves.io.schema.upgrade_status.UpgradeStatusCustomApi.GetUpgradeStatus",
                 "responses": {
                     "200": {
@@ -381,11 +531,11 @@ var UpgradeStatusCustomApiSwaggerJSON string = `{
                     },
                     {
                         "name": "name",
-                        "description": "vh_name\n\nx-example: \"blogging-app\"\nFetch upgrade status for the name of site",
+                        "description": "name\n\nx-example: \"blogging-app\"\nFetch upgrade status for the name of site",
                         "in": "path",
                         "required": true,
                         "type": "string",
-                        "x-displayname": "Virtual Host Name"
+                        "x-displayname": "Site Name"
                     }
                 ],
                 "tags": [
@@ -396,6 +546,98 @@ var UpgradeStatusCustomApiSwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-upgrade_status-upgradestatuscustomapi-getupgradestatus"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.upgrade_status.UpgradeStatusCustomApi.GetUpgradeStatus"
+            },
+            "x-displayname": "Upgrade Status Custom API",
+            "x-ves-proto-service": "ves.io.schema.upgrade_status.UpgradeStatusCustomApi",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/upgradable_sw_versions": {
+            "get": {
+                "summary": "Get Upgradable SW Versions",
+                "description": "API to get list of sw versions that can be upgraded to",
+                "operationId": "ves.io.schema.upgrade_status.UpgradeStatusCustomApi.GetUpgradableSWVersions",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/upgrade_statusGetUpgradableSWVersionsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "current_os_version",
+                        "description": "x-example: \"9.2023.23\"\nFetch upgradable sw versions for site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Current OS Version"
+                    },
+                    {
+                        "name": "current_sw_version",
+                        "description": "x-example: \"crt-20241107-1123\"\nFetch upgradable sw versions for site",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Current SW Version"
+                    }
+                ],
+                "tags": [
+                    "UpgradeStatusCustomApi"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-upgrade_status-upgradestatuscustomapi-getupgradableswversions"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.upgrade_status.UpgradeStatusCustomApi.GetUpgradableSWVersions"
             },
             "x-displayname": "Upgrade Status Custom API",
             "x-ves-proto-service": "ves.io.schema.upgrade_status.UpgradeStatusCustomApi",
@@ -471,6 +713,25 @@ var UpgradeStatusCustomApiSwaggerJSON string = `{
                 "type": {
                     "type": "string",
                     "title": "x-displayName: \"Type\"\nType of action to was applied with object, i.e. load, apply, running, status"
+                }
+            }
+        },
+        "upgrade_statusGetUpgradableSWVersionsResponse": {
+            "type": "object",
+            "description": "Response to get the list of upgradable sw versions",
+            "title": "GetUpgradableSWVersionsResponse",
+            "x-displayname": "Get upgradable sw versions reponse",
+            "x-ves-proto-message": "ves.io.schema.upgrade_status.GetUpgradableSWVersionsResponse",
+            "properties": {
+                "sw_versions": {
+                    "type": "array",
+                    "description": " Fetch upgradable sw versions for site\n\nExample: - \"[\\\"crt-20241107-1123\\\"]\"-",
+                    "title": "sw_versions",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "SW Versions",
+                    "x-ves-example": "[\\\"crt-20241107-1123\\\"]"
                 }
             }
         },

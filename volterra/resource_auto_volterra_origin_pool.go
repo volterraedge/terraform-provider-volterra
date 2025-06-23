@@ -18,8 +18,8 @@ import (
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
-	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
 	statemigration "github.com/volterraedge/terraform-provider-volterra/volterra/state_migration"
+	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
 )
 
 // resourceVolterraOriginPool is implementation of Volterra's OriginPool resources
@@ -123,46 +123,6 @@ func resourceVolterraOriginPool() *schema.Resource {
 						"connection_timeout": {
 							Type:     schema.TypeInt,
 							Optional: true,
-						},
-
-						"header_transformation_type": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"default_header_transformation": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"legacy_header_transformation": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"preserve_case_header_transformation": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"proper_case_header_transformation": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-								},
-							},
 						},
 
 						"http_idle_timeout": {
@@ -551,6 +511,54 @@ func resourceVolterraOriginPool() *schema.Resource {
 											},
 										},
 									},
+
+									"snat_pool": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"no_snat_pool": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"snat_pool": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -616,33 +624,15 @@ func resourceVolterraOriginPool() *schema.Resource {
 										Optional: true,
 									},
 
-									"service_name": {
-
+									"protocol": {
 										Type:     schema.TypeString,
 										Optional: true,
 									},
 
-									"service_selector": {
+									"service_name": {
 
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"expressions": {
-
-													Type: schema.TypeList,
-
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
-												},
-											},
-										},
+										Type:     schema.TypeString,
+										Optional: true,
 									},
 
 									"site_locator": {
@@ -706,6 +696,54 @@ func resourceVolterraOriginPool() *schema.Resource {
 															"tenant": {
 																Type:     schema.TypeString,
 																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"snat_pool": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"no_snat_pool": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"snat_pool": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
 															},
 														},
 													},
@@ -841,6 +879,54 @@ func resourceVolterraOriginPool() *schema.Resource {
 											},
 										},
 									},
+
+									"snat_pool": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"no_snat_pool": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"snat_pool": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -960,6 +1046,54 @@ func resourceVolterraOriginPool() *schema.Resource {
 															"tenant": {
 																Type:     schema.TypeString,
 																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"snat_pool": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"no_snat_pool": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"snat_pool": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
 															},
 														},
 													},
@@ -1240,42 +1374,6 @@ func resourceVolterraOriginPool() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
-															"blindfold_secret_info_internal": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"decryption_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"store_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"secret_encoding_type": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -1318,66 +1416,6 @@ func resourceVolterraOriginPool() *schema.Resource {
 																		"url": {
 																			Type:     schema.TypeString,
 																			Required: true,
-																		},
-																	},
-																},
-															},
-
-															"vault_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"key": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"provider": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"secret_encoding": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"version": {
-																			Type:       schema.TypeInt,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"wingman_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"name": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1549,6 +1587,29 @@ func resourceVolterraOriginPool() *schema.Resource {
 					},
 				},
 			},
+
+			"upstream_conn_pool_reuse_type": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disable_conn_pool_reuse": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_conn_pool_reuse": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
+				},
+			},
 		},
 		SchemaVersion: 1,
 		StateUpgraders: []schema.StateUpgrader{
@@ -1558,7 +1619,6 @@ func resourceVolterraOriginPool() *schema.Resource {
 				Version: 0,
 			},
 		},
-
 	}
 }
 
@@ -1700,70 +1760,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 				if w, ok := advancedOptionsMapStrToI["connection_timeout"]; ok && !isIntfNil(w) {
 					advancedOptions.ConnectionTimeout = uint32(w.(int))
-				}
-
-				if v, ok := advancedOptionsMapStrToI["header_transformation_type"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					headerTransformationType := &ves_io_schema.HeaderTransformationType{}
-					advancedOptions.HeaderTransformationType = headerTransformationType
-					for _, set := range sl {
-						if set != nil {
-							headerTransformationTypeMapStrToI := set.(map[string]interface{})
-
-							headerTransformationChoiceTypeFound := false
-
-							if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-								headerTransformationChoiceTypeFound = true
-
-								if v.(bool) {
-									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
-									headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
-									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-								}
-
-							}
-
-							if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-								headerTransformationChoiceTypeFound = true
-
-								if v.(bool) {
-									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
-									headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
-									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-								}
-
-							}
-
-							if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-								headerTransformationChoiceTypeFound = true
-
-								if v.(bool) {
-									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
-									headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
-									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-								}
-
-							}
-
-							if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-								headerTransformationChoiceTypeFound = true
-
-								if v.(bool) {
-									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
-									headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
-									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-								}
-
-							}
-
-						}
-					}
-
 				}
 
 				if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
@@ -2077,7 +2073,12 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 										if w, ok := endpointSubsetsMapStrToI["keys"]; ok && !isIntfNil(w) {
 											ls := make([]string, len(w.([]interface{})))
 											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field keys")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											endpointSubsets[i].Keys = ls
 										}
@@ -2160,7 +2161,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 	healthCheckPortChoiceTypeFound := false
 
-	if v, ok := d.GetOk("health_check_port"); ok && !healthCheckPortChoiceTypeFound {
+	if v, ok := d.GetOk("health_check_port"); ok && !isIntfNil(v) && !healthCheckPortChoiceTypeFound {
 
 		healthCheckPortChoiceTypeFound = true
 		healthCheckPortChoiceInt := &ves_io_schema_views_origin_pool.CreateSpecType_HealthCheckPort{}
@@ -2383,6 +2384,81 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+							if v, ok := cs["snat_pool"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								snatPool := &ves_io_schema_views.SnatPoolConfiguration{}
+								choiceInt.ConsulService.SnatPool = snatPool
+								for _, set := range sl {
+									if set != nil {
+										snatPoolMapStrToI := set.(map[string]interface{})
+
+										snatPoolChoiceTypeFound := false
+
+										if v, ok := snatPoolMapStrToI["no_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+
+											if v.(bool) {
+												snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_NoSnatPool{}
+												snatPoolChoiceInt.NoSnatPool = &ves_io_schema.Empty{}
+												snatPool.SnatPoolChoice = snatPoolChoiceInt
+											}
+
+										}
+
+										if v, ok := snatPoolMapStrToI["snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+											snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_SnatPool{}
+											snatPoolChoiceInt.SnatPool = &ves_io_schema_views.PrefixStringListType{}
+											snatPool.SnatPoolChoice = snatPoolChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Ipv6Prefixes = ls
+
+													}
+
+													if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Prefixes = ls
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
 						}
 					}
 
@@ -2479,6 +2555,12 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+							if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
+
+								choiceInt.K8SService.Protocol = ves_io_schema_views_origin_pool.ProtocolType(ves_io_schema_views_origin_pool.ProtocolType_value[v.(string)])
+
+							}
+
 							serviceInfoTypeFound := false
 
 							if v, ok := cs["service_name"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
@@ -2489,33 +2571,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 								choiceInt.K8SService.ServiceInfo = serviceInfoInt
 
 								serviceInfoInt.ServiceName = v.(string)
-
-							}
-
-							if v, ok := cs["service_selector"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
-
-								serviceInfoTypeFound = true
-								serviceInfoInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceSelector{}
-								serviceInfoInt.ServiceSelector = &ves_io_schema.LabelSelectorType{}
-								choiceInt.K8SService.ServiceInfo = serviceInfoInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-											ls := make([]string, len(v.([]interface{})))
-											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
-											}
-											serviceInfoInt.ServiceSelector.Expressions = ls
-
-										}
-
-									}
-								}
 
 							}
 
@@ -2592,6 +2647,81 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 														choiceInt.VirtualSite.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["snat_pool"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								snatPool := &ves_io_schema_views.SnatPoolConfiguration{}
+								choiceInt.K8SService.SnatPool = snatPool
+								for _, set := range sl {
+									if set != nil {
+										snatPoolMapStrToI := set.(map[string]interface{})
+
+										snatPoolChoiceTypeFound := false
+
+										if v, ok := snatPoolMapStrToI["no_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+
+											if v.(bool) {
+												snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_NoSnatPool{}
+												snatPoolChoiceInt.NoSnatPool = &ves_io_schema.Empty{}
+												snatPool.SnatPoolChoice = snatPoolChoiceInt
+											}
+
+										}
+
+										if v, ok := snatPoolMapStrToI["snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+											snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_SnatPool{}
+											snatPoolChoiceInt.SnatPool = &ves_io_schema_views.PrefixStringListType{}
+											snatPool.SnatPoolChoice = snatPoolChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Ipv6Prefixes = ls
+
+													}
+
+													if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Prefixes = ls
 
 													}
 
@@ -2793,6 +2923,81 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+							if v, ok := cs["snat_pool"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								snatPool := &ves_io_schema_views.SnatPoolConfiguration{}
+								choiceInt.PrivateIp.SnatPool = snatPool
+								for _, set := range sl {
+									if set != nil {
+										snatPoolMapStrToI := set.(map[string]interface{})
+
+										snatPoolChoiceTypeFound := false
+
+										if v, ok := snatPoolMapStrToI["no_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+
+											if v.(bool) {
+												snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_NoSnatPool{}
+												snatPoolChoiceInt.NoSnatPool = &ves_io_schema.Empty{}
+												snatPool.SnatPoolChoice = snatPoolChoiceInt
+											}
+
+										}
+
+										if v, ok := snatPoolMapStrToI["snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+											snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_SnatPool{}
+											snatPoolChoiceInt.SnatPool = &ves_io_schema_views.PrefixStringListType{}
+											snatPool.SnatPoolChoice = snatPoolChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Ipv6Prefixes = ls
+
+													}
+
+													if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Prefixes = ls
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
 						}
 					}
 
@@ -2956,6 +3161,81 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 														choiceInt.VirtualSite.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["snat_pool"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								snatPool := &ves_io_schema_views.SnatPoolConfiguration{}
+								choiceInt.PrivateName.SnatPool = snatPool
+								for _, set := range sl {
+									if set != nil {
+										snatPoolMapStrToI := set.(map[string]interface{})
+
+										snatPoolChoiceTypeFound := false
+
+										if v, ok := snatPoolMapStrToI["no_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+
+											if v.(bool) {
+												snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_NoSnatPool{}
+												snatPoolChoiceInt.NoSnatPool = &ves_io_schema.Empty{}
+												snatPool.SnatPoolChoice = snatPoolChoiceInt
+											}
+
+										}
+
+										if v, ok := snatPoolMapStrToI["snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+											snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_SnatPool{}
+											snatPoolChoiceInt.SnatPool = &ves_io_schema_views.PrefixStringListType{}
+											snatPool.SnatPoolChoice = snatPoolChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Ipv6Prefixes = ls
+
+													}
+
+													if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Prefixes = ls
 
 													}
 
@@ -3197,7 +3477,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	if v, ok := d.GetOk("port"); ok && !portChoiceTypeFound {
+	if v, ok := d.GetOk("port"); ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 		portChoiceTypeFound = true
 		portChoiceInt := &ves_io_schema_views_origin_pool.CreateSpecType_Port{}
@@ -3224,7 +3504,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	if v, ok := d.GetOk("use_tls"); ok && !tlsChoiceTypeFound {
+	if v, ok := d.GetOk("use_tls"); ok && !isIntfNil(v) && !tlsChoiceTypeFound {
 
 		tlsChoiceTypeFound = true
 		tlsChoiceInt := &ves_io_schema_views_origin_pool.CreateSpecType_UseTls{}
@@ -3335,6 +3615,9 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+															}
 															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
 														}
 														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
@@ -3346,7 +3629,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
@@ -3355,7 +3638,7 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
@@ -3372,38 +3655,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 											for _, set := range sl {
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
-
-													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															if set != nil {
-																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.Location = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
 
 													secretInfoOneofTypeFound := false
 
@@ -3463,76 +3714,6 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																}
-
-																if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																}
-
-																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																}
-
-																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																}
-
-																if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -3746,7 +3927,12 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -3806,6 +3992,47 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 							}
 
 						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	//upstream_conn_pool_reuse_type
+	if v, ok := d.GetOk("upstream_conn_pool_reuse_type"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		upstreamConnPoolReuseType := &ves_io_schema.UpstreamConnPoolReuseType{}
+		createSpec.UpstreamConnPoolReuseType = upstreamConnPoolReuseType
+		for _, set := range sl {
+			if set != nil {
+				upstreamConnPoolReuseTypeMapStrToI := set.(map[string]interface{})
+
+				mapDownstreamToUpstreamConnPoolTypeTypeFound := false
+
+				if v, ok := upstreamConnPoolReuseTypeMapStrToI["disable_conn_pool_reuse"]; ok && !isIntfNil(v) && !mapDownstreamToUpstreamConnPoolTypeTypeFound {
+
+					mapDownstreamToUpstreamConnPoolTypeTypeFound = true
+
+					if v.(bool) {
+						mapDownstreamToUpstreamConnPoolTypeInt := &ves_io_schema.UpstreamConnPoolReuseType_DisableConnPoolReuse{}
+						mapDownstreamToUpstreamConnPoolTypeInt.DisableConnPoolReuse = &ves_io_schema.Empty{}
+						upstreamConnPoolReuseType.MapDownstreamToUpstreamConnPoolType = mapDownstreamToUpstreamConnPoolTypeInt
+					}
+
+				}
+
+				if v, ok := upstreamConnPoolReuseTypeMapStrToI["enable_conn_pool_reuse"]; ok && !isIntfNil(v) && !mapDownstreamToUpstreamConnPoolTypeTypeFound {
+
+					mapDownstreamToUpstreamConnPoolTypeTypeFound = true
+
+					if v.(bool) {
+						mapDownstreamToUpstreamConnPoolTypeInt := &ves_io_schema.UpstreamConnPoolReuseType_EnableConnPoolReuse{}
+						mapDownstreamToUpstreamConnPoolTypeInt.EnableConnPoolReuse = &ves_io_schema.Empty{}
+						upstreamConnPoolReuseType.MapDownstreamToUpstreamConnPoolType = mapDownstreamToUpstreamConnPoolTypeInt
 					}
 
 				}
@@ -4000,70 +4227,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 				if w, ok := advancedOptionsMapStrToI["connection_timeout"]; ok && !isIntfNil(w) {
 					advancedOptions.ConnectionTimeout = uint32(w.(int))
-				}
-
-				if v, ok := advancedOptionsMapStrToI["header_transformation_type"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					headerTransformationType := &ves_io_schema.HeaderTransformationType{}
-					advancedOptions.HeaderTransformationType = headerTransformationType
-					for _, set := range sl {
-						if set != nil {
-							headerTransformationTypeMapStrToI := set.(map[string]interface{})
-
-							headerTransformationChoiceTypeFound := false
-
-							if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-								headerTransformationChoiceTypeFound = true
-
-								if v.(bool) {
-									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
-									headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
-									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-								}
-
-							}
-
-							if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-								headerTransformationChoiceTypeFound = true
-
-								if v.(bool) {
-									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
-									headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
-									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-								}
-
-							}
-
-							if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-								headerTransformationChoiceTypeFound = true
-
-								if v.(bool) {
-									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
-									headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
-									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-								}
-
-							}
-
-							if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
-
-								headerTransformationChoiceTypeFound = true
-
-								if v.(bool) {
-									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
-									headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
-									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
-								}
-
-							}
-
-						}
-					}
-
 				}
 
 				if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
@@ -4377,7 +4540,12 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 										if w, ok := endpointSubsetsMapStrToI["keys"]; ok && !isIntfNil(w) {
 											ls := make([]string, len(w.([]interface{})))
 											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field keys")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											endpointSubsets[i].Keys = ls
 										}
@@ -4457,7 +4625,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 	healthCheckPortChoiceTypeFound := false
 
-	if v, ok := d.GetOk("health_check_port"); ok && !healthCheckPortChoiceTypeFound {
+	if v, ok := d.GetOk("health_check_port"); ok && !isIntfNil(v) && !healthCheckPortChoiceTypeFound {
 
 		healthCheckPortChoiceTypeFound = true
 		healthCheckPortChoiceInt := &ves_io_schema_views_origin_pool.ReplaceSpecType_HealthCheckPort{}
@@ -4677,6 +4845,81 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+							if v, ok := cs["snat_pool"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								snatPool := &ves_io_schema_views.SnatPoolConfiguration{}
+								choiceInt.ConsulService.SnatPool = snatPool
+								for _, set := range sl {
+									if set != nil {
+										snatPoolMapStrToI := set.(map[string]interface{})
+
+										snatPoolChoiceTypeFound := false
+
+										if v, ok := snatPoolMapStrToI["no_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+
+											if v.(bool) {
+												snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_NoSnatPool{}
+												snatPoolChoiceInt.NoSnatPool = &ves_io_schema.Empty{}
+												snatPool.SnatPoolChoice = snatPoolChoiceInt
+											}
+
+										}
+
+										if v, ok := snatPoolMapStrToI["snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+											snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_SnatPool{}
+											snatPoolChoiceInt.SnatPool = &ves_io_schema_views.PrefixStringListType{}
+											snatPool.SnatPoolChoice = snatPoolChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Ipv6Prefixes = ls
+
+													}
+
+													if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Prefixes = ls
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
 						}
 					}
 
@@ -4773,6 +5016,12 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+							if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
+
+								choiceInt.K8SService.Protocol = ves_io_schema_views_origin_pool.ProtocolType(ves_io_schema_views_origin_pool.ProtocolType_value[v.(string)])
+
+							}
+
 							serviceInfoTypeFound := false
 
 							if v, ok := cs["service_name"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
@@ -4783,33 +5032,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 								choiceInt.K8SService.ServiceInfo = serviceInfoInt
 
 								serviceInfoInt.ServiceName = v.(string)
-
-							}
-
-							if v, ok := cs["service_selector"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
-
-								serviceInfoTypeFound = true
-								serviceInfoInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceSelector{}
-								serviceInfoInt.ServiceSelector = &ves_io_schema.LabelSelectorType{}
-								choiceInt.K8SService.ServiceInfo = serviceInfoInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-											ls := make([]string, len(v.([]interface{})))
-											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
-											}
-											serviceInfoInt.ServiceSelector.Expressions = ls
-
-										}
-
-									}
-								}
 
 							}
 
@@ -4886,6 +5108,81 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 														choiceInt.VirtualSite.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["snat_pool"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								snatPool := &ves_io_schema_views.SnatPoolConfiguration{}
+								choiceInt.K8SService.SnatPool = snatPool
+								for _, set := range sl {
+									if set != nil {
+										snatPoolMapStrToI := set.(map[string]interface{})
+
+										snatPoolChoiceTypeFound := false
+
+										if v, ok := snatPoolMapStrToI["no_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+
+											if v.(bool) {
+												snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_NoSnatPool{}
+												snatPoolChoiceInt.NoSnatPool = &ves_io_schema.Empty{}
+												snatPool.SnatPoolChoice = snatPoolChoiceInt
+											}
+
+										}
+
+										if v, ok := snatPoolMapStrToI["snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+											snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_SnatPool{}
+											snatPoolChoiceInt.SnatPool = &ves_io_schema_views.PrefixStringListType{}
+											snatPool.SnatPoolChoice = snatPoolChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Ipv6Prefixes = ls
+
+													}
+
+													if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Prefixes = ls
 
 													}
 
@@ -5087,6 +5384,81 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 							}
 
+							if v, ok := cs["snat_pool"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								snatPool := &ves_io_schema_views.SnatPoolConfiguration{}
+								choiceInt.PrivateIp.SnatPool = snatPool
+								for _, set := range sl {
+									if set != nil {
+										snatPoolMapStrToI := set.(map[string]interface{})
+
+										snatPoolChoiceTypeFound := false
+
+										if v, ok := snatPoolMapStrToI["no_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+
+											if v.(bool) {
+												snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_NoSnatPool{}
+												snatPoolChoiceInt.NoSnatPool = &ves_io_schema.Empty{}
+												snatPool.SnatPoolChoice = snatPoolChoiceInt
+											}
+
+										}
+
+										if v, ok := snatPoolMapStrToI["snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+											snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_SnatPool{}
+											snatPoolChoiceInt.SnatPool = &ves_io_schema_views.PrefixStringListType{}
+											snatPool.SnatPoolChoice = snatPoolChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Ipv6Prefixes = ls
+
+													}
+
+													if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Prefixes = ls
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
 						}
 					}
 
@@ -5250,6 +5622,81 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 													if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
 
 														choiceInt.VirtualSite.Tenant = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["snat_pool"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								snatPool := &ves_io_schema_views.SnatPoolConfiguration{}
+								choiceInt.PrivateName.SnatPool = snatPool
+								for _, set := range sl {
+									if set != nil {
+										snatPoolMapStrToI := set.(map[string]interface{})
+
+										snatPoolChoiceTypeFound := false
+
+										if v, ok := snatPoolMapStrToI["no_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+
+											if v.(bool) {
+												snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_NoSnatPool{}
+												snatPoolChoiceInt.NoSnatPool = &ves_io_schema.Empty{}
+												snatPool.SnatPoolChoice = snatPoolChoiceInt
+											}
+
+										}
+
+										if v, ok := snatPoolMapStrToI["snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+											snatPoolChoiceTypeFound = true
+											snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_SnatPool{}
+											snatPoolChoiceInt.SnatPool = &ves_io_schema_views.PrefixStringListType{}
+											snatPool.SnatPoolChoice = snatPoolChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Ipv6Prefixes = ls
+
+													}
+
+													if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														snatPoolChoiceInt.SnatPool.Prefixes = ls
 
 													}
 
@@ -5489,7 +5936,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	if v, ok := d.GetOk("port"); ok && !portChoiceTypeFound {
+	if v, ok := d.GetOk("port"); ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 		portChoiceTypeFound = true
 		portChoiceInt := &ves_io_schema_views_origin_pool.ReplaceSpecType_Port{}
@@ -5514,7 +5961,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
-	if v, ok := d.GetOk("use_tls"); ok && !tlsChoiceTypeFound {
+	if v, ok := d.GetOk("use_tls"); ok && !isIntfNil(v) && !tlsChoiceTypeFound {
 
 		tlsChoiceTypeFound = true
 		tlsChoiceInt := &ves_io_schema_views_origin_pool.ReplaceSpecType_UseTls{}
@@ -5625,6 +6072,9 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+															}
 															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
 														}
 														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
@@ -5636,7 +6086,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
@@ -5645,7 +6095,7 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
@@ -5662,38 +6112,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 											for _, set := range sl {
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
-
-													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															if set != nil {
-																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.Location = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
 
 													secretInfoOneofTypeFound := false
 
@@ -5753,76 +6171,6 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																}
-
-																if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																}
-
-																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																}
-
-																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																}
-
-																if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -6036,7 +6384,12 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -6105,6 +6458,46 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 
 	}
 
+	if v, ok := d.GetOk("upstream_conn_pool_reuse_type"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		upstreamConnPoolReuseType := &ves_io_schema.UpstreamConnPoolReuseType{}
+		updateSpec.UpstreamConnPoolReuseType = upstreamConnPoolReuseType
+		for _, set := range sl {
+			if set != nil {
+				upstreamConnPoolReuseTypeMapStrToI := set.(map[string]interface{})
+
+				mapDownstreamToUpstreamConnPoolTypeTypeFound := false
+
+				if v, ok := upstreamConnPoolReuseTypeMapStrToI["disable_conn_pool_reuse"]; ok && !isIntfNil(v) && !mapDownstreamToUpstreamConnPoolTypeTypeFound {
+
+					mapDownstreamToUpstreamConnPoolTypeTypeFound = true
+
+					if v.(bool) {
+						mapDownstreamToUpstreamConnPoolTypeInt := &ves_io_schema.UpstreamConnPoolReuseType_DisableConnPoolReuse{}
+						mapDownstreamToUpstreamConnPoolTypeInt.DisableConnPoolReuse = &ves_io_schema.Empty{}
+						upstreamConnPoolReuseType.MapDownstreamToUpstreamConnPoolType = mapDownstreamToUpstreamConnPoolTypeInt
+					}
+
+				}
+
+				if v, ok := upstreamConnPoolReuseTypeMapStrToI["enable_conn_pool_reuse"]; ok && !isIntfNil(v) && !mapDownstreamToUpstreamConnPoolTypeTypeFound {
+
+					mapDownstreamToUpstreamConnPoolTypeTypeFound = true
+
+					if v.(bool) {
+						mapDownstreamToUpstreamConnPoolTypeInt := &ves_io_schema.UpstreamConnPoolReuseType_EnableConnPoolReuse{}
+						mapDownstreamToUpstreamConnPoolTypeInt.EnableConnPoolReuse = &ves_io_schema.Empty{}
+						upstreamConnPoolReuseType.MapDownstreamToUpstreamConnPoolType = mapDownstreamToUpstreamConnPoolTypeInt
+					}
+
+				}
+
+			}
+		}
+
+	}
+
 	log.Printf("[DEBUG] Updating Volterra OriginPool obj with struct: %+v", updateReq)
 
 	err := client.ReplaceObject(context.Background(), ves_io_schema_views_origin_pool.ObjectType, updateReq)
@@ -6131,5 +6524,8 @@ func resourceVolterraOriginPoolDelete(d *schema.ResourceData, meta interface{}) 
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra OriginPool obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_views_origin_pool.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_views_origin_pool.ObjectType, namespace, name, opts...)
 }

@@ -1605,7 +1605,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.crudapi.API.Get"
             },
             "delete": {
@@ -1681,7 +1680,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.crudapi.API.Delete"
             },
             "put": {
@@ -1765,7 +1763,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -1913,7 +1910,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.crudapi.API.List"
             },
             "post": {
@@ -1991,7 +1987,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2139,7 +2134,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-crudapi-api-liststream"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.crudapi.API.ListStream"
             },
             "x-displayname": "",
@@ -2247,7 +2241,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-crudapi-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.crudapi.API.Get"
             },
             "x-displayname": "",
@@ -2395,7 +2388,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-crudapi-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.crudapi.API.List"
             },
             "x-displayname": "",
@@ -2478,7 +2470,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-crudapi-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.crudapi.API.Delete"
             },
             "put": {
@@ -2562,7 +2553,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-crudapi-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -2647,7 +2637,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-crudapi-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -3399,7 +3388,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with []\n Configuration when JIRA is the ticket provider system",
                     "title": "jira",
                     "$ref": "#/definitions/ticket_tracking_systemJiraConfigurationType",
-                    "x-displayname": "Jira Configuration"
+                    "x-displayname": "Jira"
                 },
                 "type": {
                     "description": " Type of the ticket tracking system.  JIRA, ServiceNow, etc.",

@@ -34,7 +34,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type DomainViewCertificate struct {
 	// TLS Certificates
 	//
-	// x-displayName: "TLS Certificates"
+	// x-displayName: "TLS Certificate"
 	// Select/Add one or more TLS Certificate objects to associate with this ZeroTrust Domain
 	Certificate *views.ObjectRefType `protobuf:"bytes,2,opt,name=certificate,proto3" json:"certificate,omitempty"`
 }
@@ -86,7 +86,7 @@ type DomainViewPolicy struct {
 	//
 	// x-displayName: "ZTNA Policy"
 	//
-	// Select/Add ZTNA Policy to associate with this ZeroTrust Domain
+	// The ZeroTrust Domain enforces an Access policy that all end users must comply with to access private and potentially public applications. The ZTNA policy allows the admin to set up the access policy for this ZeroTrust Domain
 	PolicyName *views.ObjectRefType `protobuf:"bytes,1,opt,name=policy_name,json=policyName,proto3" json:"policy_name,omitempty"`
 }
 
@@ -129,23 +129,94 @@ func (m *DomainViewPolicy) GetPolicyName() *views.ObjectRefType {
 	return nil
 }
 
+// Dual Stack App VIP Pool
+//
+// x-displayName: "Dual Stack App VIP Pools"
+//
+// This is used to import or create new IPv4 and Ipv6 App VIP Pools
+type DomainViewDualStackAppVipPool struct {
+	// IPv4 App VIP Pools
+	//
+	// x-displayName: "IPv4 App VIP Pool"
+	// x-required
+	// Select or create new IPv4 App VIP pools
+	Ipv4AppVipPool *views.ObjectRefType `protobuf:"bytes,1,opt,name=ipv4_app_vip_pool,json=ipv4AppVipPool,proto3" json:"ipv4_app_vip_pool,omitempty"`
+	// IPv6 App VIP Pool
+	//
+	// x-displayName: "IPv6 App VIP Pool"
+	// x-required
+	// Select or create new IPv6 App VIP Pools
+	Ipv6AppVipPool *views.ObjectRefType `protobuf:"bytes,2,opt,name=ipv6_app_vip_pool,json=ipv6AppVipPool,proto3" json:"ipv6_app_vip_pool,omitempty"`
+}
+
+func (m *DomainViewDualStackAppVipPool) Reset()      { *m = DomainViewDualStackAppVipPool{} }
+func (*DomainViewDualStackAppVipPool) ProtoMessage() {}
+func (*DomainViewDualStackAppVipPool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f0504c1c76ca1eb7, []int{2}
+}
+func (m *DomainViewDualStackAppVipPool) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DomainViewDualStackAppVipPool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DomainViewDualStackAppVipPool.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DomainViewDualStackAppVipPool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DomainViewDualStackAppVipPool.Merge(m, src)
+}
+func (m *DomainViewDualStackAppVipPool) XXX_Size() int {
+	return m.Size()
+}
+func (m *DomainViewDualStackAppVipPool) XXX_DiscardUnknown() {
+	xxx_messageInfo_DomainViewDualStackAppVipPool.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DomainViewDualStackAppVipPool proto.InternalMessageInfo
+
+func (m *DomainViewDualStackAppVipPool) GetIpv4AppVipPool() *views.ObjectRefType {
+	if m != nil {
+		return m.Ipv4AppVipPool
+	}
+	return nil
+}
+
+func (m *DomainViewDualStackAppVipPool) GetIpv6AppVipPool() *views.ObjectRefType {
+	if m != nil {
+		return m.Ipv6AppVipPool
+	}
+	return nil
+}
+
 // Application VIP Pool
 //
 // x-displayName: "Application VIP Pool"
 // This is used to select VIP Network and VIP Range from
 // VIP Pool.
 type DomainViewAppVIPPool struct {
-	// Selected VIP Pool for Application
+	// App VIP Pool
 	//
-	// x-displayName: "Selected VIP Pools"
-	// VIP Pools
-	AppVipPool *views.ObjectRefType `protobuf:"bytes,1,opt,name=app_vip_pool,json=appVipPool,proto3" json:"app_vip_pool,omitempty"`
+	// x-displayName: "IP Version"
+	// App VIP Pool for UZTNA Domain View
+	//
+	// Types that are valid to be assigned to IpaddressType:
+	//	*DomainViewAppVIPPool_Ipv4AppVipPool
+	//	*DomainViewAppVIPPool_Ipv6AppVipPool
+	//	*DomainViewAppVIPPool_Ipv4Ipv6AppVipPool
+	IpaddressType isDomainViewAppVIPPool_IpaddressType `protobuf_oneof:"ipaddress_type"`
 }
 
 func (m *DomainViewAppVIPPool) Reset()      { *m = DomainViewAppVIPPool{} }
 func (*DomainViewAppVIPPool) ProtoMessage() {}
 func (*DomainViewAppVIPPool) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f0504c1c76ca1eb7, []int{2}
+	return fileDescriptor_f0504c1c76ca1eb7, []int{3}
 }
 func (m *DomainViewAppVIPPool) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -174,11 +245,62 @@ func (m *DomainViewAppVIPPool) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DomainViewAppVIPPool proto.InternalMessageInfo
 
-func (m *DomainViewAppVIPPool) GetAppVipPool() *views.ObjectRefType {
+type isDomainViewAppVIPPool_IpaddressType interface {
+	isDomainViewAppVIPPool_IpaddressType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type DomainViewAppVIPPool_Ipv4AppVipPool struct {
+	Ipv4AppVipPool *views.ObjectRefType `protobuf:"bytes,6,opt,name=ipv4_app_vip_pool,json=ipv4AppVipPool,proto3,oneof" json:"ipv4_app_vip_pool,omitempty"`
+}
+type DomainViewAppVIPPool_Ipv6AppVipPool struct {
+	Ipv6AppVipPool *views.ObjectRefType `protobuf:"bytes,7,opt,name=ipv6_app_vip_pool,json=ipv6AppVipPool,proto3,oneof" json:"ipv6_app_vip_pool,omitempty"`
+}
+type DomainViewAppVIPPool_Ipv4Ipv6AppVipPool struct {
+	Ipv4Ipv6AppVipPool *DomainViewDualStackAppVipPool `protobuf:"bytes,5,opt,name=ipv4_ipv6_app_vip_pool,json=ipv4Ipv6AppVipPool,proto3,oneof" json:"ipv4_ipv6_app_vip_pool,omitempty"`
+}
+
+func (*DomainViewAppVIPPool_Ipv4AppVipPool) isDomainViewAppVIPPool_IpaddressType()     {}
+func (*DomainViewAppVIPPool_Ipv6AppVipPool) isDomainViewAppVIPPool_IpaddressType()     {}
+func (*DomainViewAppVIPPool_Ipv4Ipv6AppVipPool) isDomainViewAppVIPPool_IpaddressType() {}
+
+func (m *DomainViewAppVIPPool) GetIpaddressType() isDomainViewAppVIPPool_IpaddressType {
 	if m != nil {
-		return m.AppVipPool
+		return m.IpaddressType
 	}
 	return nil
+}
+
+func (m *DomainViewAppVIPPool) GetIpv4AppVipPool() *views.ObjectRefType {
+	if x, ok := m.GetIpaddressType().(*DomainViewAppVIPPool_Ipv4AppVipPool); ok {
+		return x.Ipv4AppVipPool
+	}
+	return nil
+}
+
+func (m *DomainViewAppVIPPool) GetIpv6AppVipPool() *views.ObjectRefType {
+	if x, ok := m.GetIpaddressType().(*DomainViewAppVIPPool_Ipv6AppVipPool); ok {
+		return x.Ipv6AppVipPool
+	}
+	return nil
+}
+
+func (m *DomainViewAppVIPPool) GetIpv4Ipv6AppVipPool() *DomainViewDualStackAppVipPool {
+	if x, ok := m.GetIpaddressType().(*DomainViewAppVIPPool_Ipv4Ipv6AppVipPool); ok {
+		return x.Ipv4Ipv6AppVipPool
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*DomainViewAppVIPPool) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*DomainViewAppVIPPool_Ipv4AppVipPool)(nil),
+		(*DomainViewAppVIPPool_Ipv6AppVipPool)(nil),
+		(*DomainViewAppVIPPool_Ipv4Ipv6AppVipPool)(nil),
+	}
 }
 
 // Dual Stack Lease Pool
@@ -189,22 +311,22 @@ func (m *DomainViewAppVIPPool) GetAppVipPool() *views.ObjectRefType {
 type DomainViewDualStackLeasePool struct {
 	// IPv4 Lease Pools
 	//
-	// x-displayName: "IPv4 Lease Pools"
+	// x-displayName: "IPv4 Lease Pool"
 	// x-required
 	// Select or create new IPv4 Leasepools
 	Ipv4Leasepool *views.ObjectRefType `protobuf:"bytes,2,opt,name=ipv4_leasepool,json=ipv4Leasepool,proto3" json:"ipv4_leasepool,omitempty"`
 	// IPv6 Lease Pool
 	//
-	// x-displayName: "IPv6 Lease Pools"
+	// x-displayName: "IPv6 Lease Pool"
 	// x-required
-	// Select or create new IPv4 Lease Pools
+	// Select or create new IPv6 Lease Pools
 	Ipv6Leasepool *views.ObjectRefType `protobuf:"bytes,3,opt,name=ipv6_leasepool,json=ipv6Leasepool,proto3" json:"ipv6_leasepool,omitempty"`
 }
 
 func (m *DomainViewDualStackLeasePool) Reset()      { *m = DomainViewDualStackLeasePool{} }
 func (*DomainViewDualStackLeasePool) ProtoMessage() {}
 func (*DomainViewDualStackLeasePool) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f0504c1c76ca1eb7, []int{3}
+	return fileDescriptor_f0504c1c76ca1eb7, []int{4}
 }
 func (m *DomainViewDualStackLeasePool) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -247,6 +369,108 @@ func (m *DomainViewDualStackLeasePool) GetIpv6Leasepool() *views.ObjectRefType {
 	return nil
 }
 
+// IPv4 Lease Pool
+//
+// x-displayName: "IPv4 Lease Pool"
+type IPv4LeasePool struct {
+	// IPv4 Lease Pool
+	//
+	// x-displayName: "IPv4 Lease Pool"
+	// x-required
+	// Select or create new IPv4 Leasepools
+	Ipv4Leasepool *views.ObjectRefType `protobuf:"bytes,1,opt,name=ipv4_leasepool,json=ipv4Leasepool,proto3" json:"ipv4_leasepool,omitempty"`
+}
+
+func (m *IPv4LeasePool) Reset()      { *m = IPv4LeasePool{} }
+func (*IPv4LeasePool) ProtoMessage() {}
+func (*IPv4LeasePool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f0504c1c76ca1eb7, []int{5}
+}
+func (m *IPv4LeasePool) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IPv4LeasePool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IPv4LeasePool.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IPv4LeasePool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPv4LeasePool.Merge(m, src)
+}
+func (m *IPv4LeasePool) XXX_Size() int {
+	return m.Size()
+}
+func (m *IPv4LeasePool) XXX_DiscardUnknown() {
+	xxx_messageInfo_IPv4LeasePool.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IPv4LeasePool proto.InternalMessageInfo
+
+func (m *IPv4LeasePool) GetIpv4Leasepool() *views.ObjectRefType {
+	if m != nil {
+		return m.Ipv4Leasepool
+	}
+	return nil
+}
+
+// IPv6 Lease Pool
+//
+// x-displayName: "IPv6 Lease Pool"
+type IPv6LeasePool struct {
+	// IPv6 Lease Pool
+	//
+	// x-displayName: "IPv6 Lease Pool"
+	// x-required
+	// Select or create new IPv6 Leasepools
+	Ipv6Leasepool *views.ObjectRefType `protobuf:"bytes,1,opt,name=ipv6_leasepool,json=ipv6Leasepool,proto3" json:"ipv6_leasepool,omitempty"`
+}
+
+func (m *IPv6LeasePool) Reset()      { *m = IPv6LeasePool{} }
+func (*IPv6LeasePool) ProtoMessage() {}
+func (*IPv6LeasePool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f0504c1c76ca1eb7, []int{6}
+}
+func (m *IPv6LeasePool) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IPv6LeasePool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IPv6LeasePool.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IPv6LeasePool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPv6LeasePool.Merge(m, src)
+}
+func (m *IPv6LeasePool) XXX_Size() int {
+	return m.Size()
+}
+func (m *IPv6LeasePool) XXX_DiscardUnknown() {
+	xxx_messageInfo_IPv6LeasePool.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IPv6LeasePool proto.InternalMessageInfo
+
+func (m *IPv6LeasePool) GetIpv6Leasepool() *views.ObjectRefType {
+	if m != nil {
+		return m.Ipv6Leasepool
+	}
+	return nil
+}
+
 // Lease Pools
 //
 // x-displayName: "Lease Pools"
@@ -255,9 +479,9 @@ func (m *DomainViewDualStackLeasePool) GetIpv6Leasepool() *views.ObjectRefType {
 type DomainViewLeasePoolList struct {
 	// Lease Pool
 	//
-	// x-displayName: "Lease Pool"
+	// x-displayName: "IP Version"
 	// x-required
-	// Lease Pool for UZTNA Domain View
+	// IP version type for the lease pool
 	//
 	// Types that are valid to be assigned to IpaddressType:
 	//	*DomainViewLeasePoolList_Ipv4Leasepool
@@ -269,7 +493,7 @@ type DomainViewLeasePoolList struct {
 func (m *DomainViewLeasePoolList) Reset()      { *m = DomainViewLeasePoolList{} }
 func (*DomainViewLeasePoolList) ProtoMessage() {}
 func (*DomainViewLeasePoolList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f0504c1c76ca1eb7, []int{4}
+	return fileDescriptor_f0504c1c76ca1eb7, []int{7}
 }
 func (m *DomainViewLeasePoolList) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -373,7 +597,7 @@ type DomainViewCloudGateways struct {
 func (m *DomainViewCloudGateways) Reset()      { *m = DomainViewCloudGateways{} }
 func (*DomainViewCloudGateways) ProtoMessage() {}
 func (*DomainViewCloudGateways) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f0504c1c76ca1eb7, []int{5}
+	return fileDescriptor_f0504c1c76ca1eb7, []int{8}
 }
 func (m *DomainViewCloudGateways) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -424,7 +648,7 @@ type DomainViewSites struct {
 func (m *DomainViewSites) Reset()      { *m = DomainViewSites{} }
 func (*DomainViewSites) ProtoMessage() {}
 func (*DomainViewSites) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f0504c1c76ca1eb7, []int{6}
+	return fileDescriptor_f0504c1c76ca1eb7, []int{9}
 }
 func (m *DomainViewSites) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -464,13 +688,15 @@ func (m *DomainViewSites) GetUztnaGateway() []*views.ObjectRefType {
 //
 // x-displayName: "Cloud Gateway Advertisement"
 //
-// Gateways for Advertisemen
+// Gateways for Advertisement
 type DVCloudGatewayAdvertisement struct {
 	// Cloud Gateway Advertisement
 	//
-	// x-displayName: "Cloud Gateways Advertisement"
+	// x-displayName: "Cloud Gateway Advertising"
 	//
-	// Gateways for advertisement.
+	// Cloud gateways, hosted within the F5 Distributed Cloud, are typically accessed by
+	// mobile users who are not connected to their office or corporate network. For example,
+	// users accessing the ZTNA platform from a public place over the public internet.
 	//
 	// Types that are valid to be assigned to CloudGatewayChoice:
 	//	*DVCloudGatewayAdvertisement_AllCloud
@@ -481,7 +707,7 @@ type DVCloudGatewayAdvertisement struct {
 func (m *DVCloudGatewayAdvertisement) Reset()      { *m = DVCloudGatewayAdvertisement{} }
 func (*DVCloudGatewayAdvertisement) ProtoMessage() {}
 func (*DVCloudGatewayAdvertisement) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f0504c1c76ca1eb7, []int{7}
+	return fileDescriptor_f0504c1c76ca1eb7, []int{10}
 }
 func (m *DVCloudGatewayAdvertisement) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -556,18 +782,63 @@ func (*DVCloudGatewayAdvertisement) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// Private Gateways
+//
+// x-displayName: "Private Gateways"
+// Private gateways are gateways hosted within the customer's data centers and are typically accessed by users connected to their office or corporate network.
+type DomainViewPrivateGateways struct {
+	// Private Gateway
+	//
+	// x-displayName: "Private Gateway"
+	// x-example: "system/alon-ge"
+	UztnaGateway []*views.ObjectRefType `protobuf:"bytes,1,rep,name=uztna_gateway,json=uztnaGateway,proto3" json:"uztna_gateway,omitempty"`
+}
+
+func (m *DomainViewPrivateGateways) Reset()      { *m = DomainViewPrivateGateways{} }
+func (*DomainViewPrivateGateways) ProtoMessage() {}
+func (*DomainViewPrivateGateways) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f0504c1c76ca1eb7, []int{11}
+}
+func (m *DomainViewPrivateGateways) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DomainViewPrivateGateways) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DomainViewPrivateGateways.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DomainViewPrivateGateways) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DomainViewPrivateGateways.Merge(m, src)
+}
+func (m *DomainViewPrivateGateways) XXX_Size() int {
+	return m.Size()
+}
+func (m *DomainViewPrivateGateways) XXX_DiscardUnknown() {
+	xxx_messageInfo_DomainViewPrivateGateways.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DomainViewPrivateGateways proto.InternalMessageInfo
+
+func (m *DomainViewPrivateGateways) GetUztnaGateway() []*views.ObjectRefType {
+	if m != nil {
+		return m.UztnaGateway
+	}
+	return nil
+}
+
 // Gateways
 //
 // x-displayName: "Gateways"
 //
-// Each UZTNA ZeroTrust Domain will have one or more gateways associated with it.
-// The gateways represent the sites where the end user can connect to terminate
-// the mTLS/DTLS tunnels. The gateways associated with a UZTNA ZeroTrust Domain would all be front
-// ending the same set of applications and will enforce same set of policies for
-// authentication and authorisation to grant access to these applications.
-// This ensures same user experience no matter which gateway is reached for tunnel termination.
-// Each Gateway will have a lease pool defined to allocate IP address to
-// client for the terminated tunne
+// Access FQDNs resolve to IP addresses on F5 Distributed Cloud or BIG-IP devices in customers' data centers. These devices, known as Gateways, establish secure connections with end users. This section allows users to specify Gateways for this ZeroTrust Domain.
+// client for the terminated tunnel
 type DomainViewGateways struct {
 	// PerimeterREAdvertisement
 	//
@@ -575,18 +846,17 @@ type DomainViewGateways struct {
 	//
 	// Cloud Gateways and Big-IP Edge Gateways
 	PerimeterRe *DVCloudGatewayAdvertisement `protobuf:"bytes,1,opt,name=perimeter_re,json=perimeterRe,proto3" json:"perimeter_re,omitempty"`
-	// BigIP Edge Gateways
+	// Private Gateways
 	//
-	// x-displayName: "BIG-IP Edge Gateways"
-	//
-	// Select BIG-IP Edge Gateway for Advertisement .
-	UztnaGateway []*views.ObjectRefType `protobuf:"bytes,3,rep,name=uztna_gateway,json=uztnaGateway,proto3" json:"uztna_gateway,omitempty"`
+	// x-displayName: "Private Gateways"
+	// Private gateways are gateways hosted within the customer's data centers and are typically accessed by users connected to their office or corporate network.
+	PrivateGateway *DomainViewPrivateGateways `protobuf:"bytes,4,opt,name=private_gateway,json=privateGateway,proto3" json:"private_gateway,omitempty"`
 }
 
 func (m *DomainViewGateways) Reset()      { *m = DomainViewGateways{} }
 func (*DomainViewGateways) ProtoMessage() {}
 func (*DomainViewGateways) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f0504c1c76ca1eb7, []int{8}
+	return fileDescriptor_f0504c1c76ca1eb7, []int{12}
 }
 func (m *DomainViewGateways) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -622,9 +892,9 @@ func (m *DomainViewGateways) GetPerimeterRe() *DVCloudGatewayAdvertisement {
 	return nil
 }
 
-func (m *DomainViewGateways) GetUztnaGateway() []*views.ObjectRefType {
+func (m *DomainViewGateways) GetPrivateGateway() *DomainViewPrivateGateways {
 	if m != nil {
-		return m.UztnaGateway
+		return m.PrivateGateway
 	}
 	return nil
 }
@@ -637,18 +907,18 @@ func (m *DomainViewGateways) GetUztnaGateway() []*views.ObjectRefType {
 type GlobalSpecType struct {
 	// Access URL
 	//
-	// x-displayName: "Access Url"
+	// x-displayName: "Access FQDN"
 	// x-required
-	// Url to access the gateways
+	// The FQDN that users will configure on their Access Clients
+	// to connect to the ZTNA service.
+	// This URL would resolve to the Cloud or the Private Gateway
 	AccessUrl string `protobuf:"bytes,1,opt,name=access_url,json=accessUrl,proto3" json:"access_url,omitempty"`
 	// Certificate
 	//
-	// x-displayName: "Certificate"
+	// x-displayName: "TLS Certificate"
 	// x-required
-	// A ZTNA ZeroTrust Domain being a TLS Gateway requires a Valid
-	// Certificate associated with the Access FQDN.
-	// The approach to attach a certificate and key to a
-	// Domain in XC is an established pattern and we would reuse the same.
+	// Select the certificate to be used for mTLS negotiation between clients
+	// and the server on Cloud and Private gateways
 	Cert *DomainViewCertificate `protobuf:"bytes,2,opt,name=cert,proto3" json:"cert,omitempty"`
 	// Gateways
 	//
@@ -658,9 +928,12 @@ type GlobalSpecType struct {
 	Gateways *DomainViewGateways `protobuf:"bytes,3,opt,name=gateways,proto3" json:"gateways,omitempty"`
 	// Lease Pool
 	//
-	// x-displayName: "Lease Pool"
-	// x-required
-	// The Lease Pool assigned to the Zero Trust Domain.
+	// x-displayName: "Lease Pools"
+	// After a successful evaluation of the Access Policy,the
+	// end-user device is assigned private IP addressess. All
+	// application requests from this device will have this IP
+	// as their source. The admin can set up a subnet or IP address
+	// range using the leasepool for this assignment
 	LeasePool *DomainViewLeasePoolList `protobuf:"bytes,4,opt,name=lease_pool,json=leasePool,proto3" json:"lease_pool,omitempty"`
 	// view_internal
 	//
@@ -670,12 +943,14 @@ type GlobalSpecType struct {
 	// Selected VIP Pools
 	//
 	// x-displayName: "Application VIP Pools"
-	// Application VIP Pools
+	// Applications Onboarded to the ZTNA platform are assigned an IP
+	// address from this Pool as internal Virtual Server.
+	// Configure this option only if the default range is unacceptable.
 	AppVipPool *DomainViewAppVIPPool `protobuf:"bytes,7,opt,name=app_vip_pool,json=appVipPool,proto3" json:"app_vip_pool,omitempty"`
 	// Profile Name
 	//
 	// x-displayName: "ZTNA Profile"
-	// x-required
+	//
 	// The name of the ZTNA profile
 	Policy *DomainViewPolicy `protobuf:"bytes,8,opt,name=policy,proto3" json:"policy,omitempty"`
 }
@@ -683,7 +958,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f0504c1c76ca1eb7, []int{9}
+	return fileDescriptor_f0504c1c76ca1eb7, []int{13}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -777,7 +1052,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f0504c1c76ca1eb7, []int{10}
+	return fileDescriptor_f0504c1c76ca1eb7, []int{14}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -853,18 +1128,17 @@ func (m *CreateSpecType) GetPolicy() *DomainViewPolicy {
 // x-displayName: "Replace Specification"
 // Shape of the UZTNA ZeroTrust Domain
 type ReplaceSpecType struct {
-	AccessUrl  string                   `protobuf:"bytes,1,opt,name=access_url,json=accessUrl,proto3" json:"access_url,omitempty"`
-	Cert       *DomainViewCertificate   `protobuf:"bytes,2,opt,name=cert,proto3" json:"cert,omitempty"`
-	Gateways   *DomainViewGateways      `protobuf:"bytes,3,opt,name=gateways,proto3" json:"gateways,omitempty"`
-	LeasePool  *DomainViewLeasePoolList `protobuf:"bytes,4,opt,name=lease_pool,json=leasePool,proto3" json:"lease_pool,omitempty"`
-	AppVipPool *DomainViewAppVIPPool    `protobuf:"bytes,7,opt,name=app_vip_pool,json=appVipPool,proto3" json:"app_vip_pool,omitempty"`
-	Policy     *DomainViewPolicy        `protobuf:"bytes,8,opt,name=policy,proto3" json:"policy,omitempty"`
+	AccessUrl string                   `protobuf:"bytes,1,opt,name=access_url,json=accessUrl,proto3" json:"access_url,omitempty"`
+	Cert      *DomainViewCertificate   `protobuf:"bytes,2,opt,name=cert,proto3" json:"cert,omitempty"`
+	Gateways  *DomainViewGateways      `protobuf:"bytes,3,opt,name=gateways,proto3" json:"gateways,omitempty"`
+	LeasePool *DomainViewLeasePoolList `protobuf:"bytes,4,opt,name=lease_pool,json=leasePool,proto3" json:"lease_pool,omitempty"`
+	Policy    *DomainViewPolicy        `protobuf:"bytes,8,opt,name=policy,proto3" json:"policy,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f0504c1c76ca1eb7, []int{11}
+	return fileDescriptor_f0504c1c76ca1eb7, []int{15}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -921,13 +1195,6 @@ func (m *ReplaceSpecType) GetLeasePool() *DomainViewLeasePoolList {
 	return nil
 }
 
-func (m *ReplaceSpecType) GetAppVipPool() *DomainViewAppVIPPool {
-	if m != nil {
-		return m.AppVipPool
-	}
-	return nil
-}
-
 func (m *ReplaceSpecType) GetPolicy() *DomainViewPolicy {
 	if m != nil {
 		return m.Policy
@@ -951,7 +1218,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f0504c1c76ca1eb7, []int{12}
+	return fileDescriptor_f0504c1c76ca1eb7, []int{16}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1025,12 +1292,16 @@ func (m *GetSpecType) GetPolicy() *DomainViewPolicy {
 func init() {
 	proto.RegisterType((*DomainViewCertificate)(nil), "ves.io.schema.uztna.views.uztna_domain_view.DomainViewCertificate")
 	proto.RegisterType((*DomainViewPolicy)(nil), "ves.io.schema.uztna.views.uztna_domain_view.DomainViewPolicy")
+	proto.RegisterType((*DomainViewDualStackAppVipPool)(nil), "ves.io.schema.uztna.views.uztna_domain_view.DomainViewDualStackAppVipPool")
 	proto.RegisterType((*DomainViewAppVIPPool)(nil), "ves.io.schema.uztna.views.uztna_domain_view.DomainViewAppVIPPool")
 	proto.RegisterType((*DomainViewDualStackLeasePool)(nil), "ves.io.schema.uztna.views.uztna_domain_view.DomainViewDualStackLeasePool")
+	proto.RegisterType((*IPv4LeasePool)(nil), "ves.io.schema.uztna.views.uztna_domain_view.IPv4LeasePool")
+	proto.RegisterType((*IPv6LeasePool)(nil), "ves.io.schema.uztna.views.uztna_domain_view.IPv6LeasePool")
 	proto.RegisterType((*DomainViewLeasePoolList)(nil), "ves.io.schema.uztna.views.uztna_domain_view.DomainViewLeasePoolList")
 	proto.RegisterType((*DomainViewCloudGateways)(nil), "ves.io.schema.uztna.views.uztna_domain_view.DomainViewCloudGateways")
 	proto.RegisterType((*DomainViewSites)(nil), "ves.io.schema.uztna.views.uztna_domain_view.DomainViewSites")
 	proto.RegisterType((*DVCloudGatewayAdvertisement)(nil), "ves.io.schema.uztna.views.uztna_domain_view.DVCloudGatewayAdvertisement")
+	proto.RegisterType((*DomainViewPrivateGateways)(nil), "ves.io.schema.uztna.views.uztna_domain_view.DomainViewPrivateGateways")
 	proto.RegisterType((*DomainViewGateways)(nil), "ves.io.schema.uztna.views.uztna_domain_view.DomainViewGateways")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.uztna.views.uztna_domain_view.GlobalSpecType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.uztna.views.uztna_domain_view.CreateSpecType")
@@ -1043,80 +1314,94 @@ func init() {
 }
 
 var fileDescriptor_f0504c1c76ca1eb7 = []byte{
-	// 1164 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xf6, 0xd8, 0xeb, 0xd4, 0x79, 0x8e, 0x5d, 0x77, 0x48, 0xc0, 0xa4, 0x65, 0x6b, 0x6d, 0x39,
-	0x54, 0x90, 0xda, 0x22, 0x09, 0xad, 0x54, 0x09, 0x50, 0x9c, 0xd0, 0xfc, 0x20, 0x2a, 0x61, 0xd3,
-	0x46, 0x6a, 0x4b, 0xb5, 0x9d, 0xac, 0x27, 0xe9, 0x36, 0x6b, 0xef, 0xb0, 0x3b, 0x71, 0x08, 0xc8,
-	0x52, 0xf8, 0x0f, 0x10, 0x42, 0xe2, 0x80, 0x04, 0x57, 0x94, 0x3f, 0x01, 0x73, 0x88, 0x38, 0xa1,
-	0x0a, 0x21, 0x1f, 0x73, 0xe0, 0x40, 0x9c, 0x4b, 0xb9, 0xf5, 0xc8, 0x11, 0xed, 0xec, 0xc6, 0xde,
-	0xb5, 0x5b, 0xe4, 0xb8, 0x25, 0xa7, 0xdc, 0x76, 0x7e, 0xbc, 0xef, 0x9b, 0xf7, 0xde, 0xf7, 0xde,
-	0x8c, 0x16, 0xae, 0x55, 0xa9, 0x93, 0x37, 0xac, 0x82, 0xa3, 0x3f, 0xa4, 0x65, 0x52, 0xd8, 0xfc,
-	0x82, 0x57, 0x48, 0xa1, 0x6a, 0xd0, 0x2d, 0xc7, 0xfb, 0xd6, 0x4a, 0x56, 0x99, 0x18, 0x15, 0xcd,
-	0x9d, 0x2a, 0xf0, 0x6d, 0x46, 0x9d, 0x3c, 0xb3, 0x2d, 0x6e, 0xe1, 0xb7, 0x3d, 0xc3, 0xbc, 0x67,
-	0x98, 0x17, 0x9b, 0xf3, 0xc2, 0x30, 0xdf, 0x65, 0x38, 0x7a, 0x3e, 0xcc, 0x62, 0x31, 0x6e, 0x58,
-	0x15, 0x1f, 0x69, 0xf4, 0xf5, 0xf0, 0x62, 0x80, 0x64, 0x74, 0xec, 0x59, 0xa7, 0x0b, 0xc2, 0x87,
-	0x76, 0x5f, 0x08, 0xef, 0xae, 0x12, 0xd3, 0x28, 0x11, 0x4e, 0xfd, 0xd5, 0x5c, 0xc7, 0xaa, 0x41,
-	0xb7, 0xb4, 0xf0, 0x41, 0x2e, 0x76, 0xef, 0x70, 0x82, 0x04, 0x4a, 0x19, 0x46, 0x66, 0x04, 0xed,
-	0x8a, 0x41, 0xb7, 0xa6, 0xa9, 0xcd, 0x8d, 0x35, 0x43, 0x27, 0x9c, 0xe2, 0x5b, 0x90, 0xd4, 0xdb,
-	0xc3, 0x6c, 0x34, 0x87, 0x2e, 0x27, 0xc7, 0x95, 0x7c, 0x38, 0x44, 0x5e, 0x70, 0x3e, 0x5e, 0x7d,
-	0x44, 0x75, 0xae, 0xd2, 0xb5, 0x5b, 0xdb, 0x8c, 0x16, 0xd3, 0xbb, 0xb5, 0xa0, 0xa5, 0x1a, 0x1c,
-	0x28, 0x9f, 0x41, 0xa6, 0x4d, 0xb7, 0x64, 0x99, 0x86, 0xbe, 0x8d, 0xef, 0x43, 0x92, 0x89, 0x2f,
-	0xad, 0x42, 0xca, 0x34, 0x8b, 0x7a, 0x66, 0xca, 0xee, 0xd6, 0x46, 0xbc, 0xc8, 0xf9, 0xf6, 0x9c,
-	0x96, 0x99, 0xe9, 0x72, 0x82, 0x37, 0x71, 0x93, 0x94, 0xa9, 0xe2, 0xc0, 0x70, 0x9b, 0x72, 0x8a,
-	0xb1, 0x95, 0xf9, 0xa5, 0x25, 0xcb, 0x32, 0xf1, 0x3d, 0x18, 0x22, 0x8c, 0x69, 0x55, 0x83, 0x69,
-	0xcc, 0xb2, 0xcc, 0x63, 0xf0, 0x8e, 0xec, 0xd6, 0xb0, 0xc7, 0x1b, 0x04, 0x50, 0x81, 0x30, 0xb6,
-	0x62, 0x30, 0x17, 0x5c, 0xf9, 0x13, 0xc1, 0x85, 0x36, 0xeb, 0xcc, 0x26, 0x31, 0x97, 0x39, 0xd1,
-	0x37, 0x16, 0x29, 0x71, 0xa8, 0x60, 0xbf, 0x0f, 0x69, 0x83, 0x55, 0x27, 0x35, 0xd3, 0x9d, 0x11,
-	0xfc, 0xbd, 0x47, 0x18, 0xef, 0xd6, 0xce, 0x7a, 0xfc, 0x2d, 0x6b, 0x35, 0xe5, 0xa2, 0x2d, 0x1e,
-	0x0d, 0x7d, 0xf8, 0xab, 0x01, 0xf8, 0xd8, 0x0b, 0xc3, 0x5f, 0x6d, 0xc1, 0x2b, 0xdf, 0xc6, 0xe0,
-	0xb5, 0xb6, 0x7b, 0x2d, 0xaf, 0x16, 0x0d, 0x87, 0x63, 0xad, 0xcb, 0xb3, 0x17, 0xa2, 0x9e, 0x8b,
-	0x74, 0xfa, 0xa6, 0x77, 0xf9, 0x26, 0xf5, 0x4c, 0xf0, 0x6a, 0x37, 0xc1, 0x93, 0x3a, 0x42, 0x3e,
-	0x49, 0xdb, 0x43, 0xfc, 0x15, 0x82, 0x57, 0x84, 0x1b, 0x1d, 0x54, 0x71, 0x41, 0x35, 0x9f, 0x3f,
-	0x46, 0xab, 0xc8, 0xff, 0x97, 0x10, 0x8a, 0x92, 0xcf, 0x7f, 0xce, 0x65, 0x9b, 0x0f, 0x9e, 0xa1,
-	0x78, 0xc9, 0x75, 0x94, 0x94, 0x4a, 0x36, 0x75, 0x1c, 0xcd, 0x2d, 0x5a, 0x7c, 0x6e, 0xaf, 0x8e,
-	0x62, 0x8d, 0x3a, 0x8a, 0x36, 0xeb, 0x28, 0x3e, 0x31, 0x36, 0x39, 0xf6, 0xee, 0x82, 0x94, 0x88,
-	0x66, 0x62, 0x0b, 0x52, 0x02, 0x65, 0xa2, 0xca, 0x97, 0xc1, 0xac, 0x4c, 0x9b, 0xd6, 0x66, 0x69,
-	0x96, 0x70, 0xba, 0x45, 0xb6, 0x1d, 0xfc, 0x00, 0xd2, 0xba, 0x3b, 0xa1, 0xad, 0xfb, 0x33, 0x59,
-	0x94, 0x8b, 0xf5, 0xae, 0x77, 0xc9, 0x31, 0x38, 0xdd, 0xf9, 0x05, 0xa1, 0x9f, 0xff, 0xde, 0x8b,
-	0xc5, 0xbf, 0x41, 0xd1, 0x0c, 0x52, 0x53, 0x7a, 0x90, 0x41, 0x31, 0xe1, 0x6c, 0x9b, 0x7c, 0xd9,
-	0xe0, 0xd4, 0xc1, 0x77, 0x20, 0xe5, 0x45, 0xc3, 0x27, 0x3d, 0x06, 0x67, 0x66, 0xb7, 0x16, 0xb6,
-	0x55, 0x87, 0xc4, 0xd0, 0xa7, 0x53, 0x7e, 0x8f, 0xc2, 0xf9, 0x99, 0x95, 0xa0, 0x8f, 0x53, 0xa5,
-	0xaa, 0xdb, 0x68, 0x1c, 0x5a, 0xa6, 0x15, 0x8e, 0x27, 0x60, 0x90, 0x98, 0xa6, 0x26, 0x8e, 0xe8,
-	0x97, 0xf6, 0x70, 0x07, 0xed, 0x87, 0x65, 0xc6, 0xb7, 0xe7, 0x22, 0x6a, 0x82, 0x98, 0xa6, 0x00,
-	0xc2, 0x8f, 0x20, 0x61, 0x53, 0xcd, 0x75, 0xd5, 0xf1, 0xcb, 0x71, 0xa6, 0xcf, 0x44, 0x87, 0x82,
-	0x5f, 0x3c, 0xb3, 0x5f, 0x43, 0x7e, 0x9a, 0xcf, 0xd8, 0x54, 0xc4, 0xe6, 0xfa, 0x83, 0xc7, 0x75,
-	0xf4, 0x29, 0xdc, 0x85, 0xb4, 0xd8, 0x9a, 0x3b, 0xda, 0xfb, 0xd6, 0x1c, 0xdc, 0x80, 0x8b, 0x81,
-	0xc3, 0x8f, 0xe3, 0x29, 0xd3, 0xcc, 0x85, 0x37, 0xc1, 0xa5, 0xf6, 0x41, 0xc7, 0x9f, 0x97, 0xf2,
-	0xe2, 0x9b, 0x30, 0x1c, 0x4a, 0xb9, 0xa6, 0x3f, 0xb4, 0x0c, 0x9d, 0xe2, 0xa1, 0xbd, 0x3a, 0x42,
-	0x8d, 0x3a, 0x92, 0xfe, 0xa9, 0xa3, 0xe8, 0x82, 0x94, 0x90, 0x32, 0x71, 0xa5, 0x89, 0x00, 0xb7,
-	0x71, 0x5a, 0xaa, 0xd9, 0x80, 0x21, 0x46, 0x6d, 0xa3, 0x4c, 0x39, 0xb5, 0x35, 0xfb, 0xa8, 0x37,
-	0xcf, 0x1d, 0x2f, 0x28, 0xcf, 0xcf, 0x92, 0x9a, 0x6c, 0xa1, 0xab, 0xb4, 0x5b, 0x2d, 0xb1, 0x97,
-	0xa5, 0x16, 0xaf, 0x48, 0x94, 0x3f, 0xe2, 0x90, 0x9e, 0x35, 0xad, 0x55, 0x62, 0x2e, 0x33, 0xaa,
-	0xbb, 0x86, 0x78, 0x0c, 0x80, 0xe8, 0xba, 0x5b, 0x5f, 0x9b, 0xb6, 0x77, 0x05, 0x0c, 0x16, 0x53,
-	0xae, 0xc6, 0x13, 0xf6, 0xc0, 0xe5, 0x9d, 0xc4, 0x4e, 0x1c, 0xa9, 0x83, 0xde, 0x86, 0xdb, 0xb6,
-	0x89, 0x57, 0x40, 0x72, 0x2f, 0x33, 0x5f, 0x1b, 0xc5, 0x7e, 0xb5, 0x11, 0xb8, 0x1c, 0x05, 0x1e,
-	0x26, 0x90, 0x68, 0x95, 0xa5, 0xd7, 0x2c, 0x3f, 0xe8, 0x13, 0xbb, 0x95, 0x7c, 0xa9, 0x51, 0x47,
-	0x48, 0x6d, 0xc1, 0x62, 0x1d, 0x40, 0x34, 0x31, 0x2d, 0xd0, 0x30, 0xfb, 0x15, 0x77, 0xa8, 0xdf,
-	0xab, 0x83, 0x66, 0xeb, 0x52, 0xbb, 0x03, 0x29, 0xf1, 0x06, 0x31, 0x2a, 0x9c, 0xda, 0x15, 0x62,
-	0x66, 0x07, 0x7a, 0x6e, 0xcc, 0x6e, 0x06, 0x43, 0xb6, 0xea, 0x90, 0x3b, 0x9c, 0xf7, 0x47, 0xd8,
-	0xe8, 0xb8, 0xad, 0xcf, 0x08, 0xe4, 0xa9, 0x3e, 0x3d, 0x68, 0x3f, 0x03, 0x8a, 0x92, 0x5b, 0x0d,
-	0xc1, 0xbb, 0x1b, 0xdf, 0x86, 0x01, 0xef, 0xf9, 0x90, 0x4d, 0x08, 0x92, 0xf7, 0xfa, 0x24, 0xf1,
-	0x9e, 0x37, 0xaa, 0x0f, 0x76, 0xfd, 0xa3, 0x5f, 0xeb, 0x68, 0x16, 0x32, 0x90, 0x9c, 0x12, 0x7a,
-	0xca, 0xdd, 0xf8, 0x64, 0xe6, 0x26, 0x46, 0xef, 0xb8, 0x33, 0xc1, 0x77, 0x17, 0x1a, 0x87, 0x14,
-	0x24, 0x5a, 0x15, 0x88, 0x26, 0x00, 0x43, 0x52, 0x44, 0x3c, 0xe7, 0x9e, 0xce, 0xc1, 0xb1, 0xc9,
-	0xb1, 0x6b, 0x0b, 0x52, 0x22, 0x9e, 0x19, 0x50, 0x7e, 0x90, 0x20, 0x3d, 0x6d, 0x53, 0xc2, 0x69,
-	0x4b, 0xd0, 0x6f, 0x74, 0x0b, 0xfa, 0x24, 0x14, 0x7c, 0xef, 0xa5, 0x2b, 0xf8, 0xa4, 0xb5, 0xab,
-	0xff, 0x4f, 0x02, 0x3b, 0x09, 0x69, 0x9d, 0x7b, 0xfc, 0x7e, 0x47, 0x63, 0xf3, 0x05, 0xf2, 0xa3,
-	0x04, 0x67, 0x55, 0xca, 0x4c, 0xa2, 0x9f, 0x2a, 0xe4, 0x54, 0x21, 0xcf, 0x52, 0xc8, 0xf7, 0x12,
-	0x24, 0x67, 0x29, 0x3f, 0x55, 0xc7, 0xa9, 0x3a, 0xba, 0xd5, 0x51, 0xfc, 0x0e, 0x35, 0x0e, 0xe4,
-	0xc8, 0xfe, 0x81, 0x1c, 0x79, 0x7a, 0x20, 0xa3, 0x9d, 0xa6, 0x8c, 0x7e, 0x6a, 0xca, 0xe8, 0xb7,
-	0xa6, 0x8c, 0x1a, 0x4d, 0x19, 0xfd, 0xd5, 0x94, 0xd1, 0x93, 0xa6, 0x1c, 0x79, 0xda, 0x94, 0xd1,
-	0xd7, 0x87, 0x72, 0xa4, 0x71, 0x28, 0x47, 0xf6, 0x0f, 0xe5, 0xc8, 0x5d, 0xb2, 0x6e, 0xb1, 0x8d,
-	0xf5, 0x7c, 0xd5, 0x32, 0x39, 0xb5, 0x6d, 0x92, 0xdf, 0x74, 0x0a, 0xe2, 0x63, 0xcd, 0xb2, 0xcb,
-	0x57, 0x98, 0x6d, 0x55, 0x8d, 0x12, 0xb5, 0xaf, 0x1c, 0x2d, 0x17, 0xd8, 0xea, 0xba, 0x55, 0xa0,
-	0x9f, 0x73, 0xff, 0x27, 0x45, 0x2f, 0xff, 0x6d, 0x56, 0x07, 0xc4, 0xef, 0x8b, 0x89, 0x7f, 0x03,
-	0x00, 0x00, 0xff, 0xff, 0x22, 0xa8, 0xe5, 0x1c, 0xed, 0x11, 0x00, 0x00,
+	// 1378 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcf, 0x6f, 0x1b, 0xc5,
+	0x17, 0xf7, 0xd8, 0x1b, 0xc7, 0x79, 0x89, 0x1d, 0x67, 0xbe, 0xfd, 0x91, 0xfe, 0xda, 0xfa, 0xeb,
+	0x22, 0x84, 0x20, 0xb5, 0x51, 0x53, 0x5c, 0xa9, 0x12, 0xa0, 0x38, 0xa1, 0x4d, 0xac, 0xaa, 0x44,
+	0xdb, 0x36, 0x52, 0x4b, 0xd1, 0x32, 0x59, 0x4f, 0xd2, 0x69, 0xd7, 0xde, 0x65, 0x77, 0xe3, 0x34,
+	0x48, 0x96, 0x82, 0x84, 0xe0, 0xd2, 0x03, 0xea, 0x85, 0x03, 0x12, 0x42, 0x9c, 0x50, 0xc4, 0x5f,
+	0x50, 0x17, 0x29, 0x42, 0x42, 0x42, 0x15, 0x87, 0x1c, 0x7b, 0xe0, 0xd0, 0xba, 0x97, 0x22, 0x2e,
+	0x3d, 0x72, 0x44, 0x3b, 0x3b, 0xd9, 0x1f, 0x76, 0x82, 0x12, 0x27, 0xf4, 0xd4, 0xdb, 0xce, 0xce,
+	0xcc, 0xfb, 0xbc, 0xcf, 0x7b, 0x9f, 0xf7, 0x66, 0x76, 0xe1, 0x5c, 0x83, 0xda, 0x05, 0x66, 0x14,
+	0x6d, 0xed, 0x16, 0xad, 0x91, 0xe2, 0xd2, 0x67, 0x4e, 0x9d, 0x14, 0x1b, 0x8c, 0x2e, 0xdb, 0xde,
+	0xb3, 0x5a, 0x35, 0x6a, 0x84, 0xd5, 0x55, 0xf7, 0x55, 0xd1, 0x59, 0x31, 0xa9, 0x5d, 0x30, 0x2d,
+	0xc3, 0x31, 0xf0, 0x5b, 0xde, 0xc6, 0x82, 0xb7, 0xb1, 0xc0, 0x17, 0x17, 0xf8, 0xc6, 0x42, 0xd7,
+	0xc6, 0xa3, 0xc7, 0xa2, 0x28, 0x86, 0xe9, 0x30, 0xa3, 0x2e, 0x2c, 0x1d, 0x3d, 0x12, 0x9d, 0x0c,
+	0x81, 0x1c, 0x1d, 0xdb, 0xca, 0xbb, 0xb0, 0xf9, 0xc8, 0xea, 0xe3, 0xd1, 0xd5, 0x0d, 0xa2, 0xb3,
+	0x2a, 0x71, 0xa8, 0x98, 0xcd, 0x75, 0xcc, 0x32, 0xba, 0xac, 0x46, 0x1d, 0x39, 0xd9, 0xbd, 0xc2,
+	0x0e, 0x03, 0xe4, 0x6b, 0x70, 0x70, 0x8a, 0xc3, 0xce, 0x31, 0xba, 0x3c, 0x49, 0x2d, 0x87, 0x2d,
+	0x30, 0x8d, 0x38, 0x14, 0x5f, 0x85, 0x41, 0x2d, 0x18, 0x8e, 0xc6, 0x73, 0xe8, 0x8d, 0xc1, 0x33,
+	0xf9, 0x42, 0x34, 0x44, 0x5e, 0x70, 0x3e, 0x9c, 0xbf, 0x4d, 0x35, 0x47, 0xa1, 0x0b, 0x57, 0x57,
+	0x4c, 0x5a, 0xce, 0xac, 0x35, 0xc3, 0x3b, 0x95, 0xf0, 0x20, 0x7f, 0x0f, 0x41, 0x36, 0xc0, 0x9b,
+	0x35, 0x74, 0xa6, 0xad, 0xe0, 0xbb, 0x30, 0x68, 0xf2, 0x27, 0xb5, 0x4e, 0x6a, 0x74, 0x14, 0xed,
+	0x18, 0x6a, 0x7c, 0xad, 0x79, 0xd0, 0x0b, 0x9d, 0xd8, 0xef, 0xd0, 0x9a, 0xa9, 0x13, 0x87, 0xfe,
+	0xf0, 0x33, 0x3a, 0xcc, 0x27, 0x3c, 0x84, 0xcb, 0x86, 0x70, 0x80, 0x19, 0x75, 0x05, 0xbc, 0xb5,
+	0x97, 0x49, 0x8d, 0xe6, 0xff, 0x42, 0x70, 0x22, 0x70, 0x67, 0x6a, 0x89, 0xe8, 0x57, 0x1c, 0xa2,
+	0xdd, 0x99, 0x30, 0xcd, 0x39, 0x66, 0xce, 0x1a, 0x86, 0x8e, 0xab, 0x30, 0xc2, 0xcc, 0xc6, 0x59,
+	0x95, 0x98, 0xa6, 0xda, 0x60, 0xa6, 0x6a, 0x1a, 0x86, 0xbe, 0x0b, 0x0f, 0x0f, 0xae, 0x35, 0xb1,
+	0xe7, 0x61, 0xd8, 0x80, 0x92, 0x71, 0x6d, 0x76, 0xa1, 0x94, 0xa2, 0x28, 0xf1, 0xfd, 0x40, 0x29,
+	0x05, 0x28, 0xf9, 0x9f, 0x12, 0x70, 0x20, 0x60, 0xeb, 0x4e, 0xcc, 0xcc, 0x72, 0xf8, 0x85, 0xad,
+	0x48, 0x26, 0xf7, 0x08, 0x3f, 0x1d, 0xeb, 0xa2, 0x79, 0x7b, 0x2b, 0x9a, 0xfd, 0x3b, 0xc6, 0x39,
+	0xb2, 0x25, 0xce, 0xf3, 0x16, 0x42, 0x02, 0x2b, 0x44, 0x16, 0x7f, 0x89, 0xe0, 0x10, 0x27, 0xd5,
+	0x8d, 0xd8, 0xc7, 0x11, 0x2b, 0x85, 0x5d, 0x94, 0x7b, 0xe1, 0x5f, 0x55, 0x52, 0x96, 0x84, 0x13,
+	0xd8, 0x45, 0x9c, 0x89, 0x38, 0x52, 0x3e, 0x09, 0x19, 0x66, 0x92, 0x6a, 0xd5, 0xa2, 0xb6, 0xad,
+	0xba, 0xa5, 0x87, 0xd3, 0x1b, 0x2d, 0x14, 0x6f, 0xb7, 0x50, 0x5f, 0x69, 0xec, 0xdc, 0xd8, 0x3b,
+	0x15, 0x29, 0x85, 0xb2, 0xf1, 0x8a, 0x94, 0x8a, 0x67, 0x13, 0x15, 0x29, 0x95, 0xc8, 0x4a, 0x15,
+	0x29, 0x25, 0x65, 0xfb, 0xf2, 0x7f, 0x20, 0x38, 0xbe, 0x05, 0xec, 0x25, 0x4a, 0x6c, 0xca, 0x29,
+	0x7e, 0x0c, 0x3c, 0xc0, 0xaa, 0xee, 0xbe, 0xd9, 0xa5, 0x64, 0xf0, 0x5a, 0x73, 0xd8, 0x63, 0xe9,
+	0xef, 0x56, 0xd2, 0xae, 0xb5, 0x4b, 0x9b, 0x43, 0x61, 0xbe, 0x14, 0x32, 0x9f, 0xd8, 0xb3, 0xf9,
+	0x92, 0x6f, 0x3e, 0x5f, 0x87, 0xf4, 0xcc, 0xac, 0xc0, 0xdb, 0x86, 0x0e, 0xda, 0x47, 0x3a, 0x02,
+	0xaf, 0xd4, 0x89, 0x57, 0xda, 0x57, 0xbc, 0x10, 0xbf, 0xef, 0x13, 0x70, 0x38, 0x48, 0x9f, 0x0f,
+	0x7b, 0x89, 0xd9, 0x0e, 0x56, 0xbb, 0xa8, 0xee, 0x29, 0xb4, 0xd3, 0xb1, 0xce, 0xdc, 0x69, 0x5d,
+	0xdc, 0xa4, 0x1d, 0x03, 0x1c, 0xea, 0x06, 0x10, 0xf2, 0x8e, 0x32, 0xc4, 0x9f, 0x23, 0xf8, 0x5f,
+	0x50, 0x62, 0x01, 0x94, 0x57, 0x5f, 0x33, 0x7b, 0xad, 0x2f, 0x3f, 0x64, 0x7e, 0x79, 0x8d, 0x6c,
+	0x96, 0x97, 0xef, 0x43, 0xf9, 0x54, 0x57, 0x75, 0x8d, 0xac, 0xb7, 0x50, 0x62, 0xb3, 0xc2, 0xc6,
+	0xc7, 0xce, 0xf2, 0x0a, 0xf3, 0x6a, 0xcb, 0xab, 0xb3, 0x64, 0xb6, 0xbf, 0x22, 0xa5, 0xfa, 0xb3,
+	0xa9, 0xfc, 0x57, 0x28, 0x9c, 0xa2, 0x49, 0xdd, 0x58, 0xaa, 0x5e, 0x24, 0x0e, 0x5d, 0x26, 0x2b,
+	0x36, 0xd6, 0x21, 0xa3, 0xb9, 0x2f, 0xd4, 0x45, 0xf1, 0x66, 0x14, 0xe5, 0x12, 0x3b, 0x8c, 0xe0,
+	0xff, 0xd7, 0x9a, 0x92, 0xcd, 0x1c, 0xba, 0xfa, 0x10, 0xa1, 0x07, 0x7f, 0xae, 0x27, 0x92, 0xf7,
+	0x51, 0x22, 0xbb, 0x9a, 0x6b, 0x3f, 0xf9, 0x35, 0x91, 0xbc, 0xff, 0x10, 0xc5, 0xb3, 0x31, 0x25,
+	0xad, 0x85, 0xd1, 0xf2, 0x3a, 0x0c, 0x07, 0x8e, 0x5c, 0x61, 0x0e, 0xb5, 0xf1, 0x75, 0x48, 0x7b,
+	0x61, 0x12, 0x0e, 0xec, 0x02, 0x3f, 0xbb, 0xd6, 0x8c, 0xee, 0x55, 0x86, 0xf8, 0x50, 0xc0, 0xe5,
+	0x7f, 0x8f, 0xc3, 0xb1, 0xa9, 0xb9, 0x30, 0xdf, 0x89, 0x6a, 0xc3, 0x3d, 0xa5, 0x6d, 0x5a, 0xa3,
+	0x75, 0x07, 0x8f, 0xc3, 0x00, 0xd1, 0x75, 0x95, 0xbb, 0x28, 0x8a, 0xe2, 0x40, 0x07, 0xec, 0x07,
+	0x35, 0xd3, 0x59, 0x99, 0x8e, 0x29, 0x29, 0xa2, 0xeb, 0xdc, 0x10, 0xbe, 0x0d, 0x29, 0x8b, 0xaa,
+	0x2e, 0x6d, 0x5b, 0xf4, 0xa1, 0xa9, 0x1e, 0x15, 0x10, 0x49, 0x44, 0xb9, 0xff, 0x71, 0x13, 0x89,
+	0xfc, 0xf7, 0x5b, 0x94, 0xc7, 0xe6, 0xfc, 0x27, 0x8f, 0x5a, 0xe8, 0x26, 0xdc, 0x80, 0x0c, 0x5f,
+	0x9a, 0xdb, 0x5c, 0xfb, 0xe6, 0x34, 0x5c, 0x80, 0x93, 0x21, 0xe7, 0xcf, 0xe0, 0x09, 0x5d, 0xcf,
+	0x45, 0x17, 0xc1, 0xa9, 0xc0, 0xd1, 0x33, 0xdb, 0xa5, 0xbf, 0xfc, 0x1a, 0x1c, 0x88, 0xa4, 0x5f,
+	0xd5, 0x6e, 0x19, 0x4c, 0xa3, 0x78, 0x68, 0xbd, 0x85, 0xd0, 0x46, 0x0b, 0x49, 0x7f, 0xb7, 0x50,
+	0x5c, 0x34, 0xea, 0x7b, 0x08, 0x8e, 0x84, 0x2e, 0x35, 0x16, 0x6b, 0x10, 0x87, 0xfa, 0x42, 0x32,
+	0x7a, 0xcf, 0xe3, 0xeb, 0x9d, 0x79, 0xdc, 0x46, 0x4c, 0xd1, 0xec, 0x7e, 0x11, 0x07, 0x1c, 0xb8,
+	0xe3, 0xfb, 0xf1, 0x29, 0x0c, 0x99, 0xd4, 0x62, 0x35, 0xea, 0x50, 0x4b, 0xb5, 0x36, 0xaf, 0x59,
+	0xd3, 0xbb, 0xcb, 0xd1, 0xf6, 0xa2, 0x29, 0x4b, 0x2f, 0x5a, 0x08, 0x29, 0x83, 0x3e, 0x86, 0x42,
+	0xb1, 0x01, 0xc3, 0xa6, 0x17, 0x0d, 0x9f, 0xbc, 0xd7, 0x86, 0x2e, 0xf4, 0xa8, 0x8c, 0x8e, 0xd8,
+	0x2a, 0x19, 0x33, 0xf2, 0x22, 0x7c, 0x88, 0xe6, 0x1f, 0xf4, 0x41, 0xe6, 0xa2, 0x6e, 0xcc, 0x13,
+	0xfd, 0x8a, 0x49, 0x35, 0x37, 0x9e, 0xf8, 0x34, 0x00, 0xd1, 0x34, 0xb7, 0x53, 0x2c, 0x59, 0x5e,
+	0xb7, 0x1f, 0x28, 0x67, 0xdc, 0x98, 0x0e, 0x58, 0xfd, 0x59, 0x34, 0xba, 0x1a, 0xbf, 0x85, 0x94,
+	0x01, 0x6f, 0xc5, 0x35, 0x4b, 0xc7, 0x37, 0x41, 0x72, 0xef, 0xae, 0x42, 0xcd, 0xe5, 0x5e, 0xd5,
+	0x1c, 0x5c, 0x7f, 0xcb, 0xd2, 0x86, 0x1b, 0x23, 0x6e, 0x15, 0x13, 0x48, 0xf9, 0xad, 0xc5, 0xeb,
+	0xfe, 0xef, 0xf7, 0x88, 0xe0, 0x8b, 0xd6, 0x4b, 0x81, 0x6f, 0x16, 0x6b, 0x00, 0xbc, 0x2b, 0xab,
+	0xa1, 0x13, 0xa0, 0xd7, 0xa2, 0x8c, 0x1c, 0x60, 0xca, 0x80, 0xee, 0x1f, 0xa3, 0xd7, 0x21, 0xcd,
+	0x3f, 0x3c, 0x58, 0xdd, 0xa1, 0x56, 0x9d, 0xec, 0xe6, 0xe2, 0xe8, 0xf6, 0xa9, 0xc8, 0x5e, 0x65,
+	0xc8, 0x1d, 0xce, 0x88, 0x11, 0x66, 0x30, 0xb4, 0xc5, 0x55, 0x71, 0xa2, 0x47, 0x06, 0xc1, 0x85,
+	0xb7, 0x2c, 0xb9, 0x55, 0xac, 0x00, 0x09, 0xae, 0x8b, 0xd7, 0x20, 0xe9, 0x7d, 0x17, 0x8c, 0xa6,
+	0x38, 0xc8, 0xbb, 0xbd, 0x2a, 0x94, 0x1b, 0x51, 0x84, 0xb1, 0xf3, 0x6f, 0xff, 0xd2, 0x42, 0x63,
+	0x90, 0x86, 0x94, 0x5f, 0x86, 0x68, 0x1c, 0x8e, 0xc1, 0xa1, 0x89, 0x6a, 0x83, 0xd4, 0x35, 0x5a,
+	0xcd, 0x4d, 0x1a, 0xf5, 0x05, 0xb6, 0xb8, 0x64, 0xf1, 0x6f, 0x13, 0x8c, 0xce, 0x55, 0xa4, 0x54,
+	0x5f, 0x36, 0x99, 0xff, 0x4e, 0x82, 0xcc, 0xa4, 0x45, 0x89, 0x43, 0x7d, 0xf1, 0x9e, 0xe8, 0x16,
+	0x6f, 0x58, 0xac, 0x73, 0xfb, 0x2d, 0x56, 0x21, 0xd3, 0x8f, 0xf6, 0x5d, 0xa6, 0x2f, 0x5b, 0xa0,
+	0xda, 0x7f, 0xa4, 0xa2, 0x97, 0xa1, 0x9f, 0x91, 0x47, 0xef, 0x75, 0x34, 0x31, 0x21, 0x90, 0xf5,
+	0x04, 0x0c, 0x2b, 0xd4, 0xd4, 0x89, 0xf6, 0x4a, 0x21, 0x7b, 0x56, 0xc8, 0x4b, 0x4e, 0x9e, 0xb8,
+	0x7d, 0x7e, 0x2b, 0xc1, 0xe0, 0x45, 0xea, 0xbc, 0x4a, 0xdf, 0xab, 0x02, 0xef, 0xd6, 0x48, 0xf9,
+	0x1b, 0xb4, 0xf1, 0x54, 0x8e, 0x3d, 0x7e, 0x2a, 0xc7, 0x5e, 0x3c, 0x95, 0xd1, 0x6a, 0x5b, 0x46,
+	0x3f, 0xb6, 0x65, 0xf4, 0x5b, 0x5b, 0x46, 0x1b, 0x6d, 0x19, 0x3d, 0x69, 0xcb, 0xe8, 0x79, 0x5b,
+	0x8e, 0xbd, 0x68, 0xcb, 0xe8, 0xeb, 0x67, 0x72, 0x6c, 0xe3, 0x99, 0x1c, 0x7b, 0xfc, 0x4c, 0x8e,
+	0xdd, 0x20, 0x8b, 0x86, 0x79, 0x67, 0xb1, 0xd0, 0x30, 0x74, 0x87, 0x5a, 0x16, 0x29, 0x2c, 0xd9,
+	0x45, 0xfe, 0xb0, 0x60, 0x58, 0xb5, 0xd3, 0xa6, 0x65, 0x34, 0x58, 0x95, 0x5a, 0xa7, 0x37, 0xa7,
+	0x8b, 0xe6, 0xfc, 0xa2, 0x51, 0xa4, 0x77, 0x1d, 0xf1, 0x7f, 0x70, 0x27, 0xbf, 0x4c, 0xe7, 0x93,
+	0xfc, 0xcf, 0xe1, 0xf8, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x63, 0x40, 0x81, 0xd5, 0x68, 0x15,
+	0x00, 0x00,
 }
 
 func (this *DomainViewCertificate) Equal(that interface{}) bool {
@@ -1167,6 +1452,33 @@ func (this *DomainViewPolicy) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *DomainViewDualStackAppVipPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DomainViewDualStackAppVipPool)
+	if !ok {
+		that2, ok := that.(DomainViewDualStackAppVipPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ipv4AppVipPool.Equal(that1.Ipv4AppVipPool) {
+		return false
+	}
+	if !this.Ipv6AppVipPool.Equal(that1.Ipv6AppVipPool) {
+		return false
+	}
+	return true
+}
 func (this *DomainViewAppVIPPool) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1186,7 +1498,85 @@ func (this *DomainViewAppVIPPool) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.AppVipPool.Equal(that1.AppVipPool) {
+	if that1.IpaddressType == nil {
+		if this.IpaddressType != nil {
+			return false
+		}
+	} else if this.IpaddressType == nil {
+		return false
+	} else if !this.IpaddressType.Equal(that1.IpaddressType) {
+		return false
+	}
+	return true
+}
+func (this *DomainViewAppVIPPool_Ipv4AppVipPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DomainViewAppVIPPool_Ipv4AppVipPool)
+	if !ok {
+		that2, ok := that.(DomainViewAppVIPPool_Ipv4AppVipPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ipv4AppVipPool.Equal(that1.Ipv4AppVipPool) {
+		return false
+	}
+	return true
+}
+func (this *DomainViewAppVIPPool_Ipv6AppVipPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DomainViewAppVIPPool_Ipv6AppVipPool)
+	if !ok {
+		that2, ok := that.(DomainViewAppVIPPool_Ipv6AppVipPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ipv6AppVipPool.Equal(that1.Ipv6AppVipPool) {
+		return false
+	}
+	return true
+}
+func (this *DomainViewAppVIPPool_Ipv4Ipv6AppVipPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DomainViewAppVIPPool_Ipv4Ipv6AppVipPool)
+	if !ok {
+		that2, ok := that.(DomainViewAppVIPPool_Ipv4Ipv6AppVipPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ipv4Ipv6AppVipPool.Equal(that1.Ipv4Ipv6AppVipPool) {
 		return false
 	}
 	return true
@@ -1211,6 +1601,54 @@ func (this *DomainViewDualStackLeasePool) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Ipv4Leasepool.Equal(that1.Ipv4Leasepool) {
+		return false
+	}
+	if !this.Ipv6Leasepool.Equal(that1.Ipv6Leasepool) {
+		return false
+	}
+	return true
+}
+func (this *IPv4LeasePool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IPv4LeasePool)
+	if !ok {
+		that2, ok := that.(IPv4LeasePool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ipv4Leasepool.Equal(that1.Ipv4Leasepool) {
+		return false
+	}
+	return true
+}
+func (this *IPv6LeasePool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IPv6LeasePool)
+	if !ok {
+		that2, ok := that.(IPv6LeasePool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
 		return false
 	}
 	if !this.Ipv6Leasepool.Equal(that1.Ipv6Leasepool) {
@@ -1456,6 +1894,35 @@ func (this *DVCloudGatewayAdvertisement_ReSites) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *DomainViewPrivateGateways) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DomainViewPrivateGateways)
+	if !ok {
+		that2, ok := that.(DomainViewPrivateGateways)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.UztnaGateway) != len(that1.UztnaGateway) {
+		return false
+	}
+	for i := range this.UztnaGateway {
+		if !this.UztnaGateway[i].Equal(that1.UztnaGateway[i]) {
+			return false
+		}
+	}
+	return true
+}
 func (this *DomainViewGateways) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1478,13 +1945,8 @@ func (this *DomainViewGateways) Equal(that interface{}) bool {
 	if !this.PerimeterRe.Equal(that1.PerimeterRe) {
 		return false
 	}
-	if len(this.UztnaGateway) != len(that1.UztnaGateway) {
+	if !this.PrivateGateway.Equal(that1.PrivateGateway) {
 		return false
-	}
-	for i := range this.UztnaGateway {
-		if !this.UztnaGateway[i].Equal(that1.UztnaGateway[i]) {
-			return false
-		}
 	}
 	return true
 }
@@ -1600,9 +2062,6 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if !this.LeasePool.Equal(that1.LeasePool) {
 		return false
 	}
-	if !this.AppVipPool.Equal(that1.AppVipPool) {
-		return false
-	}
 	if !this.Policy.Equal(that1.Policy) {
 		return false
 	}
@@ -1671,17 +2130,56 @@ func (this *DomainViewPolicy) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *DomainViewDualStackAppVipPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&uztna_domain_view.DomainViewDualStackAppVipPool{")
+	if this.Ipv4AppVipPool != nil {
+		s = append(s, "Ipv4AppVipPool: "+fmt.Sprintf("%#v", this.Ipv4AppVipPool)+",\n")
+	}
+	if this.Ipv6AppVipPool != nil {
+		s = append(s, "Ipv6AppVipPool: "+fmt.Sprintf("%#v", this.Ipv6AppVipPool)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *DomainViewAppVIPPool) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 7)
 	s = append(s, "&uztna_domain_view.DomainViewAppVIPPool{")
-	if this.AppVipPool != nil {
-		s = append(s, "AppVipPool: "+fmt.Sprintf("%#v", this.AppVipPool)+",\n")
+	if this.IpaddressType != nil {
+		s = append(s, "IpaddressType: "+fmt.Sprintf("%#v", this.IpaddressType)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *DomainViewAppVIPPool_Ipv4AppVipPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_domain_view.DomainViewAppVIPPool_Ipv4AppVipPool{` +
+		`Ipv4AppVipPool:` + fmt.Sprintf("%#v", this.Ipv4AppVipPool) + `}`}, ", ")
+	return s
+}
+func (this *DomainViewAppVIPPool_Ipv6AppVipPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_domain_view.DomainViewAppVIPPool_Ipv6AppVipPool{` +
+		`Ipv6AppVipPool:` + fmt.Sprintf("%#v", this.Ipv6AppVipPool) + `}`}, ", ")
+	return s
+}
+func (this *DomainViewAppVIPPool_Ipv4Ipv6AppVipPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_domain_view.DomainViewAppVIPPool_Ipv4Ipv6AppVipPool{` +
+		`Ipv4Ipv6AppVipPool:` + fmt.Sprintf("%#v", this.Ipv4Ipv6AppVipPool) + `}`}, ", ")
+	return s
 }
 func (this *DomainViewDualStackLeasePool) GoString() string {
 	if this == nil {
@@ -1692,6 +2190,30 @@ func (this *DomainViewDualStackLeasePool) GoString() string {
 	if this.Ipv4Leasepool != nil {
 		s = append(s, "Ipv4Leasepool: "+fmt.Sprintf("%#v", this.Ipv4Leasepool)+",\n")
 	}
+	if this.Ipv6Leasepool != nil {
+		s = append(s, "Ipv6Leasepool: "+fmt.Sprintf("%#v", this.Ipv6Leasepool)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *IPv4LeasePool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&uztna_domain_view.IPv4LeasePool{")
+	if this.Ipv4Leasepool != nil {
+		s = append(s, "Ipv4Leasepool: "+fmt.Sprintf("%#v", this.Ipv4Leasepool)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *IPv6LeasePool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&uztna_domain_view.IPv6LeasePool{")
 	if this.Ipv6Leasepool != nil {
 		s = append(s, "Ipv6Leasepool: "+fmt.Sprintf("%#v", this.Ipv6Leasepool)+",\n")
 	}
@@ -1786,6 +2308,18 @@ func (this *DVCloudGatewayAdvertisement_ReSites) GoString() string {
 		`ReSites:` + fmt.Sprintf("%#v", this.ReSites) + `}`}, ", ")
 	return s
 }
+func (this *DomainViewPrivateGateways) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&uztna_domain_view.DomainViewPrivateGateways{")
+	if this.UztnaGateway != nil {
+		s = append(s, "UztnaGateway: "+fmt.Sprintf("%#v", this.UztnaGateway)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *DomainViewGateways) GoString() string {
 	if this == nil {
 		return "nil"
@@ -1795,8 +2329,8 @@ func (this *DomainViewGateways) GoString() string {
 	if this.PerimeterRe != nil {
 		s = append(s, "PerimeterRe: "+fmt.Sprintf("%#v", this.PerimeterRe)+",\n")
 	}
-	if this.UztnaGateway != nil {
-		s = append(s, "UztnaGateway: "+fmt.Sprintf("%#v", this.UztnaGateway)+",\n")
+	if this.PrivateGateway != nil {
+		s = append(s, "PrivateGateway: "+fmt.Sprintf("%#v", this.PrivateGateway)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1858,7 +2392,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 9)
 	s = append(s, "&uztna_domain_view.ReplaceSpecType{")
 	s = append(s, "AccessUrl: "+fmt.Sprintf("%#v", this.AccessUrl)+",\n")
 	if this.Cert != nil {
@@ -1869,9 +2403,6 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.LeasePool != nil {
 		s = append(s, "LeasePool: "+fmt.Sprintf("%#v", this.LeasePool)+",\n")
-	}
-	if this.AppVipPool != nil {
-		s = append(s, "AppVipPool: "+fmt.Sprintf("%#v", this.AppVipPool)+",\n")
 	}
 	if this.Policy != nil {
 		s = append(s, "Policy: "+fmt.Sprintf("%#v", this.Policy)+",\n")
@@ -1982,6 +2513,53 @@ func (m *DomainViewPolicy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *DomainViewDualStackAppVipPool) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DomainViewDualStackAppVipPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DomainViewDualStackAppVipPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Ipv6AppVipPool != nil {
+		{
+			size, err := m.Ipv6AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Ipv4AppVipPool != nil {
+		{
+			size, err := m.Ipv4AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *DomainViewAppVIPPool) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2002,9 +2580,28 @@ func (m *DomainViewAppVIPPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.AppVipPool != nil {
+	if m.IpaddressType != nil {
 		{
-			size, err := m.AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			size := m.IpaddressType.Size()
+			i -= size
+			if _, err := m.IpaddressType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DomainViewAppVIPPool_Ipv4Ipv6AppVipPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DomainViewAppVIPPool_Ipv4Ipv6AppVipPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ipv4Ipv6AppVipPool != nil {
+		{
+			size, err := m.Ipv4Ipv6AppVipPool.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -2012,11 +2609,52 @@ func (m *DomainViewAppVIPPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0xa
+		dAtA[i] = 0x2a
 	}
 	return len(dAtA) - i, nil
 }
+func (m *DomainViewAppVIPPool_Ipv4AppVipPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
 
+func (m *DomainViewAppVIPPool_Ipv4AppVipPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ipv4AppVipPool != nil {
+		{
+			size, err := m.Ipv4AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DomainViewAppVIPPool_Ipv6AppVipPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DomainViewAppVIPPool_Ipv6AppVipPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ipv6AppVipPool != nil {
+		{
+			size, err := m.Ipv6AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *DomainViewDualStackLeasePool) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2060,6 +2698,76 @@ func (m *DomainViewDualStackLeasePool) MarshalToSizedBuffer(dAtA []byte) (int, e
 		}
 		i--
 		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *IPv4LeasePool) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IPv4LeasePool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IPv4LeasePool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Ipv4Leasepool != nil {
+		{
+			size, err := m.Ipv4Leasepool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *IPv6LeasePool) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IPv6LeasePool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IPv6LeasePool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Ipv6Leasepool != nil {
+		{
+			size, err := m.Ipv6Leasepool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -2307,6 +3015,43 @@ func (m *DVCloudGatewayAdvertisement_ReSites) MarshalToSizedBuffer(dAtA []byte) 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *DomainViewPrivateGateways) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DomainViewPrivateGateways) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DomainViewPrivateGateways) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.UztnaGateway) > 0 {
+		for iNdEx := len(m.UztnaGateway) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.UztnaGateway[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *DomainViewGateways) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2327,19 +3072,17 @@ func (m *DomainViewGateways) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.UztnaGateway) > 0 {
-		for iNdEx := len(m.UztnaGateway) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.UztnaGateway[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
+	if m.PrivateGateway != nil {
+		{
+			size, err := m.PrivateGateway.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
 			}
-			i--
-			dAtA[i] = 0x1a
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
 		}
+		i--
+		dAtA[i] = 0x22
 	}
 	if m.PerimeterRe != nil {
 		{
@@ -2580,18 +3323,6 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x42
 	}
-	if m.AppVipPool != nil {
-		{
-			size, err := m.AppVipPool.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3a
-	}
 	if m.LeasePool != nil {
 		{
 			size, err := m.LeasePool.MarshalToSizedBuffer(dAtA[:i])
@@ -2765,19 +3496,71 @@ func (m *DomainViewPolicy) Size() (n int) {
 	return n
 }
 
+func (m *DomainViewDualStackAppVipPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ipv4AppVipPool != nil {
+		l = m.Ipv4AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Ipv6AppVipPool != nil {
+		l = m.Ipv6AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func (m *DomainViewAppVIPPool) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.AppVipPool != nil {
-		l = m.AppVipPool.Size()
-		n += 1 + l + sovTypes(uint64(l))
+	if m.IpaddressType != nil {
+		n += m.IpaddressType.Size()
 	}
 	return n
 }
 
+func (m *DomainViewAppVIPPool_Ipv4Ipv6AppVipPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ipv4Ipv6AppVipPool != nil {
+		l = m.Ipv4Ipv6AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DomainViewAppVIPPool_Ipv4AppVipPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ipv4AppVipPool != nil {
+		l = m.Ipv4AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DomainViewAppVIPPool_Ipv6AppVipPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ipv6AppVipPool != nil {
+		l = m.Ipv6AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *DomainViewDualStackLeasePool) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2788,6 +3571,32 @@ func (m *DomainViewDualStackLeasePool) Size() (n int) {
 		l = m.Ipv4Leasepool.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if m.Ipv6Leasepool != nil {
+		l = m.Ipv6Leasepool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *IPv4LeasePool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ipv4Leasepool != nil {
+		l = m.Ipv4Leasepool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *IPv6LeasePool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
 	if m.Ipv6Leasepool != nil {
 		l = m.Ipv6Leasepool.Size()
 		n += 1 + l + sovTypes(uint64(l))
@@ -2909,6 +3718,21 @@ func (m *DVCloudGatewayAdvertisement_ReSites) Size() (n int) {
 	}
 	return n
 }
+func (m *DomainViewPrivateGateways) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.UztnaGateway) > 0 {
+		for _, e := range m.UztnaGateway {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *DomainViewGateways) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2919,11 +3743,9 @@ func (m *DomainViewGateways) Size() (n int) {
 		l = m.PerimeterRe.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if len(m.UztnaGateway) > 0 {
-		for _, e := range m.UztnaGateway {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
+	if m.PrivateGateway != nil {
+		l = m.PrivateGateway.Size()
+		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
 }
@@ -3020,10 +3842,6 @@ func (m *ReplaceSpecType) Size() (n int) {
 		l = m.LeasePool.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
-	if m.AppVipPool != nil {
-		l = m.AppVipPool.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
 	if m.Policy != nil {
 		l = m.Policy.Size()
 		n += 1 + l + sovTypes(uint64(l))
@@ -3090,12 +3908,53 @@ func (this *DomainViewPolicy) String() string {
 	}, "")
 	return s
 }
+func (this *DomainViewDualStackAppVipPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DomainViewDualStackAppVipPool{`,
+		`Ipv4AppVipPool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv4AppVipPool), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`Ipv6AppVipPool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv6AppVipPool), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *DomainViewAppVIPPool) String() string {
 	if this == nil {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DomainViewAppVIPPool{`,
-		`AppVipPool:` + strings.Replace(fmt.Sprintf("%v", this.AppVipPool), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`IpaddressType:` + fmt.Sprintf("%v", this.IpaddressType) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DomainViewAppVIPPool_Ipv4Ipv6AppVipPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DomainViewAppVIPPool_Ipv4Ipv6AppVipPool{`,
+		`Ipv4Ipv6AppVipPool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv4Ipv6AppVipPool), "DomainViewDualStackAppVipPool", "DomainViewDualStackAppVipPool", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DomainViewAppVIPPool_Ipv4AppVipPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DomainViewAppVIPPool_Ipv4AppVipPool{`,
+		`Ipv4AppVipPool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv4AppVipPool), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DomainViewAppVIPPool_Ipv6AppVipPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DomainViewAppVIPPool_Ipv6AppVipPool{`,
+		`Ipv6AppVipPool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv6AppVipPool), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3106,6 +3965,26 @@ func (this *DomainViewDualStackLeasePool) String() string {
 	}
 	s := strings.Join([]string{`&DomainViewDualStackLeasePool{`,
 		`Ipv4Leasepool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv4Leasepool), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`Ipv6Leasepool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv6Leasepool), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IPv4LeasePool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IPv4LeasePool{`,
+		`Ipv4Leasepool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv4Leasepool), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IPv6LeasePool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IPv6LeasePool{`,
 		`Ipv6Leasepool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv6Leasepool), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
@@ -3211,7 +4090,7 @@ func (this *DVCloudGatewayAdvertisement_ReSites) String() string {
 	}, "")
 	return s
 }
-func (this *DomainViewGateways) String() string {
+func (this *DomainViewPrivateGateways) String() string {
 	if this == nil {
 		return "nil"
 	}
@@ -3220,9 +4099,19 @@ func (this *DomainViewGateways) String() string {
 		repeatedStringForUztnaGateway += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
 	}
 	repeatedStringForUztnaGateway += "}"
+	s := strings.Join([]string{`&DomainViewPrivateGateways{`,
+		`UztnaGateway:` + repeatedStringForUztnaGateway + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DomainViewGateways) String() string {
+	if this == nil {
+		return "nil"
+	}
 	s := strings.Join([]string{`&DomainViewGateways{`,
 		`PerimeterRe:` + strings.Replace(this.PerimeterRe.String(), "DVCloudGatewayAdvertisement", "DVCloudGatewayAdvertisement", 1) + `,`,
-		`UztnaGateway:` + repeatedStringForUztnaGateway + `,`,
+		`PrivateGateway:` + strings.Replace(this.PrivateGateway.String(), "DomainViewPrivateGateways", "DomainViewPrivateGateways", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3267,7 +4156,6 @@ func (this *ReplaceSpecType) String() string {
 		`Cert:` + strings.Replace(this.Cert.String(), "DomainViewCertificate", "DomainViewCertificate", 1) + `,`,
 		`Gateways:` + strings.Replace(this.Gateways.String(), "DomainViewGateways", "DomainViewGateways", 1) + `,`,
 		`LeasePool:` + strings.Replace(this.LeasePool.String(), "DomainViewLeasePoolList", "DomainViewLeasePoolList", 1) + `,`,
-		`AppVipPool:` + strings.Replace(this.AppVipPool.String(), "DomainViewAppVIPPool", "DomainViewAppVIPPool", 1) + `,`,
 		`Policy:` + strings.Replace(this.Policy.String(), "DomainViewPolicy", "DomainViewPolicy", 1) + `,`,
 		`}`,
 	}, "")
@@ -3474,6 +4362,131 @@ func (m *DomainViewPolicy) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *DomainViewDualStackAppVipPool) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DomainViewDualStackAppVipPool: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DomainViewDualStackAppVipPool: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Ipv4AppVipPool == nil {
+				m.Ipv4AppVipPool = &views.ObjectRefType{}
+			}
+			if err := m.Ipv4AppVipPool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Ipv6AppVipPool == nil {
+				m.Ipv6AppVipPool = &views.ObjectRefType{}
+			}
+			if err := m.Ipv6AppVipPool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *DomainViewAppVIPPool) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -3503,9 +4516,9 @@ func (m *DomainViewAppVIPPool) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: DomainViewAppVIPPool: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 5:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AppVipPool", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4Ipv6AppVipPool", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3532,12 +4545,81 @@ func (m *DomainViewAppVIPPool) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.AppVipPool == nil {
-				m.AppVipPool = &views.ObjectRefType{}
-			}
-			if err := m.AppVipPool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			v := &DomainViewDualStackAppVipPool{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			m.IpaddressType = &DomainViewAppVIPPool_Ipv4Ipv6AppVipPool{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IpaddressType = &DomainViewAppVIPPool_Ipv4AppVipPool{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &views.ObjectRefType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IpaddressType = &DomainViewAppVIPPool_Ipv6AppVipPool{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3629,6 +4711,184 @@ func (m *DomainViewDualStackLeasePool) Unmarshal(dAtA []byte) error {
 			}
 			iNdEx = postIndex
 		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6Leasepool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Ipv6Leasepool == nil {
+				m.Ipv6Leasepool = &views.ObjectRefType{}
+			}
+			if err := m.Ipv6Leasepool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IPv4LeasePool) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IPv4LeasePool: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IPv4LeasePool: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4Leasepool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Ipv4Leasepool == nil {
+				m.Ipv4Leasepool = &views.ObjectRefType{}
+			}
+			if err := m.Ipv4Leasepool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IPv6LeasePool) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IPv6LeasePool: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IPv6LeasePool: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6Leasepool", wireType)
 			}
@@ -4143,6 +5403,93 @@ func (m *DVCloudGatewayAdvertisement) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *DomainViewPrivateGateways) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DomainViewPrivateGateways: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DomainViewPrivateGateways: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UztnaGateway", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.UztnaGateway = append(m.UztnaGateway, &views.ObjectRefType{})
+			if err := m.UztnaGateway[len(m.UztnaGateway)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *DomainViewGateways) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -4208,9 +5555,9 @@ func (m *DomainViewGateways) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field UztnaGateway", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field PrivateGateway", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4237,8 +5584,10 @@ func (m *DomainViewGateways) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.UztnaGateway = append(m.UztnaGateway, &views.ObjectRefType{})
-			if err := m.UztnaGateway[len(m.UztnaGateway)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if m.PrivateGateway == nil {
+				m.PrivateGateway = &DomainViewPrivateGateways{}
+			}
+			if err := m.PrivateGateway.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4998,42 +6347,6 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				m.LeasePool = &DomainViewLeasePoolList{}
 			}
 			if err := m.LeasePool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AppVipPool", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.AppVipPool == nil {
-				m.AppVipPool = &DomainViewAppVIPPool{}
-			}
-			if err := m.AppVipPool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

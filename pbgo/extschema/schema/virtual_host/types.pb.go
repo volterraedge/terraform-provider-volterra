@@ -394,6 +394,99 @@ func (BotDefenseMode) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_df61af5ea37a6592, []int{3}
 }
 
+// ServicePolicyOption
+//
+// x-displayName: "Service Policy Option"
+// Definitions for Service Policy Option
+type ServicePolicyOption int32
+
+const (
+	// NO SERVICE POLICIES
+	//
+	// x-displayName: "NO_SERVICE_POLICIES"
+	// This option indicates that no service policy has been selected for the view object.
+	NO_SERVICE_POLICIES ServicePolicyOption = 0
+	// SERVICE POLICIES FROM NAMESPACE
+	//
+	// x-displayName: "SERVICE_POLICIES_FROM_NAMESPACE"
+	// This indicates that all service policies within the namespace, having names prefixed with "active," have been selected.
+	SERVICE_POLICIES_FROM_NAMESPACE ServicePolicyOption = 1
+	// ACTIVE SERVICE POLICIES
+	//
+	// x-displayName: "ACTIVE_SERVICE_POLICIES"
+	// This indicates that a custom service policy has been selected for the view object.
+	ACTIVE_SERVICE_POLICIES ServicePolicyOption = 2
+)
+
+var ServicePolicyOption_name = map[int32]string{
+	0: "NO_SERVICE_POLICIES",
+	1: "SERVICE_POLICIES_FROM_NAMESPACE",
+	2: "ACTIVE_SERVICE_POLICIES",
+}
+
+var ServicePolicyOption_value = map[string]int32{
+	"NO_SERVICE_POLICIES":             0,
+	"SERVICE_POLICIES_FROM_NAMESPACE": 1,
+	"ACTIVE_SERVICE_POLICIES":         2,
+}
+
+func (ServicePolicyOption) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{4}
+}
+
+// HTTP-LB Service Delegation Location
+//
+// x-displayName: "Service Action Delegation Location"
+// Location in the service-chain topology where a virtual_host's service action is to be
+// applied. It could be either in CDN or LB or BIG-IP etc.
+type DelegationLocation int32
+
+const (
+	// NONE
+	//
+	// x-displayName: "Not Performed"
+	// The service action is not performed. This should override the user selection. This option is chosen
+	// by the system in cases where the action is either redundant etc.
+	NONE DelegationLocation = 0
+	// HTTP_LB
+	//
+	// x-displayName: "Http Load Balancer"
+	// The HTTP-LB service action will be performed by the LB (envoy).
+	// This implies that the service action is performed only on cache miss requests.
+	HTTP_LB DelegationLocation = 1
+	// CDN
+	//
+	// x-displayName: "CDN"
+	// The HTTP-LB service action will be performed by the CDN (nginx)
+	// The service action is performed for all requests, both cache hits and miss.
+	CDN DelegationLocation = 2
+	// BOTH
+	//
+	// x-displayName: "CDN AND Load Balancer"
+	// The HTTP-LB service action will be performed by both the CDN (nginx) and LB (envoy)
+	// The service action is performed for all requests. The action is performed twice for origin requests, once
+	// in CDN (nginx) and once in LB (envoy)
+	BOTH DelegationLocation = 3
+)
+
+var DelegationLocation_name = map[int32]string{
+	0: "NONE",
+	1: "HTTP_LB",
+	2: "CDN",
+	3: "BOTH",
+}
+
+var DelegationLocation_value = map[string]int32{
+	"NONE":    0,
+	"HTTP_LB": 1,
+	"CDN":     2,
+	"BOTH":    3,
+}
+
+func (DelegationLocation) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{5}
+}
+
 // VirtualHostType
 //
 // x-displayName: "Virtual Host Type"
@@ -447,6 +540,11 @@ const (
 	// x-displayName: "BIG-IP Virtual Server"
 	// Virtual Host representing a BIG-IP Virtual Server
 	BIGIP_VIRTUAL_SERVER VirtualHostType = 8
+	// UDP LoadBalancer
+	//
+	// x-displayName: "Load balancer"
+	// Virtual Host used as Load Balancer
+	UDP_LOAD_BALANCER VirtualHostType = 9
 )
 
 var VirtualHostType_name = map[int32]string{
@@ -459,6 +557,7 @@ var VirtualHostType_name = map[int32]string{
 	6: "CDN_LOAD_BALANCER",
 	7: "NGINX_SERVER",
 	8: "BIGIP_VIRTUAL_SERVER",
+	9: "UDP_LOAD_BALANCER",
 }
 
 var VirtualHostType_value = map[string]int32{
@@ -471,10 +570,11 @@ var VirtualHostType_value = map[string]int32{
 	"CDN_LOAD_BALANCER":     6,
 	"NGINX_SERVER":          7,
 	"BIGIP_VIRTUAL_SERVER":  8,
+	"UDP_LOAD_BALANCER":     9,
 }
 
 func (VirtualHostType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{4}
+	return fileDescriptor_df61af5ea37a6592, []int{6}
 }
 
 // Virtual Host Identifier
@@ -1903,12 +2003,36 @@ type CdnServiceType struct {
 	// x-displayName: "Cache TTL"
 	// x-example: "3600"
 	// The Cache TTL is the number of seconds after which cache content is no longer valid
-	CacheTtl uint32 `protobuf:"varint,4,opt,name=cache_ttl,json=cacheTtl,proto3" json:"cache_ttl,omitempty"`
+	CacheTtl uint32 `protobuf:"varint,4,opt,name=cache_ttl,json=cacheTtl,proto3" json:"cache_ttl,omitempty"` // Deprecated: Do not use.
 	// Service Domains
 	//
 	// x-displayName: "Service Domains"
 	// CNAME provided from service per domain
-	ServiceDomains []*ServiceDomain `protobuf:"bytes,5,rep,name=service_domains,json=serviceDomains,proto3" json:"service_domains,omitempty"`
+	ServiceDomains []*ServiceDomain `protobuf:"bytes,5,rep,name=service_domains,json=serviceDomains,proto3" json:"service_domains,omitempty"` // Deprecated: Do not use.
+	// CDN Origin Pool
+	//
+	// x-displayName: "CDN Origin Pool"
+	//
+	CdnOriginPool *CdnOriginPoolType `protobuf:"bytes,6,opt,name=cdn_origin_pool,json=cdnOriginPool,proto3" json:"cdn_origin_pool,omitempty"`
+	// cdn_cache_rule
+	//
+	// x-displayName: "Enable"
+	// Reference to CDN Cache Rule configuration object
+	CdnCacheRule []*views.ObjectRefType `protobuf:"bytes,7,rep,name=cdn_cache_rule,json=cdnCacheRule,proto3" json:"cdn_cache_rule,omitempty"`
+	// Other Settings
+	//
+	// x-displayName: "Other Settings"
+	OtherSettings *OtherSettings `protobuf:"bytes,8,opt,name=other_settings,json=otherSettings,proto3" json:"other_settings,omitempty"`
+	// Default Cache Action
+	//
+	// x-displayName: "Default Cache Action"
+	// Default value for Cache action.
+	DefaultCacheAction *DefaultCacheAction `protobuf:"bytes,9,opt,name=default_cache_action,json=defaultCacheAction,proto3" json:"default_cache_action,omitempty"`
+	// Service Policy Option
+	//
+	// x-displayName: "ServicePolicyOption"
+	// This option provides information about the service policy option selected during the creation of the view object. Previously, this reference was available only in the view object. It has now been added here to ensure that other CDN-related services, which only have access to the virtual host object, can also utilize this information.
+	ServicePolicyOption ServicePolicyOption `protobuf:"varint,10,opt,name=service_policy_option,json=servicePolicyOption,proto3,enum=ves.io.schema.virtual_host.ServicePolicyOption" json:"service_policy_option,omitempty"`
 }
 
 func (m *CdnServiceType) Reset()      { *m = CdnServiceType{} }
@@ -1977,6 +2101,7 @@ func (m *CdnServiceType) GetLiveStreaming() *schema.Empty {
 	return nil
 }
 
+// Deprecated: Do not use.
 func (m *CdnServiceType) GetCacheTtl() uint32 {
 	if m != nil {
 		return m.CacheTtl
@@ -1984,6 +2109,7 @@ func (m *CdnServiceType) GetCacheTtl() uint32 {
 	return 0
 }
 
+// Deprecated: Do not use.
 func (m *CdnServiceType) GetServiceDomains() []*ServiceDomain {
 	if m != nil {
 		return m.ServiceDomains
@@ -1991,11 +2117,908 @@ func (m *CdnServiceType) GetServiceDomains() []*ServiceDomain {
 	return nil
 }
 
+func (m *CdnServiceType) GetCdnOriginPool() *CdnOriginPoolType {
+	if m != nil {
+		return m.CdnOriginPool
+	}
+	return nil
+}
+
+func (m *CdnServiceType) GetCdnCacheRule() []*views.ObjectRefType {
+	if m != nil {
+		return m.CdnCacheRule
+	}
+	return nil
+}
+
+func (m *CdnServiceType) GetOtherSettings() *OtherSettings {
+	if m != nil {
+		return m.OtherSettings
+	}
+	return nil
+}
+
+func (m *CdnServiceType) GetDefaultCacheAction() *DefaultCacheAction {
+	if m != nil {
+		return m.DefaultCacheAction
+	}
+	return nil
+}
+
+func (m *CdnServiceType) GetServicePolicyOption() ServicePolicyOption {
+	if m != nil {
+		return m.ServicePolicyOption
+	}
+	return NO_SERVICE_POLICIES
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CdnServiceType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CdnServiceType_DownloadDelivery)(nil),
 		(*CdnServiceType_LiveStreaming)(nil),
+	}
+}
+
+// Other Settings
+//
+// x-displayName: "Other Settings"
+// Other Settings
+type OtherSettings struct {
+	// Add Site information
+	//
+	// x-displayName: "Add Location"
+	// x-example: "true"
+	// x-example: true
+	// Appends header x-volterra-location = <re-site-name> in responses.
+	AddLocation bool `protobuf:"varint,1,opt,name=add_location,json=addLocation,proto3" json:"add_location,omitempty"`
+	// Logging Options
+	//
+	// x-displayName: "Logging Options"
+	// Logging related options
+	LoggingOptions *LoggingOptionsType `protobuf:"bytes,2,opt,name=logging_options,json=loggingOptions,proto3" json:"logging_options,omitempty"`
+	// Header Control
+	//
+	// x-displayName: "Header Control"
+	// Request/Response header related options
+	HeaderOptions *HeaderControlType `protobuf:"bytes,3,opt,name=header_options,json=headerOptions,proto3" json:"header_options,omitempty"`
+}
+
+func (m *OtherSettings) Reset()      { *m = OtherSettings{} }
+func (*OtherSettings) ProtoMessage() {}
+func (*OtherSettings) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{15}
+}
+func (m *OtherSettings) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OtherSettings) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *OtherSettings) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OtherSettings.Merge(m, src)
+}
+func (m *OtherSettings) XXX_Size() int {
+	return m.Size()
+}
+func (m *OtherSettings) XXX_DiscardUnknown() {
+	xxx_messageInfo_OtherSettings.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OtherSettings proto.InternalMessageInfo
+
+func (m *OtherSettings) GetAddLocation() bool {
+	if m != nil {
+		return m.AddLocation
+	}
+	return false
+}
+
+func (m *OtherSettings) GetLoggingOptions() *LoggingOptionsType {
+	if m != nil {
+		return m.LoggingOptions
+	}
+	return nil
+}
+
+func (m *OtherSettings) GetHeaderOptions() *HeaderControlType {
+	if m != nil {
+		return m.HeaderOptions
+	}
+	return nil
+}
+
+// Logging options
+//
+// x-displayName: "Logging Options"
+// This defines various options related to logging
+type LoggingOptionsType struct {
+	// client_log_options
+	//
+	// x-displayName: "Client Request Headers to Log"
+	// Client request headers to log
+	ClientLogOptions *LogHeaderOptions `protobuf:"bytes,7,opt,name=client_log_options,json=clientLogOptions,proto3" json:"client_log_options,omitempty"`
+	// origin_log_options
+	//
+	// x-displayName: "Origin Response Headers to Log"
+	// Origin response headers to log
+	OriginLogOptions *LogHeaderOptions `protobuf:"bytes,8,opt,name=origin_log_options,json=originLogOptions,proto3" json:"origin_log_options,omitempty"`
+}
+
+func (m *LoggingOptionsType) Reset()      { *m = LoggingOptionsType{} }
+func (*LoggingOptionsType) ProtoMessage() {}
+func (*LoggingOptionsType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{16}
+}
+func (m *LoggingOptionsType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *LoggingOptionsType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *LoggingOptionsType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LoggingOptionsType.Merge(m, src)
+}
+func (m *LoggingOptionsType) XXX_Size() int {
+	return m.Size()
+}
+func (m *LoggingOptionsType) XXX_DiscardUnknown() {
+	xxx_messageInfo_LoggingOptionsType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LoggingOptionsType proto.InternalMessageInfo
+
+func (m *LoggingOptionsType) GetClientLogOptions() *LogHeaderOptions {
+	if m != nil {
+		return m.ClientLogOptions
+	}
+	return nil
+}
+
+func (m *LoggingOptionsType) GetOriginLogOptions() *LogHeaderOptions {
+	if m != nil {
+		return m.OriginLogOptions
+	}
+	return nil
+}
+
+// LogHeaderOptions
+//
+// x-displayName: "Headers to Log"
+// List of headers to Log
+type LogHeaderOptions struct {
+	// List of Headers
+	//
+	// x-displayName: "Headers"
+	// x-example: "x-custom-length"
+	// List of headers
+	HeaderList []string `protobuf:"bytes,1,rep,name=header_list,json=headerList,proto3" json:"header_list,omitempty"`
+}
+
+func (m *LogHeaderOptions) Reset()      { *m = LogHeaderOptions{} }
+func (*LogHeaderOptions) ProtoMessage() {}
+func (*LogHeaderOptions) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{17}
+}
+func (m *LogHeaderOptions) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *LogHeaderOptions) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *LogHeaderOptions) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_LogHeaderOptions.Merge(m, src)
+}
+func (m *LogHeaderOptions) XXX_Size() int {
+	return m.Size()
+}
+func (m *LogHeaderOptions) XXX_DiscardUnknown() {
+	xxx_messageInfo_LogHeaderOptions.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_LogHeaderOptions proto.InternalMessageInfo
+
+func (m *LogHeaderOptions) GetHeaderList() []string {
+	if m != nil {
+		return m.HeaderList
+	}
+	return nil
+}
+
+// Header Control
+//
+// x-displayName: "Header Control"
+// This defines various options related to request/response headers
+type HeaderControlType struct {
+	// Headers to add in request
+	//
+	// x-displayName: "Add Origin Request Headers"
+	// Headers are key-value pairs to be added to HTTP request being routed towards upstream.
+	// Headers specified at this level are applied after headers from matched Route are applied
+	RequestHeadersToAdd []*schema.HeaderManipulationOptionType `protobuf:"bytes,1,rep,name=request_headers_to_add,json=requestHeadersToAdd,proto3" json:"request_headers_to_add,omitempty"`
+	// Header to be removed from request
+	//
+	// x-displayName: "Remove Origin Request Headers"
+	// x-example: "host"
+	// List of keys of Headers to be removed from the HTTP request being sent towards upstream.
+	RequestHeadersToRemove []string `protobuf:"bytes,2,rep,name=request_headers_to_remove,json=requestHeadersToRemove,proto3" json:"request_headers_to_remove,omitempty"`
+	// Headers to add in response
+	//
+	// x-displayName: "Add Response Headers"
+	// Headers are key-value pairs to be added to HTTP response being sent towards downstream.
+	// Headers specified at this level are applied after headers from matched Route are applied
+	ResponseHeadersToAdd []*schema.HeaderManipulationOptionType `protobuf:"bytes,3,rep,name=response_headers_to_add,json=responseHeadersToAdd,proto3" json:"response_headers_to_add,omitempty"`
+	// Header to be removed from response
+	//
+	// x-displayName: "Remove Response Headers"
+	// x-example: "host"
+	// List of keys of Headers to be removed from the HTTP response being sent towards downstream.
+	ResponseHeadersToRemove []string `protobuf:"bytes,4,rep,name=response_headers_to_remove,json=responseHeadersToRemove,proto3" json:"response_headers_to_remove,omitempty"`
+}
+
+func (m *HeaderControlType) Reset()      { *m = HeaderControlType{} }
+func (*HeaderControlType) ProtoMessage() {}
+func (*HeaderControlType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{18}
+}
+func (m *HeaderControlType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *HeaderControlType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *HeaderControlType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_HeaderControlType.Merge(m, src)
+}
+func (m *HeaderControlType) XXX_Size() int {
+	return m.Size()
+}
+func (m *HeaderControlType) XXX_DiscardUnknown() {
+	xxx_messageInfo_HeaderControlType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_HeaderControlType proto.InternalMessageInfo
+
+func (m *HeaderControlType) GetRequestHeadersToAdd() []*schema.HeaderManipulationOptionType {
+	if m != nil {
+		return m.RequestHeadersToAdd
+	}
+	return nil
+}
+
+func (m *HeaderControlType) GetRequestHeadersToRemove() []string {
+	if m != nil {
+		return m.RequestHeadersToRemove
+	}
+	return nil
+}
+
+func (m *HeaderControlType) GetResponseHeadersToAdd() []*schema.HeaderManipulationOptionType {
+	if m != nil {
+		return m.ResponseHeadersToAdd
+	}
+	return nil
+}
+
+func (m *HeaderControlType) GetResponseHeadersToRemove() []string {
+	if m != nil {
+		return m.ResponseHeadersToRemove
+	}
+	return nil
+}
+
+// Default Cache Action
+//
+// x-displayName: "Default Cache Action"
+// This defines a Default Cache Action
+type DefaultCacheAction struct {
+	// Cache Actions
+	//
+	// x-required
+	// x-displayName: "Cache Actions"
+	// Configure the Cache Actions for a rule.
+	//
+	// Types that are valid to be assigned to CacheActions:
+	//	*DefaultCacheAction_CacheTtlDefault
+	//	*DefaultCacheAction_CacheTtlOverride
+	//	*DefaultCacheAction_CacheDisabled
+	CacheActions isDefaultCacheAction_CacheActions `protobuf_oneof:"cache_actions"`
+}
+
+func (m *DefaultCacheAction) Reset()      { *m = DefaultCacheAction{} }
+func (*DefaultCacheAction) ProtoMessage() {}
+func (*DefaultCacheAction) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{19}
+}
+func (m *DefaultCacheAction) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DefaultCacheAction) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DefaultCacheAction) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DefaultCacheAction.Merge(m, src)
+}
+func (m *DefaultCacheAction) XXX_Size() int {
+	return m.Size()
+}
+func (m *DefaultCacheAction) XXX_DiscardUnknown() {
+	xxx_messageInfo_DefaultCacheAction.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DefaultCacheAction proto.InternalMessageInfo
+
+type isDefaultCacheAction_CacheActions interface {
+	isDefaultCacheAction_CacheActions()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type DefaultCacheAction_CacheTtlDefault struct {
+	CacheTtlDefault string `protobuf:"bytes,3,opt,name=cache_ttl_default,json=cacheTtlDefault,proto3,oneof" json:"cache_ttl_default,omitempty"`
+}
+type DefaultCacheAction_CacheTtlOverride struct {
+	CacheTtlOverride string `protobuf:"bytes,4,opt,name=cache_ttl_override,json=cacheTtlOverride,proto3,oneof" json:"cache_ttl_override,omitempty"`
+}
+type DefaultCacheAction_CacheDisabled struct {
+	CacheDisabled *schema.Empty `protobuf:"bytes,5,opt,name=cache_disabled,json=cacheDisabled,proto3,oneof" json:"cache_disabled,omitempty"`
+}
+
+func (*DefaultCacheAction_CacheTtlDefault) isDefaultCacheAction_CacheActions()  {}
+func (*DefaultCacheAction_CacheTtlOverride) isDefaultCacheAction_CacheActions() {}
+func (*DefaultCacheAction_CacheDisabled) isDefaultCacheAction_CacheActions()    {}
+
+func (m *DefaultCacheAction) GetCacheActions() isDefaultCacheAction_CacheActions {
+	if m != nil {
+		return m.CacheActions
+	}
+	return nil
+}
+
+func (m *DefaultCacheAction) GetCacheTtlDefault() string {
+	if x, ok := m.GetCacheActions().(*DefaultCacheAction_CacheTtlDefault); ok {
+		return x.CacheTtlDefault
+	}
+	return ""
+}
+
+func (m *DefaultCacheAction) GetCacheTtlOverride() string {
+	if x, ok := m.GetCacheActions().(*DefaultCacheAction_CacheTtlOverride); ok {
+		return x.CacheTtlOverride
+	}
+	return ""
+}
+
+func (m *DefaultCacheAction) GetCacheDisabled() *schema.Empty {
+	if x, ok := m.GetCacheActions().(*DefaultCacheAction_CacheDisabled); ok {
+		return x.CacheDisabled
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*DefaultCacheAction) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*DefaultCacheAction_CacheTtlDefault)(nil),
+		(*DefaultCacheAction_CacheTtlOverride)(nil),
+		(*DefaultCacheAction_CacheDisabled)(nil),
+	}
+}
+
+// CdnOriginPoolType
+//
+// x-displayName: "CDN Origin Pool"
+// Origin Pool for the CDN distribution
+type CdnOriginPoolType struct {
+	// OriginServerPublicName
+	//
+	// x-displayName: "Origin Host Header"
+	// The DNS name to be used as the host header for the request to the origin server
+	PublicName *CDNOriginServerPublicName `protobuf:"bytes,1,opt,name=public_name,json=publicName,proto3" json:"public_name,omitempty"`
+	// Enable TLS
+	//
+	// x-displayName: "Enable TLS for Origin Servers"
+	// x-required
+	// Choice to enable TLS for origin servers
+	//
+	// Types that are valid to be assigned to TlsChoice:
+	//	*CdnOriginPoolType_NoTls
+	//	*CdnOriginPoolType_UseTls
+	TlsChoice isCdnOriginPoolType_TlsChoice `protobuf_oneof:"tls_choice"`
+	// List of Origin Servers
+	//
+	// x-displayName: "List Of Origin Servers"
+	// x-required
+	// List of original servers
+	OriginServers []*CDNOriginServerType `protobuf:"bytes,5,rep,name=origin_servers,json=originServers,proto3" json:"origin_servers,omitempty"`
+	// Follow Origin Redirect
+	//
+	// x-displayName: "Follow Origin Redirect"
+	// x-example: "true"
+	// x-example: true
+	// Instructs the CDN to follow redirects from the origin server(s)
+	FollowOriginRedirect bool `protobuf:"varint,6,opt,name=follow_origin_redirect,json=followOriginRedirect,proto3" json:"follow_origin_redirect,omitempty"`
+	// Origin Request Timeout
+	//
+	// x-displayName: "Origin Request Timeout Duration"
+	// x-example: "100s"
+	// Configures the time after which a request to the origin will time out waiting for a response
+	OriginRequestTimeout string `protobuf:"bytes,7,opt,name=origin_request_timeout,json=originRequestTimeout,proto3" json:"origin_request_timeout,omitempty"`
+	// Advanced Configuration
+	//
+	// x-displayName: "Advanced Configuration"
+	MoreOriginOptions *OriginAdvancedConfiguration `protobuf:"bytes,8,opt,name=more_origin_options,json=moreOriginOptions,proto3" json:"more_origin_options,omitempty"`
+}
+
+func (m *CdnOriginPoolType) Reset()      { *m = CdnOriginPoolType{} }
+func (*CdnOriginPoolType) ProtoMessage() {}
+func (*CdnOriginPoolType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{20}
+}
+func (m *CdnOriginPoolType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CdnOriginPoolType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CdnOriginPoolType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CdnOriginPoolType.Merge(m, src)
+}
+func (m *CdnOriginPoolType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CdnOriginPoolType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CdnOriginPoolType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CdnOriginPoolType proto.InternalMessageInfo
+
+type isCdnOriginPoolType_TlsChoice interface {
+	isCdnOriginPoolType_TlsChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CdnOriginPoolType_NoTls struct {
+	NoTls *schema.Empty `protobuf:"bytes,3,opt,name=no_tls,json=noTls,proto3,oneof" json:"no_tls,omitempty"`
+}
+type CdnOriginPoolType_UseTls struct {
+	UseTls *CDNUpstreamTlsParameters `protobuf:"bytes,4,opt,name=use_tls,json=useTls,proto3,oneof" json:"use_tls,omitempty"`
+}
+
+func (*CdnOriginPoolType_NoTls) isCdnOriginPoolType_TlsChoice()  {}
+func (*CdnOriginPoolType_UseTls) isCdnOriginPoolType_TlsChoice() {}
+
+func (m *CdnOriginPoolType) GetTlsChoice() isCdnOriginPoolType_TlsChoice {
+	if m != nil {
+		return m.TlsChoice
+	}
+	return nil
+}
+
+func (m *CdnOriginPoolType) GetPublicName() *CDNOriginServerPublicName {
+	if m != nil {
+		return m.PublicName
+	}
+	return nil
+}
+
+func (m *CdnOriginPoolType) GetNoTls() *schema.Empty {
+	if x, ok := m.GetTlsChoice().(*CdnOriginPoolType_NoTls); ok {
+		return x.NoTls
+	}
+	return nil
+}
+
+func (m *CdnOriginPoolType) GetUseTls() *CDNUpstreamTlsParameters {
+	if x, ok := m.GetTlsChoice().(*CdnOriginPoolType_UseTls); ok {
+		return x.UseTls
+	}
+	return nil
+}
+
+func (m *CdnOriginPoolType) GetOriginServers() []*CDNOriginServerType {
+	if m != nil {
+		return m.OriginServers
+	}
+	return nil
+}
+
+func (m *CdnOriginPoolType) GetFollowOriginRedirect() bool {
+	if m != nil {
+		return m.FollowOriginRedirect
+	}
+	return false
+}
+
+func (m *CdnOriginPoolType) GetOriginRequestTimeout() string {
+	if m != nil {
+		return m.OriginRequestTimeout
+	}
+	return ""
+}
+
+func (m *CdnOriginPoolType) GetMoreOriginOptions() *OriginAdvancedConfiguration {
+	if m != nil {
+		return m.MoreOriginOptions
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CdnOriginPoolType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CdnOriginPoolType_NoTls)(nil),
+		(*CdnOriginPoolType_UseTls)(nil),
+	}
+}
+
+// CDNOriginServerPublicName
+//
+// x-displayName: "Public DNS Name"
+// Specify origin server with public DNS name
+type CDNOriginServerPublicName struct {
+	// DNS name
+	//
+	// x-displayName: "DNS Name"
+	// x-example: "value"
+	// DNS Name
+	DnsName string `protobuf:"bytes,1,opt,name=dns_name,json=dnsName,proto3" json:"dns_name,omitempty"`
+}
+
+func (m *CDNOriginServerPublicName) Reset()      { *m = CDNOriginServerPublicName{} }
+func (*CDNOriginServerPublicName) ProtoMessage() {}
+func (*CDNOriginServerPublicName) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{21}
+}
+func (m *CDNOriginServerPublicName) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CDNOriginServerPublicName) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CDNOriginServerPublicName) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CDNOriginServerPublicName.Merge(m, src)
+}
+func (m *CDNOriginServerPublicName) XXX_Size() int {
+	return m.Size()
+}
+func (m *CDNOriginServerPublicName) XXX_DiscardUnknown() {
+	xxx_messageInfo_CDNOriginServerPublicName.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CDNOriginServerPublicName proto.InternalMessageInfo
+
+func (m *CDNOriginServerPublicName) GetDnsName() string {
+	if m != nil {
+		return m.DnsName
+	}
+	return ""
+}
+
+// CDNUpstreamTlsParameters
+//
+// x-displayName: "TLS Parameters for Origin Servers"
+// Upstream TLS Parameters
+type CDNUpstreamTlsParameters struct {
+}
+
+func (m *CDNUpstreamTlsParameters) Reset()      { *m = CDNUpstreamTlsParameters{} }
+func (*CDNUpstreamTlsParameters) ProtoMessage() {}
+func (*CDNUpstreamTlsParameters) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{22}
+}
+func (m *CDNUpstreamTlsParameters) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CDNUpstreamTlsParameters) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CDNUpstreamTlsParameters) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CDNUpstreamTlsParameters.Merge(m, src)
+}
+func (m *CDNUpstreamTlsParameters) XXX_Size() int {
+	return m.Size()
+}
+func (m *CDNUpstreamTlsParameters) XXX_DiscardUnknown() {
+	xxx_messageInfo_CDNUpstreamTlsParameters.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CDNUpstreamTlsParameters proto.InternalMessageInfo
+
+// Origin Byte Range Request Config
+//
+// x-displayName: "Origin Byte Range Request Config"
+type OriginAdvancedConfiguration struct {
+	// Disable Origin Byte Range Requests
+	//
+	// x-displayName: "Disable Origin Byte Range Requests"
+	// x-example: "true/false"
+	// Choice to enable/disable origin byte range requrests towards origin
+	DisableByteRangeRequest bool `protobuf:"varint,1,opt,name=disable_byte_range_request,json=disableByteRangeRequest,proto3" json:"disable_byte_range_request,omitempty"`
+	// Enable websocket proxy to the origin
+	//
+	// x-displayName: "Enable websocket proxy to the origin"
+	// Option to enable proxying of websocket connections to the origin server
+	WebsocketProxy bool `protobuf:"varint,2,opt,name=websocket_proxy,json=websocketProxy,proto3" json:"websocket_proxy,omitempty"`
+}
+
+func (m *OriginAdvancedConfiguration) Reset()      { *m = OriginAdvancedConfiguration{} }
+func (*OriginAdvancedConfiguration) ProtoMessage() {}
+func (*OriginAdvancedConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{23}
+}
+func (m *OriginAdvancedConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *OriginAdvancedConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *OriginAdvancedConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OriginAdvancedConfiguration.Merge(m, src)
+}
+func (m *OriginAdvancedConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *OriginAdvancedConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_OriginAdvancedConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_OriginAdvancedConfiguration proto.InternalMessageInfo
+
+func (m *OriginAdvancedConfiguration) GetDisableByteRangeRequest() bool {
+	if m != nil {
+		return m.DisableByteRangeRequest
+	}
+	return false
+}
+
+func (m *OriginAdvancedConfiguration) GetWebsocketProxy() bool {
+	if m != nil {
+		return m.WebsocketProxy
+	}
+	return false
+}
+
+// CDNOriginServerType
+//
+// x-displayName: "Origin Server"
+// Various options to specify origin server
+type CDNOriginServerType struct {
+	// Origin Server Type
+	//
+	// x-displayName: "Select Type of Origin Server"
+	// x-required
+	// Various options to specify origin server
+	//
+	// Types that are valid to be assigned to Choice:
+	//	*CDNOriginServerType_PublicIp
+	//	*CDNOriginServerType_PublicName
+	Choice isCDNOriginServerType_Choice `protobuf_oneof:"choice"`
+	// Port
+	//
+	// x-displayName: "Origin Server Port"
+	// x-example: "80"
+	// Port the workload can be reached on
+	Port uint32 `protobuf:"varint,4,opt,name=port,proto3" json:"port,omitempty"`
+}
+
+func (m *CDNOriginServerType) Reset()      { *m = CDNOriginServerType{} }
+func (*CDNOriginServerType) ProtoMessage() {}
+func (*CDNOriginServerType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{24}
+}
+func (m *CDNOriginServerType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CDNOriginServerType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CDNOriginServerType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CDNOriginServerType.Merge(m, src)
+}
+func (m *CDNOriginServerType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CDNOriginServerType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CDNOriginServerType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CDNOriginServerType proto.InternalMessageInfo
+
+type isCDNOriginServerType_Choice interface {
+	isCDNOriginServerType_Choice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CDNOriginServerType_PublicIp struct {
+	PublicIp *CDNOriginServerPublicIP `protobuf:"bytes,2,opt,name=public_ip,json=publicIp,proto3,oneof" json:"public_ip,omitempty"`
+}
+type CDNOriginServerType_PublicName struct {
+	PublicName *CDNOriginServerPublicName `protobuf:"bytes,3,opt,name=public_name,json=publicName,proto3,oneof" json:"public_name,omitempty"`
+}
+
+func (*CDNOriginServerType_PublicIp) isCDNOriginServerType_Choice()   {}
+func (*CDNOriginServerType_PublicName) isCDNOriginServerType_Choice() {}
+
+func (m *CDNOriginServerType) GetChoice() isCDNOriginServerType_Choice {
+	if m != nil {
+		return m.Choice
+	}
+	return nil
+}
+
+func (m *CDNOriginServerType) GetPublicIp() *CDNOriginServerPublicIP {
+	if x, ok := m.GetChoice().(*CDNOriginServerType_PublicIp); ok {
+		return x.PublicIp
+	}
+	return nil
+}
+
+func (m *CDNOriginServerType) GetPublicName() *CDNOriginServerPublicName {
+	if x, ok := m.GetChoice().(*CDNOriginServerType_PublicName); ok {
+		return x.PublicName
+	}
+	return nil
+}
+
+func (m *CDNOriginServerType) GetPort() uint32 {
+	if m != nil {
+		return m.Port
+	}
+	return 0
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CDNOriginServerType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CDNOriginServerType_PublicIp)(nil),
+		(*CDNOriginServerType_PublicName)(nil),
+	}
+}
+
+// OriginServerPublicIP
+//
+// x-displayName: "Public IP"
+// Specify origin server with public IP address
+type CDNOriginServerPublicIP struct {
+	// Public IP Choice
+	//
+	// x-displayName: "Select Public IP"
+	// x-required
+	// Origin server public IP - either V4 or V6
+	//
+	// Types that are valid to be assigned to PublicIpChoice:
+	//	*CDNOriginServerPublicIP_Ip
+	//	*CDNOriginServerPublicIP_Ipv6
+	PublicIpChoice isCDNOriginServerPublicIP_PublicIpChoice `protobuf_oneof:"public_ip_choice"`
+}
+
+func (m *CDNOriginServerPublicIP) Reset()      { *m = CDNOriginServerPublicIP{} }
+func (*CDNOriginServerPublicIP) ProtoMessage() {}
+func (*CDNOriginServerPublicIP) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{25}
+}
+func (m *CDNOriginServerPublicIP) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CDNOriginServerPublicIP) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CDNOriginServerPublicIP) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CDNOriginServerPublicIP.Merge(m, src)
+}
+func (m *CDNOriginServerPublicIP) XXX_Size() int {
+	return m.Size()
+}
+func (m *CDNOriginServerPublicIP) XXX_DiscardUnknown() {
+	xxx_messageInfo_CDNOriginServerPublicIP.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CDNOriginServerPublicIP proto.InternalMessageInfo
+
+type isCDNOriginServerPublicIP_PublicIpChoice interface {
+	isCDNOriginServerPublicIP_PublicIpChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type CDNOriginServerPublicIP_Ip struct {
+	Ip string `protobuf:"bytes,1,opt,name=ip,proto3,oneof" json:"ip,omitempty"`
+}
+type CDNOriginServerPublicIP_Ipv6 struct {
+	Ipv6 string `protobuf:"bytes,3,opt,name=ipv6,proto3,oneof" json:"ipv6,omitempty"`
+}
+
+func (*CDNOriginServerPublicIP_Ip) isCDNOriginServerPublicIP_PublicIpChoice()   {}
+func (*CDNOriginServerPublicIP_Ipv6) isCDNOriginServerPublicIP_PublicIpChoice() {}
+
+func (m *CDNOriginServerPublicIP) GetPublicIpChoice() isCDNOriginServerPublicIP_PublicIpChoice {
+	if m != nil {
+		return m.PublicIpChoice
+	}
+	return nil
+}
+
+func (m *CDNOriginServerPublicIP) GetIp() string {
+	if x, ok := m.GetPublicIpChoice().(*CDNOriginServerPublicIP_Ip); ok {
+		return x.Ip
+	}
+	return ""
+}
+
+func (m *CDNOriginServerPublicIP) GetIpv6() string {
+	if x, ok := m.GetPublicIpChoice().(*CDNOriginServerPublicIP_Ipv6); ok {
+		return x.Ipv6
+	}
+	return ""
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*CDNOriginServerPublicIP) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*CDNOriginServerPublicIP_Ip)(nil),
+		(*CDNOriginServerPublicIP_Ipv6)(nil),
 	}
 }
 
@@ -2023,7 +3046,7 @@ type ClientIPHeaders struct {
 func (m *ClientIPHeaders) Reset()      { *m = ClientIPHeaders{} }
 func (*ClientIPHeaders) ProtoMessage() {}
 func (*ClientIPHeaders) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{15}
+	return fileDescriptor_df61af5ea37a6592, []int{26}
 }
 func (m *ClientIPHeaders) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2075,7 +3098,7 @@ type ZtnaProxyConfiguration struct {
 func (m *ZtnaProxyConfiguration) Reset()      { *m = ZtnaProxyConfiguration{} }
 func (*ZtnaProxyConfiguration) ProtoMessage() {}
 func (*ZtnaProxyConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{16}
+	return fileDescriptor_df61af5ea37a6592, []int{27}
 }
 func (m *ZtnaProxyConfiguration) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2149,7 +3172,7 @@ type DNSProxyConfiguration struct {
 func (m *DNSProxyConfiguration) Reset()      { *m = DNSProxyConfiguration{} }
 func (*DNSProxyConfiguration) ProtoMessage() {}
 func (*DNSProxyConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{17}
+	return fileDescriptor_df61af5ea37a6592, []int{28}
 }
 func (m *DNSProxyConfiguration) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2223,7 +3246,7 @@ type DNSDDoSProfile struct {
 func (m *DNSDDoSProfile) Reset()      { *m = DNSDDoSProfile{} }
 func (*DNSDDoSProfile) ProtoMessage() {}
 func (*DNSDDoSProfile) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{18}
+	return fileDescriptor_df61af5ea37a6592, []int{29}
 }
 func (m *DNSDDoSProfile) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2316,7 +3339,7 @@ type DNSCacheProfile struct {
 func (m *DNSCacheProfile) Reset()      { *m = DNSCacheProfile{} }
 func (*DNSCacheProfile) ProtoMessage() {}
 func (*DNSCacheProfile) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{19}
+	return fileDescriptor_df61af5ea37a6592, []int{30}
 }
 func (m *DNSCacheProfile) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2418,7 +3441,7 @@ type SlowDDoSMitigation struct {
 func (m *SlowDDoSMitigation) Reset()      { *m = SlowDDoSMitigation{} }
 func (*SlowDDoSMitigation) ProtoMessage() {}
 func (*SlowDDoSMitigation) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{20}
+	return fileDescriptor_df61af5ea37a6592, []int{31}
 }
 func (m *SlowDDoSMitigation) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2516,7 +3539,7 @@ type DomainCertificates struct {
 func (m *DomainCertificates) Reset()      { *m = DomainCertificates{} }
 func (*DomainCertificates) ProtoMessage() {}
 func (*DomainCertificates) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{21}
+	return fileDescriptor_df61af5ea37a6592, []int{32}
 }
 func (m *DomainCertificates) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2581,7 +3604,7 @@ type ApiSpec struct {
 func (m *ApiSpec) Reset()      { *m = ApiSpec{} }
 func (*ApiSpec) ProtoMessage() {}
 func (*ApiSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{22}
+	return fileDescriptor_df61af5ea37a6592, []int{33}
 }
 func (m *ApiSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2678,7 +3701,7 @@ type MaskingConfiguration struct {
 func (m *MaskingConfiguration) Reset()      { *m = MaskingConfiguration{} }
 func (*MaskingConfiguration) ProtoMessage() {}
 func (*MaskingConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{23}
+	return fileDescriptor_df61af5ea37a6592, []int{34}
 }
 func (m *MaskingConfiguration) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2780,7 +3803,7 @@ type OpenApiValidationSettings struct {
 func (m *OpenApiValidationSettings) Reset()      { *m = OpenApiValidationSettings{} }
 func (*OpenApiValidationSettings) ProtoMessage() {}
 func (*OpenApiValidationSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{24}
+	return fileDescriptor_df61af5ea37a6592, []int{35}
 }
 func (m *OpenApiValidationSettings) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2854,7 +3877,7 @@ type Http1ProtocolOptions struct {
 func (m *Http1ProtocolOptions) Reset()      { *m = Http1ProtocolOptions{} }
 func (*Http1ProtocolOptions) ProtoMessage() {}
 func (*Http1ProtocolOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{25}
+	return fileDescriptor_df61af5ea37a6592, []int{36}
 }
 func (m *Http1ProtocolOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -2907,7 +3930,7 @@ type HttpProtocolOptions struct {
 func (m *HttpProtocolOptions) Reset()      { *m = HttpProtocolOptions{} }
 func (*HttpProtocolOptions) ProtoMessage() {}
 func (*HttpProtocolOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{26}
+	return fileDescriptor_df61af5ea37a6592, []int{37}
 }
 func (m *HttpProtocolOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3000,7 +4023,7 @@ type HttpRedirectOptions struct {
 func (m *HttpRedirectOptions) Reset()      { *m = HttpRedirectOptions{} }
 func (*HttpRedirectOptions) ProtoMessage() {}
 func (*HttpRedirectOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{27}
+	return fileDescriptor_df61af5ea37a6592, []int{38}
 }
 func (m *HttpRedirectOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3024,6 +4047,140 @@ func (m *HttpRedirectOptions) XXX_DiscardUnknown() {
 }
 
 var xxx_messageInfo_HttpRedirectOptions proto.InternalMessageInfo
+
+type DelegationLocationSelection struct {
+	// WAAP Service Delegation
+	//
+	// x-displayName: "Service Delection selection for WAAP"
+	// Specifies where the WAAP service action is delegated to. This is for all WAAP except for L7DDoS.
+	Waap DelegationLocation `protobuf:"varint,1,opt,name=waap,proto3,enum=ves.io.schema.virtual_host.DelegationLocation" json:"waap,omitempty"`
+	// L7DDoS Service Delegation
+	//
+	// x-displayName: "Service Delection selection for L7DDoS"
+	// Specifies where the L7DDoS service action is delegated to.
+	// Since L7DDoS is to be applied first in the service chain, it is delegated to CDN.
+	L7Ddos DelegationLocation `protobuf:"varint,2,opt,name=l7ddos,proto3,enum=ves.io.schema.virtual_host.DelegationLocation" json:"l7ddos,omitempty"`
+	// Simple Route Service Delegation
+	//
+	// x-displayName: "Service Delection selection for Simple Route"
+	// Specifies where the Simple Route service action is delegated to.
+	// Since simple route is applied just before origin, it is delegated to LB.
+	SimpleRoute DelegationLocation `protobuf:"varint,3,opt,name=simple_route,json=simpleRoute,proto3,enum=ves.io.schema.virtual_host.DelegationLocation" json:"simple_route,omitempty"`
+	// Direct Response Route Service Delegation
+	//
+	// x-displayName: "Service Delection selection for Direct Response Route"
+	// Specifies where the Direct Response Route service action is delegated to.
+	// Since direct response route is to be applied ASAP, it is delegated to CDN.
+	DirectResponseRoute DelegationLocation `protobuf:"varint,4,opt,name=direct_response_route,json=directResponseRoute,proto3,enum=ves.io.schema.virtual_host.DelegationLocation" json:"direct_response_route,omitempty"`
+	// Redirect Route Service Delegation
+	//
+	// x-displayName: "Service Delection selection for Redirect Route"
+	// Specifies where the Redirect Route service action is delegated to.
+	// Since redirect route is to be applied ASAP, it is delegated to CDN.
+	RedirectRoute DelegationLocation `protobuf:"varint,5,opt,name=redirect_route,json=redirectRoute,proto3,enum=ves.io.schema.virtual_host.DelegationLocation" json:"redirect_route,omitempty"`
+	// Request Header Manipulation Service Delegation
+	//
+	// x-displayName: "Service Delection selection for Request Header Manipulation"
+	// Specifies where the Request Header Manipulation service action is delegated to.
+	// Since request header manipulation is to be applied just before origin, it is delegated to LB.
+	RequestHeaderManipulation DelegationLocation `protobuf:"varint,6,opt,name=request_header_manipulation,json=requestHeaderManipulation,proto3,enum=ves.io.schema.virtual_host.DelegationLocation" json:"request_header_manipulation,omitempty"`
+	// Response Header Manipulation Service Delegation
+	//
+	// x-displayName: "Service Delection selection for Response Header Manipulation"
+	// Specifies where the Response Header Manipulation service action is delegated to.
+	// Since response header manipulation is to be applied just before responding to client, it is delegated to CDN.
+	ResponseHeaderManipulation DelegationLocation `protobuf:"varint,7,opt,name=response_header_manipulation,json=responseHeaderManipulation,proto3,enum=ves.io.schema.virtual_host.DelegationLocation" json:"response_header_manipulation,omitempty"`
+	// Request Rewrite Service Delegation Location
+	//
+	// x-displayName: "Service Delection selection for Request Rewrite"
+	// Specifies where the Request Rewrite service action is delegated to.
+	// Since request rewrite is to be applied just before origin, it is delegated to LB.
+	RequestRewrite DelegationLocation `protobuf:"varint,8,opt,name=request_rewrite,json=requestRewrite,proto3,enum=ves.io.schema.virtual_host.DelegationLocation" json:"request_rewrite,omitempty"`
+}
+
+func (m *DelegationLocationSelection) Reset()      { *m = DelegationLocationSelection{} }
+func (*DelegationLocationSelection) ProtoMessage() {}
+func (*DelegationLocationSelection) Descriptor() ([]byte, []int) {
+	return fileDescriptor_df61af5ea37a6592, []int{39}
+}
+func (m *DelegationLocationSelection) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DelegationLocationSelection) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DelegationLocationSelection) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DelegationLocationSelection.Merge(m, src)
+}
+func (m *DelegationLocationSelection) XXX_Size() int {
+	return m.Size()
+}
+func (m *DelegationLocationSelection) XXX_DiscardUnknown() {
+	xxx_messageInfo_DelegationLocationSelection.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DelegationLocationSelection proto.InternalMessageInfo
+
+func (m *DelegationLocationSelection) GetWaap() DelegationLocation {
+	if m != nil {
+		return m.Waap
+	}
+	return NONE
+}
+
+func (m *DelegationLocationSelection) GetL7Ddos() DelegationLocation {
+	if m != nil {
+		return m.L7Ddos
+	}
+	return NONE
+}
+
+func (m *DelegationLocationSelection) GetSimpleRoute() DelegationLocation {
+	if m != nil {
+		return m.SimpleRoute
+	}
+	return NONE
+}
+
+func (m *DelegationLocationSelection) GetDirectResponseRoute() DelegationLocation {
+	if m != nil {
+		return m.DirectResponseRoute
+	}
+	return NONE
+}
+
+func (m *DelegationLocationSelection) GetRedirectRoute() DelegationLocation {
+	if m != nil {
+		return m.RedirectRoute
+	}
+	return NONE
+}
+
+func (m *DelegationLocationSelection) GetRequestHeaderManipulation() DelegationLocation {
+	if m != nil {
+		return m.RequestHeaderManipulation
+	}
+	return NONE
+}
+
+func (m *DelegationLocationSelection) GetResponseHeaderManipulation() DelegationLocation {
+	if m != nil {
+		return m.ResponseHeaderManipulation
+	}
+	return NONE
+}
+
+func (m *DelegationLocationSelection) GetRequestRewrite() DelegationLocation {
+	if m != nil {
+		return m.RequestRewrite
+	}
+	return NONE
+}
 
 // GlobalSpecType
 //
@@ -3097,6 +4254,28 @@ type GlobalSpecType struct {
 	// x-example: "host"
 	// List of keys of Headers to be removed from the HTTP response being sent towards downstream.
 	ResponseHeadersToRemove []string `protobuf:"bytes,8,rep,name=response_headers_to_remove,json=responseHeadersToRemove,proto3" json:"response_headers_to_remove,omitempty"`
+	// Cookies to add in request
+	//
+	// x-displayName: "Add Cookies in Cookie Header"
+	// Cookies are key-value pairs to be added to HTTP request being routed towards upstream.
+	// Cookies specified at this level are applied after cookies from matched Route are applied
+	RequestCookiesToAdd []*schema.CookieValueOption `protobuf:"bytes,100,rep,name=request_cookies_to_add,json=requestCookiesToAdd,proto3" json:"request_cookies_to_add,omitempty"`
+	// Cookies to be removed from request
+	//
+	// x-displayName: "Remove Cookies from Cookie Header"
+	// List of keys of Cookies to be removed from the HTTP request being sent towards upstream.
+	RequestCookiesToRemove []string `protobuf:"bytes,101,rep,name=request_cookies_to_remove,json=requestCookiesToRemove,proto3" json:"request_cookies_to_remove,omitempty"`
+	// Cookies to add in set-cookie header in response
+	//
+	// x-displayName: "Add Set-Cookie Headers"
+	// Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream.
+	// Cookies specified at this level are applied after cookies from matched Route are applied
+	ResponseCookiesToAdd []*schema.SetCookieValueOption `protobuf:"bytes,102,rep,name=response_cookies_to_add,json=responseCookiesToAdd,proto3" json:"response_cookies_to_add,omitempty"`
+	// Cookies to be removed from response
+	//
+	// x-displayName: "Remove Cookies from Set-Cookie Headers"
+	// List of name of Cookies to be removed from the HTTP response being sent towards downstream. Entire set-cookie header will be removed
+	ResponseCookiesToRemove []string `protobuf:"bytes,103,rep,name=response_cookies_to_remove,json=responseCookiesToRemove,proto3" json:"response_cookies_to_remove,omitempty"`
 	// TLS parameters
 	//
 	// x-displayName: "TLS Configuration"
@@ -3451,6 +4630,12 @@ type GlobalSpecType struct {
 	// Reference to Downstream Class of Service that will override the object that is used by the tenant.
 	// Used mainly during DDoS attacks to throttle down incoming traffic.
 	DownstreamCos []*schema.ObjectRefType `protobuf:"bytes,97,rep,name=downstream_cos,json=downstreamCos,proto3" json:"downstream_cos,omitempty"`
+	// RPS Threshold
+	//
+	// x-displayName: "RPS Threshold"
+	// L7 DDoS attack is detected by service degradation signals in combination with high RPS. Configure the RPS which
+	// is considered high for the server.
+	L7DdosRpsThreshold uint32 `protobuf:"varint,105,opt,name=l7_ddos_rps_threshold,json=l7DdosRpsThreshold,proto3" json:"l7_ddos_rps_threshold,omitempty"`
 	// DNS F5XC Managed
 	//
 	// x-displayName: "DNS F5XC Managed"
@@ -3513,6 +4698,14 @@ type GlobalSpecType struct {
 	// When a connection to a endpoint in an upstream cluster is required, the loadbalancer uses
 	// loadbalancer_algorithm to determine which host is selected.
 	LoadbalancerAlgorithm cluster.LoadbalancerAlgorithm `protobuf:"varint,1013,opt,name=loadbalancer_algorithm,json=loadbalancerAlgorithm,proto3,enum=ves.io.schema.cluster.LoadbalancerAlgorithm" json:"loadbalancer_algorithm,omitempty"`
+	// Enable Per Packet Load Balancing
+	//
+	// x-displayName: "Enable Per Packet Load Balancing"
+	// Perform per packet load balancing (upstream host selection) on each received data chunk.
+	// The default if not specified is false, that means each data chunk is forwarded
+	// to upstream host selected on first chunk receival for that "session" (identified by source IP/port and local IP/port).
+	// This is applicable only for UDP load balancers.
+	EnablePerPacketLoadBalancing bool `protobuf:"varint,1029,opt,name=enable_per_packet_load_balancing,json=enablePerPacketLoadBalancing,proto3" json:"enable_per_packet_load_balancing,omitempty"`
 	// F5XC Certificates
 	//
 	// x-displayName: "F5XC Certificates"
@@ -3645,12 +4838,26 @@ type GlobalSpecType struct {
 	// x-displayName: "TLS Coalescing Options"
 	// Options for coalescing of multiple HTTPS Loadbalancers into single one
 	CoalescingOptions *schema.TLSCoalescingOptions `protobuf:"bytes,99,opt,name=coalescing_options,json=coalescingOptions,proto3" json:"coalescing_options,omitempty"`
+	// WAF Exclusion Policy
+	//
+	// x-displayName: "WAF Exclusion Policy"
+	// A policy containing an ordered list of rules
+	WafExclusionPolicy []*schema.ObjectRefType `protobuf:"bytes,104,rep,name=waf_exclusion_policy,json=wafExclusionPolicy,proto3" json:"waf_exclusion_policy,omitempty"`
+	// Service Action Delegation for virtual_host
+	//
+	// x-displayName: "Service Action Delegation"
+	// Delegation of service actions across CDN (nginx) or LB (envoy).
+	//
+	// Types that are valid to be assigned to ServiceActionDelegation:
+	//	*GlobalSpecType_Selected
+	//	*GlobalSpecType_All
+	ServiceActionDelegation isGlobalSpecType_ServiceActionDelegation `protobuf_oneof:"service_action_delegation"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{28}
+	return fileDescriptor_df61af5ea37a6592, []int{40}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3741,6 +4948,12 @@ type isGlobalSpecType_DnsZoneStateChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_ServiceActionDelegation interface {
+	isGlobalSpecType_ServiceActionDelegation()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_TlsParameters struct {
 	TlsParameters *schema.DownstreamTlsParamsType `protobuf:"bytes,9,opt,name=tls_parameters,json=tlsParameters,proto3,oneof" json:"tls_parameters,omitempty"`
@@ -3826,6 +5039,12 @@ type GlobalSpecType_NotReady struct {
 type GlobalSpecType_Ready struct {
 	Ready *schema.Empty `protobuf:"bytes,1024,opt,name=ready,proto3,oneof" json:"ready,omitempty"`
 }
+type GlobalSpecType_Selected struct {
+	Selected *DelegationLocationSelection `protobuf:"bytes,106,opt,name=selected,proto3,oneof" json:"selected,omitempty"`
+}
+type GlobalSpecType_All struct {
+	All DelegationLocation `protobuf:"varint,107,opt,name=all,proto3,enum=ves.io.schema.virtual_host.DelegationLocation,oneof" json:"all,omitempty"`
+}
 
 func (*GlobalSpecType_TlsParameters) isGlobalSpecType_TlsCertificatesChoice()      {}
 func (*GlobalSpecType_TlsCertParams) isGlobalSpecType_TlsCertificatesChoice()      {}
@@ -3856,6 +5075,8 @@ func (*GlobalSpecType_DisableBotDefense) isGlobalSpecType_BotDefenseChoice()    
 func (*GlobalSpecType_BotDefense) isGlobalSpecType_BotDefenseChoice()                            {}
 func (*GlobalSpecType_NotReady) isGlobalSpecType_DnsZoneStateChoice()                            {}
 func (*GlobalSpecType_Ready) isGlobalSpecType_DnsZoneStateChoice()                               {}
+func (*GlobalSpecType_Selected) isGlobalSpecType_ServiceActionDelegation()                       {}
+func (*GlobalSpecType_All) isGlobalSpecType_ServiceActionDelegation()                            {}
 
 func (m *GlobalSpecType) GetTlsCertificatesChoice() isGlobalSpecType_TlsCertificatesChoice {
 	if m != nil {
@@ -3923,6 +5144,12 @@ func (m *GlobalSpecType) GetDnsZoneStateChoice() isGlobalSpecType_DnsZoneStateCh
 	}
 	return nil
 }
+func (m *GlobalSpecType) GetServiceActionDelegation() isGlobalSpecType_ServiceActionDelegation {
+	if m != nil {
+		return m.ServiceActionDelegation
+	}
+	return nil
+}
 
 func (m *GlobalSpecType) GetDomains() []string {
 	if m != nil {
@@ -3976,6 +5203,34 @@ func (m *GlobalSpecType) GetRequestHeadersToRemove() []string {
 func (m *GlobalSpecType) GetResponseHeadersToRemove() []string {
 	if m != nil {
 		return m.ResponseHeadersToRemove
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetRequestCookiesToAdd() []*schema.CookieValueOption {
+	if m != nil {
+		return m.RequestCookiesToAdd
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetRequestCookiesToRemove() []string {
+	if m != nil {
+		return m.RequestCookiesToRemove
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetResponseCookiesToAdd() []*schema.SetCookieValueOption {
+	if m != nil {
+		return m.ResponseCookiesToAdd
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetResponseCookiesToRemove() []string {
+	if m != nil {
+		return m.ResponseCookiesToRemove
 	}
 	return nil
 }
@@ -4347,6 +5602,13 @@ func (m *GlobalSpecType) GetDownstreamCos() []*schema.ObjectRefType {
 	return nil
 }
 
+func (m *GlobalSpecType) GetL7DdosRpsThreshold() uint32 {
+	if m != nil {
+		return m.L7DdosRpsThreshold
+	}
+	return 0
+}
+
 func (m *GlobalSpecType) GetDnsVolterraManaged() bool {
 	if m != nil {
 		return m.DnsVolterraManaged
@@ -4430,6 +5692,13 @@ func (m *GlobalSpecType) GetLoadbalancerAlgorithm() cluster.LoadbalancerAlgorith
 		return m.LoadbalancerAlgorithm
 	}
 	return cluster.ROUND_ROBIN
+}
+
+func (m *GlobalSpecType) GetEnablePerPacketLoadBalancing() bool {
+	if m != nil {
+		return m.EnablePerPacketLoadBalancing
+	}
+	return false
 }
 
 func (m *GlobalSpecType) GetVolterraCert() bool {
@@ -4593,6 +5862,27 @@ func (m *GlobalSpecType) GetCoalescingOptions() *schema.TLSCoalescingOptions {
 	return nil
 }
 
+func (m *GlobalSpecType) GetWafExclusionPolicy() []*schema.ObjectRefType {
+	if m != nil {
+		return m.WafExclusionPolicy
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetSelected() *DelegationLocationSelection {
+	if x, ok := m.GetServiceActionDelegation().(*GlobalSpecType_Selected); ok {
+		return x.Selected
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetAll() DelegationLocation {
+	if x, ok := m.GetServiceActionDelegation().(*GlobalSpecType_All); ok {
+		return x.All
+	}
+	return NONE
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -4624,6 +5914,8 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_BotDefense)(nil),
 		(*GlobalSpecType_NotReady)(nil),
 		(*GlobalSpecType_Ready)(nil),
+		(*GlobalSpecType_Selected)(nil),
+		(*GlobalSpecType_All)(nil),
 	}
 }
 
@@ -4665,7 +5957,7 @@ type DNSVHostStatusType struct {
 func (m *DNSVHostStatusType) Reset()      { *m = DNSVHostStatusType{} }
 func (*DNSVHostStatusType) ProtoMessage() {}
 func (*DNSVHostStatusType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{29}
+	return fileDescriptor_df61af5ea37a6592, []int{41}
 }
 func (m *DNSVHostStatusType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4737,7 +6029,12 @@ type CreateSpecType struct {
 	ResponseHeadersToAdd    []*schema.HeaderManipulationOptionType `protobuf:"bytes,7,rep,name=response_headers_to_add,json=responseHeadersToAdd,proto3" json:"response_headers_to_add,omitempty"`
 	RequestHeadersToRemove  []string                               `protobuf:"bytes,17,rep,name=request_headers_to_remove,json=requestHeadersToRemove,proto3" json:"request_headers_to_remove,omitempty"`
 	ResponseHeadersToRemove []string                               `protobuf:"bytes,8,rep,name=response_headers_to_remove,json=responseHeadersToRemove,proto3" json:"response_headers_to_remove,omitempty"`
+	RequestCookiesToAdd     []*schema.CookieValueOption            `protobuf:"bytes,100,rep,name=request_cookies_to_add,json=requestCookiesToAdd,proto3" json:"request_cookies_to_add,omitempty"`
+	RequestCookiesToRemove  []string                               `protobuf:"bytes,101,rep,name=request_cookies_to_remove,json=requestCookiesToRemove,proto3" json:"request_cookies_to_remove,omitempty"`
+	ResponseCookiesToAdd    []*schema.SetCookieValueOption         `protobuf:"bytes,102,rep,name=response_cookies_to_add,json=responseCookiesToAdd,proto3" json:"response_cookies_to_add,omitempty"`
+	ResponseCookiesToRemove []string                               `protobuf:"bytes,103,rep,name=response_cookies_to_remove,json=responseCookiesToRemove,proto3" json:"response_cookies_to_remove,omitempty"`
 	// Types that are valid to be assigned to TlsCertificatesChoice:
+	//
 	//	*CreateSpecType_TlsParameters
 	//	*CreateSpecType_TlsCertParams
 	TlsCertificatesChoice    isCreateSpecType_TlsCertificatesChoice `protobuf_oneof:"tls_certificates_choice"`
@@ -4752,6 +6049,7 @@ type CreateSpecType struct {
 	DisableDefaultErrorPages bool                                   `protobuf:"varint,33,opt,name=disable_default_error_pages,json=disableDefaultErrorPages,proto3" json:"disable_default_error_pages,omitempty"`
 	MaxRequestHeaderSize     uint32                                 `protobuf:"varint,23,opt,name=max_request_header_size,json=maxRequestHeaderSize,proto3" json:"max_request_header_size,omitempty"`
 	// Types that are valid to be assigned to ChallengeType:
+	//
 	//	*CreateSpecType_NoChallenge
 	//	*CreateSpecType_JsChallenge
 	//	*CreateSpecType_CaptchaChallenge
@@ -4763,24 +6061,29 @@ type CreateSpecType struct {
 	DisableDnsResolve          bool                           `protobuf:"varint,34,opt,name=disable_dns_resolve,json=disableDnsResolve,proto3" json:"disable_dns_resolve,omitempty"`
 	TemporaryUserBlocking      *TemporaryUserBlockingType     `protobuf:"bytes,35,opt,name=temporary_user_blocking,json=temporaryUserBlocking,proto3" json:"temporary_user_blocking,omitempty"`
 	// Types that are valid to be assigned to AuthenticationChoice:
+	//
 	//	*CreateSpecType_NoAuthentication
 	//	*CreateSpecType_Authentication
 	AuthenticationChoice isCreateSpecType_AuthenticationChoice `protobuf_oneof:"authentication_choice"`
 	// Types that are valid to be assigned to ServerHeaderChoice:
+	//
 	//	*CreateSpecType_DefaultHeader
 	//	*CreateSpecType_ServerName
 	//	*CreateSpecType_AppendServerName
 	//	*CreateSpecType_PassThrough
 	ServerHeaderChoice isCreateSpecType_ServerHeaderChoice `protobuf_oneof:"server_header_choice"`
 	// Types that are valid to be assigned to PathNormalizeChoice:
+	//
 	//	*CreateSpecType_EnablePathNormalize
 	//	*CreateSpecType_DisablePathNormalize
 	PathNormalizeChoice isCreateSpecType_PathNormalizeChoice `protobuf_oneof:"path_normalize_choice"`
 	// Types that are valid to be assigned to StrictSniHostHeaderCheckChoice:
+	//
 	//	*CreateSpecType_EnableStrictSniHostHeaderCheck
 	//	*CreateSpecType_AdditionalDomains
 	StrictSniHostHeaderCheckChoice isCreateSpecType_StrictSniHostHeaderCheckChoice `protobuf_oneof:"strict_sni_host_header_check_choice"`
 	// Types that are valid to be assigned to DefaultLbChoice:
+	//
 	//	*CreateSpecType_NonDefaultLoadbalancer
 	//	*CreateSpecType_DefaultLoadbalancer
 	DefaultLbChoice           isCreateSpecType_DefaultLbChoice       `protobuf_oneof:"default_lb_choice"`
@@ -4803,7 +6106,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{30}
+	return fileDescriptor_df61af5ea37a6592, []int{42}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -5030,6 +6333,34 @@ func (m *CreateSpecType) GetRequestHeadersToRemove() []string {
 func (m *CreateSpecType) GetResponseHeadersToRemove() []string {
 	if m != nil {
 		return m.ResponseHeadersToRemove
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetRequestCookiesToAdd() []*schema.CookieValueOption {
+	if m != nil {
+		return m.RequestCookiesToAdd
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetRequestCookiesToRemove() []string {
+	if m != nil {
+		return m.RequestCookiesToRemove
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetResponseCookiesToAdd() []*schema.SetCookieValueOption {
+	if m != nil {
+		return m.ResponseCookiesToAdd
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetResponseCookiesToRemove() []string {
+	if m != nil {
+		return m.ResponseCookiesToRemove
 	}
 	return nil
 }
@@ -5398,6 +6729,10 @@ type ReplaceSpecType struct {
 	ResponseHeadersToAdd    []*schema.HeaderManipulationOptionType `protobuf:"bytes,7,rep,name=response_headers_to_add,json=responseHeadersToAdd,proto3" json:"response_headers_to_add,omitempty"`
 	RequestHeadersToRemove  []string                               `protobuf:"bytes,17,rep,name=request_headers_to_remove,json=requestHeadersToRemove,proto3" json:"request_headers_to_remove,omitempty"`
 	ResponseHeadersToRemove []string                               `protobuf:"bytes,8,rep,name=response_headers_to_remove,json=responseHeadersToRemove,proto3" json:"response_headers_to_remove,omitempty"`
+	RequestCookiesToAdd     []*schema.CookieValueOption            `protobuf:"bytes,100,rep,name=request_cookies_to_add,json=requestCookiesToAdd,proto3" json:"request_cookies_to_add,omitempty"`
+	RequestCookiesToRemove  []string                               `protobuf:"bytes,101,rep,name=request_cookies_to_remove,json=requestCookiesToRemove,proto3" json:"request_cookies_to_remove,omitempty"`
+	ResponseCookiesToAdd    []*schema.SetCookieValueOption         `protobuf:"bytes,102,rep,name=response_cookies_to_add,json=responseCookiesToAdd,proto3" json:"response_cookies_to_add,omitempty"`
+	ResponseCookiesToRemove []string                               `protobuf:"bytes,103,rep,name=response_cookies_to_remove,json=responseCookiesToRemove,proto3" json:"response_cookies_to_remove,omitempty"`
 	// Types that are valid to be assigned to TlsCertificatesChoice:
 	//
 	//	*ReplaceSpecType_TlsParameters
@@ -5471,7 +6806,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{31}
+	return fileDescriptor_df61af5ea37a6592, []int{43}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -5698,6 +7033,34 @@ func (m *ReplaceSpecType) GetRequestHeadersToRemove() []string {
 func (m *ReplaceSpecType) GetResponseHeadersToRemove() []string {
 	if m != nil {
 		return m.ResponseHeadersToRemove
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetRequestCookiesToAdd() []*schema.CookieValueOption {
+	if m != nil {
+		return m.RequestCookiesToAdd
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetRequestCookiesToRemove() []string {
+	if m != nil {
+		return m.RequestCookiesToRemove
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetResponseCookiesToAdd() []*schema.SetCookieValueOption {
+	if m != nil {
+		return m.ResponseCookiesToAdd
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetResponseCookiesToRemove() []string {
+	if m != nil {
+		return m.ResponseCookiesToRemove
 	}
 	return nil
 }
@@ -6066,6 +7429,10 @@ type GetSpecType struct {
 	ResponseHeadersToAdd    []*schema.HeaderManipulationOptionType `protobuf:"bytes,7,rep,name=response_headers_to_add,json=responseHeadersToAdd,proto3" json:"response_headers_to_add,omitempty"`
 	RequestHeadersToRemove  []string                               `protobuf:"bytes,17,rep,name=request_headers_to_remove,json=requestHeadersToRemove,proto3" json:"request_headers_to_remove,omitempty"`
 	ResponseHeadersToRemove []string                               `protobuf:"bytes,8,rep,name=response_headers_to_remove,json=responseHeadersToRemove,proto3" json:"response_headers_to_remove,omitempty"`
+	RequestCookiesToAdd     []*schema.CookieValueOption            `protobuf:"bytes,100,rep,name=request_cookies_to_add,json=requestCookiesToAdd,proto3" json:"request_cookies_to_add,omitempty"`
+	RequestCookiesToRemove  []string                               `protobuf:"bytes,101,rep,name=request_cookies_to_remove,json=requestCookiesToRemove,proto3" json:"request_cookies_to_remove,omitempty"`
+	ResponseCookiesToAdd    []*schema.SetCookieValueOption         `protobuf:"bytes,102,rep,name=response_cookies_to_add,json=responseCookiesToAdd,proto3" json:"response_cookies_to_add,omitempty"`
+	ResponseCookiesToRemove []string                               `protobuf:"bytes,103,rep,name=response_cookies_to_remove,json=responseCookiesToRemove,proto3" json:"response_cookies_to_remove,omitempty"`
 	// Types that are valid to be assigned to TlsCertificatesChoice:
 	//
 	//	*GetSpecType_TlsParameters
@@ -6146,12 +7513,20 @@ type GetSpecType struct {
 	MaskingConfig             *MaskingConfiguration            `protobuf:"bytes,96,opt,name=masking_config,json=maskingConfig,proto3" json:"masking_config,omitempty"`
 	SensitiveDataPolicy       []*schema.ObjectRefType          `protobuf:"bytes,1122,rep,name=sensitive_data_policy,json=sensitiveDataPolicy,proto3" json:"sensitive_data_policy,omitempty"`
 	CoalescingOptions         *schema.TLSCoalescingOptions     `protobuf:"bytes,99,opt,name=coalescing_options,json=coalescingOptions,proto3" json:"coalescing_options,omitempty"`
+	// Types that are valid to be assigned to DdosAutoMitigationAction:
+	//
+	//	*GetSpecType_Block
+	//	*GetSpecType_DdosJsChallenge
+	//	*GetSpecType_L7DdosActionDefault
+	//	*GetSpecType_L7DdosActionNone
+	DdosAutoMitigationAction isGetSpecType_DdosAutoMitigationAction `protobuf_oneof:"ddos_auto_mitigation_action"`
+	L7DdosRpsThreshold       uint32                                 `protobuf:"varint,105,opt,name=l7_ddos_rps_threshold,json=l7DdosRpsThreshold,proto3" json:"l7_ddos_rps_threshold,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_df61af5ea37a6592, []int{32}
+	return fileDescriptor_df61af5ea37a6592, []int{44}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -6224,6 +7599,12 @@ type isGetSpecType_DnsZoneStateChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_DdosAutoMitigationAction interface {
+	isGetSpecType_DdosAutoMitigationAction()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GetSpecType_TlsParameters struct {
 	TlsParameters *schema.DownstreamTlsParamsType `protobuf:"bytes,9,opt,name=tls_parameters,json=tlsParameters,proto3,oneof" json:"tls_parameters,omitempty"`
@@ -6282,6 +7663,18 @@ type GetSpecType_NotReady struct {
 type GetSpecType_Ready struct {
 	Ready *schema.Empty `protobuf:"bytes,1024,opt,name=ready,proto3,oneof" json:"ready,omitempty"`
 }
+type GetSpecType_Block struct {
+	Block *schema.Empty `protobuf:"bytes,91,opt,name=block,proto3,oneof" json:"block,omitempty"`
+}
+type GetSpecType_DdosJsChallenge struct {
+	DdosJsChallenge *JavascriptChallengeType `protobuf:"bytes,92,opt,name=ddos_js_challenge,json=ddosJsChallenge,proto3,oneof" json:"ddos_js_challenge,omitempty"`
+}
+type GetSpecType_L7DdosActionDefault struct {
+	L7DdosActionDefault *schema.Empty `protobuf:"bytes,93,opt,name=l7_ddos_action_default,json=l7DdosActionDefault,proto3,oneof" json:"l7_ddos_action_default,omitempty"`
+}
+type GetSpecType_L7DdosActionNone struct {
+	L7DdosActionNone *schema.Empty `protobuf:"bytes,94,opt,name=l7_ddos_action_none,json=l7DdosActionNone,proto3,oneof" json:"l7_ddos_action_none,omitempty"`
+}
 
 func (*GetSpecType_TlsParameters) isGetSpecType_TlsCertificatesChoice()                           {}
 func (*GetSpecType_TlsCertParams) isGetSpecType_TlsCertificatesChoice()                           {}
@@ -6302,6 +7695,10 @@ func (*GetSpecType_NonDefaultLoadbalancer) isGetSpecType_DefaultLbChoice()      
 func (*GetSpecType_DefaultLoadbalancer) isGetSpecType_DefaultLbChoice()                           {}
 func (*GetSpecType_NotReady) isGetSpecType_DnsZoneStateChoice()                                   {}
 func (*GetSpecType_Ready) isGetSpecType_DnsZoneStateChoice()                                      {}
+func (*GetSpecType_Block) isGetSpecType_DdosAutoMitigationAction()                                {}
+func (*GetSpecType_DdosJsChallenge) isGetSpecType_DdosAutoMitigationAction()                      {}
+func (*GetSpecType_L7DdosActionDefault) isGetSpecType_DdosAutoMitigationAction()                  {}
+func (*GetSpecType_L7DdosActionNone) isGetSpecType_DdosAutoMitigationAction()                     {}
 
 func (m *GetSpecType) GetTlsCertificatesChoice() isGetSpecType_TlsCertificatesChoice {
 	if m != nil {
@@ -6351,6 +7748,12 @@ func (m *GetSpecType) GetDnsZoneStateChoice() isGetSpecType_DnsZoneStateChoice {
 	}
 	return nil
 }
+func (m *GetSpecType) GetDdosAutoMitigationAction() isGetSpecType_DdosAutoMitigationAction {
+	if m != nil {
+		return m.DdosAutoMitigationAction
+	}
+	return nil
+}
 
 func (m *GetSpecType) GetDomains() []string {
 	if m != nil {
@@ -6397,6 +7800,34 @@ func (m *GetSpecType) GetRequestHeadersToRemove() []string {
 func (m *GetSpecType) GetResponseHeadersToRemove() []string {
 	if m != nil {
 		return m.ResponseHeadersToRemove
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetRequestCookiesToAdd() []*schema.CookieValueOption {
+	if m != nil {
+		return m.RequestCookiesToAdd
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetRequestCookiesToRemove() []string {
+	if m != nil {
+		return m.RequestCookiesToRemove
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetResponseCookiesToAdd() []*schema.SetCookieValueOption {
+	if m != nil {
+		return m.ResponseCookiesToAdd
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetResponseCookiesToRemove() []string {
+	if m != nil {
+		return m.ResponseCookiesToRemove
 	}
 	return nil
 }
@@ -6793,6 +8224,41 @@ func (m *GetSpecType) GetCoalescingOptions() *schema.TLSCoalescingOptions {
 	return nil
 }
 
+func (m *GetSpecType) GetBlock() *schema.Empty {
+	if x, ok := m.GetDdosAutoMitigationAction().(*GetSpecType_Block); ok {
+		return x.Block
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDdosJsChallenge() *JavascriptChallengeType {
+	if x, ok := m.GetDdosAutoMitigationAction().(*GetSpecType_DdosJsChallenge); ok {
+		return x.DdosJsChallenge
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetL7DdosActionDefault() *schema.Empty {
+	if x, ok := m.GetDdosAutoMitigationAction().(*GetSpecType_L7DdosActionDefault); ok {
+		return x.L7DdosActionDefault
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetL7DdosActionNone() *schema.Empty {
+	if x, ok := m.GetDdosAutoMitigationAction().(*GetSpecType_L7DdosActionNone); ok {
+		return x.L7DdosActionNone
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetL7DdosRpsThreshold() uint32 {
+	if m != nil {
+		return m.L7DdosRpsThreshold
+	}
+	return 0
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
@@ -6815,6 +8281,10 @@ func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 		(*GetSpecType_DefaultLoadbalancer)(nil),
 		(*GetSpecType_NotReady)(nil),
 		(*GetSpecType_Ready)(nil),
+		(*GetSpecType_Block)(nil),
+		(*GetSpecType_DdosJsChallenge)(nil),
+		(*GetSpecType_L7DdosActionDefault)(nil),
+		(*GetSpecType_L7DdosActionNone)(nil),
 	}
 }
 
@@ -6827,6 +8297,10 @@ func init() {
 	golang_proto.RegisterEnum("ves.io.schema.virtual_host.CertificationState", CertificationState_name, CertificationState_value)
 	proto.RegisterEnum("ves.io.schema.virtual_host.BotDefenseMode", BotDefenseMode_name, BotDefenseMode_value)
 	golang_proto.RegisterEnum("ves.io.schema.virtual_host.BotDefenseMode", BotDefenseMode_name, BotDefenseMode_value)
+	proto.RegisterEnum("ves.io.schema.virtual_host.ServicePolicyOption", ServicePolicyOption_name, ServicePolicyOption_value)
+	golang_proto.RegisterEnum("ves.io.schema.virtual_host.ServicePolicyOption", ServicePolicyOption_name, ServicePolicyOption_value)
+	proto.RegisterEnum("ves.io.schema.virtual_host.DelegationLocation", DelegationLocation_name, DelegationLocation_value)
+	golang_proto.RegisterEnum("ves.io.schema.virtual_host.DelegationLocation", DelegationLocation_name, DelegationLocation_value)
 	proto.RegisterEnum("ves.io.schema.virtual_host.VirtualHostType", VirtualHostType_name, VirtualHostType_value)
 	golang_proto.RegisterEnum("ves.io.schema.virtual_host.VirtualHostType", VirtualHostType_name, VirtualHostType_value)
 	proto.RegisterType((*VirtualHostID)(nil), "ves.io.schema.virtual_host.VirtualHostID")
@@ -6861,6 +8335,28 @@ func init() {
 	golang_proto.RegisterType((*ServiceDomain)(nil), "ves.io.schema.virtual_host.ServiceDomain")
 	proto.RegisterType((*CdnServiceType)(nil), "ves.io.schema.virtual_host.CdnServiceType")
 	golang_proto.RegisterType((*CdnServiceType)(nil), "ves.io.schema.virtual_host.CdnServiceType")
+	proto.RegisterType((*OtherSettings)(nil), "ves.io.schema.virtual_host.OtherSettings")
+	golang_proto.RegisterType((*OtherSettings)(nil), "ves.io.schema.virtual_host.OtherSettings")
+	proto.RegisterType((*LoggingOptionsType)(nil), "ves.io.schema.virtual_host.LoggingOptionsType")
+	golang_proto.RegisterType((*LoggingOptionsType)(nil), "ves.io.schema.virtual_host.LoggingOptionsType")
+	proto.RegisterType((*LogHeaderOptions)(nil), "ves.io.schema.virtual_host.LogHeaderOptions")
+	golang_proto.RegisterType((*LogHeaderOptions)(nil), "ves.io.schema.virtual_host.LogHeaderOptions")
+	proto.RegisterType((*HeaderControlType)(nil), "ves.io.schema.virtual_host.HeaderControlType")
+	golang_proto.RegisterType((*HeaderControlType)(nil), "ves.io.schema.virtual_host.HeaderControlType")
+	proto.RegisterType((*DefaultCacheAction)(nil), "ves.io.schema.virtual_host.DefaultCacheAction")
+	golang_proto.RegisterType((*DefaultCacheAction)(nil), "ves.io.schema.virtual_host.DefaultCacheAction")
+	proto.RegisterType((*CdnOriginPoolType)(nil), "ves.io.schema.virtual_host.CdnOriginPoolType")
+	golang_proto.RegisterType((*CdnOriginPoolType)(nil), "ves.io.schema.virtual_host.CdnOriginPoolType")
+	proto.RegisterType((*CDNOriginServerPublicName)(nil), "ves.io.schema.virtual_host.CDNOriginServerPublicName")
+	golang_proto.RegisterType((*CDNOriginServerPublicName)(nil), "ves.io.schema.virtual_host.CDNOriginServerPublicName")
+	proto.RegisterType((*CDNUpstreamTlsParameters)(nil), "ves.io.schema.virtual_host.CDNUpstreamTlsParameters")
+	golang_proto.RegisterType((*CDNUpstreamTlsParameters)(nil), "ves.io.schema.virtual_host.CDNUpstreamTlsParameters")
+	proto.RegisterType((*OriginAdvancedConfiguration)(nil), "ves.io.schema.virtual_host.OriginAdvancedConfiguration")
+	golang_proto.RegisterType((*OriginAdvancedConfiguration)(nil), "ves.io.schema.virtual_host.OriginAdvancedConfiguration")
+	proto.RegisterType((*CDNOriginServerType)(nil), "ves.io.schema.virtual_host.CDNOriginServerType")
+	golang_proto.RegisterType((*CDNOriginServerType)(nil), "ves.io.schema.virtual_host.CDNOriginServerType")
+	proto.RegisterType((*CDNOriginServerPublicIP)(nil), "ves.io.schema.virtual_host.CDNOriginServerPublicIP")
+	golang_proto.RegisterType((*CDNOriginServerPublicIP)(nil), "ves.io.schema.virtual_host.CDNOriginServerPublicIP")
 	proto.RegisterType((*ClientIPHeaders)(nil), "ves.io.schema.virtual_host.ClientIPHeaders")
 	golang_proto.RegisterType((*ClientIPHeaders)(nil), "ves.io.schema.virtual_host.ClientIPHeaders")
 	proto.RegisterType((*ZtnaProxyConfiguration)(nil), "ves.io.schema.virtual_host.ZtnaProxyConfiguration")
@@ -6887,6 +8383,8 @@ func init() {
 	golang_proto.RegisterType((*HttpProtocolOptions)(nil), "ves.io.schema.virtual_host.HttpProtocolOptions")
 	proto.RegisterType((*HttpRedirectOptions)(nil), "ves.io.schema.virtual_host.HttpRedirectOptions")
 	golang_proto.RegisterType((*HttpRedirectOptions)(nil), "ves.io.schema.virtual_host.HttpRedirectOptions")
+	proto.RegisterType((*DelegationLocationSelection)(nil), "ves.io.schema.virtual_host.DelegationLocationSelection")
+	golang_proto.RegisterType((*DelegationLocationSelection)(nil), "ves.io.schema.virtual_host.DelegationLocationSelection")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.virtual_host.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.virtual_host.GlobalSpecType")
 	proto.RegisterMapType((map[uint32]string)(nil), "ves.io.schema.virtual_host.GlobalSpecType.CustomErrorsEntry")
@@ -6923,510 +8421,621 @@ func init() {
 }
 
 var fileDescriptor_df61af5ea37a6592 = []byte{
-	// 8033 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7d, 0x5b, 0x6c, 0x1c, 0x57,
-	0x9a, 0x1e, 0x0f, 0xd9, 0xcd, 0x6e, 0x1e, 0xde, 0x8a, 0x87, 0xb7, 0x12, 0x25, 0x51, 0x2d, 0xda,
-	0x96, 0x65, 0xba, 0xc5, 0x4b, 0x93, 0xd4, 0xcd, 0x63, 0xcf, 0x74, 0xb3, 0x29, 0x91, 0x34, 0x45,
-	0x71, 0x8a, 0x94, 0x6c, 0x6b, 0x3c, 0x2e, 0x17, 0xbb, 0x0e, 0xc9, 0x92, 0xaa, 0xab, 0xda, 0x55,
-	0xd5, 0x94, 0xe8, 0x84, 0x80, 0xd6, 0x49, 0x90, 0x8d, 0x1f, 0x76, 0x27, 0xce, 0x43, 0x00, 0x63,
-	0x1e, 0x92, 0xdd, 0x87, 0x24, 0x5c, 0x20, 0x58, 0x04, 0x08, 0x10, 0x6c, 0x2b, 0x80, 0x30, 0xc0,
-	0x62, 0x07, 0xfb, 0x90, 0x30, 0xc0, 0x02, 0x31, 0x9c, 0x3c, 0x78, 0x38, 0x58, 0xc0, 0x3b, 0x3b,
-	0xd9, 0x0c, 0x26, 0x93, 0xac, 0xe3, 0x24, 0x3b, 0xc1, 0xb9, 0x54, 0x75, 0x75, 0x75, 0x75, 0xb3,
-	0x45, 0xc9, 0x9e, 0x99, 0x84, 0x2f, 0x52, 0xf7, 0x39, 0xff, 0xff, 0x9d, 0x4b, 0x9d, 0xf3, 0x9f,
-	0xff, 0x7c, 0xff, 0x5f, 0x4d, 0x78, 0x6e, 0x1b, 0xdb, 0x63, 0x9a, 0x39, 0x6e, 0xe7, 0xb6, 0x70,
-	0x5e, 0x19, 0xdf, 0xd6, 0x2c, 0xa7, 0xa8, 0xe8, 0xf2, 0x96, 0x69, 0x3b, 0xe3, 0xce, 0x4e, 0x01,
-	0xdb, 0x63, 0x05, 0xcb, 0x74, 0x4c, 0x34, 0xc4, 0xe4, 0xc6, 0x98, 0xdc, 0x98, 0x5f, 0x6e, 0xe8,
-	0xc2, 0xa6, 0xe6, 0x6c, 0x15, 0xd7, 0xc7, 0x72, 0x66, 0x7e, 0x7c, 0xd3, 0xdc, 0x34, 0xc7, 0xa9,
-	0xca, 0x7a, 0x71, 0x83, 0x7e, 0xa3, 0x5f, 0xe8, 0x27, 0x06, 0x35, 0x74, 0x6a, 0xd3, 0x34, 0x37,
-	0x75, 0x5c, 0x96, 0xb2, 0x1d, 0xab, 0x98, 0x73, 0x78, 0xed, 0x99, 0x60, 0xad, 0xa3, 0xe5, 0xb1,
-	0xed, 0x28, 0xf9, 0x02, 0x17, 0x38, 0x5f, 0xd9, 0x63, 0xa5, 0xe8, 0x6c, 0x61, 0xc3, 0xd1, 0x72,
-	0x8a, 0xa3, 0x99, 0x86, 0xbf, 0xcf, 0x43, 0xc3, 0x95, 0x92, 0x39, 0x6c, 0x39, 0xb2, 0xbf, 0xfe,
-	0x6c, 0xa0, 0x5e, 0x2f, 0xda, 0x0e, 0xb6, 0x2a, 0x20, 0x06, 0x2b, 0x45, 0x0c, 0xec, 0x76, 0xf3,
-	0x64, 0x65, 0x85, 0x59, 0x20, 0xad, 0xdb, 0xe1, 0x5d, 0xb4, 0xb1, 0xb5, 0xad, 0xe5, 0xb0, 0x5c,
-	0x30, 0x75, 0x2d, 0xb7, 0x53, 0x81, 0x7f, 0xa2, 0x52, 0xd2, 0x5f, 0x75, 0x2a, 0xf0, 0x64, 0x14,
-	0x5d, 0x53, 0x15, 0x07, 0xf3, 0xda, 0x44, 0xf0, 0xb9, 0xe1, 0xfb, 0x72, 0x65, 0x27, 0xce, 0x54,
-	0x4b, 0xd8, 0x15, 0x0d, 0x4c, 0xd4, 0x7e, 0xf4, 0xb2, 0x6a, 0xd8, 0xb2, 0x66, 0x6c, 0x98, 0xe3,
-	0xe6, 0xfa, 0x5d, 0xec, 0x3e, 0x9b, 0x91, 0x34, 0xec, 0xbc, 0xcd, 0xa4, 0xe6, 0x4d, 0xdb, 0x59,
-	0xc8, 0xa2, 0x53, 0xb0, 0xcd, 0x50, 0xf2, 0xd8, 0x2e, 0x28, 0x39, 0x2c, 0x82, 0x04, 0x38, 0xdf,
-	0x26, 0x95, 0x0b, 0x10, 0x82, 0x11, 0xf2, 0x45, 0x6c, 0xa6, 0x15, 0xf4, 0xf3, 0xc8, 0xe7, 0x51,
-	0xd8, 0x79, 0x1b, 0x5b, 0xab, 0x8e, 0xe2, 0x14, 0xed, 0xb5, 0x9d, 0x02, 0x46, 0xff, 0x08, 0xc0,
-	0xc1, 0x9c, 0xa9, 0xe8, 0xd8, 0xce, 0x61, 0x55, 0xf6, 0xf7, 0xc2, 0x16, 0x41, 0xa2, 0xe5, 0x7c,
-	0x7b, 0xea, 0xa5, 0xb1, 0xda, 0x8b, 0x6f, 0xac, 0xa2, 0x43, 0x99, 0x89, 0x4f, 0x76, 0xc1, 0xe7,
-	0x25, 0x00, 0xfe, 0xe8, 0x2f, 0x1e, 0xb7, 0xc0, 0x8f, 0x40, 0x6c, 0x24, 0x6a, 0xb5, 0x9c, 0x7f,
-	0xd8, 0x4c, 0xbe, 0xb6, 0x7d, 0x04, 0x5a, 0x47, 0x22, 0x56, 0x73, 0x82, 0x56, 0x46, 0x3f, 0x02,
-	0xcd, 0x22, 0x10, 0x81, 0xd4, 0xef, 0xb5, 0xed, 0x43, 0xb2, 0xd1, 0xc7, 0x00, 0x9e, 0x34, 0x4c,
-	0x43, 0xae, 0xd5, 0xb3, 0xe6, 0xaf, 0xbe, 0x67, 0xa2, 0x61, 0x1a, 0xb3, 0xa1, 0x9d, 0xbb, 0x01,
-	0x05, 0x45, 0xdd, 0xc6, 0x96, 0xa3, 0xd9, 0xee, 0xaa, 0x12, 0x5b, 0x12, 0xe0, 0x7c, 0x7b, 0x6a,
-	0xa4, 0xaa, 0x43, 0xf8, 0xbe, 0x3d, 0x76, 0x93, 0x3e, 0x44, 0x09, 0x6f, 0x90, 0x09, 0x97, 0xba,
-	0x3d, 0xdd, 0x15, 0xaa, 0x8a, 0xde, 0x82, 0x82, 0x6f, 0x98, 0x6c, 0x7c, 0x11, 0x3a, 0xbe, 0x06,
-	0xe0, 0x32, 0xb0, 0xdc, 0x69, 0xa9, 0xbb, 0x3c, 0x99, 0x14, 0x06, 0xbd, 0x0b, 0xfb, 0x02, 0xb3,
-	0xc8, 0xe0, 0xa3, 0x47, 0x82, 0x47, 0x15, 0x33, 0x42, 0x91, 0xae, 0xfe, 0x63, 0xf0, 0xa7, 0x25,
-	0xf0, 0x11, 0x80, 0xe7, 0xa0, 0x90, 0x76, 0xc7, 0x95, 0x60, 0x03, 0x1b, 0x42, 0xd5, 0xf3, 0x04,
-	0xc7, 0xe1, 0xa0, 0x07, 0x91, 0xe0, 0xb3, 0x9a, 0xa0, 0xd3, 0x9a, 0xe9, 0xab, 0x9e, 0x07, 0x21,
-	0x0a, 0x2f, 0xc1, 0x93, 0xcb, 0xa6, 0x71, 0x21, 0x57, 0x43, 0x49, 0x0c, 0x1f, 0xa1, 0x10, 0x1d,
-	0xf9, 0x7d, 0x00, 0xfb, 0x16, 0x95, 0x6d, 0x65, 0x35, 0x67, 0x69, 0x05, 0x67, 0xd6, 0x34, 0x36,
-	0xb4, 0x4d, 0xba, 0xe2, 0xcf, 0xc2, 0x8e, 0x9c, 0x92, 0xdb, 0xc2, 0x72, 0xc1, 0xc2, 0x1b, 0xda,
-	0x03, 0xbe, 0x71, 0xda, 0x69, 0xd9, 0x0a, 0x2d, 0x42, 0xdf, 0x80, 0x9d, 0x36, 0x55, 0x93, 0x73,
-	0x54, 0x8f, 0xee, 0xa1, 0xf6, 0xd4, 0xe0, 0x18, 0xb3, 0x8e, 0x63, 0xae, 0x75, 0x1c, 0x5b, 0xa5,
-	0xb6, 0x53, 0xea, 0xb0, 0x7d, 0x8d, 0xa0, 0x51, 0xd8, 0x93, 0x2b, 0xda, 0x8e, 0x99, 0x97, 0x39,
-	0x48, 0xd1, 0xd2, 0xe9, 0x02, 0x69, 0x93, 0xba, 0x59, 0x05, 0xeb, 0xd3, 0x2d, 0x4b, 0x1f, 0xf9,
-	0xf3, 0x66, 0x38, 0x98, 0xdd, 0x31, 0x94, 0xbc, 0x96, 0x93, 0xf0, 0x36, 0xb6, 0x6c, 0xbc, 0x62,
-	0x99, 0x0f, 0x76, 0x68, 0x47, 0xbf, 0x05, 0x4f, 0x59, 0xd8, 0x36, 0xf5, 0x6d, 0x2c, 0x63, 0x43,
-	0x2d, 0x98, 0x9a, 0xe1, 0xc8, 0x2a, 0x93, 0x55, 0x74, 0x7d, 0x87, 0x76, 0x3c, 0x2e, 0x0d, 0x71,
-	0x99, 0x39, 0x2e, 0x92, 0x2d, 0x4b, 0xa0, 0xb7, 0xe0, 0x20, 0xad, 0x2d, 0x12, 0xcb, 0x24, 0x1b,
-	0xd8, 0xb9, 0x6f, 0x5a, 0xf7, 0xa8, 0x11, 0xa6, 0x23, 0xea, 0x4a, 0x9d, 0x0d, 0x2c, 0x01, 0x3e,
-	0xb9, 0xcb, 0x4c, 0x92, 0xae, 0xd7, 0xfe, 0x32, 0x82, 0xaf, 0x18, 0xc9, 0x10, 0x55, 0x43, 0x8b,
-	0x2d, 0x74, 0x61, 0x9d, 0x0a, 0xa0, 0x56, 0x2e, 0x29, 0xb4, 0xb7, 0xdb, 0xed, 0xee, 0x54, 0xae,
-	0x27, 0xf5, 0x54, 0x35, 0x82, 0xae, 0x41, 0x94, 0x33, 0x0d, 0x03, 0xe7, 0x68, 0x03, 0xe4, 0x18,
-	0x32, 0x8b, 0x8e, 0x18, 0x4d, 0x80, 0xf3, 0x9d, 0x99, 0xc1, 0x4f, 0x4b, 0x20, 0x92, 0x9a, 0x98,
-	0x98, 0xf8, 0xed, 0x47, 0xa0, 0x89, 0xac, 0xd0, 0xd6, 0xd1, 0x88, 0xf8, 0xf8, 0xdf, 0x3f, 0x2f,
-	0xf5, 0x94, 0x55, 0xd6, 0x98, 0xc6, 0x62, 0x24, 0x1e, 0x11, 0xa2, 0x23, 0xff, 0xb0, 0x19, 0x76,
-	0xcf, 0x9a, 0xf9, 0x82, 0x85, 0x6d, 0x9b, 0x54, 0x92, 0x21, 0x4c, 0xc0, 0xae, 0x9c, 0x69, 0x38,
-	0xd8, 0x70, 0x64, 0x1d, 0x1b, 0x9b, 0xce, 0x16, 0x9d, 0xd1, 0xce, 0x4c, 0x1b, 0x41, 0x8c, 0x8c,
-	0x36, 0x9f, 0x1f, 0x96, 0x3a, 0xb9, 0xc0, 0x12, 0xad, 0x47, 0x6b, 0xb0, 0xc3, 0xd5, 0xe0, 0x93,
-	0xd8, 0x72, 0xbe, 0x2d, 0x33, 0xd9, 0x90, 0x51, 0x11, 0x52, 0xbe, 0xad, 0xd4, 0xce, 0x61, 0x68,
-	0x3f, 0xa6, 0xe0, 0x80, 0xaa, 0xd9, 0xca, 0xba, 0x8e, 0x65, 0xd3, 0x90, 0xb1, 0xa3, 0x6c, 0xca,
-	0x5b, 0x58, 0x51, 0xb1, 0x45, 0x17, 0x4d, 0x5c, 0xea, 0xe5, 0xb5, 0x37, 0x8d, 0x39, 0x47, 0xd9,
-	0x9c, 0xa7, 0x55, 0x28, 0x0d, 0x4f, 0x5b, 0x38, 0x6f, 0x6e, 0x63, 0x59, 0xc9, 0xe5, 0x70, 0xc1,
-	0x91, 0xb1, 0x91, 0x33, 0x55, 0xcd, 0xf0, 0x74, 0x23, 0xee, 0xea, 0x20, 0x42, 0x69, 0x2a, 0x33,
-	0xc7, 0x45, 0x18, 0xc4, 0xc8, 0x3f, 0x6d, 0x86, 0x83, 0x64, 0x87, 0xf0, 0xc5, 0xbb, 0xa5, 0xe8,
-	0x64, 0x1a, 0x30, 0xed, 0xd3, 0x35, 0xd8, 0x7d, 0xd7, 0x76, 0xd7, 0xaf, 0x8a, 0x75, 0x65, 0x87,
-	0xae, 0x98, 0xce, 0xcc, 0x30, 0x99, 0xfa, 0x99, 0x89, 0x89, 0x89, 0x2f, 0x4a, 0xa0, 0xc9, 0x9d,
-	0xfe, 0xb6, 0xd1, 0x98, 0xf8, 0xd9, 0x9f, 0xb5, 0x9c, 0xff, 0x3c, 0x26, 0x75, 0xde, 0xb5, 0xd9,
-	0xea, 0xce, 0x12, 0x25, 0x94, 0x81, 0x9d, 0x39, 0xd3, 0xbc, 0xa7, 0x61, 0x19, 0x3f, 0x28, 0x68,
-	0x16, 0x33, 0x94, 0x9d, 0x99, 0xd3, 0x04, 0x65, 0xea, 0xa2, 0x87, 0x42, 0x67, 0x29, 0x3e, 0xda,
-	0x2a, 0x3e, 0xfc, 0xfd, 0xe8, 0x79, 0x20, 0x75, 0x30, 0x9d, 0x39, 0xaa, 0x82, 0xb2, 0xb0, 0x9d,
-	0xef, 0xa7, 0x82, 0xb2, 0x89, 0xe9, 0xc0, 0xda, 0x32, 0xcf, 0x7d, 0x51, 0x02, 0x91, 0xdf, 0x7b,
-	0x04, 0x3a, 0x15, 0x3b, 0xa7, 0x69, 0xc9, 0xc4, 0xba, 0x62, 0xe3, 0x8b, 0xd3, 0xb4, 0x33, 0x56,
-	0x4c, 0x7c, 0xf8, 0x30, 0xf2, 0x3d, 0x00, 0x24, 0xc8, 0xf4, 0x56, 0x94, 0x4d, 0x7c, 0x75, 0xec,
-	0x07, 0x25, 0x30, 0x0a, 0xcf, 0xc3, 0x33, 0xe5, 0x21, 0x27, 0xbc, 0x31, 0x27, 0x56, 0x14, 0x4b,
-	0xc9, 0x63, 0x07, 0x5b, 0x36, 0x8a, 0xa6, 0x92, 0x53, 0xc9, 0xe9, 0xc5, 0x48, 0x1c, 0x08, 0xcd,
-	0x23, 0xff, 0x01, 0xc0, 0xbe, 0x59, 0xa5, 0xe0, 0xe4, 0xb6, 0x94, 0xca, 0x09, 0xaa, 0x1a, 0x58,
-	0xf3, 0x53, 0x0f, 0xac, 0xe5, 0x68, 0x03, 0x7b, 0xe9, 0x07, 0x25, 0xf0, 0x02, 0x7c, 0x0e, 0x9e,
-	0xe2, 0xfd, 0x0c, 0x1f, 0x55, 0x4b, 0x2a, 0x39, 0xc5, 0xc7, 0xf4, 0x3d, 0x00, 0x4f, 0xac, 0xe1,
-	0x7c, 0xc1, 0xb4, 0x14, 0x6b, 0xe7, 0x96, 0x8d, 0xad, 0x8c, 0x6e, 0xe6, 0xee, 0x69, 0x06, 0x33,
-	0x8f, 0x81, 0x4e, 0x81, 0xa3, 0x75, 0xea, 0xc2, 0x0f, 0x4a, 0xe0, 0x25, 0xf8, 0x22, 0x1c, 0xf1,
-	0x1a, 0x4a, 0x90, 0x96, 0x12, 0x6e, 0x53, 0xfe, 0xae, 0x81, 0xc9, 0x91, 0x05, 0xd8, 0x96, 0x5d,
-	0x5e, 0x95, 0x70, 0xce, 0xb4, 0x54, 0xcf, 0x71, 0x01, 0x65, 0xc7, 0x85, 0x94, 0x79, 0x66, 0xab,
-	0x4d, 0xa2, 0x9f, 0x51, 0x1f, 0x8c, 0x6e, 0x2b, 0x7a, 0x91, 0x4f, 0x9c, 0xc4, 0xbe, 0x8c, 0xfc,
-	0xeb, 0x16, 0x28, 0xa4, 0x8b, 0x8e, 0x39, 0x8b, 0x2d, 0x67, 0xc1, 0xd8, 0x30, 0xe9, 0xa0, 0x0c,
-	0xd8, 0xad, 0x14, 0x1d, 0x53, 0xa6, 0x4e, 0xa8, 0xed, 0x28, 0x0e, 0x43, 0xef, 0x4a, 0x8d, 0xd5,
-	0x73, 0x21, 0x08, 0x84, 0xb6, 0xc1, 0x7d, 0x5b, 0xe2, 0x33, 0xe1, 0xcc, 0xc0, 0xa7, 0x25, 0x80,
-	0xca, 0xf0, 0x9a, 0xa3, 0x29, 0xba, 0xf6, 0x3e, 0x96, 0x3a, 0x15, 0x5e, 0x46, 0xc5, 0x50, 0x16,
-	0x0a, 0xe5, 0xf6, 0x7c, 0x0b, 0xa4, 0x3d, 0x35, 0x54, 0x75, 0x86, 0xac, 0xb9, 0x1e, 0xb6, 0xd4,
-	0xe5, 0x82, 0xf0, 0xf5, 0x31, 0x0a, 0x7b, 0x7c, 0xbd, 0x2e, 0x52, 0x2b, 0xea, 0x1e, 0x24, 0x5e,
-	0x7b, 0xac, 0x18, 0x9d, 0xf7, 0xb7, 0xa8, 0xd9, 0x76, 0x91, 0x9b, 0x80, 0xb6, 0x32, 0xea, 0x02,
-	0x2d, 0x45, 0xd7, 0x60, 0x3b, 0xf1, 0x2f, 0x2d, 0x3a, 0xd9, 0xae, 0x2f, 0xf0, 0x42, 0xbd, 0x79,
-	0xf0, 0x1e, 0x8d, 0x04, 0x55, 0xc3, 0x66, 0x1f, 0xa9, 0x1b, 0x44, 0x67, 0x92, 0xcc, 0x27, 0x71,
-	0xed, 0xb5, 0x3c, 0x16, 0x5b, 0x0f, 0x1b, 0x63, 0x26, 0xc6, 0x1d, 0x31, 0xa9, 0x8b, 0x2a, 0xaf,
-	0x12, 0x5d, 0x52, 0x3b, 0xf2, 0x07, 0x11, 0xd8, 0x9f, 0xae, 0xb8, 0x4d, 0x64, 0xb1, 0xa3, 0x68,
-	0xba, 0x8d, 0xee, 0xc0, 0x76, 0x72, 0xcd, 0x70, 0xcf, 0x62, 0xd0, 0xc0, 0x19, 0x73, 0x72, 0x6f,
-	0xb7, 0xab, 0xf2, 0x6a, 0xe2, 0x99, 0x61, 0x20, 0x41, 0x52, 0xc3, 0xcf, 0xea, 0xd7, 0xe1, 0x40,
-	0xd1, 0xc6, 0x32, 0xc5, 0x67, 0xce, 0xb6, 0xdb, 0x0c, 0xf3, 0xe8, 0xfa, 0x02, 0xcd, 0xcc, 0xe5,
-	0x0b, 0xce, 0xce, 0x7c, 0x93, 0xd4, 0x5b, 0xb4, 0x31, 0xe9, 0x2d, 0x6b, 0x96, 0x83, 0x7d, 0xdb,
-	0xb3, 0x09, 0x05, 0xb2, 0xba, 0x6d, 0xfa, 0x00, 0xda, 0x53, 0xa3, 0x01, 0x8c, 0xca, 0x8e, 0x8d,
-	0xcd, 0x52, 0x15, 0xba, 0x1f, 0xec, 0xf9, 0x26, 0xd7, 0x44, 0xb0, 0xef, 0xe8, 0x1a, 0xec, 0xb0,
-	0xb0, 0xaa, 0x59, 0xa4, 0x63, 0xc4, 0x8d, 0x68, 0xa5, 0xdb, 0xf1, 0xec, 0x17, 0x25, 0x40, 0x8f,
-	0x99, 0xa8, 0xd5, 0x22, 0x3e, 0xa4, 0x36, 0x26, 0x62, 0x35, 0x0b, 0x80, 0x17, 0x7d, 0x0f, 0x80,
-	0x79, 0x20, 0xb5, 0xbb, 0x8a, 0xb7, 0x2c, 0x1d, 0xa5, 0xa1, 0xe0, 0xe1, 0x70, 0x1f, 0x42, 0x8c,
-	0xd5, 0x19, 0x21, 0x90, 0xba, 0x5d, 0x79, 0xee, 0x50, 0x70, 0x03, 0xda, 0x0f, 0xbb, 0x2a, 0x9f,
-	0x12, 0x6a, 0x99, 0x4c, 0xa6, 0x60, 0x0f, 0xec, 0x90, 0xb8, 0x7c, 0xe2, 0x96, 0xb4, 0x84, 0xc0,
-	0x4c, 0xe6, 0x45, 0xd8, 0x57, 0x31, 0x1b, 0x72, 0x6e, 0xcb, 0xd4, 0x72, 0x18, 0x75, 0x3f, 0x2e,
-	0x81, 0x96, 0xfd, 0x12, 0x68, 0x3e, 0x28, 0x81, 0x96, 0xa9, 0xe4, 0x74, 0xe6, 0x1c, 0xec, 0xf5,
-	0x8f, 0xd1, 0x2f, 0xd7, 0xba, 0x5f, 0x02, 0x51, 0x22, 0x77, 0x31, 0x79, 0x69, 0x31, 0x12, 0x6f,
-	0x16, 0x5a, 0x16, 0x23, 0xf1, 0xa8, 0xd0, 0x3a, 0xf2, 0x8b, 0x28, 0xec, 0x63, 0x6e, 0x66, 0x46,
-	0xb1, 0xb1, 0xea, 0x99, 0x3c, 0xf4, 0x36, 0xec, 0xb8, 0x4b, 0x9a, 0xe2, 0xdf, 0xe9, 0x36, 0x6f,
-	0x4f, 0x4d, 0xd5, 0x5b, 0xde, 0x35, 0xce, 0xc0, 0x4c, 0x64, 0x9f, 0xac, 0xd3, 0xf6, 0xbb, 0x76,
-	0x19, 0x3d, 0x07, 0x7b, 0x72, 0xcc, 0xca, 0xfa, 0x9a, 0x60, 0x1b, 0x7b, 0xa2, 0xae, 0x25, 0x09,
-	0x39, 0x42, 0x38, 0xbe, 0x90, 0x0b, 0xd4, 0x21, 0x1b, 0x0e, 0x3a, 0xae, 0xd5, 0x94, 0x8b, 0x36,
-	0xb6, 0xe4, 0x75, 0x6e, 0x35, 0xf9, 0xa2, 0x9c, 0xa9, 0xd7, 0x54, 0x4d, 0xcb, 0xce, 0xdb, 0xeb,
-	0x77, 0xc2, 0x04, 0xd0, 0x15, 0xd8, 0x61, 0x98, 0xbe, 0x41, 0x45, 0xeb, 0x2e, 0xff, 0x76, 0xc3,
-	0x2c, 0xf7, 0x77, 0x15, 0x0e, 0x29, 0xfa, 0x7d, 0x65, 0xc7, 0x96, 0xb1, 0x41, 0xbd, 0x98, 0x8a,
-	0x07, 0xd0, 0x5a, 0x17, 0x68, 0x90, 0x69, 0xce, 0x51, 0xc5, 0x45, 0xdf, 0x4c, 0x7f, 0x17, 0x9e,
-	0xa9, 0x04, 0xad, 0x9e, 0xf7, 0x58, 0x5d, 0xe4, 0x53, 0x7e, 0xe4, 0xe0, 0xfc, 0xa3, 0xbf, 0x0f,
-	0xe0, 0x89, 0xbc, 0xa2, 0x6b, 0x39, 0xcd, 0x2c, 0xda, 0x6c, 0x92, 0xf3, 0x9a, 0xa3, 0x6d, 0xd2,
-	0x25, 0x2d, 0xc6, 0x1b, 0x30, 0x31, 0x17, 0xf6, 0x76, 0x6b, 0x23, 0xf8, 0x6e, 0x9b, 0xdc, 0xe8,
-	0x0c, 0x7a, 0xb2, 0x64, 0xda, 0x6f, 0x78, 0x92, 0x99, 0x17, 0xa0, 0xe0, 0x0d, 0xc9, 0x5d, 0xfa,
-	0x3d, 0x8f, 0x4b, 0x20, 0xba, 0x5f, 0x02, 0x91, 0x83, 0x12, 0x88, 0xce, 0x24, 0xd9, 0xe2, 0x27,
-	0x6e, 0xec, 0xef, 0x44, 0xe1, 0x89, 0xd5, 0x2d, 0xa5, 0x80, 0x33, 0xa6, 0x93, 0xc5, 0x1b, 0xd8,
-	0xb0, 0xb1, 0xef, 0x66, 0x33, 0x01, 0xbb, 0x94, 0x42, 0x41, 0xe7, 0x1b, 0x53, 0xd6, 0x54, 0x7e,
-	0x7a, 0xb7, 0x71, 0x03, 0x21, 0x26, 0xa4, 0x4e, 0x9f, 0xc0, 0x82, 0x8a, 0x5e, 0x81, 0x1d, 0x4a,
-	0x41, 0x63, 0xe6, 0xef, 0x1e, 0x76, 0xcf, 0xa8, 0x13, 0x81, 0x81, 0xaf, 0xe2, 0x9c, 0x85, 0xa9,
-	0xaf, 0x2a, 0x41, 0xa5, 0xa0, 0x91, 0xfd, 0xff, 0x3a, 0xde, 0x41, 0x77, 0x60, 0x5c, 0x33, 0x6c,
-	0x47, 0x31, 0x72, 0xb8, 0x21, 0xc7, 0x3f, 0xb1, 0xb7, 0x3b, 0x64, 0x93, 0xce, 0xcb, 0xeb, 0x26,
-	0x71, 0x2a, 0x69, 0xf7, 0x65, 0x17, 0xe2, 0x93, 0x5d, 0x20, 0x79, 0x78, 0xe8, 0x32, 0x8c, 0xb9,
-	0x2e, 0x7f, 0x84, 0xf9, 0x9d, 0x8f, 0x4b, 0x00, 0x7c, 0x4a, 0x2c, 0x46, 0xa5, 0xeb, 0x49, 0x3c,
-	0xff, 0xcf, 0xfe, 0xac, 0x45, 0x72, 0xc5, 0xd1, 0xef, 0x01, 0xd8, 0xe5, 0xee, 0x17, 0xea, 0xc2,
-	0xb8, 0x47, 0xdc, 0x7c, 0xbd, 0x5d, 0x53, 0x73, 0x52, 0xc7, 0xdc, 0x1d, 0x42, 0xdc, 0x1a, 0x7b,
-	0xce, 0x70, 0xac, 0x9d, 0xcc, 0xa4, 0xef, 0xf1, 0xb6, 0x7f, 0x0c, 0xe2, 0x23, 0xad, 0x56, 0x44,
-	0x48, 0x88, 0x09, 0xda, 0x9f, 0x8f, 0x41, 0x8b, 0xc0, 0x4c, 0x32, 0xfc, 0x18, 0xc4, 0x46, 0xa9,
-	0x85, 0x4e, 0x48, 0x9d, 0xeb, 0x7e, 0x18, 0x94, 0x24, 0xb7, 0x27, 0xdd, 0x54, 0x54, 0xee, 0xad,
-	0xcb, 0xd4, 0xe1, 0xa1, 0xc6, 0x5d, 0x12, 0x58, 0x0d, 0x73, 0xd2, 0x97, 0x89, 0xf3, 0x33, 0x08,
-	0x63, 0x77, 0x6d, 0xb9, 0xa0, 0x38, 0x5b, 0x74, 0xcd, 0xb7, 0x49, 0xad, 0x77, 0xed, 0x15, 0xc5,
-	0xd9, 0x42, 0xaf, 0xc1, 0x48, 0xde, 0x54, 0xb1, 0x18, 0xa7, 0xbe, 0xcc, 0x68, 0xbd, 0x01, 0x96,
-	0xc7, 0x76, 0xc3, 0x54, 0xb1, 0x44, 0xf5, 0x86, 0xbe, 0x05, 0x51, 0xf5, 0xf0, 0x90, 0x00, 0x5b,
-	0xc8, 0x5a, 0x60, 0xee, 0x17, 0xf9, 0x58, 0xf6, 0xb4, 0x9a, 0x7d, 0x9e, 0xd6, 0xd5, 0xe6, 0xcb,
-	0x60, 0xe4, 0x77, 0x01, 0xec, 0x5c, 0x65, 0x04, 0x5b, 0xd6, 0xcc, 0x2b, 0x9a, 0x81, 0x06, 0x60,
-	0xab, 0x4a, 0x3f, 0x71, 0x00, 0xfe, 0x0d, 0xbd, 0x00, 0xbb, 0x5c, 0x26, 0x8e, 0xd7, 0x33, 0xb0,
-	0x4e, 0xbb, 0x42, 0xfd, 0x9b, 0x70, 0x50, 0x33, 0x1c, 0x6c, 0x19, 0x8a, 0x2e, 0x07, 0xe4, 0x99,
-	0x7f, 0xec, 0x39, 0x10, 0xfd, 0xae, 0x5c, 0x45, 0xfb, 0x23, 0xff, 0xb2, 0x19, 0x76, 0xcd, 0xaa,
-	0x06, 0x2f, 0xa4, 0xfb, 0x62, 0x16, 0xf6, 0xa8, 0xe6, 0x7d, 0x83, 0xce, 0xb7, 0x8a, 0x75, 0x6d,
-	0x1b, 0x7b, 0xee, 0x58, 0x2d, 0xeb, 0x21, 0xb8, 0x0a, 0x59, 0x2e, 0x8f, 0x5e, 0x85, 0x5d, 0xe4,
-	0x93, 0x6c, 0x3b, 0x16, 0x56, 0xf2, 0x65, 0x63, 0x5c, 0x0b, 0xa1, 0x93, 0x48, 0xaf, 0xba, 0xc2,
-	0xe8, 0x24, 0x6c, 0x63, 0xac, 0x83, 0xe3, 0xe8, 0x6c, 0x49, 0x4b, 0x71, 0x5a, 0xb0, 0xe6, 0xe8,
-	0x48, 0x82, 0xdd, 0x95, 0x63, 0x75, 0xd7, 0x6c, 0x5d, 0x86, 0xab, 0x62, 0xdc, 0x52, 0x57, 0xc5,
-	0x3c, 0xda, 0x99, 0xb3, 0xe5, 0xdb, 0xad, 0xef, 0x40, 0x6d, 0x26, 0x67, 0x00, 0x39, 0x50, 0xcb,
-	0xd7, 0x01, 0x03, 0x76, 0xcf, 0xea, 0x1a, 0x36, 0x9c, 0x85, 0x15, 0xb6, 0xe6, 0x6c, 0xf4, 0x1d,
-	0xd8, 0x93, 0xa3, 0x45, 0xb2, 0x56, 0xe0, 0x2b, 0x94, 0xb1, 0x81, 0x6d, 0x99, 0x71, 0xb2, 0xb2,
-	0x3b, 0x3e, 0x02, 0x6d, 0x23, 0x31, 0x8b, 0x9c, 0x11, 0xec, 0xba, 0x4b, 0x8d, 0x5c, 0xd4, 0xfd,
-	0x14, 0x07, 0x15, 0xa4, 0x14, 0x03, 0x2f, 0x70, 0xf0, 0x91, 0x9f, 0x02, 0x38, 0x70, 0xc7, 0x31,
-	0x14, 0x4a, 0x74, 0xb0, 0x8d, 0x56, 0xb4, 0x98, 0x2b, 0xf1, 0x5d, 0x88, 0xde, 0x77, 0x0c, 0x85,
-	0x93, 0x45, 0x4f, 0xe2, 0xf0, 0xf5, 0xec, 0xed, 0x46, 0x88, 0x6a, 0xf9, 0xb6, 0x2d, 0x09, 0xe4,
-	0x3b, 0xf3, 0x11, 0xb8, 0x7f, 0x66, 0xc3, 0x41, 0x0a, 0xef, 0x37, 0x92, 0xbc, 0x0d, 0xb5, 0x81,
-	0x36, 0x4e, 0xef, 0xed, 0x0a, 0x41, 0x7d, 0x9f, 0x85, 0xef, 0x27, 0x75, 0xe9, 0x72, 0x15, 0x6b,
-	0x74, 0xe4, 0x77, 0x5b, 0x60, 0x7f, 0x76, 0x79, 0x35, 0x64, 0xb4, 0xab, 0xb0, 0x43, 0x55, 0x4d,
-	0x5b, 0x2e, 0x58, 0xe6, 0x86, 0xa6, 0xbb, 0xe7, 0xd9, 0xe8, 0x21, 0x9e, 0x78, 0x36, 0x6b, 0x12,
-	0x30, 0xa2, 0xe1, 0x7a, 0x28, 0x04, 0x85, 0x17, 0xa1, 0xdb, 0xb0, 0xd3, 0x65, 0xb7, 0x18, 0x6a,
-	0x9c, 0xa2, 0xbe, 0x7c, 0x08, 0xea, 0x2c, 0x63, 0xbf, 0xfc, 0xb0, 0x1d, 0x39, 0x5f, 0x19, 0xba,
-	0x07, 0x7b, 0xa9, 0x37, 0x9f, 0x33, 0x75, 0x62, 0xb2, 0x0b, 0x8c, 0x64, 0x11, 0xdb, 0x1a, 0xe5,
-	0x3d, 0x33, 0x03, 0x7b, 0xbb, 0x61, 0x08, 0x12, 0x72, 0x0b, 0x17, 0xbc, 0x32, 0xf4, 0x36, 0x6c,
-	0xd5, 0xac, 0xa2, 0x8e, 0x6d, 0x11, 0x36, 0xcc, 0x54, 0x26, 0xf6, 0x76, 0xa3, 0x54, 0x69, 0xdf,
-	0x7f, 0xf0, 0x0a, 0xbe, 0x95, 0xc8, 0x31, 0x47, 0x3e, 0x01, 0xb0, 0xab, 0x72, 0x22, 0xd1, 0x12,
-	0x1c, 0xe0, 0x6e, 0x06, 0x7d, 0x22, 0x3e, 0x57, 0xa0, 0xbe, 0x99, 0xe8, 0x63, 0x5a, 0x59, 0xd5,
-	0xb4, 0xcb, 0x47, 0x3a, 0x5a, 0x86, 0x83, 0x2e, 0xa1, 0x13, 0x84, 0xab, 0x6f, 0x33, 0xfa, 0xb9,
-	0x5a, 0x25, 0x5e, 0x66, 0x04, 0x0e, 0x04, 0x70, 0xdc, 0x2d, 0x1d, 0xe7, 0xbe, 0x34, 0xe0, 0x7b,
-	0xf9, 0xdf, 0x01, 0xd8, 0x1d, 0x78, 0x9a, 0x28, 0x0d, 0x21, 0x5b, 0x11, 0xb6, 0xf6, 0x3e, 0xe6,
-	0xa7, 0x69, 0xe2, 0xd3, 0x12, 0x88, 0x4c, 0x4e, 0xa4, 0xa6, 0x7f, 0x56, 0x02, 0x80, 0x1f, 0xa7,
-	0xed, 0x64, 0xaa, 0x62, 0xa3, 0x51, 0xf1, 0xe1, 0xca, 0x79, 0x30, 0xdf, 0x24, 0x31, 0x7b, 0xb5,
-	0xaa, 0xbd, 0x8f, 0xd1, 0x22, 0x74, 0x7b, 0x26, 0x57, 0x2e, 0xae, 0x43, 0x2e, 0x49, 0x5c, 0xa9,
-	0x62, 0x71, 0x25, 0x60, 0x5f, 0x05, 0x46, 0x8d, 0xa1, 0x30, 0x6f, 0x7f, 0xe4, 0x8f, 0x9a, 0x21,
-	0x5a, 0xd5, 0xcd, 0xfb, 0xe4, 0x61, 0xf9, 0x66, 0xf8, 0x0d, 0x38, 0x68, 0xe1, 0xf7, 0x8a, 0xd8,
-	0x76, 0x5c, 0xf3, 0xe4, 0x31, 0x84, 0x8c, 0x87, 0x39, 0xf3, 0x69, 0x09, 0x44, 0x27, 0x27, 0x42,
-	0x78, 0xaa, 0x3f, 0xfc, 0x09, 0x38, 0xbf, 0xdf, 0x2d, 0xf5, 0x73, 0x7d, 0x6e, 0x95, 0x38, 0x5b,
-	0x88, 0x16, 0x61, 0xb7, 0x0b, 0xec, 0x02, 0x82, 0x32, 0xe0, 0xc5, 0x30, 0xc0, 0xcf, 0xfe, 0x19,
-	0x3a, 0xbf, 0xdf, 0x3d, 0xdf, 0x24, 0x75, 0x71, 0x4d, 0x17, 0xcb, 0xb7, 0x0c, 0x82, 0x98, 0x8d,
-	0x2d, 0x03, 0xa9, 0x02, 0x2f, 0xf3, 0x12, 0x1c, 0x08, 0xe0, 0xf8, 0x2d, 0x3b, 0xe0, 0xfe, 0x62,
-	0xcb, 0x24, 0xb5, 0xec, 0xc4, 0x5b, 0xdc, 0x07, 0x10, 0xb1, 0xe3, 0xa0, 0xcc, 0x64, 0x60, 0x72,
-	0x9f, 0x16, 0x2c, 0x5b, 0xa1, 0x4c, 0x81, 0x5b, 0xd6, 0x98, 0x8d, 0xad, 0xf6, 0x6a, 0xbb, 0x2d,
-	0x5b, 0xa9, 0xc0, 0x7e, 0x07, 0x22, 0x9c, 0x53, 0x83, 0xe8, 0xcd, 0x47, 0x43, 0xef, 0xa1, 0x50,
-	0x7e, 0xfc, 0x91, 0xef, 0xb7, 0xc0, 0x58, 0xba, 0xa0, 0xad, 0x16, 0x70, 0x0e, 0xe5, 0x88, 0xbb,
-	0xab, 0x11, 0x47, 0x52, 0x33, 0x34, 0xba, 0xbb, 0x40, 0xc3, 0xd6, 0x48, 0xdc, 0xdb, 0x0d, 0x28,
-	0xbb, 0x6e, 0x45, 0xa7, 0x52, 0xd0, 0xb2, 0x5e, 0x29, 0x7a, 0x07, 0x9e, 0xf4, 0xc8, 0xd9, 0x02,
-	0x36, 0x64, 0xa2, 0xc4, 0x83, 0x81, 0x87, 0xec, 0x67, 0xcf, 0x53, 0x99, 0x6f, 0x92, 0x44, 0x97,
-	0xc2, 0x2d, 0x60, 0x23, 0x5d, 0xd0, 0x6e, 0x7b, 0x00, 0x68, 0x17, 0x0e, 0x71, 0xcb, 0x13, 0x06,
-	0x1f, 0x39, 0xfc, 0xbe, 0x57, 0x05, 0xb9, 0x8a, 0x1d, 0x47, 0x33, 0x36, 0x6d, 0x7f, 0xfb, 0x83,
-	0xac, 0x8d, 0x2a, 0xd9, 0xcc, 0x75, 0x38, 0x14, 0xd2, 0xae, 0xbb, 0xae, 0x5e, 0x0a, 0x5c, 0xd5,
-	0x89, 0xb5, 0xf8, 0xe8, 0x11, 0x40, 0x1b, 0x33, 0x0f, 0x72, 0x17, 0xee, 0x2b, 0x4a, 0xe1, 0x82,
-	0xa2, 0x6e, 0x13, 0x7f, 0x5d, 0xe5, 0xdb, 0xf5, 0x2f, 0x01, 0xec, 0xbb, 0xa1, 0xd8, 0xc4, 0xa1,
-	0xac, 0x3c, 0xeb, 0xe6, 0x61, 0xb7, 0x3b, 0x8d, 0x79, 0x56, 0x5f, 0xcf, 0xb2, 0xfa, 0xbb, 0xde,
-	0xc5, 0xf5, 0x38, 0x2c, 0xba, 0x06, 0xbb, 0xf8, 0x84, 0xb9, 0x40, 0x0d, 0x3e, 0x83, 0x4e, 0xa6,
-	0xc6, 0x71, 0x32, 0xaf, 0xc0, 0x2e, 0x0e, 0xe0, 0x1f, 0xad, 0xdf, 0x3f, 0xaa, 0x3b, 0x5a, 0x62,
-	0x6d, 0xbf, 0xdf, 0x0c, 0x4f, 0xd4, 0x9c, 0x7e, 0x34, 0x0b, 0x87, 0x37, 0x14, 0x4d, 0x97, 0xcd,
-	0x6d, 0x6c, 0x11, 0xd3, 0xab, 0xca, 0xeb, 0xa6, 0xba, 0x13, 0x7c, 0xba, 0x71, 0xe9, 0x24, 0x91,
-	0xba, 0xe9, 0x0a, 0x65, 0x4c, 0x75, 0xc7, 0xb7, 0x3c, 0xe6, 0xe1, 0x59, 0x45, 0xd7, 0xcd, 0xfb,
-	0xb2, 0x69, 0xe8, 0x3b, 0x32, 0x39, 0x20, 0xb5, 0x0d, 0x0d, 0xab, 0xf2, 0x7b, 0x45, 0x6c, 0xed,
-	0xb8, 0x34, 0x53, 0x94, 0xe2, 0x9c, 0xa6, 0x82, 0x37, 0x0d, 0x7d, 0x67, 0xd5, 0x15, 0xfb, 0x36,
-	0x91, 0xe2, 0x4c, 0xd2, 0x37, 0xe1, 0xa9, 0x50, 0x24, 0xd7, 0xbd, 0x6b, 0xa5, 0x20, 0x27, 0xaa,
-	0x41, 0x5c, 0xa7, 0xf0, 0x34, 0x84, 0x74, 0x3c, 0x39, 0xdd, 0xb4, 0x99, 0xb3, 0x12, 0x97, 0xda,
-	0x48, 0xc9, 0x2c, 0x29, 0xf0, 0x5b, 0xed, 0xc5, 0x48, 0xbc, 0x45, 0x88, 0x8c, 0x38, 0xb0, 0x6f,
-	0xde, 0x71, 0x0a, 0x93, 0x2b, 0xfc, 0x80, 0xbf, 0xc9, 0x02, 0xe4, 0xe8, 0x6d, 0xd8, 0xcf, 0x6f,
-	0x3d, 0x8e, 0xa5, 0x18, 0xf6, 0x86, 0x69, 0xe5, 0x15, 0xdf, 0xf6, 0x7d, 0x31, 0xf0, 0x20, 0x59,
-	0xfb, 0x6b, 0x15, 0xa2, 0xf4, 0x2e, 0xda, 0xb7, 0x15, 0x52, 0x33, 0xf2, 0xd3, 0x66, 0xd8, 0x4b,
-	0x9a, 0x0d, 0xb6, 0x6a, 0xc1, 0x53, 0x5b, 0x8e, 0x53, 0x90, 0x3d, 0x1f, 0x84, 0xaf, 0xa2, 0xed,
-	0x49, 0x3a, 0x23, 0x8d, 0xb0, 0x38, 0x61, 0xa3, 0x21, 0x9b, 0x7b, 0xcb, 0xd7, 0x1c, 0xe3, 0x1b,
-	0x6e, 0x4f, 0x92, 0x29, 0x44, 0xb7, 0x6b, 0xb5, 0x99, 0x62, 0x6d, 0xd6, 0x3f, 0x06, 0xc2, 0x70,
-	0x53, 0x14, 0x57, 0x82, 0x43, 0xb5, 0xc6, 0xb2, 0x9d, 0xe2, 0x46, 0xa3, 0x16, 0xea, 0x40, 0x58,
-	0x6f, 0x6f, 0xa7, 0xae, 0x46, 0x7e, 0xfe, 0x1a, 0x98, 0xcc, 0xbc, 0x04, 0xfb, 0x2a, 0x91, 0x7d,
-	0x8c, 0x44, 0x84, 0xef, 0x8d, 0xe8, 0x74, 0x72, 0x2a, 0x99, 0xe2, 0x7b, 0xa0, 0x9f, 0xcd, 0xb6,
-	0x4b, 0xfe, 0xf1, 0x59, 0x19, 0xf9, 0xfe, 0x75, 0xd8, 0x75, 0x5d, 0x37, 0xd7, 0x15, 0x9d, 0xac,
-	0x23, 0x7a, 0x0b, 0x7b, 0x15, 0xc6, 0xdc, 0xcb, 0x0d, 0x8b, 0x9b, 0x3d, 0xe7, 0x8f, 0x9b, 0xfd,
-	0x76, 0x73, 0xd9, 0xf2, 0x9f, 0xf5, 0x39, 0x6d, 0xae, 0x0e, 0x5a, 0x80, 0xad, 0x96, 0x59, 0x24,
-	0xa7, 0x49, 0x23, 0x5c, 0x43, 0xef, 0xde, 0x6e, 0x94, 0x8a, 0xd3, 0x3b, 0xf9, 0x47, 0xe4, 0x4e,
-	0xde, 0x2c, 0x71, 0x00, 0xf4, 0x16, 0xec, 0xbe, 0xeb, 0x71, 0x7e, 0x34, 0xd1, 0x82, 0xcf, 0xd9,
-	0xc4, 0x61, 0x34, 0x61, 0x30, 0x98, 0x2c, 0x75, 0x95, 0x81, 0x16, 0x8c, 0x0d, 0x13, 0xbd, 0x0b,
-	0x51, 0x20, 0xe6, 0xad, 0x79, 0x04, 0xc4, 0xa1, 0x3d, 0xae, 0x0a, 0x97, 0x4b, 0x3d, 0x95, 0xc9,
-	0x02, 0x1a, 0xb6, 0xd1, 0x76, 0xd9, 0x0b, 0xf0, 0x5c, 0x1f, 0x53, 0x56, 0x54, 0x55, 0x6c, 0xa5,
-	0xad, 0xbc, 0x1c, 0xba, 0x7d, 0x6e, 0x28, 0x86, 0x56, 0x28, 0xea, 0x74, 0x8b, 0xb0, 0x67, 0x44,
-	0x1b, 0xed, 0xf3, 0xe6, 0x3c, 0xe1, 0x9b, 0xf3, 0xde, 0x80, 0x6f, 0x64, 0xa6, 0x55, 0x15, 0x3d,
-	0xa0, 0xb1, 0xe4, 0x82, 0x69, 0xd8, 0x38, 0xd8, 0x70, 0xec, 0x59, 0x35, 0xdc, 0xe7, 0xb6, 0x50,
-	0xd1, 0xf2, 0x4d, 0x78, 0x22, 0x64, 0xc4, 0x2c, 0xb0, 0x29, 0xf6, 0xd0, 0xa5, 0x14, 0x0e, 0x37,
-	0x10, 0x1c, 0x87, 0x44, 0x75, 0xd0, 0xb7, 0xe1, 0x50, 0xd8, 0x50, 0x38, 0x62, 0xbc, 0x0e, 0xe2,
-	0x60, 0x55, 0x07, 0x39, 0xe4, 0x4d, 0xd8, 0xe5, 0xe8, 0x36, 0x33, 0xc8, 0x34, 0xaa, 0xc5, 0x6f,
-	0x46, 0xe7, 0x02, 0x93, 0x92, 0x35, 0xef, 0x1b, 0x8c, 0x41, 0x58, 0xd3, 0x6d, 0x66, 0x99, 0xc9,
-	0x7c, 0x90, 0xe3, 0xc9, 0xe1, 0x05, 0x2c, 0x28, 0xb6, 0x0c, 0xbb, 0x09, 0x20, 0x0d, 0xe7, 0x70,
-	0x33, 0x7f, 0x9b, 0x22, 0x3e, 0x1f, 0x40, 0xf4, 0xb9, 0x47, 0x55, 0x78, 0xa4, 0xce, 0x33, 0xff,
-	0x2c, 0x80, 0x06, 0x29, 0x55, 0xf4, 0x72, 0x83, 0x99, 0x33, 0x74, 0x8d, 0xb3, 0x68, 0xdb, 0x22,
-	0xec, 0x5c, 0x2f, 0x6e, 0x6c, 0x60, 0xcb, 0x4d, 0x79, 0xe9, 0xa0, 0xdd, 0x39, 0x13, 0x40, 0xca,
-	0x50, 0x99, 0xf2, 0x0e, 0x71, 0x2f, 0x93, 0x4c, 0x97, 0xa7, 0xbc, 0x7c, 0x0b, 0xb6, 0xe7, 0x4c,
-	0xcb, 0x76, 0x91, 0x3a, 0x43, 0x59, 0xc7, 0x59, 0xd3, 0xb2, 0x39, 0xc5, 0xcf, 0x30, 0x60, 0xce,
-	0x2b, 0x41, 0xaf, 0xc0, 0x68, 0x81, 0xdc, 0xa8, 0xc5, 0x6e, 0x3a, 0x9e, 0xba, 0xe1, 0x2b, 0x2f,
-	0xa3, 0x42, 0x62, 0x3a, 0xe8, 0x22, 0x6c, 0xb9, 0x7b, 0xdf, 0x11, 0x85, 0x06, 0x76, 0x65, 0xeb,
-	0xde, 0x2e, 0x91, 0x95, 0xc8, 0x3f, 0x68, 0x12, 0xc6, 0xef, 0x2b, 0x1b, 0x2c, 0xf4, 0x8f, 0x68,
-	0x9f, 0x07, 0x02, 0xca, 0x6f, 0x28, 0x2c, 0xc9, 0x27, 0x76, 0x9f, 0x7d, 0x40, 0x79, 0xd8, 0xcf,
-	0xc3, 0x2d, 0xb2, 0xc5, 0xf2, 0x3b, 0x64, 0xd6, 0xef, 0xde, 0xc3, 0xe3, 0x12, 0x35, 0xf2, 0x42,
-	0xf8, 0x6c, 0xf4, 0xaa, 0xd5, 0xd5, 0xe8, 0x2c, 0xec, 0x50, 0x54, 0x55, 0xd6, 0x4d, 0x46, 0x41,
-	0x88, 0x7d, 0xf4, 0x94, 0x6e, 0x57, 0x54, 0x75, 0x89, 0x17, 0x11, 0x0b, 0x95, 0x2b, 0x27, 0x42,
-	0xb8, 0x6b, 0xab, 0xff, 0x70, 0x96, 0x20, 0x90, 0x3e, 0xc1, 0xbb, 0xd1, 0xe3, 0x03, 0xe3, 0x4b,
-	0xed, 0x0f, 0x22, 0xb0, 0x93, 0x87, 0x90, 0xb1, 0x65, 0x99, 0x96, 0x2d, 0x0e, 0xd0, 0x99, 0xfe,
-	0x46, 0x3d, 0xf4, 0xca, 0xc3, 0x62, 0x6c, 0x96, 0xea, 0xcf, 0x51, 0x75, 0x46, 0xba, 0xfe, 0x09,
-	0xbd, 0x1c, 0x86, 0xc6, 0xa0, 0x3b, 0x3e, 0x06, 0x6d, 0x23, 0xe4, 0xe6, 0xfa, 0x1f, 0x23, 0xe7,
-	0x5b, 0xe8, 0x6e, 0xfd, 0xd8, 0xbd, 0xfa, 0x77, 0x7d, 0x0c, 0xda, 0x47, 0xcb, 0x31, 0xea, 0x83,
-	0xcf, 0xfe, 0xb8, 0xe5, 0x8f, 0xc1, 0x87, 0x8f, 0xc0, 0x63, 0x80, 0xfe, 0x2d, 0xf8, 0x49, 0x09,
-	0xfc, 0x1b, 0x30, 0xbf, 0xb6, 0xb6, 0x92, 0xa0, 0x0d, 0x25, 0x72, 0xa6, 0x8a, 0x13, 0x94, 0xdb,
-	0x4c, 0x4c, 0x25, 0xa7, 0x93, 0x33, 0x09, 0xd3, 0x4a, 0xac, 0x63, 0xe7, 0x3e, 0xc6, 0x46, 0x62,
-	0x6a, 0x62, 0x22, 0xa1, 0x18, 0x6a, 0x62, 0xe6, 0xca, 0x95, 0xb1, 0xc4, 0xdc, 0xe6, 0x58, 0xe2,
-	0x36, 0x95, 0x9b, 0x4e, 0xbc, 0x9a, 0x98, 0x7e, 0xf0, 0x80, 0x48, 0x2a, 0xba, 0x9e, 0x98, 0x9e,
-	0x98, 0xb8, 0x30, 0x7d, 0xe5, 0x4a, 0x02, 0x7b, 0x78, 0x76, 0x32, 0x31, 0x93, 0x78, 0x35, 0x31,
-	0x53, 0x96, 0x99, 0x99, 0x98, 0xb8, 0x30, 0x53, 0x29, 0x33, 0x96, 0x78, 0xcb, 0x2c, 0x26, 0x72,
-	0x8a, 0x91, 0x50, 0x74, 0xdb, 0x4c, 0x30, 0xe7, 0x6c, 0x27, 0xa1, 0x18, 0x09, 0xfc, 0x40, 0xc9,
-	0x39, 0x3e, 0xd1, 0x84, 0xae, 0xdd, 0xc3, 0x89, 0xe9, 0x89, 0xe9, 0x31, 0x32, 0x94, 0xbe, 0x0f,
-	0x1f, 0x01, 0x01, 0x75, 0x1d, 0x94, 0x00, 0x64, 0x23, 0x98, 0x35, 0x55, 0x4c, 0x2a, 0xe0, 0x87,
-	0x8f, 0x40, 0x2b, 0x8a, 0xfc, 0xb0, 0x04, 0x9a, 0xc8, 0xd7, 0xd6, 0x0f, 0x1f, 0x81, 0xe6, 0x38,
-	0x1d, 0x7d, 0xfa, 0xc3, 0x47, 0xe0, 0xd5, 0xa1, 0x57, 0x7e, 0x52, 0x02, 0x97, 0x56, 0x1d, 0x4b,
-	0x33, 0x36, 0x13, 0x16, 0x26, 0xcf, 0x0f, 0x1b, 0xc4, 0x6b, 0xe5, 0x2d, 0xb9, 0x56, 0x2e, 0x99,
-	0x28, 0xda, 0x45, 0x45, 0xd7, 0x77, 0x12, 0x4a, 0x62, 0xcb, 0xc9, 0xeb, 0xb4, 0x0b, 0x04, 0xe5,
-	0xf4, 0x87, 0x8f, 0xc0, 0x89, 0xa1, 0xc1, 0x83, 0x12, 0xe8, 0x65, 0x0d, 0x4b, 0x5c, 0x23, 0x41,
-	0xfc, 0x57, 0xaf, 0x07, 0x43, 0xa4, 0x07, 0x11, 0xdf, 0xd7, 0xc7, 0x8c, 0x58, 0xf2, 0x3d, 0x5c,
-	0xf4, 0x6a, 0xf9, 0x82, 0xa5, 0xe2, 0x0d, 0xa5, 0xa8, 0x3b, 0x6c, 0xd5, 0x70, 0xee, 0xfe, 0x2c,
-	0x5d, 0xc1, 0xee, 0xfd, 0x29, 0xcb, 0x24, 0xa8, 0x2a, 0x63, 0xd2, 0xbf, 0x05, 0x07, 0xf3, 0xca,
-	0x03, 0xb9, 0xf2, 0x80, 0x60, 0x54, 0xc7, 0x60, 0x45, 0x36, 0x8f, 0xf8, 0xae, 0xd4, 0x97, 0x57,
-	0x1e, 0x48, 0xfe, 0x23, 0x81, 0x92, 0x1b, 0xc1, 0xc8, 0xd7, 0x99, 0xba, 0x61, 0xd1, 0x8a, 0xc8,
-	0xd7, 0x3b, 0x81, 0x60, 0xa3, 0xf8, 0x94, 0xc1, 0xc6, 0xf9, 0x40, 0xb8, 0x11, 0x87, 0x85, 0x1b,
-	0x4f, 0x3f, 0x4d, 0xb8, 0x71, 0x3e, 0x2c, 0xe0, 0xf8, 0x1e, 0x1c, 0xe0, 0x8c, 0x2b, 0xd9, 0x53,
-	0xaa, 0xaf, 0xad, 0x97, 0x0e, 0x6f, 0x2b, 0x2c, 0x0a, 0x5b, 0xbe, 0x76, 0x01, 0xa9, 0xaf, 0x10,
-	0x16, 0xa6, 0x35, 0x61, 0x2f, 0x0d, 0x99, 0x69, 0x2a, 0x59, 0x78, 0x6e, 0x8e, 0x85, 0x78, 0xa2,
-	0xb1, 0x30, 0x52, 0x98, 0xae, 0x8f, 0x37, 0x40, 0xa4, 0x7a, 0xa1, 0xa2, 0x16, 0xdd, 0x81, 0x1d,
-	0x96, 0xe2, 0x60, 0x59, 0xd7, 0xf2, 0x9a, 0x83, 0x2d, 0x71, 0xa8, 0x81, 0x96, 0x4e, 0xec, 0xed,
-	0x56, 0x28, 0xf9, 0x9a, 0x68, 0x27, 0xe5, 0x4b, 0xac, 0x18, 0xfd, 0x2d, 0x78, 0xda, 0x2f, 0x26,
-	0xd3, 0x3b, 0x14, 0x56, 0x79, 0x82, 0x21, 0xb6, 0xc5, 0x93, 0x0d, 0x34, 0x36, 0xb4, 0xb7, 0xdb,
-	0xa9, 0x15, 0xb8, 0x8e, 0x6c, 0x63, 0xc7, 0x6b, 0x2d, 0x22, 0x0d, 0xf9, 0x5a, 0x4b, 0x33, 0xf0,
-	0x15, 0x8e, 0x8d, 0xae, 0xc3, 0x0e, 0x0b, 0x3b, 0xe4, 0x32, 0xc8, 0x0e, 0xd3, 0x53, 0xf4, 0x91,
-	0x0d, 0x07, 0xda, 0x92, 0x88, 0x08, 0x7b, 0x54, 0xfe, 0xd8, 0xb6, 0x55, 0x2e, 0x46, 0x7f, 0xbb,
-	0x76, 0xd8, 0xf9, 0xb9, 0xa7, 0x09, 0x3b, 0x77, 0x7e, 0xb2, 0x0b, 0x48, 0x6b, 0x64, 0x3d, 0x88,
-	0x35, 0xe3, 0xcf, 0xff, 0xa0, 0x6e, 0x40, 0xf6, 0xf9, 0x06, 0x26, 0x70, 0xfc, 0x89, 0x02, 0xb2,
-	0x62, 0xed, 0x90, 0x2c, 0xba, 0x0e, 0x89, 0xf3, 0x24, 0xd3, 0xf8, 0x52, 0x0e, 0x17, 0x1c, 0xf1,
-	0x85, 0x50, 0x5e, 0x69, 0x4d, 0xb7, 0x17, 0x5c, 0x11, 0xf7, 0x4e, 0xda, 0xe1, 0xf8, 0x0a, 0xd1,
-	0x2c, 0xec, 0x31, 0x4c, 0xb9, 0x32, 0xdf, 0x43, 0x7c, 0xb1, 0x8e, 0x7d, 0x69, 0x96, 0x04, 0xc3,
-	0x0c, 0xe4, 0x57, 0x28, 0x30, 0x90, 0xca, 0x22, 0x9e, 0xa7, 0x08, 0x93, 0xf5, 0x1e, 0x47, 0x68,
-	0x26, 0x0d, 0x37, 0x01, 0xcd, 0x52, 0x00, 0x10, 0xbd, 0x08, 0x3b, 0x34, 0x55, 0xc7, 0x1e, 0x3d,
-	0x99, 0xa0, 0x96, 0x33, 0xf2, 0x45, 0x09, 0x34, 0x49, 0xed, 0xa4, 0xc6, 0xa5, 0x34, 0xc7, 0x60,
-	0xaf, 0x67, 0xac, 0x69, 0x0e, 0x11, 0x4d, 0x3d, 0x15, 0x47, 0xa8, 0x91, 0xee, 0x71, 0x8d, 0xb4,
-	0x61, 0x4b, 0xac, 0x02, 0xbd, 0x0a, 0xbb, 0x5c, 0xa3, 0xce, 0xd3, 0x12, 0x5f, 0xae, 0x33, 0xfa,
-	0x16, 0xa9, 0x93, 0x4b, 0xf3, 0x24, 0xc7, 0x0b, 0xb0, 0xdd, 0xc6, 0xd6, 0xb6, 0x1b, 0x1f, 0x4d,
-	0xd2, 0x00, 0x20, 0x74, 0x13, 0x5f, 0xfe, 0xc9, 0x37, 0xe7, 0x5b, 0x24, 0xc8, 0x04, 0x68, 0x9c,
-	0xf4, 0x2a, 0x44, 0x4a, 0xa1, 0x80, 0x0d, 0x55, 0xf6, 0x6b, 0x5d, 0x08, 0xd1, 0x12, 0x98, 0xdc,
-	0x6a, 0x59, 0xf7, 0x0a, 0xec, 0x28, 0x28, 0xb6, 0x2d, 0x3b, 0x5b, 0x96, 0x59, 0xdc, 0xdc, 0x12,
-	0xc7, 0xea, 0xf6, 0xb3, 0x9d, 0xc8, 0xae, 0x31, 0x51, 0xb4, 0x08, 0xfb, 0xf9, 0xfd, 0xbb, 0xa0,
-	0x38, 0x5b, 0xb2, 0x61, 0x5a, 0x79, 0x9a, 0x14, 0x26, 0x4e, 0xd4, 0xc1, 0x88, 0x48, 0xbd, 0x4c,
-	0x69, 0x45, 0x71, 0xb6, 0x96, 0x5d, 0x15, 0xb4, 0x54, 0xce, 0x05, 0x0d, 0x80, 0x4d, 0xd6, 0x05,
-	0xeb, 0xe3, 0x5a, 0x95, 0x68, 0x1a, 0x7c, 0x8e, 0xf7, 0xcc, 0x76, 0x2c, 0x2d, 0xe7, 0xc8, 0xb6,
-	0xa1, 0xb1, 0x37, 0x0c, 0xf8, 0x39, 0x99, 0xdb, 0xc2, 0xb9, 0x7b, 0xe2, 0x54, 0x1d, 0x02, 0x2d,
-	0x42, 0xcd, 0x78, 0x54, 0x1a, 0x66, 0x40, 0xab, 0x14, 0x67, 0xd5, 0xd0, 0xc8, 0xed, 0x80, 0x3d,
-	0xa5, 0x59, 0x82, 0x81, 0xd6, 0xc8, 0xc5, 0x57, 0xa5, 0x9c, 0xa9, 0xa2, 0x7b, 0x51, 0xcc, 0x19,
-	0x8a, 0x7c, 0xba, 0xea, 0x12, 0x44, 0x6a, 0xc9, 0xb4, 0x2f, 0x69, 0xb6, 0xe3, 0x35, 0xd1, 0x53,
-	0x06, 0xe0, 0x41, 0x4c, 0xf4, 0x3a, 0x6c, 0xcf, 0xa9, 0x86, 0x1b, 0x08, 0x16, 0x2f, 0x1e, 0x1e,
-	0x21, 0xab, 0x0c, 0xfd, 0x4a, 0x30, 0xe7, 0x7d, 0x47, 0x6f, 0xc3, 0x33, 0xee, 0xdc, 0x3a, 0x56,
-	0xd1, 0x76, 0xe4, 0xea, 0x18, 0xe7, 0x62, 0x9d, 0x49, 0x6e, 0x95, 0x5c, 0x47, 0x65, 0x8d, 0x68,
-	0xcf, 0x56, 0x86, 0x35, 0xd1, 0x7b, 0x90, 0x4f, 0x51, 0x4d, 0xf0, 0xd7, 0x1b, 0xf0, 0xb1, 0x2b,
-	0x03, 0xb1, 0xf3, 0xad, 0x12, 0x67, 0x87, 0x43, 0x9b, 0x5c, 0x81, 0xa2, 0x61, 0x1a, 0x9e, 0xdb,
-	0xa4, 0x9b, 0x8a, 0xba, 0xae, 0xe8, 0x8a, 0x91, 0xc3, 0x96, 0x78, 0xa3, 0xce, 0x48, 0x62, 0xd2,
-	0x80, 0x41, 0x8c, 0x02, 0x55, 0x5b, 0xf2, 0x69, 0xa1, 0x05, 0xd8, 0x17, 0x8a, 0xb6, 0x5c, 0x17,
-	0xad, 0x57, 0x0d, 0x81, 0xca, 0xc3, 0xa1, 0x50, 0x96, 0x8f, 0x5d, 0x9f, 0x6e, 0x3e, 0x11, 0xd5,
-	0x97, 0x69, 0xe5, 0x87, 0x87, 0xb8, 0x55, 0x43, 0x02, 0xfd, 0x3d, 0x00, 0x7b, 0x58, 0xba, 0x19,
-	0xbd, 0xcb, 0xe7, 0x4d, 0x55, 0xdb, 0xd8, 0x11, 0xbf, 0x1d, 0xca, 0x4c, 0xb0, 0x8c, 0xbb, 0x1a,
-	0xcc, 0x44, 0xd2, 0x77, 0x54, 0x84, 0xc7, 0xb9, 0x13, 0x95, 0xaf, 0x5c, 0xd0, 0x36, 0xd7, 0xcc,
-	0x1b, 0xb4, 0x45, 0x74, 0x1d, 0x0e, 0xfa, 0xd2, 0xd6, 0x2b, 0xac, 0xaa, 0x44, 0xad, 0x6a, 0x37,
-	0xb1, 0xaa, 0xfe, 0x9c, 0xf5, 0xfe, 0xb2, 0xfc, 0x82, 0xcf, 0xd4, 0xe6, 0x60, 0x7f, 0x25, 0x13,
-	0xc7, 0xdf, 0x2f, 0x12, 0xdf, 0xa2, 0x53, 0x37, 0x7e, 0x18, 0x51, 0x19, 0xe0, 0x29, 0xa5, 0xde,
-	0xad, 0x10, 0x52, 0x34, 0x09, 0xa3, 0xf4, 0x90, 0x17, 0xbf, 0x53, 0xe7, 0x01, 0xc7, 0x25, 0x26,
-	0x84, 0x36, 0x61, 0x0f, 0x8d, 0x43, 0x56, 0xf8, 0xbc, 0x6f, 0x3f, 0xad, 0xcf, 0x1b, 0x97, 0xba,
-	0x09, 0xaa, 0x3f, 0xf9, 0xeb, 0x75, 0x38, 0xa0, 0x5f, 0x62, 0xb1, 0x53, 0x85, 0x4d, 0x24, 0x5f,
-	0x61, 0xe2, 0x77, 0xeb, 0xf6, 0xb3, 0x57, 0xbf, 0x94, 0x55, 0x4d, 0x3b, 0x9d, 0x63, 0x87, 0x1e,
-	0x55, 0x41, 0xcb, 0xb0, 0x37, 0x00, 0x66, 0x98, 0x06, 0x16, 0xdf, 0x69, 0x24, 0x6a, 0x10, 0x97,
-	0x04, 0x3f, 0xe4, 0xb2, 0x69, 0x60, 0x74, 0x0e, 0x76, 0x17, 0x6d, 0x4c, 0x0e, 0x0a, 0xac, 0x38,
-	0x72, 0x1e, 0xdb, 0x5b, 0xa2, 0x4c, 0xcf, 0xbf, 0xce, 0xa2, 0x8d, 0xd7, 0x68, 0xe9, 0x0d, 0x6c,
-	0x6f, 0xa1, 0x4d, 0xd8, 0xa5, 0x7a, 0x6c, 0x8f, 0x9c, 0x33, 0x6d, 0x51, 0x69, 0xc0, 0x8b, 0x19,
-	0xd9, 0xdb, 0x0d, 0xa8, 0x55, 0xc7, 0xc5, 0x3a, 0xcb, 0x02, 0xb3, 0xa6, 0x8d, 0x26, 0x61, 0x1f,
-	0x39, 0x8c, 0xb7, 0x4d, 0xdd, 0xc1, 0x96, 0xa5, 0xc8, 0x79, 0xc5, 0x50, 0x36, 0xb1, 0x2a, 0x7e,
-	0xce, 0x38, 0x7a, 0xa4, 0x1a, 0xf6, 0x6d, 0x5e, 0x77, 0x83, 0x55, 0xa1, 0x37, 0x59, 0x0e, 0xb0,
-	0x6b, 0xa6, 0xff, 0x22, 0xd6, 0x40, 0xcf, 0xc4, 0xbd, 0x5d, 0x58, 0x56, 0xf2, 0xf3, 0xaa, 0xa4,
-	0xd8, 0xb5, 0xd8, 0xa7, 0x60, 0x9b, 0x97, 0x87, 0x2c, 0xfe, 0x84, 0xf5, 0x20, 0xee, 0x66, 0x20,
-	0xa3, 0x59, 0x18, 0x65, 0xd9, 0xd7, 0x7f, 0x19, 0xa3, 0xbc, 0x4d, 0xb2, 0x41, 0x1e, 0x8a, 0x66,
-	0x55, 0x4b, 0x4c, 0x97, 0x34, 0x41, 0xcf, 0x30, 0x7a, 0xba, 0xff, 0x94, 0x65, 0x44, 0xc5, 0x49,
-	0x09, 0x3d, 0xc8, 0xe7, 0x61, 0xdc, 0x7d, 0x7d, 0x4e, 0xfc, 0x2f, 0x6c, 0x5c, 0xf5, 0x5a, 0xf1,
-	0xde, 0xb5, 0x1b, 0xcb, 0x1a, 0xf6, 0x82, 0xb1, 0x61, 0x4a, 0x31, 0x95, 0x7d, 0x40, 0xef, 0x55,
-	0x27, 0x8d, 0xff, 0x55, 0xec, 0x48, 0x59, 0xe3, 0x62, 0x78, 0xd6, 0xb8, 0x08, 0x82, 0x79, 0xe3,
-	0xab, 0xd4, 0xd7, 0x73, 0xb3, 0xb8, 0xc9, 0x10, 0x7e, 0xce, 0xb2, 0x42, 0x92, 0x87, 0x38, 0x7b,
-	0x15, 0xe9, 0xee, 0x52, 0x87, 0xe2, 0x2b, 0x21, 0x4e, 0x9b, 0x2f, 0x19, 0x9d, 0xde, 0xad, 0xf3,
-	0xf6, 0xa6, 0xf8, 0x41, 0x9c, 0xa5, 0x9b, 0x79, 0x49, 0xe7, 0xa4, 0xe6, 0x86, 0xbd, 0x89, 0xae,
-	0xc1, 0x0e, 0xea, 0x3d, 0xbb, 0xab, 0xe3, 0xbf, 0xc5, 0x28, 0x23, 0x3a, 0x52, 0xe3, 0xbd, 0x16,
-	0xbf, 0x39, 0x6c, 0x27, 0x8a, 0xee, 0x52, 0x28, 0xc2, 0xde, 0xca, 0x77, 0x2f, 0xc9, 0xad, 0xc6,
-	0x16, 0x7f, 0xd1, 0xc8, 0x62, 0x3b, 0xb7, 0xb7, 0x8b, 0xaa, 0x95, 0x83, 0x5b, 0x21, 0x2a, 0xf5,
-	0x70, 0x21, 0x76, 0x87, 0x59, 0xc5, 0x8e, 0x8d, 0xf2, 0x70, 0xc0, 0x7f, 0x76, 0xc9, 0x8a, 0xbe,
-	0x69, 0x5a, 0x9a, 0xb3, 0x95, 0x17, 0xff, 0x7b, 0xf8, 0xa2, 0xe3, 0x6f, 0x9e, 0x8e, 0xf9, 0x8f,
-	0xaf, 0xb4, 0xab, 0xe4, 0xcb, 0x37, 0xd3, 0xc3, 0xea, 0xd1, 0xf3, 0xb0, 0xd3, 0xdb, 0x79, 0x74,
-	0xd1, 0xff, 0x0f, 0xb6, 0xe8, 0x3b, 0xdc, 0x52, 0xba, 0xf0, 0x57, 0xca, 0x8e, 0xb3, 0x2f, 0xf9,
-	0x51, 0xfc, 0x22, 0xd6, 0x88, 0x15, 0x6a, 0xf3, 0x5c, 0xeb, 0x72, 0x16, 0x1f, 0x5a, 0x87, 0xed,
-	0x7e, 0xa4, 0xff, 0x19, 0x3b, 0xfc, 0x8e, 0x56, 0x33, 0xc9, 0xd1, 0xdf, 0x14, 0x5c, 0x2f, 0xb7,
-	0x71, 0x19, 0xf6, 0x52, 0x0f, 0x91, 0x78, 0x31, 0x16, 0x2e, 0x14, 0x1d, 0x76, 0xff, 0xf8, 0x92,
-	0x8e, 0xb0, 0x3c, 0x33, 0x3d, 0x54, 0x68, 0xa1, 0x20, 0x79, 0x22, 0xe8, 0x36, 0x8c, 0x6f, 0x28,
-	0xb6, 0x23, 0x2b, 0x39, 0x5d, 0xfc, 0x5f, 0x8d, 0x3c, 0xf0, 0x53, 0x7b, 0xbb, 0x9e, 0x46, 0xb5,
-	0xc5, 0x8b, 0x91, 0xaa, 0x74, 0x4e, 0x47, 0x2b, 0xb0, 0x55, 0xbf, 0x44, 0x51, 0xff, 0x77, 0xac,
-	0xb1, 0x4b, 0x35, 0x97, 0xaf, 0xc6, 0x8c, 0xea, 0x97, 0x08, 0xa2, 0x04, 0xdb, 0x88, 0x09, 0x78,
-	0xdf, 0x34, 0xb0, 0x2d, 0xfe, 0x9f, 0x46, 0x40, 0x07, 0xf6, 0x76, 0xe3, 0xae, 0x8a, 0xdf, 0x0c,
-	0x92, 0xc2, 0x3b, 0x04, 0x86, 0xf2, 0xdb, 0xb6, 0xb5, 0xe1, 0x5e, 0xc9, 0x57, 0xc2, 0xf9, 0x6d,
-	0xdb, 0xda, 0x08, 0xf0, 0xdb, 0x5e, 0x09, 0xb2, 0xe1, 0x20, 0x69, 0x82, 0x72, 0xc5, 0x3c, 0x47,
-	0x8d, 0x87, 0xd2, 0xc5, 0x3f, 0x6c, 0x3b, 0xfc, 0xfa, 0x17, 0x9a, 0x70, 0xe6, 0x5b, 0xca, 0xaa,
-	0x61, 0x87, 0x24, 0xa4, 0x4d, 0xc3, 0x36, 0xc3, 0x74, 0x64, 0x0b, 0x2b, 0xea, 0x8e, 0xf8, 0xcb,
-	0x7a, 0xe9, 0xd5, 0x50, 0x8a, 0x1b, 0xa6, 0x23, 0x11, 0x41, 0x74, 0x01, 0x46, 0x99, 0xc6, 0xc3,
-	0x78, 0x5d, 0x0d, 0x26, 0x85, 0x24, 0x88, 0x38, 0x39, 0xec, 0x7f, 0x39, 0xe6, 0xb7, 0xe2, 0x8d,
-	0xbf, 0x39, 0x22, 0x30, 0x7d, 0xdf, 0x8b, 0x32, 0xef, 0xc2, 0x3e, 0x5b, 0x37, 0xef, 0x57, 0x65,
-	0x5b, 0xad, 0x52, 0xd0, 0xba, 0xd6, 0xba, 0x3a, 0xb9, 0x48, 0x42, 0x04, 0x2b, 0x90, 0xd2, 0x75,
-	0x1d, 0xc6, 0x95, 0x82, 0x46, 0xc3, 0xe6, 0xe2, 0x1a, 0x45, 0x7d, 0xae, 0xae, 0x45, 0x66, 0x29,
-	0x2a, 0xe5, 0x3e, 0xc7, 0x14, 0x9e, 0xb4, 0x62, 0xc0, 0x6e, 0x66, 0x57, 0xd9, 0xf0, 0xf3, 0x4a,
-	0x41, 0x7c, 0x93, 0xae, 0xb9, 0x57, 0x9f, 0x80, 0x1d, 0x2f, 0x27, 0xf5, 0xdc, 0x50, 0x0a, 0x8c,
-	0x1e, 0xf7, 0x5a, 0xea, 0x54, 0xfd, 0x95, 0x28, 0xcf, 0xdd, 0x48, 0xef, 0x0d, 0x0b, 0xd7, 0x8d,
-	0xfc, 0x3b, 0xf1, 0xc6, 0xfc, 0xc8, 0x40, 0x64, 0xb7, 0xdc, 0x10, 0x75, 0x28, 0x03, 0xb5, 0xe8,
-	0x01, 0x3c, 0xc1, 0x32, 0x38, 0xab, 0x17, 0xae, 0x2d, 0x7e, 0xc6, 0x9a, 0x4c, 0xd5, 0x6b, 0x32,
-	0x3c, 0x33, 0xb4, 0xdc, 0x2a, 0xcd, 0xe0, 0xac, 0x16, 0xb0, 0x89, 0xad, 0x2a, 0x87, 0x4f, 0x4d,
-	0x43, 0x2e, 0x14, 0xd7, 0x75, 0x2d, 0x27, 0xfe, 0x28, 0x1e, 0xb0, 0x55, 0x9e, 0xd0, 0x4d, 0x63,
-	0x85, 0x8a, 0xa0, 0x5b, 0xf0, 0x74, 0x5e, 0x79, 0x20, 0xf3, 0xf9, 0xf1, 0x22, 0x83, 0x34, 0x5b,
-	0x83, 0x12, 0xc9, 0x7f, 0x37, 0x4e, 0x3d, 0x77, 0xe4, 0xb3, 0x21, 0xc4, 0x79, 0x7f, 0xf8, 0x30,
-	0x22, 0x9d, 0xc8, 0x2b, 0x0f, 0xb2, 0x54, 0xd1, 0x65, 0xc0, 0x33, 0xa6, 0xba, 0x43, 0x79, 0xe5,
-	0x77, 0x7d, 0x09, 0x26, 0x2c, 0xc9, 0xf4, 0xdd, 0xc3, 0xd9, 0xd4, 0xb0, 0xe4, 0x19, 0xdf, 0xb3,
-	0xcd, 0xfb, 0xab, 0xd1, 0x3d, 0xd8, 0x6f, 0x63, 0xc3, 0xd6, 0x1c, 0x6d, 0x1b, 0xcb, 0xaa, 0xe2,
-	0xb8, 0x89, 0xb3, 0xe2, 0x41, 0xbc, 0x31, 0x7f, 0x2e, 0x5c, 0x5d, 0xea, 0xf5, 0x8a, 0xb3, 0x8a,
-	0xa3, 0x78, 0xaf, 0xa9, 0x9f, 0xf0, 0xf2, 0x6e, 0xf4, 0xfb, 0x8a, 0x45, 0x03, 0x59, 0x0e, 0x4f,
-	0x03, 0x5d, 0x6f, 0xe0, 0x18, 0x73, 0x93, 0x90, 0x6e, 0x30, 0xf5, 0x15, 0x4f, 0x9b, 0x9a, 0x04,
-	0xf6, 0x02, 0x37, 0x99, 0x2c, 0x77, 0x81, 0xe6, 0x42, 0xb7, 0xd9, 0xda, 0xd2, 0xea, 0xac, 0x27,
-	0xeb, 0xde, 0x6d, 0x7a, 0x72, 0xc1, 0xa2, 0xa1, 0x6f, 0xc2, 0x9e, 0xaa, 0x18, 0x92, 0x3f, 0xb3,
-	0xbd, 0xf3, 0x90, 0xcc, 0xf6, 0xa1, 0x82, 0x3f, 0x77, 0xce, 0xdd, 0x66, 0x21, 0xb9, 0xf1, 0x59,
-	0x3f, 0xc2, 0x21, 0xc6, 0xa6, 0x3a, 0x19, 0xcf, 0xd7, 0x62, 0x66, 0x1c, 0x0e, 0xba, 0x21, 0x5f,
-	0xb7, 0xda, 0x4d, 0xbf, 0xe8, 0xfb, 0x21, 0x4b, 0xf0, 0xbb, 0x75, 0x50, 0x02, 0x91, 0x2b, 0xc9,
-	0xcb, 0x17, 0x7f, 0x56, 0x02, 0x20, 0x73, 0x0e, 0x76, 0x95, 0x5f, 0x1d, 0x61, 0xaf, 0x44, 0x3e,
-	0x2e, 0x81, 0x33, 0xfb, 0x25, 0x30, 0x7c, 0x50, 0x02, 0xf1, 0xa9, 0xc9, 0x64, 0x6a, 0x3a, 0x99,
-	0xba, 0x92, 0x19, 0x85, 0xfd, 0x95, 0x84, 0x9f, 0x3f, 0xab, 0xe3, 0xc5, 0xfd, 0x12, 0x38, 0x77,
-	0x50, 0x02, 0xd1, 0xa9, 0x2b, 0xc9, 0xe9, 0x89, 0xcc, 0x38, 0xec, 0xe3, 0xe4, 0x99, 0x47, 0x11,
-	0x51, 0xd1, 0xc1, 0xc7, 0x25, 0xf0, 0xf2, 0x7e, 0x09, 0x8c, 0x1e, 0x94, 0x40, 0xfb, 0xf4, 0x54,
-	0x72, 0x7a, 0x3a, 0x39, 0x3d, 0x93, 0x9c, 0xbe, 0x48, 0xc0, 0x2b, 0x99, 0x2a, 0x3f, 0xf8, 0xc4,
-	0x7e, 0x09, 0x8c, 0xd3, 0x94, 0x91, 0xcb, 0xc9, 0xe9, 0x2b, 0x99, 0x6f, 0xc0, 0xe7, 0xea, 0x11,
-	0x51, 0xae, 0x66, 0xff, 0xe3, 0x12, 0x98, 0xda, 0x2f, 0x81, 0x14, 0x7d, 0xfd, 0x65, 0x32, 0x39,
-	0x43, 0x53, 0xb1, 0x32, 0x53, 0x70, 0xb8, 0x06, 0xb5, 0xe2, 0x6f, 0x72, 0x71, 0xbf, 0x04, 0x16,
-	0x88, 0xe2, 0xa5, 0xe9, 0xe4, 0xa5, 0x99, 0xcc, 0x39, 0xd8, 0xe3, 0x31, 0x1a, 0xeb, 0x7e, 0xb9,
-	0x1b, 0xfb, 0x25, 0xb0, 0x44, 0xe5, 0x2e, 0x25, 0x2f, 0x5d, 0xce, 0x8c, 0xc3, 0x93, 0xec, 0x8a,
-	0x48, 0x3c, 0x65, 0x5f, 0xa2, 0x2d, 0xbb, 0x32, 0x22, 0x61, 0xbf, 0x04, 0xee, 0x90, 0x49, 0xbd,
-	0x32, 0x95, 0xbc, 0x32, 0x99, 0xbc, 0x92, 0xca, 0x4c, 0x42, 0xe4, 0x7f, 0x8d, 0x85, 0x23, 0x9f,
-	0x7c, 0x5c, 0x02, 0x5f, 0xc4, 0xf6, 0x4b, 0xe0, 0xaf, 0x63, 0x07, 0x25, 0xd0, 0x36, 0x39, 0x31,
-	0x79, 0x31, 0x39, 0x39, 0x31, 0x79, 0x89, 0x0e, 0x60, 0x02, 0xf6, 0xbb, 0x7e, 0x03, 0xbb, 0x4f,
-	0xf8, 0x27, 0xf7, 0x97, 0x44, 0xeb, 0x6f, 0xb8, 0x56, 0x6a, 0x2a, 0x39, 0x39, 0x91, 0x9a, 0xf6,
-	0x92, 0xaa, 0x6e, 0x09, 0xb7, 0x17, 0x23, 0xf1, 0x61, 0xe1, 0xcc, 0x62, 0x24, 0x7e, 0x4e, 0x78,
-	0x71, 0x31, 0x12, 0x1f, 0x15, 0x5e, 0x5e, 0x8c, 0xc4, 0xc7, 0x85, 0x89, 0xc5, 0x48, 0x3c, 0x25,
-	0x4c, 0x2d, 0x46, 0xe2, 0xd3, 0xc2, 0xcc, 0x62, 0x24, 0xbe, 0x20, 0x2c, 0x2e, 0x46, 0xe2, 0x4b,
-	0xc2, 0x8d, 0xc5, 0x48, 0xfc, 0x8e, 0xf0, 0x9d, 0xc5, 0xd6, 0xf8, 0x5f, 0xc7, 0x84, 0x2f, 0x62,
-	0x8b, 0xad, 0xf1, 0xbf, 0x89, 0x09, 0xbf, 0x8c, 0x2d, 0x46, 0xe2, 0x6f, 0x08, 0x6f, 0x8e, 0xfc,
-	0xe7, 0x66, 0x88, 0xb2, 0xcb, 0xab, 0xb7, 0xdd, 0xbb, 0x15, 0xff, 0x31, 0x90, 0x8c, 0x7b, 0x3d,
-	0x03, 0x47, 0xbf, 0x9d, 0x7d, 0x03, 0x0e, 0xe1, 0x07, 0x9a, 0xed, 0x50, 0xbb, 0x57, 0x5e, 0xca,
-	0xfc, 0x02, 0x15, 0xa5, 0x1b, 0x47, 0x74, 0x25, 0x7c, 0x5b, 0x81, 0x5d, 0x80, 0x36, 0xe0, 0xa0,
-	0x85, 0x0d, 0x7c, 0x3f, 0x44, 0xb5, 0xf5, 0x28, 0x57, 0x2f, 0xa9, 0x9f, 0xc2, 0x55, 0xb5, 0xf3,
-	0x32, 0xec, 0x61, 0x37, 0x21, 0x15, 0x33, 0x66, 0xc2, 0x4d, 0xe6, 0x6c, 0x93, 0x04, 0x5a, 0x91,
-	0x2d, 0x97, 0xa3, 0x97, 0xa0, 0x60, 0x17, 0x37, 0x37, 0xb1, 0xed, 0x60, 0x95, 0x2f, 0x08, 0xfe,
-	0x6e, 0x6d, 0xb7, 0x57, 0xce, 0x08, 0x02, 0x9e, 0x06, 0xf9, 0x2f, 0xce, 0xc1, 0xae, 0x59, 0x0b,
-	0x93, 0xd6, 0xdc, 0xec, 0x27, 0x31, 0x90, 0xfd, 0x54, 0x4e, 0x6c, 0x7a, 0xed, 0x89, 0x12, 0x9b,
-	0xe2, 0x6e, 0x62, 0x93, 0x97, 0xcd, 0xf4, 0xd5, 0xa7, 0x1c, 0xbd, 0xfb, 0x0c, 0x53, 0x8e, 0xc2,
-	0x93, 0x8b, 0xd6, 0x9f, 0x65, 0x72, 0x51, 0x8d, 0x34, 0xa2, 0x2b, 0x87, 0xa6, 0x11, 0xd5, 0x4c,
-	0x18, 0x7a, 0xe5, 0xf0, 0x84, 0xa1, 0xdf, 0xe0, 0xd4, 0xa0, 0xec, 0xd1, 0x32, 0x7b, 0x02, 0x39,
-	0x3d, 0x57, 0x9f, 0x2c, 0xa7, 0xa7, 0x22, 0x9b, 0x67, 0xe1, 0x28, 0xd9, 0x3c, 0x99, 0x0e, 0xfa,
-	0xc2, 0xc2, 0x07, 0x20, 0x32, 0xd4, 0x1c, 0x89, 0xba, 0xb9, 0x3d, 0x47, 0xc8, 0xd1, 0xd9, 0x7c,
-	0xf6, 0x39, 0x3a, 0x47, 0xce, 0xce, 0xb9, 0xf3, 0x8c, 0xb2, 0x73, 0xc2, 0xf2, 0x72, 0x94, 0x23,
-	0xa4, 0xe5, 0x54, 0x5a, 0xb1, 0xea, 0xb4, 0x9c, 0x67, 0x9b, 0xcc, 0x31, 0x73, 0x48, 0x32, 0xc7,
-	0xb3, 0xcf, 0xe0, 0x78, 0xf3, 0x99, 0x65, 0x70, 0x04, 0x73, 0x37, 0xe4, 0x67, 0x98, 0xbb, 0x11,
-	0x9a, 0xb5, 0x81, 0x8f, 0x9e, 0x42, 0x31, 0x10, 0x9e, 0x42, 0x11, 0x9a, 0x38, 0xf1, 0xde, 0xb3,
-	0x48, 0x6e, 0x10, 0x82, 0xc9, 0x0d, 0x5f, 0x4f, 0x4a, 0xc3, 0xd9, 0xb0, 0xb8, 0xf6, 0xd3, 0x45,
-	0xb4, 0xf3, 0x5f, 0x4d, 0x96, 0x44, 0xad, 0xb4, 0x88, 0x67, 0x92, 0x41, 0xf0, 0x9d, 0x67, 0x96,
-	0x41, 0x10, 0x92, 0x3b, 0xf0, 0x94, 0x21, 0xfe, 0xb3, 0x21, 0x21, 0xfe, 0x40, 0x58, 0x7f, 0xac,
-	0x76, 0x58, 0xff, 0xff, 0x9f, 0x50, 0x7e, 0xee, 0xa9, 0x43, 0xf9, 0x0d, 0x04, 0xf1, 0x97, 0x8f,
-	0x1c, 0xc4, 0x0f, 0x0f, 0xdf, 0x1f, 0x35, 0x40, 0xdd, 0xfa, 0x4c, 0x03, 0xd4, 0xad, 0xe1, 0x01,
-	0x6a, 0xfc, 0x0c, 0x03, 0xd4, 0x75, 0x02, 0xd3, 0x57, 0x9f, 0x8c, 0x0b, 0xae, 0x60, 0x81, 0xdf,
-	0x78, 0x36, 0x31, 0xed, 0xea, 0x28, 0xf5, 0xc5, 0x43, 0xa2, 0xd4, 0xbf, 0xd2, 0xa0, 0xf4, 0xdd,
-	0xaf, 0x80, 0xfb, 0xae, 0x45, 0x79, 0x7f, 0xf5, 0xcc, 0xf1, 0x6b, 0x47, 0x62, 0x8e, 0xcb, 0x84,
-	0x31, 0x3e, 0x12, 0x61, 0x1c, 0xf0, 0xdb, 0xaa, 0x99, 0xac, 0x20, 0x4f, 0x6c, 0x7e, 0x35, 0xc4,
-	0x6d, 0x6d, 0xbe, 0x36, 0xdd, 0x18, 0xeb, 0x5a, 0x8f, 0x61, 0x7d, 0xe3, 0x59, 0x31, 0xac, 0xbf,
-	0x52, 0x62, 0xf5, 0x98, 0xfd, 0x24, 0x2d, 0x5e, 0x55, 0xff, 0xf4, 0xb5, 0xc0, 0x1b, 0x63, 0x3f,
-	0x7f, 0x6d, 0x65, 0x72, 0x26, 0x99, 0x4a, 0x4e, 0x25, 0x67, 0x92, 0x97, 0x67, 0x92, 0x93, 0x97,
-	0x93, 0x93, 0x57, 0x92, 0x53, 0x97, 0x93, 0x17, 0x93, 0x93, 0x97, 0x92, 0x97, 0x92, 0x97, 0x93,
-	0x93, 0xa9, 0xe4, 0xe4, 0x54, 0x32, 0x35, 0x91, 0x4c, 0x5d, 0x4e, 0xa6, 0x26, 0x93, 0xa9, 0x54,
-	0x72, 0x6a, 0x2a, 0x99, 0x9a, 0x4a, 0x4e, 0x4d, 0x24, 0xa7, 0x66, 0x92, 0xa9, 0x4b, 0xc9, 0xd4,
-	0x4c, 0x72, 0x2a, 0x95, 0x9c, 0x9a, 0x4e, 0x5e, 0xba, 0x98, 0xbc, 0x74, 0x25, 0x79, 0x39, 0x95,
-	0xb9, 0x58, 0x9b, 0x63, 0x3d, 0xf9, 0xc1, 0x97, 0xa0, 0x56, 0x65, 0xe6, 0xf9, 0x2a, 0xaa, 0x15,
-	0x7d, 0xf0, 0x25, 0x08, 0x94, 0x65, 0x52, 0xb5, 0x88, 0xd6, 0x13, 0x1f, 0x7c, 0x09, 0xc2, 0xab,
-	0x32, 0x13, 0x35, 0x08, 0x57, 0xf1, 0x83, 0x2f, 0x41, 0x68, 0x0d, 0x69, 0x25, 0x9c, 0x71, 0xa5,
-	0xad, 0x84, 0x56, 0x65, 0x96, 0x1b, 0x63, 0x5e, 0x5f, 0xfc, 0xe0, 0x4b, 0xd0, 0x88, 0x60, 0x66,
-	0x34, 0x8c, 0x56, 0xed, 0xff, 0xe0, 0x4b, 0x50, 0x5d, 0xbc, 0x18, 0x89, 0x0f, 0x09, 0x27, 0x03,
-	0x34, 0x25, 0x23, 0x28, 0xdf, 0x10, 0xde, 0x1c, 0xf9, 0x57, 0xe7, 0x60, 0xb7, 0x84, 0x0b, 0xba,
-	0x92, 0x3b, 0x26, 0xcb, 0x8e, 0xc9, 0xb2, 0x63, 0xb2, 0xec, 0x98, 0x2c, 0xfb, 0xb5, 0x20, 0xcb,
-	0xd6, 0xc3, 0xc9, 0xb2, 0xba, 0x4e, 0x57, 0xc0, 0x8c, 0x1d, 0xb3, 0x65, 0xc7, 0x6c, 0xd9, 0x6f,
-	0x12, 0x5b, 0xf6, 0x95, 0xbd, 0x05, 0x72, 0xcc, 0x99, 0x1d, 0x73, 0x66, 0xc7, 0x9c, 0xd9, 0x31,
-	0x67, 0x76, 0xcc, 0x99, 0x1d, 0x73, 0x66, 0x5f, 0x0b, 0x67, 0xb6, 0x51, 0x8b, 0x33, 0x7b, 0xed,
-	0x49, 0xdc, 0xb7, 0x63, 0xd2, 0xec, 0x98, 0x34, 0x3b, 0x26, 0xcd, 0x8e, 0x49, 0xb3, 0x5f, 0x43,
-	0xd2, 0xec, 0x8b, 0x51, 0xd8, 0x7e, 0x1d, 0x3b, 0xc7, 0x84, 0xd9, 0x31, 0x61, 0xf6, 0xff, 0xfc,
-	0x0f, 0x4f, 0xfd, 0xea, 0x19, 0xb7, 0xa7, 0xfa, 0xb1, 0xa9, 0x63, 0x8e, 0xad, 0x26, 0xc7, 0xf6,
-	0x4e, 0x38, 0xc7, 0x76, 0xa5, 0xee, 0x9b, 0x30, 0x65, 0xab, 0x77, 0xcc, 0xaf, 0x1d, 0xf3, 0x6b,
-	0x5f, 0x03, 0xbf, 0x96, 0x3e, 0x0a, 0xbf, 0xf6, 0xc4, 0x79, 0x68, 0xc7, 0x1c, 0xd9, 0x31, 0x47,
-	0x76, 0xcc, 0x91, 0x1d, 0x73, 0x64, 0x0d, 0x73, 0x64, 0xbf, 0x76, 0x3c, 0xd7, 0x6f, 0xd4, 0x6f,
-	0x3b, 0x7c, 0x9d, 0x3f, 0xb4, 0xf0, 0x5b, 0xb5, 0x7e, 0x68, 0xe1, 0x49, 0xe3, 0x28, 0xcf, 0xf4,
-	0xd7, 0x90, 0x9e, 0x86, 0x63, 0xfd, 0x3a, 0xd9, 0xc6, 0xc6, 0x5f, 0x4a, 0x8f, 0x3d, 0xf1, 0x4b,
-	0xe9, 0x31, 0xf7, 0xa5, 0xf4, 0x5f, 0x7f, 0x4a, 0x73, 0xbd, 0x16, 0xa5, 0x79, 0xb5, 0x51, 0x6f,
-	0xf9, 0x70, 0x3a, 0xf3, 0x6b, 0x61, 0xaa, 0x8f, 0x39, 0xd3, 0x63, 0xce, 0xf4, 0x57, 0xca, 0x99,
-	0x6e, 0x86, 0x70, 0xa6, 0xab, 0x93, 0x13, 0xc9, 0x63, 0xda, 0xf4, 0x37, 0x9f, 0x36, 0x25, 0xfd,
-	0x0d, 0x7f, 0xc5, 0x9a, 0xf6, 0x37, 0xb4, 0xaa, 0x26, 0xd5, 0xda, 0x1a, 0xff, 0xab, 0x98, 0xf0,
-	0x5f, 0x03, 0xaf, 0x4e, 0x8f, 0xfe, 0x02, 0xc0, 0xb6, 0xf2, 0xdf, 0x68, 0xef, 0x83, 0x70, 0x7e,
-	0x6d, 0x6d, 0x45, 0x5e, 0x91, 0x6e, 0xbe, 0xf9, 0x96, 0xd0, 0xc4, 0x7e, 0xe1, 0x18, 0xf5, 0xc2,
-	0xb6, 0xb5, 0x59, 0xb7, 0x10, 0xf0, 0xc2, 0x53, 0x10, 0x79, 0x85, 0xf2, 0x1b, 0x0b, 0x6b, 0xf3,
-	0xf2, 0xea, 0xf2, 0x82, 0xd0, 0xcc, 0x6b, 0x07, 0x61, 0xe7, 0xda, 0xd2, 0xaa, 0x5c, 0x56, 0xe3,
-	0xbf, 0x96, 0x8c, 0x12, 0x70, 0xa0, 0xa2, 0xa2, 0xac, 0x1a, 0xe3, 0x12, 0xfd, 0xb0, 0x9d, 0xf4,
-	0x61, 0x95, 0x2b, 0xb6, 0xf0, 0xe2, 0x4e, 0xd8, 0x76, 0x2b, 0xeb, 0xa2, 0x45, 0xc8, 0xd7, 0xd5,
-	0x1b, 0x69, 0xfe, 0x35, 0x4a, 0xbe, 0x66, 0x97, 0x5d, 0x95, 0x38, 0xea, 0x82, 0xf0, 0xce, 0xda,
-	0xb2, 0x5b, 0xdd, 0x86, 0xba, 0x61, 0xfb, 0x2d, 0x5f, 0x01, 0x1c, 0xfd, 0x93, 0x66, 0x28, 0x04,
-	0x9d, 0x36, 0x34, 0x00, 0xd1, 0xed, 0x05, 0x69, 0xed, 0x56, 0x7a, 0x49, 0x9e, 0xbf, 0xb9, 0xba,
-	0x26, 0x4b, 0x73, 0xe9, 0xec, 0x5b, 0x42, 0x13, 0x7a, 0x01, 0x9e, 0xad, 0x28, 0x5f, 0x99, 0x5b,
-	0xce, 0x2e, 0x2c, 0x5f, 0x97, 0x6f, 0xcf, 0x49, 0x0b, 0xd7, 0x16, 0x66, 0xd3, 0x6b, 0x0b, 0x37,
-	0x97, 0x05, 0x80, 0x9e, 0x87, 0x89, 0x0a, 0x31, 0x7f, 0xb5, 0x7c, 0x2d, 0xbd, 0xb0, 0x34, 0x97,
-	0x15, 0x9a, 0xd1, 0x8b, 0xf0, 0xb9, 0x50, 0x30, 0xd2, 0xfd, 0xec, 0xdc, 0xd2, 0xdc, 0x75, 0x06,
-	0xd7, 0x82, 0xce, 0xc2, 0xd3, 0xa1, 0x82, 0x69, 0x59, 0x9a, 0x9b, 0xbd, 0x29, 0x65, 0x85, 0x08,
-	0x7a, 0x0e, 0x9e, 0xa9, 0x10, 0x21, 0x18, 0x6e, 0xb5, 0x9c, 0xce, 0x66, 0xe7, 0xb2, 0x42, 0x14,
-	0x8d, 0xc1, 0xd1, 0x0a, 0xa1, 0x85, 0xe5, 0xb5, 0x39, 0x69, 0x79, 0x6e, 0x4d, 0x5e, 0x5e, 0xca,
-	0x78, 0xa0, 0xb3, 0xd2, 0x1c, 0x6b, 0xb7, 0x15, 0x5d, 0x80, 0x2f, 0xd5, 0x96, 0x77, 0xe5, 0xdc,
-	0xf1, 0xc4, 0x46, 0xff, 0xbc, 0x05, 0xa2, 0xea, 0x17, 0xd5, 0x51, 0x5f, 0xf9, 0xcf, 0x56, 0x67,
-	0x99, 0xe7, 0xa7, 0x0a, 0x4d, 0xe8, 0x04, 0xec, 0xcf, 0xba, 0x3f, 0xae, 0x76, 0x1b, 0x5b, 0x9e,
-	0x8e, 0x40, 0x16, 0x59, 0x77, 0xba, 0xfc, 0xe3, 0x61, 0x96, 0x83, 0x55, 0xa1, 0x19, 0x9d, 0x86,
-	0x27, 0x56, 0x2c, 0xfe, 0x37, 0x00, 0x3d, 0x72, 0x66, 0x05, 0x1b, 0xaa, 0x66, 0x6c, 0x0a, 0x1d,
-	0x68, 0x08, 0x0e, 0x04, 0xea, 0x5c, 0xd5, 0xce, 0x90, 0x3a, 0x57, 0xaf, 0x05, 0x9d, 0x84, 0x83,
-	0x81, 0x3a, 0xd6, 0x19, 0xac, 0x0a, 0x11, 0x7f, 0xcf, 0xaf, 0x69, 0x06, 0x35, 0x05, 0x42, 0x94,
-	0xac, 0x0d, 0x9f, 0x05, 0x5e, 0x30, 0xe8, 0xdf, 0xbd, 0x11, 0x5a, 0x89, 0xb4, 0xaf, 0x9c, 0xfe,
-	0xa9, 0x1b, 0x21, 0x46, 0xc6, 0xe9, 0x62, 0x2c, 0x9b, 0x0e, 0xff, 0x2b, 0x7a, 0xeb, 0x3a, 0x16,
-	0xe2, 0x68, 0x10, 0xf6, 0xba, 0x55, 0x92, 0xc7, 0xd2, 0xa8, 0x42, 0x1b, 0xe9, 0x94, 0x5b, 0x71,
-	0x1d, 0x1b, 0x98, 0x9f, 0xb0, 0xd8, 0xb1, 0x76, 0x04, 0x88, 0x7a, 0x60, 0x67, 0xda, 0xef, 0x6f,
-	0x0b, 0xed, 0xa4, 0x47, 0xd5, 0xbf, 0xc1, 0x26, 0x74, 0xa1, 0x61, 0x38, 0xe4, 0x96, 0xa7, 0x73,
-	0x39, 0xb3, 0x68, 0x54, 0xb4, 0xd3, 0x4d, 0xe6, 0xd4, 0x7b, 0x32, 0xec, 0x6f, 0x2d, 0xfa, 0xaa,
-	0x85, 0xc0, 0x40, 0xe9, 0x2f, 0x12, 0x61, 0x55, 0xe8, 0x19, 0x1d, 0x87, 0x5d, 0x95, 0x7f, 0x74,
-	0x13, 0x75, 0xc0, 0x78, 0x7a, 0x65, 0x41, 0xbe, 0x71, 0x33, 0x3b, 0x27, 0x34, 0x91, 0x2d, 0xb6,
-	0xb0, 0xbc, 0xb4, 0xb0, 0x3c, 0xc7, 0x0a, 0xc0, 0xe8, 0x7f, 0x02, 0xb0, 0x3b, 0x40, 0x81, 0x93,
-	0x87, 0xec, 0xae, 0xad, 0xd5, 0x39, 0xe9, 0xf6, 0xc2, 0x2c, 0xd1, 0x1c, 0x80, 0x88, 0x1a, 0x9d,
-	0xa5, 0x9b, 0xe9, 0xac, 0x9c, 0x49, 0x2f, 0xa5, 0x97, 0x67, 0xe7, 0x24, 0x01, 0x10, 0x44, 0x82,
-	0x7f, 0x3d, 0xbd, 0x36, 0xf7, 0x46, 0xfa, 0x2d, 0xa1, 0x19, 0xf5, 0xc3, 0x1e, 0x62, 0x37, 0x2a,
-	0xe5, 0x5a, 0x50, 0x1b, 0x8c, 0xba, 0x56, 0xe1, 0x0c, 0xec, 0x5f, 0xba, 0x39, 0x9b, 0x5e, 0x92,
-	0x5f, 0xbf, 0xbc, 0x2a, 0xfb, 0x95, 0xa3, 0x9e, 0x71, 0xe9, 0x99, 0xcd, 0x2e, 0x07, 0x20, 0x5a,
-	0x91, 0x00, 0x3b, 0x96, 0xaf, 0x2f, 0x2c, 0xbf, 0x49, 0x7b, 0x35, 0x27, 0x09, 0x31, 0x34, 0x0c,
-	0xfb, 0x32, 0x0b, 0xd7, 0x17, 0x56, 0x64, 0x7f, 0x7f, 0xe7, 0x24, 0x21, 0xce, 0x80, 0x32, 0xbf,
-	0x03, 0xf6, 0x7f, 0x34, 0xdc, 0xf4, 0xc9, 0x8f, 0x86, 0x9b, 0x7e, 0xf6, 0xa3, 0x61, 0xf0, 0xf0,
-	0x60, 0x18, 0xfc, 0xf3, 0x83, 0x61, 0xf0, 0xc3, 0x83, 0x61, 0xb0, 0x7f, 0x30, 0x0c, 0x3e, 0x39,
-	0x18, 0x06, 0x9f, 0x1d, 0x0c, 0x83, 0xcf, 0x0f, 0x86, 0x9b, 0x7e, 0x76, 0x30, 0x0c, 0xbe, 0xf7,
-	0xe3, 0xe1, 0xa6, 0xc7, 0x3f, 0x1e, 0x06, 0xfb, 0x3f, 0x1e, 0x6e, 0xfa, 0xe4, 0xc7, 0xc3, 0x4d,
-	0x77, 0x56, 0x36, 0xcd, 0xc2, 0xbd, 0xcd, 0x31, 0xf7, 0x47, 0xd5, 0xc6, 0x8a, 0xf6, 0x38, 0xfd,
-	0x40, 0x2e, 0xc5, 0x17, 0x0a, 0x96, 0xb9, 0xad, 0xa9, 0xd8, 0xba, 0xe0, 0x56, 0x8f, 0x17, 0xd6,
-	0x37, 0xcd, 0x71, 0xfc, 0xc0, 0x61, 0xee, 0xc1, 0x38, 0xff, 0xcf, 0xef, 0x25, 0xac, 0xb7, 0x52,
-	0x37, 0x77, 0xea, 0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0x3a, 0x1f, 0x59, 0x48, 0x84, 0x89, 0x00,
-	0x00,
+	// 9817 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7d, 0x6b, 0x6c, 0x24, 0x47,
+	0x7e, 0xdf, 0x36, 0x67, 0x86, 0x33, 0xfc, 0xf3, 0xd5, 0x2c, 0xbe, 0x86, 0xdc, 0x5d, 0xee, 0x2c,
+	0xf5, 0x5a, 0x51, 0xb3, 0x7c, 0x0c, 0xb9, 0x2f, 0xe9, 0xa4, 0x13, 0x87, 0x43, 0x2d, 0x49, 0x71,
+	0x49, 0x5e, 0x93, 0xbb, 0x92, 0x56, 0x3a, 0xb5, 0x9a, 0xd3, 0x45, 0xb2, 0xb5, 0x3d, 0xdd, 0xa3,
+	0xee, 0x9e, 0xdd, 0xa5, 0x1c, 0x06, 0x6b, 0x39, 0x86, 0xcf, 0x42, 0x70, 0xbe, 0x28, 0x1f, 0x02,
+	0x08, 0xfe, 0x90, 0xd8, 0x08, 0x12, 0xec, 0x7d, 0xf1, 0x87, 0x04, 0x08, 0x3c, 0x7b, 0xc0, 0xe2,
+	0x00, 0xc3, 0x87, 0xfb, 0x90, 0xac, 0x01, 0x03, 0x11, 0x84, 0x7c, 0xd0, 0xf1, 0x62, 0xe3, 0x2c,
+	0x9f, 0x9d, 0xc3, 0xe5, 0x12, 0x2b, 0x4a, 0xe2, 0x0b, 0xea, 0xd1, 0x3d, 0xdd, 0x3d, 0x0f, 0xce,
+	0x3e, 0xa4, 0xb3, 0x2e, 0xfc, 0x22, 0x71, 0xaa, 0xfe, 0x8f, 0xaa, 0x7f, 0x57, 0xfd, 0xeb, 0x5f,
+	0xff, 0xfa, 0x55, 0x2d, 0x3c, 0x79, 0x1d, 0xdb, 0xe3, 0x9a, 0x39, 0x61, 0xe7, 0x77, 0x70, 0x41,
+	0x99, 0xb8, 0xae, 0x59, 0x4e, 0x49, 0xd1, 0xe5, 0x1d, 0xd3, 0x76, 0x26, 0x9c, 0xdd, 0x22, 0xb6,
+	0xc7, 0x8b, 0x96, 0xe9, 0x98, 0x68, 0x98, 0xd1, 0x8d, 0x33, 0xba, 0x71, 0x3f, 0xdd, 0xf0, 0xe9,
+	0x6d, 0xcd, 0xd9, 0x29, 0x6d, 0x8e, 0xe7, 0xcd, 0xc2, 0xc4, 0xb6, 0xb9, 0x6d, 0x4e, 0x50, 0x96,
+	0xcd, 0xd2, 0x16, 0xfd, 0x45, 0x7f, 0xd0, 0xbf, 0x98, 0xa8, 0xe1, 0x63, 0xdb, 0xa6, 0xb9, 0xad,
+	0xe3, 0x0a, 0x95, 0xed, 0x58, 0xa5, 0xbc, 0xc3, 0x6b, 0x4f, 0x84, 0x6b, 0x1d, 0xad, 0x80, 0x6d,
+	0x47, 0x29, 0x14, 0x39, 0xc1, 0xa9, 0x60, 0x8b, 0x95, 0x92, 0xb3, 0x83, 0x0d, 0x47, 0xcb, 0x2b,
+	0x8e, 0x66, 0x1a, 0xfe, 0x36, 0x0f, 0x8f, 0x04, 0x29, 0xf3, 0xd8, 0x72, 0x64, 0x7f, 0xfd, 0xc9,
+	0x50, 0xbd, 0x5e, 0xb2, 0x1d, 0x6c, 0x05, 0x44, 0x0c, 0x06, 0x49, 0x0c, 0xec, 0x36, 0xf3, 0x68,
+	0xb0, 0xc2, 0x2c, 0x12, 0xed, 0x76, 0xed, 0x26, 0xda, 0xd8, 0xba, 0xae, 0xe5, 0xb1, 0x5c, 0x34,
+	0x75, 0x2d, 0xbf, 0x1b, 0x90, 0x3f, 0x14, 0xa4, 0xf4, 0x57, 0x1d, 0x0b, 0x7d, 0x19, 0x45, 0xd7,
+	0x54, 0xc5, 0xc1, 0xbc, 0x36, 0x15, 0xfe, 0x6e, 0xf8, 0x86, 0x1c, 0x6c, 0xc4, 0x89, 0x6a, 0x0a,
+	0x3b, 0xa0, 0x60, 0xb2, 0xfe, 0xa7, 0x97, 0x55, 0xc3, 0x96, 0x35, 0x63, 0xcb, 0x9c, 0x30, 0x37,
+	0xdf, 0xc6, 0xee, 0xb7, 0x19, 0x9d, 0x85, 0xce, 0x2b, 0x8c, 0x6a, 0xc1, 0xb4, 0x9d, 0xc5, 0x1c,
+	0x3a, 0x06, 0x6d, 0x86, 0x52, 0xc0, 0x76, 0x51, 0xc9, 0xe3, 0xa4, 0x90, 0x12, 0x4e, 0xb5, 0x49,
+	0x95, 0x02, 0x84, 0x20, 0x4a, 0x7e, 0x24, 0x5b, 0x68, 0x05, 0xfd, 0x7b, 0xf4, 0x27, 0x31, 0xe8,
+	0xbc, 0x82, 0xad, 0x75, 0x47, 0x71, 0x4a, 0xf6, 0xc6, 0x6e, 0x11, 0xa3, 0x7f, 0x2e, 0xc0, 0x60,
+	0xde, 0x54, 0x74, 0x6c, 0xe7, 0xb1, 0x2a, 0xfb, 0x5b, 0x61, 0x27, 0x85, 0x54, 0xe4, 0x54, 0x7b,
+	0xe6, 0xe9, 0xf1, 0xfa, 0x83, 0x6f, 0x3c, 0xd0, 0xa0, 0xec, 0xe4, 0x47, 0x7b, 0xc2, 0x4f, 0xca,
+	0x82, 0xf0, 0xc7, 0x7f, 0x75, 0x37, 0x02, 0x1f, 0x08, 0xf1, 0xd1, 0x98, 0x15, 0x39, 0x75, 0xab,
+	0x85, 0xfc, 0x6c, 0xfb, 0x40, 0x68, 0x1d, 0x8d, 0x5a, 0x2d, 0x29, 0x5a, 0x19, 0xfb, 0x40, 0x68,
+	0x49, 0x0a, 0x49, 0x41, 0xea, 0xf7, 0x74, 0xfb, 0x24, 0xd9, 0xe8, 0x43, 0x01, 0x8e, 0x1a, 0xa6,
+	0x21, 0xd7, 0x6b, 0x59, 0xcb, 0x17, 0xdf, 0xb2, 0xa4, 0x61, 0x1a, 0x73, 0x35, 0x1b, 0x77, 0x09,
+	0x44, 0x45, 0xbd, 0x8e, 0x2d, 0x47, 0xb3, 0xdd, 0x51, 0x95, 0x8c, 0xa4, 0x84, 0x53, 0xed, 0x99,
+	0xd1, 0xaa, 0x06, 0xe1, 0x1b, 0xf6, 0xf8, 0x2a, 0xfd, 0x88, 0x12, 0xde, 0x22, 0x06, 0x97, 0xba,
+	0x3d, 0xde, 0x35, 0xca, 0x8a, 0x5e, 0x03, 0xd1, 0xd7, 0x4d, 0xd6, 0xbf, 0x28, 0xed, 0x5f, 0x13,
+	0xe2, 0xb2, 0x50, 0x69, 0xb4, 0xd4, 0x5d, 0x31, 0x26, 0x15, 0x83, 0xde, 0x82, 0xbe, 0x90, 0x15,
+	0x99, 0xf8, 0xd8, 0x03, 0x89, 0x47, 0x01, 0x8b, 0x50, 0x49, 0xcf, 0xfe, 0x0b, 0xe1, 0x87, 0x65,
+	0xe1, 0x03, 0x01, 0x9e, 0x04, 0x71, 0xd6, 0xed, 0x57, 0x8a, 0x75, 0x6c, 0x18, 0x55, 0xdb, 0x09,
+	0x26, 0x60, 0xd0, 0x13, 0x91, 0xe2, 0x56, 0x4d, 0x51, 0xb3, 0x66, 0xfb, 0xaa, 0xed, 0x20, 0xc6,
+	0xe0, 0x1c, 0x1c, 0x5d, 0x31, 0x8d, 0xd3, 0xf9, 0x3a, 0x4c, 0xc9, 0xda, 0x3d, 0x14, 0x63, 0xa3,
+	0x7f, 0x28, 0x40, 0xdf, 0x92, 0x72, 0x5d, 0x59, 0xcf, 0x5b, 0x5a, 0xd1, 0x99, 0x33, 0x8d, 0x2d,
+	0x6d, 0x9b, 0x8e, 0xf8, 0x93, 0xd0, 0x91, 0x57, 0xf2, 0x3b, 0x58, 0x2e, 0x5a, 0x78, 0x4b, 0xbb,
+	0xc9, 0x27, 0x4e, 0x3b, 0x2d, 0x5b, 0xa3, 0x45, 0xe8, 0x6b, 0xd0, 0x69, 0x53, 0x36, 0x39, 0x4f,
+	0xf9, 0xe8, 0x1c, 0x6a, 0xcf, 0x0c, 0x8e, 0x33, 0xef, 0x38, 0xee, 0x7a, 0xc7, 0xf1, 0x75, 0xea,
+	0x3b, 0xa5, 0x0e, 0xdb, 0xa7, 0x04, 0x8d, 0x41, 0x4f, 0xbe, 0x64, 0x3b, 0x66, 0x41, 0xe6, 0x42,
+	0x4a, 0x96, 0x4e, 0x07, 0x48, 0x9b, 0xd4, 0xcd, 0x2a, 0x58, 0x9b, 0x2e, 0x5b, 0xfa, 0xe8, 0x5f,
+	0xb4, 0xc0, 0x60, 0x6e, 0xd7, 0x50, 0x0a, 0x5a, 0x5e, 0xc2, 0xd7, 0xb1, 0x65, 0xe3, 0x35, 0xcb,
+	0xbc, 0xb9, 0x4b, 0x1b, 0xfa, 0x22, 0x1c, 0xb3, 0xb0, 0x6d, 0xea, 0xd7, 0xb1, 0x8c, 0x0d, 0xb5,
+	0x68, 0x6a, 0x86, 0x23, 0xab, 0x8c, 0x56, 0xd1, 0xf5, 0x5d, 0xda, 0xf0, 0x84, 0x34, 0xcc, 0x69,
+	0xe6, 0x39, 0x49, 0xae, 0x42, 0x81, 0x5e, 0x83, 0x41, 0x5a, 0x5b, 0x22, 0x9e, 0x49, 0x36, 0xb0,
+	0x73, 0xc3, 0xb4, 0xae, 0x51, 0x27, 0x4c, 0x7b, 0xd4, 0x95, 0x39, 0x19, 0x1a, 0x02, 0xdc, 0xb8,
+	0x2b, 0x8c, 0x92, 0x8e, 0xd7, 0xfe, 0x8a, 0x04, 0x5f, 0x31, 0x92, 0x01, 0x55, 0x8b, 0x4e, 0x46,
+	0xe8, 0xc0, 0x3a, 0x16, 0x92, 0x1a, 0x1c, 0x52, 0xe8, 0xf6, 0x5e, 0xb7, 0x3b, 0x53, 0x39, 0x9f,
+	0xd4, 0x53, 0xa5, 0x04, 0xbd, 0x04, 0x28, 0x6f, 0x1a, 0x06, 0xce, 0x53, 0x05, 0x64, 0x19, 0x32,
+	0x4b, 0x4e, 0x32, 0x96, 0x12, 0x4e, 0x75, 0x66, 0x07, 0x3f, 0x2e, 0x0b, 0xd1, 0xcc, 0xe4, 0xe4,
+	0xe4, 0xb7, 0xee, 0x08, 0x47, 0xc8, 0x08, 0x6d, 0x1d, 0x8b, 0x26, 0xef, 0xfe, 0xa7, 0xc7, 0xa5,
+	0x9e, 0x0a, 0xcb, 0x06, 0xe3, 0x58, 0x8a, 0x26, 0xa2, 0x62, 0x6c, 0xf4, 0x9f, 0xb5, 0x40, 0xf7,
+	0x9c, 0x59, 0x28, 0x5a, 0xd8, 0xb6, 0x49, 0x25, 0xe9, 0xc2, 0x24, 0x74, 0xe5, 0x4d, 0xc3, 0xc1,
+	0x86, 0x23, 0xeb, 0xd8, 0xd8, 0x76, 0x76, 0xa8, 0x45, 0x3b, 0xb3, 0x6d, 0x44, 0x62, 0x74, 0xac,
+	0xe5, 0xd4, 0x88, 0xd4, 0xc9, 0x09, 0x96, 0x69, 0x3d, 0xda, 0x80, 0x0e, 0x97, 0x83, 0x1b, 0x31,
+	0x72, 0xaa, 0x2d, 0x3b, 0xd5, 0x94, 0x53, 0x11, 0x33, 0xbe, 0xa9, 0xd4, 0xce, 0xc5, 0xd0, 0x76,
+	0x4c, 0xc3, 0x80, 0xaa, 0xd9, 0xca, 0xa6, 0x8e, 0x65, 0xd3, 0x90, 0xb1, 0xa3, 0x6c, 0xcb, 0x3b,
+	0x58, 0x51, 0xb1, 0x45, 0x07, 0x4d, 0x42, 0xea, 0xe5, 0xb5, 0xab, 0xc6, 0xbc, 0xa3, 0x6c, 0x2f,
+	0xd0, 0x2a, 0x34, 0x0b, 0xc7, 0x2d, 0x5c, 0x30, 0xaf, 0x63, 0x59, 0xc9, 0xe7, 0x71, 0xd1, 0x91,
+	0xb1, 0x91, 0x37, 0x55, 0xcd, 0xf0, 0x78, 0xa3, 0xee, 0xe8, 0x20, 0x44, 0xb3, 0x94, 0x66, 0x9e,
+	0x93, 0x30, 0x11, 0xa3, 0xff, 0xaa, 0x05, 0x06, 0xc9, 0x0c, 0xe1, 0x83, 0x77, 0x47, 0xd1, 0x89,
+	0x19, 0x30, 0x6d, 0xd3, 0x4b, 0xd0, 0xfd, 0xb6, 0xed, 0x8e, 0x5f, 0x15, 0xeb, 0xca, 0x2e, 0x1d,
+	0x31, 0x9d, 0xd9, 0x11, 0x62, 0xfa, 0x33, 0x93, 0x93, 0x93, 0x9f, 0x95, 0x85, 0x23, 0xae, 0xf9,
+	0xdb, 0xc6, 0xe2, 0xc9, 0x4f, 0xfe, 0x3c, 0x72, 0xea, 0x27, 0x71, 0xa9, 0xf3, 0x6d, 0x9b, 0x8d,
+	0xee, 0x1c, 0x61, 0x42, 0x59, 0xe8, 0xcc, 0x9b, 0xe6, 0x35, 0x0d, 0xcb, 0xf8, 0x66, 0x51, 0xb3,
+	0x98, 0xa3, 0xec, 0xcc, 0x1e, 0x27, 0x52, 0xa6, 0xcf, 0x7a, 0x52, 0xa8, 0x95, 0x12, 0x63, 0xad,
+	0xc9, 0x5b, 0x7f, 0x18, 0x3b, 0x25, 0x48, 0x1d, 0x8c, 0x67, 0x9e, 0xb2, 0xa0, 0x1c, 0xb4, 0xf3,
+	0xf9, 0x54, 0x54, 0xb6, 0x31, 0xed, 0x58, 0x5b, 0xf6, 0xb1, 0xcf, 0xca, 0x42, 0xf4, 0x0f, 0xee,
+	0x08, 0x9d, 0x8a, 0x9d, 0xd7, 0xb4, 0x74, 0x6a, 0x53, 0xb1, 0xf1, 0xd9, 0x19, 0xda, 0x18, 0x2b,
+	0x9e, 0xbc, 0x75, 0x2b, 0xfa, 0x1d, 0x41, 0x90, 0x80, 0xf1, 0xad, 0x29, 0xdb, 0xf8, 0xd9, 0xf1,
+	0xef, 0x97, 0x85, 0x31, 0x38, 0x05, 0x27, 0x2a, 0x5d, 0x4e, 0x79, 0x7d, 0x4e, 0xad, 0x29, 0x96,
+	0x52, 0xc0, 0x0e, 0xb6, 0x6c, 0x14, 0xcb, 0xa4, 0xa7, 0xd3, 0x33, 0x4b, 0xd1, 0x84, 0x20, 0xb6,
+	0x8c, 0xfe, 0x99, 0x00, 0x7d, 0x73, 0x4a, 0xd1, 0xc9, 0xef, 0x28, 0x41, 0x03, 0x55, 0x75, 0xac,
+	0xe5, 0xa1, 0x3b, 0x16, 0x79, 0xb0, 0x8e, 0x3d, 0xfd, 0xfd, 0xb2, 0xf0, 0x04, 0x3c, 0x06, 0xc7,
+	0x78, 0x3b, 0x6b, 0xf7, 0x2a, 0x92, 0x49, 0x4f, 0xf3, 0x3e, 0x7d, 0x47, 0x80, 0xa1, 0x0d, 0x5c,
+	0x28, 0x9a, 0x96, 0x62, 0xed, 0x5e, 0xb6, 0xb1, 0x95, 0xd5, 0xcd, 0xfc, 0x35, 0xcd, 0x60, 0xee,
+	0x31, 0xd4, 0x28, 0xe1, 0xc1, 0x1a, 0x75, 0xfa, 0xfb, 0x65, 0xe1, 0x69, 0x78, 0x0a, 0x46, 0x3d,
+	0x45, 0x29, 0xa2, 0x29, 0xe5, 0xaa, 0xf2, 0x37, 0x4d, 0x98, 0x1a, 0x5d, 0x84, 0xb6, 0xdc, 0xca,
+	0xba, 0x84, 0xf3, 0xa6, 0xa5, 0x7a, 0x81, 0x8b, 0x50, 0x09, 0x5c, 0x48, 0x99, 0xe7, 0xb6, 0xda,
+	0x24, 0xfa, 0x37, 0xea, 0x83, 0xd8, 0x75, 0x45, 0x2f, 0x71, 0xc3, 0x49, 0xec, 0xc7, 0xe8, 0xbf,
+	0x8f, 0x80, 0x38, 0x5b, 0x72, 0xcc, 0x39, 0x6c, 0x39, 0x8b, 0xc6, 0x96, 0x49, 0x3b, 0x65, 0x40,
+	0xb7, 0x52, 0x72, 0x4c, 0x99, 0x06, 0xa1, 0xb6, 0xa3, 0x38, 0x4c, 0x7a, 0x57, 0x66, 0xbc, 0x51,
+	0x08, 0x41, 0x44, 0x68, 0x5b, 0x3c, 0xb6, 0x25, 0x31, 0x13, 0xce, 0x0e, 0x7c, 0x5c, 0x16, 0x50,
+	0x45, 0xbc, 0xe6, 0x68, 0x8a, 0xae, 0xbd, 0x8b, 0xa5, 0x4e, 0x85, 0x97, 0x51, 0x32, 0x94, 0x03,
+	0xb1, 0xa2, 0xcf, 0x37, 0x40, 0xda, 0x33, 0xc3, 0x55, 0x6b, 0xc8, 0x86, 0x1b, 0x61, 0x4b, 0x5d,
+	0xae, 0x10, 0x3e, 0x3e, 0xc6, 0xa0, 0xc7, 0xd7, 0xea, 0x12, 0xf5, 0xa2, 0xee, 0x42, 0xe2, 0xe9,
+	0x63, 0xc5, 0xe8, 0x94, 0x5f, 0xa3, 0x66, 0xdb, 0x25, 0xee, 0x02, 0xda, 0x2a, 0x52, 0x17, 0x69,
+	0x29, 0x7a, 0x09, 0xda, 0x49, 0x7c, 0x69, 0x51, 0x63, 0xbb, 0xb1, 0xc0, 0x13, 0x8d, 0xec, 0xe0,
+	0x7d, 0x1a, 0x09, 0x54, 0xc3, 0x66, 0x7f, 0xd2, 0x30, 0x88, 0x5a, 0x92, 0xd8, 0x93, 0x84, 0xf6,
+	0x5a, 0x01, 0x27, 0x5b, 0x0f, 0xea, 0x63, 0x36, 0xce, 0x03, 0x31, 0xa9, 0x8b, 0x32, 0xaf, 0x13,
+	0x5e, 0x52, 0x3b, 0xfa, 0xdd, 0x28, 0xf4, 0xcf, 0x06, 0x76, 0x13, 0x39, 0xec, 0x28, 0x9a, 0x6e,
+	0xa3, 0xab, 0xd0, 0x4e, 0xb6, 0x19, 0xee, 0x5a, 0x2c, 0x34, 0xb1, 0xc6, 0x1c, 0xbd, 0xbd, 0xd7,
+	0x15, 0xdc, 0x9a, 0x78, 0x6e, 0x58, 0x90, 0x80, 0xd4, 0xf0, 0xb5, 0xfa, 0x65, 0x18, 0x28, 0xd9,
+	0x58, 0xa6, 0xf2, 0x59, 0xb0, 0xed, 0xaa, 0x61, 0x11, 0x5d, 0x5f, 0x48, 0xcd, 0x7c, 0xa1, 0xe8,
+	0xec, 0x2e, 0x1c, 0x91, 0x7a, 0x4b, 0x36, 0x26, 0xad, 0x65, 0x6a, 0xb9, 0xb0, 0x6f, 0x78, 0x3e,
+	0xa1, 0x48, 0x46, 0xb7, 0x4d, 0x3f, 0x40, 0x7b, 0x66, 0x2c, 0x24, 0x23, 0xd8, 0xb0, 0xf1, 0x39,
+	0xca, 0x42, 0xe7, 0x83, 0xbd, 0x70, 0xc4, 0x75, 0x11, 0xec, 0x37, 0x7a, 0x09, 0x3a, 0x2c, 0xac,
+	0x6a, 0x16, 0x69, 0x18, 0x09, 0x23, 0x5a, 0xe9, 0x74, 0x3c, 0xf9, 0x59, 0x59, 0xa0, 0xcb, 0x4c,
+	0xcc, 0x8a, 0x24, 0x6f, 0x51, 0x1f, 0x13, 0xb5, 0x5a, 0x44, 0x81, 0x17, 0x7d, 0x47, 0x10, 0x16,
+	0x04, 0xa9, 0xdd, 0x65, 0xbc, 0x6c, 0xe9, 0x68, 0x16, 0x44, 0x4f, 0x0e, 0x8f, 0x21, 0x92, 0xf1,
+	0x06, 0x3d, 0x14, 0xa4, 0x6e, 0x97, 0x9e, 0x07, 0x14, 0xdc, 0x81, 0xf6, 0x43, 0x57, 0xf0, 0x2b,
+	0xa1, 0xc8, 0x54, 0x3a, 0x03, 0x3d, 0xd0, 0x21, 0x71, 0xfa, 0xd4, 0x65, 0x69, 0x19, 0x09, 0x67,
+	0xb2, 0x4f, 0x41, 0x5f, 0xc0, 0x1a, 0x72, 0x7e, 0xc7, 0xd4, 0xf2, 0x18, 0x75, 0xdf, 0x2d, 0x0b,
+	0x91, 0x7b, 0x65, 0xa1, 0x65, 0xbf, 0x2c, 0x44, 0xa6, 0xd3, 0x33, 0xd9, 0x27, 0xa1, 0xd7, 0xdf,
+	0x47, 0x3f, 0x5d, 0xeb, 0xbd, 0xb2, 0x10, 0x23, 0x74, 0x67, 0xd3, 0xe7, 0x96, 0xa2, 0x89, 0x16,
+	0x31, 0xb2, 0x14, 0x4d, 0xc4, 0xc4, 0xd6, 0xd1, 0x5f, 0xc4, 0xa0, 0x8f, 0x85, 0x99, 0x59, 0xc5,
+	0xc6, 0xaa, 0xe7, 0xf2, 0xd0, 0x1b, 0xd0, 0xf1, 0x36, 0x51, 0xc5, 0x7f, 0xd3, 0x69, 0xde, 0x9e,
+	0x99, 0x6e, 0x34, 0xbc, 0xeb, 0xac, 0x81, 0xd9, 0xe8, 0x3d, 0x32, 0x4e, 0xdb, 0xdf, 0xb6, 0x2b,
+	0xd2, 0xf3, 0xd0, 0x93, 0x67, 0x5e, 0xd6, 0xa7, 0x82, 0x4d, 0xec, 0xc9, 0x86, 0x9e, 0xa4, 0xc6,
+	0x12, 0xc2, 0xe5, 0x8b, 0xf9, 0x50, 0x1d, 0xb2, 0x61, 0xd0, 0x71, 0xbd, 0xa6, 0x5c, 0xb2, 0xb1,
+	0x25, 0x6f, 0x72, 0xaf, 0xc9, 0x07, 0xe5, 0x99, 0x46, 0xaa, 0xea, 0x7a, 0x76, 0xae, 0xaf, 0xdf,
+	0xa9, 0x45, 0x80, 0x2e, 0x40, 0x87, 0x61, 0xfa, 0x3a, 0x15, 0x6b, 0x38, 0xfc, 0xdb, 0x0d, 0xb3,
+	0xd2, 0xde, 0x75, 0x18, 0x56, 0xf4, 0x1b, 0xca, 0xae, 0x2d, 0x63, 0x83, 0x46, 0x31, 0x81, 0x0f,
+	0xd0, 0xda, 0x50, 0xd0, 0x20, 0xe3, 0x9c, 0xa7, 0x8c, 0x4b, 0x3e, 0x4b, 0x7f, 0x13, 0x4e, 0x04,
+	0x85, 0x56, 0xdb, 0x3d, 0xde, 0x50, 0xf2, 0x31, 0xbf, 0xe4, 0xb0, 0xfd, 0xd1, 0xef, 0x08, 0x30,
+	0x54, 0x50, 0x74, 0x2d, 0xaf, 0x99, 0x25, 0x9b, 0x19, 0xb9, 0xa0, 0x39, 0xda, 0x36, 0x1d, 0xd2,
+	0xc9, 0x44, 0x13, 0x2e, 0xe6, 0xf4, 0xed, 0xbd, 0xfa, 0x12, 0x7c, 0xbb, 0x4d, 0xee, 0x74, 0x06,
+	0x3d, 0x5a, 0x62, 0xf6, 0x4b, 0x1e, 0x65, 0xf6, 0x09, 0x10, 0xbd, 0x2e, 0xb9, 0x43, 0xbf, 0xe7,
+	0x6e, 0x59, 0x88, 0xdd, 0x2b, 0x0b, 0xd1, 0xfd, 0xb2, 0x10, 0x3b, 0x93, 0x66, 0x83, 0x9f, 0x84,
+	0xb1, 0xdf, 0x8e, 0xc1, 0xd0, 0xfa, 0x8e, 0x52, 0xc4, 0x59, 0xd3, 0xc9, 0xe1, 0x2d, 0x6c, 0xd8,
+	0xd8, 0xb7, 0xb3, 0x99, 0x84, 0x2e, 0xa5, 0x58, 0xd4, 0xf9, 0xc4, 0x94, 0x35, 0x95, 0xaf, 0xde,
+	0x6d, 0xdc, 0x41, 0x24, 0x53, 0x52, 0xa7, 0x8f, 0x60, 0x51, 0x45, 0xcf, 0x41, 0x87, 0x52, 0xd4,
+	0x98, 0xfb, 0xbb, 0x86, 0xdd, 0x35, 0x6a, 0x28, 0xd4, 0xf1, 0x75, 0x9c, 0xb7, 0x30, 0x8d, 0x55,
+	0x25, 0x50, 0x8a, 0x1a, 0x99, 0xff, 0x2f, 0xe3, 0x5d, 0x74, 0x15, 0x12, 0x9a, 0x61, 0x3b, 0x8a,
+	0x91, 0xc7, 0x4d, 0x05, 0xfe, 0xa9, 0xdb, 0x7b, 0xc3, 0x36, 0x69, 0xbc, 0xbc, 0x69, 0x92, 0xa0,
+	0x92, 0x36, 0x5f, 0x76, 0x45, 0x7c, 0xb4, 0x27, 0x48, 0x9e, 0x3c, 0x74, 0x1e, 0xe2, 0x6e, 0xc8,
+	0x1f, 0x65, 0x71, 0xe7, 0xdd, 0xb2, 0x20, 0x7c, 0x4c, 0x3c, 0x46, 0x30, 0xf4, 0x24, 0x91, 0xff,
+	0x27, 0x7f, 0x1e, 0x91, 0x5c, 0x72, 0xf4, 0x07, 0x02, 0x74, 0xb9, 0xf3, 0x85, 0x86, 0x30, 0xee,
+	0x12, 0xb7, 0xd0, 0x68, 0xd6, 0xd4, 0x35, 0xea, 0xb8, 0x3b, 0x43, 0x48, 0x58, 0x63, 0xcf, 0x1b,
+	0x8e, 0xb5, 0x9b, 0x9d, 0xf2, 0x7d, 0xde, 0xf6, 0x0f, 0x85, 0xc4, 0x68, 0xab, 0x15, 0x15, 0x53,
+	0xc9, 0x14, 0x6d, 0xcf, 0x87, 0x42, 0x44, 0x64, 0x2e, 0x19, 0x3e, 0x14, 0xe2, 0x63, 0xd4, 0x43,
+	0xa7, 0xa4, 0xce, 0x4d, 0xbf, 0x18, 0x94, 0x26, 0xbb, 0x27, 0xdd, 0x54, 0x54, 0x1e, 0xad, 0xcb,
+	0x34, 0xe0, 0xa1, 0xce, 0x5d, 0x12, 0x59, 0x0d, 0x0b, 0xd2, 0x57, 0x48, 0xf0, 0x33, 0x08, 0xf1,
+	0xb7, 0x6d, 0xb9, 0xa8, 0x38, 0x3b, 0x74, 0xcc, 0xb7, 0x49, 0xad, 0x6f, 0xdb, 0x6b, 0x8a, 0xb3,
+	0x83, 0x5e, 0x80, 0x68, 0xc1, 0x54, 0x71, 0x32, 0x41, 0x63, 0x99, 0xb1, 0x46, 0x1d, 0xac, 0xf4,
+	0xed, 0x92, 0xa9, 0x62, 0x89, 0xf2, 0x0d, 0xbf, 0x08, 0xa8, 0xba, 0x7b, 0x48, 0x84, 0x08, 0x19,
+	0x0b, 0x2c, 0xfc, 0x22, 0x7f, 0x56, 0x22, 0xad, 0x16, 0x5f, 0xa4, 0xf5, 0x6c, 0xcb, 0x79, 0x61,
+	0xf4, 0xf7, 0x04, 0xe8, 0x5c, 0x67, 0x09, 0xb6, 0x9c, 0x59, 0x50, 0x34, 0x03, 0x0d, 0x40, 0xab,
+	0x4a, 0xff, 0xe2, 0x02, 0xf8, 0x2f, 0xf4, 0x04, 0x74, 0xb9, 0x99, 0x38, 0x5e, 0xcf, 0x84, 0x75,
+	0xda, 0x01, 0xf6, 0xaf, 0xc3, 0xa0, 0x66, 0x38, 0xd8, 0x32, 0x14, 0x5d, 0x0e, 0xd1, 0xb3, 0xf8,
+	0xd8, 0x0b, 0x20, 0xfa, 0x5d, 0xba, 0x80, 0xfe, 0xd1, 0xdf, 0x89, 0x43, 0xd7, 0x9c, 0x6a, 0xf0,
+	0x42, 0x3a, 0x2f, 0xe6, 0xa0, 0x47, 0x35, 0x6f, 0x18, 0xd4, 0xde, 0x2a, 0xd6, 0xb5, 0xeb, 0xd8,
+	0x0b, 0xc7, 0xea, 0x79, 0x0f, 0xd1, 0x65, 0xc8, 0x71, 0x7a, 0xf4, 0x3c, 0x74, 0x91, 0xbf, 0x64,
+	0xdb, 0xb1, 0xb0, 0x52, 0xa8, 0x38, 0xe3, 0x7a, 0x12, 0x3a, 0x09, 0xf5, 0xba, 0x4b, 0x8c, 0x2e,
+	0x42, 0x1b, 0xcb, 0x3a, 0x38, 0x8e, 0xce, 0x87, 0xf4, 0xd8, 0xfe, 0xde, 0xc9, 0xf5, 0x1d, 0xb3,
+	0xa4, 0xab, 0x29, 0xc3, 0x74, 0x52, 0x9b, 0x38, 0x55, 0xb2, 0xb1, 0x9a, 0xda, 0xdc, 0x4d, 0xcd,
+	0xae, 0x2d, 0xa6, 0xf2, 0xba, 0x86, 0x0d, 0xc7, 0x26, 0x5d, 0x4d, 0x0a, 0x52, 0x82, 0x32, 0x6f,
+	0x38, 0x3a, 0xfa, 0xc7, 0xd0, 0x1d, 0xb4, 0x8b, 0x3b, 0xbe, 0x1b, 0x66, 0xc3, 0x02, 0x36, 0xba,
+	0x2f, 0xcd, 0x5d, 0x81, 0xef, 0x63, 0xa3, 0x37, 0xa1, 0x3b, 0xaf, 0x1a, 0xb2, 0x69, 0x69, 0xdb,
+	0x9a, 0x21, 0x17, 0x4d, 0x53, 0xe7, 0x2e, 0xfe, 0x74, 0xc3, 0x05, 0x50, 0x35, 0x56, 0x29, 0xc7,
+	0x9a, 0x69, 0xea, 0xd4, 0x1b, 0x78, 0xdf, 0xb1, 0x33, 0xef, 0xaf, 0x43, 0x9b, 0xd0, 0x45, 0xe4,
+	0x33, 0x63, 0x59, 0x25, 0x9d, 0xf8, 0xf9, 0x66, 0xb3, 0x55, 0xc9, 0xdb, 0x7b, 0x21, 0x66, 0x57,
+	0x49, 0x47, 0x5e, 0x35, 0xe6, 0x48, 0xa9, 0x54, 0xd2, 0x31, 0x7a, 0x0d, 0xba, 0x4c, 0x67, 0x07,
+	0x5b, 0xb2, 0x8d, 0x1d, 0x47, 0x33, 0xb6, 0x6d, 0x3a, 0x83, 0x0e, 0x30, 0xe1, 0x2a, 0xe1, 0x58,
+	0xe7, 0x0c, 0xbe, 0xe6, 0x9b, 0xfe, 0x72, 0xa4, 0x41, 0x9f, 0x8a, 0xb7, 0x94, 0x92, 0xee, 0xf0,
+	0x56, 0x28, 0x34, 0x1b, 0x91, 0x6c, 0xa3, 0x0a, 0x1a, 0x6e, 0x37, 0x72, 0x8c, 0x8f, 0x36, 0x73,
+	0x96, 0x72, 0x55, 0xb4, 0x20, 0xb5, 0xaa, 0x12, 0xe9, 0xd0, 0x1f, 0xcc, 0x6d, 0xf3, 0x14, 0x74,
+	0x12, 0xa8, 0x3b, 0x98, 0x68, 0x62, 0x3c, 0xb0, 0x10, 0x6a, 0xb5, 0x18, 0x54, 0xd6, 0x6b, 0xd7,
+	0xa8, 0x1d, 0xab, 0x64, 0x4b, 0xf8, 0x2a, 0x95, 0xbc, 0x5b, 0x16, 0x5a, 0x48, 0x4c, 0x41, 0x02,
+	0xb4, 0x4c, 0x7a, 0xfa, 0xfd, 0xcf, 0x85, 0x98, 0x8a, 0x0b, 0xe6, 0x14, 0xdf, 0x67, 0x7e, 0xab,
+	0x05, 0x3a, 0x03, 0x46, 0x43, 0xe3, 0xd0, 0xa1, 0xa8, 0xaa, 0xac, 0x9b, 0x6c, 0x01, 0x62, 0x19,
+	0xac, 0x6c, 0x3b, 0xd7, 0x4b, 0xdc, 0xba, 0xd4, 0xae, 0xa8, 0xea, 0x32, 0xaf, 0x47, 0x2a, 0x74,
+	0xeb, 0xe6, 0xf6, 0x36, 0xf1, 0xe4, 0x3c, 0xbb, 0xce, 0xa7, 0x6d, 0x43, 0x3b, 0x2e, 0x33, 0x16,
+	0xd6, 0x6e, 0x9a, 0xe5, 0xa6, 0x2a, 0x48, 0x4b, 0xd9, 0xce, 0x43, 0x0f, 0x10, 0x20, 0x05, 0xba,
+	0xb8, 0x17, 0x76, 0x95, 0x44, 0x0e, 0x1e, 0xd0, 0xcc, 0x3d, 0xcf, 0x99, 0x86, 0x63, 0xf1, 0x01,
+	0x1d, 0xd0, 0xd1, 0xc9, 0x24, 0x72, 0x15, 0xa3, 0x7f, 0x29, 0x00, 0xaa, 0x6e, 0x16, 0xda, 0x06,
+	0xc4, 0x26, 0x9b, 0xac, 0x9b, 0x95, 0x2e, 0xb2, 0xb8, 0x26, 0x7d, 0x40, 0x17, 0x17, 0xfc, 0x0a,
+	0x82, 0xca, 0x45, 0x26, 0x74, 0xd9, 0xf4, 0xba, 0xb8, 0x0d, 0x88, 0x4f, 0x58, 0xbf, 0xa2, 0xc4,
+	0x43, 0x2b, 0x62, 0x42, 0x2b, 0x8a, 0x46, 0xd7, 0x40, 0x0c, 0xb3, 0xa0, 0xaf, 0x41, 0x3b, 0xb7,
+	0xaf, 0xae, 0xd9, 0x0e, 0xdd, 0xbf, 0xb5, 0x65, 0x8f, 0x86, 0x43, 0xa4, 0x17, 0x7d, 0xe9, 0x31,
+	0x60, 0xf4, 0xcb, 0x9a, 0xed, 0x90, 0x7d, 0x61, 0x4f, 0x95, 0xb1, 0xd1, 0x6f, 0x0a, 0x30, 0x60,
+	0xe1, 0x77, 0x4a, 0xd8, 0x76, 0xf8, 0x12, 0x6a, 0xcb, 0x8e, 0x29, 0x2b, 0xaa, 0xca, 0xf7, 0x87,
+	0xcf, 0x84, 0x7a, 0xc5, 0x44, 0x5c, 0x52, 0x0c, 0xad, 0x58, 0xd2, 0xe9, 0xe8, 0x62, 0xcd, 0xa3,
+	0x9f, 0xee, 0x84, 0xaf, 0x53, 0x5e, 0x83, 0x52, 0xbe, 0x06, 0xf5, 0x72, 0x5d, 0x4c, 0x8a, 0xbd,
+	0x61, 0xce, 0xaa, 0x2a, 0xfa, 0xa7, 0x02, 0x0c, 0xd5, 0x68, 0x03, 0xcb, 0xb8, 0xf1, 0xdc, 0xe0,
+	0x37, 0x42, 0x92, 0x3b, 0x3e, 0x10, 0xda, 0x46, 0xe3, 0x16, 0x89, 0xae, 0x59, 0xa2, 0xf0, 0xd8,
+	0x07, 0xc2, 0xd0, 0xe8, 0xa0, 0xd5, 0x9f, 0xe9, 0x7d, 0xf3, 0xf5, 0xc9, 0xd3, 0x17, 0x66, 0x4f,
+	0x5f, 0x55, 0x4e, 0xbf, 0x2b, 0xbf, 0x71, 0xfa, 0x8d, 0xf1, 0x6f, 0x3e, 0xf3, 0x78, 0xcd, 0xb6,
+	0x0c, 0x84, 0xdb, 0x22, 0x51, 0x85, 0xe8, 0xb7, 0x04, 0x9a, 0xed, 0x2d, 0x9a, 0x24, 0xaa, 0x0a,
+	0xd9, 0x24, 0xf2, 0x05, 0xd8, 0xa4, 0xcf, 0x55, 0x16, 0x30, 0xca, 0x1e, 0x0c, 0xd7, 0x6a, 0x04,
+	0x37, 0x4a, 0x94, 0x1a, 0xe5, 0xc5, 0x90, 0xe8, 0xfb, 0xb7, 0xc1, 0x60, 0x95, 0x6e, 0x66, 0x84,
+	0xd1, 0xcf, 0x04, 0x40, 0xd5, 0x7e, 0x14, 0x7d, 0x9d, 0xec, 0xdb, 0xf8, 0xea, 0x2b, 0x73, 0x57,
+	0xca, 0xe3, 0x89, 0x1e, 0xff, 0x40, 0xb4, 0x22, 0x3f, 0x6b, 0x11, 0x16, 0x8e, 0x48, 0xdd, 0xee,
+	0x72, 0xcb, 0x65, 0xa1, 0x59, 0x40, 0x15, 0x01, 0xe6, 0x75, 0x6c, 0x59, 0x9a, 0xea, 0xa6, 0x22,
+	0x6b, 0x4a, 0x10, 0x5d, 0x09, 0xab, 0x9c, 0x98, 0x04, 0x10, 0x4c, 0x04, 0x4f, 0xe7, 0xaa, 0x07,
+	0xec, 0xb1, 0x3a, 0x29, 0x75, 0x8e, 0x13, 0x67, 0x87, 0xa0, 0xd3, 0xbf, 0xa0, 0xd8, 0x28, 0xc1,
+	0xf7, 0xd1, 0x02, 0x77, 0xb7, 0xdf, 0x8b, 0x41, 0x4f, 0xd5, 0x32, 0x8b, 0x64, 0x68, 0x2f, 0x96,
+	0x36, 0x75, 0x2d, 0x2f, 0x7b, 0x39, 0xb5, 0x03, 0x36, 0x90, 0x73, 0xb9, 0x15, 0x26, 0x83, 0xac,
+	0x11, 0xd8, 0x5a, 0xa3, 0xdc, 0x24, 0x0e, 0xad, 0x2c, 0x10, 0x50, 0xf4, 0x0a, 0x51, 0x06, 0x5a,
+	0x0d, 0x53, 0x76, 0x74, 0xbb, 0x51, 0x3c, 0x94, 0x8d, 0x7c, 0xb4, 0x47, 0xac, 0x12, 0x33, 0xcc,
+	0x0d, 0xdd, 0x46, 0x1b, 0x10, 0x2f, 0xd9, 0x98, 0x32, 0xb1, 0x14, 0xc9, 0xcc, 0x01, 0x0d, 0xba,
+	0x5c, 0x64, 0x61, 0xd7, 0x86, 0x6e, 0x57, 0x12, 0x87, 0xae, 0xd0, 0xd6, 0x92, 0x8d, 0x89, 0xd4,
+	0x3d, 0xe8, 0xe2, 0x4e, 0xce, 0xa6, 0x2d, 0x77, 0x03, 0xa3, 0x89, 0xfb, 0xe8, 0x2d, 0x1d, 0xfa,
+	0x4f, 0x84, 0x7d, 0x93, 0x37, 0xf4, 0x12, 0xbe, 0x33, 0x42, 0xa9, 0xd3, 0xf4, 0x31, 0xda, 0xe8,
+	0x79, 0x18, 0xd8, 0x32, 0x75, 0xdd, 0xbc, 0xe1, 0xc6, 0x46, 0x6e, 0x52, 0x83, 0xc6, 0x47, 0x89,
+	0x8a, 0xf5, 0xfa, 0x18, 0x19, 0x53, 0xeb, 0x66, 0x4d, 0xd0, 0x0e, 0x0c, 0x78, 0x7c, 0xcc, 0xa7,
+	0xb8, 0x1b, 0x20, 0x1a, 0xf3, 0x67, 0x33, 0x1f, 0xed, 0xd1, 0xfd, 0xcf, 0xd9, 0x49, 0xdb, 0x6d,
+	0x5b, 0xc2, 0x6a, 0xfd, 0x34, 0x12, 0x99, 0x9a, 0x2c, 0xf0, 0x1f, 0xfb, 0xe4, 0x87, 0x5d, 0x19,
+	0x86, 0x52, 0x9f, 0xc9, 0x75, 0x50, 0x81, 0xfc, 0x44, 0x04, 0x15, 0xa1, 0xb7, 0x60, 0x5a, 0xd8,
+	0x6d, 0x66, 0x70, 0x35, 0x38, 0xd7, 0x30, 0x04, 0xa2, 0x1c, 0xb3, 0xea, 0x75, 0xb2, 0x47, 0x53,
+	0xd9, 0x26, 0xa9, 0x64, 0x29, 0xc1, 0xe8, 0xa1, 0x87, 0x08, 0x67, 0x94, 0xee, 0xa2, 0x71, 0x1c,
+	0xc0, 0xd1, 0x03, 0x09, 0xa0, 0xa8, 0x2f, 0x01, 0xc4, 0x12, 0x3b, 0xa3, 0x6b, 0x30, 0x54, 0x77,
+	0xe8, 0xa1, 0x67, 0x20, 0xa1, 0x1a, 0x76, 0x65, 0x0c, 0xb7, 0x65, 0x45, 0xdf, 0x47, 0x8a, 0x5a,
+	0x2d, 0x3b, 0x82, 0x14, 0x57, 0x0d, 0x9b, 0x10, 0x3f, 0xdb, 0xfa, 0xf3, 0x17, 0x22, 0x53, 0xe9,
+	0xcc, 0xe8, 0x30, 0x24, 0xeb, 0x8d, 0x9d, 0xd1, 0x7f, 0x2d, 0xc0, 0xd1, 0x06, 0xdd, 0x41, 0x0b,
+	0x30, 0xec, 0x1e, 0xca, 0x6c, 0xee, 0x3a, 0x58, 0xb6, 0x14, 0xb2, 0x3f, 0xe7, 0x9f, 0xc6, 0x17,
+	0xb8, 0xdc, 0x75, 0xd7, 0xc2, 0x41, 0x4e, 0x9e, 0xdd, 0x75, 0xb0, 0x44, 0x88, 0xb9, 0xd5, 0xd1,
+	0x0c, 0x74, 0xdf, 0xc0, 0x9b, 0xb6, 0x99, 0xbf, 0x86, 0x1d, 0xb9, 0x68, 0x99, 0x37, 0xd9, 0xde,
+	0x23, 0xc4, 0xde, 0xe5, 0xd1, 0xd0, 0x03, 0x40, 0xaf, 0x0f, 0xff, 0x2e, 0x02, 0xbd, 0x35, 0xc6,
+	0x28, 0x7a, 0x05, 0xda, 0xf8, 0xbc, 0xd6, 0x8a, 0x3c, 0x28, 0x9a, 0xbe, 0xef, 0x59, 0xbd, 0xb8,
+	0xe6, 0xce, 0xa1, 0x04, 0x13, 0xb6, 0x58, 0x44, 0xdf, 0x0c, 0x3a, 0x8c, 0xc8, 0xc3, 0x38, 0x0c,
+	0x2e, 0xdc, 0xef, 0x2e, 0x26, 0x20, 0x5a, 0x34, 0x2d, 0x77, 0x57, 0xef, 0x8f, 0x02, 0xa2, 0x63,
+	0x2d, 0xa7, 0xbc, 0x2d, 0xfd, 0x2f, 0x7f, 0x19, 0x91, 0x28, 0xe1, 0xb3, 0xdf, 0x16, 0x7e, 0x58,
+	0x16, 0x7e, 0x57, 0x80, 0x97, 0x20, 0x4a, 0x3a, 0x3e, 0xf6, 0x02, 0x4c, 0xc3, 0x80, 0xaf, 0xf3,
+	0x99, 0x36, 0xa6, 0x30, 0xb5, 0xb8, 0x06, 0x43, 0x81, 0xb6, 0x67, 0x80, 0xd7, 0xe4, 0x56, 0xd6,
+	0x51, 0xfc, 0xb2, 0x71, 0xcd, 0x30, 0x6f, 0x18, 0x30, 0x01, 0x71, 0xd2, 0x90, 0x89, 0xc5, 0xb5,
+	0xcc, 0xe3, 0xd0, 0xe1, 0x89, 0x19, 0xd7, 0x8a, 0xd0, 0xe7, 0x63, 0x1e, 0x77, 0x87, 0x1b, 0x74,
+	0x41, 0x74, 0xcd, 0xb4, 0x9c, 0x4c, 0x2b, 0x6b, 0x79, 0xf6, 0x38, 0xb4, 0xf2, 0x81, 0xdc, 0xeb,
+	0x7a, 0x60, 0x1e, 0x00, 0x7f, 0x56, 0x71, 0xc6, 0x7f, 0x29, 0xc0, 0x60, 0x1d, 0x93, 0xa3, 0x11,
+	0x68, 0xd1, 0x8a, 0x7c, 0x14, 0x77, 0x7c, 0xb4, 0xe7, 0x8e, 0xe0, 0x9b, 0xc4, 0x54, 0x2d, 0x5a,
+	0x11, 0xbd, 0x0b, 0x51, 0xad, 0x78, 0xfd, 0x2c, 0x5f, 0x9f, 0xd4, 0x8f, 0xf6, 0x84, 0x4f, 0xf7,
+	0x4e, 0xd1, 0xc0, 0x3a, 0xed, 0x60, 0xdb, 0x49, 0xe7, 0x2d, 0x27, 0x6d, 0x3b, 0x0a, 0x09, 0x26,
+	0xd3, 0xb6, 0xb9, 0xe5, 0x6c, 0x2a, 0xc6, 0x35, 0xb9, 0x80, 0xf3, 0xe9, 0xa2, 0x65, 0xaa, 0xb7,
+	0xef, 0x08, 0x08, 0x44, 0xb2, 0x09, 0x22, 0xbb, 0xd7, 0x4d, 0x45, 0x27, 0x63, 0xdb, 0x7a, 0xff,
+	0x7b, 0x02, 0xda, 0x3a, 0x73, 0x33, 0x7f, 0x9a, 0x08, 0x3e, 0x6d, 0x3b, 0x8a, 0xa1, 0x2a, 0x96,
+	0xca, 0x3d, 0xc5, 0x2d, 0x81, 0x68, 0xa6, 0x3a, 0x9f, 0x8d, 0xfe, 0xfc, 0x05, 0x21, 0x93, 0x7d,
+	0x0c, 0x44, 0xcf, 0x30, 0xfe, 0x59, 0x2b, 0xb8, 0xb3, 0x76, 0x8a, 0x1e, 0x26, 0x91, 0x59, 0x6b,
+	0x40, 0xf7, 0x1c, 0x8d, 0x36, 0x17, 0xd7, 0xf8, 0x5a, 0x8c, 0x5e, 0x87, 0x1e, 0x1e, 0xd5, 0x6a,
+	0x45, 0x37, 0x06, 0xe0, 0x51, 0xdf, 0x44, 0xcd, 0x18, 0x88, 0xfa, 0xd8, 0x58, 0x4d, 0x1f, 0xdb,
+	0xcd, 0x24, 0x2d, 0x16, 0xb9, 0xf0, 0xd1, 0x9f, 0x0a, 0x30, 0x70, 0xd5, 0x31, 0x14, 0x3a, 0x4b,
+	0x82, 0x53, 0xf6, 0x9b, 0x80, 0xde, 0x75, 0x0c, 0xc5, 0xdd, 0x0c, 0xdd, 0xc7, 0x71, 0x41, 0xcf,
+	0xed, 0xbd, 0x28, 0x61, 0xad, 0x9c, 0xd5, 0x4a, 0x22, 0xf9, 0xcd, 0x36, 0x40, 0x3c, 0xbb, 0x6f,
+	0xc3, 0x20, 0x15, 0xef, 0x4f, 0xb1, 0x71, 0x1d, 0x6a, 0x13, 0x3a, 0x8e, 0xdf, 0xde, 0x13, 0xc3,
+	0xfc, 0xbe, 0xfc, 0x60, 0x3f, 0xa9, 0x9b, 0xad, 0x54, 0x31, 0xa5, 0xa3, 0xbf, 0x17, 0x81, 0xfe,
+	0xdc, 0xca, 0x7a, 0x8d, 0xde, 0xae, 0x43, 0x87, 0xaa, 0x9a, 0x36, 0xf1, 0x28, 0x5b, 0x9a, 0xee,
+	0x66, 0x43, 0xc7, 0x0e, 0x38, 0xc7, 0xc9, 0xe5, 0x4c, 0x22, 0x8c, 0x70, 0xb8, 0xf9, 0x6d, 0x22,
+	0x85, 0x17, 0xa1, 0x2b, 0x6e, 0x90, 0xe1, 0x4a, 0x65, 0x8b, 0xc2, 0x33, 0x07, 0x48, 0x9d, 0x63,
+	0xd8, 0x09, 0xbf, 0xd8, 0x8e, 0xbc, 0xaf, 0x0c, 0x5d, 0x83, 0x5e, 0x7a, 0x16, 0x94, 0x37, 0x75,
+	0x59, 0x33, 0xec, 0x22, 0xf6, 0x6f, 0x8a, 0x9b, 0xd9, 0xd9, 0x0f, 0xdc, 0xde, 0xab, 0x25, 0x41,
+	0x42, 0x6e, 0xe1, 0xa2, 0x57, 0x86, 0xde, 0x80, 0x56, 0x8d, 0xec, 0xfd, 0xed, 0x24, 0x34, 0x9d,
+	0x39, 0x48, 0xdd, 0xde, 0x8b, 0x51, 0xa6, 0x7b, 0xfe, 0x75, 0x5f, 0xf4, 0x8d, 0x44, 0x2e, 0x73,
+	0xf4, 0x23, 0x01, 0xba, 0x82, 0x86, 0x44, 0xcb, 0x30, 0xc0, 0x93, 0xd4, 0xf4, 0x8b, 0xf8, 0x12,
+	0xc9, 0x8d, 0x93, 0x4c, 0x7d, 0x8c, 0x2b, 0xa7, 0x9a, 0x76, 0x25, 0x21, 0x8c, 0x56, 0xc0, 0x5d,
+	0x4a, 0xaa, 0xc4, 0x35, 0xce, 0x38, 0xf5, 0x73, 0xb6, 0xa0, 0xbc, 0xec, 0x28, 0x0c, 0x84, 0xe4,
+	0xb8, 0x53, 0x3a, 0x1c, 0x41, 0xfe, 0x47, 0x01, 0xba, 0x43, 0x5f, 0x13, 0xcd, 0x02, 0xb0, 0x11,
+	0x61, 0x6b, 0xef, 0x62, 0xee, 0xb5, 0x53, 0x1f, 0x97, 0x85, 0xe8, 0xd4, 0x64, 0x66, 0xe6, 0x67,
+	0x7c, 0xd7, 0xfe, 0xad, 0x3b, 0x42, 0x3b, 0x31, 0x55, 0x7c, 0x2c, 0x96, 0xbc, 0xb5, 0x76, 0x8a,
+	0xb8, 0x13, 0x96, 0xed, 0x5a, 0xd7, 0xde, 0xc5, 0x68, 0x09, 0xdc, 0x96, 0xc9, 0xc1, 0xc1, 0x75,
+	0xc0, 0x11, 0x1b, 0x67, 0x0a, 0x0c, 0xae, 0x14, 0xf4, 0x05, 0x64, 0xd4, 0xe9, 0x0a, 0x77, 0x4e,
+	0x7f, 0xdc, 0x02, 0x68, 0x5d, 0x37, 0x6f, 0x90, 0x8f, 0xe5, 0xb3, 0xf0, 0x2b, 0x64, 0xa3, 0x14,
+	0xda, 0xb7, 0xf1, 0x58, 0x8b, 0x9d, 0xe2, 0x9f, 0xf8, 0xb8, 0x2c, 0xc4, 0xa6, 0x26, 0x6b, 0xa0,
+	0x1c, 0xfe, 0xe8, 0x53, 0xe1, 0xd4, 0xbd, 0x6e, 0xa9, 0x3f, 0xb4, 0x07, 0xe3, 0x91, 0xd5, 0x12,
+	0x74, 0x87, 0x83, 0x37, 0xa1, 0x22, 0xf0, 0x6c, 0x2d, 0x81, 0x9f, 0xfc, 0x1b, 0x74, 0xea, 0x5e,
+	0xf7, 0xc2, 0x11, 0xa9, 0xcb, 0x0a, 0x46, 0x69, 0xbe, 0x61, 0x10, 0x96, 0xd9, 0xdc, 0x30, 0x08,
+	0x46, 0x7d, 0xd9, 0xa7, 0x2b, 0x1b, 0x66, 0x2e, 0x27, 0xec, 0xd9, 0xa3, 0x15, 0xcf, 0x1e, 0x15,
+	0x63, 0xa3, 0xf7, 0xc8, 0x56, 0x8a, 0x26, 0xfd, 0x2a, 0xe7, 0xe0, 0xd8, 0x46, 0x57, 0x41, 0xb4,
+	0x6c, 0x85, 0x9e, 0x33, 0xbb, 0x65, 0xcd, 0xf9, 0xd8, 0xea, 0x33, 0x91, 0x6e, 0xcb, 0x56, 0x02,
+	0xb2, 0xdf, 0x04, 0x84, 0xf3, 0x6a, 0x58, 0x7a, 0xcb, 0x83, 0x49, 0xef, 0xa1, 0xa2, 0xfc, 0xf2,
+	0x47, 0x7f, 0x3f, 0x02, 0xf1, 0xd9, 0xa2, 0xb6, 0x5e, 0xc4, 0x79, 0x94, 0x87, 0x2e, 0xa5, 0xa8,
+	0x91, 0xcd, 0xa0, 0x66, 0x68, 0x5e, 0x36, 0xaa, 0xf9, 0x3c, 0x63, 0x90, 0xd9, 0xcb, 0x06, 0x2a,
+	0x45, 0x2d, 0xe7, 0x95, 0xa2, 0x37, 0xe1, 0xa8, 0x07, 0xed, 0x29, 0x62, 0x43, 0x26, 0x4c, 0x1c,
+	0x4a, 0x7a, 0xc0, 0x7c, 0xf6, 0xe2, 0xe9, 0x85, 0x23, 0x52, 0xd2, 0x05, 0x00, 0x15, 0xb1, 0x31,
+	0x5b, 0xd4, 0xae, 0x78, 0x02, 0xc8, 0x6e, 0x9b, 0x7b, 0x9e, 0x5a, 0xe2, 0xa3, 0x07, 0xc7, 0x6e,
+	0x55, 0x22, 0xab, 0x12, 0x9c, 0x0b, 0x47, 0xa4, 0x41, 0xa6, 0xa3, 0x8a, 0x36, 0x7b, 0x11, 0x86,
+	0x6b, 0xe8, 0x75, 0xc7, 0xd5, 0xd3, 0xa1, 0x83, 0x5e, 0xe2, 0x2d, 0x3e, 0xb8, 0xc3, 0x03, 0x91,
+	0x1b, 0x8a, 0x52, 0x3c, 0xad, 0xf0, 0xd0, 0x9b, 0x4f, 0xd7, 0xbf, 0x16, 0xa0, 0xef, 0x92, 0x62,
+	0x5f, 0xd3, 0x8c, 0xed, 0x70, 0x30, 0xde, 0xed, 0x9a, 0xb1, 0xc0, 0xea, 0x1b, 0x79, 0x56, 0x7f,
+	0xd3, 0xbb, 0x38, 0x1f, 0x17, 0x8b, 0x5e, 0x82, 0x2e, 0x6e, 0x30, 0x57, 0x50, 0x93, 0xdf, 0xa0,
+	0x93, 0xb1, 0x71, 0x39, 0xd9, 0xe7, 0xa0, 0x8b, 0x0b, 0xf0, 0xf7, 0xd6, 0x9f, 0x0d, 0x6d, 0xd8,
+	0x5b, 0xe2, 0x6d, 0x7f, 0xbf, 0x05, 0x86, 0xea, 0x9a, 0x1f, 0xcd, 0xc1, 0xc8, 0x96, 0xa2, 0xb1,
+	0x5c, 0x03, 0x71, 0xbd, 0xaa, 0xbc, 0x69, 0xaa, 0xbb, 0xe1, 0xaf, 0x9b, 0x90, 0x8e, 0x12, 0xaa,
+	0x55, 0x97, 0x28, 0x6b, 0xaa, 0xbb, 0xbe, 0xe1, 0xb1, 0x00, 0x27, 0x15, 0xb6, 0x23, 0x35, 0xf4,
+	0x5d, 0x99, 0x2c, 0x90, 0xda, 0x96, 0x86, 0x55, 0xf9, 0x9d, 0x12, 0xb6, 0x76, 0x5d, 0x90, 0x42,
+	0x8c, 0xca, 0x39, 0x4e, 0x09, 0x57, 0x0d, 0x7d, 0x77, 0xdd, 0x25, 0xfb, 0x06, 0xa1, 0xe2, 0x38,
+	0x84, 0xaf, 0xc3, 0xb1, 0x9a, 0x92, 0xdc, 0xf0, 0x8e, 0x6e, 0x71, 0xa5, 0xa1, 0x6a, 0x21, 0x6e,
+	0x50, 0x78, 0x1c, 0x80, 0xf6, 0x27, 0xaf, 0x9b, 0x36, 0x0b, 0x56, 0x12, 0x52, 0x1b, 0x29, 0x99,
+	0x23, 0x05, 0x7e, 0xaf, 0xbd, 0x14, 0x4d, 0x44, 0xc4, 0xe8, 0xa8, 0x03, 0x7d, 0x0b, 0x8e, 0x53,
+	0x9c, 0x5a, 0xe3, 0x0b, 0xbc, 0x9b, 0x4d, 0x7c, 0x03, 0xfa, 0x79, 0x36, 0xd1, 0xb1, 0x14, 0xc3,
+	0xde, 0x32, 0xad, 0x82, 0xe2, 0x9b, 0xbe, 0x4f, 0xd5, 0xcc, 0x71, 0x6d, 0x04, 0x48, 0xe9, 0x49,
+	0x66, 0xdf, 0x4e, 0x8d, 0x9a, 0xd1, 0x9f, 0xb6, 0x40, 0x2f, 0x51, 0x1b, 0xd6, 0x6a, 0xc1, 0xb1,
+	0x1d, 0xc7, 0x29, 0xca, 0x5e, 0x0c, 0xc2, 0x47, 0xd1, 0xf5, 0x29, 0x6a, 0x91, 0x66, 0x30, 0x00,
+	0xb5, 0x7a, 0x43, 0x26, 0xf7, 0x8e, 0x4f, 0x1d, 0x3b, 0xad, 0xbe, 0x32, 0x45, 0x4c, 0x88, 0xae,
+	0xd4, 0xd3, 0x99, 0x61, 0x3a, 0x1b, 0x2f, 0x03, 0xb5, 0xe4, 0x66, 0xa8, 0x5c, 0x09, 0x86, 0xeb,
+	0xf5, 0xe5, 0x7a, 0x86, 0x3b, 0x8d, 0x7a, 0x52, 0x07, 0x6a, 0xb5, 0xf6, 0x4a, 0x86, 0xee, 0x1b,
+	0xa6, 0xb2, 0x4f, 0x43, 0x5f, 0x50, 0xb2, 0xef, 0x3c, 0x3b, 0xca, 0xe7, 0x46, 0x6c, 0x26, 0x3d,
+	0x9d, 0xce, 0xf0, 0x39, 0xd0, 0xcf, 0xac, 0xed, 0x26, 0x41, 0xdc, 0x2c, 0xf2, 0x0f, 0x5b, 0xe1,
+	0x68, 0x0e, 0xeb, 0x98, 0xad, 0xd7, 0xee, 0x71, 0xc0, 0x3a, 0xd6, 0x79, 0x84, 0xb7, 0x0a, 0x51,
+	0x32, 0xa3, 0x9a, 0xc1, 0x70, 0x55, 0x8b, 0xc9, 0xb6, 0x7f, 0x5c, 0x16, 0xe2, 0x0b, 0x1b, 0x1b,
+	0x6b, 0xf2, 0x72, 0x56, 0xa2, 0x82, 0xd0, 0x2a, 0xb4, 0xea, 0xe7, 0x48, 0x94, 0xc4, 0x71, 0xb1,
+	0xf7, 0x2b, 0x32, 0xfe, 0x71, 0x59, 0x88, 0xcc, 0xe5, 0x56, 0x24, 0x2e, 0x06, 0xbd, 0x09, 0x1d,
+	0xb6, 0x56, 0x28, 0x92, 0xc5, 0xdb, 0x2c, 0x39, 0x2c, 0xd4, 0x79, 0xc8, 0x96, 0xb6, 0x33, 0x81,
+	0x12, 0x91, 0x87, 0xae, 0x91, 0x98, 0x8a, 0x22, 0x66, 0xbc, 0x6c, 0x2b, 0x53, 0x14, 0x7d, 0xb8,
+	0xf6, 0xf7, 0x32, 0xa9, 0x12, 0x17, 0xca, 0x94, 0xbd, 0x09, 0x5d, 0x1e, 0x40, 0x87, 0x69, 0x89,
+	0x3d, 0x9c, 0x96, 0x4e, 0x57, 0x1c, 0x93, 0xff, 0x1b, 0x70, 0x34, 0x18, 0x8f, 0xc9, 0x05, 0x5f,
+	0x4e, 0x9a, 0xfa, 0x96, 0x87, 0xb4, 0xdd, 0x50, 0x20, 0x5e, 0xf3, 0x67, 0xbc, 0xd1, 0x2e, 0x45,
+	0x59, 0xfb, 0x13, 0xd6, 0x41, 0xed, 0xf1, 0x87, 0xeb, 0xea, 0x70, 0x30, 0x53, 0x1d, 0x50, 0xad,
+	0x56, 0xc2, 0x45, 0x0b, 0xdf, 0xb0, 0x34, 0xc7, 0x3d, 0xc9, 0x7f, 0xa8, 0xbe, 0xba, 0x81, 0xa4,
+	0xc4, 0x44, 0x8e, 0x7e, 0x77, 0x05, 0xba, 0x2e, 0xea, 0xe6, 0xa6, 0xa2, 0x13, 0xa7, 0x4c, 0x93,
+	0x47, 0xcf, 0x43, 0xdc, 0x3d, 0x3b, 0x66, 0xc7, 0x14, 0x8f, 0xf9, 0x21, 0xcc, 0xdf, 0x6a, 0xa9,
+	0x84, 0x51, 0x27, 0x7d, 0x3b, 0x20, 0x97, 0x07, 0x2d, 0x42, 0x2b, 0x1d, 0x06, 0x76, 0x53, 0xb0,
+	0x8f, 0xde, 0xdb, 0x7b, 0x31, 0x4a, 0x4e, 0x73, 0x3b, 0x1f, 0x08, 0x11, 0xf1, 0x56, 0x8b, 0xc4,
+	0x05, 0xa0, 0xd7, 0xa0, 0xfb, 0x6d, 0x0f, 0x7e, 0x45, 0xef, 0xbc, 0x70, 0x07, 0x34, 0x79, 0x10,
+	0x62, 0x2b, 0x8c, 0xeb, 0x97, 0xba, 0x2a, 0x82, 0x16, 0x8d, 0x2d, 0x13, 0xbd, 0x05, 0x28, 0x74,
+	0xfd, 0x40, 0xf3, 0xb0, 0x20, 0x07, 0xb6, 0xb8, 0xea, 0xe6, 0x82, 0xd4, 0x13, 0xbc, 0xb7, 0xa1,
+	0x61, 0x1b, 0x5d, 0xaf, 0x7b, 0x06, 0xd5, 0x7a, 0xff, 0xe7, 0x2d, 0x7d, 0xcd, 0x1f, 0x3c, 0xdd,
+	0xac, 0x7f, 0xd0, 0x13, 0x7f, 0x54, 0x8a, 0x6b, 0x9f, 0xee, 0xac, 0x36, 0x3a, 0xf1, 0xea, 0xa1,
+	0x43, 0xa9, 0xef, 0xbe, 0x0e, 0xad, 0xbe, 0xd1, 0xf0, 0xb8, 0x28, 0xd1, 0x40, 0x62, 0xbd, 0x23,
+	0x20, 0x74, 0xad, 0xf2, 0x55, 0x18, 0xfe, 0xd0, 0x33, 0x0e, 0x4b, 0xd3, 0xa4, 0x42, 0xc6, 0x61,
+	0xf8, 0xcb, 0x2b, 0x8a, 0x5e, 0xc2, 0xfc, 0xa8, 0xbb, 0xf1, 0xa7, 0x60, 0xf4, 0xdc, 0x20, 0x6f,
+	0x55, 0x0c, 0xe2, 0x53, 0xc6, 0x9b, 0x8f, 0x69, 0xf3, 0x9f, 0xa8, 0x9f, 0xf3, 0xaa, 0x65, 0x21,
+	0x4f, 0x3c, 0xef, 0x4e, 0xd1, 0xf7, 0xb1, 0x43, 0xfd, 0xd9, 0xa2, 0xfd, 0x79, 0xac, 0x0a, 0xad,
+	0xe5, 0x34, 0xdb, 0x25, 0xef, 0x23, 0x07, 0xfa, 0xb4, 0xe9, 0xfb, 0x26, 0xd5, 0x9d, 0xda, 0xbe,
+	0x9f, 0x4e, 0x0d, 0x56, 0x29, 0xe0, 0xbd, 0x5a, 0x85, 0x2e, 0x47, 0xb7, 0x59, 0x08, 0x4a, 0x13,
+	0xf2, 0x3c, 0x17, 0xf4, 0x64, 0xa8, 0x33, 0x39, 0xf3, 0x86, 0x11, 0x4c, 0xdf, 0xd3, 0x93, 0x73,
+	0x12, 0x90, 0x3b, 0xfe, 0x7c, 0x3e, 0x5a, 0x81, 0x6e, 0x7a, 0xc4, 0x80, 0x2d, 0xc7, 0x0d, 0x6c,
+	0xaf, 0x50, 0x89, 0x8f, 0x87, 0x3f, 0x77, 0x65, 0x43, 0x58, 0x25, 0x8f, 0xd4, 0x79, 0x01, 0x2f,
+	0x03, 0x9c, 0x33, 0x2c, 0xc5, 0x33, 0x4d, 0xde, 0x34, 0xa3, 0x8e, 0x88, 0xa1, 0xd3, 0x97, 0xa0,
+	0x73, 0xb3, 0xb4, 0xb5, 0x85, 0x2d, 0xf7, 0x8a, 0x58, 0x07, 0x6d, 0xce, 0x89, 0x90, 0xa4, 0x2c,
+	0xa5, 0xa9, 0xb8, 0x31, 0x37, 0x7d, 0xc6, 0x78, 0xf9, 0x15, 0xb1, 0x17, 0xa1, 0x3d, 0x6f, 0x5a,
+	0xb6, 0x2b, 0xa9, 0xb3, 0x26, 0x4a, 0x6f, 0xce, 0xb4, 0x6c, 0x0e, 0x89, 0x65, 0x32, 0x20, 0xef,
+	0x95, 0xa0, 0xe7, 0x20, 0xc6, 0x8e, 0x1e, 0xba, 0x69, 0x7f, 0x1a, 0xc2, 0xbd, 0xbd, 0x1b, 0x48,
+	0x12, 0xe3, 0x41, 0x67, 0x21, 0xf2, 0xf6, 0x0d, 0x27, 0x29, 0x36, 0xe1, 0x3a, 0x5b, 0x6f, 0xef,
+	0x11, 0x5a, 0x89, 0xfc, 0x07, 0x4d, 0x41, 0xe2, 0x86, 0xb2, 0xc5, 0xae, 0xca, 0x20, 0xda, 0xe6,
+	0x81, 0x10, 0xf3, 0x2b, 0x0a, 0xbb, 0x14, 0x17, 0xbf, 0xc1, 0xfe, 0x40, 0x05, 0xe8, 0xe7, 0xf0,
+	0x64, 0xd9, 0x62, 0xf7, 0xa1, 0xf8, 0x91, 0x49, 0xef, 0xc1, 0x47, 0x1c, 0x75, 0xee, 0x51, 0x71,
+	0x6b, 0xf4, 0xaa, 0xd5, 0xd5, 0xe8, 0x64, 0x08, 0x90, 0xd2, 0x47, 0xf7, 0x25, 0x01, 0x0c, 0xca,
+	0x5b, 0x80, 0xf2, 0x95, 0x8b, 0x43, 0xee, 0xd8, 0xea, 0x3f, 0x38, 0x2f, 0x1a, 0xba, 0x6e, 0xc4,
+	0x9b, 0xd1, 0xe3, 0x13, 0xc6, 0x87, 0xda, 0x77, 0xa3, 0xd0, 0xc9, 0xaf, 0x5c, 0x60, 0xcb, 0x32,
+	0x2d, 0x3b, 0x39, 0x40, 0x2d, 0xfd, 0xb5, 0x46, 0xd2, 0x83, 0x2b, 0xfa, 0xf8, 0x1c, 0xe5, 0x9f,
+	0xa7, 0xec, 0x0c, 0xa4, 0xf8, 0xa7, 0x34, 0x1d, 0x56, 0xf3, 0xce, 0x46, 0xc7, 0x87, 0x64, 0xde,
+	0x8e, 0xc5, 0x92, 0xff, 0x39, 0x7a, 0x2a, 0x42, 0x67, 0xeb, 0x87, 0x6e, 0xb2, 0xb3, 0xeb, 0x43,
+	0xa1, 0x7d, 0xac, 0x72, 0xa7, 0x63, 0xff, 0x93, 0x3f, 0x89, 0xfc, 0x89, 0xf0, 0xfe, 0x1d, 0xe1,
+	0xae, 0x80, 0xbe, 0x27, 0x7c, 0x5a, 0x16, 0xfe, 0x83, 0x40, 0xc2, 0x8c, 0x14, 0x55, 0x94, 0xca,
+	0x9b, 0x2a, 0x4e, 0x51, 0x2c, 0x60, 0x6a, 0x3a, 0x3d, 0x93, 0x3e, 0x93, 0x32, 0xad, 0xd4, 0x26,
+	0x76, 0x6e, 0x60, 0x6c, 0xa4, 0xa6, 0x27, 0x27, 0x53, 0x8a, 0xa1, 0xa6, 0xce, 0x5c, 0xb8, 0x30,
+	0x9e, 0x9a, 0xdf, 0x1e, 0x4f, 0x51, 0x6f, 0x94, 0x9a, 0x49, 0x3d, 0x9f, 0x9a, 0xb9, 0x79, 0x93,
+	0x50, 0x2a, 0xba, 0x9e, 0x9a, 0x99, 0x9c, 0x3c, 0x3d, 0x73, 0xe1, 0x42, 0x0a, 0x7b, 0xf2, 0xec,
+	0x74, 0xea, 0x4c, 0xea, 0xf9, 0xd4, 0x99, 0x0a, 0xcd, 0x99, 0xc9, 0xc9, 0xd3, 0x67, 0x82, 0x34,
+	0xe3, 0xa9, 0xd7, 0xcc, 0x52, 0x2a, 0xaf, 0x18, 0x29, 0x45, 0xb7, 0xcd, 0x14, 0xdb, 0x8e, 0xee,
+	0xa6, 0x14, 0x23, 0x85, 0x6f, 0x2a, 0x79, 0xc7, 0x47, 0x9a, 0xd2, 0xb5, 0x6b, 0x38, 0x35, 0x33,
+	0x39, 0x33, 0x4e, 0xba, 0xd2, 0xf7, 0xfe, 0x1d, 0x41, 0x44, 0x5d, 0xfb, 0x65, 0x01, 0x58, 0x0f,
+	0xe6, 0x4c, 0x15, 0x93, 0x0a, 0x78, 0xff, 0x8e, 0xd0, 0x8a, 0xa2, 0x3f, 0x28, 0x0b, 0x47, 0xc8,
+	0xcf, 0xd6, 0xf7, 0xef, 0x08, 0x2d, 0x09, 0xda, 0xfb, 0xd9, 0xf7, 0xef, 0x08, 0xcf, 0x0f, 0x3f,
+	0xf7, 0x69, 0x59, 0x38, 0xb7, 0xee, 0x58, 0x9a, 0xb1, 0x9d, 0xb2, 0x30, 0xf9, 0x7e, 0xd8, 0x20,
+	0xfb, 0x74, 0xae, 0xc9, 0xf5, 0x72, 0xe9, 0x54, 0xc9, 0x2e, 0x29, 0xba, 0xbe, 0x9b, 0x52, 0x52,
+	0x3b, 0x4e, 0x41, 0xa7, 0x4d, 0x20, 0x52, 0x8e, 0xbf, 0x7f, 0x47, 0x18, 0x1a, 0x1e, 0xdc, 0x2f,
+	0x0b, 0xbd, 0x4c, 0xb1, 0x1b, 0x60, 0xa7, 0xc8, 0x8e, 0xdd, 0x6b, 0xc1, 0x30, 0x69, 0x41, 0xd4,
+	0xf7, 0xf3, 0x2e, 0x4b, 0xa5, 0xfb, 0x3e, 0x2e, 0x7a, 0xbe, 0x92, 0x52, 0x72, 0x81, 0x66, 0xb4,
+	0x11, 0x1c, 0xeb, 0x7a, 0x92, 0x8e, 0x60, 0x37, 0x63, 0xc4, 0xe1, 0x0b, 0x94, 0x95, 0x21, 0x4f,
+	0x5f, 0x84, 0xc1, 0x82, 0x72, 0x53, 0x0e, 0xc5, 0xdb, 0x34, 0xb9, 0x3b, 0x18, 0xb8, 0xfd, 0x96,
+	0x7c, 0x4b, 0xea, 0x2b, 0x28, 0x37, 0x25, 0xff, 0xba, 0x4d, 0xd3, 0xb9, 0x61, 0xa4, 0xf8, 0x89,
+	0x86, 0xd7, 0x08, 0x02, 0x48, 0xf1, 0x37, 0x43, 0xe0, 0xfc, 0xe4, 0x43, 0x82, 0xf3, 0x17, 0x42,
+	0xf0, 0x7c, 0x5c, 0x0b, 0x9e, 0x7f, 0xfc, 0x61, 0xe0, 0xf9, 0x0b, 0xb5, 0x00, 0xfa, 0xef, 0xc0,
+	0x00, 0x3f, 0x63, 0x22, 0x73, 0x4a, 0xf5, 0xe9, 0x7a, 0xfa, 0x60, 0x5d, 0xb5, 0x6e, 0x2d, 0x54,
+	0x12, 0x4d, 0x82, 0xd4, 0x57, 0xac, 0x75, 0xad, 0xc1, 0x84, 0x5e, 0x0a, 0x31, 0xd7, 0x54, 0x32,
+	0xf0, 0xdc, 0x3b, 0x49, 0xc9, 0xa1, 0xe6, 0x60, 0xd7, 0xb5, 0x78, 0x7d, 0x99, 0x52, 0x44, 0xaa,
+	0x17, 0x03, 0xb5, 0xe8, 0x2a, 0x74, 0x58, 0x8a, 0x83, 0x65, 0x5d, 0x2b, 0x68, 0x0e, 0xb6, 0x92,
+	0xc3, 0x4d, 0x68, 0x1a, 0xba, 0xbd, 0x17, 0x60, 0xf2, 0xa9, 0x68, 0x27, 0xe5, 0xcb, 0xac, 0x18,
+	0xfd, 0x06, 0x1c, 0xf7, 0x93, 0xc9, 0x34, 0x6b, 0x84, 0x55, 0x7e, 0x21, 0x17, 0xdb, 0xc9, 0xa3,
+	0x4d, 0x28, 0x1b, 0xbe, 0xbd, 0xd7, 0xa9, 0x15, 0x39, 0x8f, 0x6c, 0x63, 0xc7, 0xd3, 0x16, 0x95,
+	0x86, 0x7d, 0xda, 0x66, 0x99, 0xf0, 0x35, 0x2e, 0x1b, 0x5d, 0x84, 0x0e, 0x0b, 0x3b, 0xd6, 0xae,
+	0xbb, 0x98, 0x1e, 0xa3, 0x9f, 0x6c, 0x24, 0xa4, 0x4b, 0x22, 0x24, 0xec, 0x53, 0xf9, 0xef, 0x82,
+	0x58, 0x95, 0x62, 0xf4, 0x8f, 0xea, 0x5f, 0xd3, 0x78, 0xec, 0x61, 0xae, 0x69, 0x74, 0xfa, 0xd0,
+	0x51, 0xc9, 0xba, 0xf7, 0x35, 0x7e, 0xb7, 0xe1, 0x05, 0x86, 0xc7, 0x9b, 0x30, 0xe0, 0xc4, 0x7d,
+	0x5d, 0x60, 0x48, 0xd6, 0xbf, 0xc2, 0x80, 0x2e, 0x02, 0x09, 0x9e, 0x64, 0x8a, 0xc7, 0xce, 0xe3,
+	0xa2, 0x93, 0x7c, 0xa2, 0x66, 0x26, 0x7d, 0x43, 0xb7, 0x17, 0x5d, 0x12, 0x37, 0x0b, 0xd7, 0xe1,
+	0xf8, 0x0a, 0xd1, 0x1c, 0xf4, 0x18, 0xa6, 0x1c, 0xbc, 0x1f, 0x95, 0x7c, 0xaa, 0x81, 0x7f, 0x69,
+	0x91, 0x44, 0xc3, 0x0c, 0xdd, 0x47, 0x52, 0x20, 0x74, 0xf5, 0x2b, 0x79, 0x8a, 0x4a, 0x98, 0x6a,
+	0xf4, 0x39, 0x6a, 0xde, 0x3c, 0xe3, 0x2e, 0xa0, 0x45, 0x0a, 0x09, 0x44, 0x4f, 0x41, 0x87, 0xa6,
+	0xea, 0xd8, 0x3b, 0x90, 0x49, 0x51, 0xcf, 0x19, 0x65, 0x00, 0x56, 0x52, 0xe3, 0x1e, 0xe2, 0x8c,
+	0x43, 0xaf, 0xe7, 0xac, 0xe9, 0x9d, 0x3b, 0x7a, 0x55, 0x3b, 0x39, 0x4a, 0x9d, 0x74, 0x8f, 0xeb,
+	0xa4, 0x0d, 0x5b, 0x62, 0x15, 0xe8, 0x79, 0xe8, 0x72, 0x9d, 0x3a, 0xbf, 0xc6, 0xfb, 0x4c, 0x83,
+	0xde, 0x47, 0xa4, 0x4e, 0x4e, 0xcd, 0x2f, 0x05, 0x9f, 0x86, 0x76, 0x06, 0x7d, 0x62, 0xd8, 0x8d,
+	0x34, 0x05, 0x10, 0x80, 0x7b, 0x51, 0xec, 0x5f, 0x7e, 0x7d, 0x21, 0x22, 0x01, 0x23, 0xa0, 0x58,
+	0x8c, 0x67, 0x01, 0x29, 0xc5, 0x22, 0x36, 0x54, 0xd9, 0xcf, 0x75, 0xba, 0x06, 0x97, 0xc8, 0xe8,
+	0xd6, 0x2b, 0xbc, 0x17, 0xa0, 0xa3, 0xa8, 0xd8, 0xb6, 0xec, 0xec, 0x58, 0x66, 0x69, 0x7b, 0x27,
+	0x39, 0xde, 0xb0, 0x9d, 0xed, 0x84, 0x76, 0x83, 0x91, 0xa2, 0x25, 0xe8, 0xe7, 0x19, 0xc7, 0xa2,
+	0xe2, 0xec, 0xc8, 0x86, 0x69, 0x15, 0xe8, 0x25, 0xca, 0xe4, 0x64, 0x03, 0x19, 0x51, 0xa9, 0x97,
+	0x31, 0xad, 0x29, 0xce, 0xce, 0x8a, 0xcb, 0x82, 0x96, 0x2b, 0x77, 0xa7, 0x43, 0xc2, 0xa6, 0x1a,
+	0x0a, 0xeb, 0xe3, 0x5c, 0x41, 0x69, 0x1a, 0x3c, 0xc6, 0x5b, 0x66, 0x3b, 0x96, 0x96, 0x77, 0x64,
+	0xdb, 0xd0, 0xd8, 0x8b, 0x1c, 0x7c, 0x9d, 0xcc, 0xef, 0xe0, 0xfc, 0xb5, 0xe4, 0x74, 0x83, 0x23,
+	0x83, 0x28, 0x75, 0xe3, 0x31, 0x69, 0x84, 0x09, 0x5a, 0xa7, 0x72, 0xd6, 0x0d, 0x8d, 0xec, 0x0e,
+	0x38, 0x8c, 0x95, 0xc8, 0x40, 0x1b, 0x80, 0x14, 0x55, 0xa5, 0xa7, 0x44, 0x8a, 0xee, 0x21, 0xf9,
+	0xcf, 0x50, 0xc9, 0xc7, 0xab, 0x36, 0x41, 0xa4, 0x96, 0x98, 0x7d, 0x59, 0xb3, 0x1d, 0x4f, 0x45,
+	0x4f, 0x45, 0x80, 0x0b, 0xce, 0x7f, 0x19, 0xda, 0xf3, 0xaa, 0xe1, 0x5e, 0x9c, 0x48, 0x9e, 0x3d,
+	0x18, 0x13, 0x10, 0xbc, 0x2a, 0x21, 0x41, 0xde, 0xfb, 0x8d, 0xde, 0x80, 0x13, 0xae, 0x6d, 0x1d,
+	0xab, 0x44, 0x76, 0xb8, 0x55, 0xa8, 0x8e, 0xa5, 0x06, 0x46, 0x6e, 0x95, 0xdc, 0x40, 0x65, 0x83,
+	0x70, 0xcf, 0x05, 0x81, 0x1c, 0xe8, 0x1d, 0xe0, 0x26, 0xaa, 0x2b, 0xfc, 0xe5, 0x26, 0x62, 0xec,
+	0x20, 0xf4, 0x64, 0xa1, 0x55, 0xe2, 0xe7, 0x61, 0x35, 0x55, 0xae, 0x41, 0xd2, 0x30, 0x0d, 0x2f,
+	0x6c, 0xf2, 0x03, 0x64, 0x92, 0x97, 0x1a, 0xf4, 0x24, 0x2e, 0x0d, 0x18, 0xc4, 0x29, 0x50, 0xb6,
+	0x65, 0x1f, 0x17, 0x5a, 0xac, 0xa0, 0xfd, 0x03, 0xd2, 0x56, 0x1a, 0x4a, 0xeb, 0x55, 0x6b, 0x88,
+	0x2a, 0xc0, 0x70, 0xcd, 0x73, 0x0d, 0xb6, 0x7d, 0x5a, 0xbd, 0xaf, 0xc3, 0x8d, 0x6c, 0x2b, 0x5f,
+	0x3c, 0x92, 0x3b, 0x75, 0x28, 0xd0, 0x6f, 0x0b, 0xd0, 0xe3, 0xdb, 0xdc, 0x17, 0x4c, 0x55, 0xdb,
+	0xda, 0x4d, 0x7e, 0xa3, 0x66, 0xfa, 0x88, 0x6d, 0xde, 0xeb, 0xa4, 0x8f, 0xd2, 0xbe, 0xa5, 0xe2,
+	0xe0, 0x84, 0x40, 0x77, 0xde, 0x4d, 0x04, 0x5c, 0xa2, 0x1a, 0xd1, 0x45, 0x18, 0xf4, 0x3d, 0xf3,
+	0x10, 0xf0, 0xaa, 0x12, 0xf5, 0xaa, 0xdd, 0xc4, 0xab, 0xfa, 0xdf, 0x78, 0xe8, 0xaf, 0xd0, 0x2f,
+	0xfa, 0x5c, 0x6d, 0x1e, 0xfa, 0x83, 0x67, 0x0f, 0x2e, 0xae, 0xf1, 0x35, 0x6a, 0xba, 0x89, 0x83,
+	0x8e, 0x66, 0x42, 0x27, 0x33, 0x52, 0xef, 0x4e, 0x8d, 0x63, 0xa0, 0x34, 0xc4, 0xe8, 0x22, 0x9f,
+	0x7c, 0xbd, 0xc1, 0x07, 0x4e, 0x48, 0x8c, 0x08, 0x6d, 0x43, 0x0f, 0x45, 0x5e, 0x04, 0x62, 0xde,
+	0x37, 0x1e, 0x36, 0xe6, 0x4d, 0x48, 0xdd, 0x44, 0xaa, 0xff, 0xb2, 0xe4, 0xcb, 0x30, 0xa0, 0x9f,
+	0x63, 0x68, 0x11, 0x86, 0x0e, 0xf6, 0x30, 0xce, 0xdf, 0x6c, 0xd8, 0xce, 0x5e, 0xfd, 0x5c, 0x4e,
+	0x35, 0x6d, 0x06, 0x92, 0x76, 0xa1, 0xce, 0x2b, 0xd0, 0x1b, 0x12, 0x66, 0x98, 0x06, 0x4e, 0xbe,
+	0xd9, 0xcc, 0x39, 0x69, 0x42, 0x12, 0xfd, 0x22, 0x57, 0x4c, 0x03, 0xa3, 0x27, 0xa1, 0x9b, 0x82,
+	0x7d, 0x77, 0x2c, 0xac, 0x38, 0x72, 0x01, 0xdb, 0x3b, 0x49, 0x99, 0xae, 0x7f, 0x9d, 0x25, 0x1b,
+	0x6f, 0xd0, 0xd2, 0x4b, 0xd8, 0xde, 0x41, 0xdb, 0xd0, 0xa5, 0x7a, 0xd9, 0x1e, 0x39, 0x6f, 0xda,
+	0x49, 0xa5, 0x89, 0x28, 0x66, 0xf4, 0xf6, 0x5e, 0x88, 0xad, 0x1a, 0x09, 0xd0, 0x59, 0x21, 0x98,
+	0x33, 0x6d, 0x74, 0x0e, 0xfa, 0xdd, 0x0e, 0x5a, 0x45, 0xba, 0x82, 0x61, 0x7b, 0xc7, 0xd4, 0xd5,
+	0xa4, 0xc6, 0x96, 0x71, 0x76, 0xe1, 0x86, 0xf5, 0x43, 0x2a, 0x92, 0x65, 0x8b, 0xd5, 0xa3, 0x29,
+	0xe8, 0x23, 0xab, 0xf8, 0x75, 0x53, 0x77, 0xb0, 0x65, 0x29, 0x72, 0x41, 0x31, 0x94, 0x6d, 0xac,
+	0x26, 0x7f, 0xc2, 0x8e, 0x33, 0x91, 0x6a, 0xd8, 0x57, 0x78, 0xdd, 0x25, 0x56, 0x85, 0x5e, 0x65,
+	0x97, 0xed, 0x5d, 0xff, 0xfe, 0x57, 0xf1, 0x26, 0xba, 0x94, 0xbc, 0xbd, 0x07, 0x15, 0x26, 0x7f,
+	0xd6, 0x9c, 0x14, 0xbb, 0xae, 0xfe, 0x18, 0xb4, 0x79, 0x17, 0xfe, 0x93, 0x9f, 0xb2, 0x16, 0x24,
+	0xdc, 0xab, 0xfe, 0x68, 0x0e, 0x62, 0xec, 0x99, 0x83, 0xbf, 0x66, 0xe7, 0x17, 0xe9, 0x26, 0x13,
+	0x58, 0xf4, 0xf9, 0x02, 0x89, 0xf1, 0x12, 0x15, 0x74, 0xf1, 0xa3, 0x61, 0xc1, 0x4f, 0xd9, 0xd5,
+	0xc3, 0x04, 0x29, 0xa1, 0x11, 0xc0, 0x02, 0x83, 0xe4, 0xd2, 0x9c, 0xfd, 0xdf, 0xb0, 0x7e, 0x35,
+	0xd2, 0xe2, 0x3d, 0x6a, 0x35, 0x9e, 0x33, 0xec, 0x45, 0x63, 0xcb, 0xa4, 0x78, 0x5d, 0x9a, 0xa9,
+	0x7f, 0xa7, 0xfa, 0x75, 0x86, 0xbf, 0x8d, 0x3f, 0xd0, 0xf3, 0x0c, 0xc9, 0xda, 0xcf, 0x33, 0x24,
+	0x85, 0xf0, 0x03, 0x0d, 0xeb, 0x34, 0x48, 0x74, 0x9f, 0x4b, 0x20, 0x5d, 0xf8, 0x79, 0x13, 0xd7,
+	0x6e, 0xc2, 0xef, 0x4a, 0x48, 0x1d, 0x8a, 0xaf, 0x84, 0x44, 0x7b, 0xbe, 0x57, 0x1f, 0xe8, 0xa6,
+	0xbc, 0x60, 0x6f, 0x27, 0xdf, 0x4b, 0xb0, 0x7b, 0x9d, 0xde, 0xeb, 0x0e, 0xa4, 0xe6, 0x92, 0xbd,
+	0x8d, 0x5e, 0x82, 0x0e, 0x1a, 0x76, 0xbb, 0xa3, 0xe3, 0xbf, 0xc7, 0x69, 0x6e, 0x75, 0xb4, 0xce,
+	0x03, 0x32, 0x7e, 0x3f, 0xda, 0x4e, 0x18, 0xdd, 0xa1, 0x50, 0x82, 0xde, 0xd0, 0x45, 0x30, 0x1b,
+	0x3b, 0x76, 0xf2, 0x17, 0xcd, 0x0c, 0xb6, 0x27, 0x6f, 0xef, 0xa1, 0x6a, 0xe6, 0xf0, 0x1c, 0x8a,
+	0x49, 0x3d, 0x81, 0x3b, 0x61, 0xeb, 0xd8, 0xb1, 0x51, 0x01, 0x06, 0xfc, 0x8b, 0x9e, 0xac, 0xe8,
+	0xdb, 0xa6, 0xa5, 0x39, 0x3b, 0x85, 0xe4, 0xff, 0xa8, 0x3d, 0xe8, 0xf8, 0x13, 0x6f, 0xe3, 0xfe,
+	0x75, 0x6f, 0xd6, 0x65, 0xf2, 0x5d, 0xec, 0xd4, 0x6b, 0xd5, 0xa3, 0x35, 0x48, 0xb9, 0x61, 0x23,
+	0xb6, 0xe4, 0xa2, 0x42, 0xf1, 0xd4, 0xf4, 0x4e, 0x27, 0xa3, 0x25, 0x1b, 0xaf, 0xdf, 0x4e, 0x04,
+	0xa1, 0xf6, 0xc7, 0x78, 0xcc, 0x88, 0xad, 0x35, 0x4a, 0x4f, 0x34, 0x67, 0x5d, 0x6a, 0xf4, 0x38,
+	0x74, 0x7a, 0x73, 0x99, 0x4e, 0xa3, 0xff, 0xc9, 0xa6, 0x51, 0x87, 0x5b, 0x4a, 0xa7, 0xd2, 0x5a,
+	0x25, 0x86, 0xf7, 0xdd, 0x5b, 0x4e, 0x7e, 0x16, 0x6f, 0xc6, 0x21, 0xb6, 0x79, 0x51, 0x7e, 0xe5,
+	0x02, 0x2e, 0xda, 0x84, 0x76, 0xbf, 0xa4, 0xff, 0x15, 0x3f, 0x78, 0xbb, 0x58, 0xf7, 0x7e, 0xb2,
+	0x5f, 0x15, 0x6c, 0x56, 0x74, 0x9c, 0x87, 0x5e, 0x1a, 0xac, 0x92, 0x80, 0xca, 0xc2, 0xc5, 0x92,
+	0xc3, 0xb6, 0x42, 0x9f, 0xc7, 0x83, 0x06, 0xea, 0xa1, 0x44, 0x8b, 0x45, 0xc9, 0x23, 0x41, 0x57,
+	0x20, 0xb1, 0xa5, 0xd8, 0x8e, 0xac, 0xe4, 0xf5, 0xe4, 0xff, 0x6e, 0x66, 0x08, 0x1d, 0xbb, 0xbd,
+	0xe7, 0x71, 0x54, 0x3b, 0xdf, 0x38, 0xa9, 0x9a, 0xcd, 0xeb, 0x68, 0x0d, 0x5a, 0xf5, 0x73, 0x54,
+	0xea, 0xff, 0x89, 0x37, 0xb7, 0xbf, 0xe7, 0xf4, 0xd5, 0x32, 0x63, 0xfa, 0x39, 0x22, 0x51, 0x82,
+	0x36, 0xe2, 0x54, 0xde, 0x35, 0x0d, 0x6c, 0x27, 0xff, 0x6f, 0x33, 0x42, 0x07, 0x6e, 0xef, 0x25,
+	0x5c, 0x16, 0xbf, 0x63, 0x25, 0x85, 0x57, 0x89, 0x18, 0x9a, 0x6a, 0xb7, 0xad, 0x2d, 0x37, 0x3b,
+	0xb0, 0x56, 0x3b, 0xd5, 0x6e, 0x5b, 0x5b, 0xa1, 0x54, 0xbb, 0x57, 0x82, 0x6c, 0x18, 0x24, 0x2a,
+	0x68, 0xda, 0x9a, 0x03, 0x84, 0x39, 0x8e, 0x29, 0xf9, 0x47, 0x6d, 0x07, 0xef, 0x44, 0x6b, 0xa2,
+	0x7d, 0x7d, 0x93, 0x43, 0x35, 0xec, 0x1a, 0x68, 0xe0, 0x19, 0x68, 0x33, 0x4c, 0x47, 0xb6, 0xb0,
+	0xa2, 0xee, 0x26, 0x7f, 0xd9, 0xe8, 0x65, 0x04, 0x90, 0x12, 0x86, 0xe9, 0x48, 0x84, 0x10, 0x9d,
+	0x86, 0x18, 0xe3, 0xb8, 0x95, 0x68, 0xc8, 0xc1, 0xa8, 0x90, 0x04, 0x88, 0xe7, 0xa9, 0xfd, 0xef,
+	0xda, 0xfc, 0x66, 0xa2, 0xf9, 0x47, 0x5f, 0x44, 0xc6, 0xef, 0x7b, 0xe3, 0xe6, 0x2d, 0xe8, 0xb3,
+	0x75, 0xf3, 0x46, 0x15, 0xd4, 0x75, 0xfd, 0xe0, 0x7b, 0x9e, 0xd5, 0xc8, 0x4e, 0x09, 0x11, 0x59,
+	0x21, 0x3c, 0xed, 0x45, 0x48, 0x28, 0x45, 0x8d, 0x62, 0x96, 0x92, 0x1b, 0x54, 0xea, 0x63, 0x0d,
+	0x7d, 0x3c, 0xc3, 0x07, 0x56, 0xda, 0x1c, 0x57, 0x38, 0x62, 0xd0, 0x80, 0x6e, 0xe6, 0xa9, 0x59,
+	0xf7, 0x0b, 0x4a, 0x31, 0xf9, 0x2a, 0x1d, 0x73, 0xcf, 0xdf, 0x47, 0xa2, 0xbe, 0x82, 0xa8, 0xbc,
+	0xa4, 0x14, 0x59, 0xa6, 0xbe, 0x72, 0x95, 0x58, 0xf5, 0x57, 0xa2, 0x02, 0x8f, 0x68, 0x3d, 0xec,
+	0x85, 0x1b, 0xd1, 0xfe, 0x56, 0xa2, 0xb9, 0x90, 0x36, 0x04, 0xab, 0xf1, 0x5d, 0xf0, 0xdd, 0xa9,
+	0xae, 0x45, 0x37, 0x61, 0x88, 0xc1, 0xe7, 0xab, 0x07, 0xae, 0x9d, 0xfc, 0x84, 0xa9, 0xcc, 0x34,
+	0x52, 0x59, 0x1b, 0x96, 0x5f, 0xd1, 0x4a, 0xe1, 0xf3, 0xd5, 0x04, 0x36, 0xf1, 0x55, 0x95, 0xe3,
+	0x76, 0xd3, 0x90, 0xd9, 0xdd, 0x83, 0xe4, 0x8f, 0x42, 0xce, 0xbc, 0x72, 0x02, 0xbf, 0x6a, 0xb0,
+	0xcb, 0x14, 0xe8, 0x32, 0x1c, 0x2f, 0x28, 0x37, 0xe5, 0x30, 0x14, 0x86, 0x42, 0xe5, 0x68, 0x4e,
+	0xfb, 0x9f, 0x24, 0x68, 0x4c, 0x87, 0x7c, 0x3e, 0x84, 0xec, 0x23, 0x6e, 0xdd, 0x8a, 0x4a, 0x43,
+	0x05, 0xe5, 0x66, 0x2e, 0x80, 0x76, 0xc9, 0x9a, 0xea, 0x2e, 0x4d, 0x71, 0xbf, 0xe5, 0x43, 0xf7,
+	0x31, 0x84, 0xff, 0x5b, 0x07, 0x27, 0x76, 0x6b, 0x21, 0x17, 0x7d, 0xdf, 0xb6, 0xe0, 0xaf, 0x46,
+	0xd7, 0xa0, 0xdf, 0xc6, 0x86, 0xad, 0x39, 0xda, 0x75, 0x2c, 0xab, 0x8a, 0xe3, 0xde, 0x5a, 0x48,
+	0xee, 0x27, 0x9a, 0x8b, 0x10, 0x6b, 0xb3, 0x4b, 0xbd, 0x5e, 0x71, 0x4e, 0x71, 0x14, 0xef, 0x85,
+	0xc9, 0x21, 0x0f, 0xf4, 0xa8, 0xdf, 0x50, 0x2c, 0x7a, 0xa6, 0xe6, 0x70, 0x0c, 0xfe, 0x66, 0x13,
+	0xcb, 0x98, 0x8b, 0x00, 0xbd, 0xc4, 0xd8, 0xd7, 0x3c, 0x6e, 0xea, 0x12, 0xd8, 0xdb, 0x8b, 0xfe,
+	0x4b, 0xda, 0xf9, 0x9a, 0xd3, 0x6c, 0x63, 0x79, 0x7d, 0xce, 0xa3, 0x75, 0xb7, 0x59, 0x3d, 0xf9,
+	0x70, 0x11, 0xba, 0x09, 0x7d, 0x37, 0x94, 0x2d, 0x19, 0xdf, 0x24, 0xf1, 0x02, 0x3d, 0x73, 0x63,
+	0xa6, 0xd9, 0x69, 0xc2, 0x32, 0xa7, 0x6e, 0xef, 0xd5, 0x64, 0xae, 0x5e, 0x43, 0xd0, 0x0d, 0x65,
+	0x6b, 0xde, 0xa5, 0xe2, 0x86, 0x7a, 0x13, 0x12, 0x36, 0x05, 0x99, 0x61, 0x35, 0xf9, 0xf6, 0xc1,
+	0xd7, 0xe1, 0x1a, 0x40, 0xd4, 0x2a, 0xcb, 0x72, 0xbb, 0xe4, 0xc9, 0x44, 0x2f, 0x43, 0x44, 0xd1,
+	0xf5, 0xe4, 0xb5, 0x07, 0x83, 0x14, 0x55, 0x24, 0x12, 0x29, 0xc3, 0x5f, 0x87, 0x9e, 0xaa, 0x53,
+	0x3f, 0xff, 0xdb, 0x1d, 0x9d, 0x07, 0xbc, 0xdd, 0x31, 0x5c, 0xf4, 0xe3, 0xbb, 0x5d, 0x6f, 0x54,
+	0xe3, 0xf5, 0x8f, 0x9c, 0x5f, 0xc2, 0x41, 0x6f, 0x18, 0x54, 0x01, 0xc6, 0x7d, 0x1a, 0xb3, 0x13,
+	0x30, 0xe8, 0x1e, 0xd2, 0xbb, 0xd5, 0x2e, 0x44, 0xb0, 0xef, 0x07, 0x0c, 0x84, 0x7e, 0x79, 0xbf,
+	0x2c, 0x44, 0x2f, 0xa4, 0xcf, 0x9f, 0xfd, 0x59, 0x59, 0x10, 0xb2, 0x4f, 0x42, 0x57, 0xe5, 0x71,
+	0x1c, 0xf6, 0xe8, 0xdb, 0xdd, 0xb2, 0x70, 0xe2, 0x5e, 0x59, 0x18, 0xd9, 0x2f, 0x0b, 0x89, 0xe9,
+	0xa9, 0x74, 0x66, 0x26, 0x9d, 0xb9, 0x90, 0x1d, 0x83, 0xfe, 0x60, 0x8a, 0xd6, 0x8f, 0x3c, 0x7c,
+	0xea, 0x5e, 0x59, 0x78, 0x72, 0xbf, 0x2c, 0xc4, 0xa6, 0x2f, 0xa4, 0x67, 0x26, 0xb3, 0x13, 0xd0,
+	0xc7, 0xd3, 0x9d, 0x5e, 0x52, 0x8f, 0x92, 0x0e, 0xde, 0x2d, 0x0b, 0xcf, 0xdc, 0x2b, 0x0b, 0x63,
+	0xfb, 0x65, 0xa1, 0x7d, 0x66, 0x3a, 0x3d, 0x33, 0x93, 0x9e, 0x39, 0x93, 0x9e, 0x39, 0x4b, 0x84,
+	0x07, 0x73, 0x8b, 0x7e, 0xe1, 0x93, 0xf7, 0xca, 0xc2, 0x04, 0x85, 0x35, 0x9e, 0x4f, 0xcf, 0x5c,
+	0xc8, 0x7e, 0x0d, 0x1e, 0x6b, 0x94, 0x3a, 0x74, 0x39, 0xfb, 0xef, 0x96, 0x85, 0xe9, 0x7b, 0x65,
+	0x21, 0x43, 0x1f, 0xf8, 0x99, 0x4a, 0x9f, 0xa1, 0x70, 0xe1, 0xec, 0x34, 0x8c, 0xd4, 0x49, 0x86,
+	0xf9, 0x55, 0x2e, 0xdd, 0x2b, 0x0b, 0x8b, 0x84, 0xf1, 0xdc, 0x4c, 0xfa, 0xdc, 0x99, 0xec, 0x93,
+	0xd0, 0xe3, 0xe5, 0xa0, 0x36, 0xfd, 0x74, 0x97, 0xee, 0x95, 0x85, 0x65, 0x4a, 0x77, 0x2e, 0x7d,
+	0xee, 0x7c, 0x76, 0x02, 0x8e, 0xb2, 0x4d, 0x3d, 0xd9, 0xa2, 0xf8, 0x2e, 0x83, 0xb0, 0x4d, 0x3e,
+	0x12, 0xef, 0x95, 0x85, 0xab, 0xc4, 0xa8, 0x17, 0xa6, 0xd3, 0x17, 0xa6, 0xd2, 0x17, 0x32, 0xd9,
+	0x29, 0x40, 0xfe, 0x87, 0x7a, 0xb8, 0xe4, 0xa3, 0x77, 0xcb, 0xc2, 0x67, 0xf1, 0x7b, 0x65, 0xe1,
+	0xef, 0xe2, 0xfb, 0x65, 0xa1, 0x6d, 0x6a, 0x72, 0xea, 0x6c, 0x7a, 0x6a, 0x72, 0xea, 0x1c, 0xed,
+	0xc0, 0x24, 0xf4, 0xbb, 0xe1, 0x15, 0xdb, 0xc8, 0xf9, 0x8d, 0xfb, 0x4b, 0xc2, 0xf5, 0xf7, 0x9c,
+	0x2b, 0x33, 0x9d, 0x9e, 0x9a, 0xcc, 0xcc, 0x64, 0x27, 0x61, 0xc8, 0xdd, 0x7e, 0x78, 0xa9, 0x0b,
+	0x77, 0xe8, 0xa3, 0xde, 0x7b, 0x65, 0x41, 0xdf, 0x2f, 0x0b, 0xf1, 0xa9, 0x49, 0xa2, 0x84, 0xea,
+	0xf0, 0xa0, 0xc2, 0x97, 0xc5, 0x2b, 0x4b, 0xd1, 0xc4, 0x88, 0x78, 0x62, 0x29, 0x9a, 0x78, 0x52,
+	0x7c, 0x6a, 0x29, 0x9a, 0x18, 0x13, 0x9f, 0x59, 0x8a, 0x26, 0x26, 0xc4, 0xc9, 0xa5, 0x68, 0x22,
+	0x23, 0x4e, 0x2f, 0x45, 0x13, 0x33, 0xe2, 0x99, 0xa5, 0x68, 0x62, 0x51, 0x5c, 0x5a, 0x8a, 0x26,
+	0x96, 0xc5, 0x4b, 0x4b, 0xd1, 0xc4, 0x55, 0xf1, 0xf5, 0xa5, 0xd6, 0xc4, 0xdf, 0xc5, 0xc5, 0xcf,
+	0xe2, 0x4b, 0xad, 0x89, 0xbf, 0x8f, 0x8b, 0xbf, 0x8c, 0x2f, 0x45, 0x13, 0xaf, 0x88, 0xaf, 0x2e,
+	0x45, 0x13, 0xba, 0x58, 0x18, 0xfd, 0x2f, 0x2d, 0x80, 0x72, 0x2b, 0xeb, 0x57, 0xdc, 0xcd, 0x30,
+	0x7f, 0x26, 0x39, 0xeb, 0xee, 0xa7, 0x85, 0x07, 0xdf, 0x4e, 0x7f, 0x0d, 0x86, 0xf1, 0x4d, 0xcd,
+	0x76, 0xe8, 0xb2, 0x52, 0x99, 0x02, 0x7c, 0xc7, 0x1b, 0xa3, 0x13, 0x2e, 0xe9, 0x52, 0xf8, 0xa6,
+	0x10, 0xdb, 0xb1, 0x6e, 0xc1, 0xa0, 0x85, 0x0d, 0x7c, 0xa3, 0x06, 0x6b, 0xeb, 0x83, 0xec, 0x95,
+	0xa5, 0x7e, 0x2a, 0xae, 0x4a, 0xcf, 0x33, 0xd0, 0xc3, 0xb6, 0xae, 0x2a, 0x66, 0x39, 0x28, 0xf7,
+	0xa2, 0x42, 0x9b, 0x24, 0xd2, 0x8a, 0x5c, 0xa5, 0x1c, 0x3d, 0x0d, 0xa2, 0x5d, 0xda, 0xde, 0xc6,
+	0xb6, 0x83, 0x55, 0xf7, 0xa5, 0x13, 0xf6, 0xea, 0x60, 0xb7, 0x57, 0xce, 0x52, 0x41, 0x1c, 0xe2,
+	0xff, 0x5f, 0x4f, 0x41, 0xd7, 0x9c, 0x85, 0x89, 0x36, 0x17, 0x8c, 0x98, 0x0c, 0x81, 0x11, 0x2b,
+	0x38, 0xc3, 0x17, 0xee, 0x0b, 0x67, 0x98, 0x70, 0x71, 0x86, 0x1e, 0xb8, 0xf0, 0x8b, 0x47, 0x00,
+	0xbe, 0xf5, 0x08, 0x11, 0x80, 0xb5, 0xb1, 0x7e, 0x9b, 0x8f, 0x12, 0xeb, 0x57, 0x07, 0xd5, 0x77,
+	0xe1, 0x40, 0x54, 0x5f, 0x5d, 0xfc, 0xde, 0x73, 0x07, 0xe3, 0xf7, 0xea, 0x23, 0xf5, 0x2e, 0x3f,
+	0x2c, 0x52, 0xaf, 0x36, 0x26, 0xef, 0xc2, 0x81, 0x98, 0xbc, 0xba, 0x60, 0xbb, 0xab, 0x8f, 0x02,
+	0x6c, 0x57, 0x07, 0x56, 0xf7, 0xdc, 0xc1, 0xb0, 0xba, 0xaf, 0x30, 0x5e, 0x2e, 0xf7, 0x60, 0x70,
+	0xb7, 0x10, 0xd0, 0xed, 0xd9, 0xfb, 0x03, 0xba, 0x05, 0x20, 0x6e, 0x8b, 0x0f, 0x02, 0x71, 0xcb,
+	0x76, 0xd0, 0x7b, 0x8b, 0xef, 0x09, 0xd1, 0xe1, 0x96, 0x68, 0xcc, 0x05, 0xbc, 0x3d, 0x00, 0x70,
+	0x6d, 0xfb, 0xd1, 0x03, 0xd7, 0x1e, 0x18, 0xb2, 0x76, 0xf5, 0x11, 0x41, 0xd6, 0x6a, 0x81, 0xd5,
+	0x94, 0x07, 0xc0, 0xaa, 0x05, 0x1d, 0x7e, 0x35, 0x56, 0xed, 0xd1, 0x22, 0x9c, 0xce, 0x1c, 0x80,
+	0x70, 0x7a, 0xf4, 0xb0, 0xa6, 0x57, 0x1f, 0x19, 0xac, 0x29, 0x0c, 0x68, 0x92, 0x1f, 0x21, 0xa0,
+	0xa9, 0x26, 0x94, 0x09, 0x3f, 0x38, 0xae, 0x68, 0xa0, 0x36, 0xae, 0xa8, 0x26, 0x9a, 0xe8, 0x9d,
+	0x47, 0x81, 0xf8, 0x11, 0xc3, 0x88, 0x9f, 0x2f, 0x07, 0xe7, 0x73, 0xb2, 0x16, 0xd8, 0xe3, 0xe1,
+	0x60, 0x1e, 0x85, 0x2f, 0x06, 0x3a, 0x54, 0x0f, 0x2b, 0xf4, 0x48, 0x60, 0x35, 0xaf, 0x3f, 0x32,
+	0x58, 0x4d, 0x0d, 0x40, 0xcd, 0x43, 0xe2, 0x5e, 0x4e, 0xd6, 0xc0, 0xbd, 0x84, 0xb0, 0x2e, 0xe3,
+	0xf5, 0xb1, 0x2e, 0xff, 0xff, 0xe0, 0x5b, 0xf2, 0x0f, 0x8d, 0x6f, 0x69, 0x02, 0xd9, 0xb2, 0xf2,
+	0xc0, 0xc8, 0x96, 0xda, 0x98, 0x96, 0x07, 0x45, 0x6d, 0xb4, 0x3e, 0x52, 0xd4, 0x46, 0x6b, 0x6d,
+	0xd4, 0x06, 0x7e, 0x84, 0xa8, 0x8d, 0x06, 0x68, 0x8d, 0x67, 0xef, 0xef, 0x54, 0x22, 0x70, 0x1e,
+	0xf1, 0xca, 0xa3, 0x01, 0x7a, 0x54, 0x43, 0x37, 0xce, 0x1e, 0x00, 0xdd, 0xf8, 0x95, 0x22, 0x35,
+	0xde, 0xfe, 0x02, 0x4e, 0x61, 0xea, 0x1d, 0xbe, 0x7c, 0xf1, 0x67, 0x18, 0x2f, 0x3c, 0xd0, 0x19,
+	0x46, 0xe5, 0xe8, 0x02, 0x3f, 0xd0, 0xd1, 0x45, 0x28, 0x6e, 0xab, 0x4e, 0x16, 0x86, 0x4f, 0x2c,
+	0xcc, 0x2f, 0xe6, 0x08, 0xa1, 0xfe, 0xc9, 0xc1, 0x6c, 0x73, 0xf9, 0xff, 0x46, 0xb9, 0xfe, 0x57,
+	0x1e, 0x55, 0xae, 0xff, 0x57, 0x9a, 0xe2, 0xff, 0x02, 0xf2, 0xf0, 0x5f, 0xc1, 0x04, 0xf3, 0xb3,
+	0xce, 0x0f, 0x5f, 0x08, 0xdd, 0x75, 0xfd, 0xf9, 0x0b, 0x6f, 0x4d, 0x9d, 0x49, 0x67, 0xd2, 0xd3,
+	0xe9, 0x33, 0xe9, 0xf3, 0x67, 0xd2, 0x53, 0xe7, 0xd3, 0x53, 0x17, 0xd2, 0xd3, 0xe7, 0xd3, 0x67,
+	0xd3, 0x53, 0xe7, 0xd2, 0xe7, 0xd2, 0xe7, 0xd3, 0x53, 0x93, 0x93, 0xe9, 0xa9, 0xc9, 0xa9, 0xf4,
+	0xd4, 0x64, 0x26, 0x3d, 0x35, 0x39, 0x9d, 0x9e, 0xca, 0xa4, 0xa7, 0xa6, 0xd3, 0x99, 0xc9, 0x74,
+	0xe6, 0x7c, 0x3a, 0x33, 0x95, 0xce, 0x64, 0xd2, 0xd3, 0xd3, 0xe9, 0xcc, 0x74, 0x7a, 0x7a, 0x32,
+	0x3d, 0x7d, 0x26, 0x9d, 0x39, 0x97, 0xce, 0x9c, 0x49, 0x4f, 0x67, 0xd2, 0xd3, 0x33, 0xe9, 0x73,
+	0x67, 0xd3, 0xe7, 0x2e, 0xa4, 0xcf, 0x67, 0xb2, 0x67, 0xeb, 0xa7, 0xb5, 0x8f, 0xbe, 0xf7, 0xb9,
+	0x50, 0xaf, 0x32, 0xfb, 0x78, 0x55, 0x76, 0x1b, 0xbd, 0xf7, 0xb9, 0x10, 0x2a, 0xcb, 0x66, 0xea,
+	0xe5, 0xb6, 0x87, 0xde, 0xfb, 0x5c, 0xa8, 0x5d, 0x95, 0x9d, 0xac, 0x93, 0xe3, 0x4e, 0xbe, 0xf7,
+	0xb9, 0x50, 0xb3, 0x86, 0x68, 0xa9, 0x9d, 0xe4, 0xa6, 0x5a, 0x6a, 0x56, 0x65, 0x57, 0x9a, 0x4b,
+	0x76, 0x3f, 0xf5, 0xde, 0xe7, 0x42, 0x33, 0x84, 0xd9, 0xb1, 0x5a, 0x99, 0xec, 0xfe, 0xf7, 0x3e,
+	0x17, 0xaa, 0x8b, 0x97, 0xa2, 0x89, 0x61, 0xf1, 0x68, 0x28, 0xcf, 0xcb, 0x32, 0xbc, 0xaf, 0x88,
+	0xaf, 0x8e, 0xfe, 0xcd, 0x29, 0xe8, 0x96, 0x70, 0x51, 0x57, 0xf2, 0x87, 0x79, 0xc6, 0xc3, 0x3c,
+	0xe3, 0x61, 0x9e, 0xf1, 0x30, 0xcf, 0x78, 0x98, 0x67, 0xfc, 0x6a, 0xe5, 0x19, 0x37, 0x6b, 0xe7,
+	0x19, 0x1b, 0xc6, 0xab, 0x21, 0x8f, 0x7f, 0x98, 0x68, 0x3c, 0x4c, 0x34, 0x7e, 0x95, 0x12, 0x8d,
+	0x5f, 0xd8, 0xad, 0xb2, 0xc3, 0x74, 0xe3, 0x61, 0xba, 0xf1, 0x30, 0xdd, 0x78, 0x98, 0x6e, 0x3c,
+	0x4c, 0x37, 0x1e, 0xa6, 0x1b, 0xbf, 0x94, 0x74, 0xe3, 0x56, 0xbd, 0x74, 0xe3, 0x0b, 0xf7, 0x13,
+	0xbe, 0x1d, 0xe6, 0x1b, 0x0f, 0xf3, 0x8d, 0x87, 0xf9, 0xc6, 0xc3, 0x7c, 0xe3, 0x57, 0x20, 0xdf,
+	0xf8, 0x67, 0x93, 0xd0, 0x7e, 0x11, 0x3b, 0x87, 0xb9, 0xc6, 0xc3, 0x5c, 0xe3, 0x61, 0xae, 0xf1,
+	0xd7, 0x26, 0xd7, 0xf8, 0xd0, 0x6f, 0x00, 0xfe, 0xea, 0x93, 0x95, 0x0f, 0xf5, 0xee, 0xdf, 0x61,
+	0x7a, 0xb2, 0x6e, 0x7a, 0xf2, 0xcd, 0xda, 0xe9, 0xc9, 0x0b, 0x0d, 0x6f, 0x02, 0x56, 0x16, 0x88,
+	0xc3, 0xd4, 0xe4, 0x61, 0x6a, 0xf2, 0x4b, 0x48, 0x4d, 0xce, 0x3e, 0x48, 0x6a, 0xf2, 0xbe, 0xd1,
+	0x8f, 0x87, 0xe9, 0xc5, 0xc3, 0xf4, 0xe2, 0x61, 0x7a, 0xf1, 0x30, 0xbd, 0xd8, 0x74, 0x7a, 0xf1,
+	0x1f, 0x5c, 0x8a, 0xf0, 0x2b, 0xf5, 0x5a, 0xce, 0x97, 0xf9, 0x74, 0xcd, 0x6f, 0xd6, 0x7b, 0xba,
+	0xe6, 0x7e, 0x8f, 0xa0, 0x1e, 0xe9, 0xc3, 0x74, 0x0f, 0x93, 0x9e, 0xfe, 0x32, 0x13, 0xb5, 0xcd,
+	0x3f, 0xca, 0x11, 0xbf, 0xef, 0x47, 0x39, 0xe2, 0xee, 0xa3, 0x1c, 0xff, 0xf0, 0xb3, 0xc1, 0x9b,
+	0xf5, 0xb2, 0xc1, 0xcf, 0x36, 0x1b, 0x2d, 0x1f, 0x9c, 0x09, 0xfe, 0x52, 0x92, 0xfc, 0x87, 0xe9,
+	0xe6, 0x5f, 0xa3, 0x74, 0xf3, 0x7d, 0xbe, 0xe5, 0xa7, 0x3c, 0xda, 0xb7, 0xfc, 0xbe, 0xf0, 0x57,
+	0xfc, 0xe6, 0xef, 0xfb, 0x15, 0xbf, 0x9a, 0x8f, 0xf7, 0x4d, 0x35, 0x7c, 0x2b, 0xaf, 0xd6, 0x2b,
+	0x79, 0x5f, 0xc5, 0x34, 0xfe, 0x8d, 0x1a, 0x69, 0xfc, 0xfc, 0xd4, 0x64, 0xfa, 0x30, 0x93, 0xff,
+	0xeb, 0x97, 0xc9, 0x27, 0xed, 0xad, 0xfd, 0x46, 0x05, 0x6d, 0x6f, 0xcd, 0xaa, 0xec, 0x0b, 0x8d,
+	0xdf, 0xce, 0x38, 0xf1, 0xde, 0xe7, 0x42, 0x23, 0x82, 0xba, 0xa7, 0x07, 0xad, 0x89, 0xbf, 0x8d,
+	0x8b, 0xff, 0xad, 0xfa, 0x25, 0x8a, 0xab, 0xe2, 0xeb, 0x63, 0xbf, 0x10, 0xa0, 0xcd, 0x4b, 0x82,
+	0xa1, 0x3e, 0x00, 0xfa, 0x0f, 0x3c, 0xad, 0x49, 0xab, 0xaf, 0xbe, 0x26, 0x1e, 0x61, 0xff, 0x34,
+	0x00, 0xea, 0x85, 0xb6, 0x8d, 0x39, 0xb7, 0x50, 0xe0, 0x85, 0xc7, 0x00, 0x79, 0x85, 0xf2, 0x2b,
+	0x8b, 0x1b, 0x0b, 0xf2, 0xfa, 0xca, 0xa2, 0xd8, 0xc2, 0x6b, 0x07, 0xa1, 0x73, 0x63, 0x79, 0x5d,
+	0xae, 0xb0, 0xf1, 0x7f, 0x66, 0x00, 0xa5, 0x60, 0x20, 0x50, 0x51, 0x61, 0x8d, 0x73, 0x8a, 0x7e,
+	0x68, 0x27, 0x6d, 0x58, 0xe7, 0x8c, 0x11, 0x5e, 0xdc, 0x09, 0x6d, 0x97, 0x73, 0xae, 0xb4, 0x28,
+	0xf9, 0xb9, 0x7e, 0x69, 0x96, 0xff, 0x8c, 0x91, 0x9f, 0xb9, 0x15, 0x97, 0x25, 0x81, 0xba, 0x00,
+	0xae, 0x6e, 0xac, 0xb8, 0xd5, 0x6d, 0xa8, 0x1b, 0xda, 0x2f, 0xfb, 0x0a, 0x60, 0xec, 0x4f, 0x5b,
+	0x40, 0x0c, 0x87, 0xd8, 0x68, 0x00, 0xd0, 0x95, 0x45, 0x69, 0xe3, 0xf2, 0xec, 0xb2, 0xbc, 0xb0,
+	0xba, 0xbe, 0x21, 0x4b, 0xf3, 0xb3, 0xb9, 0xd7, 0xc4, 0x23, 0xe8, 0x09, 0x38, 0x19, 0x28, 0x5f,
+	0x9b, 0x5f, 0xc9, 0x2d, 0xae, 0x5c, 0x94, 0xaf, 0xcc, 0x4b, 0x8b, 0x2f, 0x2d, 0xce, 0xcd, 0x6e,
+	0x2c, 0xae, 0xae, 0x88, 0x02, 0x7a, 0x1c, 0x52, 0x01, 0x32, 0x7f, 0xb5, 0xfc, 0xd2, 0xec, 0xe2,
+	0xf2, 0x7c, 0x4e, 0x6c, 0x41, 0x4f, 0xc1, 0x63, 0x35, 0x85, 0x91, 0xe6, 0xe7, 0xe6, 0x97, 0xe7,
+	0x2f, 0x32, 0x71, 0x11, 0x74, 0x12, 0x8e, 0xd7, 0x24, 0x9c, 0x95, 0xa5, 0xf9, 0xb9, 0x55, 0x29,
+	0x27, 0x46, 0xd1, 0x63, 0x70, 0x22, 0x40, 0x42, 0x64, 0xb8, 0xd5, 0xf2, 0x6c, 0x2e, 0x37, 0x9f,
+	0x13, 0x63, 0x68, 0x1c, 0xc6, 0x02, 0x44, 0x8b, 0x2b, 0x1b, 0xf3, 0xd2, 0xca, 0xfc, 0x86, 0xbc,
+	0xb2, 0x9c, 0xf5, 0x84, 0xce, 0x49, 0xf3, 0x4c, 0x6f, 0x2b, 0x3a, 0x0d, 0x4f, 0xd7, 0xa7, 0x77,
+	0xe9, 0xdc, 0xfe, 0xc4, 0xc7, 0xfe, 0x22, 0x02, 0xa8, 0xfa, 0xdd, 0x0f, 0xd4, 0x07, 0xa2, 0xbb,
+	0x19, 0xc8, 0xb1, 0x38, 0x5d, 0x15, 0x8f, 0xa0, 0x21, 0xe8, 0xcf, 0xb9, 0x8f, 0x8b, 0x5e, 0xc1,
+	0x96, 0xc7, 0x23, 0x92, 0x41, 0xd6, 0x3d, 0x5b, 0x79, 0x3c, 0xd3, 0x72, 0xb0, 0x2a, 0xb6, 0xa0,
+	0xe3, 0x30, 0xb4, 0x66, 0x61, 0xee, 0x56, 0x5d, 0xb7, 0xb3, 0x86, 0x0d, 0x55, 0x33, 0xb6, 0xc5,
+	0x0e, 0x34, 0x0c, 0x03, 0xa1, 0x3a, 0x97, 0xb5, 0xb3, 0x46, 0x9d, 0xcb, 0x17, 0x41, 0x47, 0x61,
+	0x30, 0x54, 0xc7, 0x1a, 0x83, 0x55, 0x31, 0xea, 0x6f, 0xf9, 0x4b, 0x9a, 0x41, 0x1d, 0x8a, 0x18,
+	0x23, 0x63, 0xc3, 0xe7, 0xd7, 0x17, 0x0d, 0xfa, 0x4f, 0x64, 0x8a, 0xad, 0x84, 0xda, 0x57, 0x4e,
+	0xff, 0x55, 0x4c, 0x31, 0x4e, 0xfa, 0xe9, 0xca, 0x58, 0x31, 0x1d, 0xfe, 0x0f, 0x6e, 0x6f, 0xea,
+	0x58, 0x4c, 0xa0, 0x41, 0xe8, 0x75, 0xab, 0x24, 0x2f, 0xa7, 0xa6, 0x8a, 0x6d, 0xa4, 0x51, 0x6e,
+	0xc5, 0x45, 0x6c, 0x60, 0x1e, 0x0f, 0x61, 0xc7, 0xda, 0x15, 0x01, 0xf5, 0x40, 0xe7, 0xac, 0x7f,
+	0x77, 0x24, 0xb6, 0x93, 0x16, 0x55, 0xbf, 0x41, 0x2a, 0x76, 0xa1, 0x11, 0x18, 0x76, 0xcb, 0x67,
+	0xf3, 0x79, 0xb3, 0x64, 0x04, 0xf4, 0x74, 0x13, 0x9b, 0x7a, 0x5f, 0x86, 0x1a, 0xc1, 0x5f, 0x2d,
+	0x86, 0x3a, 0x4a, 0xdf, 0xcf, 0xc3, 0xaa, 0xd8, 0x33, 0x36, 0x01, 0x5d, 0x95, 0x97, 0x21, 0x2f,
+	0x99, 0x2a, 0x46, 0x1d, 0x90, 0x98, 0x5d, 0x5b, 0x94, 0x2f, 0xad, 0xe6, 0xe6, 0xc5, 0x23, 0x64,
+	0x8a, 0x2d, 0xae, 0x2c, 0x2f, 0xae, 0xcc, 0xb3, 0x02, 0x61, 0xac, 0x08, 0xbd, 0xeb, 0xfe, 0xd7,
+	0x3c, 0x59, 0x44, 0x44, 0xfa, 0xbf, 0xb2, 0x2a, 0xaf, 0xcf, 0x4b, 0x57, 0x16, 0xe7, 0xe6, 0xe5,
+	0xb5, 0xd5, 0xe5, 0xc5, 0xb9, 0xc5, 0xf9, 0x75, 0xf1, 0x08, 0x19, 0xcc, 0xe1, 0x52, 0xf9, 0x25,
+	0x69, 0xf5, 0x92, 0xbc, 0x32, 0x7b, 0x69, 0x7e, 0x7d, 0x6d, 0x76, 0x6e, 0x5e, 0x14, 0xa8, 0x91,
+	0xe6, 0x36, 0x16, 0xaf, 0xcc, 0x57, 0x4b, 0x68, 0x19, 0x7b, 0x01, 0x50, 0xf5, 0x8b, 0x56, 0x28,
+	0x01, 0xd1, 0x95, 0xd5, 0x15, 0xd2, 0xc4, 0x76, 0x70, 0xff, 0xf9, 0x3a, 0x51, 0x40, 0x71, 0x88,
+	0xcc, 0xe5, 0x56, 0xc4, 0x16, 0x52, 0x9f, 0x5d, 0xdd, 0x58, 0x10, 0x23, 0x63, 0x3f, 0x17, 0xa0,
+	0x3b, 0x74, 0xc4, 0x42, 0x86, 0xa5, 0x3b, 0x1b, 0xb8, 0x46, 0xf1, 0x08, 0xb1, 0x11, 0x13, 0xb4,
+	0x3a, 0x9b, 0x93, 0xb3, 0xb3, 0xcb, 0xb3, 0x2b, 0x73, 0xf3, 0x92, 0x28, 0x10, 0x1b, 0x10, 0x8b,
+	0x5c, 0x9c, 0xdd, 0x98, 0x7f, 0x65, 0xf6, 0x35, 0xb1, 0x05, 0xf5, 0x43, 0x0f, 0xf1, 0x74, 0x41,
+	0xba, 0x08, 0x6a, 0x83, 0x98, 0xeb, 0xc7, 0x4e, 0x40, 0xff, 0xf2, 0xea, 0xdc, 0xec, 0xb2, 0xfc,
+	0xf2, 0xf9, 0x75, 0xd9, 0xcf, 0x1c, 0xf3, 0xdc, 0x61, 0xcf, 0x5c, 0x6e, 0x25, 0x24, 0xa2, 0x15,
+	0x89, 0xd0, 0xb1, 0x72, 0x71, 0x71, 0xe5, 0x55, 0xda, 0xaa, 0x79, 0x49, 0x8c, 0xa3, 0x11, 0xe8,
+	0xcb, 0x2e, 0x5e, 0x5c, 0x5c, 0x93, 0xfd, 0xed, 0x9d, 0x97, 0xc4, 0x44, 0x45, 0x10, 0x71, 0xa0,
+	0x41, 0x41, 0x6d, 0xd9, 0x6f, 0x0b, 0xf7, 0x7e, 0x34, 0x72, 0xe4, 0xa3, 0x1f, 0x8d, 0x1c, 0xf9,
+	0xd9, 0x8f, 0x46, 0x84, 0x5b, 0xfb, 0x23, 0xc2, 0xbf, 0xdd, 0x1f, 0x11, 0x7e, 0xb0, 0x3f, 0x22,
+	0xdc, 0xdb, 0x1f, 0x11, 0x3e, 0xda, 0x1f, 0x11, 0x3e, 0xd9, 0x1f, 0x11, 0x7e, 0xb2, 0x3f, 0x72,
+	0xe4, 0x67, 0xfb, 0x23, 0xc2, 0x77, 0x7e, 0x3c, 0x72, 0xe4, 0xee, 0x8f, 0x47, 0x84, 0x7b, 0x3f,
+	0x1e, 0x39, 0xf2, 0xd1, 0x8f, 0x47, 0x8e, 0x5c, 0x5d, 0xdb, 0x36, 0x8b, 0xd7, 0xb6, 0xc7, 0xdd,
+	0xb7, 0x4c, 0xc7, 0x4b, 0xf6, 0x04, 0xfd, 0x63, 0xcb, 0xb4, 0x0a, 0xa7, 0x8b, 0x96, 0x79, 0x5d,
+	0x53, 0xb1, 0x75, 0xda, 0xad, 0x9e, 0x28, 0x6e, 0x6e, 0x9b, 0x13, 0xf8, 0xa6, 0xc3, 0xa2, 0xa7,
+	0x09, 0xfe, 0x3f, 0x7f, 0x10, 0xb5, 0xd9, 0x4a, 0x77, 0x57, 0xd3, 0xff, 0x2f, 0x00, 0x00, 0xff,
+	0xff, 0x44, 0x70, 0x31, 0x94, 0xb6, 0xa4, 0x00, 0x00,
 }
 
 func (x ProxyType) String() string {
@@ -7452,6 +9061,20 @@ func (x CertificationState) String() string {
 }
 func (x BotDefenseMode) String() string {
 	s, ok := BotDefenseMode_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x ServicePolicyOption) String() string {
+	s, ok := ServicePolicyOption_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (x DelegationLocation) String() string {
+	s, ok := DelegationLocation_name[int32(x)]
 	if ok {
 		return s
 	}
@@ -8194,6 +9817,26 @@ func (this *CdnServiceType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if !this.CdnOriginPool.Equal(that1.CdnOriginPool) {
+		return false
+	}
+	if len(this.CdnCacheRule) != len(that1.CdnCacheRule) {
+		return false
+	}
+	for i := range this.CdnCacheRule {
+		if !this.CdnCacheRule[i].Equal(that1.CdnCacheRule[i]) {
+			return false
+		}
+	}
+	if !this.OtherSettings.Equal(that1.OtherSettings) {
+		return false
+	}
+	if !this.DefaultCacheAction.Equal(that1.DefaultCacheAction) {
+		return false
+	}
+	if this.ServicePolicyOption != that1.ServicePolicyOption {
+		return false
+	}
 	return true
 }
 func (this *CdnServiceType_DownloadDelivery) Equal(that interface{}) bool {
@@ -8240,6 +9883,576 @@ func (this *CdnServiceType_LiveStreaming) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.LiveStreaming.Equal(that1.LiveStreaming) {
+		return false
+	}
+	return true
+}
+func (this *OtherSettings) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*OtherSettings)
+	if !ok {
+		that2, ok := that.(OtherSettings)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.AddLocation != that1.AddLocation {
+		return false
+	}
+	if !this.LoggingOptions.Equal(that1.LoggingOptions) {
+		return false
+	}
+	if !this.HeaderOptions.Equal(that1.HeaderOptions) {
+		return false
+	}
+	return true
+}
+func (this *LoggingOptionsType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*LoggingOptionsType)
+	if !ok {
+		that2, ok := that.(LoggingOptionsType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ClientLogOptions.Equal(that1.ClientLogOptions) {
+		return false
+	}
+	if !this.OriginLogOptions.Equal(that1.OriginLogOptions) {
+		return false
+	}
+	return true
+}
+func (this *LogHeaderOptions) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*LogHeaderOptions)
+	if !ok {
+		that2, ok := that.(LogHeaderOptions)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.HeaderList) != len(that1.HeaderList) {
+		return false
+	}
+	for i := range this.HeaderList {
+		if this.HeaderList[i] != that1.HeaderList[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *HeaderControlType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*HeaderControlType)
+	if !ok {
+		that2, ok := that.(HeaderControlType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.RequestHeadersToAdd) != len(that1.RequestHeadersToAdd) {
+		return false
+	}
+	for i := range this.RequestHeadersToAdd {
+		if !this.RequestHeadersToAdd[i].Equal(that1.RequestHeadersToAdd[i]) {
+			return false
+		}
+	}
+	if len(this.RequestHeadersToRemove) != len(that1.RequestHeadersToRemove) {
+		return false
+	}
+	for i := range this.RequestHeadersToRemove {
+		if this.RequestHeadersToRemove[i] != that1.RequestHeadersToRemove[i] {
+			return false
+		}
+	}
+	if len(this.ResponseHeadersToAdd) != len(that1.ResponseHeadersToAdd) {
+		return false
+	}
+	for i := range this.ResponseHeadersToAdd {
+		if !this.ResponseHeadersToAdd[i].Equal(that1.ResponseHeadersToAdd[i]) {
+			return false
+		}
+	}
+	if len(this.ResponseHeadersToRemove) != len(that1.ResponseHeadersToRemove) {
+		return false
+	}
+	for i := range this.ResponseHeadersToRemove {
+		if this.ResponseHeadersToRemove[i] != that1.ResponseHeadersToRemove[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *DefaultCacheAction) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DefaultCacheAction)
+	if !ok {
+		that2, ok := that.(DefaultCacheAction)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.CacheActions == nil {
+		if this.CacheActions != nil {
+			return false
+		}
+	} else if this.CacheActions == nil {
+		return false
+	} else if !this.CacheActions.Equal(that1.CacheActions) {
+		return false
+	}
+	return true
+}
+func (this *DefaultCacheAction_CacheTtlDefault) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DefaultCacheAction_CacheTtlDefault)
+	if !ok {
+		that2, ok := that.(DefaultCacheAction_CacheTtlDefault)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.CacheTtlDefault != that1.CacheTtlDefault {
+		return false
+	}
+	return true
+}
+func (this *DefaultCacheAction_CacheTtlOverride) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DefaultCacheAction_CacheTtlOverride)
+	if !ok {
+		that2, ok := that.(DefaultCacheAction_CacheTtlOverride)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.CacheTtlOverride != that1.CacheTtlOverride {
+		return false
+	}
+	return true
+}
+func (this *DefaultCacheAction_CacheDisabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DefaultCacheAction_CacheDisabled)
+	if !ok {
+		that2, ok := that.(DefaultCacheAction_CacheDisabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CacheDisabled.Equal(that1.CacheDisabled) {
+		return false
+	}
+	return true
+}
+func (this *CdnOriginPoolType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CdnOriginPoolType)
+	if !ok {
+		that2, ok := that.(CdnOriginPoolType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.PublicName.Equal(that1.PublicName) {
+		return false
+	}
+	if that1.TlsChoice == nil {
+		if this.TlsChoice != nil {
+			return false
+		}
+	} else if this.TlsChoice == nil {
+		return false
+	} else if !this.TlsChoice.Equal(that1.TlsChoice) {
+		return false
+	}
+	if len(this.OriginServers) != len(that1.OriginServers) {
+		return false
+	}
+	for i := range this.OriginServers {
+		if !this.OriginServers[i].Equal(that1.OriginServers[i]) {
+			return false
+		}
+	}
+	if this.FollowOriginRedirect != that1.FollowOriginRedirect {
+		return false
+	}
+	if this.OriginRequestTimeout != that1.OriginRequestTimeout {
+		return false
+	}
+	if !this.MoreOriginOptions.Equal(that1.MoreOriginOptions) {
+		return false
+	}
+	return true
+}
+func (this *CdnOriginPoolType_NoTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CdnOriginPoolType_NoTls)
+	if !ok {
+		that2, ok := that.(CdnOriginPoolType_NoTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoTls.Equal(that1.NoTls) {
+		return false
+	}
+	return true
+}
+func (this *CdnOriginPoolType_UseTls) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CdnOriginPoolType_UseTls)
+	if !ok {
+		that2, ok := that.(CdnOriginPoolType_UseTls)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.UseTls.Equal(that1.UseTls) {
+		return false
+	}
+	return true
+}
+func (this *CDNOriginServerPublicName) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CDNOriginServerPublicName)
+	if !ok {
+		that2, ok := that.(CDNOriginServerPublicName)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DnsName != that1.DnsName {
+		return false
+	}
+	return true
+}
+func (this *CDNUpstreamTlsParameters) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CDNUpstreamTlsParameters)
+	if !ok {
+		that2, ok := that.(CDNUpstreamTlsParameters)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	return true
+}
+func (this *OriginAdvancedConfiguration) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*OriginAdvancedConfiguration)
+	if !ok {
+		that2, ok := that.(OriginAdvancedConfiguration)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.DisableByteRangeRequest != that1.DisableByteRangeRequest {
+		return false
+	}
+	if this.WebsocketProxy != that1.WebsocketProxy {
+		return false
+	}
+	return true
+}
+func (this *CDNOriginServerType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CDNOriginServerType)
+	if !ok {
+		that2, ok := that.(CDNOriginServerType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.Choice == nil {
+		if this.Choice != nil {
+			return false
+		}
+	} else if this.Choice == nil {
+		return false
+	} else if !this.Choice.Equal(that1.Choice) {
+		return false
+	}
+	if this.Port != that1.Port {
+		return false
+	}
+	return true
+}
+func (this *CDNOriginServerType_PublicIp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CDNOriginServerType_PublicIp)
+	if !ok {
+		that2, ok := that.(CDNOriginServerType_PublicIp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.PublicIp.Equal(that1.PublicIp) {
+		return false
+	}
+	return true
+}
+func (this *CDNOriginServerType_PublicName) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CDNOriginServerType_PublicName)
+	if !ok {
+		that2, ok := that.(CDNOriginServerType_PublicName)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.PublicName.Equal(that1.PublicName) {
+		return false
+	}
+	return true
+}
+func (this *CDNOriginServerPublicIP) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CDNOriginServerPublicIP)
+	if !ok {
+		that2, ok := that.(CDNOriginServerPublicIP)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.PublicIpChoice == nil {
+		if this.PublicIpChoice != nil {
+			return false
+		}
+	} else if this.PublicIpChoice == nil {
+		return false
+	} else if !this.PublicIpChoice.Equal(that1.PublicIpChoice) {
+		return false
+	}
+	return true
+}
+func (this *CDNOriginServerPublicIP_Ip) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CDNOriginServerPublicIP_Ip)
+	if !ok {
+		that2, ok := that.(CDNOriginServerPublicIP_Ip)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Ip != that1.Ip {
+		return false
+	}
+	return true
+}
+func (this *CDNOriginServerPublicIP_Ipv6) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CDNOriginServerPublicIP_Ipv6)
+	if !ok {
+		that2, ok := that.(CDNOriginServerPublicIP_Ipv6)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Ipv6 != that1.Ipv6 {
 		return false
 	}
 	return true
@@ -8961,6 +11174,51 @@ func (this *HttpRedirectOptions) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *DelegationLocationSelection) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DelegationLocationSelection)
+	if !ok {
+		that2, ok := that.(DelegationLocationSelection)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Waap != that1.Waap {
+		return false
+	}
+	if this.L7Ddos != that1.L7Ddos {
+		return false
+	}
+	if this.SimpleRoute != that1.SimpleRoute {
+		return false
+	}
+	if this.DirectResponseRoute != that1.DirectResponseRoute {
+		return false
+	}
+	if this.RedirectRoute != that1.RedirectRoute {
+		return false
+	}
+	if this.RequestHeaderManipulation != that1.RequestHeaderManipulation {
+		return false
+	}
+	if this.ResponseHeaderManipulation != that1.ResponseHeaderManipulation {
+		return false
+	}
+	if this.RequestRewrite != that1.RequestRewrite {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -9036,6 +11294,38 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	}
 	for i := range this.ResponseHeadersToRemove {
 		if this.ResponseHeadersToRemove[i] != that1.ResponseHeadersToRemove[i] {
+			return false
+		}
+	}
+	if len(this.RequestCookiesToAdd) != len(that1.RequestCookiesToAdd) {
+		return false
+	}
+	for i := range this.RequestCookiesToAdd {
+		if !this.RequestCookiesToAdd[i].Equal(that1.RequestCookiesToAdd[i]) {
+			return false
+		}
+	}
+	if len(this.RequestCookiesToRemove) != len(that1.RequestCookiesToRemove) {
+		return false
+	}
+	for i := range this.RequestCookiesToRemove {
+		if this.RequestCookiesToRemove[i] != that1.RequestCookiesToRemove[i] {
+			return false
+		}
+	}
+	if len(this.ResponseCookiesToAdd) != len(that1.ResponseCookiesToAdd) {
+		return false
+	}
+	for i := range this.ResponseCookiesToAdd {
+		if !this.ResponseCookiesToAdd[i].Equal(that1.ResponseCookiesToAdd[i]) {
+			return false
+		}
+	}
+	if len(this.ResponseCookiesToRemove) != len(that1.ResponseCookiesToRemove) {
+		return false
+	}
+	for i := range this.ResponseCookiesToRemove {
+		if this.ResponseCookiesToRemove[i] != that1.ResponseCookiesToRemove[i] {
 			return false
 		}
 	}
@@ -9244,6 +11534,9 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if this.L7DdosRpsThreshold != that1.L7DdosRpsThreshold {
+		return false
+	}
 	if this.DnsVolterraManaged != that1.DnsVolterraManaged {
 		return false
 	}
@@ -9298,6 +11591,9 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		}
 	}
 	if this.LoadbalancerAlgorithm != that1.LoadbalancerAlgorithm {
+		return false
+	}
+	if this.EnablePerPacketLoadBalancing != that1.EnablePerPacketLoadBalancing {
 		return false
 	}
 	if this.VolterraCert != that1.VolterraCert {
@@ -9398,6 +11694,23 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.CoalescingOptions.Equal(that1.CoalescingOptions) {
+		return false
+	}
+	if len(this.WafExclusionPolicy) != len(that1.WafExclusionPolicy) {
+		return false
+	}
+	for i := range this.WafExclusionPolicy {
+		if !this.WafExclusionPolicy[i].Equal(that1.WafExclusionPolicy[i]) {
+			return false
+		}
+	}
+	if that1.ServiceActionDelegation == nil {
+		if this.ServiceActionDelegation != nil {
+			return false
+		}
+	} else if this.ServiceActionDelegation == nil {
+		return false
+	} else if !this.ServiceActionDelegation.Equal(that1.ServiceActionDelegation) {
 		return false
 	}
 	return true
@@ -10074,6 +12387,54 @@ func (this *GlobalSpecType_Ready) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_Selected) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_Selected)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_Selected)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Selected.Equal(that1.Selected) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_All) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_All)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_All)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.All != that1.All {
+		return false
+	}
+	return true
+}
 func (this *DNSVHostStatusType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -10182,6 +12543,38 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	}
 	for i := range this.ResponseHeadersToRemove {
 		if this.ResponseHeadersToRemove[i] != that1.ResponseHeadersToRemove[i] {
+			return false
+		}
+	}
+	if len(this.RequestCookiesToAdd) != len(that1.RequestCookiesToAdd) {
+		return false
+	}
+	for i := range this.RequestCookiesToAdd {
+		if !this.RequestCookiesToAdd[i].Equal(that1.RequestCookiesToAdd[i]) {
+			return false
+		}
+	}
+	if len(this.RequestCookiesToRemove) != len(that1.RequestCookiesToRemove) {
+		return false
+	}
+	for i := range this.RequestCookiesToRemove {
+		if this.RequestCookiesToRemove[i] != that1.RequestCookiesToRemove[i] {
+			return false
+		}
+	}
+	if len(this.ResponseCookiesToAdd) != len(that1.ResponseCookiesToAdd) {
+		return false
+	}
+	for i := range this.ResponseCookiesToAdd {
+		if !this.ResponseCookiesToAdd[i].Equal(that1.ResponseCookiesToAdd[i]) {
+			return false
+		}
+	}
+	if len(this.ResponseCookiesToRemove) != len(that1.ResponseCookiesToRemove) {
+		return false
+	}
+	for i := range this.ResponseCookiesToRemove {
+		if this.ResponseCookiesToRemove[i] != that1.ResponseCookiesToRemove[i] {
 			return false
 		}
 	}
@@ -10853,6 +13246,38 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if len(this.RequestCookiesToAdd) != len(that1.RequestCookiesToAdd) {
+		return false
+	}
+	for i := range this.RequestCookiesToAdd {
+		if !this.RequestCookiesToAdd[i].Equal(that1.RequestCookiesToAdd[i]) {
+			return false
+		}
+	}
+	if len(this.RequestCookiesToRemove) != len(that1.RequestCookiesToRemove) {
+		return false
+	}
+	for i := range this.RequestCookiesToRemove {
+		if this.RequestCookiesToRemove[i] != that1.RequestCookiesToRemove[i] {
+			return false
+		}
+	}
+	if len(this.ResponseCookiesToAdd) != len(that1.ResponseCookiesToAdd) {
+		return false
+	}
+	for i := range this.ResponseCookiesToAdd {
+		if !this.ResponseCookiesToAdd[i].Equal(that1.ResponseCookiesToAdd[i]) {
+			return false
+		}
+	}
+	if len(this.ResponseCookiesToRemove) != len(that1.ResponseCookiesToRemove) {
+		return false
+	}
+	for i := range this.ResponseCookiesToRemove {
+		if this.ResponseCookiesToRemove[i] != that1.ResponseCookiesToRemove[i] {
+			return false
+		}
+	}
 	if that1.TlsCertificatesChoice == nil {
 		if this.TlsCertificatesChoice != nil {
 			return false
@@ -11521,6 +13946,38 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if len(this.RequestCookiesToAdd) != len(that1.RequestCookiesToAdd) {
+		return false
+	}
+	for i := range this.RequestCookiesToAdd {
+		if !this.RequestCookiesToAdd[i].Equal(that1.RequestCookiesToAdd[i]) {
+			return false
+		}
+	}
+	if len(this.RequestCookiesToRemove) != len(that1.RequestCookiesToRemove) {
+		return false
+	}
+	for i := range this.RequestCookiesToRemove {
+		if this.RequestCookiesToRemove[i] != that1.RequestCookiesToRemove[i] {
+			return false
+		}
+	}
+	if len(this.ResponseCookiesToAdd) != len(that1.ResponseCookiesToAdd) {
+		return false
+	}
+	for i := range this.ResponseCookiesToAdd {
+		if !this.ResponseCookiesToAdd[i].Equal(that1.ResponseCookiesToAdd[i]) {
+			return false
+		}
+	}
+	if len(this.ResponseCookiesToRemove) != len(that1.ResponseCookiesToRemove) {
+		return false
+	}
+	for i := range this.ResponseCookiesToRemove {
+		if this.ResponseCookiesToRemove[i] != that1.ResponseCookiesToRemove[i] {
+			return false
+		}
+	}
 	if that1.TlsCertificatesChoice == nil {
 		if this.TlsCertificatesChoice != nil {
 			return false
@@ -11737,6 +14194,18 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 		}
 	}
 	if !this.CoalescingOptions.Equal(that1.CoalescingOptions) {
+		return false
+	}
+	if that1.DdosAutoMitigationAction == nil {
+		if this.DdosAutoMitigationAction != nil {
+			return false
+		}
+	} else if this.DdosAutoMitigationAction == nil {
+		return false
+	} else if !this.DdosAutoMitigationAction.Equal(that1.DdosAutoMitigationAction) {
+		return false
+	}
+	if this.L7DdosRpsThreshold != that1.L7DdosRpsThreshold {
 		return false
 	}
 	return true
@@ -12197,6 +14666,102 @@ func (this *GetSpecType_Ready) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GetSpecType_Block) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_Block)
+	if !ok {
+		that2, ok := that.(GetSpecType_Block)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Block.Equal(that1.Block) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DdosJsChallenge) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DdosJsChallenge)
+	if !ok {
+		that2, ok := that.(GetSpecType_DdosJsChallenge)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DdosJsChallenge.Equal(that1.DdosJsChallenge) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_L7DdosActionDefault) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_L7DdosActionDefault)
+	if !ok {
+		that2, ok := that.(GetSpecType_L7DdosActionDefault)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.L7DdosActionDefault.Equal(that1.L7DdosActionDefault) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_L7DdosActionNone) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_L7DdosActionNone)
+	if !ok {
+		that2, ok := that.(GetSpecType_L7DdosActionNone)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.L7DdosActionNone.Equal(that1.L7DdosActionNone) {
+		return false
+	}
+	return true
+}
 func (this *VirtualHostID) GoString() string {
 	if this == nil {
 		return "nil"
@@ -12487,7 +15052,7 @@ func (this *CdnServiceType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 13)
 	s = append(s, "&virtual_host.CdnServiceType{")
 	if this.ContentChoice != nil {
 		s = append(s, "ContentChoice: "+fmt.Sprintf("%#v", this.ContentChoice)+",\n")
@@ -12496,6 +15061,19 @@ func (this *CdnServiceType) GoString() string {
 	if this.ServiceDomains != nil {
 		s = append(s, "ServiceDomains: "+fmt.Sprintf("%#v", this.ServiceDomains)+",\n")
 	}
+	if this.CdnOriginPool != nil {
+		s = append(s, "CdnOriginPool: "+fmt.Sprintf("%#v", this.CdnOriginPool)+",\n")
+	}
+	if this.CdnCacheRule != nil {
+		s = append(s, "CdnCacheRule: "+fmt.Sprintf("%#v", this.CdnCacheRule)+",\n")
+	}
+	if this.OtherSettings != nil {
+		s = append(s, "OtherSettings: "+fmt.Sprintf("%#v", this.OtherSettings)+",\n")
+	}
+	if this.DefaultCacheAction != nil {
+		s = append(s, "DefaultCacheAction: "+fmt.Sprintf("%#v", this.DefaultCacheAction)+",\n")
+	}
+	s = append(s, "ServicePolicyOption: "+fmt.Sprintf("%#v", this.ServicePolicyOption)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -12513,6 +15091,226 @@ func (this *CdnServiceType_LiveStreaming) GoString() string {
 	}
 	s := strings.Join([]string{`&virtual_host.CdnServiceType_LiveStreaming{` +
 		`LiveStreaming:` + fmt.Sprintf("%#v", this.LiveStreaming) + `}`}, ", ")
+	return s
+}
+func (this *OtherSettings) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&virtual_host.OtherSettings{")
+	s = append(s, "AddLocation: "+fmt.Sprintf("%#v", this.AddLocation)+",\n")
+	if this.LoggingOptions != nil {
+		s = append(s, "LoggingOptions: "+fmt.Sprintf("%#v", this.LoggingOptions)+",\n")
+	}
+	if this.HeaderOptions != nil {
+		s = append(s, "HeaderOptions: "+fmt.Sprintf("%#v", this.HeaderOptions)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *LoggingOptionsType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&virtual_host.LoggingOptionsType{")
+	if this.ClientLogOptions != nil {
+		s = append(s, "ClientLogOptions: "+fmt.Sprintf("%#v", this.ClientLogOptions)+",\n")
+	}
+	if this.OriginLogOptions != nil {
+		s = append(s, "OriginLogOptions: "+fmt.Sprintf("%#v", this.OriginLogOptions)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *LogHeaderOptions) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&virtual_host.LogHeaderOptions{")
+	s = append(s, "HeaderList: "+fmt.Sprintf("%#v", this.HeaderList)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *HeaderControlType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&virtual_host.HeaderControlType{")
+	if this.RequestHeadersToAdd != nil {
+		s = append(s, "RequestHeadersToAdd: "+fmt.Sprintf("%#v", this.RequestHeadersToAdd)+",\n")
+	}
+	s = append(s, "RequestHeadersToRemove: "+fmt.Sprintf("%#v", this.RequestHeadersToRemove)+",\n")
+	if this.ResponseHeadersToAdd != nil {
+		s = append(s, "ResponseHeadersToAdd: "+fmt.Sprintf("%#v", this.ResponseHeadersToAdd)+",\n")
+	}
+	s = append(s, "ResponseHeadersToRemove: "+fmt.Sprintf("%#v", this.ResponseHeadersToRemove)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DefaultCacheAction) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&virtual_host.DefaultCacheAction{")
+	if this.CacheActions != nil {
+		s = append(s, "CacheActions: "+fmt.Sprintf("%#v", this.CacheActions)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DefaultCacheAction_CacheTtlDefault) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.DefaultCacheAction_CacheTtlDefault{` +
+		`CacheTtlDefault:` + fmt.Sprintf("%#v", this.CacheTtlDefault) + `}`}, ", ")
+	return s
+}
+func (this *DefaultCacheAction_CacheTtlOverride) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.DefaultCacheAction_CacheTtlOverride{` +
+		`CacheTtlOverride:` + fmt.Sprintf("%#v", this.CacheTtlOverride) + `}`}, ", ")
+	return s
+}
+func (this *DefaultCacheAction_CacheDisabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.DefaultCacheAction_CacheDisabled{` +
+		`CacheDisabled:` + fmt.Sprintf("%#v", this.CacheDisabled) + `}`}, ", ")
+	return s
+}
+func (this *CdnOriginPoolType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 11)
+	s = append(s, "&virtual_host.CdnOriginPoolType{")
+	if this.PublicName != nil {
+		s = append(s, "PublicName: "+fmt.Sprintf("%#v", this.PublicName)+",\n")
+	}
+	if this.TlsChoice != nil {
+		s = append(s, "TlsChoice: "+fmt.Sprintf("%#v", this.TlsChoice)+",\n")
+	}
+	if this.OriginServers != nil {
+		s = append(s, "OriginServers: "+fmt.Sprintf("%#v", this.OriginServers)+",\n")
+	}
+	s = append(s, "FollowOriginRedirect: "+fmt.Sprintf("%#v", this.FollowOriginRedirect)+",\n")
+	s = append(s, "OriginRequestTimeout: "+fmt.Sprintf("%#v", this.OriginRequestTimeout)+",\n")
+	if this.MoreOriginOptions != nil {
+		s = append(s, "MoreOriginOptions: "+fmt.Sprintf("%#v", this.MoreOriginOptions)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CdnOriginPoolType_NoTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.CdnOriginPoolType_NoTls{` +
+		`NoTls:` + fmt.Sprintf("%#v", this.NoTls) + `}`}, ", ")
+	return s
+}
+func (this *CdnOriginPoolType_UseTls) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.CdnOriginPoolType_UseTls{` +
+		`UseTls:` + fmt.Sprintf("%#v", this.UseTls) + `}`}, ", ")
+	return s
+}
+func (this *CDNOriginServerPublicName) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&virtual_host.CDNOriginServerPublicName{")
+	s = append(s, "DnsName: "+fmt.Sprintf("%#v", this.DnsName)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CDNUpstreamTlsParameters) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 4)
+	s = append(s, "&virtual_host.CDNUpstreamTlsParameters{")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *OriginAdvancedConfiguration) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&virtual_host.OriginAdvancedConfiguration{")
+	s = append(s, "DisableByteRangeRequest: "+fmt.Sprintf("%#v", this.DisableByteRangeRequest)+",\n")
+	s = append(s, "WebsocketProxy: "+fmt.Sprintf("%#v", this.WebsocketProxy)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CDNOriginServerType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&virtual_host.CDNOriginServerType{")
+	if this.Choice != nil {
+		s = append(s, "Choice: "+fmt.Sprintf("%#v", this.Choice)+",\n")
+	}
+	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CDNOriginServerType_PublicIp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.CDNOriginServerType_PublicIp{` +
+		`PublicIp:` + fmt.Sprintf("%#v", this.PublicIp) + `}`}, ", ")
+	return s
+}
+func (this *CDNOriginServerType_PublicName) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.CDNOriginServerType_PublicName{` +
+		`PublicName:` + fmt.Sprintf("%#v", this.PublicName) + `}`}, ", ")
+	return s
+}
+func (this *CDNOriginServerPublicIP) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&virtual_host.CDNOriginServerPublicIP{")
+	if this.PublicIpChoice != nil {
+		s = append(s, "PublicIpChoice: "+fmt.Sprintf("%#v", this.PublicIpChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CDNOriginServerPublicIP_Ip) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.CDNOriginServerPublicIP_Ip{` +
+		`Ip:` + fmt.Sprintf("%#v", this.Ip) + `}`}, ", ")
+	return s
+}
+func (this *CDNOriginServerPublicIP_Ipv6) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.CDNOriginServerPublicIP_Ipv6{` +
+		`Ipv6:` + fmt.Sprintf("%#v", this.Ipv6) + `}`}, ", ")
 	return s
 }
 func (this *ClientIPHeaders) GoString() string {
@@ -12790,11 +15588,28 @@ func (this *HttpRedirectOptions) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *DelegationLocationSelection) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 12)
+	s = append(s, "&virtual_host.DelegationLocationSelection{")
+	s = append(s, "Waap: "+fmt.Sprintf("%#v", this.Waap)+",\n")
+	s = append(s, "L7Ddos: "+fmt.Sprintf("%#v", this.L7Ddos)+",\n")
+	s = append(s, "SimpleRoute: "+fmt.Sprintf("%#v", this.SimpleRoute)+",\n")
+	s = append(s, "DirectResponseRoute: "+fmt.Sprintf("%#v", this.DirectResponseRoute)+",\n")
+	s = append(s, "RedirectRoute: "+fmt.Sprintf("%#v", this.RedirectRoute)+",\n")
+	s = append(s, "RequestHeaderManipulation: "+fmt.Sprintf("%#v", this.RequestHeaderManipulation)+",\n")
+	s = append(s, "ResponseHeaderManipulation: "+fmt.Sprintf("%#v", this.ResponseHeaderManipulation)+",\n")
+	s = append(s, "RequestRewrite: "+fmt.Sprintf("%#v", this.RequestRewrite)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 99)
+	s := make([]string, 0, 108)
 	s = append(s, "&virtual_host.GlobalSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.Routes != nil {
@@ -12814,6 +15629,14 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	s = append(s, "RequestHeadersToRemove: "+fmt.Sprintf("%#v", this.RequestHeadersToRemove)+",\n")
 	s = append(s, "ResponseHeadersToRemove: "+fmt.Sprintf("%#v", this.ResponseHeadersToRemove)+",\n")
+	if this.RequestCookiesToAdd != nil {
+		s = append(s, "RequestCookiesToAdd: "+fmt.Sprintf("%#v", this.RequestCookiesToAdd)+",\n")
+	}
+	s = append(s, "RequestCookiesToRemove: "+fmt.Sprintf("%#v", this.RequestCookiesToRemove)+",\n")
+	if this.ResponseCookiesToAdd != nil {
+		s = append(s, "ResponseCookiesToAdd: "+fmt.Sprintf("%#v", this.ResponseCookiesToAdd)+",\n")
+	}
+	s = append(s, "ResponseCookiesToRemove: "+fmt.Sprintf("%#v", this.ResponseCookiesToRemove)+",\n")
 	if this.TlsCertificatesChoice != nil {
 		s = append(s, "TlsCertificatesChoice: "+fmt.Sprintf("%#v", this.TlsCertificatesChoice)+",\n")
 	}
@@ -12917,6 +15740,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this.DownstreamCos != nil {
 		s = append(s, "DownstreamCos: "+fmt.Sprintf("%#v", this.DownstreamCos)+",\n")
 	}
+	s = append(s, "L7DdosRpsThreshold: "+fmt.Sprintf("%#v", this.L7DdosRpsThreshold)+",\n")
 	s = append(s, "DnsVolterraManaged: "+fmt.Sprintf("%#v", this.DnsVolterraManaged)+",\n")
 	if this.DnsDomains != nil {
 		s = append(s, "DnsDomains: "+fmt.Sprintf("%#v", this.DnsDomains)+",\n")
@@ -12937,6 +15761,7 @@ func (this *GlobalSpecType) GoString() string {
 		s = append(s, "ServicePolicySets: "+fmt.Sprintf("%#v", this.ServicePolicySets)+",\n")
 	}
 	s = append(s, "LoadbalancerAlgorithm: "+fmt.Sprintf("%#v", this.LoadbalancerAlgorithm)+",\n")
+	s = append(s, "EnablePerPacketLoadBalancing: "+fmt.Sprintf("%#v", this.EnablePerPacketLoadBalancing)+",\n")
 	s = append(s, "VolterraCert: "+fmt.Sprintf("%#v", this.VolterraCert)+",\n")
 	if this.BotDefenseChoice != nil {
 		s = append(s, "BotDefenseChoice: "+fmt.Sprintf("%#v", this.BotDefenseChoice)+",\n")
@@ -13001,6 +15826,12 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.CoalescingOptions != nil {
 		s = append(s, "CoalescingOptions: "+fmt.Sprintf("%#v", this.CoalescingOptions)+",\n")
+	}
+	if this.WafExclusionPolicy != nil {
+		s = append(s, "WafExclusionPolicy: "+fmt.Sprintf("%#v", this.WafExclusionPolicy)+",\n")
+	}
+	if this.ServiceActionDelegation != nil {
+		s = append(s, "ServiceActionDelegation: "+fmt.Sprintf("%#v", this.ServiceActionDelegation)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -13229,6 +16060,22 @@ func (this *GlobalSpecType_Ready) GoString() string {
 		`Ready:` + fmt.Sprintf("%#v", this.Ready) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_Selected) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GlobalSpecType_Selected{` +
+		`Selected:` + fmt.Sprintf("%#v", this.Selected) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_All) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GlobalSpecType_All{` +
+		`All:` + fmt.Sprintf("%#v", this.All) + `}`}, ", ")
+	return s
+}
 func (this *DNSVHostStatusType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -13247,7 +16094,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 58)
+	s := make([]string, 0, 62)
 	s = append(s, "&virtual_host.CreateSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.Routes != nil {
@@ -13264,6 +16111,14 @@ func (this *CreateSpecType) GoString() string {
 	}
 	s = append(s, "RequestHeadersToRemove: "+fmt.Sprintf("%#v", this.RequestHeadersToRemove)+",\n")
 	s = append(s, "ResponseHeadersToRemove: "+fmt.Sprintf("%#v", this.ResponseHeadersToRemove)+",\n")
+	if this.RequestCookiesToAdd != nil {
+		s = append(s, "RequestCookiesToAdd: "+fmt.Sprintf("%#v", this.RequestCookiesToAdd)+",\n")
+	}
+	s = append(s, "RequestCookiesToRemove: "+fmt.Sprintf("%#v", this.RequestCookiesToRemove)+",\n")
+	if this.ResponseCookiesToAdd != nil {
+		s = append(s, "ResponseCookiesToAdd: "+fmt.Sprintf("%#v", this.ResponseCookiesToAdd)+",\n")
+	}
+	s = append(s, "ResponseCookiesToRemove: "+fmt.Sprintf("%#v", this.ResponseCookiesToRemove)+",\n")
 	if this.TlsCertificatesChoice != nil {
 		s = append(s, "TlsCertificatesChoice: "+fmt.Sprintf("%#v", this.TlsCertificatesChoice)+",\n")
 	}
@@ -13522,7 +16377,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 58)
+	s := make([]string, 0, 62)
 	s = append(s, "&virtual_host.ReplaceSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.Routes != nil {
@@ -13539,6 +16394,14 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	s = append(s, "RequestHeadersToRemove: "+fmt.Sprintf("%#v", this.RequestHeadersToRemove)+",\n")
 	s = append(s, "ResponseHeadersToRemove: "+fmt.Sprintf("%#v", this.ResponseHeadersToRemove)+",\n")
+	if this.RequestCookiesToAdd != nil {
+		s = append(s, "RequestCookiesToAdd: "+fmt.Sprintf("%#v", this.RequestCookiesToAdd)+",\n")
+	}
+	s = append(s, "RequestCookiesToRemove: "+fmt.Sprintf("%#v", this.RequestCookiesToRemove)+",\n")
+	if this.ResponseCookiesToAdd != nil {
+		s = append(s, "ResponseCookiesToAdd: "+fmt.Sprintf("%#v", this.ResponseCookiesToAdd)+",\n")
+	}
+	s = append(s, "ResponseCookiesToRemove: "+fmt.Sprintf("%#v", this.ResponseCookiesToRemove)+",\n")
 	if this.TlsCertificatesChoice != nil {
 		s = append(s, "TlsCertificatesChoice: "+fmt.Sprintf("%#v", this.TlsCertificatesChoice)+",\n")
 	}
@@ -13797,7 +16660,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 67)
+	s := make([]string, 0, 76)
 	s = append(s, "&virtual_host.GetSpecType{")
 	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
 	if this.Routes != nil {
@@ -13814,6 +16677,14 @@ func (this *GetSpecType) GoString() string {
 	}
 	s = append(s, "RequestHeadersToRemove: "+fmt.Sprintf("%#v", this.RequestHeadersToRemove)+",\n")
 	s = append(s, "ResponseHeadersToRemove: "+fmt.Sprintf("%#v", this.ResponseHeadersToRemove)+",\n")
+	if this.RequestCookiesToAdd != nil {
+		s = append(s, "RequestCookiesToAdd: "+fmt.Sprintf("%#v", this.RequestCookiesToAdd)+",\n")
+	}
+	s = append(s, "RequestCookiesToRemove: "+fmt.Sprintf("%#v", this.RequestCookiesToRemove)+",\n")
+	if this.ResponseCookiesToAdd != nil {
+		s = append(s, "ResponseCookiesToAdd: "+fmt.Sprintf("%#v", this.ResponseCookiesToAdd)+",\n")
+	}
+	s = append(s, "ResponseCookiesToRemove: "+fmt.Sprintf("%#v", this.ResponseCookiesToRemove)+",\n")
 	if this.TlsCertificatesChoice != nil {
 		s = append(s, "TlsCertificatesChoice: "+fmt.Sprintf("%#v", this.TlsCertificatesChoice)+",\n")
 	}
@@ -13945,6 +16816,10 @@ func (this *GetSpecType) GoString() string {
 	if this.CoalescingOptions != nil {
 		s = append(s, "CoalescingOptions: "+fmt.Sprintf("%#v", this.CoalescingOptions)+",\n")
 	}
+	if this.DdosAutoMitigationAction != nil {
+		s = append(s, "DdosAutoMitigationAction: "+fmt.Sprintf("%#v", this.DdosAutoMitigationAction)+",\n")
+	}
+	s = append(s, "L7DdosRpsThreshold: "+fmt.Sprintf("%#v", this.L7DdosRpsThreshold)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -14098,6 +16973,38 @@ func (this *GetSpecType_Ready) GoString() string {
 	}
 	s := strings.Join([]string{`&virtual_host.GetSpecType_Ready{` +
 		`Ready:` + fmt.Sprintf("%#v", this.Ready) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_Block) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GetSpecType_Block{` +
+		`Block:` + fmt.Sprintf("%#v", this.Block) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DdosJsChallenge) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GetSpecType_DdosJsChallenge{` +
+		`DdosJsChallenge:` + fmt.Sprintf("%#v", this.DdosJsChallenge) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_L7DdosActionDefault) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GetSpecType_L7DdosActionDefault{` +
+		`L7DdosActionDefault:` + fmt.Sprintf("%#v", this.L7DdosActionDefault) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_L7DdosActionNone) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&virtual_host.GetSpecType_L7DdosActionNone{` +
+		`L7DdosActionNone:` + fmt.Sprintf("%#v", this.L7DdosActionNone) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -15073,6 +17980,61 @@ func (m *CdnServiceType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ServicePolicyOption != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ServicePolicyOption))
+		i--
+		dAtA[i] = 0x50
+	}
+	if m.DefaultCacheAction != nil {
+		{
+			size, err := m.DefaultCacheAction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	if m.OtherSettings != nil {
+		{
+			size, err := m.OtherSettings.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.CdnCacheRule) > 0 {
+		for iNdEx := len(m.CdnCacheRule) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.CdnCacheRule[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x3a
+		}
+	}
+	if m.CdnOriginPool != nil {
+		{
+			size, err := m.CdnOriginPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
 	if len(m.ServiceDomains) > 0 {
 		for iNdEx := len(m.ServiceDomains) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -15144,6 +18106,656 @@ func (m *CdnServiceType_LiveStreaming) MarshalToSizedBuffer(dAtA []byte) (int, e
 		i--
 		dAtA[i] = 0x1a
 	}
+	return len(dAtA) - i, nil
+}
+func (m *OtherSettings) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *OtherSettings) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OtherSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.HeaderOptions != nil {
+		{
+			size, err := m.HeaderOptions.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.LoggingOptions != nil {
+		{
+			size, err := m.LoggingOptions.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.AddLocation {
+		i--
+		if m.AddLocation {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *LoggingOptionsType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *LoggingOptionsType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LoggingOptionsType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.OriginLogOptions != nil {
+		{
+			size, err := m.OriginLogOptions.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if m.ClientLogOptions != nil {
+		{
+			size, err := m.ClientLogOptions.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *LogHeaderOptions) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *LogHeaderOptions) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LogHeaderOptions) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.HeaderList) > 0 {
+		for iNdEx := len(m.HeaderList) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.HeaderList[iNdEx])
+			copy(dAtA[i:], m.HeaderList[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.HeaderList[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *HeaderControlType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *HeaderControlType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *HeaderControlType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ResponseHeadersToRemove) > 0 {
+		for iNdEx := len(m.ResponseHeadersToRemove) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ResponseHeadersToRemove[iNdEx])
+			copy(dAtA[i:], m.ResponseHeadersToRemove[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.ResponseHeadersToRemove[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.ResponseHeadersToAdd) > 0 {
+		for iNdEx := len(m.ResponseHeadersToAdd) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ResponseHeadersToAdd[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.RequestHeadersToRemove) > 0 {
+		for iNdEx := len(m.RequestHeadersToRemove) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.RequestHeadersToRemove[iNdEx])
+			copy(dAtA[i:], m.RequestHeadersToRemove[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.RequestHeadersToRemove[iNdEx])))
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.RequestHeadersToAdd) > 0 {
+		for iNdEx := len(m.RequestHeadersToAdd) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RequestHeadersToAdd[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DefaultCacheAction) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DefaultCacheAction) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DefaultCacheAction) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.CacheActions != nil {
+		{
+			size := m.CacheActions.Size()
+			i -= size
+			if _, err := m.CacheActions.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DefaultCacheAction_CacheTtlDefault) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DefaultCacheAction_CacheTtlDefault) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.CacheTtlDefault)
+	copy(dAtA[i:], m.CacheTtlDefault)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.CacheTtlDefault)))
+	i--
+	dAtA[i] = 0x1a
+	return len(dAtA) - i, nil
+}
+func (m *DefaultCacheAction_CacheTtlOverride) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DefaultCacheAction_CacheTtlOverride) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.CacheTtlOverride)
+	copy(dAtA[i:], m.CacheTtlOverride)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.CacheTtlOverride)))
+	i--
+	dAtA[i] = 0x22
+	return len(dAtA) - i, nil
+}
+func (m *DefaultCacheAction_CacheDisabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DefaultCacheAction_CacheDisabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CacheDisabled != nil {
+		{
+			size, err := m.CacheDisabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CdnOriginPoolType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CdnOriginPoolType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CdnOriginPoolType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.MoreOriginOptions != nil {
+		{
+			size, err := m.MoreOriginOptions.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	if len(m.OriginRequestTimeout) > 0 {
+		i -= len(m.OriginRequestTimeout)
+		copy(dAtA[i:], m.OriginRequestTimeout)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.OriginRequestTimeout)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.FollowOriginRedirect {
+		i--
+		if m.FollowOriginRedirect {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x30
+	}
+	if len(m.OriginServers) > 0 {
+		for iNdEx := len(m.OriginServers) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.OriginServers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
+	if m.TlsChoice != nil {
+		{
+			size := m.TlsChoice.Size()
+			i -= size
+			if _, err := m.TlsChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.PublicName != nil {
+		{
+			size, err := m.PublicName.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CdnOriginPoolType_NoTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CdnOriginPoolType_NoTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoTls != nil {
+		{
+			size, err := m.NoTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CdnOriginPoolType_UseTls) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CdnOriginPoolType_UseTls) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.UseTls != nil {
+		{
+			size, err := m.UseTls.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CDNOriginServerPublicName) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CDNOriginServerPublicName) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CDNOriginServerPublicName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DnsName) > 0 {
+		i -= len(m.DnsName)
+		copy(dAtA[i:], m.DnsName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.DnsName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CDNUpstreamTlsParameters) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CDNUpstreamTlsParameters) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CDNUpstreamTlsParameters) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	return len(dAtA) - i, nil
+}
+
+func (m *OriginAdvancedConfiguration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *OriginAdvancedConfiguration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *OriginAdvancedConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.WebsocketProxy {
+		i--
+		if m.WebsocketProxy {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.DisableByteRangeRequest {
+		i--
+		if m.DisableByteRangeRequest {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CDNOriginServerType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CDNOriginServerType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CDNOriginServerType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Port != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.Choice != nil {
+		{
+			size := m.Choice.Size()
+			i -= size
+			if _, err := m.Choice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CDNOriginServerType_PublicIp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CDNOriginServerType_PublicIp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.PublicIp != nil {
+		{
+			size, err := m.PublicIp.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CDNOriginServerType_PublicName) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CDNOriginServerType_PublicName) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.PublicName != nil {
+		{
+			size, err := m.PublicName.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CDNOriginServerPublicIP) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CDNOriginServerPublicIP) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CDNOriginServerPublicIP) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.PublicIpChoice != nil {
+		{
+			size := m.PublicIpChoice.Size()
+			i -= size
+			if _, err := m.PublicIpChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CDNOriginServerPublicIP_Ip) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CDNOriginServerPublicIP_Ip) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Ip)
+	copy(dAtA[i:], m.Ip)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Ip)))
+	i--
+	dAtA[i] = 0xa
+	return len(dAtA) - i, nil
+}
+func (m *CDNOriginServerPublicIP_Ipv6) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CDNOriginServerPublicIP_Ipv6) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i -= len(m.Ipv6)
+	copy(dAtA[i:], m.Ipv6)
+	i = encodeVarintTypes(dAtA, i, uint64(len(m.Ipv6)))
+	i--
+	dAtA[i] = 0x1a
 	return len(dAtA) - i, nil
 }
 func (m *ClientIPHeaders) Marshal() (dAtA []byte, err error) {
@@ -15940,6 +19552,69 @@ func (m *HttpRedirectOptions) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *DelegationLocationSelection) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DelegationLocationSelection) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DelegationLocationSelection) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.RequestRewrite != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.RequestRewrite))
+		i--
+		dAtA[i] = 0x40
+	}
+	if m.ResponseHeaderManipulation != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ResponseHeaderManipulation))
+		i--
+		dAtA[i] = 0x38
+	}
+	if m.RequestHeaderManipulation != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.RequestHeaderManipulation))
+		i--
+		dAtA[i] = 0x30
+	}
+	if m.RedirectRoute != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.RedirectRoute))
+		i--
+		dAtA[i] = 0x28
+	}
+	if m.DirectResponseRoute != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.DirectResponseRoute))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.SimpleRoute != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.SimpleRoute))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.L7Ddos != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.L7Ddos))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Waap != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Waap))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -16015,6 +19690,18 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x46
 		i--
 		dAtA[i] = 0x82
+	}
+	if m.EnablePerPacketLoadBalancing {
+		i--
+		if m.EnablePerPacketLoadBalancing {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x40
+		i--
+		dAtA[i] = 0xa8
 	}
 	if m.MaxDirectResponseBodySize != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.MaxDirectResponseBodySize))
@@ -16276,6 +19963,92 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x3e
 		i--
 		dAtA[i] = 0xc0
+	}
+	if m.ServiceActionDelegation != nil {
+		{
+			size := m.ServiceActionDelegation.Size()
+			i -= size
+			if _, err := m.ServiceActionDelegation.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.L7DdosRpsThreshold != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.L7DdosRpsThreshold))
+		i--
+		dAtA[i] = 0x6
+		i--
+		dAtA[i] = 0xc8
+	}
+	if len(m.WafExclusionPolicy) > 0 {
+		for iNdEx := len(m.WafExclusionPolicy) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.WafExclusionPolicy[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xc2
+		}
+	}
+	if len(m.ResponseCookiesToRemove) > 0 {
+		for iNdEx := len(m.ResponseCookiesToRemove) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ResponseCookiesToRemove[iNdEx])
+			copy(dAtA[i:], m.ResponseCookiesToRemove[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.ResponseCookiesToRemove[iNdEx])))
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xba
+		}
+	}
+	if len(m.ResponseCookiesToAdd) > 0 {
+		for iNdEx := len(m.ResponseCookiesToAdd) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ResponseCookiesToAdd[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xb2
+		}
+	}
+	if len(m.RequestCookiesToRemove) > 0 {
+		for iNdEx := len(m.RequestCookiesToRemove) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.RequestCookiesToRemove[iNdEx])
+			copy(dAtA[i:], m.RequestCookiesToRemove[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.RequestCookiesToRemove[iNdEx])))
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xaa
+		}
+	}
+	if len(m.RequestCookiesToAdd) > 0 {
+		for iNdEx := len(m.RequestCookiesToAdd) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RequestCookiesToAdd[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xa2
+		}
 	}
 	if m.CoalescingOptions != nil {
 		{
@@ -17476,6 +21249,43 @@ func (m *GlobalSpecType_L7DdosActionNone) MarshalToSizedBuffer(dAtA []byte) (int
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_Selected) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_Selected) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Selected != nil {
+		{
+			size, err := m.Selected.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6
+		i--
+		dAtA[i] = 0xd2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_All) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_All) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	i = encodeVarintTypes(dAtA, i, uint64(m.All))
+	i--
+	dAtA[i] = 0x6
+	i--
+	dAtA[i] = 0xd8
+	return len(dAtA) - i, nil
+}
 func (m *GlobalSpecType_DisableBotDefense) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -17692,6 +21502,60 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x40
 		i--
 		dAtA[i] = 0xa0
+	}
+	if len(m.ResponseCookiesToRemove) > 0 {
+		for iNdEx := len(m.ResponseCookiesToRemove) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ResponseCookiesToRemove[iNdEx])
+			copy(dAtA[i:], m.ResponseCookiesToRemove[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.ResponseCookiesToRemove[iNdEx])))
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xba
+		}
+	}
+	if len(m.ResponseCookiesToAdd) > 0 {
+		for iNdEx := len(m.ResponseCookiesToAdd) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ResponseCookiesToAdd[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xb2
+		}
+	}
+	if len(m.RequestCookiesToRemove) > 0 {
+		for iNdEx := len(m.RequestCookiesToRemove) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.RequestCookiesToRemove[iNdEx])
+			copy(dAtA[i:], m.RequestCookiesToRemove[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.RequestCookiesToRemove[iNdEx])))
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xaa
+		}
+	}
+	if len(m.RequestCookiesToAdd) > 0 {
+		for iNdEx := len(m.RequestCookiesToAdd) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RequestCookiesToAdd[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xa2
+		}
 	}
 	if m.CoalescingOptions != nil {
 		{
@@ -18648,6 +22512,60 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x40
 		i--
 		dAtA[i] = 0xa0
+	}
+	if len(m.ResponseCookiesToRemove) > 0 {
+		for iNdEx := len(m.ResponseCookiesToRemove) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ResponseCookiesToRemove[iNdEx])
+			copy(dAtA[i:], m.ResponseCookiesToRemove[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.ResponseCookiesToRemove[iNdEx])))
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xba
+		}
+	}
+	if len(m.ResponseCookiesToAdd) > 0 {
+		for iNdEx := len(m.ResponseCookiesToAdd) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ResponseCookiesToAdd[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xb2
+		}
+	}
+	if len(m.RequestCookiesToRemove) > 0 {
+		for iNdEx := len(m.RequestCookiesToRemove) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.RequestCookiesToRemove[iNdEx])
+			copy(dAtA[i:], m.RequestCookiesToRemove[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.RequestCookiesToRemove[iNdEx])))
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xaa
+		}
+	}
+	if len(m.RequestCookiesToAdd) > 0 {
+		for iNdEx := len(m.RequestCookiesToAdd) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RequestCookiesToAdd[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xa2
+		}
 	}
 	if m.CoalescingOptions != nil {
 		{
@@ -19669,6 +23587,67 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xd8
 	}
+	if m.L7DdosRpsThreshold != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.L7DdosRpsThreshold))
+		i--
+		dAtA[i] = 0x6
+		i--
+		dAtA[i] = 0xc8
+	}
+	if len(m.ResponseCookiesToRemove) > 0 {
+		for iNdEx := len(m.ResponseCookiesToRemove) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.ResponseCookiesToRemove[iNdEx])
+			copy(dAtA[i:], m.ResponseCookiesToRemove[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.ResponseCookiesToRemove[iNdEx])))
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xba
+		}
+	}
+	if len(m.ResponseCookiesToAdd) > 0 {
+		for iNdEx := len(m.ResponseCookiesToAdd) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ResponseCookiesToAdd[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xb2
+		}
+	}
+	if len(m.RequestCookiesToRemove) > 0 {
+		for iNdEx := len(m.RequestCookiesToRemove) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.RequestCookiesToRemove[iNdEx])
+			copy(dAtA[i:], m.RequestCookiesToRemove[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.RequestCookiesToRemove[iNdEx])))
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xaa
+		}
+	}
+	if len(m.RequestCookiesToAdd) > 0 {
+		for iNdEx := len(m.RequestCookiesToAdd) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RequestCookiesToAdd[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x6
+			i--
+			dAtA[i] = 0xa2
+		}
+	}
 	if m.CoalescingOptions != nil {
 		{
 			size, err := m.CoalescingOptions.MarshalToSizedBuffer(dAtA[:i])
@@ -19696,6 +23675,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		dAtA[i] = 0x6
 		i--
 		dAtA[i] = 0x82
+	}
+	if m.DdosAutoMitigationAction != nil {
+		{
+			size := m.DdosAutoMitigationAction.Size()
+			i -= size
+			if _, err := m.DdosAutoMitigationAction.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
 	}
 	if m.HttpProtocolOptions != nil {
 		{
@@ -20573,6 +24561,98 @@ func (m *GetSpecType_TlsCertParams) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GetSpecType_Block) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_Block) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Block != nil {
+		{
+			size, err := m.Block.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5
+		i--
+		dAtA[i] = 0xda
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DdosJsChallenge) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DdosJsChallenge) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DdosJsChallenge != nil {
+		{
+			size, err := m.DdosJsChallenge.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5
+		i--
+		dAtA[i] = 0xe2
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_L7DdosActionDefault) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_L7DdosActionDefault) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.L7DdosActionDefault != nil {
+		{
+			size, err := m.L7DdosActionDefault.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5
+		i--
+		dAtA[i] = 0xea
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_L7DdosActionNone) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_L7DdosActionNone) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.L7DdosActionNone != nil {
+		{
+			size, err := m.L7DdosActionNone.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5
+		i--
+		dAtA[i] = 0xf2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType_NotReady) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
@@ -21073,6 +25153,27 @@ func (m *CdnServiceType) Size() (n int) {
 			n += 1 + l + sovTypes(uint64(l))
 		}
 	}
+	if m.CdnOriginPool != nil {
+		l = m.CdnOriginPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.CdnCacheRule) > 0 {
+		for _, e := range m.CdnCacheRule {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.OtherSettings != nil {
+		l = m.OtherSettings.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.DefaultCacheAction != nil {
+		l = m.DefaultCacheAction.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ServicePolicyOption != 0 {
+		n += 1 + sovTypes(uint64(m.ServicePolicyOption))
+	}
 	return n
 }
 
@@ -21098,6 +25199,300 @@ func (m *CdnServiceType_LiveStreaming) Size() (n int) {
 		l = m.LiveStreaming.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	return n
+}
+func (m *OtherSettings) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AddLocation {
+		n += 2
+	}
+	if m.LoggingOptions != nil {
+		l = m.LoggingOptions.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.HeaderOptions != nil {
+		l = m.HeaderOptions.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *LoggingOptionsType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ClientLogOptions != nil {
+		l = m.ClientLogOptions.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.OriginLogOptions != nil {
+		l = m.OriginLogOptions.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *LogHeaderOptions) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.HeaderList) > 0 {
+		for _, s := range m.HeaderList {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *HeaderControlType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.RequestHeadersToAdd) > 0 {
+		for _, e := range m.RequestHeadersToAdd {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.RequestHeadersToRemove) > 0 {
+		for _, s := range m.RequestHeadersToRemove {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ResponseHeadersToAdd) > 0 {
+		for _, e := range m.ResponseHeadersToAdd {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ResponseHeadersToRemove) > 0 {
+		for _, s := range m.ResponseHeadersToRemove {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *DefaultCacheAction) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CacheActions != nil {
+		n += m.CacheActions.Size()
+	}
+	return n
+}
+
+func (m *DefaultCacheAction_CacheTtlDefault) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.CacheTtlDefault)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *DefaultCacheAction_CacheTtlOverride) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.CacheTtlOverride)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *DefaultCacheAction_CacheDisabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CacheDisabled != nil {
+		l = m.CacheDisabled.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CdnOriginPoolType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PublicName != nil {
+		l = m.PublicName.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TlsChoice != nil {
+		n += m.TlsChoice.Size()
+	}
+	if len(m.OriginServers) > 0 {
+		for _, e := range m.OriginServers {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.FollowOriginRedirect {
+		n += 2
+	}
+	l = len(m.OriginRequestTimeout)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.MoreOriginOptions != nil {
+		l = m.MoreOriginOptions.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *CdnOriginPoolType_NoTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoTls != nil {
+		l = m.NoTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CdnOriginPoolType_UseTls) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.UseTls != nil {
+		l = m.UseTls.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CDNOriginServerPublicName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.DnsName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *CDNUpstreamTlsParameters) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	return n
+}
+
+func (m *OriginAdvancedConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableByteRangeRequest {
+		n += 2
+	}
+	if m.WebsocketProxy {
+		n += 2
+	}
+	return n
+}
+
+func (m *CDNOriginServerType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Choice != nil {
+		n += m.Choice.Size()
+	}
+	if m.Port != 0 {
+		n += 1 + sovTypes(uint64(m.Port))
+	}
+	return n
+}
+
+func (m *CDNOriginServerType_PublicIp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PublicIp != nil {
+		l = m.PublicIp.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CDNOriginServerType_PublicName) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PublicName != nil {
+		l = m.PublicName.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CDNOriginServerPublicIP) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.PublicIpChoice != nil {
+		n += m.PublicIpChoice.Size()
+	}
+	return n
+}
+
+func (m *CDNOriginServerPublicIP_Ip) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Ip)
+	n += 1 + l + sovTypes(uint64(l))
+	return n
+}
+func (m *CDNOriginServerPublicIP_Ipv6) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Ipv6)
+	n += 1 + l + sovTypes(uint64(l))
 	return n
 }
 func (m *ClientIPHeaders) Size() (n int) {
@@ -21456,6 +25851,39 @@ func (m *HttpRedirectOptions) Size() (n int) {
 	return n
 }
 
+func (m *DelegationLocationSelection) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Waap != 0 {
+		n += 1 + sovTypes(uint64(m.Waap))
+	}
+	if m.L7Ddos != 0 {
+		n += 1 + sovTypes(uint64(m.L7Ddos))
+	}
+	if m.SimpleRoute != 0 {
+		n += 1 + sovTypes(uint64(m.SimpleRoute))
+	}
+	if m.DirectResponseRoute != 0 {
+		n += 1 + sovTypes(uint64(m.DirectResponseRoute))
+	}
+	if m.RedirectRoute != 0 {
+		n += 1 + sovTypes(uint64(m.RedirectRoute))
+	}
+	if m.RequestHeaderManipulation != 0 {
+		n += 1 + sovTypes(uint64(m.RequestHeaderManipulation))
+	}
+	if m.ResponseHeaderManipulation != 0 {
+		n += 1 + sovTypes(uint64(m.ResponseHeaderManipulation))
+	}
+	if m.RequestRewrite != 0 {
+		n += 1 + sovTypes(uint64(m.RequestRewrite))
+	}
+	return n
+}
+
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -21693,6 +26121,42 @@ func (m *GlobalSpecType) Size() (n int) {
 		l = m.CoalescingOptions.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
+	if len(m.RequestCookiesToAdd) > 0 {
+		for _, e := range m.RequestCookiesToAdd {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.RequestCookiesToRemove) > 0 {
+		for _, s := range m.RequestCookiesToRemove {
+			l = len(s)
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ResponseCookiesToAdd) > 0 {
+		for _, e := range m.ResponseCookiesToAdd {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ResponseCookiesToRemove) > 0 {
+		for _, s := range m.ResponseCookiesToRemove {
+			l = len(s)
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.WafExclusionPolicy) > 0 {
+		for _, e := range m.WafExclusionPolicy {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.L7DdosRpsThreshold != 0 {
+		n += 2 + sovTypes(uint64(m.L7DdosRpsThreshold))
+	}
+	if m.ServiceActionDelegation != nil {
+		n += m.ServiceActionDelegation.Size()
+	}
 	if m.DnsVolterraManaged {
 		n += 3
 	}
@@ -21784,6 +26248,9 @@ func (m *GlobalSpecType) Size() (n int) {
 	}
 	if m.MaxDirectResponseBodySize != 0 {
 		n += 2 + sovTypes(uint64(m.MaxDirectResponseBodySize))
+	}
+	if m.EnablePerPacketLoadBalancing {
+		n += 3
 	}
 	if m.ZtnaProxyConfigurations != nil {
 		l = m.ZtnaProxyConfigurations.Size()
@@ -22089,6 +26556,27 @@ func (m *GlobalSpecType_L7DdosActionNone) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_Selected) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Selected != nil {
+		l = m.Selected.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_All) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	n += 2 + sovTypes(uint64(m.All))
+	return n
+}
 func (m *GlobalSpecType_DisableBotDefense) Size() (n int) {
 	if m == nil {
 		return 0
@@ -22348,6 +26836,30 @@ func (m *CreateSpecType) Size() (n int) {
 	if m.CoalescingOptions != nil {
 		l = m.CoalescingOptions.Size()
 		n += 2 + l + sovTypes(uint64(l))
+	}
+	if len(m.RequestCookiesToAdd) > 0 {
+		for _, e := range m.RequestCookiesToAdd {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.RequestCookiesToRemove) > 0 {
+		for _, s := range m.RequestCookiesToRemove {
+			l = len(s)
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ResponseCookiesToAdd) > 0 {
+		for _, e := range m.ResponseCookiesToAdd {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ResponseCookiesToRemove) > 0 {
+		for _, s := range m.ResponseCookiesToRemove {
+			l = len(s)
+			n += 2 + l + sovTypes(uint64(l))
+		}
 	}
 	if m.MaxDirectResponseBodySize != 0 {
 		n += 2 + sovTypes(uint64(m.MaxDirectResponseBodySize))
@@ -22754,6 +27266,30 @@ func (m *ReplaceSpecType) Size() (n int) {
 		l = m.CoalescingOptions.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
+	if len(m.RequestCookiesToAdd) > 0 {
+		for _, e := range m.RequestCookiesToAdd {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.RequestCookiesToRemove) > 0 {
+		for _, s := range m.RequestCookiesToRemove {
+			l = len(s)
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ResponseCookiesToAdd) > 0 {
+		for _, e := range m.ResponseCookiesToAdd {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ResponseCookiesToRemove) > 0 {
+		for _, s := range m.ResponseCookiesToRemove {
+			l = len(s)
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
 	if m.MaxDirectResponseBodySize != 0 {
 		n += 2 + sovTypes(uint64(m.MaxDirectResponseBodySize))
 	}
@@ -23158,6 +27694,9 @@ func (m *GetSpecType) Size() (n int) {
 		l = m.HttpProtocolOptions.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
+	if m.DdosAutoMitigationAction != nil {
+		n += m.DdosAutoMitigationAction.Size()
+	}
 	if m.MaskingConfig != nil {
 		l = m.MaskingConfig.Size()
 		n += 2 + l + sovTypes(uint64(l))
@@ -23165,6 +27704,33 @@ func (m *GetSpecType) Size() (n int) {
 	if m.CoalescingOptions != nil {
 		l = m.CoalescingOptions.Size()
 		n += 2 + l + sovTypes(uint64(l))
+	}
+	if len(m.RequestCookiesToAdd) > 0 {
+		for _, e := range m.RequestCookiesToAdd {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.RequestCookiesToRemove) > 0 {
+		for _, s := range m.RequestCookiesToRemove {
+			l = len(s)
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ResponseCookiesToAdd) > 0 {
+		for _, e := range m.ResponseCookiesToAdd {
+			l = e.Size()
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.ResponseCookiesToRemove) > 0 {
+		for _, s := range m.ResponseCookiesToRemove {
+			l = len(s)
+			n += 2 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.L7DdosRpsThreshold != 0 {
+		n += 2 + sovTypes(uint64(m.L7DdosRpsThreshold))
 	}
 	if m.State != 0 {
 		n += 2 + sovTypes(uint64(m.State))
@@ -23406,6 +27972,54 @@ func (m *GetSpecType_TlsCertParams) Size() (n int) {
 	_ = l
 	if m.TlsCertParams != nil {
 		l = m.TlsCertParams.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_Block) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Block != nil {
+		l = m.Block.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DdosJsChallenge) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DdosJsChallenge != nil {
+		l = m.DdosJsChallenge.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_L7DdosActionDefault) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.L7DdosActionDefault != nil {
+		l = m.L7DdosActionDefault.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_L7DdosActionNone) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.L7DdosActionNone != nil {
+		l = m.L7DdosActionNone.Size()
 		n += 2 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -23753,10 +28367,20 @@ func (this *CdnServiceType) String() string {
 		repeatedStringForServiceDomains += strings.Replace(f.String(), "ServiceDomain", "ServiceDomain", 1) + ","
 	}
 	repeatedStringForServiceDomains += "}"
+	repeatedStringForCdnCacheRule := "[]*ObjectRefType{"
+	for _, f := range this.CdnCacheRule {
+		repeatedStringForCdnCacheRule += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "views.ObjectRefType", 1) + ","
+	}
+	repeatedStringForCdnCacheRule += "}"
 	s := strings.Join([]string{`&CdnServiceType{`,
 		`ContentChoice:` + fmt.Sprintf("%v", this.ContentChoice) + `,`,
 		`CacheTtl:` + fmt.Sprintf("%v", this.CacheTtl) + `,`,
 		`ServiceDomains:` + repeatedStringForServiceDomains + `,`,
+		`CdnOriginPool:` + strings.Replace(this.CdnOriginPool.String(), "CdnOriginPoolType", "CdnOriginPoolType", 1) + `,`,
+		`CdnCacheRule:` + repeatedStringForCdnCacheRule + `,`,
+		`OtherSettings:` + strings.Replace(this.OtherSettings.String(), "OtherSettings", "OtherSettings", 1) + `,`,
+		`DefaultCacheAction:` + strings.Replace(this.DefaultCacheAction.String(), "DefaultCacheAction", "DefaultCacheAction", 1) + `,`,
+		`ServicePolicyOption:` + fmt.Sprintf("%v", this.ServicePolicyOption) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -23777,6 +28401,233 @@ func (this *CdnServiceType_LiveStreaming) String() string {
 	}
 	s := strings.Join([]string{`&CdnServiceType_LiveStreaming{`,
 		`LiveStreaming:` + strings.Replace(fmt.Sprintf("%v", this.LiveStreaming), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *OtherSettings) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&OtherSettings{`,
+		`AddLocation:` + fmt.Sprintf("%v", this.AddLocation) + `,`,
+		`LoggingOptions:` + strings.Replace(this.LoggingOptions.String(), "LoggingOptionsType", "LoggingOptionsType", 1) + `,`,
+		`HeaderOptions:` + strings.Replace(this.HeaderOptions.String(), "HeaderControlType", "HeaderControlType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *LoggingOptionsType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&LoggingOptionsType{`,
+		`ClientLogOptions:` + strings.Replace(this.ClientLogOptions.String(), "LogHeaderOptions", "LogHeaderOptions", 1) + `,`,
+		`OriginLogOptions:` + strings.Replace(this.OriginLogOptions.String(), "LogHeaderOptions", "LogHeaderOptions", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *LogHeaderOptions) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&LogHeaderOptions{`,
+		`HeaderList:` + fmt.Sprintf("%v", this.HeaderList) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *HeaderControlType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForRequestHeadersToAdd := "[]*HeaderManipulationOptionType{"
+	for _, f := range this.RequestHeadersToAdd {
+		repeatedStringForRequestHeadersToAdd += strings.Replace(fmt.Sprintf("%v", f), "HeaderManipulationOptionType", "schema.HeaderManipulationOptionType", 1) + ","
+	}
+	repeatedStringForRequestHeadersToAdd += "}"
+	repeatedStringForResponseHeadersToAdd := "[]*HeaderManipulationOptionType{"
+	for _, f := range this.ResponseHeadersToAdd {
+		repeatedStringForResponseHeadersToAdd += strings.Replace(fmt.Sprintf("%v", f), "HeaderManipulationOptionType", "schema.HeaderManipulationOptionType", 1) + ","
+	}
+	repeatedStringForResponseHeadersToAdd += "}"
+	s := strings.Join([]string{`&HeaderControlType{`,
+		`RequestHeadersToAdd:` + repeatedStringForRequestHeadersToAdd + `,`,
+		`RequestHeadersToRemove:` + fmt.Sprintf("%v", this.RequestHeadersToRemove) + `,`,
+		`ResponseHeadersToAdd:` + repeatedStringForResponseHeadersToAdd + `,`,
+		`ResponseHeadersToRemove:` + fmt.Sprintf("%v", this.ResponseHeadersToRemove) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DefaultCacheAction) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DefaultCacheAction{`,
+		`CacheActions:` + fmt.Sprintf("%v", this.CacheActions) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DefaultCacheAction_CacheTtlDefault) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DefaultCacheAction_CacheTtlDefault{`,
+		`CacheTtlDefault:` + fmt.Sprintf("%v", this.CacheTtlDefault) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DefaultCacheAction_CacheTtlOverride) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DefaultCacheAction_CacheTtlOverride{`,
+		`CacheTtlOverride:` + fmt.Sprintf("%v", this.CacheTtlOverride) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DefaultCacheAction_CacheDisabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DefaultCacheAction_CacheDisabled{`,
+		`CacheDisabled:` + strings.Replace(fmt.Sprintf("%v", this.CacheDisabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CdnOriginPoolType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForOriginServers := "[]*CDNOriginServerType{"
+	for _, f := range this.OriginServers {
+		repeatedStringForOriginServers += strings.Replace(f.String(), "CDNOriginServerType", "CDNOriginServerType", 1) + ","
+	}
+	repeatedStringForOriginServers += "}"
+	s := strings.Join([]string{`&CdnOriginPoolType{`,
+		`PublicName:` + strings.Replace(this.PublicName.String(), "CDNOriginServerPublicName", "CDNOriginServerPublicName", 1) + `,`,
+		`TlsChoice:` + fmt.Sprintf("%v", this.TlsChoice) + `,`,
+		`OriginServers:` + repeatedStringForOriginServers + `,`,
+		`FollowOriginRedirect:` + fmt.Sprintf("%v", this.FollowOriginRedirect) + `,`,
+		`OriginRequestTimeout:` + fmt.Sprintf("%v", this.OriginRequestTimeout) + `,`,
+		`MoreOriginOptions:` + strings.Replace(this.MoreOriginOptions.String(), "OriginAdvancedConfiguration", "OriginAdvancedConfiguration", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CdnOriginPoolType_NoTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CdnOriginPoolType_NoTls{`,
+		`NoTls:` + strings.Replace(fmt.Sprintf("%v", this.NoTls), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CdnOriginPoolType_UseTls) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CdnOriginPoolType_UseTls{`,
+		`UseTls:` + strings.Replace(fmt.Sprintf("%v", this.UseTls), "CDNUpstreamTlsParameters", "CDNUpstreamTlsParameters", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CDNOriginServerPublicName) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CDNOriginServerPublicName{`,
+		`DnsName:` + fmt.Sprintf("%v", this.DnsName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CDNUpstreamTlsParameters) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CDNUpstreamTlsParameters{`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *OriginAdvancedConfiguration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&OriginAdvancedConfiguration{`,
+		`DisableByteRangeRequest:` + fmt.Sprintf("%v", this.DisableByteRangeRequest) + `,`,
+		`WebsocketProxy:` + fmt.Sprintf("%v", this.WebsocketProxy) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CDNOriginServerType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CDNOriginServerType{`,
+		`Choice:` + fmt.Sprintf("%v", this.Choice) + `,`,
+		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CDNOriginServerType_PublicIp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CDNOriginServerType_PublicIp{`,
+		`PublicIp:` + strings.Replace(fmt.Sprintf("%v", this.PublicIp), "CDNOriginServerPublicIP", "CDNOriginServerPublicIP", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CDNOriginServerType_PublicName) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CDNOriginServerType_PublicName{`,
+		`PublicName:` + strings.Replace(fmt.Sprintf("%v", this.PublicName), "CDNOriginServerPublicName", "CDNOriginServerPublicName", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CDNOriginServerPublicIP) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CDNOriginServerPublicIP{`,
+		`PublicIpChoice:` + fmt.Sprintf("%v", this.PublicIpChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CDNOriginServerPublicIP_Ip) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CDNOriginServerPublicIP_Ip{`,
+		`Ip:` + fmt.Sprintf("%v", this.Ip) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CDNOriginServerPublicIP_Ipv6) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CDNOriginServerPublicIP_Ipv6{`,
+		`Ipv6:` + fmt.Sprintf("%v", this.Ipv6) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -24075,6 +28926,23 @@ func (this *HttpRedirectOptions) String() string {
 	}, "")
 	return s
 }
+func (this *DelegationLocationSelection) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DelegationLocationSelection{`,
+		`Waap:` + fmt.Sprintf("%v", this.Waap) + `,`,
+		`L7Ddos:` + fmt.Sprintf("%v", this.L7Ddos) + `,`,
+		`SimpleRoute:` + fmt.Sprintf("%v", this.SimpleRoute) + `,`,
+		`DirectResponseRoute:` + fmt.Sprintf("%v", this.DirectResponseRoute) + `,`,
+		`RedirectRoute:` + fmt.Sprintf("%v", this.RedirectRoute) + `,`,
+		`RequestHeaderManipulation:` + fmt.Sprintf("%v", this.RequestHeaderManipulation) + `,`,
+		`ResponseHeaderManipulation:` + fmt.Sprintf("%v", this.ResponseHeaderManipulation) + `,`,
+		`RequestRewrite:` + fmt.Sprintf("%v", this.RequestRewrite) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -24134,6 +29002,21 @@ func (this *GlobalSpecType) String() string {
 		repeatedStringForDownstreamCos += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
 	}
 	repeatedStringForDownstreamCos += "}"
+	repeatedStringForRequestCookiesToAdd := "[]*CookieValueOption{"
+	for _, f := range this.RequestCookiesToAdd {
+		repeatedStringForRequestCookiesToAdd += strings.Replace(fmt.Sprintf("%v", f), "CookieValueOption", "schema.CookieValueOption", 1) + ","
+	}
+	repeatedStringForRequestCookiesToAdd += "}"
+	repeatedStringForResponseCookiesToAdd := "[]*SetCookieValueOption{"
+	for _, f := range this.ResponseCookiesToAdd {
+		repeatedStringForResponseCookiesToAdd += strings.Replace(fmt.Sprintf("%v", f), "SetCookieValueOption", "schema.SetCookieValueOption", 1) + ","
+	}
+	repeatedStringForResponseCookiesToAdd += "}"
+	repeatedStringForWafExclusionPolicy := "[]*ObjectRefType{"
+	for _, f := range this.WafExclusionPolicy {
+		repeatedStringForWafExclusionPolicy += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForWafExclusionPolicy += "}"
 	repeatedStringForDnsDomains := "[]*ObjectRefType{"
 	for _, f := range this.DnsDomains {
 		repeatedStringForDnsDomains += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
@@ -24242,6 +29125,13 @@ func (this *GlobalSpecType) String() string {
 		`DownstreamCos:` + repeatedStringForDownstreamCos + `,`,
 		`EnableMalwareProtection:` + strings.Replace(fmt.Sprintf("%v", this.EnableMalwareProtection), "Empty", "schema.Empty", 1) + `,`,
 		`CoalescingOptions:` + strings.Replace(fmt.Sprintf("%v", this.CoalescingOptions), "TLSCoalescingOptions", "schema.TLSCoalescingOptions", 1) + `,`,
+		`RequestCookiesToAdd:` + repeatedStringForRequestCookiesToAdd + `,`,
+		`RequestCookiesToRemove:` + fmt.Sprintf("%v", this.RequestCookiesToRemove) + `,`,
+		`ResponseCookiesToAdd:` + repeatedStringForResponseCookiesToAdd + `,`,
+		`ResponseCookiesToRemove:` + fmt.Sprintf("%v", this.ResponseCookiesToRemove) + `,`,
+		`WafExclusionPolicy:` + repeatedStringForWafExclusionPolicy + `,`,
+		`L7DdosRpsThreshold:` + fmt.Sprintf("%v", this.L7DdosRpsThreshold) + `,`,
+		`ServiceActionDelegation:` + fmt.Sprintf("%v", this.ServiceActionDelegation) + `,`,
 		`DnsVolterraManaged:` + fmt.Sprintf("%v", this.DnsVolterraManaged) + `,`,
 		`DnsDomains:` + repeatedStringForDnsDomains + `,`,
 		`AutoCert:` + fmt.Sprintf("%v", this.AutoCert) + `,`,
@@ -24264,6 +29154,7 @@ func (this *GlobalSpecType) String() string {
 		`AutoCertErrorMsg:` + fmt.Sprintf("%v", this.AutoCertErrorMsg) + `,`,
 		`HttpRedirectOptions:` + strings.Replace(this.HttpRedirectOptions.String(), "HttpRedirectOptions", "HttpRedirectOptions", 1) + `,`,
 		`MaxDirectResponseBodySize:` + fmt.Sprintf("%v", this.MaxDirectResponseBodySize) + `,`,
+		`EnablePerPacketLoadBalancing:` + fmt.Sprintf("%v", this.EnablePerPacketLoadBalancing) + `,`,
 		`ZtnaProxyConfigurations:` + strings.Replace(this.ZtnaProxyConfigurations.String(), "ZtnaProxyConfiguration", "ZtnaProxyConfiguration", 1) + `,`,
 		`AdvertiseOnPublic:` + fmt.Sprintf("%v", this.AdvertiseOnPublic) + `,`,
 		`SensitiveDataPolicy:` + repeatedStringForSensitiveDataPolicy + `,`,
@@ -24512,6 +29403,26 @@ func (this *GlobalSpecType_L7DdosActionNone) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_Selected) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_Selected{`,
+		`Selected:` + strings.Replace(fmt.Sprintf("%v", this.Selected), "DelegationLocationSelection", "DelegationLocationSelection", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_All) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_All{`,
+		`All:` + fmt.Sprintf("%v", this.All) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GlobalSpecType_DisableBotDefense) String() string {
 	if this == nil {
 		return "nil"
@@ -24605,6 +29516,16 @@ func (this *CreateSpecType) String() string {
 		repeatedStringForCookiesToModify += strings.Replace(fmt.Sprintf("%v", f), "CookieManipulationOptionType", "schema.CookieManipulationOptionType", 1) + ","
 	}
 	repeatedStringForCookiesToModify += "}"
+	repeatedStringForRequestCookiesToAdd := "[]*CookieValueOption{"
+	for _, f := range this.RequestCookiesToAdd {
+		repeatedStringForRequestCookiesToAdd += strings.Replace(fmt.Sprintf("%v", f), "CookieValueOption", "schema.CookieValueOption", 1) + ","
+	}
+	repeatedStringForRequestCookiesToAdd += "}"
+	repeatedStringForResponseCookiesToAdd := "[]*SetCookieValueOption{"
+	for _, f := range this.ResponseCookiesToAdd {
+		repeatedStringForResponseCookiesToAdd += strings.Replace(fmt.Sprintf("%v", f), "SetCookieValueOption", "schema.SetCookieValueOption", 1) + ","
+	}
+	repeatedStringForResponseCookiesToAdd += "}"
 	repeatedStringForSensitiveDataPolicy := "[]*ObjectRefType{"
 	for _, f := range this.SensitiveDataPolicy {
 		repeatedStringForSensitiveDataPolicy += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
@@ -24671,6 +29592,10 @@ func (this *CreateSpecType) String() string {
 		`HttpProtocolOptions:` + strings.Replace(this.HttpProtocolOptions.String(), "HttpProtocolOptions", "HttpProtocolOptions", 1) + `,`,
 		`MaskingConfig:` + strings.Replace(this.MaskingConfig.String(), "MaskingConfiguration", "MaskingConfiguration", 1) + `,`,
 		`CoalescingOptions:` + strings.Replace(fmt.Sprintf("%v", this.CoalescingOptions), "TLSCoalescingOptions", "schema.TLSCoalescingOptions", 1) + `,`,
+		`RequestCookiesToAdd:` + repeatedStringForRequestCookiesToAdd + `,`,
+		`RequestCookiesToRemove:` + fmt.Sprintf("%v", this.RequestCookiesToRemove) + `,`,
+		`ResponseCookiesToAdd:` + repeatedStringForResponseCookiesToAdd + `,`,
+		`ResponseCookiesToRemove:` + fmt.Sprintf("%v", this.ResponseCookiesToRemove) + `,`,
 		`MaxDirectResponseBodySize:` + fmt.Sprintf("%v", this.MaxDirectResponseBodySize) + `,`,
 		`ZtnaProxyConfigurations:` + strings.Replace(this.ZtnaProxyConfigurations.String(), "ZtnaProxyConfiguration", "ZtnaProxyConfiguration", 1) + `,`,
 		`SensitiveDataPolicy:` + repeatedStringForSensitiveDataPolicy + `,`,
@@ -24888,6 +29813,16 @@ func (this *ReplaceSpecType) String() string {
 		repeatedStringForCookiesToModify += strings.Replace(fmt.Sprintf("%v", f), "CookieManipulationOptionType", "schema.CookieManipulationOptionType", 1) + ","
 	}
 	repeatedStringForCookiesToModify += "}"
+	repeatedStringForRequestCookiesToAdd := "[]*CookieValueOption{"
+	for _, f := range this.RequestCookiesToAdd {
+		repeatedStringForRequestCookiesToAdd += strings.Replace(fmt.Sprintf("%v", f), "CookieValueOption", "schema.CookieValueOption", 1) + ","
+	}
+	repeatedStringForRequestCookiesToAdd += "}"
+	repeatedStringForResponseCookiesToAdd := "[]*SetCookieValueOption{"
+	for _, f := range this.ResponseCookiesToAdd {
+		repeatedStringForResponseCookiesToAdd += strings.Replace(fmt.Sprintf("%v", f), "SetCookieValueOption", "schema.SetCookieValueOption", 1) + ","
+	}
+	repeatedStringForResponseCookiesToAdd += "}"
 	repeatedStringForSensitiveDataPolicy := "[]*ObjectRefType{"
 	for _, f := range this.SensitiveDataPolicy {
 		repeatedStringForSensitiveDataPolicy += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
@@ -24954,6 +29889,10 @@ func (this *ReplaceSpecType) String() string {
 		`HttpProtocolOptions:` + strings.Replace(this.HttpProtocolOptions.String(), "HttpProtocolOptions", "HttpProtocolOptions", 1) + `,`,
 		`MaskingConfig:` + strings.Replace(this.MaskingConfig.String(), "MaskingConfiguration", "MaskingConfiguration", 1) + `,`,
 		`CoalescingOptions:` + strings.Replace(fmt.Sprintf("%v", this.CoalescingOptions), "TLSCoalescingOptions", "schema.TLSCoalescingOptions", 1) + `,`,
+		`RequestCookiesToAdd:` + repeatedStringForRequestCookiesToAdd + `,`,
+		`RequestCookiesToRemove:` + fmt.Sprintf("%v", this.RequestCookiesToRemove) + `,`,
+		`ResponseCookiesToAdd:` + repeatedStringForResponseCookiesToAdd + `,`,
+		`ResponseCookiesToRemove:` + fmt.Sprintf("%v", this.ResponseCookiesToRemove) + `,`,
 		`MaxDirectResponseBodySize:` + fmt.Sprintf("%v", this.MaxDirectResponseBodySize) + `,`,
 		`ZtnaProxyConfigurations:` + strings.Replace(this.ZtnaProxyConfigurations.String(), "ZtnaProxyConfiguration", "ZtnaProxyConfiguration", 1) + `,`,
 		`SensitiveDataPolicy:` + repeatedStringForSensitiveDataPolicy + `,`,
@@ -25171,6 +30110,16 @@ func (this *GetSpecType) String() string {
 		repeatedStringForCookiesToModify += strings.Replace(fmt.Sprintf("%v", f), "CookieManipulationOptionType", "schema.CookieManipulationOptionType", 1) + ","
 	}
 	repeatedStringForCookiesToModify += "}"
+	repeatedStringForRequestCookiesToAdd := "[]*CookieValueOption{"
+	for _, f := range this.RequestCookiesToAdd {
+		repeatedStringForRequestCookiesToAdd += strings.Replace(fmt.Sprintf("%v", f), "CookieValueOption", "schema.CookieValueOption", 1) + ","
+	}
+	repeatedStringForRequestCookiesToAdd += "}"
+	repeatedStringForResponseCookiesToAdd := "[]*SetCookieValueOption{"
+	for _, f := range this.ResponseCookiesToAdd {
+		repeatedStringForResponseCookiesToAdd += strings.Replace(fmt.Sprintf("%v", f), "SetCookieValueOption", "schema.SetCookieValueOption", 1) + ","
+	}
+	repeatedStringForResponseCookiesToAdd += "}"
 	repeatedStringForDnsInfo := "[]*DnsInfo{"
 	for _, f := range this.DnsInfo {
 		repeatedStringForDnsInfo += strings.Replace(fmt.Sprintf("%v", f), "DnsInfo", "virtual_host_dns_info.DnsInfo", 1) + ","
@@ -25242,8 +30191,14 @@ func (this *GetSpecType) String() string {
 		`ApiSpec:` + strings.Replace(this.ApiSpec.String(), "ApiSpec", "ApiSpec", 1) + `,`,
 		`DomainCertMap:` + mapStringForDomainCertMap + `,`,
 		`HttpProtocolOptions:` + strings.Replace(this.HttpProtocolOptions.String(), "HttpProtocolOptions", "HttpProtocolOptions", 1) + `,`,
+		`DdosAutoMitigationAction:` + fmt.Sprintf("%v", this.DdosAutoMitigationAction) + `,`,
 		`MaskingConfig:` + strings.Replace(this.MaskingConfig.String(), "MaskingConfiguration", "MaskingConfiguration", 1) + `,`,
 		`CoalescingOptions:` + strings.Replace(fmt.Sprintf("%v", this.CoalescingOptions), "TLSCoalescingOptions", "schema.TLSCoalescingOptions", 1) + `,`,
+		`RequestCookiesToAdd:` + repeatedStringForRequestCookiesToAdd + `,`,
+		`RequestCookiesToRemove:` + fmt.Sprintf("%v", this.RequestCookiesToRemove) + `,`,
+		`ResponseCookiesToAdd:` + repeatedStringForResponseCookiesToAdd + `,`,
+		`ResponseCookiesToRemove:` + fmt.Sprintf("%v", this.ResponseCookiesToRemove) + `,`,
+		`L7DdosRpsThreshold:` + fmt.Sprintf("%v", this.L7DdosRpsThreshold) + `,`,
 		`State:` + fmt.Sprintf("%v", this.State) + `,`,
 		`HostName:` + fmt.Sprintf("%v", this.HostName) + `,`,
 		`DnsInfo:` + repeatedStringForDnsInfo + `,`,
@@ -25424,6 +30379,46 @@ func (this *GetSpecType_TlsCertParams) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_TlsCertParams{`,
 		`TlsCertParams:` + strings.Replace(fmt.Sprintf("%v", this.TlsCertParams), "CertificateParamsType", "schema.CertificateParamsType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_Block) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_Block{`,
+		`Block:` + strings.Replace(fmt.Sprintf("%v", this.Block), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DdosJsChallenge) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DdosJsChallenge{`,
+		`DdosJsChallenge:` + strings.Replace(fmt.Sprintf("%v", this.DdosJsChallenge), "JavascriptChallengeType", "JavascriptChallengeType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_L7DdosActionDefault) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_L7DdosActionDefault{`,
+		`L7DdosActionDefault:` + strings.Replace(fmt.Sprintf("%v", this.L7DdosActionDefault), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_L7DdosActionNone) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_L7DdosActionNone{`,
+		`L7DdosActionNone:` + strings.Replace(fmt.Sprintf("%v", this.L7DdosActionNone), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -28152,6 +33147,1630 @@ func (m *CdnServiceType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CdnOriginPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CdnOriginPool == nil {
+				m.CdnOriginPool = &CdnOriginPoolType{}
+			}
+			if err := m.CdnOriginPool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CdnCacheRule", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CdnCacheRule = append(m.CdnCacheRule, &views.ObjectRefType{})
+			if err := m.CdnCacheRule[len(m.CdnCacheRule)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OtherSettings", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.OtherSettings == nil {
+				m.OtherSettings = &OtherSettings{}
+			}
+			if err := m.OtherSettings.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultCacheAction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DefaultCacheAction == nil {
+				m.DefaultCacheAction = &DefaultCacheAction{}
+			}
+			if err := m.DefaultCacheAction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServicePolicyOption", wireType)
+			}
+			m.ServicePolicyOption = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ServicePolicyOption |= ServicePolicyOption(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *OtherSettings) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: OtherSettings: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: OtherSettings: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AddLocation", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.AddLocation = bool(v != 0)
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LoggingOptions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.LoggingOptions == nil {
+				m.LoggingOptions = &LoggingOptionsType{}
+			}
+			if err := m.LoggingOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HeaderOptions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.HeaderOptions == nil {
+				m.HeaderOptions = &HeaderControlType{}
+			}
+			if err := m.HeaderOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *LoggingOptionsType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: LoggingOptionsType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: LoggingOptionsType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ClientLogOptions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.ClientLogOptions == nil {
+				m.ClientLogOptions = &LogHeaderOptions{}
+			}
+			if err := m.ClientLogOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OriginLogOptions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.OriginLogOptions == nil {
+				m.OriginLogOptions = &LogHeaderOptions{}
+			}
+			if err := m.OriginLogOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *LogHeaderOptions) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: LogHeaderOptions: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: LogHeaderOptions: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HeaderList", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.HeaderList = append(m.HeaderList, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *HeaderControlType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: HeaderControlType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: HeaderControlType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestHeadersToAdd", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequestHeadersToAdd = append(m.RequestHeadersToAdd, &schema.HeaderManipulationOptionType{})
+			if err := m.RequestHeadersToAdd[len(m.RequestHeadersToAdd)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestHeadersToRemove", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequestHeadersToRemove = append(m.RequestHeadersToRemove, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseHeadersToAdd", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResponseHeadersToAdd = append(m.ResponseHeadersToAdd, &schema.HeaderManipulationOptionType{})
+			if err := m.ResponseHeadersToAdd[len(m.ResponseHeadersToAdd)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseHeadersToRemove", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResponseHeadersToRemove = append(m.ResponseHeadersToRemove, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DefaultCacheAction) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DefaultCacheAction: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DefaultCacheAction: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CacheTtlDefault", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheActions = &DefaultCacheAction_CacheTtlDefault{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CacheTtlOverride", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CacheActions = &DefaultCacheAction_CacheTtlOverride{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CacheDisabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CacheActions = &DefaultCacheAction_CacheDisabled{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CdnOriginPoolType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CdnOriginPoolType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CdnOriginPoolType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicName", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.PublicName == nil {
+				m.PublicName = &CDNOriginServerPublicName{}
+			}
+			if err := m.PublicName.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &CdnOriginPoolType_NoTls{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UseTls", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CDNUpstreamTlsParameters{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.TlsChoice = &CdnOriginPoolType_UseTls{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OriginServers", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OriginServers = append(m.OriginServers, &CDNOriginServerType{})
+			if err := m.OriginServers[len(m.OriginServers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field FollowOriginRedirect", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.FollowOriginRedirect = bool(v != 0)
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OriginRequestTimeout", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.OriginRequestTimeout = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MoreOriginOptions", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.MoreOriginOptions == nil {
+				m.MoreOriginOptions = &OriginAdvancedConfiguration{}
+			}
+			if err := m.MoreOriginOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CDNOriginServerPublicName) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CDNOriginServerPublicName: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CDNOriginServerPublicName: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DnsName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.DnsName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CDNUpstreamTlsParameters) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CDNUpstreamTlsParameters: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CDNUpstreamTlsParameters: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *OriginAdvancedConfiguration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: OriginAdvancedConfiguration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: OriginAdvancedConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableByteRangeRequest", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.DisableByteRangeRequest = bool(v != 0)
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WebsocketProxy", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.WebsocketProxy = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CDNOriginServerType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CDNOriginServerType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CDNOriginServerType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicIp", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CDNOriginServerPublicIP{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Choice = &CDNOriginServerType_PublicIp{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PublicName", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CDNOriginServerPublicName{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Choice = &CDNOriginServerType_PublicName{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			m.Port = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Port |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CDNOriginServerPublicIP) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CDNOriginServerPublicIP: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CDNOriginServerPublicIP: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ip", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PublicIpChoice = &CDNOriginServerPublicIP_Ip{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.PublicIpChoice = &CDNOriginServerPublicIP_Ipv6{string(dAtA[iNdEx:postIndex])}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -29747,6 +36366,211 @@ func (m *HttpRedirectOptions) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: HttpRedirectOptions: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DelegationLocationSelection) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DelegationLocationSelection: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DelegationLocationSelection: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Waap", wireType)
+			}
+			m.Waap = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Waap |= DelegationLocation(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field L7Ddos", wireType)
+			}
+			m.L7Ddos = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.L7Ddos |= DelegationLocation(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SimpleRoute", wireType)
+			}
+			m.SimpleRoute = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.SimpleRoute |= DelegationLocation(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DirectResponseRoute", wireType)
+			}
+			m.DirectResponseRoute = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.DirectResponseRoute |= DelegationLocation(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RedirectRoute", wireType)
+			}
+			m.RedirectRoute = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.RedirectRoute |= DelegationLocation(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestHeaderManipulation", wireType)
+			}
+			m.RequestHeaderManipulation = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.RequestHeaderManipulation |= DelegationLocation(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseHeaderManipulation", wireType)
+			}
+			m.ResponseHeaderManipulation = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ResponseHeaderManipulation |= DelegationLocation(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestRewrite", wireType)
+			}
+			m.RequestRewrite = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.RequestRewrite |= DelegationLocation(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -32169,6 +38993,246 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 100:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestCookiesToAdd", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequestCookiesToAdd = append(m.RequestCookiesToAdd, &schema.CookieValueOption{})
+			if err := m.RequestCookiesToAdd[len(m.RequestCookiesToAdd)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 101:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestCookiesToRemove", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequestCookiesToRemove = append(m.RequestCookiesToRemove, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 102:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseCookiesToAdd", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResponseCookiesToAdd = append(m.ResponseCookiesToAdd, &schema.SetCookieValueOption{})
+			if err := m.ResponseCookiesToAdd[len(m.ResponseCookiesToAdd)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 103:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseCookiesToRemove", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResponseCookiesToRemove = append(m.ResponseCookiesToRemove, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 104:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field WafExclusionPolicy", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.WafExclusionPolicy = append(m.WafExclusionPolicy, &schema.ObjectRefType{})
+			if err := m.WafExclusionPolicy[len(m.WafExclusionPolicy)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 105:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field L7DdosRpsThreshold", wireType)
+			}
+			m.L7DdosRpsThreshold = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.L7DdosRpsThreshold |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 106:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Selected", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DelegationLocationSelection{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceActionDelegation = &GlobalSpecType_Selected{v}
+			iNdEx = postIndex
+		case 107:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field All", wireType)
+			}
+			var v DelegationLocation
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= DelegationLocation(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.ServiceActionDelegation = &GlobalSpecType_All{v}
 		case 1000:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field DnsVolterraManaged", wireType)
@@ -32873,6 +39937,26 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 1029:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnablePerPacketLoadBalancing", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.EnablePerPacketLoadBalancing = bool(v != 0)
 		case 1120:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ZtnaProxyConfigurations", wireType)
@@ -35044,6 +42128,138 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 100:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestCookiesToAdd", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequestCookiesToAdd = append(m.RequestCookiesToAdd, &schema.CookieValueOption{})
+			if err := m.RequestCookiesToAdd[len(m.RequestCookiesToAdd)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 101:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestCookiesToRemove", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequestCookiesToRemove = append(m.RequestCookiesToRemove, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 102:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseCookiesToAdd", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResponseCookiesToAdd = append(m.ResponseCookiesToAdd, &schema.SetCookieValueOption{})
+			if err := m.ResponseCookiesToAdd[len(m.ResponseCookiesToAdd)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 103:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseCookiesToRemove", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResponseCookiesToRemove = append(m.ResponseCookiesToRemove, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
 		case 1028:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field MaxDirectResponseBodySize", wireType)
@@ -37027,6 +44243,138 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 100:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestCookiesToAdd", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequestCookiesToAdd = append(m.RequestCookiesToAdd, &schema.CookieValueOption{})
+			if err := m.RequestCookiesToAdd[len(m.RequestCookiesToAdd)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 101:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestCookiesToRemove", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequestCookiesToRemove = append(m.RequestCookiesToRemove, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 102:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseCookiesToAdd", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResponseCookiesToAdd = append(m.ResponseCookiesToAdd, &schema.SetCookieValueOption{})
+			if err := m.ResponseCookiesToAdd[len(m.ResponseCookiesToAdd)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 103:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseCookiesToRemove", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResponseCookiesToRemove = append(m.ResponseCookiesToRemove, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
 		case 1028:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field MaxDirectResponseBodySize", wireType)
@@ -38993,6 +46341,146 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 91:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Block", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DdosAutoMitigationAction = &GetSpecType_Block{v}
+			iNdEx = postIndex
+		case 92:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DdosJsChallenge", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &JavascriptChallengeType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DdosAutoMitigationAction = &GetSpecType_DdosJsChallenge{v}
+			iNdEx = postIndex
+		case 93:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field L7DdosActionDefault", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DdosAutoMitigationAction = &GetSpecType_L7DdosActionDefault{v}
+			iNdEx = postIndex
+		case 94:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field L7DdosActionNone", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.DdosAutoMitigationAction = &GetSpecType_L7DdosActionNone{v}
+			iNdEx = postIndex
 		case 96:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field MaskingConfig", wireType)
@@ -39065,6 +46553,157 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 100:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestCookiesToAdd", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequestCookiesToAdd = append(m.RequestCookiesToAdd, &schema.CookieValueOption{})
+			if err := m.RequestCookiesToAdd[len(m.RequestCookiesToAdd)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 101:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RequestCookiesToRemove", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RequestCookiesToRemove = append(m.RequestCookiesToRemove, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 102:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseCookiesToAdd", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResponseCookiesToAdd = append(m.ResponseCookiesToAdd, &schema.SetCookieValueOption{})
+			if err := m.ResponseCookiesToAdd[len(m.ResponseCookiesToAdd)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 103:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseCookiesToRemove", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ResponseCookiesToRemove = append(m.ResponseCookiesToRemove, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 105:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field L7DdosRpsThreshold", wireType)
+			}
+			m.L7DdosRpsThreshold = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.L7DdosRpsThreshold |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		case 1003:
 			if wireType != 0 {
 				return fmt.Errorf("proto: wrong wireType = %d for field State", wireType)

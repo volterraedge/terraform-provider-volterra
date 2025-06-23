@@ -2184,13 +2184,15 @@ var APISwaggerJSON string = `{
         },
         "subscriptionStatus": {
             "type": "string",
-            "description": "x-displayName: \"Addon Subscription Status\"\nStatus of an addon subscription\n\n - AS_UNKNOWN: x-displayName: \"None\"\nDefault state\n - AS_SUBSCRIBED: x-displayName: \"Subscribed\"\nSuccessfully subscribed\n - AS_UNSUBSCRIBED: x-displayName: \"Unsubscribed\"\nSuccessfully unsubscribed\n - AS_ERROR: x-displayName: \"Error\"\nService subscription request ended up in error state.",
+            "description": "x-displayName: \"Addon Subscription Status\"\nStatus of an addon subscription\n\n - AS_UNKNOWN: x-displayName: \"None\"\nDefault state\n - AS_SUBSCRIBED: x-displayName: \"Subscribed\"\nSuccessfully subscribed\n - AS_UNSUBSCRIBED: x-displayName: \"Unsubscribed\"\nSuccessfully unsubscribed\n - AS_ERROR: x-displayName: \"Error\"\nService subscription request ended up in error state.\n - AS_SUBSCRIBE_PENDING: x-displayName: \"Pending Subscribed\"\nRequest for subscription has been initiated and is pending approval\n - AS_UNSUBSCRIBE_PENDING: x-displayName: \"Pending Unsubscribed\"\nRequest for unsubscription has been initiated and is pending approval.",
             "title": "Status",
             "enum": [
                 "AS_UNKNOWN",
                 "AS_SUBSCRIBED",
                 "AS_UNSUBSCRIBED",
-                "AS_ERROR"
+                "AS_ERROR",
+                "AS_SUBSCRIBE_PENDING",
+                "AS_UNSUBSCRIBE_PENDING"
             ],
             "default": "AS_UNKNOWN"
         },

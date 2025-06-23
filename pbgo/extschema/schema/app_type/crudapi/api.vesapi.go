@@ -2849,7 +2849,7 @@ var APISwaggerJSON string = `{
                     "description": " Inactive discovered API will be deleted after configured duration.\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 7\n",
                     "title": "purge_duration_for_inactive_discovered_apis",
                     "format": "int64",
-                    "x-displayname": "Purge Duration for Inactive Discovered APIs",
+                    "x-displayname": "Purge Duration for Inactive Discovered APIs from Traffic",
                     "x-ves-example": "2",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",

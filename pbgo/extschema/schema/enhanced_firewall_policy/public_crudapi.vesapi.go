@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/enhanced_firewall_policys/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -2428,9 +2441,9 @@ var APISwaggerJSON string = `{
                 },
                 "destination_prefix_list": {
                     "description": "Exclusive with [all_destinations all_sli_vips all_slo_vips destination_aws_vpc_ids destination_ip_prefix_set destination_label_selector inside_destinations outside_destinations]\n Addresses that match one of the prefix in the list\n\nExample: - \"192.168.20.0/24\"-",
-                    "title": "ipv4 prefix list",
+                    "title": "IP Prefix List",
                     "$ref": "#/definitions/viewsPrefixStringListType",
-                    "x-displayname": "IPv4 Prefix List",
+                    "x-displayname": "IP Prefix List",
                     "x-ves-example": "192.168.20.0/24"
                 },
                 "insert_service": {

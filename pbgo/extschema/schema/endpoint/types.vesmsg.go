@@ -380,6 +380,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["snat_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("snat_pool"))
+		if err := fv(ctx, m.GetSnatPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["where"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("where"))
@@ -464,6 +473,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["endpoint_address.dns_name_advanced"] = DnsNameAdvancedTypeValidator().Validate
 
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
+
+	v.FldValidators["snat_pool"] = ves_io_schema_views.SnatPoolConfigurationValidator().Validate
 
 	return v
 }()
@@ -1019,6 +1030,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["snat_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("snat_pool"))
+		if err := fv(ctx, m.GetSnatPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["where"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("where"))
@@ -1103,6 +1123,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["endpoint_address.dns_name_advanced"] = DnsNameAdvancedTypeValidator().Validate
 
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
+
+	v.FldValidators["snat_pool"] = ves_io_schema_views.SnatPoolConfigurationValidator().Validate
 
 	return v
 }()
@@ -1409,6 +1431,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["snat_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("snat_pool"))
+		if err := fv(ctx, m.GetSnatPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["where"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("where"))
@@ -1505,6 +1536,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["proximity_choice.site_preferences"] = ves_io_schema.SiteReferenceListTypeValidator().Validate
 
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
+
+	v.FldValidators["snat_pool"] = ves_io_schema_views.SnatPoolConfigurationValidator().Validate
 
 	return v
 }()
@@ -2020,6 +2053,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["snat_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("snat_pool"))
+		if err := fv(ctx, m.GetSnatPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["where"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("where"))
@@ -2104,6 +2146,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["endpoint_address.dns_name_advanced"] = DnsNameAdvancedTypeValidator().Validate
 
 	v.FldValidators["where"] = ves_io_schema.NetworkSiteRefSelectorValidator().Validate
+
+	v.FldValidators["snat_pool"] = ves_io_schema_views.SnatPoolConfigurationValidator().Validate
 
 	return v
 }()
@@ -2484,6 +2528,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.HealthCheckPort = f.GetHealthCheckPort()
 	m.Port = f.GetPort()
 	m.Protocol = f.GetProtocol()
+	m.SnatPool = f.GetSnatPool()
 	m.Where = f.GetWhere()
 }
 
@@ -2506,6 +2551,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.HealthCheckPort = m1.HealthCheckPort
 	f.Port = m1.Port
 	f.Protocol = m1.Protocol
+	f.SnatPool = m1.SnatPool
 	f.Where = m1.Where
 }
 
@@ -2572,6 +2618,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.HealthCheckPort = f.GetHealthCheckPort()
 	m.Port = f.GetPort()
 	m.Protocol = f.GetProtocol()
+	m.SnatPool = f.GetSnatPool()
 	m.Where = f.GetWhere()
 }
 
@@ -2594,6 +2641,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.HealthCheckPort = m1.HealthCheckPort
 	f.Port = m1.Port
 	f.Protocol = m1.Protocol
+	f.SnatPool = m1.SnatPool
 	f.Where = m1.Where
 }
 
@@ -2660,6 +2708,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.HealthCheckPort = f.GetHealthCheckPort()
 	m.Port = f.GetPort()
 	m.Protocol = f.GetProtocol()
+	m.SnatPool = f.GetSnatPool()
 	m.Where = f.GetWhere()
 }
 
@@ -2682,6 +2731,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.HealthCheckPort = m1.HealthCheckPort
 	f.Port = m1.Port
 	f.Protocol = m1.Protocol
+	f.SnatPool = m1.SnatPool
 	f.Where = m1.Where
 }
 

@@ -502,7 +502,12 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field labels")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								groupByInt.Custom.Labels = ls
 
@@ -872,6 +877,9 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 
 								groupsList := []ves_io_schema_alert_policy.Group{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field groups")
+									}
 									groupsList = append(groupsList, ves_io_schema_alert_policy.Group(ves_io_schema_alert_policy.Group_value[j.(string)]))
 								}
 								matcherInt.Group.Groups = groupsList
@@ -899,6 +907,9 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 
 								severitiesList := []ves_io_schema_alert_policy.Severity{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field severities")
+									}
 									severitiesList = append(severitiesList, ves_io_schema_alert_policy.Severity(ves_io_schema_alert_policy.Severity_value[j.(string)]))
 								}
 								matcherInt.Severity.Severities = severitiesList
@@ -937,7 +948,12 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field labels")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											groupByInt.Custom.Labels = ls
 
@@ -1132,7 +1148,12 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field labels")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								groupByInt.Custom.Labels = ls
 
@@ -1500,6 +1521,9 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 
 								groupsList := []ves_io_schema_alert_policy.Group{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field groups")
+									}
 									groupsList = append(groupsList, ves_io_schema_alert_policy.Group(ves_io_schema_alert_policy.Group_value[j.(string)]))
 								}
 								matcherInt.Group.Groups = groupsList
@@ -1527,6 +1551,9 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 
 								severitiesList := []ves_io_schema_alert_policy.Severity{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field severities")
+									}
 									severitiesList = append(severitiesList, ves_io_schema_alert_policy.Severity(ves_io_schema_alert_policy.Severity_value[j.(string)]))
 								}
 								matcherInt.Severity.Severities = severitiesList
@@ -1565,7 +1592,12 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field labels")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											groupByInt.Custom.Labels = ls
 
@@ -1660,5 +1692,8 @@ func resourceVolterraAlertPolicyDelete(d *schema.ResourceData, meta interface{})
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra AlertPolicy obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_alert_policy.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_alert_policy.ObjectType, namespace, name, opts...)
 }

@@ -152,8 +152,16 @@ type DBObject struct {
 
 // GetObjectIndexers returns the associated store.Indexers for Object
 func GetObjectIndexers() store.Indexers {
-
-	return nil
+	indexers := store.Indexers{
+		"spec.gc_spec.fqdn": store.NewIndexInfo(store.WithUniqueSecondaryIndex(func(e store.Entry) ([]string, error) {
+			obj, ok := e.(*Object)
+			if !ok {
+				return nil, fmt.Errorf("Index spec.gc_spec.fqdn expected *ves.io.schema.uztna.views.uztna_application_view.Object, got %T: %#v", e, e)
+			}
+			return []string{obj.GetSpec().GetGcSpec().GetFqdn()}, nil
+		})),
+	}
+	return indexers
 
 }
 

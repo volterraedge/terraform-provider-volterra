@@ -194,54 +194,7 @@ func resourceVolterraUztnaApplicationView() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"http": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"https": {
-
-							Type:     schema.TypeList,
-							MaxItems: 1,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"certificate": {
-
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
 						"tcp": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"udp": {
 
 							Type:     schema.TypeBool,
 							Optional: true,
@@ -467,59 +420,6 @@ func resourceVolterraUztnaApplicationViewCreate(d *schema.ResourceData, meta int
 
 				protocolChoiceTypeFound := false
 
-				if v, ok := protocolMapStrToI["http"]; ok && !isIntfNil(v) && !protocolChoiceTypeFound {
-
-					protocolChoiceTypeFound = true
-
-					if v.(bool) {
-						protocolChoiceInt := &ves_io_schema_uztna_views_uztna_application_view.Protocol_HTTP{}
-						protocolChoiceInt.HTTP = &ves_io_schema.Empty{}
-						protocol.ProtocolChoice = protocolChoiceInt
-					}
-
-				}
-
-				if v, ok := protocolMapStrToI["https"]; ok && !isIntfNil(v) && !protocolChoiceTypeFound {
-
-					protocolChoiceTypeFound = true
-					protocolChoiceInt := &ves_io_schema_uztna_views_uztna_application_view.Protocol_HTTPS{}
-					protocolChoiceInt.HTTPS = &ves_io_schema_uztna_views_uztna_application_view.AppCertificate{}
-					protocol.ProtocolChoice = protocolChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["certificate"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								certificateInt := &ves_io_schema_views.ObjectRefType{}
-								protocolChoiceInt.HTTPS.Certificate = certificateInt
-
-								for _, set := range sl {
-									if set != nil {
-										cMapToStrVal := set.(map[string]interface{})
-										if val, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-											certificateInt.Name = val.(string)
-										}
-										if val, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-											certificateInt.Namespace = val.(string)
-										}
-
-										if val, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-											certificateInt.Tenant = val.(string)
-										}
-									}
-								}
-
-							}
-
-						}
-					}
-
-				}
-
 				if v, ok := protocolMapStrToI["tcp"]; ok && !isIntfNil(v) && !protocolChoiceTypeFound {
 
 					protocolChoiceTypeFound = true
@@ -527,18 +427,6 @@ func resourceVolterraUztnaApplicationViewCreate(d *schema.ResourceData, meta int
 					if v.(bool) {
 						protocolChoiceInt := &ves_io_schema_uztna_views_uztna_application_view.Protocol_TCP{}
 						protocolChoiceInt.TCP = &ves_io_schema.Empty{}
-						protocol.ProtocolChoice = protocolChoiceInt
-					}
-
-				}
-
-				if v, ok := protocolMapStrToI["udp"]; ok && !isIntfNil(v) && !protocolChoiceTypeFound {
-
-					protocolChoiceTypeFound = true
-
-					if v.(bool) {
-						protocolChoiceInt := &ves_io_schema_uztna_views_uztna_application_view.Protocol_UDP{}
-						protocolChoiceInt.UDP = &ves_io_schema.Empty{}
 						protocol.ProtocolChoice = protocolChoiceInt
 					}
 
@@ -803,59 +691,6 @@ func resourceVolterraUztnaApplicationViewUpdate(d *schema.ResourceData, meta int
 
 				protocolChoiceTypeFound := false
 
-				if v, ok := protocolMapStrToI["http"]; ok && !isIntfNil(v) && !protocolChoiceTypeFound {
-
-					protocolChoiceTypeFound = true
-
-					if v.(bool) {
-						protocolChoiceInt := &ves_io_schema_uztna_views_uztna_application_view.Protocol_HTTP{}
-						protocolChoiceInt.HTTP = &ves_io_schema.Empty{}
-						protocol.ProtocolChoice = protocolChoiceInt
-					}
-
-				}
-
-				if v, ok := protocolMapStrToI["https"]; ok && !isIntfNil(v) && !protocolChoiceTypeFound {
-
-					protocolChoiceTypeFound = true
-					protocolChoiceInt := &ves_io_schema_uztna_views_uztna_application_view.Protocol_HTTPS{}
-					protocolChoiceInt.HTTPS = &ves_io_schema_uztna_views_uztna_application_view.AppCertificate{}
-					protocol.ProtocolChoice = protocolChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["certificate"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								certificateInt := &ves_io_schema_views.ObjectRefType{}
-								protocolChoiceInt.HTTPS.Certificate = certificateInt
-
-								for _, set := range sl {
-									if set != nil {
-										cMapToStrVal := set.(map[string]interface{})
-										if val, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-											certificateInt.Name = val.(string)
-										}
-										if val, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-											certificateInt.Namespace = val.(string)
-										}
-
-										if val, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-											certificateInt.Tenant = val.(string)
-										}
-									}
-								}
-
-							}
-
-						}
-					}
-
-				}
-
 				if v, ok := protocolMapStrToI["tcp"]; ok && !isIntfNil(v) && !protocolChoiceTypeFound {
 
 					protocolChoiceTypeFound = true
@@ -863,18 +698,6 @@ func resourceVolterraUztnaApplicationViewUpdate(d *schema.ResourceData, meta int
 					if v.(bool) {
 						protocolChoiceInt := &ves_io_schema_uztna_views_uztna_application_view.Protocol_TCP{}
 						protocolChoiceInt.TCP = &ves_io_schema.Empty{}
-						protocol.ProtocolChoice = protocolChoiceInt
-					}
-
-				}
-
-				if v, ok := protocolMapStrToI["udp"]; ok && !isIntfNil(v) && !protocolChoiceTypeFound {
-
-					protocolChoiceTypeFound = true
-
-					if v.(bool) {
-						protocolChoiceInt := &ves_io_schema_uztna_views_uztna_application_view.Protocol_UDP{}
-						protocolChoiceInt.UDP = &ves_io_schema.Empty{}
 						protocol.ProtocolChoice = protocolChoiceInt
 					}
 
@@ -911,5 +734,8 @@ func resourceVolterraUztnaApplicationViewDelete(d *schema.ResourceData, meta int
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra UztnaApplicationView obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_uztna_views_uztna_application_view.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_uztna_views_uztna_application_view.ObjectType, namespace, name, opts...)
 }

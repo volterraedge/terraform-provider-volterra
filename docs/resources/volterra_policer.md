@@ -17,9 +17,11 @@ Example Usage
 
 ```hcl
 resource "volterra_policer" "example" {
-  name                       = "acmecorp-web"
-  namespace                  = "staging"
-  burst_size                 = ["10000"]
+  name      = "acmecorp-web"
+  namespace = "staging"
+
+  burst_size = ["10000"]
+
   committed_information_rate = ["10000"]
 }
 

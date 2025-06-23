@@ -23,7 +23,7 @@ resource "volterra_k8s_pod_security_admission" "example" {
   pod_security_admission_specs {
     // One of the arguments from this list "audit enforce warn" must be set
 
-    enforce = true
+    audit = true
 
     // One of the arguments from this list "baseline privileged restricted" must be set
 

@@ -2191,6 +2191,15 @@ func (v *ValidateDDoSClientSource) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["ja4_tls_fingerprint_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ja4_tls_fingerprint_matcher"))
+		if err := fv(ctx, m.GetJa4TlsFingerprintMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tls_fingerprint_matcher"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tls_fingerprint_matcher"))
@@ -2232,6 +2241,8 @@ var DefaultDDoSClientSourceValidator = func() *ValidateDDoSClientSource {
 	v.FldValidators["asn_list"] = ves_io_schema_policy.AsnMatchListValidator().Validate
 
 	v.FldValidators["tls_fingerprint_matcher"] = ves_io_schema_policy.TlsFingerprintMatcherTypeValidator().Validate
+
+	v.FldValidators["ja4_tls_fingerprint_matcher"] = ves_io_schema_policy.JA4TlsFingerprintMatcherTypeValidator().Validate
 
 	return v
 }()

@@ -2102,6 +2102,17 @@ func (v *ValidateServiceSlugChoice) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
+	case *ServiceSlugChoice_MobileAppShield:
+		if fv, exists := v.FldValidators["choice.mobile_app_shield"]; exists {
+			val := m.GetChoice().(*ServiceSlugChoice_MobileAppShield).MobileAppShield
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("mobile_app_shield"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

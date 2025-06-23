@@ -5149,6 +5149,14 @@ type ValidateGCPVPCNetworkType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGCPVPCNetworkType) RoutingTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for routing_type")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGCPVPCNetworkType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -5182,6 +5190,42 @@ func (v *ValidateGCPVPCNetworkType) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["routing_type"]; exists {
+		val := m.GetRoutingType()
+		vOpts := append(opts,
+			db.WithValidateField("routing_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetRoutingType().(type) {
+	case *GCPVPCNetworkType_F5OrchestratedRouting:
+		if fv, exists := v.FldValidators["routing_type.f5_orchestrated_routing"]; exists {
+			val := m.GetRoutingType().(*GCPVPCNetworkType_F5OrchestratedRouting).F5OrchestratedRouting
+			vOpts := append(opts,
+				db.WithValidateField("routing_type"),
+				db.WithValidateField("f5_orchestrated_routing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPVPCNetworkType_ManualRouting:
+		if fv, exists := v.FldValidators["routing_type.manual_routing"]; exists {
+			val := m.GetRoutingType().(*GCPVPCNetworkType_ManualRouting).ManualRouting
+			vOpts := append(opts,
+				db.WithValidateField("routing_type"),
+				db.WithValidateField("manual_routing"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -5196,6 +5240,17 @@ var DefaultGCPVPCNetworkTypeValidator = func() *ValidateGCPVPCNetworkType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhRoutingType := v.RoutingTypeValidationRuleHandler
+	rulesRoutingType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhRoutingType(rulesRoutingType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCNetworkType.routing_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["routing_type"] = vFn
 
 	vrhName := v.NameValidationRuleHandler
 	rulesName := map[string]string{
@@ -6426,6 +6481,173 @@ func PrivateConnectivityTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SMSv2InterfaceOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SMSv2InterfaceOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SMSv2InterfaceOptions) DeepCopy() *SMSv2InterfaceOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SMSv2InterfaceOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SMSv2InterfaceOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SMSv2InterfaceOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SMSv2InterfaceOptionsValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SMSv2InterfaceOptions) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetSegmentNetworkDRefInfo()
+
+}
+
+func (m *SMSv2InterfaceOptions) GetSegmentNetworkDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSegmentNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment_network",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetSegmentNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SMSv2InterfaceOptions) GetSegmentNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+	}
+
+	vref := m.GetSegmentNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "segment.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateSMSv2InterfaceOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSMSv2InterfaceOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SMSv2InterfaceOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SMSv2InterfaceOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["enable_site_to_site_connectivity"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("enable_site_to_site_connectivity"))
+		if err := fv(ctx, m.GetEnableSiteToSiteConnectivity(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mtu"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mtu"))
+		if err := fv(ctx, m.GetMtu(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["segment_network"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_network"))
+		if err := fv(ctx, m.GetSegmentNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["segment_subnet"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_subnet"))
+		if err := fv(ctx, m.GetSegmentSubnet(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSMSv2InterfaceOptionsValidator = func() *ValidateSMSv2InterfaceOptions {
+	v := &ValidateSMSv2InterfaceOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["segment_network"] = ObjectRefTypeValidator().Validate
+
+	v.FldValidators["segment_subnet"] = SegmentSubnetTypeValidator().Validate
+
+	return v
+}()
+
+func SMSv2InterfaceOptionsValidator() db.Validator {
+	return DefaultSMSv2InterfaceOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SecurityGroupType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -6561,6 +6783,177 @@ var DefaultSecurityGroupTypeValidator = func() *ValidateSecurityGroupType {
 
 func SecurityGroupTypeValidator() db.Validator {
 	return DefaultSecurityGroupTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SegmentSubnetType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SegmentSubnetType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SegmentSubnetType) DeepCopy() *SegmentSubnetType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SegmentSubnetType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SegmentSubnetType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SegmentSubnetType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SegmentSubnetTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSegmentSubnetType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSegmentSubnetType) ChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateSegmentSubnetType) ChoiceIpv4ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ipv4, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv4")
+	}
+	return oValidatorFn_Ipv4, nil
+}
+func (v *ValidateSegmentSubnetType) ChoiceExistingSubnetIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_ExistingSubnetId, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for existing_subnet_id")
+	}
+	return oValidatorFn_ExistingSubnetId, nil
+}
+
+func (v *ValidateSegmentSubnetType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SegmentSubnetType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SegmentSubnetType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["choice"]; exists {
+		val := m.GetChoice()
+		vOpts := append(opts,
+			db.WithValidateField("choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetChoice().(type) {
+	case *SegmentSubnetType_Ipv4:
+		if fv, exists := v.FldValidators["choice.ipv4"]; exists {
+			val := m.GetChoice().(*SegmentSubnetType_Ipv4).Ipv4
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("ipv4"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SegmentSubnetType_ExistingSubnetId:
+		if fv, exists := v.FldValidators["choice.existing_subnet_id"]; exists {
+			val := m.GetChoice().(*SegmentSubnetType_ExistingSubnetId).ExistingSubnetId
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("existing_subnet_id"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSegmentSubnetTypeValidator = func() *ValidateSegmentSubnetType {
+	v := &ValidateSegmentSubnetType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhChoice := v.ChoiceValidationRuleHandler
+	rulesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhChoice(rulesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SegmentSubnetType.choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["choice"] = vFn
+
+	vrhChoiceIpv4 := v.ChoiceIpv4ValidationRuleHandler
+	rulesChoiceIpv4 := map[string]string{
+		"ves.io.schema.rules.string.ipv4_prefix":          "true",
+		"ves.io.schema.rules.string.max_ip_prefix_length": "28",
+	}
+	vFnMap["choice.ipv4"], err = vrhChoiceIpv4(rulesChoiceIpv4)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SegmentSubnetType.choice_ipv4: %s", err)
+		panic(errMsg)
+	}
+	vrhChoiceExistingSubnetId := v.ChoiceExistingSubnetIdValidationRuleHandler
+	rulesChoiceExistingSubnetId := map[string]string{
+		"ves.io.schema.rules.string.max_len": "64",
+		"ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$",
+	}
+	vFnMap["choice.existing_subnet_id"], err = vrhChoiceExistingSubnetId(rulesChoiceExistingSubnetId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SegmentSubnetType.choice_existing_subnet_id: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["choice.ipv4"] = vFnMap["choice.ipv4"]
+	v.FldValidators["choice.existing_subnet_id"] = vFnMap["choice.existing_subnet_id"]
+
+	return v
+}()
+
+func SegmentSubnetTypeValidator() db.Validator {
+	return DefaultSegmentSubnetTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

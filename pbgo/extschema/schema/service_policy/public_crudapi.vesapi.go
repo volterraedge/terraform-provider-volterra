@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/service_policys/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -4245,9 +4258,70 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "rate_limiterInputHours": {
+            "type": "object",
+            "description": "x-displayName: \"Hours\"\nInput Duration Hours",
+            "title": "Hours",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Duration\"",
+                    "title": "Duration",
+                    "format": "int64"
+                }
+            }
+        },
+        "rate_limiterInputMinutes": {
+            "type": "object",
+            "description": "x-displayName: \"Minutes\"\nInput Duration Minutes",
+            "title": "Minutes",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Duration\"",
+                    "title": "Duration",
+                    "format": "int64"
+                }
+            }
+        },
+        "rate_limiterInputSeconds": {
+            "type": "object",
+            "description": "x-displayName: \"Seconds\"\nInput Duration Seconds",
+            "title": "Seconds",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Duration\"",
+                    "title": "Duration",
+                    "format": "int64"
+                }
+            }
+        },
+        "rate_limiterRateLimitBlockAction": {
+            "type": "object",
+            "description": "x-displayName: \"Rate Limit Block Action\"\nAction where a user is blocked from making further requests after exceeding rate limit threshold.",
+            "title": "RateLimitBlockAction",
+            "properties": {
+                "hours": {
+                    "description": "x-displayName: \"Hours\"\nUser block mitigation time in Hours",
+                    "title": "Hours",
+                    "$ref": "#/definitions/rate_limiterInputHours"
+                },
+                "minutes": {
+                    "description": "x-displayName: \"Minutes\"\nUser block mitigation time in Minutes",
+                    "title": "Minutes",
+                    "$ref": "#/definitions/rate_limiterInputMinutes"
+                },
+                "seconds": {
+                    "description": "x-displayName: \"Seconds\"\nUser block mitigation time in Seconds",
+                    "title": "Seconds",
+                    "$ref": "#/definitions/rate_limiterInputSeconds"
+                }
+            }
+        },
         "rate_limiterRateLimitPeriodUnit": {
             "type": "string",
-            "description": "x-displayName: \"Rate Limit Period Unit\"\nUnit for the period per which the rate limit is applied.\n\n - SECOND: Second\n\nx-displayName: \"Second\"\nRate limit period is 1 second\n - MINUTE: Minute\n\nx-displayName: \"Minute\"\nRate limit period is 1 minute\n - HOUR: Hour\n\nx-displayName: \"Hour\"\nRate limit period is 1 hour\n - DAY: Day\n\nx-displayName: \"Day\"\nRate limit period is 1 day",
+            "description": "x-displayName: \"Rate Limit Period Unit\"\nUnit for the period per which the rate limit is applied.\n\n - SECOND: Second\n\nx-displayName: \"Seconds\"\nRate limit period unit is seconds\n - MINUTE: Minute\n\nx-displayName: \"Minutes\"\nRate limit period unit is minutes\n - HOUR: Hour\n\nx-displayName: \"Hours\"\nRate limit period unit is hours\n - DAY: Day\n\nx-displayName: \"Days\"\nRate limit period unit is days",
             "title": "RateLimitPeriodUnit",
             "enum": [
                 "SECOND",
@@ -4262,15 +4336,31 @@ var APISwaggerJSON string = `{
             "description": "x-displayName: \"Rate Limit Value\"\nA tuple consisting of a rate limit period unit and the total number of allowed requests for that period.",
             "title": "RateLimitValue",
             "properties": {
+                "action_block": {
+                    "description": "x-displayName: \"Block\"\nBlocks the user for a specified duration of time",
+                    "title": "Block Action",
+                    "$ref": "#/definitions/rate_limiterRateLimitBlockAction"
+                },
                 "burst_multiplier": {
                     "type": "integer",
                     "description": "x-displayName: \"Burst Multiplier\"\nx-example: \"1\"\nThe maximum burst of requests to accommodate, expressed as a multiple of the rate.",
                     "title": "burst_multiplier",
                     "format": "int64"
                 },
+                "disabled": {
+                    "description": "x-displayName: \"Disabled\"",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "period_multiplier": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Periods\"\nx-example: \"1\"\nThis setting, combined with Per Period units, provides a duration",
+                    "title": "period_multiplier",
+                    "format": "int64"
+                },
                 "total_number": {
                     "type": "integer",
-                    "description": "x-displayName: \"Number\"\nx-example: \"1\"\nx-required\nThe total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period.",
+                    "description": "x-displayName: \"Number Of Requests\"\nx-example: \"1\"\nx-required\nThe total number of allowed requests per rate-limiting period.",
                     "title": "total_number",
                     "format": "int64"
                 },

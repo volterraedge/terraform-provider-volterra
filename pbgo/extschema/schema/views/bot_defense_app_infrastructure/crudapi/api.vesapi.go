@@ -2843,7 +2843,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "location": {
-                    "description": " Location\n\nExample: - \"AWS_US_WEST_1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Bot infrastructure region\n\nExample: - \"AWS_US_WEST_1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Location",
                     "$ref": "#/definitions/viewsbot_defense_app_infrastructureLocation",
                     "x-displayname": "Location",

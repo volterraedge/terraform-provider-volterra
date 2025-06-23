@@ -15,7 +15,6 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -27,15 +26,15 @@ var (
 
 // augmented methods on protoc/std generated struct
 
-func (m *GetInstanceServerResponse) ToJSON() (string, error) {
+func (m *GetDataplaneServerResponse) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *GetInstanceServerResponse) ToYAML() (string, error) {
+func (m *GetDataplaneServerResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *GetInstanceServerResponse) DeepCopy() *GetInstanceServerResponse {
+func (m *GetDataplaneServerResponse) DeepCopy() *GetDataplaneServerResponse {
 	if m == nil {
 		return nil
 	}
@@ -43,7 +42,7 @@ func (m *GetInstanceServerResponse) DeepCopy() *GetInstanceServerResponse {
 	if err != nil {
 		return nil
 	}
-	c := &GetInstanceServerResponse{}
+	c := &GetDataplaneServerResponse{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -51,18 +50,18 @@ func (m *GetInstanceServerResponse) DeepCopy() *GetInstanceServerResponse {
 	return c
 }
 
-func (m *GetInstanceServerResponse) DeepCopyProto() proto.Message {
+func (m *GetDataplaneServerResponse) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *GetInstanceServerResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return GetInstanceServerResponseValidator().Validate(ctx, m, opts...)
+func (m *GetDataplaneServerResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetDataplaneServerResponseValidator().Validate(ctx, m, opts...)
 }
 
-func (m *GetInstanceServerResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+func (m *GetDataplaneServerResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -72,7 +71,7 @@ func (m *GetInstanceServerResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 }
 
 // GetDRefInfo for the field's type
-func (m *GetInstanceServerResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
+func (m *GetDataplaneServerResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetSpec() == nil {
 		return nil, nil
 	}
@@ -89,18 +88,18 @@ func (m *GetInstanceServerResponse) GetSpecDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-type ValidateGetInstanceServerResponse struct {
+type ValidateGetDataplaneServerResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGetInstanceServerResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*GetInstanceServerResponse)
+func (v *ValidateGetDataplaneServerResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetDataplaneServerResponse)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *GetInstanceServerResponse got type %s", t)
+			return fmt.Errorf("Expected type *GetDataplaneServerResponse got type %s", t)
 		}
 	}
 	if m == nil {
@@ -138,8 +137,8 @@ func (v *ValidateGetInstanceServerResponse) Validate(ctx context.Context, pm int
 }
 
 // Well-known symbol for default validator implementation
-var DefaultGetInstanceServerResponseValidator = func() *ValidateGetInstanceServerResponse {
-	v := &ValidateGetInstanceServerResponse{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultGetDataplaneServerResponseValidator = func() *ValidateGetDataplaneServerResponse {
+	v := &ValidateGetDataplaneServerResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["metadata"] = ves_io_schema.ObjectGetMetaTypeValidator().Validate
 
@@ -148,21 +147,21 @@ var DefaultGetInstanceServerResponseValidator = func() *ValidateGetInstanceServe
 	return v
 }()
 
-func GetInstanceServerResponseValidator() db.Validator {
-	return DefaultGetInstanceServerResponseValidator
+func GetDataplaneServerResponseValidator() db.Validator {
+	return DefaultGetDataplaneServerResponseValidator
 }
 
 // augmented methods on protoc/std generated struct
 
-func (m *GetInstanceServersRequest) ToJSON() (string, error) {
+func (m *GetDataplaneServersRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *GetInstanceServersRequest) ToYAML() (string, error) {
+func (m *GetDataplaneServersRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *GetInstanceServersRequest) DeepCopy() *GetInstanceServersRequest {
+func (m *GetDataplaneServersRequest) DeepCopy() *GetDataplaneServersRequest {
 	if m == nil {
 		return nil
 	}
@@ -170,7 +169,7 @@ func (m *GetInstanceServersRequest) DeepCopy() *GetInstanceServersRequest {
 	if err != nil {
 		return nil
 	}
-	c := &GetInstanceServersRequest{}
+	c := &GetDataplaneServersRequest{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -178,91 +177,60 @@ func (m *GetInstanceServersRequest) DeepCopy() *GetInstanceServersRequest {
 	return c
 }
 
-func (m *GetInstanceServersRequest) DeepCopyProto() proto.Message {
+func (m *GetDataplaneServersRequest) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *GetInstanceServersRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return GetInstanceServersRequestValidator().Validate(ctx, m, opts...)
+func (m *GetDataplaneServersRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetDataplaneServersRequestValidator().Validate(ctx, m, opts...)
 }
 
-func (m *GetInstanceServersRequest) GetDRefInfo() ([]db.DRefInfo, error) {
+func (m *GetDataplaneServersRequest) GetDRefInfo() ([]db.DRefInfo, error) {
 	if m == nil {
 		return nil, nil
 	}
 
-	return m.GetInstanceRefDRefInfo()
+	return m.GetDataplaneRefDRefInfo()
 
 }
 
-func (m *GetInstanceServersRequest) GetInstanceRefDRefInfo() ([]db.DRefInfo, error) {
-
-	vref := m.GetInstanceRef()
-	if vref == nil {
+// GetDRefInfo for the field's type
+func (m *GetDataplaneServersRequest) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDataplaneRef() == nil {
 		return nil, nil
 	}
-	vdRef := db.NewDirectRefForView(vref)
-	vdRef.SetKind("nginx_instance.Object")
-	dri := db.DRefInfo{
-		RefdType:   "nginx_instance.Object",
-		RefdTenant: vref.Tenant,
-		RefdNS:     vref.Namespace,
-		RefdName:   vref.Name,
-		DRField:    "instance_ref",
-		Ref:        vdRef,
+
+	drInfos, err := m.GetDataplaneRef().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetDataplaneRef().GetDRefInfo() FAILED")
 	}
-	return []db.DRefInfo{dri}, nil
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "dataplane_ref." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
-// GetInstanceRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GetInstanceServersRequest) GetInstanceRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "nginx_instance.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: nginx_instance")
-	}
-
-	vref := m.GetInstanceRef()
-	if vref == nil {
-		return nil, nil
-	}
-	ref := &ves_io_schema.ObjectRefType{
-		Kind:      "nginx_instance.Object",
-		Tenant:    vref.Tenant,
-		Namespace: vref.Namespace,
-		Name:      vref.Name,
-	}
-	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-	if err != nil {
-		return nil, errors.Wrap(err, "Getting referred entry")
-	}
-	if refdEnt != nil {
-		entries = append(entries, refdEnt)
-	}
-
-	return entries, nil
-}
-
-type ValidateGetInstanceServersRequest struct {
+type ValidateGetDataplaneServersRequest struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGetInstanceServersRequest) InstanceRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGetDataplaneServersRequest) DataplaneRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for instance_ref")
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for dataplane_ref")
 	}
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
 		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
 			return err
 		}
 
-		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+		if err := DataplaneReferenceValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
 
@@ -272,24 +240,24 @@ func (v *ValidateGetInstanceServersRequest) InstanceRefValidationRuleHandler(rul
 	return validatorFn, nil
 }
 
-func (v *ValidateGetInstanceServersRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*GetInstanceServersRequest)
+func (v *ValidateGetDataplaneServersRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetDataplaneServersRequest)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *GetInstanceServersRequest got type %s", t)
+			return fmt.Errorf("Expected type *GetDataplaneServersRequest got type %s", t)
 		}
 	}
 	if m == nil {
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["instance_ref"]; exists {
+	if fv, exists := v.FldValidators["dataplane_ref"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("instance_ref"))
-		if err := fv(ctx, m.GetInstanceRef(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("dataplane_ref"))
+		if err := fv(ctx, m.GetDataplaneRef(), vOpts...); err != nil {
 			return err
 		}
 
@@ -308,8 +276,8 @@ func (v *ValidateGetInstanceServersRequest) Validate(ctx context.Context, pm int
 }
 
 // Well-known symbol for default validator implementation
-var DefaultGetInstanceServersRequestValidator = func() *ValidateGetInstanceServersRequest {
-	v := &ValidateGetInstanceServersRequest{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultGetDataplaneServersRequestValidator = func() *ValidateGetDataplaneServersRequest {
+	v := &ValidateGetDataplaneServersRequest{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -319,35 +287,35 @@ var DefaultGetInstanceServersRequestValidator = func() *ValidateGetInstanceServe
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhInstanceRef := v.InstanceRefValidationRuleHandler
-	rulesInstanceRef := map[string]string{
+	vrhDataplaneRef := v.DataplaneRefValidationRuleHandler
+	rulesDataplaneRef := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhInstanceRef(rulesInstanceRef)
+	vFn, err = vrhDataplaneRef(rulesDataplaneRef)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetInstanceServersRequest.instance_ref: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetDataplaneServersRequest.dataplane_ref: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["instance_ref"] = vFn
+	v.FldValidators["dataplane_ref"] = vFn
 
 	return v
 }()
 
-func GetInstanceServersRequestValidator() db.Validator {
-	return DefaultGetInstanceServersRequestValidator
+func GetDataplaneServersRequestValidator() db.Validator {
+	return DefaultGetDataplaneServersRequestValidator
 }
 
 // augmented methods on protoc/std generated struct
 
-func (m *GetInstanceServersResponse) ToJSON() (string, error) {
+func (m *GetDataplaneServersResponse) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *GetInstanceServersResponse) ToYAML() (string, error) {
+func (m *GetDataplaneServersResponse) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *GetInstanceServersResponse) DeepCopy() *GetInstanceServersResponse {
+func (m *GetDataplaneServersResponse) DeepCopy() *GetDataplaneServersResponse {
 	if m == nil {
 		return nil
 	}
@@ -355,7 +323,7 @@ func (m *GetInstanceServersResponse) DeepCopy() *GetInstanceServersResponse {
 	if err != nil {
 		return nil
 	}
-	c := &GetInstanceServersResponse{}
+	c := &GetDataplaneServersResponse{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -363,18 +331,18 @@ func (m *GetInstanceServersResponse) DeepCopy() *GetInstanceServersResponse {
 	return c
 }
 
-func (m *GetInstanceServersResponse) DeepCopyProto() proto.Message {
+func (m *GetDataplaneServersResponse) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *GetInstanceServersResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return GetInstanceServersResponseValidator().Validate(ctx, m, opts...)
+func (m *GetDataplaneServersResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetDataplaneServersResponseValidator().Validate(ctx, m, opts...)
 }
 
-func (m *GetInstanceServersResponse) GetDRefInfo() ([]db.DRefInfo, error) {
+func (m *GetDataplaneServersResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 	if m == nil {
 		return nil, nil
 	}
@@ -384,7 +352,7 @@ func (m *GetInstanceServersResponse) GetDRefInfo() ([]db.DRefInfo, error) {
 }
 
 // GetDRefInfo for the field's type
-func (m *GetInstanceServersResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
+func (m *GetDataplaneServersResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetItems() == nil {
 		return nil, nil
 	}
@@ -405,23 +373,23 @@ func (m *GetInstanceServersResponse) GetItemsDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-type ValidateGetInstanceServersResponse struct {
+type ValidateGetDataplaneServersResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGetInstanceServersResponse) ItemsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateGetDataplaneServersResponse) ItemsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for items")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*GetInstanceServerResponse, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*GetDataplaneServerResponse, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := GetInstanceServerResponseValidator().Validate(ctx, el, opts...); err != nil {
+			if err := GetDataplaneServerResponseValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -433,9 +401,9 @@ func (v *ValidateGetInstanceServersResponse) ItemsValidationRuleHandler(rules ma
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*GetInstanceServerResponse)
+		elems, ok := val.([]*GetDataplaneServerResponse)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*GetInstanceServerResponse, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*GetDataplaneServerResponse, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -457,14 +425,14 @@ func (v *ValidateGetInstanceServersResponse) ItemsValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
-func (v *ValidateGetInstanceServersResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*GetInstanceServersResponse)
+func (v *ValidateGetDataplaneServersResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetDataplaneServersResponse)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *GetInstanceServersResponse got type %s", t)
+			return fmt.Errorf("Expected type *GetDataplaneServersResponse got type %s", t)
 		}
 	}
 	if m == nil {
@@ -483,8 +451,8 @@ func (v *ValidateGetInstanceServersResponse) Validate(ctx context.Context, pm in
 }
 
 // Well-known symbol for default validator implementation
-var DefaultGetInstanceServersResponseValidator = func() *ValidateGetInstanceServersResponse {
-	v := &ValidateGetInstanceServersResponse{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultGetDataplaneServersResponseValidator = func() *ValidateGetDataplaneServersResponse {
+	v := &ValidateGetDataplaneServersResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -500,7 +468,7 @@ var DefaultGetInstanceServersResponseValidator = func() *ValidateGetInstanceServ
 	}
 	vFn, err = vrhItems(rulesItems)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetInstanceServersResponse.items: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetDataplaneServersResponse.items: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["items"] = vFn
@@ -508,6 +476,6 @@ var DefaultGetInstanceServersResponseValidator = func() *ValidateGetInstanceServ
 	return v
 }()
 
-func GetInstanceServersResponseValidator() db.Validator {
-	return DefaultGetInstanceServersResponseValidator
+func GetDataplaneServersResponseValidator() db.Validator {
+	return DefaultGetDataplaneServersResponseValidator
 }

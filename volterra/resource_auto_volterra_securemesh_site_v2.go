@@ -81,42 +81,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"blindfold_secret_info_internal": {
-
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"decryption_provider": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"location": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"store_provider": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-
-									"secret_encoding_type": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
 									"blindfold_secret_info": {
 
 										Type:     schema.TypeList,
@@ -159,66 +123,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 												"url": {
 													Type:     schema.TypeString,
 													Required: true,
-												},
-											},
-										},
-									},
-
-									"vault_secret_info": {
-
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"key": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"location": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"provider": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"secret_encoding": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"version": {
-													Type:       schema.TypeInt,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-
-									"wingman_secret_info": {
-
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"name": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -366,42 +270,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"blindfold_secret_info_internal": {
-
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"decryption_provider": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"location": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"store_provider": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-
-									"secret_encoding_type": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
 									"blindfold_secret_info": {
 
 										Type:     schema.TypeList,
@@ -444,66 +312,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 												"url": {
 													Type:     schema.TypeString,
 													Required: true,
-												},
-											},
-										},
-									},
-
-									"vault_secret_info": {
-
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"key": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"location": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"provider": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"secret_encoding": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"version": {
-													Type:       schema.TypeInt,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-
-									"wingman_secret_info": {
-
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"name": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1176,29 +984,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 				},
 			},
 
-			"proactive_monitoring": {
-
-				Type:     schema.TypeList,
-				MaxItems: 1,
-				Optional: true,
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"proactive_monitoring_disable": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"proactive_monitoring_enable": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-					},
-				},
-			},
-
 			"aws": {
 
 				Type:     schema.TypeList,
@@ -1206,418 +991,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-
-						"managed": {
-
-							Type:     schema.TypeList,
-							MaxItems: 1,
-							Optional: true,
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"aws_cred": {
-
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Required: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"tenant": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"aws_region": {
-										Type:     schema.TypeString,
-										Required: true,
-									},
-
-									"disk_size": {
-										Type:     schema.TypeInt,
-										Optional: true,
-									},
-
-									"egress_gateway_default": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"egress_nat_gw": {
-
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"nat_gw_id": {
-
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"egress_virtual_private_gateway": {
-
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"vgw_id": {
-
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"instance_type": {
-										Type:     schema.TypeString,
-										Required: true,
-									},
-
-									"node_list": {
-
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"node_list": {
-
-													Type:     schema.TypeList,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"aws_az_name": {
-																Type:     schema.TypeString,
-																Required: true,
-															},
-
-															"hostname": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"interface_list": {
-
-																Type:     schema.TypeList,
-																Required: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"monitor": {
-
-																			Type:     schema.TypeList,
-																			MaxItems: 1,
-																			Optional: true,
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{},
-																			},
-																		},
-
-																		"monitor_disabled": {
-
-																			Type:     schema.TypeBool,
-																			Optional: true,
-																		},
-
-																		"mtu": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
-																		},
-
-																		"network_option": {
-
-																			Type:     schema.TypeList,
-																			MaxItems: 1,
-																			Required: true,
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"segment_network": {
-
-																						Type:     schema.TypeList,
-																						MaxItems: 1,
-																						Optional: true,
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"kind": {
-																									Type:     schema.TypeString,
-																									Computed: true,
-																								},
-
-																								"name": {
-																									Type:     schema.TypeString,
-																									Optional: true,
-																								},
-																								"namespace": {
-																									Type:     schema.TypeString,
-																									Optional: true,
-																								},
-																								"tenant": {
-																									Type:     schema.TypeString,
-																									Optional: true,
-																								},
-																							},
-																						},
-																					},
-
-																					"site_local_inside_network": {
-
-																						Type:     schema.TypeBool,
-																						Optional: true,
-																					},
-
-																					"site_local_network": {
-
-																						Type:     schema.TypeBool,
-																						Optional: true,
-																					},
-																				},
-																			},
-																		},
-
-																		"priority": {
-																			Type:     schema.TypeInt,
-																			Optional: true,
-																		},
-
-																		"site_to_site_connectivity_interface_disabled": {
-
-																			Type:     schema.TypeBool,
-																			Optional: true,
-																		},
-
-																		"site_to_site_connectivity_interface_enabled": {
-
-																			Type:     schema.TypeBool,
-																			Optional: true,
-																		},
-
-																		"subnet": {
-
-																			Type:     schema.TypeList,
-																			MaxItems: 1,
-																			Optional: true,
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"existing_subnet_id": {
-
-																						Type:     schema.TypeString,
-																						Optional: true,
-																					},
-
-																					"subnet_param": {
-
-																						Type:     schema.TypeList,
-																						MaxItems: 1,
-																						Optional: true,
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"ipv4": {
-																									Type:     schema.TypeString,
-																									Required: true,
-																								},
-
-																								"ipv6": {
-																									Type:     schema.TypeString,
-																									Optional: true,
-																								},
-
-																								"autogenerate": {
-
-																									Type:     schema.TypeBool,
-																									Optional: true,
-																								},
-
-																								"name": {
-
-																									Type:     schema.TypeString,
-																									Optional: true,
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-																	},
-																},
-															},
-
-															"type": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-
-									"private_connectivity": {
-
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"cloud_link": {
-
-													Type:     schema.TypeList,
-													MaxItems: 1,
-													Required: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
-															},
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"inside": {
-
-													Type:     schema.TypeBool,
-													Optional: true,
-												},
-
-												"outside": {
-
-													Type:     schema.TypeBool,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"private_connectivity_disabled": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"custom_security_group": {
-
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"inside_security_group_id": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"outside_security_group_id": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-											},
-										},
-									},
-
-									"f5xc_security_group": {
-
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
-									"new_vpc": {
-
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"allocate_ipv6": {
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"autogenerate": {
-
-													Type:     schema.TypeBool,
-													Optional: true,
-												},
-
-												"name_tag": {
-
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"primary_ipv4": {
-													Type:     schema.TypeString,
-													Required: true,
-												},
-											},
-										},
-									},
-
-									"vpc_id": {
-
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-
-									"ssh_key": {
-										Type:       schema.TypeString,
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"tags": {
-										Type:     schema.TypeMap,
-										Optional: true,
-									},
-								},
-							},
-						},
 
 						"not_managed": {
 
@@ -1652,178 +1025,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																Optional: true,
 															},
 
-															"dhcp_server": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"dhcp_networks": {
-
-																			Type:       schema.TypeList,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"dns_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"same_as_dgw": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dgw_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"first_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"last_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"pool_settings": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"pools": {
-
-																						Type:       schema.TypeList,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"end_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"exclude": {
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"start_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"dhcp_option82_tag": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"fixed_ip_map": {
-																			Type:       schema.TypeMap,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_end": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_start": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"interface_ip_map": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interface_ip_map": {
-																						Type:       schema.TypeMap,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																				},
-																			},
-																		},
-																	},
-																},
-															},
-
 															"no_ipv4_address": {
 
 																Type:     schema.TypeBool,
@@ -1841,12 +1042,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		"default_gw": {
 																			Type:     schema.TypeString,
 																			Optional: true,
-																		},
-
-																		"dns_server": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"ip_address": {
@@ -2011,34 +1206,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"network_prefix_allocator": {
-
-																												Type:       schema.TypeList,
-																												MaxItems:   1,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																												Elem: &schema.Resource{
-																													Schema: map[string]*schema.Schema{
-
-																														"name": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"namespace": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"tenant": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																													},
-																												},
-																											},
-
 																											"pool_settings": {
 																												Type:     schema.TypeString,
 																												Required: true,
@@ -2054,12 +1221,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																														"end_ip": {
 																															Type:     schema.TypeString,
 																															Optional: true,
-																														},
-
-																														"exclude": {
-																															Type:       schema.TypeBool,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 
 																														"start_ip": {
@@ -2223,70 +1384,12 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"dns_server": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"fleet_static_ip": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"default_gw": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -2308,12 +1411,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																						Optional: true,
 																					},
 
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
 																					"ip_address": {
 																						Type:     schema.TypeString,
 																						Required: true,
@@ -2323,18 +1420,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		},
 																	},
 																},
-															},
-
-															"is_management": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"is_primary": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"labels": {
@@ -2500,178 +1585,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																Optional: true,
 															},
 
-															"dhcp_server": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"dhcp_networks": {
-
-																			Type:       schema.TypeList,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"dns_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"same_as_dgw": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dgw_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"first_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"last_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"pool_settings": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"pools": {
-
-																						Type:       schema.TypeList,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"end_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"exclude": {
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"start_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"dhcp_option82_tag": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"fixed_ip_map": {
-																			Type:       schema.TypeMap,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_end": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_start": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"interface_ip_map": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interface_ip_map": {
-																						Type:       schema.TypeMap,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																				},
-																			},
-																		},
-																	},
-																},
-															},
-
 															"no_ipv4_address": {
 
 																Type:     schema.TypeBool,
@@ -2689,12 +1602,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		"default_gw": {
 																			Type:     schema.TypeString,
 																			Optional: true,
-																		},
-
-																		"dns_server": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"ip_address": {
@@ -2859,34 +1766,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"network_prefix_allocator": {
-
-																												Type:       schema.TypeList,
-																												MaxItems:   1,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																												Elem: &schema.Resource{
-																													Schema: map[string]*schema.Schema{
-
-																														"name": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"namespace": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"tenant": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																													},
-																												},
-																											},
-
 																											"pool_settings": {
 																												Type:     schema.TypeString,
 																												Required: true,
@@ -2902,12 +1781,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																														"end_ip": {
 																															Type:     schema.TypeString,
 																															Optional: true,
-																														},
-
-																														"exclude": {
-																															Type:       schema.TypeBool,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 
 																														"start_ip": {
@@ -3071,70 +1944,12 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"dns_server": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"fleet_static_ip": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"default_gw": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -3156,12 +1971,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																						Optional: true,
 																					},
 
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
 																					"ip_address": {
 																						Type:     schema.TypeString,
 																						Required: true,
@@ -3171,18 +1980,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		},
 																	},
 																},
-															},
-
-															"is_management": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"is_primary": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"labels": {
@@ -3307,932 +2104,7 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 				},
 			},
 
-			"baremetal": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"not_managed": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"node_list": {
-
-										Type:       schema.TypeList,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"hostname": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"interface_list": {
-
-													Type:       schema.TypeList,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"dhcp_client": {
-
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"dhcp_server": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"dhcp_networks": {
-
-																			Type:       schema.TypeList,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"dns_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"same_as_dgw": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dgw_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"first_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"last_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"pool_settings": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"pools": {
-
-																						Type:       schema.TypeList,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"end_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"exclude": {
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"start_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"dhcp_option82_tag": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"fixed_ip_map": {
-																			Type:       schema.TypeMap,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_end": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_start": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"interface_ip_map": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interface_ip_map": {
-																						Type:       schema.TypeMap,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																				},
-																			},
-																		},
-																	},
-																},
-															},
-
-															"no_ipv4_address": {
-
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"static_ip": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"default_gw": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"dns_server": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"ip_address": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"description": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"bond_interface": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"devices": {
-
-																			Type: schema.TypeList,
-
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Schema{
-																				Type: schema.TypeString,
-																			},
-																		},
-
-																		"active_backup": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"lacp": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"rate": {
-																						Type:       schema.TypeInt,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																				},
-																			},
-																		},
-
-																		"link_polling_interval": {
-																			Type:       schema.TypeInt,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"link_up_delay": {
-																			Type:       schema.TypeInt,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"name": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"ethernet_interface": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"device": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"mac": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"vlan_interface": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"device": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"vlan_id": {
-																			Type:       schema.TypeInt,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"ipv6_auto_config": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"host": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"router": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"network_prefix": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"stateful": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"dhcp_networks": {
-
-																									Type:       schema.TypeList,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"network_prefix": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"network_prefix_allocator": {
-
-																												Type:       schema.TypeList,
-																												MaxItems:   1,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																												Elem: &schema.Resource{
-																													Schema: map[string]*schema.Schema{
-
-																														"name": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"namespace": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"tenant": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																													},
-																												},
-																											},
-
-																											"pool_settings": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"pools": {
-
-																												Type:       schema.TypeList,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																												Elem: &schema.Resource{
-																													Schema: map[string]*schema.Schema{
-
-																														"end_ip": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-
-																														"exclude": {
-																															Type:       schema.TypeBool,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-
-																														"start_ip": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																													},
-																												},
-																											},
-																										},
-																									},
-																								},
-
-																								"fixed_ip_map": {
-																									Type:       schema.TypeMap,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"automatic_from_end": {
-
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"automatic_from_start": {
-
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"interface_ip_map": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"interface_ip_map": {
-																												Type:       schema.TypeMap,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-																							},
-																						},
-																					},
-
-																					"dns_config": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"configured_list": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"dns_list": {
-
-																												Type: schema.TypeList,
-
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																												Elem: &schema.Schema{
-																													Type: schema.TypeString,
-																												},
-																											},
-																										},
-																									},
-																								},
-
-																								"local_dns": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"configured_address": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"first_address": {
-
-																												Type:       schema.TypeBool,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"last_address": {
-
-																												Type:       schema.TypeBool,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-																	},
-																},
-															},
-
-															"no_ipv6_address": {
-
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"static_ipv6_address": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"cluster_static_ip": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interface_ip_map": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"value": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"default_gw": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"dns_server": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"ip_address": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"fleet_static_ip": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"default_gw": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"node_static_ip": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"default_gw": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"ip_address": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																				},
-																			},
-																		},
-																	},
-																},
-															},
-
-															"is_management": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"is_primary": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"labels": {
-																Type:       schema.TypeMap,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"monitor": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{},
-																},
-															},
-
-															"monitor_disabled": {
-
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"mtu": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"name": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"network_option": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"segment_network": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"kind": {
-																						Type:       schema.TypeString,
-																						Computed:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"name": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																					"namespace": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																					"tenant": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																				},
-																			},
-																		},
-
-																		"site_local_inside_network": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"site_local_network": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"priority": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"site_to_site_connectivity_interface_disabled": {
-
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"site_to_site_connectivity_interface_enabled": {
-
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-														},
-													},
-												},
-
-												"public_ip": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"type": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-
-			"gcp": {
+			"equinix": {
 
 				Type:     schema.TypeList,
 				MaxItems: 1,
@@ -4273,178 +2145,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																Optional: true,
 															},
 
-															"dhcp_server": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"dhcp_networks": {
-
-																			Type:       schema.TypeList,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"dns_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"same_as_dgw": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dgw_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"first_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"last_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"pool_settings": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"pools": {
-
-																						Type:       schema.TypeList,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"end_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"exclude": {
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"start_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"dhcp_option82_tag": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"fixed_ip_map": {
-																			Type:       schema.TypeMap,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_end": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_start": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"interface_ip_map": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interface_ip_map": {
-																						Type:       schema.TypeMap,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																				},
-																			},
-																		},
-																	},
-																},
-															},
-
 															"no_ipv4_address": {
 
 																Type:     schema.TypeBool,
@@ -4462,12 +2162,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		"default_gw": {
 																			Type:     schema.TypeString,
 																			Optional: true,
-																		},
-
-																		"dns_server": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"ip_address": {
@@ -4632,34 +2326,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"network_prefix_allocator": {
-
-																												Type:       schema.TypeList,
-																												MaxItems:   1,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																												Elem: &schema.Resource{
-																													Schema: map[string]*schema.Schema{
-
-																														"name": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"namespace": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"tenant": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																													},
-																												},
-																											},
-
 																											"pool_settings": {
 																												Type:     schema.TypeString,
 																												Required: true,
@@ -4675,12 +2341,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																														"end_ip": {
 																															Type:     schema.TypeString,
 																															Optional: true,
-																														},
-
-																														"exclude": {
-																															Type:       schema.TypeBool,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 
 																														"start_ip": {
@@ -4844,70 +2504,12 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"dns_server": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"fleet_static_ip": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"default_gw": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -4929,12 +2531,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																						Optional: true,
 																					},
 
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
 																					"ip_address": {
 																						Type:     schema.TypeString,
 																						Required: true,
@@ -4946,16 +2542,564 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																},
 															},
 
-															"is_management": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+															"labels": {
+																Type:     schema.TypeMap,
+																Optional: true,
 															},
 
-															"is_primary": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+															"monitor": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{},
+																},
+															},
+
+															"monitor_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"mtu": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"network_option": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Required: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"segment_network": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"kind": {
+																						Type:     schema.TypeString,
+																						Computed: true,
+																					},
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"namespace": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"tenant": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"site_local_inside_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"site_local_network": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"priority": {
+																Type:     schema.TypeInt,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_disabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"site_to_site_connectivity_interface_enabled": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"public_ip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"type": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"gcp": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"not_managed": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"node_list": {
+
+										Type:     schema.TypeList,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"hostname": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"interface_list": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"dhcp_client": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"no_ipv4_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ip": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"default_gw": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+
+																		"ip_address": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"description": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"bond_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"devices": {
+
+																			Type: schema.TypeList,
+
+																			Required: true,
+																			Elem: &schema.Schema{
+																				Type: schema.TypeString,
+																			},
+																		},
+
+																		"active_backup": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"lacp": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"rate": {
+																						Type:     schema.TypeInt,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"link_polling_interval": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"link_up_delay": {
+																			Type:     schema.TypeInt,
+																			Required: true,
+																		},
+
+																		"name": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"ethernet_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"mac": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"vlan_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"device": {
+																			Type:     schema.TypeString,
+																			Required: true,
+																		},
+
+																		"vlan_id": {
+																			Type:     schema.TypeInt,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+
+															"ipv6_auto_config": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"host": {
+
+																			Type:     schema.TypeBool,
+																			Optional: true,
+																		},
+
+																		"router": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"network_prefix": {
+
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"stateful": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"dhcp_networks": {
+
+																									Type:     schema.TypeList,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"network_prefix": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"pool_settings": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+
+																											"pools": {
+
+																												Type:     schema.TypeList,
+																												Optional: true,
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"end_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+
+																														"start_ip": {
+																															Type:     schema.TypeString,
+																															Optional: true,
+																														},
+																													},
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"fixed_ip_map": {
+																									Type:     schema.TypeMap,
+																									Optional: true,
+																								},
+
+																								"automatic_from_end": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"automatic_from_start": {
+
+																									Type:     schema.TypeBool,
+																									Optional: true,
+																								},
+
+																								"interface_ip_map": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"interface_ip_map": {
+																												Type:     schema.TypeMap,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"dns_config": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"configured_list": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"dns_list": {
+
+																												Type: schema.TypeList,
+
+																												Required: true,
+																												Elem: &schema.Schema{
+																													Type: schema.TypeString,
+																												},
+																											},
+																										},
+																									},
+																								},
+
+																								"local_dns": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Optional: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"configured_address": {
+
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"first_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+
+																											"last_address": {
+
+																												Type:     schema.TypeBool,
+																												Optional: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"no_ipv6_address": {
+
+																Type:     schema.TypeBool,
+																Optional: true,
+															},
+
+															"static_ipv6_address": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cluster_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+
+																						Type:     schema.TypeList,
+																						MaxItems: 1,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Required: true,
+																								},
+																								"value": {
+
+																									Type:     schema.TypeList,
+																									MaxItems: 1,
+																									Required: true,
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"default_gw": {
+																												Type:     schema.TypeString,
+																												Optional: true,
+																											},
+
+																											"ip_address": {
+																												Type:     schema.TypeString,
+																												Required: true,
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"node_static_ip": {
+
+																			Type:     schema.TypeList,
+																			MaxItems: 1,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+
+																					"ip_address": {
+																						Type:     schema.TypeString,
+																						Required: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
 															},
 
 															"labels": {
@@ -5121,178 +3265,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																Optional: true,
 															},
 
-															"dhcp_server": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"dhcp_networks": {
-
-																			Type:       schema.TypeList,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"dns_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"same_as_dgw": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dgw_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"first_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"last_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"pool_settings": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"pools": {
-
-																						Type:       schema.TypeList,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"end_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"exclude": {
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"start_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"dhcp_option82_tag": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"fixed_ip_map": {
-																			Type:       schema.TypeMap,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_end": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_start": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"interface_ip_map": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interface_ip_map": {
-																						Type:       schema.TypeMap,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																				},
-																			},
-																		},
-																	},
-																},
-															},
-
 															"no_ipv4_address": {
 
 																Type:     schema.TypeBool,
@@ -5310,12 +3282,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		"default_gw": {
 																			Type:     schema.TypeString,
 																			Optional: true,
-																		},
-
-																		"dns_server": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"ip_address": {
@@ -5480,34 +3446,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"network_prefix_allocator": {
-
-																												Type:       schema.TypeList,
-																												MaxItems:   1,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																												Elem: &schema.Resource{
-																													Schema: map[string]*schema.Schema{
-
-																														"name": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"namespace": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"tenant": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																													},
-																												},
-																											},
-
 																											"pool_settings": {
 																												Type:     schema.TypeString,
 																												Required: true,
@@ -5523,12 +3461,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																														"end_ip": {
 																															Type:     schema.TypeString,
 																															Optional: true,
-																														},
-
-																														"exclude": {
-																															Type:       schema.TypeBool,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 
 																														"start_ip": {
@@ -5692,70 +3624,12 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"dns_server": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"fleet_static_ip": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"default_gw": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -5777,12 +3651,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																						Optional: true,
 																					},
 
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
 																					"ip_address": {
 																						Type:     schema.TypeString,
 																						Required: true,
@@ -5792,18 +3660,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		},
 																	},
 																},
-															},
-
-															"is_management": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"is_primary": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"labels": {
@@ -5969,178 +3825,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																Optional: true,
 															},
 
-															"dhcp_server": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"dhcp_networks": {
-
-																			Type:       schema.TypeList,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"dns_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"same_as_dgw": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dgw_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"first_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"last_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"pool_settings": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"pools": {
-
-																						Type:       schema.TypeList,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"end_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"exclude": {
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"start_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"dhcp_option82_tag": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"fixed_ip_map": {
-																			Type:       schema.TypeMap,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_end": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_start": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"interface_ip_map": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interface_ip_map": {
-																						Type:       schema.TypeMap,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																				},
-																			},
-																		},
-																	},
-																},
-															},
-
 															"no_ipv4_address": {
 
 																Type:     schema.TypeBool,
@@ -6158,12 +3842,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		"default_gw": {
 																			Type:     schema.TypeString,
 																			Optional: true,
-																		},
-
-																		"dns_server": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"ip_address": {
@@ -6328,34 +4006,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"network_prefix_allocator": {
-
-																												Type:       schema.TypeList,
-																												MaxItems:   1,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																												Elem: &schema.Resource{
-																													Schema: map[string]*schema.Schema{
-
-																														"name": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"namespace": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"tenant": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																													},
-																												},
-																											},
-
 																											"pool_settings": {
 																												Type:     schema.TypeString,
 																												Required: true,
@@ -6371,12 +4021,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																														"end_ip": {
 																															Type:     schema.TypeString,
 																															Optional: true,
-																														},
-
-																														"exclude": {
-																															Type:       schema.TypeBool,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 
 																														"start_ip": {
@@ -6540,70 +4184,12 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"dns_server": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"fleet_static_ip": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"default_gw": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -6625,12 +4211,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																						Optional: true,
 																					},
 
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
 																					"ip_address": {
 																						Type:     schema.TypeString,
 																						Required: true,
@@ -6640,18 +4220,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		},
 																	},
 																},
-															},
-
-															"is_management": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"is_primary": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"labels": {
@@ -6817,178 +4385,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																Optional: true,
 															},
 
-															"dhcp_server": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"dhcp_networks": {
-
-																			Type:       schema.TypeList,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"dns_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"same_as_dgw": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dgw_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"first_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"last_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"pool_settings": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"pools": {
-
-																						Type:       schema.TypeList,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"end_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"exclude": {
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"start_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"dhcp_option82_tag": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"fixed_ip_map": {
-																			Type:       schema.TypeMap,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_end": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_start": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"interface_ip_map": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interface_ip_map": {
-																						Type:       schema.TypeMap,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																				},
-																			},
-																		},
-																	},
-																},
-															},
-
 															"no_ipv4_address": {
 
 																Type:     schema.TypeBool,
@@ -7006,12 +4402,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		"default_gw": {
 																			Type:     schema.TypeString,
 																			Optional: true,
-																		},
-
-																		"dns_server": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"ip_address": {
@@ -7176,34 +4566,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"network_prefix_allocator": {
-
-																												Type:       schema.TypeList,
-																												MaxItems:   1,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																												Elem: &schema.Resource{
-																													Schema: map[string]*schema.Schema{
-
-																														"name": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"namespace": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"tenant": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																													},
-																												},
-																											},
-
 																											"pool_settings": {
 																												Type:     schema.TypeString,
 																												Required: true,
@@ -7219,12 +4581,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																														"end_ip": {
 																															Type:     schema.TypeString,
 																															Optional: true,
-																														},
-
-																														"exclude": {
-																															Type:       schema.TypeBool,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 
 																														"start_ip": {
@@ -7388,70 +4744,12 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"dns_server": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"fleet_static_ip": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"default_gw": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -7473,12 +4771,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																						Optional: true,
 																					},
 
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
 																					"ip_address": {
 																						Type:     schema.TypeString,
 																						Required: true,
@@ -7488,18 +4780,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		},
 																	},
 																},
-															},
-
-															"is_management": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"is_primary": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"labels": {
@@ -7665,178 +4945,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																Optional: true,
 															},
 
-															"dhcp_server": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"dhcp_networks": {
-
-																			Type:       schema.TypeList,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"dns_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"same_as_dgw": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dgw_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"first_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"last_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"pool_settings": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"pools": {
-
-																						Type:       schema.TypeList,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"end_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"exclude": {
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"start_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"dhcp_option82_tag": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"fixed_ip_map": {
-																			Type:       schema.TypeMap,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_end": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_start": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"interface_ip_map": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interface_ip_map": {
-																						Type:       schema.TypeMap,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																				},
-																			},
-																		},
-																	},
-																},
-															},
-
 															"no_ipv4_address": {
 
 																Type:     schema.TypeBool,
@@ -7854,12 +4962,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		"default_gw": {
 																			Type:     schema.TypeString,
 																			Optional: true,
-																		},
-
-																		"dns_server": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"ip_address": {
@@ -8024,34 +5126,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"network_prefix_allocator": {
-
-																												Type:       schema.TypeList,
-																												MaxItems:   1,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																												Elem: &schema.Resource{
-																													Schema: map[string]*schema.Schema{
-
-																														"name": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"namespace": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"tenant": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																													},
-																												},
-																											},
-
 																											"pool_settings": {
 																												Type:     schema.TypeString,
 																												Required: true,
@@ -8067,12 +5141,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																														"end_ip": {
 																															Type:     schema.TypeString,
 																															Optional: true,
-																														},
-
-																														"exclude": {
-																															Type:       schema.TypeBool,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 
 																														"start_ip": {
@@ -8236,70 +5304,12 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"dns_server": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"fleet_static_ip": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"default_gw": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -8321,12 +5331,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																						Optional: true,
 																					},
 
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
 																					"ip_address": {
 																						Type:     schema.TypeString,
 																						Required: true,
@@ -8336,18 +5340,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		},
 																	},
 																},
-															},
-
-															"is_management": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"is_primary": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"labels": {
@@ -8513,178 +5505,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																Optional: true,
 															},
 
-															"dhcp_server": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"dhcp_networks": {
-
-																			Type:       schema.TypeList,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"dns_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"same_as_dgw": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dgw_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"first_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"last_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"pool_settings": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"pools": {
-
-																						Type:       schema.TypeList,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"end_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"exclude": {
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"start_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"dhcp_option82_tag": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"fixed_ip_map": {
-																			Type:       schema.TypeMap,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_end": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_start": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"interface_ip_map": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interface_ip_map": {
-																						Type:       schema.TypeMap,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																				},
-																			},
-																		},
-																	},
-																},
-															},
-
 															"no_ipv4_address": {
 
 																Type:     schema.TypeBool,
@@ -8702,12 +5522,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		"default_gw": {
 																			Type:     schema.TypeString,
 																			Optional: true,
-																		},
-
-																		"dns_server": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"ip_address": {
@@ -8872,34 +5686,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"network_prefix_allocator": {
-
-																												Type:       schema.TypeList,
-																												MaxItems:   1,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																												Elem: &schema.Resource{
-																													Schema: map[string]*schema.Schema{
-
-																														"name": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"namespace": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"tenant": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																													},
-																												},
-																											},
-
 																											"pool_settings": {
 																												Type:     schema.TypeString,
 																												Required: true,
@@ -8915,12 +5701,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																														"end_ip": {
 																															Type:     schema.TypeString,
 																															Optional: true,
-																														},
-
-																														"exclude": {
-																															Type:       schema.TypeBool,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 
 																														"start_ip": {
@@ -9084,70 +5864,12 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"dns_server": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"fleet_static_ip": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"default_gw": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -9169,12 +5891,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																						Optional: true,
 																					},
 
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
 																					"ip_address": {
 																						Type:     schema.TypeString,
 																						Required: true,
@@ -9184,18 +5900,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		},
 																	},
 																},
-															},
-
-															"is_management": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"is_primary": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"labels": {
@@ -9361,178 +6065,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																Optional: true,
 															},
 
-															"dhcp_server": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"dhcp_networks": {
-
-																			Type:       schema.TypeList,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"dns_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"same_as_dgw": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dgw_address": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"first_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"last_address": {
-
-																						Type:       schema.TypeBool,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix": {
-
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"pool_settings": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"pools": {
-
-																						Type:       schema.TypeList,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"end_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"exclude": {
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"start_ip": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"dhcp_option82_tag": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"fixed_ip_map": {
-																			Type:       schema.TypeMap,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_end": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"automatic_from_start": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"interface_ip_map": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interface_ip_map": {
-																						Type:       schema.TypeMap,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-																				},
-																			},
-																		},
-																	},
-																},
-															},
-
 															"no_ipv4_address": {
 
 																Type:     schema.TypeBool,
@@ -9550,12 +6082,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		"default_gw": {
 																			Type:     schema.TypeString,
 																			Optional: true,
-																		},
-
-																		"dns_server": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"ip_address": {
@@ -9720,34 +6246,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"network_prefix_allocator": {
-
-																												Type:       schema.TypeList,
-																												MaxItems:   1,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																												Elem: &schema.Resource{
-																													Schema: map[string]*schema.Schema{
-
-																														"name": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"namespace": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																														"tenant": {
-																															Type:       schema.TypeString,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
-																														},
-																													},
-																												},
-																											},
-
 																											"pool_settings": {
 																												Type:     schema.TypeString,
 																												Required: true,
@@ -9763,12 +6261,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																														"end_ip": {
 																															Type:     schema.TypeString,
 																															Optional: true,
-																														},
-
-																														"exclude": {
-																															Type:       schema.TypeBool,
-																															Optional:   true,
-																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 
 																														"start_ip": {
@@ -9932,70 +6424,12 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																												Optional: true,
 																											},
 
-																											"dns_server": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"fleet_static_ip": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"default_gw": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"network_prefix_allocator": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"namespace": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																								"tenant": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -10017,12 +6451,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																						Optional: true,
 																					},
 
-																					"dns_server": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
 																					"ip_address": {
 																						Type:     schema.TypeString,
 																						Required: true,
@@ -10032,18 +6460,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 																		},
 																	},
 																},
-															},
-
-															"is_management": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"is_primary": {
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"labels": {
@@ -10168,6 +6584,33 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 				},
 			},
 
+			"custom_proxy_bypass": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"proxy_bypass": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+					},
+				},
+			},
+
+			"no_proxy_bypass": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
 			"re_select": {
 
 				Type:     schema.TypeList,
@@ -10182,13 +6625,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 							Optional: true,
 						},
 
-						"specific_geography": {
-
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
 						"specific_re": {
 
 							Type:     schema.TypeList,
@@ -10196,12 +6632,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
-
-									"backup_re": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
 
 									"primary_re": {
 										Type:     schema.TypeString,
@@ -10281,41 +6711,6 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 				Optional: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
-
-						"no_site_mesh_group": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"site_mesh_group": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"name": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-									"namespace": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-									"tenant": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-								},
-							},
-						},
 
 						"sm_connection_public_ip": {
 
@@ -10435,30 +6830,9 @@ func resourceVolterraSecuremeshSiteV2() *schema.Resource {
 													Optional: true,
 												},
 
-												"drain_max_unavailable_node_percentage": {
-
-													Type:       schema.TypeInt,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
 												"drain_node_timeout": {
 													Type:     schema.TypeInt,
 													Required: true,
-												},
-
-												"disable_vega_upgrade_mode": {
-
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"enable_vega_upgrade_mode": {
-
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -10545,38 +6919,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 						if set != nil {
 							adminPasswordMapStrToI := set.(map[string]interface{})
 
-							if v, ok := adminPasswordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-								adminPassword.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-								for _, set := range sl {
-									if set != nil {
-										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-										}
-
-										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-											blindfoldSecretInfoInternal.Location = w.(string)
-										}
-
-										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-											blindfoldSecretInfoInternal.StoreProvider = w.(string)
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := adminPasswordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-								adminPassword.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-							}
-
 							secretInfoOneofTypeFound := false
 
 							if v, ok := adminPasswordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -10643,76 +6985,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 							}
 
-							if v, ok := adminPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-								adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-										}
-
-										if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-										}
-
-										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-										}
-
-										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-										}
-
-										if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := adminPasswordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-								adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
 						}
 					}
 
@@ -10743,7 +7015,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
+	if v, ok := d.GetOk("blocked_services"); ok && !isIntfNil(v) && !blockedServicesChoiceTypeFound {
 
 		blockedServicesChoiceTypeFound = true
 		blockedServicesChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_BlockedServices{}
@@ -10847,7 +7119,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field dns_servers")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								dnsServerChoiceInt.CustomDns.DnsServers = ls
 
@@ -10888,7 +7165,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ntp_servers")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								ntpServerChoiceInt.CustomNtp.NtpServers = ls
 
@@ -10920,7 +7202,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	enterpriseProxyChoiceTypeFound := false
 
-	if v, ok := d.GetOk("custom_proxy"); ok && !enterpriseProxyChoiceTypeFound {
+	if v, ok := d.GetOk("custom_proxy"); ok && !isIntfNil(v) && !enterpriseProxyChoiceTypeFound {
 
 		enterpriseProxyChoiceTypeFound = true
 		enterpriseProxyChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_CustomProxy{}
@@ -10940,38 +7222,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 					for _, set := range sl {
 						if set != nil {
 							passwordMapStrToI := set.(map[string]interface{})
-
-							if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-								password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-								for _, set := range sl {
-									if set != nil {
-										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-										}
-
-										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-											blindfoldSecretInfoInternal.Location = w.(string)
-										}
-
-										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-											blindfoldSecretInfoInternal.StoreProvider = w.(string)
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-								password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-							}
 
 							secretInfoOneofTypeFound := false
 
@@ -11031,76 +7281,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-								password.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-										}
-
-										if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-										}
-
-										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-										}
-
-										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-										}
-
-										if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-								password.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -11179,7 +7359,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	forwardProxyChoiceTypeFound := false
 
-	if v, ok := d.GetOk("active_forward_proxy_policies"); ok && !forwardProxyChoiceTypeFound {
+	if v, ok := d.GetOk("active_forward_proxy_policies"); ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
 
 		forwardProxyChoiceTypeFound = true
 		forwardProxyChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_ActiveForwardProxyPolicies{}
@@ -11352,6 +7532,9 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														staticRoutes[i].Attrs = attrsList
@@ -11361,7 +7544,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 													if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
 														ls := make([]string, len(w.([]interface{})))
 														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														staticRoutes[i].IpPrefixes = ls
 													}
@@ -11476,6 +7664,9 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														staticRoutes[i].Attrs = attrsList
@@ -11485,7 +7676,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 													if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
 														ls := make([]string, len(w.([]interface{})))
 														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														staticRoutes[i].IpPrefixes = ls
 													}
@@ -11664,6 +7860,9 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														staticRoutes[i].Attrs = attrsList
@@ -11673,7 +7872,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 													if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
 														ls := make([]string, len(w.([]interface{})))
 														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														staticRoutes[i].IpPrefixes = ls
 													}
@@ -11788,6 +7992,9 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														staticRoutes[i].Attrs = attrsList
@@ -11797,7 +8004,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 													if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
 														ls := make([]string, len(w.([]interface{})))
 														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														staticRoutes[i].IpPrefixes = ls
 													}
@@ -11898,7 +8110,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	logsReceiverChoiceTypeFound := false
 
-	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
+	if v, ok := d.GetOk("log_receiver"); ok && !isIntfNil(v) && !logsReceiverChoiceTypeFound {
 
 		logsReceiverChoiceTypeFound = true
 		logsReceiverChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_LogReceiver{}
@@ -11949,7 +8161,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	networkPolicyChoiceTypeFound := false
 
-	if v, ok := d.GetOk("active_enhanced_firewall_policies"); ok && !networkPolicyChoiceTypeFound {
+	if v, ok := d.GetOk("active_enhanced_firewall_policies"); ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
 		networkPolicyChoiceTypeFound = true
 		networkPolicyChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_ActiveEnhancedFirewallPolicies{}
@@ -12145,52 +8357,11 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
-	//proactive_monitoring
-	if v, ok := d.GetOk("proactive_monitoring"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		proactiveMonitoring := &ves_io_schema_views.ProactiveMonitoringChoice{}
-		createSpec.ProactiveMonitoring = proactiveMonitoring
-		for _, set := range sl {
-			if set != nil {
-				proactiveMonitoringMapStrToI := set.(map[string]interface{})
-
-				proactiveMonitoringChoiceTypeFound := false
-
-				if v, ok := proactiveMonitoringMapStrToI["proactive_monitoring_disable"]; ok && !isIntfNil(v) && !proactiveMonitoringChoiceTypeFound {
-
-					proactiveMonitoringChoiceTypeFound = true
-
-					if v.(bool) {
-						proactiveMonitoringChoiceInt := &ves_io_schema_views.ProactiveMonitoringChoice_ProactiveMonitoringDisable{}
-						proactiveMonitoringChoiceInt.ProactiveMonitoringDisable = &ves_io_schema.Empty{}
-						proactiveMonitoring.ProactiveMonitoringChoice = proactiveMonitoringChoiceInt
-					}
-
-				}
-
-				if v, ok := proactiveMonitoringMapStrToI["proactive_monitoring_enable"]; ok && !isIntfNil(v) && !proactiveMonitoringChoiceTypeFound {
-
-					proactiveMonitoringChoiceTypeFound = true
-
-					if v.(bool) {
-						proactiveMonitoringChoiceInt := &ves_io_schema_views.ProactiveMonitoringChoice_ProactiveMonitoringEnable{}
-						proactiveMonitoringChoiceInt.ProactiveMonitoringEnable = &ves_io_schema.Empty{}
-						proactiveMonitoring.ProactiveMonitoringChoice = proactiveMonitoringChoiceInt
-					}
-
-				}
-
-			}
-		}
-
-	}
-
 	//provider_choice
 
 	providerChoiceTypeFound := false
 
-	if v, ok := d.GetOk("aws"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("aws"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_Aws{}
@@ -12203,616 +8374,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 				cs := set.(map[string]interface{})
 
 				orchestrationChoiceTypeFound := false
-
-				if v, ok := cs["managed"]; ok && !isIntfNil(v) && !orchestrationChoiceTypeFound {
-
-					orchestrationChoiceTypeFound = true
-					orchestrationChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSProviderType_Managed{}
-					orchestrationChoiceInt.Managed = &ves_io_schema_views_securemesh_site_v2.AWSManagedMode{}
-					providerChoiceInt.Aws.OrchestrationChoice = orchestrationChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["aws_cred"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								awsCredInt := &ves_io_schema_views.ObjectRefType{}
-								orchestrationChoiceInt.Managed.AwsCred = awsCredInt
-
-								for _, set := range sl {
-									if set != nil {
-										acMapToStrVal := set.(map[string]interface{})
-										if val, ok := acMapToStrVal["name"]; ok && !isIntfNil(v) {
-											awsCredInt.Name = val.(string)
-										}
-										if val, ok := acMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-											awsCredInt.Namespace = val.(string)
-										}
-
-										if val, ok := acMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-											awsCredInt.Tenant = val.(string)
-										}
-									}
-								}
-
-							}
-
-							if v, ok := cs["aws_region"]; ok && !isIntfNil(v) {
-
-								orchestrationChoiceInt.Managed.AwsRegion = v.(string)
-
-							}
-
-							if v, ok := cs["disk_size"]; ok && !isIntfNil(v) {
-
-								orchestrationChoiceInt.Managed.DiskSize = uint32(v.(int))
-
-							}
-
-							egressGatewayChoiceTypeFound := false
-
-							if v, ok := cs["egress_gateway_default"]; ok && !isIntfNil(v) && !egressGatewayChoiceTypeFound {
-
-								egressGatewayChoiceTypeFound = true
-
-								if v.(bool) {
-									egressGatewayChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_EgressGatewayDefault{}
-									egressGatewayChoiceInt.EgressGatewayDefault = &ves_io_schema.Empty{}
-									orchestrationChoiceInt.Managed.EgressGatewayChoice = egressGatewayChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["egress_nat_gw"]; ok && !isIntfNil(v) && !egressGatewayChoiceTypeFound {
-
-								egressGatewayChoiceTypeFound = true
-								egressGatewayChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_EgressNatGw{}
-								egressGatewayChoiceInt.EgressNatGw = &ves_io_schema_views.AWSNATGatewaychoiceType{}
-								orchestrationChoiceInt.Managed.EgressGatewayChoice = egressGatewayChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										choiceTypeFound := false
-
-										if v, ok := cs["nat_gw_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-											choiceTypeFound = true
-											choiceInt := &ves_io_schema_views.AWSNATGatewaychoiceType_NatGwId{}
-
-											egressGatewayChoiceInt.EgressNatGw.Choice = choiceInt
-
-											choiceInt.NatGwId = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := cs["egress_virtual_private_gateway"]; ok && !isIntfNil(v) && !egressGatewayChoiceTypeFound {
-
-								egressGatewayChoiceTypeFound = true
-								egressGatewayChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_EgressVirtualPrivateGateway{}
-								egressGatewayChoiceInt.EgressVirtualPrivateGateway = &ves_io_schema_views.AWSVirtualPrivateGatewaychoiceType{}
-								orchestrationChoiceInt.Managed.EgressGatewayChoice = egressGatewayChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										choiceTypeFound := false
-
-										if v, ok := cs["vgw_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-											choiceTypeFound = true
-											choiceInt := &ves_io_schema_views.AWSVirtualPrivateGatewaychoiceType_VgwId{}
-
-											egressGatewayChoiceInt.EgressVirtualPrivateGateway.Choice = choiceInt
-
-											choiceInt.VgwId = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := cs["instance_type"]; ok && !isIntfNil(v) {
-
-								orchestrationChoiceInt.Managed.InstanceType = v.(string)
-
-							}
-
-							if v, ok := cs["node_list"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								nodeList1 := &ves_io_schema_views_securemesh_site_v2.AWSManagedNodeList{}
-								orchestrationChoiceInt.Managed.NodeList = nodeList1
-								for _, set := range sl {
-									if set != nil {
-										nodeListMapStrToI := set.(map[string]interface{})
-
-										if v, ok := nodeListMapStrToI["node_list"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											nodeList := make([]*ves_io_schema_views_securemesh_site_v2.AWSManagedNode, len(sl))
-											nodeList1.NodeList = nodeList
-											for i, set := range sl {
-												if set != nil {
-													nodeList[i] = &ves_io_schema_views_securemesh_site_v2.AWSManagedNode{}
-													nodeListMapStrToI := set.(map[string]interface{})
-
-													if w, ok := nodeListMapStrToI["aws_az_name"]; ok && !isIntfNil(w) {
-														nodeList[i].AwsAzName = w.(string)
-													}
-
-													if w, ok := nodeListMapStrToI["hostname"]; ok && !isIntfNil(w) {
-														nodeList[i].Hostname = w.(string)
-													}
-
-													if v, ok := nodeListMapStrToI["interface_list"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														interfaceList := make([]*ves_io_schema_views_securemesh_site_v2.AWSOrchestratedInterface, len(sl))
-														nodeList[i].InterfaceList = interfaceList
-														for i, set := range sl {
-															if set != nil {
-																interfaceList[i] = &ves_io_schema_views_securemesh_site_v2.AWSOrchestratedInterface{}
-																interfaceListMapStrToI := set.(map[string]interface{})
-
-																monitoringChoiceTypeFound := false
-
-																if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
-
-																	monitoringChoiceTypeFound = true
-																	monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSOrchestratedInterface_Monitor{}
-																	monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
-																	interfaceList[i].MonitoringChoice = monitoringChoiceInt
-
-																}
-
-																if v, ok := interfaceListMapStrToI["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
-
-																	monitoringChoiceTypeFound = true
-
-																	if v.(bool) {
-																		monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSOrchestratedInterface_MonitorDisabled{}
-																		monitoringChoiceInt.MonitorDisabled = &ves_io_schema.Empty{}
-																		interfaceList[i].MonitoringChoice = monitoringChoiceInt
-																	}
-
-																}
-
-																if w, ok := interfaceListMapStrToI["mtu"]; ok && !isIntfNil(w) {
-																	interfaceList[i].Mtu = uint32(w.(int))
-																}
-
-																if v, ok := interfaceListMapStrToI["network_option"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	networkOption := &ves_io_schema_views.NetworkSelectType{}
-																	interfaceList[i].NetworkOption = networkOption
-																	for _, set := range sl {
-																		if set != nil {
-																			networkOptionMapStrToI := set.(map[string]interface{})
-
-																			networkChoiceTypeFound := false
-
-																			if v, ok := networkOptionMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
-
-																				networkChoiceTypeFound = true
-																				networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SegmentNetwork{}
-																				networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
-																				networkOption.NetworkChoice = networkChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkChoiceInt.SegmentNetwork.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkChoiceInt.SegmentNetwork.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkChoiceInt.SegmentNetwork.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := networkOptionMapStrToI["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
-
-																				networkChoiceTypeFound = true
-
-																				if v.(bool) {
-																					networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalInsideNetwork{}
-																					networkChoiceInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
-																					networkOption.NetworkChoice = networkChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := networkOptionMapStrToI["site_local_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
-
-																				networkChoiceTypeFound = true
-
-																				if v.(bool) {
-																					networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalNetwork{}
-																					networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
-																					networkOption.NetworkChoice = networkChoiceInt
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if w, ok := interfaceListMapStrToI["priority"]; ok && !isIntfNil(w) {
-																	interfaceList[i].Priority = uint32(w.(int))
-																}
-
-																siteToSiteConnectivityInterfaceChoiceTypeFound := false
-
-																if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_disabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
-
-																	siteToSiteConnectivityInterfaceChoiceTypeFound = true
-
-																	if v.(bool) {
-																		siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSOrchestratedInterface_SiteToSiteConnectivityInterfaceDisabled{}
-																		siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceDisabled = &ves_io_schema.Empty{}
-																		interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
-																	}
-
-																}
-
-																if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_enabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
-
-																	siteToSiteConnectivityInterfaceChoiceTypeFound = true
-
-																	if v.(bool) {
-																		siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSOrchestratedInterface_SiteToSiteConnectivityInterfaceEnabled{}
-																		siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceEnabled = &ves_io_schema.Empty{}
-																		interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
-																	}
-
-																}
-
-																if v, ok := interfaceListMapStrToI["subnet"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	subnet := &ves_io_schema_views_securemesh_site_v2.AWSSubnetChoiceType{}
-																	interfaceList[i].Subnet = subnet
-																	for _, set := range sl {
-																		if set != nil {
-																			subnetMapStrToI := set.(map[string]interface{})
-
-																			choiceTypeFound := false
-
-																			if v, ok := subnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-																				choiceTypeFound = true
-																				choiceInt := &ves_io_schema_views_securemesh_site_v2.AWSSubnetChoiceType_ExistingSubnetId{}
-
-																				subnet.Choice = choiceInt
-
-																				choiceInt.ExistingSubnetId = v.(string)
-
-																			}
-
-																			if v, ok := subnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-																				choiceTypeFound = true
-																				choiceInt := &ves_io_schema_views_securemesh_site_v2.AWSSubnetChoiceType_SubnetParam{}
-																				choiceInt.SubnetParam = &ves_io_schema_views_securemesh_site_v2.AWSCloudSubnetParamType{}
-																				subnet.Choice = choiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
-
-																							choiceInt.SubnetParam.Ipv4 = v.(string)
-
-																						}
-
-																						if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-																							choiceInt.SubnetParam.Ipv6 = v.(string)
-
-																						}
-
-																						nameChoiceTypeFound := false
-
-																						if v, ok := cs["autogenerate"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
-
-																							nameChoiceTypeFound = true
-
-																							if v.(bool) {
-																								nameChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSCloudSubnetParamType_Autogenerate{}
-																								nameChoiceInt.Autogenerate = &ves_io_schema.Empty{}
-																								choiceInt.SubnetParam.NameChoice = nameChoiceInt
-																							}
-
-																						}
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
-
-																							nameChoiceTypeFound = true
-																							nameChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSCloudSubnetParamType_Name{}
-
-																							choiceInt.SubnetParam.NameChoice = nameChoiceInt
-
-																							nameChoiceInt.Name = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
-													if w, ok := nodeListMapStrToI["type"]; ok && !isIntfNil(w) {
-														nodeList[i].Type = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-									}
-								}
-
-							}
-
-							privateConnectivityChoiceTypeFound := false
-
-							if v, ok := cs["private_connectivity"]; ok && !isIntfNil(v) && !privateConnectivityChoiceTypeFound {
-
-								privateConnectivityChoiceTypeFound = true
-								privateConnectivityChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_PrivateConnectivity{}
-								privateConnectivityChoiceInt.PrivateConnectivity = &ves_io_schema_views.PrivateConnectConfigType{}
-								orchestrationChoiceInt.Managed.PrivateConnectivityChoice = privateConnectivityChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["cloud_link"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											cloudLink := &ves_io_schema_views.ObjectRefType{}
-											privateConnectivityChoiceInt.PrivateConnectivity.CloudLink = cloudLink
-											for _, set := range sl {
-												if set != nil {
-													cloudLinkMapStrToI := set.(map[string]interface{})
-
-													if w, ok := cloudLinkMapStrToI["name"]; ok && !isIntfNil(w) {
-														cloudLink.Name = w.(string)
-													}
-
-													if w, ok := cloudLinkMapStrToI["namespace"]; ok && !isIntfNil(w) {
-														cloudLink.Namespace = w.(string)
-													}
-
-													if w, ok := cloudLinkMapStrToI["tenant"]; ok && !isIntfNil(w) {
-														cloudLink.Tenant = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-										networkOptionsTypeFound := false
-
-										if v, ok := cs["inside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
-
-											networkOptionsTypeFound = true
-
-											if v.(bool) {
-												networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Inside{}
-												networkOptionsInt.Inside = &ves_io_schema.Empty{}
-												privateConnectivityChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
-											}
-
-										}
-
-										if v, ok := cs["outside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
-
-											networkOptionsTypeFound = true
-
-											if v.(bool) {
-												networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Outside{}
-												networkOptionsInt.Outside = &ves_io_schema.Empty{}
-												privateConnectivityChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
-											}
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := cs["private_connectivity_disabled"]; ok && !isIntfNil(v) && !privateConnectivityChoiceTypeFound {
-
-								privateConnectivityChoiceTypeFound = true
-
-								if v.(bool) {
-									privateConnectivityChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_PrivateConnectivityDisabled{}
-									privateConnectivityChoiceInt.PrivateConnectivityDisabled = &ves_io_schema.Empty{}
-									orchestrationChoiceInt.Managed.PrivateConnectivityChoice = privateConnectivityChoiceInt
-								}
-
-							}
-
-							securityGroupChoiceTypeFound := false
-
-							if v, ok := cs["custom_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
-
-								securityGroupChoiceTypeFound = true
-								securityGroupChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_CustomSecurityGroup{}
-								securityGroupChoiceInt.CustomSecurityGroup = &ves_io_schema_views.SecurityGroupType{}
-								orchestrationChoiceInt.Managed.SecurityGroupChoice = securityGroupChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["inside_security_group_id"]; ok && !isIntfNil(v) {
-
-											securityGroupChoiceInt.CustomSecurityGroup.InsideSecurityGroupId = v.(string)
-
-										}
-
-										if v, ok := cs["outside_security_group_id"]; ok && !isIntfNil(v) {
-
-											securityGroupChoiceInt.CustomSecurityGroup.OutsideSecurityGroupId = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := cs["f5xc_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
-
-								securityGroupChoiceTypeFound = true
-
-								if v.(bool) {
-									securityGroupChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_F5XcSecurityGroup{}
-									securityGroupChoiceInt.F5XcSecurityGroup = &ves_io_schema.Empty{}
-									orchestrationChoiceInt.Managed.SecurityGroupChoice = securityGroupChoiceInt
-								}
-
-							}
-
-							serviceVpcChoiceTypeFound := false
-
-							if v, ok := cs["new_vpc"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
-
-								serviceVpcChoiceTypeFound = true
-								serviceVpcChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_NewVpc{}
-								serviceVpcChoiceInt.NewVpc = &ves_io_schema_views.AWSVPCParamsType{}
-								orchestrationChoiceInt.Managed.ServiceVpcChoice = serviceVpcChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["allocate_ipv6"]; ok && !isIntfNil(v) {
-
-											serviceVpcChoiceInt.NewVpc.AllocateIpv6 = v.(bool)
-
-										}
-
-										nameChoiceTypeFound := false
-
-										if v, ok := cs["autogenerate"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
-
-											nameChoiceTypeFound = true
-
-											if v.(bool) {
-												nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_Autogenerate{}
-												nameChoiceInt.Autogenerate = &ves_io_schema.Empty{}
-												serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
-											}
-
-										}
-
-										if v, ok := cs["name_tag"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
-
-											nameChoiceTypeFound = true
-											nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_NameTag{}
-
-											serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
-
-											nameChoiceInt.NameTag = v.(string)
-
-										}
-
-										if v, ok := cs["primary_ipv4"]; ok && !isIntfNil(v) {
-
-											serviceVpcChoiceInt.NewVpc.PrimaryIpv4 = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := cs["vpc_id"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
-
-								serviceVpcChoiceTypeFound = true
-								serviceVpcChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_VpcId{}
-
-								orchestrationChoiceInt.Managed.ServiceVpcChoice = serviceVpcChoiceInt
-
-								serviceVpcChoiceInt.VpcId = v.(string)
-
-							}
-
-							if v, ok := cs["ssh_key"]; ok && !isIntfNil(v) {
-
-								orchestrationChoiceInt.Managed.SshKey = v.(string)
-
-							}
-
-							if v, ok := cs["tags"]; ok && !isIntfNil(v) {
-
-								ms := map[string]string{}
-								for k, v := range v.(map[string]interface{}) {
-									ms[k] = v.(string)
-								}
-								orchestrationChoiceInt.Managed.Tags = ms
-							}
-
-						}
-					}
-
-				}
 
 				if v, ok := cs["not_managed"]; ok && !isIntfNil(v) && !orchestrationChoiceTypeFound {
 
@@ -12864,248 +8425,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -13133,12 +8452,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -13175,7 +8488,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -13387,41 +8705,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -13440,10 +8723,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -13553,7 +8832,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -13694,10 +8978,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -13706,59 +8986,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -13788,12 +9015,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -13810,14 +9031,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -13828,7 +9041,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -13990,7 +9203,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("azure"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("azure"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_Azure{}
@@ -14054,248 +9267,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -14323,12 +9294,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -14365,7 +9330,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -14577,41 +9547,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -14630,10 +9565,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -14743,7 +9674,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -14884,10 +9820,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -14896,59 +9828,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -14978,12 +9857,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -15000,14 +9873,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -15018,7 +9883,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -15180,11 +10045,11 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("baremetal"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("equinix"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
-		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_Baremetal{}
-		providerChoiceInt.Baremetal = &ves_io_schema_views_securemesh_site_v2.BaremetalProviderType{}
+		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_Equinix{}
+		providerChoiceInt.Equinix = &ves_io_schema_views_securemesh_site_v2.EquinixProviderType{}
 		createSpec.ProviderChoice = providerChoiceInt
 
 		sl := v.([]interface{})
@@ -15197,9 +10062,9 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 				if v, ok := cs["not_managed"]; ok && !isIntfNil(v) && !orchestrationChoiceTypeFound {
 
 					orchestrationChoiceTypeFound = true
-					orchestrationChoiceInt := &ves_io_schema_views_securemesh_site_v2.BaremetalProviderType_NotManaged{}
+					orchestrationChoiceInt := &ves_io_schema_views_securemesh_site_v2.EquinixProviderType_NotManaged{}
 					orchestrationChoiceInt.NotManaged = &ves_io_schema_views_securemesh_site_v2.NodeList{}
-					providerChoiceInt.Baremetal.OrchestrationChoice = orchestrationChoiceInt
+					providerChoiceInt.Equinix.OrchestrationChoice = orchestrationChoiceInt
 
 					sl := v.([]interface{})
 					for _, set := range sl {
@@ -15244,248 +10109,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -15513,12 +10136,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -15555,7 +10172,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -15767,41 +10389,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -15820,10 +10407,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -15933,7 +10516,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -16074,10 +10662,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -16086,59 +10670,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -16168,12 +10699,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -16190,14 +10715,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -16208,7 +10725,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -16370,7 +10887,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("gcp"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("gcp"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_Gcp{}
@@ -16434,248 +10951,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -16703,12 +10978,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -16745,7 +11014,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -16957,41 +11231,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -17010,10 +11249,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -17123,7 +11358,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -17264,10 +11504,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -17276,59 +11512,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -17358,12 +11541,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -17380,14 +11557,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -17398,7 +11567,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -17560,7 +11729,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("kvm"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("kvm"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_Kvm{}
@@ -17624,248 +11793,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -17893,12 +11820,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -17935,7 +11856,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -18147,41 +12073,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -18200,10 +12091,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -18313,7 +12200,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -18454,10 +12346,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -18466,59 +12354,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -18548,12 +12383,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -18570,14 +12399,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -18588,7 +12409,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -18750,7 +12571,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("nutanix"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("nutanix"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_Nutanix{}
@@ -18814,248 +12635,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -19083,12 +12662,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -19125,7 +12698,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -19337,41 +12915,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -19390,10 +12933,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -19503,7 +13042,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -19644,10 +13188,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -19656,59 +13196,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -19738,12 +13225,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -19760,14 +13241,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -19778,7 +13251,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -19940,7 +13413,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("oci"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("oci"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_Oci{}
@@ -20004,248 +13477,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -20273,12 +13504,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -20315,7 +13540,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -20527,41 +13757,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -20580,10 +13775,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -20693,7 +13884,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -20834,10 +14030,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -20846,59 +14038,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -20928,12 +14067,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -20950,14 +14083,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -20968,7 +14093,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -21130,7 +14255,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("openstack"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("openstack"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_Openstack{}
@@ -21194,248 +14319,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -21463,12 +14346,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -21505,7 +14382,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -21717,41 +14599,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -21770,10 +14617,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -21883,7 +14726,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -22024,10 +14872,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -22036,59 +14880,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -22118,12 +14909,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -22140,14 +14925,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -22158,7 +14935,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -22320,7 +15097,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("rseries"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("rseries"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_Rseries{}
@@ -22384,248 +15161,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -22653,12 +15188,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -22695,7 +15224,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -22907,41 +15441,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -22960,10 +15459,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -23073,7 +15568,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -23214,10 +15714,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -23226,59 +15722,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -23308,12 +15751,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -23330,14 +15767,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -23348,7 +15777,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -23510,7 +15939,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("vmware"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("vmware"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_Vmware{}
@@ -23574,248 +16003,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -23843,12 +16030,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -23885,7 +16066,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -24097,41 +16283,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -24150,10 +16301,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -24263,7 +16410,12 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -24404,10 +16556,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -24416,59 +16564,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -24498,12 +16593,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -24520,14 +16609,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -24538,7 +16619,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -24700,6 +16781,54 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
+	//proxy_bypass_choice
+
+	proxyBypassChoiceTypeFound := false
+
+	if v, ok := d.GetOk("custom_proxy_bypass"); ok && !isIntfNil(v) && !proxyBypassChoiceTypeFound {
+
+		proxyBypassChoiceTypeFound = true
+		proxyBypassChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_CustomProxyBypass{}
+		proxyBypassChoiceInt.CustomProxyBypass = &ves_io_schema_views_securemesh_site_v2.CustomProxyBypassSettings{}
+		createSpec.ProxyBypassChoice = proxyBypassChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["proxy_bypass"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field proxy_bypass")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					proxyBypassChoiceInt.CustomProxyBypass.ProxyBypass = ls
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("no_proxy_bypass"); ok && !proxyBypassChoiceTypeFound {
+
+		proxyBypassChoiceTypeFound = true
+
+		if v.(bool) {
+			proxyBypassChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_NoProxyBypass{}
+			proxyBypassChoiceInt.NoProxyBypass = &ves_io_schema.Empty{}
+			createSpec.ProxyBypassChoice = proxyBypassChoiceInt
+		}
+
+	}
+
 	//re_select
 	if v, ok := d.GetOk("re_select"); ok && !isIntfNil(v) {
 
@@ -24724,17 +16853,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 				}
 
-				if v, ok := reSelectMapStrToI["specific_geography"]; ok && !isIntfNil(v) && !reSelectionChoiceTypeFound {
-
-					reSelectionChoiceTypeFound = true
-					reSelectionChoiceInt := &ves_io_schema_views.RegionalEdgeSelection_SpecificGeography{}
-
-					reSelect.ReSelectionChoice = reSelectionChoiceInt
-
-					reSelectionChoiceInt.SpecificGeography = v.(string)
-
-				}
-
 				if v, ok := reSelectMapStrToI["specific_re"]; ok && !isIntfNil(v) && !reSelectionChoiceTypeFound {
 
 					reSelectionChoiceTypeFound = true
@@ -24746,12 +16864,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 					for _, set := range sl {
 						if set != nil {
 							cs := set.(map[string]interface{})
-
-							if v, ok := cs["backup_re"]; ok && !isIntfNil(v) {
-
-								reSelectionChoiceInt.SpecificRe.BackupRe = v.(string)
-
-							}
 
 							if v, ok := cs["primary_re"]; ok && !isIntfNil(v) {
 
@@ -24773,7 +16885,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	s2SConnectivitySliChoiceTypeFound := false
 
-	if v, ok := d.GetOk("dc_cluster_group_sli"); ok && !s2SConnectivitySliChoiceTypeFound {
+	if v, ok := d.GetOk("dc_cluster_group_sli"); ok && !isIntfNil(v) && !s2SConnectivitySliChoiceTypeFound {
 
 		s2SConnectivitySliChoiceTypeFound = true
 		s2SConnectivitySliChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_DcClusterGroupSli{}
@@ -24824,7 +16936,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	s2SConnectivitySloChoiceTypeFound := false
 
-	if v, ok := d.GetOk("dc_cluster_group_slo"); ok && !s2SConnectivitySloChoiceTypeFound {
+	if v, ok := d.GetOk("dc_cluster_group_slo"); ok && !isIntfNil(v) && !s2SConnectivitySloChoiceTypeFound {
 
 		s2SConnectivitySloChoiceTypeFound = true
 		s2SConnectivitySloChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_DcClusterGroupSlo{}
@@ -24871,7 +16983,7 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("site_mesh_group_on_slo"); ok && !s2SConnectivitySloChoiceTypeFound {
+	if v, ok := d.GetOk("site_mesh_group_on_slo"); ok && !isIntfNil(v) && !s2SConnectivitySloChoiceTypeFound {
 
 		s2SConnectivitySloChoiceTypeFound = true
 		s2SConnectivitySloChoiceInt := &ves_io_schema_views_securemesh_site_v2.CreateSpecType_SiteMeshGroupOnSlo{}
@@ -24882,55 +16994,6 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			if set != nil {
 				cs := set.(map[string]interface{})
-
-				siteMeshGroupChoiceTypeFound := false
-
-				if v, ok := cs["no_site_mesh_group"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
-
-					siteMeshGroupChoiceTypeFound = true
-
-					if v.(bool) {
-						siteMeshGroupChoiceInt := &ves_io_schema_views_securemesh_site_v2.SiteMeshGroupType_NoSiteMeshGroup{}
-						siteMeshGroupChoiceInt.NoSiteMeshGroup = &ves_io_schema.Empty{}
-						s2SConnectivitySloChoiceInt.SiteMeshGroupOnSlo.SiteMeshGroupChoice = siteMeshGroupChoiceInt
-					}
-
-				}
-
-				if v, ok := cs["site_mesh_group"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
-
-					siteMeshGroupChoiceTypeFound = true
-					siteMeshGroupChoiceInt := &ves_io_schema_views_securemesh_site_v2.SiteMeshGroupType_SiteMeshGroup{}
-					siteMeshGroupChoiceInt.SiteMeshGroup = &ves_io_schema_views.ObjectRefType{}
-					s2SConnectivitySloChoiceInt.SiteMeshGroupOnSlo.SiteMeshGroupChoice = siteMeshGroupChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								siteMeshGroupChoiceInt.SiteMeshGroup.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								siteMeshGroupChoiceInt.SiteMeshGroup.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								siteMeshGroupChoiceInt.SiteMeshGroup.Tenant = v.(string)
-
-							}
-
-						}
-					}
-
-				}
 
 				siteMeshGroupIpChoiceTypeFound := false
 
@@ -25129,46 +17192,9 @@ func resourceVolterraSecuremeshSiteV2Create(d *schema.ResourceData, meta interfa
 
 										}
 
-										if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
-
-											drainMaxUnavailableChoiceTypeFound = true
-											drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
-
-											kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
-
-											drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
-
-										}
-
 										if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
 
 											kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
-
-										}
-
-										vegaUpgradeModeToggleChoiceTypeFound := false
-
-										if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
-
-											vegaUpgradeModeToggleChoiceTypeFound = true
-
-											if v.(bool) {
-												vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
-												vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
-												kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
-											}
-
-										}
-
-										if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
-
-											vegaUpgradeModeToggleChoiceTypeFound = true
-
-											if v.(bool) {
-												vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
-												vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
-												kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
-											}
 
 										}
 
@@ -25304,38 +17330,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 						if set != nil {
 							adminPasswordMapStrToI := set.(map[string]interface{})
 
-							if v, ok := adminPasswordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-								adminPassword.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-								for _, set := range sl {
-									if set != nil {
-										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-										}
-
-										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-											blindfoldSecretInfoInternal.Location = w.(string)
-										}
-
-										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-											blindfoldSecretInfoInternal.StoreProvider = w.(string)
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := adminPasswordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-								adminPassword.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-							}
-
 							secretInfoOneofTypeFound := false
 
 							if v, ok := adminPasswordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -25402,76 +17396,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 							}
 
-							if v, ok := adminPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-								adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-										}
-
-										if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-										}
-
-										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-										}
-
-										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-										}
-
-										if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := adminPasswordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-								adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
 						}
 					}
 
@@ -25500,7 +17424,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
+	if v, ok := d.GetOk("blocked_services"); ok && !isIntfNil(v) && !blockedServicesChoiceTypeFound {
 
 		blockedServicesChoiceTypeFound = true
 		blockedServicesChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_BlockedServices{}
@@ -25603,7 +17527,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field dns_servers")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								dnsServerChoiceInt.CustomDns.DnsServers = ls
 
@@ -25644,7 +17573,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ntp_servers")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								ntpServerChoiceInt.CustomNtp.NtpServers = ls
 
@@ -25674,7 +17608,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	enterpriseProxyChoiceTypeFound := false
 
-	if v, ok := d.GetOk("custom_proxy"); ok && !enterpriseProxyChoiceTypeFound {
+	if v, ok := d.GetOk("custom_proxy"); ok && !isIntfNil(v) && !enterpriseProxyChoiceTypeFound {
 
 		enterpriseProxyChoiceTypeFound = true
 		enterpriseProxyChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_CustomProxy{}
@@ -25694,38 +17628,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 					for _, set := range sl {
 						if set != nil {
 							passwordMapStrToI := set.(map[string]interface{})
-
-							if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-								password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-								for _, set := range sl {
-									if set != nil {
-										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-										}
-
-										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-											blindfoldSecretInfoInternal.Location = w.(string)
-										}
-
-										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-											blindfoldSecretInfoInternal.StoreProvider = w.(string)
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-								password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-							}
 
 							secretInfoOneofTypeFound := false
 
@@ -25785,76 +17687,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-								password.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-										}
-
-										if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-										}
-
-										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-										}
-
-										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-										}
-
-										if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-								secretInfoOneofTypeFound = true
-								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-								password.SecretInfoOneof = secretInfoOneofInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -25931,7 +17763,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	forwardProxyChoiceTypeFound := false
 
-	if v, ok := d.GetOk("active_forward_proxy_policies"); ok && !forwardProxyChoiceTypeFound {
+	if v, ok := d.GetOk("active_forward_proxy_policies"); ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
 
 		forwardProxyChoiceTypeFound = true
 		forwardProxyChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_ActiveForwardProxyPolicies{}
@@ -26102,6 +17934,9 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														staticRoutes[i].Attrs = attrsList
@@ -26111,7 +17946,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 													if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
 														ls := make([]string, len(w.([]interface{})))
 														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														staticRoutes[i].IpPrefixes = ls
 													}
@@ -26226,6 +18066,9 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														staticRoutes[i].Attrs = attrsList
@@ -26235,7 +18078,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 													if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
 														ls := make([]string, len(w.([]interface{})))
 														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														staticRoutes[i].IpPrefixes = ls
 													}
@@ -26414,6 +18262,9 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														staticRoutes[i].Attrs = attrsList
@@ -26423,7 +18274,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 													if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
 														ls := make([]string, len(w.([]interface{})))
 														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														staticRoutes[i].IpPrefixes = ls
 													}
@@ -26538,6 +18394,9 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														staticRoutes[i].Attrs = attrsList
@@ -26547,7 +18406,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 													if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
 														ls := make([]string, len(w.([]interface{})))
 														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														staticRoutes[i].IpPrefixes = ls
 													}
@@ -26646,7 +18510,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	logsReceiverChoiceTypeFound := false
 
-	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
+	if v, ok := d.GetOk("log_receiver"); ok && !isIntfNil(v) && !logsReceiverChoiceTypeFound {
 
 		logsReceiverChoiceTypeFound = true
 		logsReceiverChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_LogReceiver{}
@@ -26695,7 +18559,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	networkPolicyChoiceTypeFound := false
 
-	if v, ok := d.GetOk("active_enhanced_firewall_policies"); ok && !networkPolicyChoiceTypeFound {
+	if v, ok := d.GetOk("active_enhanced_firewall_policies"); ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
 		networkPolicyChoiceTypeFound = true
 		networkPolicyChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_ActiveEnhancedFirewallPolicies{}
@@ -26887,49 +18751,9 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("proactive_monitoring"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		proactiveMonitoring := &ves_io_schema_views.ProactiveMonitoringChoice{}
-		updateSpec.ProactiveMonitoring = proactiveMonitoring
-		for _, set := range sl {
-			if set != nil {
-				proactiveMonitoringMapStrToI := set.(map[string]interface{})
-
-				proactiveMonitoringChoiceTypeFound := false
-
-				if v, ok := proactiveMonitoringMapStrToI["proactive_monitoring_disable"]; ok && !isIntfNil(v) && !proactiveMonitoringChoiceTypeFound {
-
-					proactiveMonitoringChoiceTypeFound = true
-
-					if v.(bool) {
-						proactiveMonitoringChoiceInt := &ves_io_schema_views.ProactiveMonitoringChoice_ProactiveMonitoringDisable{}
-						proactiveMonitoringChoiceInt.ProactiveMonitoringDisable = &ves_io_schema.Empty{}
-						proactiveMonitoring.ProactiveMonitoringChoice = proactiveMonitoringChoiceInt
-					}
-
-				}
-
-				if v, ok := proactiveMonitoringMapStrToI["proactive_monitoring_enable"]; ok && !isIntfNil(v) && !proactiveMonitoringChoiceTypeFound {
-
-					proactiveMonitoringChoiceTypeFound = true
-
-					if v.(bool) {
-						proactiveMonitoringChoiceInt := &ves_io_schema_views.ProactiveMonitoringChoice_ProactiveMonitoringEnable{}
-						proactiveMonitoringChoiceInt.ProactiveMonitoringEnable = &ves_io_schema.Empty{}
-						proactiveMonitoring.ProactiveMonitoringChoice = proactiveMonitoringChoiceInt
-					}
-
-				}
-
-			}
-		}
-
-	}
-
 	providerChoiceTypeFound := false
 
-	if v, ok := d.GetOk("aws"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("aws"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_Aws{}
@@ -26942,616 +18766,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 				cs := set.(map[string]interface{})
 
 				orchestrationChoiceTypeFound := false
-
-				if v, ok := cs["managed"]; ok && !isIntfNil(v) && !orchestrationChoiceTypeFound {
-
-					orchestrationChoiceTypeFound = true
-					orchestrationChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSProviderType_Managed{}
-					orchestrationChoiceInt.Managed = &ves_io_schema_views_securemesh_site_v2.AWSManagedMode{}
-					providerChoiceInt.Aws.OrchestrationChoice = orchestrationChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["aws_cred"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								awsCredInt := &ves_io_schema_views.ObjectRefType{}
-								orchestrationChoiceInt.Managed.AwsCred = awsCredInt
-
-								for _, set := range sl {
-									if set != nil {
-										acMapToStrVal := set.(map[string]interface{})
-										if val, ok := acMapToStrVal["name"]; ok && !isIntfNil(v) {
-											awsCredInt.Name = val.(string)
-										}
-										if val, ok := acMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-											awsCredInt.Namespace = val.(string)
-										}
-
-										if val, ok := acMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-											awsCredInt.Tenant = val.(string)
-										}
-									}
-								}
-
-							}
-
-							if v, ok := cs["aws_region"]; ok && !isIntfNil(v) {
-
-								orchestrationChoiceInt.Managed.AwsRegion = v.(string)
-
-							}
-
-							if v, ok := cs["disk_size"]; ok && !isIntfNil(v) {
-
-								orchestrationChoiceInt.Managed.DiskSize = uint32(v.(int))
-
-							}
-
-							egressGatewayChoiceTypeFound := false
-
-							if v, ok := cs["egress_gateway_default"]; ok && !isIntfNil(v) && !egressGatewayChoiceTypeFound {
-
-								egressGatewayChoiceTypeFound = true
-
-								if v.(bool) {
-									egressGatewayChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_EgressGatewayDefault{}
-									egressGatewayChoiceInt.EgressGatewayDefault = &ves_io_schema.Empty{}
-									orchestrationChoiceInt.Managed.EgressGatewayChoice = egressGatewayChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["egress_nat_gw"]; ok && !isIntfNil(v) && !egressGatewayChoiceTypeFound {
-
-								egressGatewayChoiceTypeFound = true
-								egressGatewayChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_EgressNatGw{}
-								egressGatewayChoiceInt.EgressNatGw = &ves_io_schema_views.AWSNATGatewaychoiceType{}
-								orchestrationChoiceInt.Managed.EgressGatewayChoice = egressGatewayChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										choiceTypeFound := false
-
-										if v, ok := cs["nat_gw_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-											choiceTypeFound = true
-											choiceInt := &ves_io_schema_views.AWSNATGatewaychoiceType_NatGwId{}
-
-											egressGatewayChoiceInt.EgressNatGw.Choice = choiceInt
-
-											choiceInt.NatGwId = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := cs["egress_virtual_private_gateway"]; ok && !isIntfNil(v) && !egressGatewayChoiceTypeFound {
-
-								egressGatewayChoiceTypeFound = true
-								egressGatewayChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_EgressVirtualPrivateGateway{}
-								egressGatewayChoiceInt.EgressVirtualPrivateGateway = &ves_io_schema_views.AWSVirtualPrivateGatewaychoiceType{}
-								orchestrationChoiceInt.Managed.EgressGatewayChoice = egressGatewayChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										choiceTypeFound := false
-
-										if v, ok := cs["vgw_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-											choiceTypeFound = true
-											choiceInt := &ves_io_schema_views.AWSVirtualPrivateGatewaychoiceType_VgwId{}
-
-											egressGatewayChoiceInt.EgressVirtualPrivateGateway.Choice = choiceInt
-
-											choiceInt.VgwId = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := cs["instance_type"]; ok && !isIntfNil(v) {
-
-								orchestrationChoiceInt.Managed.InstanceType = v.(string)
-
-							}
-
-							if v, ok := cs["node_list"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								nodeList1 := &ves_io_schema_views_securemesh_site_v2.AWSManagedNodeList{}
-								orchestrationChoiceInt.Managed.NodeList = nodeList1
-								for _, set := range sl {
-									if set != nil {
-										nodeListMapStrToI := set.(map[string]interface{})
-
-										if v, ok := nodeListMapStrToI["node_list"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											nodeList := make([]*ves_io_schema_views_securemesh_site_v2.AWSManagedNode, len(sl))
-											nodeList1.NodeList = nodeList
-											for i, set := range sl {
-												if set != nil {
-													nodeList[i] = &ves_io_schema_views_securemesh_site_v2.AWSManagedNode{}
-													nodeListMapStrToI := set.(map[string]interface{})
-
-													if w, ok := nodeListMapStrToI["aws_az_name"]; ok && !isIntfNil(w) {
-														nodeList[i].AwsAzName = w.(string)
-													}
-
-													if w, ok := nodeListMapStrToI["hostname"]; ok && !isIntfNil(w) {
-														nodeList[i].Hostname = w.(string)
-													}
-
-													if v, ok := nodeListMapStrToI["interface_list"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														interfaceList := make([]*ves_io_schema_views_securemesh_site_v2.AWSOrchestratedInterface, len(sl))
-														nodeList[i].InterfaceList = interfaceList
-														for i, set := range sl {
-															if set != nil {
-																interfaceList[i] = &ves_io_schema_views_securemesh_site_v2.AWSOrchestratedInterface{}
-																interfaceListMapStrToI := set.(map[string]interface{})
-
-																monitoringChoiceTypeFound := false
-
-																if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
-
-																	monitoringChoiceTypeFound = true
-																	monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSOrchestratedInterface_Monitor{}
-																	monitoringChoiceInt.Monitor = &ves_io_schema_network_interface.LinkQualityMonitorConfig{}
-																	interfaceList[i].MonitoringChoice = monitoringChoiceInt
-
-																}
-
-																if v, ok := interfaceListMapStrToI["monitor_disabled"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
-
-																	monitoringChoiceTypeFound = true
-
-																	if v.(bool) {
-																		monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSOrchestratedInterface_MonitorDisabled{}
-																		monitoringChoiceInt.MonitorDisabled = &ves_io_schema.Empty{}
-																		interfaceList[i].MonitoringChoice = monitoringChoiceInt
-																	}
-
-																}
-
-																if w, ok := interfaceListMapStrToI["mtu"]; ok && !isIntfNil(w) {
-																	interfaceList[i].Mtu = uint32(w.(int))
-																}
-
-																if v, ok := interfaceListMapStrToI["network_option"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	networkOption := &ves_io_schema_views.NetworkSelectType{}
-																	interfaceList[i].NetworkOption = networkOption
-																	for _, set := range sl {
-																		if set != nil {
-																			networkOptionMapStrToI := set.(map[string]interface{})
-
-																			networkChoiceTypeFound := false
-
-																			if v, ok := networkOptionMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
-
-																				networkChoiceTypeFound = true
-																				networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SegmentNetwork{}
-																				networkChoiceInt.SegmentNetwork = &ves_io_schema_views.ObjectRefType{}
-																				networkOption.NetworkChoice = networkChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkChoiceInt.SegmentNetwork.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkChoiceInt.SegmentNetwork.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkChoiceInt.SegmentNetwork.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := networkOptionMapStrToI["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
-
-																				networkChoiceTypeFound = true
-
-																				if v.(bool) {
-																					networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalInsideNetwork{}
-																					networkChoiceInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
-																					networkOption.NetworkChoice = networkChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := networkOptionMapStrToI["site_local_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
-
-																				networkChoiceTypeFound = true
-
-																				if v.(bool) {
-																					networkChoiceInt := &ves_io_schema_views.NetworkSelectType_SiteLocalNetwork{}
-																					networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
-																					networkOption.NetworkChoice = networkChoiceInt
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if w, ok := interfaceListMapStrToI["priority"]; ok && !isIntfNil(w) {
-																	interfaceList[i].Priority = uint32(w.(int))
-																}
-
-																siteToSiteConnectivityInterfaceChoiceTypeFound := false
-
-																if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_disabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
-
-																	siteToSiteConnectivityInterfaceChoiceTypeFound = true
-
-																	if v.(bool) {
-																		siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSOrchestratedInterface_SiteToSiteConnectivityInterfaceDisabled{}
-																		siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceDisabled = &ves_io_schema.Empty{}
-																		interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
-																	}
-
-																}
-
-																if v, ok := interfaceListMapStrToI["site_to_site_connectivity_interface_enabled"]; ok && !isIntfNil(v) && !siteToSiteConnectivityInterfaceChoiceTypeFound {
-
-																	siteToSiteConnectivityInterfaceChoiceTypeFound = true
-
-																	if v.(bool) {
-																		siteToSiteConnectivityInterfaceChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSOrchestratedInterface_SiteToSiteConnectivityInterfaceEnabled{}
-																		siteToSiteConnectivityInterfaceChoiceInt.SiteToSiteConnectivityInterfaceEnabled = &ves_io_schema.Empty{}
-																		interfaceList[i].SiteToSiteConnectivityInterfaceChoice = siteToSiteConnectivityInterfaceChoiceInt
-																	}
-
-																}
-
-																if v, ok := interfaceListMapStrToI["subnet"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	subnet := &ves_io_schema_views_securemesh_site_v2.AWSSubnetChoiceType{}
-																	interfaceList[i].Subnet = subnet
-																	for _, set := range sl {
-																		if set != nil {
-																			subnetMapStrToI := set.(map[string]interface{})
-
-																			choiceTypeFound := false
-
-																			if v, ok := subnetMapStrToI["existing_subnet_id"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-																				choiceTypeFound = true
-																				choiceInt := &ves_io_schema_views_securemesh_site_v2.AWSSubnetChoiceType_ExistingSubnetId{}
-
-																				subnet.Choice = choiceInt
-
-																				choiceInt.ExistingSubnetId = v.(string)
-
-																			}
-
-																			if v, ok := subnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-																				choiceTypeFound = true
-																				choiceInt := &ves_io_schema_views_securemesh_site_v2.AWSSubnetChoiceType_SubnetParam{}
-																				choiceInt.SubnetParam = &ves_io_schema_views_securemesh_site_v2.AWSCloudSubnetParamType{}
-																				subnet.Choice = choiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
-
-																							choiceInt.SubnetParam.Ipv4 = v.(string)
-
-																						}
-
-																						if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
-
-																							choiceInt.SubnetParam.Ipv6 = v.(string)
-
-																						}
-
-																						nameChoiceTypeFound := false
-
-																						if v, ok := cs["autogenerate"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
-
-																							nameChoiceTypeFound = true
-
-																							if v.(bool) {
-																								nameChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSCloudSubnetParamType_Autogenerate{}
-																								nameChoiceInt.Autogenerate = &ves_io_schema.Empty{}
-																								choiceInt.SubnetParam.NameChoice = nameChoiceInt
-																							}
-
-																						}
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
-
-																							nameChoiceTypeFound = true
-																							nameChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSCloudSubnetParamType_Name{}
-
-																							choiceInt.SubnetParam.NameChoice = nameChoiceInt
-
-																							nameChoiceInt.Name = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
-													if w, ok := nodeListMapStrToI["type"]; ok && !isIntfNil(w) {
-														nodeList[i].Type = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-									}
-								}
-
-							}
-
-							privateConnectivityChoiceTypeFound := false
-
-							if v, ok := cs["private_connectivity"]; ok && !isIntfNil(v) && !privateConnectivityChoiceTypeFound {
-
-								privateConnectivityChoiceTypeFound = true
-								privateConnectivityChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_PrivateConnectivity{}
-								privateConnectivityChoiceInt.PrivateConnectivity = &ves_io_schema_views.PrivateConnectConfigType{}
-								orchestrationChoiceInt.Managed.PrivateConnectivityChoice = privateConnectivityChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["cloud_link"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											cloudLink := &ves_io_schema_views.ObjectRefType{}
-											privateConnectivityChoiceInt.PrivateConnectivity.CloudLink = cloudLink
-											for _, set := range sl {
-												if set != nil {
-													cloudLinkMapStrToI := set.(map[string]interface{})
-
-													if w, ok := cloudLinkMapStrToI["name"]; ok && !isIntfNil(w) {
-														cloudLink.Name = w.(string)
-													}
-
-													if w, ok := cloudLinkMapStrToI["namespace"]; ok && !isIntfNil(w) {
-														cloudLink.Namespace = w.(string)
-													}
-
-													if w, ok := cloudLinkMapStrToI["tenant"]; ok && !isIntfNil(w) {
-														cloudLink.Tenant = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-										networkOptionsTypeFound := false
-
-										if v, ok := cs["inside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
-
-											networkOptionsTypeFound = true
-
-											if v.(bool) {
-												networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Inside{}
-												networkOptionsInt.Inside = &ves_io_schema.Empty{}
-												privateConnectivityChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
-											}
-
-										}
-
-										if v, ok := cs["outside"]; ok && !isIntfNil(v) && !networkOptionsTypeFound {
-
-											networkOptionsTypeFound = true
-
-											if v.(bool) {
-												networkOptionsInt := &ves_io_schema_views.PrivateConnectConfigType_Outside{}
-												networkOptionsInt.Outside = &ves_io_schema.Empty{}
-												privateConnectivityChoiceInt.PrivateConnectivity.NetworkOptions = networkOptionsInt
-											}
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := cs["private_connectivity_disabled"]; ok && !isIntfNil(v) && !privateConnectivityChoiceTypeFound {
-
-								privateConnectivityChoiceTypeFound = true
-
-								if v.(bool) {
-									privateConnectivityChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_PrivateConnectivityDisabled{}
-									privateConnectivityChoiceInt.PrivateConnectivityDisabled = &ves_io_schema.Empty{}
-									orchestrationChoiceInt.Managed.PrivateConnectivityChoice = privateConnectivityChoiceInt
-								}
-
-							}
-
-							securityGroupChoiceTypeFound := false
-
-							if v, ok := cs["custom_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
-
-								securityGroupChoiceTypeFound = true
-								securityGroupChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_CustomSecurityGroup{}
-								securityGroupChoiceInt.CustomSecurityGroup = &ves_io_schema_views.SecurityGroupType{}
-								orchestrationChoiceInt.Managed.SecurityGroupChoice = securityGroupChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["inside_security_group_id"]; ok && !isIntfNil(v) {
-
-											securityGroupChoiceInt.CustomSecurityGroup.InsideSecurityGroupId = v.(string)
-
-										}
-
-										if v, ok := cs["outside_security_group_id"]; ok && !isIntfNil(v) {
-
-											securityGroupChoiceInt.CustomSecurityGroup.OutsideSecurityGroupId = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := cs["f5xc_security_group"]; ok && !isIntfNil(v) && !securityGroupChoiceTypeFound {
-
-								securityGroupChoiceTypeFound = true
-
-								if v.(bool) {
-									securityGroupChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_F5XcSecurityGroup{}
-									securityGroupChoiceInt.F5XcSecurityGroup = &ves_io_schema.Empty{}
-									orchestrationChoiceInt.Managed.SecurityGroupChoice = securityGroupChoiceInt
-								}
-
-							}
-
-							serviceVpcChoiceTypeFound := false
-
-							if v, ok := cs["new_vpc"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
-
-								serviceVpcChoiceTypeFound = true
-								serviceVpcChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_NewVpc{}
-								serviceVpcChoiceInt.NewVpc = &ves_io_schema_views.AWSVPCParamsType{}
-								orchestrationChoiceInt.Managed.ServiceVpcChoice = serviceVpcChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["allocate_ipv6"]; ok && !isIntfNil(v) {
-
-											serviceVpcChoiceInt.NewVpc.AllocateIpv6 = v.(bool)
-
-										}
-
-										nameChoiceTypeFound := false
-
-										if v, ok := cs["autogenerate"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
-
-											nameChoiceTypeFound = true
-
-											if v.(bool) {
-												nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_Autogenerate{}
-												nameChoiceInt.Autogenerate = &ves_io_schema.Empty{}
-												serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
-											}
-
-										}
-
-										if v, ok := cs["name_tag"]; ok && !isIntfNil(v) && !nameChoiceTypeFound {
-
-											nameChoiceTypeFound = true
-											nameChoiceInt := &ves_io_schema_views.AWSVPCParamsType_NameTag{}
-
-											serviceVpcChoiceInt.NewVpc.NameChoice = nameChoiceInt
-
-											nameChoiceInt.NameTag = v.(string)
-
-										}
-
-										if v, ok := cs["primary_ipv4"]; ok && !isIntfNil(v) {
-
-											serviceVpcChoiceInt.NewVpc.PrimaryIpv4 = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := cs["vpc_id"]; ok && !isIntfNil(v) && !serviceVpcChoiceTypeFound {
-
-								serviceVpcChoiceTypeFound = true
-								serviceVpcChoiceInt := &ves_io_schema_views_securemesh_site_v2.AWSManagedMode_VpcId{}
-
-								orchestrationChoiceInt.Managed.ServiceVpcChoice = serviceVpcChoiceInt
-
-								serviceVpcChoiceInt.VpcId = v.(string)
-
-							}
-
-							if v, ok := cs["ssh_key"]; ok && !isIntfNil(v) {
-
-								orchestrationChoiceInt.Managed.SshKey = v.(string)
-
-							}
-
-							if v, ok := cs["tags"]; ok && !isIntfNil(v) {
-
-								ms := map[string]string{}
-								for k, v := range v.(map[string]interface{}) {
-									ms[k] = v.(string)
-								}
-								orchestrationChoiceInt.Managed.Tags = ms
-							}
-
-						}
-					}
-
-				}
 
 				if v, ok := cs["not_managed"]; ok && !isIntfNil(v) && !orchestrationChoiceTypeFound {
 
@@ -27603,248 +18817,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -27872,12 +18844,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -27914,7 +18880,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -28126,41 +19097,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -28179,10 +19115,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -28292,7 +19224,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -28433,10 +19370,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -28445,59 +19378,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -28527,12 +19407,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -28549,14 +19423,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -28567,7 +19433,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -28729,7 +19595,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("azure"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("azure"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_Azure{}
@@ -28793,248 +19659,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -29062,12 +19686,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -29104,7 +19722,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -29316,41 +19939,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -29369,10 +19957,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -29482,7 +20066,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -29623,10 +20212,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -29635,59 +20220,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -29717,12 +20249,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -29739,14 +20265,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -29757,7 +20275,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -29919,11 +20437,11 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("baremetal"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("equinix"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
-		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_Baremetal{}
-		providerChoiceInt.Baremetal = &ves_io_schema_views_securemesh_site_v2.BaremetalProviderType{}
+		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_Equinix{}
+		providerChoiceInt.Equinix = &ves_io_schema_views_securemesh_site_v2.EquinixProviderType{}
 		updateSpec.ProviderChoice = providerChoiceInt
 
 		sl := v.([]interface{})
@@ -29936,9 +20454,9 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 				if v, ok := cs["not_managed"]; ok && !isIntfNil(v) && !orchestrationChoiceTypeFound {
 
 					orchestrationChoiceTypeFound = true
-					orchestrationChoiceInt := &ves_io_schema_views_securemesh_site_v2.BaremetalProviderType_NotManaged{}
+					orchestrationChoiceInt := &ves_io_schema_views_securemesh_site_v2.EquinixProviderType_NotManaged{}
 					orchestrationChoiceInt.NotManaged = &ves_io_schema_views_securemesh_site_v2.NodeList{}
-					providerChoiceInt.Baremetal.OrchestrationChoice = orchestrationChoiceInt
+					providerChoiceInt.Equinix.OrchestrationChoice = orchestrationChoiceInt
 
 					sl := v.([]interface{})
 					for _, set := range sl {
@@ -29983,248 +20501,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -30252,12 +20528,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -30294,7 +20564,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -30506,41 +20781,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -30559,10 +20799,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -30672,7 +20908,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -30813,10 +21054,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -30825,59 +21062,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -30907,12 +21091,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -30929,14 +21107,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -30947,7 +21117,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -31109,7 +21279,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("gcp"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("gcp"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_Gcp{}
@@ -31173,248 +21343,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -31442,12 +21370,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -31484,7 +21406,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -31696,41 +21623,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -31749,10 +21641,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -31862,7 +21750,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -32003,10 +21896,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -32015,59 +21904,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -32097,12 +21933,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -32119,14 +21949,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -32137,7 +21959,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -32299,7 +22121,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("kvm"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("kvm"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_Kvm{}
@@ -32363,248 +22185,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -32632,12 +22212,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -32674,7 +22248,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -32886,41 +22465,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -32939,10 +22483,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -33052,7 +22592,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -33193,10 +22738,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -33205,59 +22746,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -33287,12 +22775,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -33309,14 +22791,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -33327,7 +22801,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -33489,7 +22963,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("nutanix"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("nutanix"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_Nutanix{}
@@ -33553,248 +23027,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -33822,12 +23054,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -33864,7 +23090,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -34076,41 +23307,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -34129,10 +23325,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -34242,7 +23434,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -34383,10 +23580,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -34395,59 +23588,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -34477,12 +23617,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -34499,14 +23633,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -34517,7 +23643,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -34679,7 +23805,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("oci"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("oci"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_Oci{}
@@ -34743,248 +23869,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -35012,12 +23896,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -35054,7 +23932,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -35266,41 +24149,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -35319,10 +24167,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -35432,7 +24276,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -35573,10 +24422,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -35585,59 +24430,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -35667,12 +24459,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -35689,14 +24475,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -35707,7 +24485,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -35869,7 +24647,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("openstack"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("openstack"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_Openstack{}
@@ -35933,248 +24711,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -36202,12 +24738,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -36244,7 +24774,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -36456,41 +24991,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -36509,10 +25009,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -36622,7 +25118,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -36763,10 +25264,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -36775,59 +25272,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -36857,12 +25301,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -36879,14 +25317,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -36897,7 +25327,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -37059,7 +25489,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("rseries"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("rseries"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_Rseries{}
@@ -37123,248 +25553,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -37392,12 +25580,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -37434,7 +25616,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -37646,41 +25833,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -37699,10 +25851,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -37812,7 +25960,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -37953,10 +26106,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -37965,59 +26114,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -38047,12 +26143,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -38069,14 +26159,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -38087,7 +26169,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -38249,7 +26331,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("vmware"); ok && !providerChoiceTypeFound {
+	if v, ok := d.GetOk("vmware"); ok && !isIntfNil(v) && !providerChoiceTypeFound {
 
 		providerChoiceTypeFound = true
 		providerChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_Vmware{}
@@ -38313,248 +26395,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
-
-														addressChoiceTypeFound = true
-														addressChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_DhcpServer{}
-														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
-														interfaceList[i].AddressChoice = addressChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
-
-																	sl := v.([]interface{})
-																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
-																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
-																	for i, set := range sl {
-																		if set != nil {
-																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
-																			dhcpNetworksMapStrToI := set.(map[string]interface{})
-
-																			dnsChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
-
-																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
-
-																				dnsChoiceInt.DnsAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
-
-																				dnsChoiceTypeFound = true
-
-																				if v.(bool) {
-																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
-																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
-																				}
-
-																			}
-
-																			gatewayChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
-
-																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-
-																				gatewayChoiceInt.DgwAddress = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
-																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
-
-																				gatewayChoiceTypeFound = true
-
-																				if v.(bool) {
-																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
-																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
-																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
-																				}
-
-																			}
-
-																			networkPrefixChoiceTypeFound := false
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
-
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																				networkPrefixChoiceTypeFound = true
-																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
-																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																						}
-
-																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																						}
-
-																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
-
-																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
-
-																			}
-
-																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
-																				dhcpNetworks[i].Pools = pools
-																				for i, set := range sl {
-																					if set != nil {
-																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
-																						poolsMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
-																							pools[i].EndIp = w.(string)
-																						}
-
-																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																							pools[i].Exclude = w.(bool)
-																						}
-
-																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
-																							pools[i].StartIp = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
-
-																}
-
-																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
-
-																	ms := map[string]string{}
-																	for k, v := range v.(map[string]interface{}) {
-																		ms[k] = v.(string)
-																	}
-																	addressChoiceInt.DhcpServer.FixedIpMap = ms
-																}
-
-																interfacesAddressingChoiceTypeFound := false
-
-																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
-																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
-																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
-																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
-
-																	interfacesAddressingChoiceTypeFound = true
-																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
-																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
-																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
-
-																				ms := map[string]string{}
-																				for k, v := range v.(map[string]interface{}) {
-																					ms[k] = v.(string)
-																				}
-																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
-																			}
-
-																		}
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
 													if v, ok := interfaceListMapStrToI["no_ipv4_address"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 														addressChoiceTypeFound = true
@@ -38582,12 +26422,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																	addressChoiceInt.StaticIp.DefaultGw = v.(string)
-
-																}
-
-																if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																	addressChoiceInt.StaticIp.DnsServer = v.(string)
 
 																}
 
@@ -38624,7 +26458,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																	ls := make([]string, len(v.([]interface{})))
 																	for i, v := range v.([]interface{}) {
-																		ls[i] = v.(string)
+																		if v == nil {
+																			return fmt.Errorf("please provide valid non-empty string value of field devices")
+																		}
+																		if str, ok := v.(string); ok {
+																			ls[i] = str
+																		}
 																	}
 																	interfaceChoiceInt.BondInterface.Devices = ls
 
@@ -38836,41 +26675,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																									}
 
-																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																										networkPrefixChoiceTypeFound = true
-																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
-																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
-																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
-
-																										sl := v.([]interface{})
-																										for _, set := range sl {
-																											if set != nil {
-																												cs := set.(map[string]interface{})
-
-																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
-
-																												}
-
-																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
-
-																												}
-
-																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
-
-																												}
-
-																											}
-																										}
-
-																									}
-
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -38889,10 +26693,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
-																												}
-
-																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
-																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -39002,7 +26802,12 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																										ls := make([]string, len(v.([]interface{})))
 																										for i, v := range v.([]interface{}) {
-																											ls[i] = v.(string)
+																											if v == nil {
+																												return fmt.Errorf("please provide valid non-empty string value of field dns_list")
+																											}
+																											if str, ok := v.(string); ok {
+																												ls[i] = str
+																											}
 																										}
 																										dnsChoiceInt.ConfiguredList.DnsList = ls
 
@@ -39143,10 +26948,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
-																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
-																										interfaceIpMap[key.(string)].DnsServer = w.(string)
-																									}
-
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -39155,59 +26956,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 																									break
 																								}
 																							}
-																						}
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
-
-																	networkPrefixChoiceTypeFound = true
-																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
-																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
-																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
-
-																			}
-
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
-
-																			}
-
-																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
-																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
-
-																				for _, set := range sl {
-																					if set != nil {
-																						npaMapToStrVal := set.(map[string]interface{})
-																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Name = val.(string)
-																						}
-																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Namespace = val.(string)
-																						}
-
-																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -39237,12 +26985,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 																			}
 
-																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
-
-																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
-
-																			}
-
 																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
@@ -39259,14 +27001,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													}
 
-													if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsManagement = w.(bool)
-													}
-
-													if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-														interfaceList[i].IsPrimary = w.(bool)
-													}
-
 													if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
 														ms := map[string]string{}
 														for k, v := range w.(map[string]interface{}) {
@@ -39277,7 +27011,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 													monitoringChoiceTypeFound := false
 
-													if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+													if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 														monitoringChoiceTypeFound = true
 														monitoringChoiceInt := &ves_io_schema_views_securemesh_site_v2.Interface_Monitor{}
@@ -39439,6 +27173,52 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
+	proxyBypassChoiceTypeFound := false
+
+	if v, ok := d.GetOk("custom_proxy_bypass"); ok && !isIntfNil(v) && !proxyBypassChoiceTypeFound {
+
+		proxyBypassChoiceTypeFound = true
+		proxyBypassChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_CustomProxyBypass{}
+		proxyBypassChoiceInt.CustomProxyBypass = &ves_io_schema_views_securemesh_site_v2.CustomProxyBypassSettings{}
+		updateSpec.ProxyBypassChoice = proxyBypassChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["proxy_bypass"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field proxy_bypass")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					proxyBypassChoiceInt.CustomProxyBypass.ProxyBypass = ls
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("no_proxy_bypass"); ok && !proxyBypassChoiceTypeFound {
+
+		proxyBypassChoiceTypeFound = true
+
+		if v.(bool) {
+			proxyBypassChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_NoProxyBypass{}
+			proxyBypassChoiceInt.NoProxyBypass = &ves_io_schema.Empty{}
+			updateSpec.ProxyBypassChoice = proxyBypassChoiceInt
+		}
+
+	}
+
 	if v, ok := d.GetOk("re_select"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -39462,17 +27242,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 				}
 
-				if v, ok := reSelectMapStrToI["specific_geography"]; ok && !isIntfNil(v) && !reSelectionChoiceTypeFound {
-
-					reSelectionChoiceTypeFound = true
-					reSelectionChoiceInt := &ves_io_schema_views.RegionalEdgeSelection_SpecificGeography{}
-
-					reSelect.ReSelectionChoice = reSelectionChoiceInt
-
-					reSelectionChoiceInt.SpecificGeography = v.(string)
-
-				}
-
 				if v, ok := reSelectMapStrToI["specific_re"]; ok && !isIntfNil(v) && !reSelectionChoiceTypeFound {
 
 					reSelectionChoiceTypeFound = true
@@ -39484,12 +27253,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 					for _, set := range sl {
 						if set != nil {
 							cs := set.(map[string]interface{})
-
-							if v, ok := cs["backup_re"]; ok && !isIntfNil(v) {
-
-								reSelectionChoiceInt.SpecificRe.BackupRe = v.(string)
-
-							}
 
 							if v, ok := cs["primary_re"]; ok && !isIntfNil(v) {
 
@@ -39509,7 +27272,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	s2SConnectivitySliChoiceTypeFound := false
 
-	if v, ok := d.GetOk("dc_cluster_group_sli"); ok && !s2SConnectivitySliChoiceTypeFound {
+	if v, ok := d.GetOk("dc_cluster_group_sli"); ok && !isIntfNil(v) && !s2SConnectivitySliChoiceTypeFound {
 
 		s2SConnectivitySliChoiceTypeFound = true
 		s2SConnectivitySliChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_DcClusterGroupSli{}
@@ -39558,7 +27321,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	s2SConnectivitySloChoiceTypeFound := false
 
-	if v, ok := d.GetOk("dc_cluster_group_slo"); ok && !s2SConnectivitySloChoiceTypeFound {
+	if v, ok := d.GetOk("dc_cluster_group_slo"); ok && !isIntfNil(v) && !s2SConnectivitySloChoiceTypeFound {
 
 		s2SConnectivitySloChoiceTypeFound = true
 		s2SConnectivitySloChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_DcClusterGroupSlo{}
@@ -39605,7 +27368,7 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("site_mesh_group_on_slo"); ok && !s2SConnectivitySloChoiceTypeFound {
+	if v, ok := d.GetOk("site_mesh_group_on_slo"); ok && !isIntfNil(v) && !s2SConnectivitySloChoiceTypeFound {
 
 		s2SConnectivitySloChoiceTypeFound = true
 		s2SConnectivitySloChoiceInt := &ves_io_schema_views_securemesh_site_v2.ReplaceSpecType_SiteMeshGroupOnSlo{}
@@ -39616,55 +27379,6 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 		for _, set := range sl {
 			if set != nil {
 				cs := set.(map[string]interface{})
-
-				siteMeshGroupChoiceTypeFound := false
-
-				if v, ok := cs["no_site_mesh_group"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
-
-					siteMeshGroupChoiceTypeFound = true
-
-					if v.(bool) {
-						siteMeshGroupChoiceInt := &ves_io_schema_views_securemesh_site_v2.SiteMeshGroupType_NoSiteMeshGroup{}
-						siteMeshGroupChoiceInt.NoSiteMeshGroup = &ves_io_schema.Empty{}
-						s2SConnectivitySloChoiceInt.SiteMeshGroupOnSlo.SiteMeshGroupChoice = siteMeshGroupChoiceInt
-					}
-
-				}
-
-				if v, ok := cs["site_mesh_group"]; ok && !isIntfNil(v) && !siteMeshGroupChoiceTypeFound {
-
-					siteMeshGroupChoiceTypeFound = true
-					siteMeshGroupChoiceInt := &ves_io_schema_views_securemesh_site_v2.SiteMeshGroupType_SiteMeshGroup{}
-					siteMeshGroupChoiceInt.SiteMeshGroup = &ves_io_schema_views.ObjectRefType{}
-					s2SConnectivitySloChoiceInt.SiteMeshGroupOnSlo.SiteMeshGroupChoice = siteMeshGroupChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								siteMeshGroupChoiceInt.SiteMeshGroup.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								siteMeshGroupChoiceInt.SiteMeshGroup.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								siteMeshGroupChoiceInt.SiteMeshGroup.Tenant = v.(string)
-
-							}
-
-						}
-					}
-
-				}
 
 				siteMeshGroupIpChoiceTypeFound := false
 
@@ -39859,46 +27573,9 @@ func resourceVolterraSecuremeshSiteV2Update(d *schema.ResourceData, meta interfa
 
 										}
 
-										if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
-
-											drainMaxUnavailableChoiceTypeFound = true
-											drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
-
-											kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
-
-											drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
-
-										}
-
 										if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
 
 											kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
-
-										}
-
-										vegaUpgradeModeToggleChoiceTypeFound := false
-
-										if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
-
-											vegaUpgradeModeToggleChoiceTypeFound = true
-
-											if v.(bool) {
-												vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
-												vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
-												kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
-											}
-
-										}
-
-										if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
-
-											vegaUpgradeModeToggleChoiceTypeFound = true
-
-											if v.(bool) {
-												vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
-												vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
-												kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
-											}
 
 										}
 
@@ -39943,5 +27620,8 @@ func resourceVolterraSecuremeshSiteV2Delete(d *schema.ResourceData, meta interfa
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra SecuremeshSiteV2 obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_views_securemesh_site_v2.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_views_securemesh_site_v2.ObjectType, namespace, name, opts...)
 }

@@ -17,6 +17,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_active_sessions.ListActiveSessionsResponse"] = ListActiveSessionsResponseValidator()
 	vr["ves.io.schema.uztna.uztna_active_sessions.SessionVariable"] = SessionVariableValidator()
 
+	vr["ves.io.schema.uztna.uztna_active_sessions.TerminateSessionsRequest"] = TerminateSessionsRequestValidator()
+
 }
 
 func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
@@ -29,6 +31,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.uztna.uztna_active_sessions.ActiveSessionsAPI"] = "data"
+	sm["ves.io.schema.uztna.uztna_active_sessions.TerminateSessionsAPI"] = "bigipconnector"
 
 }
 
@@ -59,6 +62,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcGwRegisterHandlers["ves.io.schema.uztna.uztna_active_sessions.ActiveSessionsAPI"] = RegisterGwActiveSessionsAPIHandler
 		customCSR.ServerRegistry["ves.io.schema.uztna.uztna_active_sessions.ActiveSessionsAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewActiveSessionsAPIServer(svc)
+		}
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.uztna.uztna_active_sessions.Object"] = TerminateSessionsAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.uztna.uztna_active_sessions.TerminateSessionsAPI"] = NewTerminateSessionsAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.uztna.uztna_active_sessions.TerminateSessionsAPI"] = NewTerminateSessionsAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.uztna.uztna_active_sessions.TerminateSessionsAPI"] = RegisterTerminateSessionsAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.uztna.uztna_active_sessions.TerminateSessionsAPI"] = RegisterGwTerminateSessionsAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.uztna.uztna_active_sessions.TerminateSessionsAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewTerminateSessionsAPIServer(svc)
 		}
 
 	}()

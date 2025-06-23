@@ -23,21 +23,40 @@ resource "volterra_apm" "example" {
   // One of the arguments from this list "https_management" must be set
 
   https_management {
-    // One of the arguments from this list "advertise_on_internet advertise_on_internet_default_vip advertise_on_sli_vip advertise_on_slo_internet_vip advertise_on_slo_sli advertise_on_slo_vip disable_local do_not_advertise_on_internet" must be set
+    // One of the arguments from this list "advertise_on_internet advertise_on_internet_default_vip advertise_on_sli_vip advertise_on_slo_internet_vip advertise_on_slo_sli advertise_on_slo_vip" must be set
 
-    advertise_on_internet {
-      public_ip {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
+    advertise_on_slo_vip {
+      // One of the arguments from this list "no_mtls use_mtls" must be set
+
+      no_mtls = true
+
+      tls_certificates {
+        certificate_url = "value"
+
+        description = "Certificate used in production environment"
+
+        // One of the arguments from this list "custom_hash_algorithms disable_ocsp_stapling use_system_defaults" can be set
+
+        use_system_defaults {}
+        private_key {
+          // One of the arguments from this list "blindfold_secret_info clear_secret_info" must be set
+
+          clear_secret_info {
+            provider = "box-provider"
+
+            url = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+          }
+        }
+      }
+
+      tls_config {
+        // One of the arguments from this list "custom_security default_security low_security medium_security" must be set
+
+        default_security = true
       }
     }
 
     domain_suffix = "foo.com"
-
-    // One of the arguments from this list "advertise_on_public advertise_on_public_default_vip do_not_advertise" can be set
-
-    do_not_advertise = true
 
     // One of the arguments from this list "default_https_port https_port" must be set
 
@@ -49,28 +68,14 @@ resource "volterra_apm" "example" {
   aws_site_type_choice {
     apm_aws_site {
       admin_password {
-        blindfold_secret_info_internal {
+        // One of the arguments from this list "blindfold_secret_info clear_secret_info" must be set
+
+        blindfold_secret_info {
           decryption_provider = "value"
 
           location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
 
           store_provider = "value"
-        }
-
-        secret_encoding_type = "secret_encoding_type"
-
-        // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-        vault_secret_info {
-          key = "key_pem"
-
-          location = "v1/data/vhost_key"
-
-          provider = "vault-vh-provider"
-
-          secret_encoding = "secret_encoding"
-
-          version = "1"
         }
       }
 
@@ -87,7 +92,7 @@ resource "volterra_apm" "example" {
       endpoint_service {
         // One of the arguments from this list "advertise_on_slo_ip advertise_on_slo_ip_external disable_advertise_on_slo_ip" must be set
 
-        advertise_on_slo_ip = true
+        disable_advertise_on_slo_ip = true
 
         // One of the arguments from this list "automatic_vip configured_vip" must be set
 
@@ -99,7 +104,9 @@ resource "volterra_apm" "example" {
 
         // One of the arguments from this list "custom_udp_ports no_udp_ports" must be set
 
-        no_udp_ports = true
+        custom_udp_ports {
+          ports = ["100-200"]
+        }
       }
 
       nodes {
@@ -162,16 +169,6 @@ Argument Reference
 `aws_site_type_choice` - (Optional) Virtual F5 BIG-IP APM service to be deployed on AWS Transit Gateway Site. See [Site Type Choice Aws Site Type Choice ](#site-type-choice-aws-site-type-choice) below for details.
 
 `baremetal_site_type_choice` - (Optional) Virtual F5 BIG-IP APM service to be deployed on App Stack Bare Metal Site. See [Site Type Choice Baremetal Site Type Choice ](#site-type-choice-baremetal-site-type-choice) below for details.
-
-### Admin Password Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Advertise Choice Advertise On Internet
 
@@ -238,14 +235,6 @@ Enable on Site local outside network, default VIP will be used.
 `tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Advertise On Slo Vip Tls Certificates ](#advertise-on-slo-vip-tls-certificates) below for details.
 
 `tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Advertise On Slo Vip Tls Config ](#advertise-on-slo-vip-tls-config) below for details.
-
-### Advertise Choice Disable Local
-
-Disable on Site local network.
-
-### Advertise Choice Do Not Advertise On Internet
-
-Do not enable access to management from internet.
 
 ### Advertise On Sli Vip Tls Certificates
 
@@ -387,19 +376,11 @@ F5 Best Plus with all modules in 1Gbps flavor.
 
 Secret admin password for BIG-IP.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Admin Password Blindfold Secret Info Internal ](#admin-password-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Apm Aws Site Aws Tgw Site
 
@@ -503,19 +484,11 @@ Virtual BIG-IP specification for App Stack Bare Metal Site.
 
 Password of the user used to access BIG-IQ to activate the license.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Choice Custom Security
 
@@ -567,19 +540,11 @@ Do not Advertise this loadbalancer on Site Local Outside network address.
 
 Secret admin password for BIG-IP.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Admin Password Blindfold Secret Info Internal ](#admin-password-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### F5 Bare Metal Site Bigiq Instance
 
@@ -613,7 +578,7 @@ Specify how and where the service nodes are spawned.
 
 Enable HTTPS based management.
 
-###### One of the arguments from this list "advertise_on_internet, advertise_on_internet_default_vip, advertise_on_sli_vip, advertise_on_slo_internet_vip, advertise_on_slo_sli, advertise_on_slo_vip, disable_local, do_not_advertise_on_internet" must be set
+###### One of the arguments from this list "advertise_on_internet, advertise_on_internet_default_vip, advertise_on_sli_vip, advertise_on_slo_internet_vip, advertise_on_slo_sli, advertise_on_slo_vip" must be set
 
 `advertise_on_internet` - (Optional) Advertise this loadbalancer on public network. See [Advertise Choice Advertise On Internet ](#advertise-choice-advertise-on-internet) below for details.
 
@@ -627,19 +592,7 @@ Enable HTTPS based management.
 
 `advertise_on_slo_vip` - (Optional) Enable on Site local outside network, default VIP will be used. See [Advertise Choice Advertise On Slo Vip ](#advertise-choice-advertise-on-slo-vip) below for details.
 
-`disable_local` - (Optional) Disable on Site local network (`Bool`).(Deprecated)
-
-`do_not_advertise_on_internet` - (Optional) Do not enable access to management from internet (`Bool`).(Deprecated)
-
 `domain_suffix` - (Required) Domain suffix will be used along with node name to form URL to access node management (`String`).
-
-###### One of the arguments from this list "advertise_on_public, advertise_on_public_default_vip, do_not_advertise" can be set
-
-`advertise_on_public` - (Optional) Advertise this loadbalancer on public network. See [Internet Choice Advertise On Public ](#internet-choice-advertise-on-public) below for details.(Deprecated)
-
-`advertise_on_public_default_vip` - (Optional) Enable management access on internet with default VIP (`Bool`).(Deprecated)
-
-`do_not_advertise` - (Optional) Do not enable access to management from internet (`Bool`).(Deprecated)
 
 ###### One of the arguments from this list "default_https_port, https_port" must be set
 
@@ -651,27 +604,13 @@ Enable HTTPS based management.
 
 System will automatically select a VIP.
 
-### Internet Choice Advertise On Public
-
-Advertise this loadbalancer on public network.
-
-`public_ip` - (Required) Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.. See [ref](#ref) below for details.
-
-### Internet Choice Advertise On Public Default Vip
-
-Enable management access on internet with default VIP.
-
-### Internet Choice Do Not Advertise
-
-Do not enable access to management from internet.
-
 ### License Type Market Place Image
 
 Select the BIG-IP pay as you go image to be used for this service.
 
-###### One of the arguments from this list "BestPlusPayG200Mbps, best_plus_payg_1gbps" must be set
+###### One of the arguments from this list "best_plus_payg_200mbps, best_plus_payg_1gbps" must be set
 
-`BestPlusPayG200Mbps` - (Optional) F5 Best Plus with all modules in 200Mbps flavor (`Bool`).
+`best_plus_payg_200mbps` - (Optional) F5 Best Plus with all modules in 200Mbps flavor (`Bool`).
 
 `best_plus_payg_1gbps` - (Optional) F5 Best Plus with all modules in 1Gbps flavor (`Bool`).
 
@@ -751,29 +690,9 @@ This is the default behavior if no choice is selected..
 
 F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
-### Password Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
 ### Port Choice Default Https Port
 
 Select default HTTPS 443.
-
-### Private Key Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Ref
 
@@ -802,26 +721,6 @@ Clear Secret is used for the secrets that are not encrypted.
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
-
-### Secret Info Oneof Vault Secret Info
-
-Vault Secret is used for the secrets managed by Hashicorp Vault.
-
-`key` - (Optional) If not provided entire secret will be returned. (`String`).
-
-`location` - (Required) Path to secret in Vault. (`String`).
-
-`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
-
-`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
-
-`version` - (Optional) If not provided latest version will be returned. (`Int`).
-
-### Secret Info Oneof Wingman Secret Info
-
-Secret is given as bootstrap secret in F5XC Security Sidecar.
-
-`name` - (Required) Name of the secret. (`String`).
 
 ### Site Type Choice Aws Site Type Choice
 
@@ -865,19 +764,11 @@ Do not select TCP Ports.
 
 TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Private Key Blindfold Secret Info Internal ](#private-key-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Tunnel Prefix Choice Automatic Prefix
 

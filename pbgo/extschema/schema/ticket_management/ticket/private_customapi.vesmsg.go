@@ -1203,6 +1203,16 @@ func (v *ValidateTicketResponseSpec) TicketTrackingSystemValidationRuleHandler(r
 	return validatorFn, nil
 }
 
+func (v *ValidateTicketResponseSpec) AuthorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for author")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateTicketResponseSpec) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*TicketResponseSpec)
 	if !ok {
@@ -1215,6 +1225,15 @@ func (v *ValidateTicketResponseSpec) Validate(ctx context.Context, pm interface{
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["author"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("author"))
+		if err := fv(ctx, m.GetAuthor(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["external_id"]; exists {
@@ -1304,6 +1323,17 @@ var DefaultTicketResponseSpecValidator = func() *ValidateTicketResponseSpec {
 	}
 	v.FldValidators["ticket_tracking_system"] = vFn
 
+	vrhAuthor := v.AuthorValidationRuleHandler
+	rulesAuthor := map[string]string{
+		"ves.io.schema.rules.string.email": "true",
+	}
+	vFn, err = vrhAuthor(rulesAuthor)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TicketResponseSpec.author: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["author"] = vFn
+
 	return v
 }()
 
@@ -1366,6 +1396,15 @@ func (v *ValidateUnlinkTicketsRequest) Validate(ctx context.Context, pm interfac
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["service_feature"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("service_feature"))
@@ -1375,12 +1414,26 @@ func (v *ValidateUnlinkTicketsRequest) Validate(ctx context.Context, pm interfac
 
 	}
 
-	if fv, exists := v.FldValidators["ticket_uids"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("ticket_uids"))
-		for idx, item := range m.GetTicketUids() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
+	switch m.GetUnlinkChoice().(type) {
+	case *UnlinkTicketsRequest_LabelFilter:
+		if fv, exists := v.FldValidators["unlink_choice.label_filter"]; exists {
+			val := m.GetUnlinkChoice().(*UnlinkTicketsRequest_LabelFilter).LabelFilter
+			vOpts := append(opts,
+				db.WithValidateField("unlink_choice"),
+				db.WithValidateField("label_filter"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UnlinkTicketsRequest_TicketUid:
+		if fv, exists := v.FldValidators["unlink_choice.ticket_uid"]; exists {
+			val := m.GetUnlinkChoice().(*UnlinkTicketsRequest_TicketUid).TicketUid
+			vOpts := append(opts,
+				db.WithValidateField("unlink_choice"),
+				db.WithValidateField("ticket_uid"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
 		}

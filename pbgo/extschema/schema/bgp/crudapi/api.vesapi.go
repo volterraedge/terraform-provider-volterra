@@ -2782,12 +2782,17 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Peer Port\"\nx-example: 179\nPeer's port number, defaults to port 179 when not set",
                     "title": "Peer Port",
                     "format": "int64"
+                },
+                "routing_policies": {
+                    "description": "x-displayName: \"Routing policies\"\nBGP Routing policies to be applied, created policies need to be referenced with\na direction inbound or outbound and specify the node or nodes that this\npolicy applies to",
+                    "title": "routing_policies",
+                    "$ref": "#/definitions/bgpBgpRoutePolicies"
                 }
             }
         },
         "bgpBgpPeerAddressType": {
             "type": "string",
-            "description": "x-displayName: \"BGP Peer Address\"\nDictates how BGP peer address is derived\n\n - BGP_PEER_ADDRESS_FROM_DEFAULT_GW: x-displayName: \"From Default GW\"\nUse default gateway IP address of interface on which the BGP is configured as BGP peer address\n - BGP_PEER_ADDRESS_FROM_IP_ADDRESS: x-displayName: \"From IP Address\"\nUse BGP Peer Address from BGP Peer as BGP peer address\n - BGP_PEER_ADDRESS_FROM_SITE_OBJECT: x-displayName: \"From Site\"\nUse BGP Peer Address from corresponding site object as BGP peer address\n - BGP_PEER_ADDRESS_FROM_SITE_TEMPLATE_PARAMETERS: x-displayName: \"From Site Template\"\nUse BGP Peer Key from corresponding site's Site Template Parameters as BGP peer address.\nThis is not currently supported.\n - BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_BEGIN: x-displayName: \"Offset from beginning of Subnet\"\nDerive BGP Peer Address from subnet of interface on which the BGP is configured. If the interface\nhas Address Allocator configured, the offset is used to derive BGP Peer Address from the subnet\nassigned by the address allocator for the interface. When Address Allocator is not configured, the\nsubnet of the interface is used to derive BGP Peer Address.\n\nNth address in the subnet, N being the Peer Subnet Offset of the BGP Peer, is used as peer address.\nFor example, if the subnet is 1.2.3.0/24, Peer Subnet Offset is set to 5 and Peer Address Type\nis set to \"Offset from beginning of Subnet\", peer address of 1.2.3.5 is used.\n - BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_END: x-displayName: \"Offset from end of Subnet\"\nDerive BGP Peer Address from subnet of interface on which the BGP is configured. If the interface\nhas Address Allocator configured, the offset is used to derive BGP Peer Address from the subnet\nassigned by the address allocator for the interface. When Address Allocator is not configured, the\nsubnet of the interface is used to derive BGP Peer Address.\n\nNth last address in the subnet, N being the Peer Subnet Offset of the BGP Peer, is used as peer address.\nFor example, if the subnet is 1.2.3.0/24, Peer Subnet Offset is set to 5 and Peer Address Type\nis set to \"Offset from end of Subnet\", peer address of 1.2.3.250 is used.",
+            "description": "x-displayName: \"BGP Peer Address\"\nDictates how BGP peer address is derived\n\n - BGP_PEER_ADDRESS_FROM_DEFAULT_GW: x-displayName: \"From Default GW\"\nUse default gateway IP address of interface on which the BGP is configured as BGP peer address\n - BGP_PEER_ADDRESS_FROM_IP_ADDRESS: x-displayName: \"From IP Address\"\nUse BGP Peer Address from BGP Peer as BGP peer address\n - BGP_PEER_ADDRESS_FROM_SITE_OBJECT: x-displayName: \"From Site\"\nUse BGP Peer Address from corresponding site object as BGP peer address\n - BGP_PEER_ADDRESS_FROM_SITE_TEMPLATE_PARAMETERS: x-displayName: \"From Site Template\"\nUse BGP Peer Key from corresponding site's Site Template Parameters as BGP peer address.\nThis is not currently supported.\n - BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_BEGIN: x-displayName: \"Offset from beginning of Subnet\"\nDerive BGP Peer Address from subnet of interface on which the BGP is configured. If the interface\nhas Address Allocator configured, the offset is used to derive BGP Peer Address from the subnet\nassigned by the address allocator for the interface. When Address Allocator is not configured, the\nsubnet of the interface is used to derive BGP Peer Address.\n\nNth address in the subnet, N being the Peer Subnet Offset of the BGP Peer, is used as peer address.\nFor example, if the subnet is 1.2.3.0/24, Peer Subnet Offset is set to 5 and Peer Address Type\nis set to \"Offset from beginning of Subnet\", peer address of 1.2.3.5 is used.\n - BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_END: x-displayName: \"Offset from end of Subnet\"\nDerive BGP Peer Address from subnet of interface on which the BGP is configured. If the interface\nhas Address Allocator configured, the offset is used to derive BGP Peer Address from the subnet\nassigned by the address allocator for the interface. When Address Allocator is not configured, the\nsubnet of the interface is used to derive BGP Peer Address.\n\nNth last address in the subnet, N being the Peer Subnet Offset of the BGP Peer, is used as peer address.\nFor example, if the subnet is 1.2.3.0/24, Peer Subnet Offset is set to 5 and Peer Address Type\nis set to \"Offset from end of Subnet\", peer address of 1.2.3.250 is used.\n - BGP_PEER_ADDRESS_FROM_EXTERNAL_CONNECTOR: x-displayName: \"Peer address from external connector\"\nUse BGP Peer Address from External connector remote object",
             "title": "BGP Peer Address",
             "enum": [
                 "BGP_PEER_ADDRESS_FROM_DEFAULT_GW",
@@ -2795,9 +2800,29 @@ var APISwaggerJSON string = `{
                 "BGP_PEER_ADDRESS_FROM_SITE_OBJECT",
                 "BGP_PEER_ADDRESS_FROM_SITE_TEMPLATE_PARAMETERS",
                 "BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_BEGIN",
-                "BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_END"
+                "BGP_PEER_ADDRESS_OFFSET_FROM_SUBNET_END",
+                "BGP_PEER_ADDRESS_FROM_EXTERNAL_CONNECTOR"
             ],
             "default": "BGP_PEER_ADDRESS_FROM_DEFAULT_GW"
+        },
+        "bgpBgpPeerProtocolState": {
+            "type": "string",
+            "description": "Status of BGP connection to this Peer\n\nConnection state is not known\nConnection state is Idle\nConnection state is Connecting\nConnection state is Active\nConnection state is Open Sent\nConnection state is Open Confirm\nConnection state is Established\nConnection state is Clearing\nConnection state is Deleted",
+            "title": "BGP Protocol Status",
+            "enum": [
+                "Unknown",
+                "Idle",
+                "Connect",
+                "Active",
+                "OpenSent",
+                "OpenConfirm",
+                "Established",
+                "Clearing",
+                "Deleted"
+            ],
+            "default": "Unknown",
+            "x-displayname": "BGP Peer Status",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BgpPeerProtocolState"
         },
         "bgpBgpPeerStatusType": {
             "type": "object",
@@ -2858,6 +2883,12 @@ var APISwaggerJSON string = `{
                     "title": "Peer Router ID",
                     "x-displayname": "Peer Router ID"
                 },
+                "protocol_status": {
+                    "description": " Status of BGP connection to this Peer",
+                    "title": "Protocol Status",
+                    "$ref": "#/definitions/bgpBgpPeerProtocolState",
+                    "x-displayname": "Protocol Status"
+                },
                 "received_prefix_count": {
                     "type": "integer",
                     "description": " Number of prefixes received from the peer",
@@ -2891,6 +2922,56 @@ var APISwaggerJSON string = `{
             "default": "BGP_PEER_DOWN",
             "x-displayname": "BGP Peer States",
             "x-ves-proto-enum": "ves.io.schema.bgp.BgpPeerUpDownType"
+        },
+        "bgpBgpRoutePolicies": {
+            "type": "object",
+            "description": "x-displayName: \"BGP Routing Policy\"\nList of rules which can be applied on all or particular nodes",
+            "title": "BGP Routing policies",
+            "properties": {
+                "route_policy": {
+                    "type": "array",
+                    "description": "x-displayName: \"BGP Routing policy\"\nRoute policy to be applied",
+                    "title": "route_policy",
+                    "items": {
+                        "$ref": "#/definitions/bgpBgpRoutePolicy"
+                    }
+                }
+            }
+        },
+        "bgpBgpRoutePolicy": {
+            "type": "object",
+            "description": "x-displayName: \"BGP Routing Policy\"\nList of filter rules which can be applied on all or particular nodes",
+            "title": "BGP Route policy",
+            "properties": {
+                "all_nodes": {
+                    "description": "x-displayName: \"All nodes\"\nApply filter on all nodes where Peer is valid",
+                    "title": "all",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "inbound": {
+                    "description": "x-displayName: \"Inbound\"\nApply policy on routes being imported",
+                    "title": "inbound",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "node_name": {
+                    "description": "x-displayName: \"Node name\"\nSelect nodes where BGP routing policy has to be applied",
+                    "title": "node_name",
+                    "$ref": "#/definitions/bgpNodes"
+                },
+                "object_refs": {
+                    "type": "array",
+                    "description": "x-displayName: \"BGP routing policy\"\nx-required\nSelect route policy to apply.",
+                    "title": "Policy to apply",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                },
+                "outbound": {
+                    "description": "x-displayName: \"Outbound\"\nApply policy on routes being exported",
+                    "title": "outbound",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
         },
         "bgpBgpRouterIdType": {
             "type": "string",
@@ -2932,6 +3013,19 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/bgpBgpPeerStatusType"
                     },
                     "x-displayname": "BGP Peer Status"
+                },
+                "tunnel": {
+                    "type": "array",
+                    "description": " Internal reference to tunnel object corresponding to this BGP\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "External Connector Object",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "External Connector Object",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },
@@ -3148,21 +3242,49 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "bgpNodes": {
+            "type": "object",
+            "description": "x-displayName: \"Nodes\"\nList of nodes on which BGP routing policy has to be applied",
+            "title": "Nodes",
+            "properties": {
+                "node": {
+                    "type": "array",
+                    "description": "x-displayName: \"Node of choice\"\nSelect BGP Session on which policy will be applied.",
+                    "title": "Node",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "bgpPeer": {
             "type": "object",
             "description": "BGP Peer parameters",
             "title": "Peer",
             "x-displayname": "BGP Peer",
             "x-ves-displayorder": "1,2,5",
+            "x-ves-oneof-field-enable_choice": "[\"disable\"]",
             "x-ves-oneof-field-passive_choice": "[\"passive_mode_disabled\",\"passive_mode_enabled\"]",
             "x-ves-oneof-field-type_choice": "[\"external\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.Peer",
             "properties": {
+                "disable": {
+                    "description": "Exclusive with []\n Disables the BGP routing policy",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
+                },
                 "external": {
                     "description": "Exclusive with []\n External BGP peer.",
                     "title": "external",
                     "$ref": "#/definitions/bgpPeerExternal",
                     "x-displayname": "External"
+                },
+                "label": {
+                    "type": "string",
+                    "description": " Specify whether this peer should be",
+                    "title": "label",
+                    "x-displayname": "Label"
                 },
                 "metadata": {
                     "description": " Common attributes for the peer including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -3194,7 +3316,7 @@ var APISwaggerJSON string = `{
             "title": "PeerExternal",
             "x-displayname": "External BGP Peer",
             "x-ves-displayorder": "1,2,29,10,11,12,20,25",
-            "x-ves-oneof-field-address_choice": "[\"address\",\"default_gateway\",\"disable\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
+            "x-ves-oneof-field-address_choice": "[\"address\",\"default_gateway\",\"disable\",\"external_connector\",\"from_site\",\"subnet_begin_offset\",\"subnet_end_offset\"]",
             "x-ves-oneof-field-address_choice_v6": "[\"address_ipv6\",\"default_gateway_v6\",\"disable_v6\",\"from_site_v6\",\"subnet_begin_offset_v6\",\"subnet_end_offset_v6\"]",
             "x-ves-oneof-field-auth_choice": "[\"md5_auth_key\",\"no_authentication\"]",
             "x-ves-oneof-field-interface_choice": "[\"interface\",\"interface_list\"]",
@@ -3202,7 +3324,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway disable from_site subnet_begin_offset subnet_end_offset]\n Specify IPV4 peer address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [default_gateway disable external_connector from_site subnet_begin_offset subnet_end_offset]\n Specify IPV4 peer address.\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "address",
                     "x-displayname": "Peer Address",
                     "x-ves-validation-rules": {
@@ -3232,7 +3354,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [address disable from_site subnet_begin_offset subnet_end_offset]\n Use the default gateway address.",
+                    "description": "Exclusive with [address disable external_connector from_site subnet_begin_offset subnet_end_offset]\n Use the default gateway address.",
                     "title": "default_gateway",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default Gateway"
@@ -3244,7 +3366,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Default Gateway"
                 },
                 "disable": {
-                    "description": "Exclusive with [address default_gateway from_site subnet_begin_offset subnet_end_offset]\n No Peer Ipv4 Address.",
+                    "description": "Exclusive with [address default_gateway external_connector from_site subnet_begin_offset subnet_end_offset]\n No Peer Ipv4 Address.",
                     "title": "disable",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable"
@@ -3254,6 +3376,12 @@ var APISwaggerJSON string = `{
                     "title": "disable_v6",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disable"
+                },
+                "external_connector": {
+                    "description": "Exclusive with [address default_gateway disable from_site subnet_begin_offset subnet_end_offset]\n Pick Peer Address from External connector interface remote address.",
+                    "title": "external_connector",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "External connector peer"
                 },
                 "family_inet": {
                     "description": " Enable/Disable Ipv4 family of routes exchange with peer",
@@ -3268,7 +3396,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Family IPv6 Unicast"
                 },
                 "from_site": {
-                    "description": "Exclusive with [address default_gateway disable subnet_begin_offset subnet_end_offset]\n Use the address specified in the site object.",
+                    "description": "Exclusive with [address default_gateway disable external_connector subnet_begin_offset subnet_end_offset]\n Use the address specified in the site object.",
                     "title": "from_site",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Address From Site Object"
@@ -3317,7 +3445,7 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_begin_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway disable from_site subnet_end_offset]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": "Exclusive with [address default_gateway disable external_connector from_site subnet_end_offset]\n Calculate peer address using offset from the beginning of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_begin_offset",
                     "format": "int64",
                     "x-displayname": "Offset From Beginning Of Subnet",
@@ -3339,7 +3467,7 @@ var APISwaggerJSON string = `{
                 },
                 "subnet_end_offset": {
                     "type": "integer",
-                    "description": "Exclusive with [address default_gateway disable from_site subnet_begin_offset]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
+                    "description": "Exclusive with [address default_gateway disable external_connector from_site subnet_begin_offset]\n Calculate peer address using offset from the end of the subnet.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 32\n",
                     "title": "subnet_end_offset",
                     "format": "int64",
                     "x-displayname": "Offset From End Of Subnet",

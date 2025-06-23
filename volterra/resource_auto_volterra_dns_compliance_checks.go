@@ -151,6 +151,9 @@ func resourceVolterraDnsComplianceChecksCreate(d *schema.ResourceData, meta inte
 
 		disallowed_query_type_listList := []ves_io_schema_dns_compliance_checks.DisallowedQueryType{}
 		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field disallowed_query_type_list")
+			}
 			disallowed_query_type_listList = append(disallowed_query_type_listList, ves_io_schema_dns_compliance_checks.DisallowedQueryType(ves_io_schema_dns_compliance_checks.DisallowedQueryType_value[j.(string)]))
 		}
 		createSpec.DisallowedQueryTypeList = disallowed_query_type_listList
@@ -162,6 +165,9 @@ func resourceVolterraDnsComplianceChecksCreate(d *schema.ResourceData, meta inte
 
 		disallowed_resource_record_type_listList := []ves_io_schema_dns_compliance_checks.DisallowedResourceRecordType{}
 		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field disallowed_resource_record_type_list")
+			}
 			disallowed_resource_record_type_listList = append(disallowed_resource_record_type_listList, ves_io_schema_dns_compliance_checks.DisallowedResourceRecordType(ves_io_schema_dns_compliance_checks.DisallowedResourceRecordType_value[j.(string)]))
 		}
 		createSpec.DisallowedResourceRecordTypeList = disallowed_resource_record_type_listList
@@ -173,7 +179,12 @@ func resourceVolterraDnsComplianceChecksCreate(d *schema.ResourceData, meta inte
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field domain_denylist")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		createSpec.DomainDenylist = ls
 
@@ -282,6 +293,9 @@ func resourceVolterraDnsComplianceChecksUpdate(d *schema.ResourceData, meta inte
 
 		disallowed_query_type_listList := []ves_io_schema_dns_compliance_checks.DisallowedQueryType{}
 		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field disallowed_query_type_list")
+			}
 			disallowed_query_type_listList = append(disallowed_query_type_listList, ves_io_schema_dns_compliance_checks.DisallowedQueryType(ves_io_schema_dns_compliance_checks.DisallowedQueryType_value[j.(string)]))
 		}
 		updateSpec.DisallowedQueryTypeList = disallowed_query_type_listList
@@ -292,6 +306,9 @@ func resourceVolterraDnsComplianceChecksUpdate(d *schema.ResourceData, meta inte
 
 		disallowed_resource_record_type_listList := []ves_io_schema_dns_compliance_checks.DisallowedResourceRecordType{}
 		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field disallowed_resource_record_type_list")
+			}
 			disallowed_resource_record_type_listList = append(disallowed_resource_record_type_listList, ves_io_schema_dns_compliance_checks.DisallowedResourceRecordType(ves_io_schema_dns_compliance_checks.DisallowedResourceRecordType_value[j.(string)]))
 		}
 		updateSpec.DisallowedResourceRecordTypeList = disallowed_resource_record_type_listList
@@ -302,7 +319,12 @@ func resourceVolterraDnsComplianceChecksUpdate(d *schema.ResourceData, meta inte
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field domain_denylist")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		updateSpec.DomainDenylist = ls
 
@@ -334,5 +356,8 @@ func resourceVolterraDnsComplianceChecksDelete(d *schema.ResourceData, meta inte
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra DnsComplianceChecks obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_dns_compliance_checks.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_dns_compliance_checks.ObjectType, namespace, name, opts...)
 }

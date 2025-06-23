@@ -3982,12 +3982,13 @@ var APISwaggerJSON string = `{
                 },
                 "trusted_ca_url": {
                     "type": "string",
-                    "description": "Exclusive with [no_ca]\n The URL or value for trusted Server CA certificate or certificate chain\n Certificates in PEM format including the PEM headers.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
+                    "description": "Exclusive with [no_ca]\n The URL or value for trusted Server CA certificate or certificate chain\n Certificates in PEM format including the PEM headers.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.truststore_url: true\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "Server CA certificates",
                     "maxLength": 131072,
                     "x-displayname": "Server CA Certificates",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
+                        "ves.io.schema.rules.string.truststore_url": "true",
                         "ves.io.schema.rules.string.uri_ref": "true"
                     }
                 }

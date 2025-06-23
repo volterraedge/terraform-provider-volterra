@@ -544,11 +544,9 @@ var DefaultIPV4ApplicationVIPValidator = func() *ValidateIPV4ApplicationVIP {
 
 	vrhPrefix := v.PrefixValidationRuleHandler
 	rulesPrefix := map[string]string{
-		"ves.io.schema.rules.message.required":                  "true",
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
 		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
-		"ves.io.schema.rules.repeated.max_items":                "10",
-		"ves.io.schema.rules.repeated.min_items":                "1",
+		"ves.io.schema.rules.repeated.max_items":                "200",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
 	vFn, err = vrhPrefix(rulesPrefix)
@@ -769,9 +767,7 @@ var DefaultIPV6ApplicationVIPValidator = func() *ValidateIPV6ApplicationVIP {
 
 	vrhVip6Range := v.Vip6RangeValidationRuleHandler
 	rulesVip6Range := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "10",
-		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhVip6Range(rulesVip6Range)

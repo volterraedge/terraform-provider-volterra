@@ -156,7 +156,12 @@ func resourceVolterraVirtualSiteCreate(d *schema.ResourceData, meta interface{})
 				if w, ok := siteSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field expressions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					siteSelector.Expressions = ls
 				}
@@ -298,5 +303,8 @@ func resourceVolterraVirtualSiteDelete(d *schema.ResourceData, meta interface{})
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra VirtualSite obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_virtual_site.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_virtual_site.ObjectType, namespace, name, opts...)
 }

@@ -492,7 +492,7 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 
 	sourceTypeFound := false
 
-	if v, ok := d.GetOk("ip_prefix_set"); ok && !sourceTypeFound {
+	if v, ok := d.GetOk("ip_prefix_set"); ok && !isIntfNil(v) && !sourceTypeFound {
 
 		sourceTypeFound = true
 		sourceInt := &ves_io_schema_fast_acl_rule.CreateSpecType_IpPrefixSet{}
@@ -541,7 +541,7 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
-	if v, ok := d.GetOk("prefix"); ok && !sourceTypeFound {
+	if v, ok := d.GetOk("prefix"); ok && !isIntfNil(v) && !sourceTypeFound {
 
 		sourceTypeFound = true
 		sourceInt := &ves_io_schema_fast_acl_rule.CreateSpecType_Prefix{}
@@ -557,7 +557,12 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					sourceInt.Prefix.Ipv6Prefix = ls
 
@@ -567,7 +572,12 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					sourceInt.Prefix.Prefix = ls
 
@@ -856,7 +866,7 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 
 	sourceTypeFound := false
 
-	if v, ok := d.GetOk("ip_prefix_set"); ok && !sourceTypeFound {
+	if v, ok := d.GetOk("ip_prefix_set"); ok && !isIntfNil(v) && !sourceTypeFound {
 
 		sourceTypeFound = true
 		sourceInt := &ves_io_schema_fast_acl_rule.ReplaceSpecType_IpPrefixSet{}
@@ -905,7 +915,7 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 
 	}
 
-	if v, ok := d.GetOk("prefix"); ok && !sourceTypeFound {
+	if v, ok := d.GetOk("prefix"); ok && !isIntfNil(v) && !sourceTypeFound {
 
 		sourceTypeFound = true
 		sourceInt := &ves_io_schema_fast_acl_rule.ReplaceSpecType_Prefix{}
@@ -921,7 +931,12 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					sourceInt.Prefix.Ipv6Prefix = ls
 
@@ -931,7 +946,12 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					sourceInt.Prefix.Prefix = ls
 
@@ -968,5 +988,8 @@ func resourceVolterraFastAclRuleDelete(d *schema.ResourceData, meta interface{})
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra FastAclRule obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_fast_acl_rule.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_fast_acl_rule.ObjectType, namespace, name, opts...)
 }

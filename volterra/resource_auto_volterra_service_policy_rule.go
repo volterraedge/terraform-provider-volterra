@@ -159,13 +159,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							},
 						},
 
-						"presence": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
 						"name": {
 							Type:     schema.TypeString,
 							Required: true,
@@ -304,12 +297,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
-			"challenge_action": {
-				Type:       schema.TypeString,
-				Required:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-			},
-
 			"any_client": {
 
 				Type:     schema.TypeBool,
@@ -395,60 +382,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
-			"client_role": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"match": {
-							Type:       schema.TypeString,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-					},
-				},
-			},
-
-			"content_rewrite_action": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"element_selector": {
-							Type:       schema.TypeString,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"insert_content": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"inserted_types": {
-							Type:       schema.TypeMap,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"position": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-					},
-				},
-			},
-
 			"cookie_matchers": {
 
 				Type:     schema.TypeList,
@@ -514,13 +447,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							},
 						},
 
-						"presence": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
 						"name": {
 							Type:     schema.TypeString,
 							Required: true,
@@ -560,215 +486,9 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
-			"any_dst_asn": {
-
-				Type:       schema.TypeBool,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-			},
-
-			"dst_asn_list": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"as_numbers": {
-
-							Type: schema.TypeList,
-
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Schema{
-								Type: schema.TypeInt,
-							},
-						},
-					},
-				},
-			},
-
-			"dst_asn_matcher": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"asn_sets": {
-
-							Type:       schema.TypeList,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"kind": {
-										Type:       schema.TypeString,
-										Computed:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"name": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-									"namespace": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-									"tenant": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-
-			"any_dst_ip": {
-
-				Type:       schema.TypeBool,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-			},
-
-			"dst_ip_matcher": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"invert_matcher": {
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"prefix_sets": {
-
-							Type:       schema.TypeList,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"kind": {
-										Type:       schema.TypeString,
-										Computed:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"name": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-									"namespace": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-									"tenant": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-
-			"dst_ip_prefix_list": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"invert_match": {
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"ip_prefixes": {
-
-							Type: schema.TypeList,
-
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
-
-						"ipv6_prefixes": {
-
-							Type: schema.TypeList,
-
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
-					},
-				},
-			},
-
 			"expiration_timestamp": {
 				Type:     schema.TypeString,
 				Optional: true,
-			},
-
-			"goto_policy": {
-
-				Type:       schema.TypeList,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"kind": {
-							Type:       schema.TypeString,
-							Computed:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"name": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"namespace": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"tenant": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-					},
-				},
 			},
 
 			"headers": {
@@ -834,13 +554,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 									},
 								},
 							},
-						},
-
-						"presence": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"name": {
@@ -963,32 +676,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
-			"ip_reputation_action": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"default": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"skip_processing": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-					},
-				},
-			},
-
 			"jwt_claims": {
 
 				Type:     schema.TypeList,
@@ -1104,12 +791,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 						},
 					},
 				},
-			},
-
-			"origin_server_subsets_action": {
-				Type:       schema.TypeMap,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"path": {
@@ -1272,46 +953,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 									},
 								},
 							},
-						},
-
-						"presence": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-					},
-				},
-			},
-
-			"rate_limiter": {
-
-				Type:       schema.TypeList,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"kind": {
-							Type:       schema.TypeString,
-							Computed:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"name": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"namespace": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"tenant": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -1484,17 +1125,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
-			"scheme": {
-
-				Type: schema.TypeList,
-
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Schema{
-					Type: schema.TypeString,
-				},
-			},
-
 			"segment_policy": {
 
 				Type:     schema.TypeList,
@@ -1602,255 +1232,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 				},
 			},
 
-			"server_selector": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"expressions": {
-
-							Type: schema.TypeList,
-
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
-					},
-				},
-			},
-
-			"shape_protected_endpoint_action": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"allow_goodbot": {
-							Type:       schema.TypeBool,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"app_traffic_type": {
-							Type:       schema.TypeString,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"flow_label": {
-							Type:       schema.TypeString,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"mitigation": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"block": {
-
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"body": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"body_hash": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"status": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-
-									"flag": {
-
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"append_headers": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"auto_type_header_name": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"inference_header_name": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-														},
-													},
-												},
-
-												"no_headers": {
-
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-
-									"none": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"redirect": {
-
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"uri": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"transaction_result": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"failure_conditions": {
-
-										Type:       schema.TypeList,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"name": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"regex_values": {
-
-													Type: schema.TypeList,
-
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
-												},
-
-												"status": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-
-									"success_conditions": {
-
-										Type:       schema.TypeList,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"name": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"regex_values": {
-
-													Type: schema.TypeList,
-
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
-												},
-
-												"status": {
-													Type:       schema.TypeString,
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"web_scraping": {
-							Type:       schema.TypeBool,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-					},
-				},
-			},
-
 			"ja4_tls_fingerprint": {
 
 				Type:     schema.TypeList,
@@ -1905,104 +1286,6 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							Type: schema.TypeList,
 
 							Optional: true,
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
-					},
-				},
-			},
-
-			"url_matcher": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"invert_matcher": {
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"url_items": {
-
-							Type:       schema.TypeList,
-							Required:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"domain_regex": {
-
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"domain_value": {
-
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"path_prefix": {
-
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"path_regex": {
-
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"path_value": {
-
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-								},
-							},
-						},
-					},
-				},
-			},
-
-			"virtual_host_matcher": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"exact_values": {
-
-							Type: schema.TypeList,
-
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
-
-						"regex_values": {
-
-							Type: schema.TypeList,
-
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Schema{
 								Type: schema.TypeString,
 							},
@@ -2120,49 +1403,10 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 							},
 						},
 
-						"data_guard_control": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"policy_name": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-								},
-							},
-						},
-
-						"jwt_claims_validation": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"jwt_validation": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
 						"none": {
 
 							Type:     schema.TypeBool,
 							Optional: true,
-						},
-
-						"waf_in_monitoring_mode": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"waf_skip_processing": {
@@ -2254,7 +1498,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				if w, ok := apiGroupMatcherMapStrToI["match"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field match")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					apiGroupMatcher.Match = ls
 				}
@@ -2321,7 +1570,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.ExactValues = ls
 
@@ -2331,7 +1585,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.RegexValues = ls
 
@@ -2341,6 +1600,9 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								transformersList := []ves_io_schema_policy.Transformer{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+									}
 									transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 								}
 								matchInt.Item.Transformers = transformersList
@@ -2349,17 +1611,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 						}
 					}
-
-				}
-
-				if v, ok := argMatchersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
-
-					matchTypeFound = true
-					matchInt := &ves_io_schema_policy.ArgMatcherType_Presence{}
-
-					argMatchers[i].Match = matchInt
-
-					matchInt.Presence = v.(bool)
 
 				}
 
@@ -2388,7 +1639,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("asn_list"); ok && !asnChoiceTypeFound {
+	if v, ok := d.GetOk("asn_list"); ok && !isIntfNil(v) && !asnChoiceTypeFound {
 
 		asnChoiceTypeFound = true
 		asnChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_AsnList{}
@@ -2415,7 +1666,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("asn_matcher"); ok && !asnChoiceTypeFound {
+	if v, ok := d.GetOk("asn_matcher"); ok && !isIntfNil(v) && !asnChoiceTypeFound {
 
 		asnChoiceTypeFound = true
 		asnChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_AsnMatcher{}
@@ -2477,7 +1728,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				if w, ok := bodyMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					bodyMatcher.ExactValues = ls
 				}
@@ -2485,7 +1741,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				if w, ok := bodyMatcherMapStrToI["regex_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					bodyMatcher.RegexValues = ls
 				}
@@ -2494,6 +1755,9 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					transformersList := []ves_io_schema_policy.Transformer{}
 					for _, j := range v.([]interface{}) {
+						if j == nil {
+							return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+						}
 						transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 					}
 					bodyMatcher.Transformers = transformersList
@@ -2546,13 +1810,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	//challenge_action
-	if v, ok := d.GetOk("challenge_action"); ok && !isIntfNil(v) {
-
-		createSpec.ChallengeAction = ves_io_schema_policy.ChallengeAction(ves_io_schema_policy.ChallengeAction_value[v.(string)])
-
-	}
-
 	//client_choice
 
 	clientChoiceTypeFound := false
@@ -2569,7 +1826,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("client_name"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("client_name"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_ClientName{}
@@ -2580,7 +1837,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("client_name_matcher"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("client_name_matcher"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_ClientNameMatcher{}
@@ -2596,7 +1853,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					clientChoiceInt.ClientNameMatcher.ExactValues = ls
 
@@ -2606,7 +1868,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					clientChoiceInt.ClientNameMatcher.RegexValues = ls
 
@@ -2617,7 +1884,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("client_selector"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("client_selector"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_ClientSelector{}
@@ -2633,7 +1900,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field expressions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					clientChoiceInt.ClientSelector.Expressions = ls
 
@@ -2644,7 +1916,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("ip_threat_category_list"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("ip_threat_category_list"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_IpThreatCategoryList{}
@@ -2660,65 +1932,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
 					for _, j := range v.([]interface{}) {
+						if j == nil {
+							return fmt.Errorf("please provide valid non-empty enum value of field ip_threat_categories")
+						}
 						ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
 					}
 					clientChoiceInt.IpThreatCategoryList.IpThreatCategories = ip_threat_categoriesList
-
-				}
-
-			}
-		}
-
-	}
-
-	//client_role
-	if v, ok := d.GetOk("client_role"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		clientRole := &ves_io_schema_policy.RoleMatcherType{}
-		createSpec.ClientRole = clientRole
-		for _, set := range sl {
-			if set != nil {
-				clientRoleMapStrToI := set.(map[string]interface{})
-
-				if w, ok := clientRoleMapStrToI["match"]; ok && !isIntfNil(w) {
-					clientRole.Match = w.(string)
-				}
-
-			}
-		}
-
-	}
-
-	//content_rewrite_action
-	if v, ok := d.GetOk("content_rewrite_action"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		contentRewriteAction := &ves_io_schema_policy.ContentRewriteAction{}
-		createSpec.ContentRewriteAction = contentRewriteAction
-		for _, set := range sl {
-			if set != nil {
-				contentRewriteActionMapStrToI := set.(map[string]interface{})
-
-				if w, ok := contentRewriteActionMapStrToI["element_selector"]; ok && !isIntfNil(w) {
-					contentRewriteAction.ElementSelector = w.(string)
-				}
-
-				if w, ok := contentRewriteActionMapStrToI["insert_content"]; ok && !isIntfNil(w) {
-					contentRewriteAction.InsertContent = w.(string)
-				}
-
-				if w, ok := contentRewriteActionMapStrToI["inserted_types"]; ok && !isIntfNil(w) {
-					ms := map[string]bool{}
-					for k, v := range w.(map[string]interface{}) {
-						ms[k] = v.(bool)
-					}
-					contentRewriteAction.InsertedTypes = ms
-				}
-
-				if v, ok := contentRewriteActionMapStrToI["position"]; ok && !isIntfNil(v) {
-
-					contentRewriteAction.Position = ves_io_schema_policy.HTMLPosition(ves_io_schema_policy.HTMLPosition_value[v.(string)])
 
 				}
 
@@ -2784,7 +2003,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.ExactValues = ls
 
@@ -2794,7 +2018,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.RegexValues = ls
 
@@ -2804,6 +2033,9 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								transformersList := []ves_io_schema_policy.Transformer{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+									}
 									transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 								}
 								matchInt.Item.Transformers = transformersList
@@ -2812,17 +2044,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 						}
 					}
-
-				}
-
-				if v, ok := cookieMatchersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
-
-					matchTypeFound = true
-					matchInt := &ves_io_schema_policy.CookieMatcherType_Presence{}
-
-					cookieMatchers[i].Match = matchInt
-
-					matchInt.Presence = v.(bool)
 
 				}
 
@@ -2848,7 +2069,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				if w, ok := domainMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					domainMatcher.ExactValues = ls
 				}
@@ -2856,215 +2082,14 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				if w, ok := domainMatcherMapStrToI["regex_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					domainMatcher.RegexValues = ls
-				}
-
-			}
-		}
-
-	}
-
-	//dst_asn_choice
-
-	dstAsnChoiceTypeFound := false
-
-	if v, ok := d.GetOk("any_dst_asn"); ok && !dstAsnChoiceTypeFound {
-
-		dstAsnChoiceTypeFound = true
-
-		if v.(bool) {
-			dstAsnChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_AnyDstAsn{}
-			dstAsnChoiceInt.AnyDstAsn = &ves_io_schema.Empty{}
-			createSpec.DstAsnChoice = dstAsnChoiceInt
-		}
-
-	}
-
-	if v, ok := d.GetOk("dst_asn_list"); ok && !dstAsnChoiceTypeFound {
-
-		dstAsnChoiceTypeFound = true
-		dstAsnChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_DstAsnList{}
-		dstAsnChoiceInt.DstAsnList = &ves_io_schema_policy.AsnMatchList{}
-		createSpec.DstAsnChoice = dstAsnChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
-
-					ls := make([]uint32, len(v.([]interface{})))
-					for i, v := range v.([]interface{}) {
-						ls[i] = uint32(v.(int))
-					}
-					dstAsnChoiceInt.DstAsnList.AsNumbers = ls
-
-				}
-
-			}
-		}
-
-	}
-
-	if v, ok := d.GetOk("dst_asn_matcher"); ok && !dstAsnChoiceTypeFound {
-
-		dstAsnChoiceTypeFound = true
-		dstAsnChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_DstAsnMatcher{}
-		dstAsnChoiceInt.DstAsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
-		createSpec.DstAsnChoice = dstAsnChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-					dstAsnChoiceInt.DstAsnMatcher.AsnSets = asnSetsInt
-					for i, ps := range sl {
-
-						asMapToStrVal := ps.(map[string]interface{})
-						asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
-
-						asnSetsInt[i].Kind = "bgp_asn_set"
-
-						if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
-							asnSetsInt[i].Name = v.(string)
-						}
-
-						if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							asnSetsInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							asnSetsInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							asnSetsInt[i].Uid = v.(string)
-						}
-
-					}
-
-				}
-
-			}
-		}
-
-	}
-
-	//dst_ip_choice
-
-	dstIpChoiceTypeFound := false
-
-	if v, ok := d.GetOk("any_dst_ip"); ok && !dstIpChoiceTypeFound {
-
-		dstIpChoiceTypeFound = true
-
-		if v.(bool) {
-			dstIpChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_AnyDstIp{}
-			dstIpChoiceInt.AnyDstIp = &ves_io_schema.Empty{}
-			createSpec.DstIpChoice = dstIpChoiceInt
-		}
-
-	}
-
-	if v, ok := d.GetOk("dst_ip_matcher"); ok && !dstIpChoiceTypeFound {
-
-		dstIpChoiceTypeFound = true
-		dstIpChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_DstIpMatcher{}
-		dstIpChoiceInt.DstIpMatcher = &ves_io_schema_policy.IpMatcherType{}
-		createSpec.DstIpChoice = dstIpChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
-
-					dstIpChoiceInt.DstIpMatcher.InvertMatcher = v.(bool)
-
-				}
-
-				if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-					dstIpChoiceInt.DstIpMatcher.PrefixSets = prefixSetsInt
-					for i, ps := range sl {
-
-						psMapToStrVal := ps.(map[string]interface{})
-						prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
-
-						prefixSetsInt[i].Kind = "ip_prefix_set"
-
-						if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
-							prefixSetsInt[i].Name = v.(string)
-						}
-
-						if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							prefixSetsInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							prefixSetsInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							prefixSetsInt[i].Uid = v.(string)
-						}
-
-					}
-
-				}
-
-			}
-		}
-
-	}
-
-	if v, ok := d.GetOk("dst_ip_prefix_list"); ok && !dstIpChoiceTypeFound {
-
-		dstIpChoiceTypeFound = true
-		dstIpChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_DstIpPrefixList{}
-		dstIpChoiceInt.DstIpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
-		createSpec.DstIpChoice = dstIpChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
-
-					dstIpChoiceInt.DstIpPrefixList.InvertMatch = v.(bool)
-
-				}
-
-				if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
-
-					ls := make([]string, len(v.([]interface{})))
-					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					dstIpChoiceInt.DstIpPrefixList.IpPrefixes = ls
-
-				}
-
-				if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-					ls := make([]string, len(v.([]interface{})))
-					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					dstIpChoiceInt.DstIpPrefixList.Ipv6Prefixes = ls
-
 				}
 
 			}
@@ -3080,39 +2105,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 			return fmt.Errorf("error creating ServicePolicyRule, timestamp format is wrong: %s", err)
 		}
 		createSpec.ExpirationTimestamp = ts
-
-	}
-
-	//goto_policy
-	if v, ok := d.GetOk("goto_policy"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		gotoPolicyInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		createSpec.GotoPolicy = gotoPolicyInt
-		for i, ps := range sl {
-
-			gpMapToStrVal := ps.(map[string]interface{})
-			gotoPolicyInt[i] = &ves_io_schema.ObjectRefType{}
-
-			gotoPolicyInt[i].Kind = "service_policy"
-
-			if v, ok := gpMapToStrVal["name"]; ok && !isIntfNil(v) {
-				gotoPolicyInt[i].Name = v.(string)
-			}
-
-			if v, ok := gpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				gotoPolicyInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := gpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				gotoPolicyInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := gpMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				gotoPolicyInt[i].Uid = v.(string)
-			}
-
-		}
 
 	}
 
@@ -3173,7 +2165,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.ExactValues = ls
 
@@ -3183,7 +2180,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.RegexValues = ls
 
@@ -3193,6 +2195,9 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								transformersList := []ves_io_schema_policy.Transformer{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+									}
 									transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 								}
 								matchInt.Item.Transformers = transformersList
@@ -3201,17 +2206,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 						}
 					}
-
-				}
-
-				if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
-
-					matchTypeFound = true
-					matchInt := &ves_io_schema_policy.HeaderMatcherType_Presence{}
-
-					headers[i].Match = matchInt
-
-					matchInt.Presence = v.(bool)
 
 				}
 
@@ -3242,6 +2236,9 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					methodsList := []ves_io_schema.HttpMethod{}
 					for _, j := range v.([]interface{}) {
+						if j == nil {
+							return fmt.Errorf("please provide valid non-empty enum value of field methods")
+						}
 						methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
 					}
 					httpMethod.Methods = methodsList
@@ -3269,7 +2266,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("ip_matcher"); ok && !ipChoiceTypeFound {
+	if v, ok := d.GetOk("ip_matcher"); ok && !isIntfNil(v) && !ipChoiceTypeFound {
 
 		ipChoiceTypeFound = true
 		ipChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_IpMatcher{}
@@ -3324,7 +2321,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("ip_prefix_list"); ok && !ipChoiceTypeFound {
+	if v, ok := d.GetOk("ip_prefix_list"); ok && !isIntfNil(v) && !ipChoiceTypeFound {
 
 		ipChoiceTypeFound = true
 		ipChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_IpPrefixList{}
@@ -3346,7 +2343,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ipChoiceInt.IpPrefixList.IpPrefixes = ls
 
@@ -3356,50 +2358,14 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
-
-				}
-
-			}
-		}
-
-	}
-
-	//ip_reputation_action
-	if v, ok := d.GetOk("ip_reputation_action"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		ipReputationAction := &ves_io_schema_policy.ModifyAction{}
-		createSpec.IpReputationAction = ipReputationAction
-		for _, set := range sl {
-			if set != nil {
-				ipReputationActionMapStrToI := set.(map[string]interface{})
-
-				actionTypeTypeFound := false
-
-				if v, ok := ipReputationActionMapStrToI["default"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-					actionTypeTypeFound = true
-
-					if v.(bool) {
-						actionTypeInt := &ves_io_schema_policy.ModifyAction_Default{}
-						actionTypeInt.Default = &ves_io_schema.Empty{}
-						ipReputationAction.ActionType = actionTypeInt
-					}
-
-				}
-
-				if v, ok := ipReputationActionMapStrToI["skip_processing"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-					actionTypeTypeFound = true
-
-					if v.(bool) {
-						actionTypeInt := &ves_io_schema_policy.ModifyAction_SkipProcessing{}
-						actionTypeInt.SkipProcessing = &ves_io_schema.Empty{}
-						ipReputationAction.ActionType = actionTypeInt
-					}
 
 				}
 
@@ -3465,7 +2431,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.ExactValues = ls
 
@@ -3475,7 +2446,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.RegexValues = ls
 
@@ -3485,6 +2461,9 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								transformersList := []ves_io_schema_policy.Transformer{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+									}
 									transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 								}
 								matchInt.Item.Transformers = transformersList
@@ -3518,7 +2497,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field keys")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					labelMatcher.Keys = ls
 				}
@@ -3569,16 +2553,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	//origin_server_subsets_action
-	if v, ok := d.GetOk("origin_server_subsets_action"); ok && !isIntfNil(v) {
-
-		ms := map[string]string{}
-		for k, v := range v.(map[string]interface{}) {
-			ms[k] = v.(string)
-		}
-		createSpec.OriginServerSubsetsAction = ms
-	}
-
 	//path
 	if v, ok := d.GetOk("path"); ok && !isIntfNil(v) {
 
@@ -3592,7 +2566,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				if w, ok := pathMapStrToI["exact_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					path.ExactValues = ls
 				}
@@ -3604,7 +2583,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				if w, ok := pathMapStrToI["prefix_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					path.PrefixValues = ls
 				}
@@ -3612,7 +2596,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				if w, ok := pathMapStrToI["regex_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					path.RegexValues = ls
 				}
@@ -3620,7 +2609,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				if w, ok := pathMapStrToI["suffix_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field suffix_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					path.SuffixValues = ls
 				}
@@ -3629,6 +2623,9 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					transformersList := []ves_io_schema_policy.Transformer{}
 					for _, j := range v.([]interface{}) {
+						if j == nil {
+							return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+						}
 						transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 					}
 					path.Transformers = transformersList
@@ -3657,7 +2654,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 				if w, ok := portMatcherMapStrToI["ports"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ports")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					portMatcher.Ports = ls
 				}
@@ -3728,7 +2730,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.ExactValues = ls
 
@@ -3738,7 +2745,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.RegexValues = ls
 
@@ -3748,6 +2760,9 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 								transformersList := []ves_io_schema_policy.Transformer{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+									}
 									transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 								}
 								matchInt.Item.Transformers = transformersList
@@ -3759,51 +2774,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 				}
 
-				if v, ok := queryParamsMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
-
-					matchTypeFound = true
-					matchInt := &ves_io_schema_policy.QueryParameterMatcherType_Presence{}
-
-					queryParams[i].Match = matchInt
-
-					matchInt.Presence = v.(bool)
-
-				}
-
 			}
-		}
-
-	}
-
-	//rate_limiter
-	if v, ok := d.GetOk("rate_limiter"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		rateLimiterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		createSpec.RateLimiter = rateLimiterInt
-		for i, ps := range sl {
-
-			rlMapToStrVal := ps.(map[string]interface{})
-			rateLimiterInt[i] = &ves_io_schema.ObjectRefType{}
-
-			rateLimiterInt[i].Kind = "rate_limiter"
-
-			if v, ok := rlMapToStrVal["name"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Name = v.(string)
-			}
-
-			if v, ok := rlMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := rlMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := rlMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -4148,17 +3119,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	//scheme
-	if v, ok := d.GetOk("scheme"); ok && !isIntfNil(v) {
-
-		ls := make([]string, len(v.([]interface{})))
-		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
-		}
-		createSpec.Scheme = ls
-
-	}
-
 	//segment_policy
 	if v, ok := d.GetOk("segment_policy"); ok && !isIntfNil(v) {
 
@@ -4300,293 +3260,11 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	//server_selector
-	if v, ok := d.GetOk("server_selector"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		serverSelector := &ves_io_schema.LabelSelectorType{}
-		createSpec.ServerSelector = serverSelector
-		for _, set := range sl {
-			if set != nil {
-				serverSelectorMapStrToI := set.(map[string]interface{})
-
-				if w, ok := serverSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
-					ls := make([]string, len(w.([]interface{})))
-					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					serverSelector.Expressions = ls
-				}
-
-			}
-		}
-
-	}
-
-	//shape_protected_endpoint_action
-	if v, ok := d.GetOk("shape_protected_endpoint_action"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		shapeProtectedEndpointAction := &ves_io_schema_policy.ShapeProtectedEndpointAction{}
-		createSpec.ShapeProtectedEndpointAction = shapeProtectedEndpointAction
-		for _, set := range sl {
-			if set != nil {
-				shapeProtectedEndpointActionMapStrToI := set.(map[string]interface{})
-
-				if w, ok := shapeProtectedEndpointActionMapStrToI["allow_goodbot"]; ok && !isIntfNil(w) {
-					shapeProtectedEndpointAction.AllowGoodbot = w.(bool)
-				}
-
-				if v, ok := shapeProtectedEndpointActionMapStrToI["app_traffic_type"]; ok && !isIntfNil(v) {
-
-					shapeProtectedEndpointAction.AppTrafficType = ves_io_schema_policy.AppTrafficType(ves_io_schema_policy.AppTrafficType_value[v.(string)])
-
-				}
-
-				if w, ok := shapeProtectedEndpointActionMapStrToI["flow_label"]; ok && !isIntfNil(w) {
-					shapeProtectedEndpointAction.FlowLabel = w.(string)
-				}
-
-				if v, ok := shapeProtectedEndpointActionMapStrToI["mitigation"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					mitigation := &ves_io_schema_policy.ShapeBotMitigationAction{}
-					shapeProtectedEndpointAction.Mitigation = mitigation
-					for _, set := range sl {
-						if set != nil {
-							mitigationMapStrToI := set.(map[string]interface{})
-
-							actionTypeTypeFound := false
-
-							if v, ok := mitigationMapStrToI["block"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-								actionTypeTypeFound = true
-								actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Block{}
-								actionTypeInt.Block = &ves_io_schema_policy.ShapeBotBlockMitigationActionType{}
-								mitigation.ActionType = actionTypeInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["body"]; ok && !isIntfNil(v) {
-
-											actionTypeInt.Block.Body = v.(string)
-
-										}
-
-										if v, ok := cs["body_hash"]; ok && !isIntfNil(v) {
-
-											actionTypeInt.Block.BodyHash = v.(string)
-
-										}
-
-										if v, ok := cs["status"]; ok && !isIntfNil(v) {
-
-											actionTypeInt.Block.Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-								actionTypeTypeFound = true
-								actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
-								actionTypeInt.Flag = &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType{}
-								mitigation.ActionType = actionTypeInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										sendHeadersChoiceTypeFound := false
-
-										if v, ok := cs["append_headers"]; ok && !isIntfNil(v) && !sendHeadersChoiceTypeFound {
-
-											sendHeadersChoiceTypeFound = true
-											sendHeadersChoiceInt := &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType_AppendHeaders{}
-											sendHeadersChoiceInt.AppendHeaders = &ves_io_schema_policy.ShapeBotFlagMitigationActionType{}
-											actionTypeInt.Flag.SendHeadersChoice = sendHeadersChoiceInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["auto_type_header_name"]; ok && !isIntfNil(v) {
-
-														sendHeadersChoiceInt.AppendHeaders.AutoTypeHeaderName = v.(string)
-
-													}
-
-													if v, ok := cs["inference_header_name"]; ok && !isIntfNil(v) {
-
-														sendHeadersChoiceInt.AppendHeaders.InferenceHeaderName = v.(string)
-
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := cs["no_headers"]; ok && !isIntfNil(v) && !sendHeadersChoiceTypeFound {
-
-											sendHeadersChoiceTypeFound = true
-
-											if v.(bool) {
-												sendHeadersChoiceInt := &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType_NoHeaders{}
-												sendHeadersChoiceInt.NoHeaders = &ves_io_schema.Empty{}
-												actionTypeInt.Flag.SendHeadersChoice = sendHeadersChoiceInt
-											}
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := mitigationMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-								actionTypeTypeFound = true
-
-								if v.(bool) {
-									actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_None{}
-									actionTypeInt.None = &ves_io_schema.Empty{}
-									mitigation.ActionType = actionTypeInt
-								}
-
-							}
-
-							if v, ok := mitigationMapStrToI["redirect"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-								actionTypeTypeFound = true
-								actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Redirect{}
-								actionTypeInt.Redirect = &ves_io_schema_policy.ShapeBotRedirectMitigationActionType{}
-								mitigation.ActionType = actionTypeInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["uri"]; ok && !isIntfNil(v) {
-
-											actionTypeInt.Redirect.Uri = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
-						}
-					}
-
-				}
-
-				if v, ok := shapeProtectedEndpointActionMapStrToI["transaction_result"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					transactionResult := &ves_io_schema.BotDefenseTransactionResultType{}
-					shapeProtectedEndpointAction.TransactionResult = transactionResult
-					for _, set := range sl {
-						if set != nil {
-							transactionResultMapStrToI := set.(map[string]interface{})
-
-							if v, ok := transactionResultMapStrToI["failure_conditions"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								failureConditions := make([]*ves_io_schema.BotDefenseTransactionResultCondition, len(sl))
-								transactionResult.FailureConditions = failureConditions
-								for i, set := range sl {
-									if set != nil {
-										failureConditions[i] = &ves_io_schema.BotDefenseTransactionResultCondition{}
-										failureConditionsMapStrToI := set.(map[string]interface{})
-
-										if w, ok := failureConditionsMapStrToI["name"]; ok && !isIntfNil(w) {
-											failureConditions[i].Name = w.(string)
-										}
-
-										if w, ok := failureConditionsMapStrToI["regex_values"]; ok && !isIntfNil(w) {
-											ls := make([]string, len(w.([]interface{})))
-											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
-											}
-											failureConditions[i].RegexValues = ls
-										}
-
-										if v, ok := failureConditionsMapStrToI["status"]; ok && !isIntfNil(v) {
-
-											failureConditions[i].Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := transactionResultMapStrToI["success_conditions"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								successConditions := make([]*ves_io_schema.BotDefenseTransactionResultCondition, len(sl))
-								transactionResult.SuccessConditions = successConditions
-								for i, set := range sl {
-									if set != nil {
-										successConditions[i] = &ves_io_schema.BotDefenseTransactionResultCondition{}
-										successConditionsMapStrToI := set.(map[string]interface{})
-
-										if w, ok := successConditionsMapStrToI["name"]; ok && !isIntfNil(w) {
-											successConditions[i].Name = w.(string)
-										}
-
-										if w, ok := successConditionsMapStrToI["regex_values"]; ok && !isIntfNil(w) {
-											ls := make([]string, len(w.([]interface{})))
-											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
-											}
-											successConditions[i].RegexValues = ls
-										}
-
-										if v, ok := successConditionsMapStrToI["status"]; ok && !isIntfNil(v) {
-
-											successConditions[i].Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
-
-										}
-
-									}
-								}
-
-							}
-
-						}
-					}
-
-				}
-
-				if w, ok := shapeProtectedEndpointActionMapStrToI["web_scraping"]; ok && !isIntfNil(w) {
-					shapeProtectedEndpointAction.WebScraping = w.(bool)
-				}
-
-			}
-		}
-
-	}
-
 	//tls_fingerprint_choice
 
 	tlsFingerprintChoiceTypeFound := false
 
-	if v, ok := d.GetOk("ja4_tls_fingerprint"); ok && !tlsFingerprintChoiceTypeFound {
+	if v, ok := d.GetOk("ja4_tls_fingerprint"); ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
 
 		tlsFingerprintChoiceTypeFound = true
 		tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_Ja4TlsFingerprint{}
@@ -4602,7 +3280,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					tlsFingerprintChoiceInt.Ja4TlsFingerprint.ExactValues = ls
 
@@ -4613,7 +3296,7 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("tls_fingerprint_matcher"); ok && !tlsFingerprintChoiceTypeFound {
+	if v, ok := d.GetOk("tls_fingerprint_matcher"); ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
 
 		tlsFingerprintChoiceTypeFound = true
 		tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.CreateSpecType_TlsFingerprintMatcher{}
@@ -4629,6 +3312,9 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
 					for _, j := range v.([]interface{}) {
+						if j == nil {
+							return fmt.Errorf("please provide valid non-empty enum value of field classes")
+						}
 						classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
 					}
 					tlsFingerprintChoiceInt.TlsFingerprintMatcher.Classes = classesList
@@ -4639,7 +3325,12 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExactValues = ls
 
@@ -4649,134 +3340,15 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field excluded_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExcludedValues = ls
 
-				}
-
-			}
-		}
-
-	}
-
-	//url_matcher
-	if v, ok := d.GetOk("url_matcher"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		urlMatcher := &ves_io_schema_policy.URLMatcherType{}
-		createSpec.UrlMatcher = urlMatcher
-		for _, set := range sl {
-			if set != nil {
-				urlMatcherMapStrToI := set.(map[string]interface{})
-
-				if w, ok := urlMatcherMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
-					urlMatcher.InvertMatcher = w.(bool)
-				}
-
-				if v, ok := urlMatcherMapStrToI["url_items"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					urlItems := make([]*ves_io_schema_policy.URLItem, len(sl))
-					urlMatcher.UrlItems = urlItems
-					for i, set := range sl {
-						if set != nil {
-							urlItems[i] = &ves_io_schema_policy.URLItem{}
-							urlItemsMapStrToI := set.(map[string]interface{})
-
-							domainChoiceTypeFound := false
-
-							if v, ok := urlItemsMapStrToI["domain_regex"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-								domainChoiceTypeFound = true
-								domainChoiceInt := &ves_io_schema_policy.URLItem_DomainRegex{}
-
-								urlItems[i].DomainChoice = domainChoiceInt
-
-								domainChoiceInt.DomainRegex = v.(string)
-
-							}
-
-							if v, ok := urlItemsMapStrToI["domain_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-								domainChoiceTypeFound = true
-								domainChoiceInt := &ves_io_schema_policy.URLItem_DomainValue{}
-
-								urlItems[i].DomainChoice = domainChoiceInt
-
-								domainChoiceInt.DomainValue = v.(string)
-
-							}
-
-							pathChoiceTypeFound := false
-
-							if v, ok := urlItemsMapStrToI["path_prefix"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-								pathChoiceTypeFound = true
-								pathChoiceInt := &ves_io_schema_policy.URLItem_PathPrefix{}
-
-								urlItems[i].PathChoice = pathChoiceInt
-
-								pathChoiceInt.PathPrefix = v.(string)
-
-							}
-
-							if v, ok := urlItemsMapStrToI["path_regex"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-								pathChoiceTypeFound = true
-								pathChoiceInt := &ves_io_schema_policy.URLItem_PathRegex{}
-
-								urlItems[i].PathChoice = pathChoiceInt
-
-								pathChoiceInt.PathRegex = v.(string)
-
-							}
-
-							if v, ok := urlItemsMapStrToI["path_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-								pathChoiceTypeFound = true
-								pathChoiceInt := &ves_io_schema_policy.URLItem_PathValue{}
-
-								urlItems[i].PathChoice = pathChoiceInt
-
-								pathChoiceInt.PathValue = v.(string)
-
-							}
-
-						}
-					}
-
-				}
-
-			}
-		}
-
-	}
-
-	//virtual_host_matcher
-	if v, ok := d.GetOk("virtual_host_matcher"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		virtualHostMatcher := &ves_io_schema_policy.MatcherTypeBasic{}
-		createSpec.VirtualHostMatcher = virtualHostMatcher
-		for _, set := range sl {
-			if set != nil {
-				virtualHostMatcherMapStrToI := set.(map[string]interface{})
-
-				if w, ok := virtualHostMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
-					ls := make([]string, len(w.([]interface{})))
-					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					virtualHostMatcher.ExactValues = ls
-				}
-
-				if w, ok := virtualHostMatcherMapStrToI["regex_values"]; ok && !isIntfNil(w) {
-					ls := make([]string, len(w.([]interface{})))
-					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					virtualHostMatcher.RegexValues = ls
 				}
 
 			}
@@ -4923,53 +3495,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 
 				}
 
-				if v, ok := wafActionMapStrToI["data_guard_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-					actionTypeTypeFound = true
-					actionTypeInt := &ves_io_schema_policy.WafAction_DataGuardControl{}
-					actionTypeInt.DataGuardControl = &ves_io_schema_policy.DataGuardControl{}
-					wafAction.ActionType = actionTypeInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["policy_name"]; ok && !isIntfNil(v) {
-
-								actionTypeInt.DataGuardControl.PolicyName = v.(string)
-
-							}
-
-						}
-					}
-
-				}
-
-				if v, ok := wafActionMapStrToI["jwt_claims_validation"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-					actionTypeTypeFound = true
-
-					if v.(bool) {
-						actionTypeInt := &ves_io_schema_policy.WafAction_JwtClaimsValidation{}
-						actionTypeInt.JwtClaimsValidation = &ves_io_schema.Empty{}
-						wafAction.ActionType = actionTypeInt
-					}
-
-				}
-
-				if v, ok := wafActionMapStrToI["jwt_validation"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-					actionTypeTypeFound = true
-
-					if v.(bool) {
-						actionTypeInt := &ves_io_schema_policy.WafAction_JwtValidation{}
-						actionTypeInt.JwtValidation = &ves_io_schema.Empty{}
-						wafAction.ActionType = actionTypeInt
-					}
-
-				}
-
 				if v, ok := wafActionMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 					actionTypeTypeFound = true
@@ -4977,18 +3502,6 @@ func resourceVolterraServicePolicyRuleCreate(d *schema.ResourceData, meta interf
 					if v.(bool) {
 						actionTypeInt := &ves_io_schema_policy.WafAction_None{}
 						actionTypeInt.None = &ves_io_schema.Empty{}
-						wafAction.ActionType = actionTypeInt
-					}
-
-				}
-
-				if v, ok := wafActionMapStrToI["waf_in_monitoring_mode"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-					actionTypeTypeFound = true
-
-					if v.(bool) {
-						actionTypeInt := &ves_io_schema_policy.WafAction_WafInMonitoringMode{}
-						actionTypeInt.WafInMonitoringMode = &ves_io_schema.Empty{}
 						wafAction.ActionType = actionTypeInt
 					}
 
@@ -5132,7 +3645,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				if w, ok := apiGroupMatcherMapStrToI["match"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field match")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					apiGroupMatcher.Match = ls
 				}
@@ -5198,7 +3716,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.ExactValues = ls
 
@@ -5208,7 +3731,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.RegexValues = ls
 
@@ -5218,6 +3746,9 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								transformersList := []ves_io_schema_policy.Transformer{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+									}
 									transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 								}
 								matchInt.Item.Transformers = transformersList
@@ -5226,17 +3757,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 						}
 					}
-
-				}
-
-				if v, ok := argMatchersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
-
-					matchTypeFound = true
-					matchInt := &ves_io_schema_policy.ArgMatcherType_Presence{}
-
-					argMatchers[i].Match = matchInt
-
-					matchInt.Presence = v.(bool)
 
 				}
 
@@ -5263,7 +3783,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("asn_list"); ok && !asnChoiceTypeFound {
+	if v, ok := d.GetOk("asn_list"); ok && !isIntfNil(v) && !asnChoiceTypeFound {
 
 		asnChoiceTypeFound = true
 		asnChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_AsnList{}
@@ -5290,7 +3810,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("asn_matcher"); ok && !asnChoiceTypeFound {
+	if v, ok := d.GetOk("asn_matcher"); ok && !isIntfNil(v) && !asnChoiceTypeFound {
 
 		asnChoiceTypeFound = true
 		asnChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_AsnMatcher{}
@@ -5351,7 +3871,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				if w, ok := bodyMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					bodyMatcher.ExactValues = ls
 				}
@@ -5359,7 +3884,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				if w, ok := bodyMatcherMapStrToI["regex_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					bodyMatcher.RegexValues = ls
 				}
@@ -5368,6 +3898,9 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					transformersList := []ves_io_schema_policy.Transformer{}
 					for _, j := range v.([]interface{}) {
+						if j == nil {
+							return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+						}
 						transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 					}
 					bodyMatcher.Transformers = transformersList
@@ -5419,12 +3952,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("challenge_action"); ok && !isIntfNil(v) {
-
-		updateSpec.ChallengeAction = ves_io_schema_policy.ChallengeAction(ves_io_schema_policy.ChallengeAction_value[v.(string)])
-
-	}
-
 	clientChoiceTypeFound := false
 
 	if v, ok := d.GetOk("any_client"); ok && !clientChoiceTypeFound {
@@ -5439,7 +3966,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("client_name"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("client_name"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_ClientName{}
@@ -5450,7 +3977,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("client_name_matcher"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("client_name_matcher"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_ClientNameMatcher{}
@@ -5466,7 +3993,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					clientChoiceInt.ClientNameMatcher.ExactValues = ls
 
@@ -5476,7 +4008,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					clientChoiceInt.ClientNameMatcher.RegexValues = ls
 
@@ -5487,7 +4024,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("client_selector"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("client_selector"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_ClientSelector{}
@@ -5503,7 +4040,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field expressions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					clientChoiceInt.ClientSelector.Expressions = ls
 
@@ -5514,7 +4056,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("ip_threat_category_list"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("ip_threat_category_list"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_IpThreatCategoryList{}
@@ -5530,63 +4072,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					ip_threat_categoriesList := []ves_io_schema_policy.IPThreatCategory{}
 					for _, j := range v.([]interface{}) {
+						if j == nil {
+							return fmt.Errorf("please provide valid non-empty enum value of field ip_threat_categories")
+						}
 						ip_threat_categoriesList = append(ip_threat_categoriesList, ves_io_schema_policy.IPThreatCategory(ves_io_schema_policy.IPThreatCategory_value[j.(string)]))
 					}
 					clientChoiceInt.IpThreatCategoryList.IpThreatCategories = ip_threat_categoriesList
-
-				}
-
-			}
-		}
-
-	}
-
-	if v, ok := d.GetOk("client_role"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		clientRole := &ves_io_schema_policy.RoleMatcherType{}
-		updateSpec.ClientRole = clientRole
-		for _, set := range sl {
-			if set != nil {
-				clientRoleMapStrToI := set.(map[string]interface{})
-
-				if w, ok := clientRoleMapStrToI["match"]; ok && !isIntfNil(w) {
-					clientRole.Match = w.(string)
-				}
-
-			}
-		}
-
-	}
-
-	if v, ok := d.GetOk("content_rewrite_action"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		contentRewriteAction := &ves_io_schema_policy.ContentRewriteAction{}
-		updateSpec.ContentRewriteAction = contentRewriteAction
-		for _, set := range sl {
-			if set != nil {
-				contentRewriteActionMapStrToI := set.(map[string]interface{})
-
-				if w, ok := contentRewriteActionMapStrToI["element_selector"]; ok && !isIntfNil(w) {
-					contentRewriteAction.ElementSelector = w.(string)
-				}
-
-				if w, ok := contentRewriteActionMapStrToI["insert_content"]; ok && !isIntfNil(w) {
-					contentRewriteAction.InsertContent = w.(string)
-				}
-
-				if w, ok := contentRewriteActionMapStrToI["inserted_types"]; ok && !isIntfNil(w) {
-					ms := map[string]bool{}
-					for k, v := range w.(map[string]interface{}) {
-						ms[k] = v.(bool)
-					}
-					contentRewriteAction.InsertedTypes = ms
-				}
-
-				if v, ok := contentRewriteActionMapStrToI["position"]; ok && !isIntfNil(v) {
-
-					contentRewriteAction.Position = ves_io_schema_policy.HTMLPosition(ves_io_schema_policy.HTMLPosition_value[v.(string)])
 
 				}
 
@@ -5651,7 +4142,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.ExactValues = ls
 
@@ -5661,7 +4157,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.RegexValues = ls
 
@@ -5671,6 +4172,9 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								transformersList := []ves_io_schema_policy.Transformer{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+									}
 									transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 								}
 								matchInt.Item.Transformers = transformersList
@@ -5679,17 +4183,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 						}
 					}
-
-				}
-
-				if v, ok := cookieMatchersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
-
-					matchTypeFound = true
-					matchInt := &ves_io_schema_policy.CookieMatcherType_Presence{}
-
-					cookieMatchers[i].Match = matchInt
-
-					matchInt.Presence = v.(bool)
 
 				}
 
@@ -5714,7 +4207,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				if w, ok := domainMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					domainMatcher.ExactValues = ls
 				}
@@ -5722,211 +4220,14 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				if w, ok := domainMatcherMapStrToI["regex_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					domainMatcher.RegexValues = ls
-				}
-
-			}
-		}
-
-	}
-
-	dstAsnChoiceTypeFound := false
-
-	if v, ok := d.GetOk("any_dst_asn"); ok && !dstAsnChoiceTypeFound {
-
-		dstAsnChoiceTypeFound = true
-
-		if v.(bool) {
-			dstAsnChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_AnyDstAsn{}
-			dstAsnChoiceInt.AnyDstAsn = &ves_io_schema.Empty{}
-			updateSpec.DstAsnChoice = dstAsnChoiceInt
-		}
-
-	}
-
-	if v, ok := d.GetOk("dst_asn_list"); ok && !dstAsnChoiceTypeFound {
-
-		dstAsnChoiceTypeFound = true
-		dstAsnChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_DstAsnList{}
-		dstAsnChoiceInt.DstAsnList = &ves_io_schema_policy.AsnMatchList{}
-		updateSpec.DstAsnChoice = dstAsnChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["as_numbers"]; ok && !isIntfNil(v) {
-
-					ls := make([]uint32, len(v.([]interface{})))
-					for i, v := range v.([]interface{}) {
-						ls[i] = uint32(v.(int))
-					}
-					dstAsnChoiceInt.DstAsnList.AsNumbers = ls
-
-				}
-
-			}
-		}
-
-	}
-
-	if v, ok := d.GetOk("dst_asn_matcher"); ok && !dstAsnChoiceTypeFound {
-
-		dstAsnChoiceTypeFound = true
-		dstAsnChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_DstAsnMatcher{}
-		dstAsnChoiceInt.DstAsnMatcher = &ves_io_schema_policy.AsnMatcherType{}
-		updateSpec.DstAsnChoice = dstAsnChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["asn_sets"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-					dstAsnChoiceInt.DstAsnMatcher.AsnSets = asnSetsInt
-					for i, ps := range sl {
-
-						asMapToStrVal := ps.(map[string]interface{})
-						asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
-
-						asnSetsInt[i].Kind = "bgp_asn_set"
-
-						if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
-							asnSetsInt[i].Name = v.(string)
-						}
-
-						if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							asnSetsInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							asnSetsInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							asnSetsInt[i].Uid = v.(string)
-						}
-
-					}
-
-				}
-
-			}
-		}
-
-	}
-
-	dstIpChoiceTypeFound := false
-
-	if v, ok := d.GetOk("any_dst_ip"); ok && !dstIpChoiceTypeFound {
-
-		dstIpChoiceTypeFound = true
-
-		if v.(bool) {
-			dstIpChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_AnyDstIp{}
-			dstIpChoiceInt.AnyDstIp = &ves_io_schema.Empty{}
-			updateSpec.DstIpChoice = dstIpChoiceInt
-		}
-
-	}
-
-	if v, ok := d.GetOk("dst_ip_matcher"); ok && !dstIpChoiceTypeFound {
-
-		dstIpChoiceTypeFound = true
-		dstIpChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_DstIpMatcher{}
-		dstIpChoiceInt.DstIpMatcher = &ves_io_schema_policy.IpMatcherType{}
-		updateSpec.DstIpChoice = dstIpChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["invert_matcher"]; ok && !isIntfNil(v) {
-
-					dstIpChoiceInt.DstIpMatcher.InvertMatcher = v.(bool)
-
-				}
-
-				if v, ok := cs["prefix_sets"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-					dstIpChoiceInt.DstIpMatcher.PrefixSets = prefixSetsInt
-					for i, ps := range sl {
-
-						psMapToStrVal := ps.(map[string]interface{})
-						prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
-
-						prefixSetsInt[i].Kind = "ip_prefix_set"
-
-						if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
-							prefixSetsInt[i].Name = v.(string)
-						}
-
-						if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							prefixSetsInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							prefixSetsInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							prefixSetsInt[i].Uid = v.(string)
-						}
-
-					}
-
-				}
-
-			}
-		}
-
-	}
-
-	if v, ok := d.GetOk("dst_ip_prefix_list"); ok && !dstIpChoiceTypeFound {
-
-		dstIpChoiceTypeFound = true
-		dstIpChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_DstIpPrefixList{}
-		dstIpChoiceInt.DstIpPrefixList = &ves_io_schema_policy.PrefixMatchList{}
-		updateSpec.DstIpChoice = dstIpChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["invert_match"]; ok && !isIntfNil(v) {
-
-					dstIpChoiceInt.DstIpPrefixList.InvertMatch = v.(bool)
-
-				}
-
-				if v, ok := cs["ip_prefixes"]; ok && !isIntfNil(v) {
-
-					ls := make([]string, len(v.([]interface{})))
-					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					dstIpChoiceInt.DstIpPrefixList.IpPrefixes = ls
-
-				}
-
-				if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
-
-					ls := make([]string, len(v.([]interface{})))
-					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					dstIpChoiceInt.DstIpPrefixList.Ipv6Prefixes = ls
-
 				}
 
 			}
@@ -5941,38 +4242,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 			return fmt.Errorf("error creating ServicePolicyRule, timestamp format is wrong: %s", err)
 		}
 		updateSpec.ExpirationTimestamp = ts
-
-	}
-
-	if v, ok := d.GetOk("goto_policy"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		gotoPolicyInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		updateSpec.GotoPolicy = gotoPolicyInt
-		for i, ps := range sl {
-
-			gpMapToStrVal := ps.(map[string]interface{})
-			gotoPolicyInt[i] = &ves_io_schema.ObjectRefType{}
-
-			gotoPolicyInt[i].Kind = "service_policy"
-
-			if v, ok := gpMapToStrVal["name"]; ok && !isIntfNil(v) {
-				gotoPolicyInt[i].Name = v.(string)
-			}
-
-			if v, ok := gpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				gotoPolicyInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := gpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				gotoPolicyInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := gpMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				gotoPolicyInt[i].Uid = v.(string)
-			}
-
-		}
 
 	}
 
@@ -6032,7 +4301,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.ExactValues = ls
 
@@ -6042,7 +4316,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.RegexValues = ls
 
@@ -6052,6 +4331,9 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								transformersList := []ves_io_schema_policy.Transformer{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+									}
 									transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 								}
 								matchInt.Item.Transformers = transformersList
@@ -6060,17 +4342,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 						}
 					}
-
-				}
-
-				if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
-
-					matchTypeFound = true
-					matchInt := &ves_io_schema_policy.HeaderMatcherType_Presence{}
-
-					headers[i].Match = matchInt
-
-					matchInt.Presence = v.(bool)
 
 				}
 
@@ -6100,6 +4371,9 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					methodsList := []ves_io_schema.HttpMethod{}
 					for _, j := range v.([]interface{}) {
+						if j == nil {
+							return fmt.Errorf("please provide valid non-empty enum value of field methods")
+						}
 						methodsList = append(methodsList, ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[j.(string)]))
 					}
 					httpMethod.Methods = methodsList
@@ -6125,7 +4399,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("ip_matcher"); ok && !ipChoiceTypeFound {
+	if v, ok := d.GetOk("ip_matcher"); ok && !isIntfNil(v) && !ipChoiceTypeFound {
 
 		ipChoiceTypeFound = true
 		ipChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_IpMatcher{}
@@ -6180,7 +4454,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("ip_prefix_list"); ok && !ipChoiceTypeFound {
+	if v, ok := d.GetOk("ip_prefix_list"); ok && !isIntfNil(v) && !ipChoiceTypeFound {
 
 		ipChoiceTypeFound = true
 		ipChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_IpPrefixList{}
@@ -6202,7 +4476,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ipChoiceInt.IpPrefixList.IpPrefixes = ls
 
@@ -6212,49 +4491,14 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ipChoiceInt.IpPrefixList.Ipv6Prefixes = ls
-
-				}
-
-			}
-		}
-
-	}
-
-	if v, ok := d.GetOk("ip_reputation_action"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		ipReputationAction := &ves_io_schema_policy.ModifyAction{}
-		updateSpec.IpReputationAction = ipReputationAction
-		for _, set := range sl {
-			if set != nil {
-				ipReputationActionMapStrToI := set.(map[string]interface{})
-
-				actionTypeTypeFound := false
-
-				if v, ok := ipReputationActionMapStrToI["default"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-					actionTypeTypeFound = true
-
-					if v.(bool) {
-						actionTypeInt := &ves_io_schema_policy.ModifyAction_Default{}
-						actionTypeInt.Default = &ves_io_schema.Empty{}
-						ipReputationAction.ActionType = actionTypeInt
-					}
-
-				}
-
-				if v, ok := ipReputationActionMapStrToI["skip_processing"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-					actionTypeTypeFound = true
-
-					if v.(bool) {
-						actionTypeInt := &ves_io_schema_policy.ModifyAction_SkipProcessing{}
-						actionTypeInt.SkipProcessing = &ves_io_schema.Empty{}
-						ipReputationAction.ActionType = actionTypeInt
-					}
 
 				}
 
@@ -6319,7 +4563,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.ExactValues = ls
 
@@ -6329,7 +4578,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.RegexValues = ls
 
@@ -6339,6 +4593,9 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								transformersList := []ves_io_schema_policy.Transformer{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+									}
 									transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 								}
 								matchInt.Item.Transformers = transformersList
@@ -6371,7 +4628,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field keys")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					labelMatcher.Keys = ls
 				}
@@ -6421,15 +4683,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("origin_server_subsets_action"); ok && !isIntfNil(v) {
-
-		ms := map[string]string{}
-		for k, v := range v.(map[string]interface{}) {
-			ms[k] = v.(string)
-		}
-		updateSpec.OriginServerSubsetsAction = ms
-	}
-
 	if v, ok := d.GetOk("path"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -6442,7 +4695,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				if w, ok := pathMapStrToI["exact_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					path.ExactValues = ls
 				}
@@ -6454,7 +4712,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				if w, ok := pathMapStrToI["prefix_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					path.PrefixValues = ls
 				}
@@ -6462,7 +4725,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				if w, ok := pathMapStrToI["regex_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					path.RegexValues = ls
 				}
@@ -6470,7 +4738,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				if w, ok := pathMapStrToI["suffix_values"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field suffix_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					path.SuffixValues = ls
 				}
@@ -6479,6 +4752,9 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					transformersList := []ves_io_schema_policy.Transformer{}
 					for _, j := range v.([]interface{}) {
+						if j == nil {
+							return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+						}
 						transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 					}
 					path.Transformers = transformersList
@@ -6506,7 +4782,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 				if w, ok := portMatcherMapStrToI["ports"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ports")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					portMatcher.Ports = ls
 				}
@@ -6576,7 +4857,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.ExactValues = ls
 
@@ -6586,7 +4872,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								matchInt.Item.RegexValues = ls
 
@@ -6596,6 +4887,9 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 								transformersList := []ves_io_schema_policy.Transformer{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field transformers")
+									}
 									transformersList = append(transformersList, ves_io_schema_policy.Transformer(ves_io_schema_policy.Transformer_value[j.(string)]))
 								}
 								matchInt.Item.Transformers = transformersList
@@ -6607,50 +4901,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 				}
 
-				if v, ok := queryParamsMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
-
-					matchTypeFound = true
-					matchInt := &ves_io_schema_policy.QueryParameterMatcherType_Presence{}
-
-					queryParams[i].Match = matchInt
-
-					matchInt.Presence = v.(bool)
-
-				}
-
 			}
-		}
-
-	}
-
-	if v, ok := d.GetOk("rate_limiter"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		rateLimiterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		updateSpec.RateLimiter = rateLimiterInt
-		for i, ps := range sl {
-
-			rlMapToStrVal := ps.(map[string]interface{})
-			rateLimiterInt[i] = &ves_io_schema.ObjectRefType{}
-
-			rateLimiterInt[i].Kind = "rate_limiter"
-
-			if v, ok := rlMapToStrVal["name"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Name = v.(string)
-			}
-
-			if v, ok := rlMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := rlMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := rlMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				rateLimiterInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -6994,16 +5245,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("scheme"); ok && !isIntfNil(v) {
-
-		ls := make([]string, len(v.([]interface{})))
-		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
-		}
-		updateSpec.Scheme = ls
-
-	}
-
 	if v, ok := d.GetOk("segment_policy"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -7144,289 +5385,9 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("server_selector"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		serverSelector := &ves_io_schema.LabelSelectorType{}
-		updateSpec.ServerSelector = serverSelector
-		for _, set := range sl {
-			if set != nil {
-				serverSelectorMapStrToI := set.(map[string]interface{})
-
-				if w, ok := serverSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
-					ls := make([]string, len(w.([]interface{})))
-					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					serverSelector.Expressions = ls
-				}
-
-			}
-		}
-
-	}
-
-	if v, ok := d.GetOk("shape_protected_endpoint_action"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		shapeProtectedEndpointAction := &ves_io_schema_policy.ShapeProtectedEndpointAction{}
-		updateSpec.ShapeProtectedEndpointAction = shapeProtectedEndpointAction
-		for _, set := range sl {
-			if set != nil {
-				shapeProtectedEndpointActionMapStrToI := set.(map[string]interface{})
-
-				if w, ok := shapeProtectedEndpointActionMapStrToI["allow_goodbot"]; ok && !isIntfNil(w) {
-					shapeProtectedEndpointAction.AllowGoodbot = w.(bool)
-				}
-
-				if v, ok := shapeProtectedEndpointActionMapStrToI["app_traffic_type"]; ok && !isIntfNil(v) {
-
-					shapeProtectedEndpointAction.AppTrafficType = ves_io_schema_policy.AppTrafficType(ves_io_schema_policy.AppTrafficType_value[v.(string)])
-
-				}
-
-				if w, ok := shapeProtectedEndpointActionMapStrToI["flow_label"]; ok && !isIntfNil(w) {
-					shapeProtectedEndpointAction.FlowLabel = w.(string)
-				}
-
-				if v, ok := shapeProtectedEndpointActionMapStrToI["mitigation"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					mitigation := &ves_io_schema_policy.ShapeBotMitigationAction{}
-					shapeProtectedEndpointAction.Mitigation = mitigation
-					for _, set := range sl {
-						if set != nil {
-							mitigationMapStrToI := set.(map[string]interface{})
-
-							actionTypeTypeFound := false
-
-							if v, ok := mitigationMapStrToI["block"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-								actionTypeTypeFound = true
-								actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Block{}
-								actionTypeInt.Block = &ves_io_schema_policy.ShapeBotBlockMitigationActionType{}
-								mitigation.ActionType = actionTypeInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["body"]; ok && !isIntfNil(v) {
-
-											actionTypeInt.Block.Body = v.(string)
-
-										}
-
-										if v, ok := cs["body_hash"]; ok && !isIntfNil(v) {
-
-											actionTypeInt.Block.BodyHash = v.(string)
-
-										}
-
-										if v, ok := cs["status"]; ok && !isIntfNil(v) {
-
-											actionTypeInt.Block.Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := mitigationMapStrToI["flag"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-								actionTypeTypeFound = true
-								actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Flag{}
-								actionTypeInt.Flag = &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType{}
-								mitigation.ActionType = actionTypeInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										sendHeadersChoiceTypeFound := false
-
-										if v, ok := cs["append_headers"]; ok && !isIntfNil(v) && !sendHeadersChoiceTypeFound {
-
-											sendHeadersChoiceTypeFound = true
-											sendHeadersChoiceInt := &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType_AppendHeaders{}
-											sendHeadersChoiceInt.AppendHeaders = &ves_io_schema_policy.ShapeBotFlagMitigationActionType{}
-											actionTypeInt.Flag.SendHeadersChoice = sendHeadersChoiceInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["auto_type_header_name"]; ok && !isIntfNil(v) {
-
-														sendHeadersChoiceInt.AppendHeaders.AutoTypeHeaderName = v.(string)
-
-													}
-
-													if v, ok := cs["inference_header_name"]; ok && !isIntfNil(v) {
-
-														sendHeadersChoiceInt.AppendHeaders.InferenceHeaderName = v.(string)
-
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := cs["no_headers"]; ok && !isIntfNil(v) && !sendHeadersChoiceTypeFound {
-
-											sendHeadersChoiceTypeFound = true
-
-											if v.(bool) {
-												sendHeadersChoiceInt := &ves_io_schema_policy.ShapeBotFlagMitigationActionChoiceType_NoHeaders{}
-												sendHeadersChoiceInt.NoHeaders = &ves_io_schema.Empty{}
-												actionTypeInt.Flag.SendHeadersChoice = sendHeadersChoiceInt
-											}
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := mitigationMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-								actionTypeTypeFound = true
-
-								if v.(bool) {
-									actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_None{}
-									actionTypeInt.None = &ves_io_schema.Empty{}
-									mitigation.ActionType = actionTypeInt
-								}
-
-							}
-
-							if v, ok := mitigationMapStrToI["redirect"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-								actionTypeTypeFound = true
-								actionTypeInt := &ves_io_schema_policy.ShapeBotMitigationAction_Redirect{}
-								actionTypeInt.Redirect = &ves_io_schema_policy.ShapeBotRedirectMitigationActionType{}
-								mitigation.ActionType = actionTypeInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["uri"]; ok && !isIntfNil(v) {
-
-											actionTypeInt.Redirect.Uri = v.(string)
-
-										}
-
-									}
-								}
-
-							}
-
-						}
-					}
-
-				}
-
-				if v, ok := shapeProtectedEndpointActionMapStrToI["transaction_result"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					transactionResult := &ves_io_schema.BotDefenseTransactionResultType{}
-					shapeProtectedEndpointAction.TransactionResult = transactionResult
-					for _, set := range sl {
-						if set != nil {
-							transactionResultMapStrToI := set.(map[string]interface{})
-
-							if v, ok := transactionResultMapStrToI["failure_conditions"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								failureConditions := make([]*ves_io_schema.BotDefenseTransactionResultCondition, len(sl))
-								transactionResult.FailureConditions = failureConditions
-								for i, set := range sl {
-									if set != nil {
-										failureConditions[i] = &ves_io_schema.BotDefenseTransactionResultCondition{}
-										failureConditionsMapStrToI := set.(map[string]interface{})
-
-										if w, ok := failureConditionsMapStrToI["name"]; ok && !isIntfNil(w) {
-											failureConditions[i].Name = w.(string)
-										}
-
-										if w, ok := failureConditionsMapStrToI["regex_values"]; ok && !isIntfNil(w) {
-											ls := make([]string, len(w.([]interface{})))
-											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
-											}
-											failureConditions[i].RegexValues = ls
-										}
-
-										if v, ok := failureConditionsMapStrToI["status"]; ok && !isIntfNil(v) {
-
-											failureConditions[i].Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
-
-										}
-
-									}
-								}
-
-							}
-
-							if v, ok := transactionResultMapStrToI["success_conditions"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								successConditions := make([]*ves_io_schema.BotDefenseTransactionResultCondition, len(sl))
-								transactionResult.SuccessConditions = successConditions
-								for i, set := range sl {
-									if set != nil {
-										successConditions[i] = &ves_io_schema.BotDefenseTransactionResultCondition{}
-										successConditionsMapStrToI := set.(map[string]interface{})
-
-										if w, ok := successConditionsMapStrToI["name"]; ok && !isIntfNil(w) {
-											successConditions[i].Name = w.(string)
-										}
-
-										if w, ok := successConditionsMapStrToI["regex_values"]; ok && !isIntfNil(w) {
-											ls := make([]string, len(w.([]interface{})))
-											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
-											}
-											successConditions[i].RegexValues = ls
-										}
-
-										if v, ok := successConditionsMapStrToI["status"]; ok && !isIntfNil(v) {
-
-											successConditions[i].Status = ves_io_schema.HttpStatusCode(ves_io_schema.HttpStatusCode_value[v.(string)])
-
-										}
-
-									}
-								}
-
-							}
-
-						}
-					}
-
-				}
-
-				if w, ok := shapeProtectedEndpointActionMapStrToI["web_scraping"]; ok && !isIntfNil(w) {
-					shapeProtectedEndpointAction.WebScraping = w.(bool)
-				}
-
-			}
-		}
-
-	}
-
 	tlsFingerprintChoiceTypeFound := false
 
-	if v, ok := d.GetOk("ja4_tls_fingerprint"); ok && !tlsFingerprintChoiceTypeFound {
+	if v, ok := d.GetOk("ja4_tls_fingerprint"); ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
 
 		tlsFingerprintChoiceTypeFound = true
 		tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_Ja4TlsFingerprint{}
@@ -7442,7 +5403,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					tlsFingerprintChoiceInt.Ja4TlsFingerprint.ExactValues = ls
 
@@ -7453,7 +5419,7 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 	}
 
-	if v, ok := d.GetOk("tls_fingerprint_matcher"); ok && !tlsFingerprintChoiceTypeFound {
+	if v, ok := d.GetOk("tls_fingerprint_matcher"); ok && !isIntfNil(v) && !tlsFingerprintChoiceTypeFound {
 
 		tlsFingerprintChoiceTypeFound = true
 		tlsFingerprintChoiceInt := &ves_io_schema_service_policy_rule.ReplaceSpecType_TlsFingerprintMatcher{}
@@ -7469,6 +5435,9 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					classesList := []ves_io_schema_policy.KnownTlsFingerprintClass{}
 					for _, j := range v.([]interface{}) {
+						if j == nil {
+							return fmt.Errorf("please provide valid non-empty enum value of field classes")
+						}
 						classesList = append(classesList, ves_io_schema_policy.KnownTlsFingerprintClass(ves_io_schema_policy.KnownTlsFingerprintClass_value[j.(string)]))
 					}
 					tlsFingerprintChoiceInt.TlsFingerprintMatcher.Classes = classesList
@@ -7479,7 +5448,12 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExactValues = ls
 
@@ -7489,132 +5463,15 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field excluded_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					tlsFingerprintChoiceInt.TlsFingerprintMatcher.ExcludedValues = ls
 
-				}
-
-			}
-		}
-
-	}
-
-	if v, ok := d.GetOk("url_matcher"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		urlMatcher := &ves_io_schema_policy.URLMatcherType{}
-		updateSpec.UrlMatcher = urlMatcher
-		for _, set := range sl {
-			if set != nil {
-				urlMatcherMapStrToI := set.(map[string]interface{})
-
-				if w, ok := urlMatcherMapStrToI["invert_matcher"]; ok && !isIntfNil(w) {
-					urlMatcher.InvertMatcher = w.(bool)
-				}
-
-				if v, ok := urlMatcherMapStrToI["url_items"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					urlItems := make([]*ves_io_schema_policy.URLItem, len(sl))
-					urlMatcher.UrlItems = urlItems
-					for i, set := range sl {
-						if set != nil {
-							urlItems[i] = &ves_io_schema_policy.URLItem{}
-							urlItemsMapStrToI := set.(map[string]interface{})
-
-							domainChoiceTypeFound := false
-
-							if v, ok := urlItemsMapStrToI["domain_regex"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-								domainChoiceTypeFound = true
-								domainChoiceInt := &ves_io_schema_policy.URLItem_DomainRegex{}
-
-								urlItems[i].DomainChoice = domainChoiceInt
-
-								domainChoiceInt.DomainRegex = v.(string)
-
-							}
-
-							if v, ok := urlItemsMapStrToI["domain_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-								domainChoiceTypeFound = true
-								domainChoiceInt := &ves_io_schema_policy.URLItem_DomainValue{}
-
-								urlItems[i].DomainChoice = domainChoiceInt
-
-								domainChoiceInt.DomainValue = v.(string)
-
-							}
-
-							pathChoiceTypeFound := false
-
-							if v, ok := urlItemsMapStrToI["path_prefix"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-								pathChoiceTypeFound = true
-								pathChoiceInt := &ves_io_schema_policy.URLItem_PathPrefix{}
-
-								urlItems[i].PathChoice = pathChoiceInt
-
-								pathChoiceInt.PathPrefix = v.(string)
-
-							}
-
-							if v, ok := urlItemsMapStrToI["path_regex"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-								pathChoiceTypeFound = true
-								pathChoiceInt := &ves_io_schema_policy.URLItem_PathRegex{}
-
-								urlItems[i].PathChoice = pathChoiceInt
-
-								pathChoiceInt.PathRegex = v.(string)
-
-							}
-
-							if v, ok := urlItemsMapStrToI["path_value"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
-
-								pathChoiceTypeFound = true
-								pathChoiceInt := &ves_io_schema_policy.URLItem_PathValue{}
-
-								urlItems[i].PathChoice = pathChoiceInt
-
-								pathChoiceInt.PathValue = v.(string)
-
-							}
-
-						}
-					}
-
-				}
-
-			}
-		}
-
-	}
-
-	if v, ok := d.GetOk("virtual_host_matcher"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		virtualHostMatcher := &ves_io_schema_policy.MatcherTypeBasic{}
-		updateSpec.VirtualHostMatcher = virtualHostMatcher
-		for _, set := range sl {
-			if set != nil {
-				virtualHostMatcherMapStrToI := set.(map[string]interface{})
-
-				if w, ok := virtualHostMatcherMapStrToI["exact_values"]; ok && !isIntfNil(w) {
-					ls := make([]string, len(w.([]interface{})))
-					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					virtualHostMatcher.ExactValues = ls
-				}
-
-				if w, ok := virtualHostMatcherMapStrToI["regex_values"]; ok && !isIntfNil(w) {
-					ls := make([]string, len(w.([]interface{})))
-					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					virtualHostMatcher.RegexValues = ls
 				}
 
 			}
@@ -7760,53 +5617,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 
 				}
 
-				if v, ok := wafActionMapStrToI["data_guard_control"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-					actionTypeTypeFound = true
-					actionTypeInt := &ves_io_schema_policy.WafAction_DataGuardControl{}
-					actionTypeInt.DataGuardControl = &ves_io_schema_policy.DataGuardControl{}
-					wafAction.ActionType = actionTypeInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["policy_name"]; ok && !isIntfNil(v) {
-
-								actionTypeInt.DataGuardControl.PolicyName = v.(string)
-
-							}
-
-						}
-					}
-
-				}
-
-				if v, ok := wafActionMapStrToI["jwt_claims_validation"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-					actionTypeTypeFound = true
-
-					if v.(bool) {
-						actionTypeInt := &ves_io_schema_policy.WafAction_JwtClaimsValidation{}
-						actionTypeInt.JwtClaimsValidation = &ves_io_schema.Empty{}
-						wafAction.ActionType = actionTypeInt
-					}
-
-				}
-
-				if v, ok := wafActionMapStrToI["jwt_validation"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-					actionTypeTypeFound = true
-
-					if v.(bool) {
-						actionTypeInt := &ves_io_schema_policy.WafAction_JwtValidation{}
-						actionTypeInt.JwtValidation = &ves_io_schema.Empty{}
-						wafAction.ActionType = actionTypeInt
-					}
-
-				}
-
 				if v, ok := wafActionMapStrToI["none"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
 
 					actionTypeTypeFound = true
@@ -7814,18 +5624,6 @@ func resourceVolterraServicePolicyRuleUpdate(d *schema.ResourceData, meta interf
 					if v.(bool) {
 						actionTypeInt := &ves_io_schema_policy.WafAction_None{}
 						actionTypeInt.None = &ves_io_schema.Empty{}
-						wafAction.ActionType = actionTypeInt
-					}
-
-				}
-
-				if v, ok := wafActionMapStrToI["waf_in_monitoring_mode"]; ok && !isIntfNil(v) && !actionTypeTypeFound {
-
-					actionTypeTypeFound = true
-
-					if v.(bool) {
-						actionTypeInt := &ves_io_schema_policy.WafAction_WafInMonitoringMode{}
-						actionTypeInt.WafInMonitoringMode = &ves_io_schema.Empty{}
 						wafAction.ActionType = actionTypeInt
 					}
 
@@ -7874,5 +5672,8 @@ func resourceVolterraServicePolicyRuleDelete(d *schema.ResourceData, meta interf
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra ServicePolicyRule obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_service_policy_rule.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_service_policy_rule.ObjectType, namespace, name, opts...)
 }

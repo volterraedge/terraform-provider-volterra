@@ -733,13 +733,13 @@ var MobileIntegratorCustomAPISwaggerJSON string = `{
             "properties": {
                 "bytes_value": {
                     "type": "string",
-                    "description": "Exclusive with [presigned_url string_value]\n Binary object contents. This will be a base64 encoded string. The client should decode it to see the actual contents of the object.\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.bytes.max_len: 2097152\n",
+                    "description": "Exclusive with [presigned_url string_value]\n Binary object contents. This will be a base64 encoded string. The client should decode it to see the actual contents of the object.\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.bytes.max_len: 5242880\n",
                     "title": "bytes_value",
                     "format": "byte",
-                    "maximum": 2097152,
+                    "maximum": 5242880,
                     "x-displayname": "Byte Value",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.bytes.max_len": "2097152"
+                        "ves.io.schema.rules.bytes.max_len": "5242880"
                     }
                 },
                 "content_format": {
@@ -763,12 +763,12 @@ var MobileIntegratorCustomAPISwaggerJSON string = `{
                 },
                 "string_value": {
                     "type": "string",
-                    "description": "Exclusive with [bytes_value presigned_url]\n String formatted contents\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 2097152\n",
+                    "description": "Exclusive with [bytes_value presigned_url]\n String formatted contents\n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 5242880\n",
                     "title": "contents",
-                    "maxLength": 2097152,
+                    "maxLength": 5242880,
                     "x-displayname": "Contents",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "2097152"
+                        "ves.io.schema.rules.string.max_len": "5242880"
                     }
                 }
             }
@@ -778,17 +778,23 @@ var MobileIntegratorCustomAPISwaggerJSON string = `{
             "description": "A descriptor for list response item.",
             "title": "ListItemDescriptor",
             "x-displayname": "List Item Descriptor",
-            "x-ves-oneof-field-object_attributes": "[\"mobile_integrator\",\"mobile_sdk\",\"no_attributes\"]",
+            "x-ves-oneof-field-object_attributes": "[\"mobile_app_shield\",\"mobile_integrator\",\"mobile_sdk\",\"no_attributes\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.ListItemDescriptor",
             "properties": {
+                "mobile_app_shield": {
+                    "description": "Exclusive with [mobile_integrator mobile_sdk no_attributes]\n Attributes of a object of a type mobile-app-shield",
+                    "title": "mobile_app_shield",
+                    "$ref": "#/definitions/stored_objectMobileAppShieldAttributes",
+                    "x-displayname": "Attributes of a object of a type mobile-app-shield"
+                },
                 "mobile_integrator": {
-                    "description": "Exclusive with [mobile_sdk no_attributes]\n Attributes of a object of a type mobile-integrator",
+                    "description": "Exclusive with [mobile_app_shield mobile_sdk no_attributes]\n Attributes of a object of a type mobile-integrator",
                     "title": "mobile_integrator",
                     "$ref": "#/definitions/stored_objectMobileIntegratorAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-integrator"
                 },
                 "mobile_sdk": {
-                    "description": "Exclusive with [mobile_integrator no_attributes]\n Attributes of a object of a type mobile-sdk",
+                    "description": "Exclusive with [mobile_app_shield mobile_integrator no_attributes]\n Attributes of a object of a type mobile-sdk",
                     "title": "mobile_sdk",
                     "$ref": "#/definitions/stored_objectMobileSDKAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-sdk"
@@ -800,7 +806,7 @@ var MobileIntegratorCustomAPISwaggerJSON string = `{
                     "x-displayname": "Object Name"
                 },
                 "no_attributes": {
-                    "description": "Exclusive with [mobile_integrator mobile_sdk]\n No special attributes specific to the object type",
+                    "description": "Exclusive with [mobile_app_shield mobile_integrator mobile_sdk]\n No special attributes specific to the object type",
                     "title": "no_attributes",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No attributes"
@@ -838,6 +844,39 @@ var MobileIntegratorCustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/stored_objectListItemDescriptor"
                     },
                     "x-displayname": "Stored Object Descriptors"
+                }
+            }
+        },
+        "stored_objectMobileAppShieldAttributes": {
+            "type": "object",
+            "description": "Describes attributes specific to object type - mobile-app-shield",
+            "title": "MobileAppShieldAttributes",
+            "x-displayname": "mobile-app-shield attributes",
+            "x-ves-proto-message": "ves.io.schema.stored_object.MobileAppShieldAttributes",
+            "properties": {
+                "os_type": {
+                    "description": " Select the Operating System type for mobile app shield release.\n\nExample: - \"IOS\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "os_type",
+                    "$ref": "#/definitions/stored_objectOSType",
+                    "x-displayname": "Operating System type",
+                    "x-ves-example": "IOS",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "release_version": {
+                    "type": "string",
+                    "description": " Version of mobile app shield release\n\nExample: - \"v.4.2.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 32\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "release_version",
+                    "maxLength": 32,
+                    "x-displayname": "mobile app shield release version",
+                    "x-ves-example": "v.4.2.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "32",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
                 }
             }
         },
@@ -966,7 +1005,7 @@ var MobileIntegratorCustomAPISwaggerJSON string = `{
             "description": "Response for Get, Create APIs",
             "title": "StoredObjectDescriptor",
             "x-displayname": "Object Metadata Response",
-            "x-ves-oneof-field-object_attributes": "[\"mobile_integrator\",\"mobile_sdk\",\"no_attributes\"]",
+            "x-ves-oneof-field-object_attributes": "[\"mobile_app_shield\",\"mobile_integrator\",\"mobile_sdk\",\"no_attributes\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.StoredObjectDescriptor",
             "properties": {
                 "creation_timestamp": {
@@ -990,14 +1029,20 @@ var MobileIntegratorCustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "512"
                     }
                 },
+                "mobile_app_shield": {
+                    "description": "Exclusive with [mobile_integrator mobile_sdk no_attributes]\n Attributes of a object of a type mobile-app-shield",
+                    "title": "mobile_app_shield",
+                    "$ref": "#/definitions/stored_objectMobileAppShieldAttributes",
+                    "x-displayname": "Attributes of a object of a type mobile-app-shield"
+                },
                 "mobile_integrator": {
-                    "description": "Exclusive with [mobile_sdk no_attributes]\n Attributes of a object of a type mobile-integrator",
+                    "description": "Exclusive with [mobile_app_shield mobile_sdk no_attributes]\n Attributes of a object of a type mobile-integrator",
                     "title": "mobile_integrator",
                     "$ref": "#/definitions/stored_objectMobileIntegratorAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-integrator"
                 },
                 "mobile_sdk": {
-                    "description": "Exclusive with [mobile_integrator no_attributes]\n Attributes of a object of a type mobile-sdk",
+                    "description": "Exclusive with [mobile_app_shield mobile_integrator no_attributes]\n Attributes of a object of a type mobile-sdk",
                     "title": "mobile_sdk",
                     "$ref": "#/definitions/stored_objectMobileSDKAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-sdk"
@@ -1023,7 +1068,7 @@ var MobileIntegratorCustomAPISwaggerJSON string = `{
                     }
                 },
                 "no_attributes": {
-                    "description": "Exclusive with [mobile_integrator mobile_sdk]\n No special attributes specific to the object type",
+                    "description": "Exclusive with [mobile_app_shield mobile_integrator mobile_sdk]\n No special attributes specific to the object type",
                     "title": "no_attributes",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No attributes"

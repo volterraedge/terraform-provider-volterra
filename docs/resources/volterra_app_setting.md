@@ -44,15 +44,11 @@ resource "volterra_app_setting" "example" {
     user_behavior_analysis_setting {
       // One of the arguments from this list "disable_learning enable_learning" must be set
 
-      enable_learning = true
+      disable_learning = true
 
       // One of the arguments from this list "disable_detection enable_detection" must be set
 
       enable_detection {
-        // One of the arguments from this list "bola_detection_automatic bola_detection_manual exclude_bola_detection" can be set
-
-        exclude_bola_detection = true
-
         // One of the arguments from this list "exclude_bot_defense_activity include_bot_defense_activity" must be set
 
         include_bot_defense_activity = true
@@ -77,19 +73,13 @@ resource "volterra_app_setting" "example" {
 
         include_ip_reputation = true
 
-        // One of the arguments from this list "exclude_non_existent_url_activity include_non_existent_url_activity_automatic include_non_existent_url_activity_custom" can be set
-
-        include_non_existent_url_activity_custom {
-          nonexistent_requests_threshold = "50"
-        }
-
         // One of the arguments from this list "exclude_rate_limit include_rate_limit" must be set
 
         include_rate_limit = true
 
         // One of the arguments from this list "exclude_waf_activity include_waf_activity" must be set
 
-        include_waf_activity = true
+        exclude_waf_activity = true
       }
     }
   }
@@ -115,10 +105,6 @@ Argument Reference
 `namespace` - (Optional) Must be a DNS_LABEL format. For a namespace object itself, namespace value will be "" (`String`).
 
 ### Spec Argument Reference
-
-`anomaly_types` - (Optional) List of Anomaly algorithms that need to be enabled (`List of Strings`).(Deprecated)
-
-`app_type_refs` - (Optional) List of references to app_type for which monitoring needs to enabled. See [ref](#ref) below for details.(Deprecated)
 
 `app_type_settings` - (Required) List of settings to enable for each AppType, given instance of AppType Exist in this Namespace. See [App Type Settings ](#app-type-settings) below for details.
 
@@ -165,32 +151,6 @@ The risk score of the user decays over time, if no further suspicious activity i
 `disable_detection` - (Optional) Disable malicious user detection (`Bool`).
 
 `enable_detection` - (Optional) Enable AI based malicious user detection. See [Malicious User Detection Enable Detection ](#malicious-user-detection-enable-detection) below for details.
-
-### Bola Activity Choice Bola Detection Automatic
-
-Detect Enumeration attack automatically..
-
-### Bola Activity Choice Bola Detection Manual
-
-Detect Enumeration attack using user defined threshold..
-
-###### One of the arguments from this list "threshold_level_1, threshold_level_2, threshold_level_3, threshold_level_4, threshold_level_5, threshold_level_6" must be set
-
-`threshold_level_1` - (Optional) Detected in range: 10 - 150 (`Bool`).
-
-`threshold_level_2` - (Optional) Detected in range: 25 - 400 (`Bool`).
-
-`threshold_level_3` - (Optional) Detected in range: 50 - 800 (`Bool`).
-
-`threshold_level_4` - (Optional) Detected in range: 100 - 1500 (`Bool`).
-
-`threshold_level_5` - (Optional) Detected in range: 200 - 3000 (`Bool`).
-
-`threshold_level_6` - (Optional) Detected in range: 500 - 8000 (`Bool`).
-
-### Bola Activity Choice Exclude Bola Detection
-
-Disable Enumeration attack detection.
 
 ### Bot Defense Activity Choice Exclude Bot Defense Activity
 
@@ -252,14 +212,6 @@ Disable malicious user detection.
 
 Enable AI based malicious user detection.
 
-###### One of the arguments from this list "bola_detection_automatic, bola_detection_manual, exclude_bola_detection" can be set
-
-`bola_detection_automatic` - (Optional) Detect Enumeration attack automatically. (`Bool`).(Deprecated)
-
-`bola_detection_manual` - (Optional) Detect Enumeration attack using user defined threshold.. See [Bola Activity Choice Bola Detection Manual ](#bola-activity-choice-bola-detection-manual) below for details.(Deprecated)
-
-`exclude_bola_detection` - (Optional) Disable Enumeration attack detection (`Bool`).(Deprecated)
-
 ###### One of the arguments from this list "exclude_bot_defense_activity, include_bot_defense_activity" must be set
 
 `exclude_bot_defense_activity` - (Optional) Exclude Bot Defense activity in malicious user detection (`Bool`).
@@ -288,14 +240,6 @@ Enable AI based malicious user detection.
 
 `include_ip_reputation` - (Optional) Include IP Reputation in malicious user detection (`Bool`).
 
-###### One of the arguments from this list "exclude_non_existent_url_activity, include_non_existent_url_activity_automatic, include_non_existent_url_activity_custom" can be set
-
-`exclude_non_existent_url_activity` - (Optional) Exclude Non-Existent URL activity in malicious user detection (`Bool`).(Deprecated)
-
-`include_non_existent_url_activity_automatic` - (Optional) Include Non-Existent URL Activity using automatic threshold in malicious user detection. See [Non Existent Url Activity Choice Include Non Existent Url Activity Automatic ](#non-existent-url-activity-choice-include-non-existent-url-activity-automatic) below for details.(Deprecated)
-
-`include_non_existent_url_activity_custom` - (Optional) Include Non-Existent URL Activity using custom threshold in malicious user detection. See [Non Existent Url Activity Choice Include Non Existent Url Activity Custom ](#non-existent-url-activity-choice-include-non-existent-url-activity-custom) below for details.(Deprecated)
-
 ###### One of the arguments from this list "exclude_rate_limit, include_rate_limit" must be set
 
 `exclude_rate_limit` - (Optional) Exclude Rate Limiting in malicious user detection (`Bool`).
@@ -307,28 +251,6 @@ Enable AI based malicious user detection.
 `exclude_waf_activity` - (Optional) Exclude WAF activity in malicious user detection (`Bool`).
 
 `include_waf_activity` - (Optional) Include WAF activity in malicious user detection (`Bool`).
-
-### Non Existent Url Activity Choice Exclude Non Existent Url Activity
-
-Exclude Non-Existent URL activity in malicious user detection.
-
-### Non Existent Url Activity Choice Include Non Existent Url Activity Automatic
-
-Include Non-Existent URL Activity using automatic threshold in malicious user detection.
-
-###### One of the arguments from this list "high, low, medium" must be set
-
-`high` - (Optional) Use auto-calculated threshold decreased by margin for more sensitive detection (`Bool`).
-
-`low` - (Optional) Use auto-calculated threshold with margin for less sensitive detection (`Bool`).
-
-`medium` - (Optional) Use auto-calculated threshold learnt from statistics per given application (`Bool`).
-
-### Non Existent Url Activity Choice Include Non Existent Url Activity Custom
-
-Include Non-Existent URL Activity using custom threshold in malicious user detection.
-
-`nonexistent_requests_threshold` - (Required) The percentage of non-existent requests beyond which the system will flag this user as malicious (`Int`).
 
 ### Rate Limit Choice Exclude Rate Limit
 
@@ -347,42 +269,6 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
-
-### Sensitivity High
-
-Use auto-calculated threshold decreased by margin for more sensitive detection.
-
-### Sensitivity Low
-
-Use auto-calculated threshold with margin for less sensitive detection.
-
-### Sensitivity Medium
-
-Use auto-calculated threshold learnt from statistics per given application.
-
-### Threshold Levels Threshold Level 1
-
-Detected in range: 10 - 150.
-
-### Threshold Levels Threshold Level 2
-
-Detected in range: 25 - 400.
-
-### Threshold Levels Threshold Level 3
-
-Detected in range: 50 - 800.
-
-### Threshold Levels Threshold Level 4
-
-Detected in range: 100 - 1500.
-
-### Threshold Levels Threshold Level 5
-
-Detected in range: 200 - 3000.
-
-### Threshold Levels Threshold Level 6
-
-Detected in range: 500 - 8000.
 
 ### Timeseries Analyses Setting Metric Selectors
 

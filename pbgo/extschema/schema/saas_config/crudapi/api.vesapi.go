@@ -2878,11 +2878,27 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaCRMInfo",
                     "x-displayname": "CRM Information"
                 },
+                "origin": {
+                    "description": " origin of the signup, from which platform signup is originated, example f5xc, aws..etc\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Origin",
+                    "$ref": "#/definitions/schemaSignupOrigin",
+                    "x-displayname": "Origin",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
                 "plan_type": {
                     "description": " Type of the billing plan the tenant is subscribed to. Value can be one of FREE, INDIVIDUAL, TEAM, ORGANIZATION.",
                     "title": "plan_type",
                     "$ref": "#/definitions/schemaPlanType",
                     "x-displayname": "Plan Type"
+                },
+                "tenant_type": {
+                    "description": " Type of the tenant (FREEMIUM, ENTERPRISE)\n Freemium type includes Free or individual account signups and\n Enterprise type includes all tenants signed up for a team account with a team plan or organizational plan",
+                    "title": "Tenant Type",
+                    "$ref": "#/definitions/schemaTenantType",
+                    "x-displayname": "Tenant Type"
                 }
             }
         },
@@ -3097,6 +3113,20 @@ var APISwaggerJSON string = `{
             "x-displayname": "Plan Type",
             "x-ves-proto-enum": "ves.io.schema.PlanType"
         },
+        "schemaSignupOrigin": {
+            "type": "string",
+            "description": "x-required\nSignupOrigin indicates, from which platform signup is originated, example f5xc, aws..etc\n\n - ORIGIN_UNKNOWN: ORIGIN_UNKNOWN\n\nIndicates, the origin of the signup is unknown\n - ORIGIN_F5XC: ORIGIN_F5XC\n\nORIGIN_F5XC as an origin indicates, signup is initiated from console or by internal scaling/testing/support teams using private API\n - ORIGIN_AWS: ORIGIN_AWS\n\nORIGIN_AWS as an origin indicates, signup is initiated from AWS marketplace \u0026 it comes to eywaprime via tsahik\n - ORIGIN_ASB: ORIGIN_ASB\n\nORIGIN_ASB as an origin indicates signup originated from Azure service bus provisioning messages \u0026 it comes to eywaprime via tsahik",
+            "title": "SignupOrigin",
+            "enum": [
+                "ORIGIN_UNKNOWN",
+                "ORIGIN_F5XC",
+                "ORIGIN_AWS",
+                "ORIGIN_ASB"
+            ],
+            "default": "ORIGIN_UNKNOWN",
+            "x-displayname": "Signup Origin",
+            "x-ves-proto-enum": "ves.io.schema.SignupOrigin"
+        },
         "schemaStatusType": {
             "type": "object",
             "description": "Status is a return value for calls that don't return other objects.",
@@ -3276,6 +3306,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "VTRP Stale"
                 }
             }
+        },
+        "schemaTenantType": {
+            "type": "string",
+            "description": "TenantType is the type of the customer\n\nUNKNOWN indicates the field not being set\nFREEMIUM are customer that don't have their domain\nENTERPRiISE customer have their domain",
+            "title": "TenantType",
+            "enum": [
+                "UNKNOWN",
+                "FREEMIUM",
+                "ENTERPRISE"
+            ],
+            "default": "UNKNOWN",
+            "x-displayname": "Tenant type",
+            "x-ves-proto-enum": "ves.io.schema.TenantType"
         },
         "schemaViewRefType": {
             "type": "object",

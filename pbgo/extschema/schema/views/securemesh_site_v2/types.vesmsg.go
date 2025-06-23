@@ -116,6 +116,14 @@ type ValidateAWSProviderType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAWSProviderType) OrchestrationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for orchestration_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSProviderType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSProviderType)
 	if !ok {
@@ -128,6 +136,16 @@ func (v *ValidateAWSProviderType) Validate(ctx context.Context, pm interface{}, 
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["orchestration_choice"]; exists {
+		val := m.GetOrchestrationChoice()
+		vOpts := append(opts,
+			db.WithValidateField("orchestration_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
 	}
 
 	switch m.GetOrchestrationChoice().(type) {
@@ -162,6 +180,25 @@ func (v *ValidateAWSProviderType) Validate(ctx context.Context, pm interface{}, 
 // Well-known symbol for default validator implementation
 var DefaultAWSProviderTypeValidator = func() *ValidateAWSProviderType {
 	v := &ValidateAWSProviderType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOrchestrationChoice := v.OrchestrationChoiceValidationRuleHandler
+	rulesOrchestrationChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhOrchestrationChoice(rulesOrchestrationChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSProviderType.orchestration_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["orchestration_choice"] = vFn
 
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
 	v.FldValidators["orchestration_choice.managed"] = AWSManagedModeValidator().Validate
@@ -237,6 +274,18 @@ func (m *AzureProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, err
 		}
 		return drInfos, err
 
+	case *AzureProviderType_Managed:
+
+		drInfos, err := m.GetManaged().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetManaged().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "managed." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -245,6 +294,14 @@ func (m *AzureProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, err
 
 type ValidateAzureProviderType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAzureProviderType) OrchestrationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for orchestration_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateAzureProviderType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -261,6 +318,16 @@ func (v *ValidateAzureProviderType) Validate(ctx context.Context, pm interface{}
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["orchestration_choice"]; exists {
+		val := m.GetOrchestrationChoice()
+		vOpts := append(opts,
+			db.WithValidateField("orchestration_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetOrchestrationChoice().(type) {
 	case *AzureProviderType_NotManaged:
 		if fv, exists := v.FldValidators["orchestration_choice.not_managed"]; exists {
@@ -268,6 +335,17 @@ func (v *ValidateAzureProviderType) Validate(ctx context.Context, pm interface{}
 			vOpts := append(opts,
 				db.WithValidateField("orchestration_choice"),
 				db.WithValidateField("not_managed"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AzureProviderType_Managed:
+		if fv, exists := v.FldValidators["orchestration_choice.managed"]; exists {
+			val := m.GetOrchestrationChoice().(*AzureProviderType_Managed).Managed
+			vOpts := append(opts,
+				db.WithValidateField("orchestration_choice"),
+				db.WithValidateField("managed"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -283,7 +361,27 @@ func (v *ValidateAzureProviderType) Validate(ctx context.Context, pm interface{}
 var DefaultAzureProviderTypeValidator = func() *ValidateAzureProviderType {
 	v := &ValidateAzureProviderType{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOrchestrationChoice := v.OrchestrationChoiceValidationRuleHandler
+	rulesOrchestrationChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhOrchestrationChoice(rulesOrchestrationChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureProviderType.orchestration_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["orchestration_choice"] = vFn
+
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
+	v.FldValidators["orchestration_choice.managed"] = AzureManagedModeValidator().Validate
 
 	return v
 }()
@@ -783,6 +881,18 @@ func (m *CreateSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *CreateSpecType_Equinix:
+
+		drInfos, err := m.GetEquinix().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEquinix().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "equinix." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -1182,15 +1292,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["proactive_monitoring"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("proactive_monitoring"))
-		if err := fv(ctx, m.GetProactiveMonitoring(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["provider_choice"]; exists {
 		val := m.GetProviderChoice()
 		vOpts := append(opts,
@@ -1307,6 +1408,43 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("provider_choice"),
 				db.WithValidateField("nutanix"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_Equinix:
+		if fv, exists := v.FldValidators["provider_choice.equinix"]; exists {
+			val := m.GetProviderChoice().(*CreateSpecType_Equinix).Equinix
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("equinix"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetProxyBypassChoice().(type) {
+	case *CreateSpecType_NoProxyBypass:
+		if fv, exists := v.FldValidators["proxy_bypass_choice.no_proxy_bypass"]; exists {
+			val := m.GetProxyBypassChoice().(*CreateSpecType_NoProxyBypass).NoProxyBypass
+			vOpts := append(opts,
+				db.WithValidateField("proxy_bypass_choice"),
+				db.WithValidateField("no_proxy_bypass"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_CustomProxyBypass:
+		if fv, exists := v.FldValidators["proxy_bypass_choice.custom_proxy_bypass"]; exists {
+			val := m.GetProxyBypassChoice().(*CreateSpecType_CustomProxyBypass).CustomProxyBypass
+			vOpts := append(opts,
+				db.WithValidateField("proxy_bypass_choice"),
+				db.WithValidateField("custom_proxy_bypass"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1503,6 +1641,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["provider_choice.oci"] = OCIProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.openstack"] = OpenstackProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.nutanix"] = NutanixProviderTypeValidator().Validate
+	v.FldValidators["provider_choice.equinix"] = EquinixProviderTypeValidator().Validate
+
+	v.FldValidators["proxy_bypass_choice.custom_proxy_bypass"] = CustomProxyBypassSettingsValidator().Validate
 
 	v.FldValidators["s2s_connectivity_sli_choice.dc_cluster_group_sli"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -2012,6 +2153,147 @@ func CustomProxyValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CustomProxyBypassSettings) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomProxyBypassSettings) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomProxyBypassSettings) DeepCopy() *CustomProxyBypassSettings {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomProxyBypassSettings{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomProxyBypassSettings) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomProxyBypassSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomProxyBypassSettingsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomProxyBypassSettings struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomProxyBypassSettings) ProxyBypassValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for proxy_bypass")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for proxy_bypass")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated proxy_bypass")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items proxy_bypass")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCustomProxyBypassSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomProxyBypassSettings)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomProxyBypassSettings got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["proxy_bypass"]; exists {
+		vOpts := append(opts, db.WithValidateField("proxy_bypass"))
+		if err := fv(ctx, m.GetProxyBypass(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomProxyBypassSettingsValidator = func() *ValidateCustomProxyBypassSettings {
+	v := &ValidateCustomProxyBypassSettings{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhProxyBypass := v.ProxyBypassValidationRuleHandler
+	rulesProxyBypass := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.hostname_or_ip": "true",
+		"ves.io.schema.rules.repeated.items.string.max_len":        "256",
+		"ves.io.schema.rules.repeated.max_items":                   "64",
+		"ves.io.schema.rules.repeated.unique":                      "true",
+	}
+	vFn, err = vrhProxyBypass(rulesProxyBypass)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CustomProxyBypassSettings.proxy_bypass: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["proxy_bypass"] = vFn
+
+	return v
+}()
+
+func CustomProxyBypassSettingsValidator() db.Validator {
+	return DefaultCustomProxyBypassSettingsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DNSNTPServerConfig) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2133,6 +2415,125 @@ var DefaultDNSNTPServerConfigValidator = func() *ValidateDNSNTPServerConfig {
 
 func DNSNTPServerConfigValidator() db.Validator {
 	return DefaultDNSNTPServerConfigValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *EquinixProviderType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *EquinixProviderType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *EquinixProviderType) DeepCopy() *EquinixProviderType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &EquinixProviderType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *EquinixProviderType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *EquinixProviderType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return EquinixProviderTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *EquinixProviderType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetOrchestrationChoiceDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *EquinixProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetOrchestrationChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetOrchestrationChoice().(type) {
+	case *EquinixProviderType_NotManaged:
+
+		drInfos, err := m.GetNotManaged().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNotManaged().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "not_managed." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateEquinixProviderType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateEquinixProviderType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*EquinixProviderType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *EquinixProviderType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetOrchestrationChoice().(type) {
+	case *EquinixProviderType_NotManaged:
+		if fv, exists := v.FldValidators["orchestration_choice.not_managed"]; exists {
+			val := m.GetOrchestrationChoice().(*EquinixProviderType_NotManaged).NotManaged
+			vOpts := append(opts,
+				db.WithValidateField("orchestration_choice"),
+				db.WithValidateField("not_managed"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultEquinixProviderTypeValidator = func() *ValidateEquinixProviderType {
+	v := &ValidateEquinixProviderType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
+
+	return v
+}()
+
+func EquinixProviderTypeValidator() db.Validator {
+	return DefaultEquinixProviderTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2338,6 +2739,18 @@ func (m *GCPProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error
 		}
 		return drInfos, err
 
+	case *GCPProviderType_Managed:
+
+		drInfos, err := m.GetManaged().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetManaged().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "managed." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -2346,6 +2759,14 @@ func (m *GCPProviderType) GetOrchestrationChoiceDRefInfo() ([]db.DRefInfo, error
 
 type ValidateGCPProviderType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGCPProviderType) OrchestrationChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for orchestration_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateGCPProviderType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -2362,6 +2783,16 @@ func (v *ValidateGCPProviderType) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["orchestration_choice"]; exists {
+		val := m.GetOrchestrationChoice()
+		vOpts := append(opts,
+			db.WithValidateField("orchestration_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
 	switch m.GetOrchestrationChoice().(type) {
 	case *GCPProviderType_NotManaged:
 		if fv, exists := v.FldValidators["orchestration_choice.not_managed"]; exists {
@@ -2369,6 +2800,17 @@ func (v *ValidateGCPProviderType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("orchestration_choice"),
 				db.WithValidateField("not_managed"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPProviderType_Managed:
+		if fv, exists := v.FldValidators["orchestration_choice.managed"]; exists {
+			val := m.GetOrchestrationChoice().(*GCPProviderType_Managed).Managed
+			vOpts := append(opts,
+				db.WithValidateField("orchestration_choice"),
+				db.WithValidateField("managed"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2384,7 +2826,27 @@ func (v *ValidateGCPProviderType) Validate(ctx context.Context, pm interface{}, 
 var DefaultGCPProviderTypeValidator = func() *ValidateGCPProviderType {
 	v := &ValidateGCPProviderType{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOrchestrationChoice := v.OrchestrationChoiceValidationRuleHandler
+	rulesOrchestrationChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhOrchestrationChoice(rulesOrchestrationChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPProviderType.orchestration_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["orchestration_choice"] = vFn
+
 	v.FldValidators["orchestration_choice.not_managed"] = NodeListValidator().Validate
+	v.FldValidators["orchestration_choice.managed"] = GCPManagedModeValidator().Validate
 
 	return v
 }()
@@ -2762,6 +3224,18 @@ func (m *GetSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "nutanix." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_Equinix:
+
+		drInfos, err := m.GetEquinix().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEquinix().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "equinix." + dri.DRField
 		}
 		return drInfos, err
 
@@ -3193,15 +3667,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["proactive_monitoring"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("proactive_monitoring"))
-		if err := fv(ctx, m.GetProactiveMonitoring(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["provider_choice"]; exists {
 		val := m.GetProviderChoice()
 		vOpts := append(opts,
@@ -3323,6 +3788,43 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_Equinix:
+		if fv, exists := v.FldValidators["provider_choice.equinix"]; exists {
+			val := m.GetProviderChoice().(*GetSpecType_Equinix).Equinix
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("equinix"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetProxyBypassChoice().(type) {
+	case *GetSpecType_NoProxyBypass:
+		if fv, exists := v.FldValidators["proxy_bypass_choice.no_proxy_bypass"]; exists {
+			val := m.GetProxyBypassChoice().(*GetSpecType_NoProxyBypass).NoProxyBypass
+			vOpts := append(opts,
+				db.WithValidateField("proxy_bypass_choice"),
+				db.WithValidateField("no_proxy_bypass"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_CustomProxyBypass:
+		if fv, exists := v.FldValidators["proxy_bypass_choice.custom_proxy_bypass"]; exists {
+			val := m.GetProxyBypassChoice().(*GetSpecType_CustomProxyBypass).CustomProxyBypass
+			vOpts := append(opts,
+				db.WithValidateField("proxy_bypass_choice"),
+				db.WithValidateField("custom_proxy_bypass"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3392,6 +3894,18 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				db.WithValidateField("dc_cluster_group_slo"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_errors"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_errors"))
+		for idx, item := range m.GetSiteErrors() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
 		}
@@ -3554,6 +4068,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["provider_choice.oci"] = OCIProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.openstack"] = OpenstackProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.nutanix"] = NutanixProviderTypeValidator().Validate
+	v.FldValidators["provider_choice.equinix"] = EquinixProviderTypeValidator().Validate
+
+	v.FldValidators["proxy_bypass_choice.custom_proxy_bypass"] = CustomProxyBypassSettingsValidator().Validate
 
 	v.FldValidators["s2s_connectivity_sli_choice.dc_cluster_group_sli"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -3958,6 +4475,18 @@ func (m *GlobalSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "nutanix." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_Equinix:
+
+		drInfos, err := m.GetEquinix().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEquinix().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "equinix." + dri.DRField
 		}
 		return drInfos, err
 
@@ -4596,6 +5125,43 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_Equinix:
+		if fv, exists := v.FldValidators["provider_choice.equinix"]; exists {
+			val := m.GetProviderChoice().(*GlobalSpecType_Equinix).Equinix
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("equinix"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetProxyBypassChoice().(type) {
+	case *GlobalSpecType_NoProxyBypass:
+		if fv, exists := v.FldValidators["proxy_bypass_choice.no_proxy_bypass"]; exists {
+			val := m.GetProxyBypassChoice().(*GlobalSpecType_NoProxyBypass).NoProxyBypass
+			vOpts := append(opts,
+				db.WithValidateField("proxy_bypass_choice"),
+				db.WithValidateField("no_proxy_bypass"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_CustomProxyBypass:
+		if fv, exists := v.FldValidators["proxy_bypass_choice.custom_proxy_bypass"]; exists {
+			val := m.GetProxyBypassChoice().(*GlobalSpecType_CustomProxyBypass).CustomProxyBypass
+			vOpts := append(opts,
+				db.WithValidateField("proxy_bypass_choice"),
+				db.WithValidateField("custom_proxy_bypass"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -4665,6 +5231,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				db.WithValidateField("dc_cluster_group_slo"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_errors"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_errors"))
+		for idx, item := range m.GetSiteErrors() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
 		}
@@ -4847,6 +5425,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["provider_choice.oci"] = OCIProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.openstack"] = OpenstackProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.nutanix"] = NutanixProviderTypeValidator().Validate
+	v.FldValidators["provider_choice.equinix"] = EquinixProviderTypeValidator().Validate
+
+	v.FldValidators["proxy_bypass_choice.custom_proxy_bypass"] = CustomProxyBypassSettingsValidator().Validate
 
 	v.FldValidators["s2s_connectivity_sli_choice.dc_cluster_group_sli"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -7292,6 +7873,18 @@ func (m *ReplaceSpecType) GetProviderChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *ReplaceSpecType_Equinix:
+
+		drInfos, err := m.GetEquinix().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetEquinix().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "equinix." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -7691,15 +8284,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["proactive_monitoring"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("proactive_monitoring"))
-		if err := fv(ctx, m.GetProactiveMonitoring(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	if fv, exists := v.FldValidators["provider_choice"]; exists {
 		val := m.GetProviderChoice()
 		vOpts := append(opts,
@@ -7816,6 +8400,43 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			vOpts := append(opts,
 				db.WithValidateField("provider_choice"),
 				db.WithValidateField("nutanix"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_Equinix:
+		if fv, exists := v.FldValidators["provider_choice.equinix"]; exists {
+			val := m.GetProviderChoice().(*ReplaceSpecType_Equinix).Equinix
+			vOpts := append(opts,
+				db.WithValidateField("provider_choice"),
+				db.WithValidateField("equinix"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetProxyBypassChoice().(type) {
+	case *ReplaceSpecType_NoProxyBypass:
+		if fv, exists := v.FldValidators["proxy_bypass_choice.no_proxy_bypass"]; exists {
+			val := m.GetProxyBypassChoice().(*ReplaceSpecType_NoProxyBypass).NoProxyBypass
+			vOpts := append(opts,
+				db.WithValidateField("proxy_bypass_choice"),
+				db.WithValidateField("no_proxy_bypass"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_CustomProxyBypass:
+		if fv, exists := v.FldValidators["proxy_bypass_choice.custom_proxy_bypass"]; exists {
+			val := m.GetProxyBypassChoice().(*ReplaceSpecType_CustomProxyBypass).CustomProxyBypass
+			vOpts := append(opts,
+				db.WithValidateField("proxy_bypass_choice"),
+				db.WithValidateField("custom_proxy_bypass"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -8012,6 +8633,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["provider_choice.oci"] = OCIProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.openstack"] = OpenstackProviderTypeValidator().Validate
 	v.FldValidators["provider_choice.nutanix"] = NutanixProviderTypeValidator().Validate
+	v.FldValidators["provider_choice.equinix"] = EquinixProviderTypeValidator().Validate
+
+	v.FldValidators["proxy_bypass_choice.custom_proxy_bypass"] = CustomProxyBypassSettingsValidator().Validate
 
 	v.FldValidators["s2s_connectivity_sli_choice.dc_cluster_group_sli"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -9594,6 +10218,9 @@ func (r *CreateSpecType) SetProviderChoiceToGlobalSpecType(o *GlobalSpecType) er
 	case *CreateSpecType_Baremetal:
 		o.ProviderChoice = &GlobalSpecType_Baremetal{Baremetal: of.Baremetal}
 
+	case *CreateSpecType_Equinix:
+		o.ProviderChoice = &GlobalSpecType_Equinix{Equinix: of.Equinix}
+
 	case *CreateSpecType_Gcp:
 		o.ProviderChoice = &GlobalSpecType_Gcp{Gcp: of.Gcp}
 
@@ -9635,6 +10262,9 @@ func (r *CreateSpecType) GetProviderChoiceFromGlobalSpecType(o *GlobalSpecType) 
 	case *GlobalSpecType_Baremetal:
 		r.ProviderChoice = &CreateSpecType_Baremetal{Baremetal: of.Baremetal}
 
+	case *GlobalSpecType_Equinix:
+		r.ProviderChoice = &CreateSpecType_Equinix{Equinix: of.Equinix}
+
 	case *GlobalSpecType_Gcp:
 		r.ProviderChoice = &CreateSpecType_Gcp{Gcp: of.Gcp}
 
@@ -9655,6 +10285,41 @@ func (r *CreateSpecType) GetProviderChoiceFromGlobalSpecType(o *GlobalSpecType) 
 
 	case *GlobalSpecType_Vmware:
 		r.ProviderChoice = &CreateSpecType_Vmware{Vmware: of.Vmware}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetProxyBypassChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ProxyBypassChoice.(type) {
+	case nil:
+		o.ProxyBypassChoice = nil
+
+	case *CreateSpecType_CustomProxyBypass:
+		o.ProxyBypassChoice = &GlobalSpecType_CustomProxyBypass{CustomProxyBypass: of.CustomProxyBypass}
+
+	case *CreateSpecType_NoProxyBypass:
+		o.ProxyBypassChoice = &GlobalSpecType_NoProxyBypass{NoProxyBypass: of.NoProxyBypass}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetProxyBypassChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ProxyBypassChoice.(type) {
+	case nil:
+		r.ProxyBypassChoice = nil
+
+	case *GlobalSpecType_CustomProxyBypass:
+		r.ProxyBypassChoice = &CreateSpecType_CustomProxyBypass{CustomProxyBypass: of.CustomProxyBypass}
+
+	case *GlobalSpecType_NoProxyBypass:
+		r.ProxyBypassChoice = &CreateSpecType_NoProxyBypass{NoProxyBypass: of.NoProxyBypass}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -9754,8 +10419,8 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetNodeHaChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
-	m.ProactiveMonitoring = f.GetProactiveMonitoring()
 	m.GetProviderChoiceFromGlobalSpecType(f)
+	m.GetProxyBypassChoiceFromGlobalSpecType(f)
 	m.ReSelect = f.GetReSelect()
 	m.GetS2SConnectivitySliChoiceFromGlobalSpecType(f)
 	m.GetS2SConnectivitySloChoiceFromGlobalSpecType(f)
@@ -9792,8 +10457,8 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetNodeHaChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
-	f.ProactiveMonitoring = m1.ProactiveMonitoring
 	m1.SetProviderChoiceToGlobalSpecType(f)
+	m1.SetProxyBypassChoiceToGlobalSpecType(f)
 	f.ReSelect = m1.ReSelect
 	m1.SetS2SConnectivitySliChoiceToGlobalSpecType(f)
 	m1.SetS2SConnectivitySloChoiceToGlobalSpecType(f)
@@ -10036,6 +10701,9 @@ func (r *GetSpecType) SetProviderChoiceToGlobalSpecType(o *GlobalSpecType) error
 	case *GetSpecType_Baremetal:
 		o.ProviderChoice = &GlobalSpecType_Baremetal{Baremetal: of.Baremetal}
 
+	case *GetSpecType_Equinix:
+		o.ProviderChoice = &GlobalSpecType_Equinix{Equinix: of.Equinix}
+
 	case *GetSpecType_Gcp:
 		o.ProviderChoice = &GlobalSpecType_Gcp{Gcp: of.Gcp}
 
@@ -10077,6 +10745,9 @@ func (r *GetSpecType) GetProviderChoiceFromGlobalSpecType(o *GlobalSpecType) err
 	case *GlobalSpecType_Baremetal:
 		r.ProviderChoice = &GetSpecType_Baremetal{Baremetal: of.Baremetal}
 
+	case *GlobalSpecType_Equinix:
+		r.ProviderChoice = &GetSpecType_Equinix{Equinix: of.Equinix}
+
 	case *GlobalSpecType_Gcp:
 		r.ProviderChoice = &GetSpecType_Gcp{Gcp: of.Gcp}
 
@@ -10097,6 +10768,41 @@ func (r *GetSpecType) GetProviderChoiceFromGlobalSpecType(o *GlobalSpecType) err
 
 	case *GlobalSpecType_Vmware:
 		r.ProviderChoice = &GetSpecType_Vmware{Vmware: of.Vmware}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetProxyBypassChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ProxyBypassChoice.(type) {
+	case nil:
+		o.ProxyBypassChoice = nil
+
+	case *GetSpecType_CustomProxyBypass:
+		o.ProxyBypassChoice = &GlobalSpecType_CustomProxyBypass{CustomProxyBypass: of.CustomProxyBypass}
+
+	case *GetSpecType_NoProxyBypass:
+		o.ProxyBypassChoice = &GlobalSpecType_NoProxyBypass{NoProxyBypass: of.NoProxyBypass}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetProxyBypassChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ProxyBypassChoice.(type) {
+	case nil:
+		r.ProxyBypassChoice = nil
+
+	case *GlobalSpecType_CustomProxyBypass:
+		r.ProxyBypassChoice = &GetSpecType_CustomProxyBypass{CustomProxyBypass: of.CustomProxyBypass}
+
+	case *GlobalSpecType_NoProxyBypass:
+		r.ProxyBypassChoice = &GetSpecType_NoProxyBypass{NoProxyBypass: of.NoProxyBypass}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -10197,11 +10903,12 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
-	m.ProactiveMonitoring = f.GetProactiveMonitoring()
 	m.GetProviderChoiceFromGlobalSpecType(f)
+	m.GetProxyBypassChoiceFromGlobalSpecType(f)
 	m.ReSelect = f.GetReSelect()
 	m.GetS2SConnectivitySliChoiceFromGlobalSpecType(f)
 	m.GetS2SConnectivitySloChoiceFromGlobalSpecType(f)
+	m.SiteErrors = f.GetSiteErrors()
 	m.SiteState = f.GetSiteState()
 	m.SoftwareSettings = f.GetSoftwareSettings()
 	m.TunnelDeadTimeout = f.GetTunnelDeadTimeout()
@@ -10238,11 +10945,12 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
-	f.ProactiveMonitoring = m1.ProactiveMonitoring
 	m1.SetProviderChoiceToGlobalSpecType(f)
+	m1.SetProxyBypassChoiceToGlobalSpecType(f)
 	f.ReSelect = m1.ReSelect
 	m1.SetS2SConnectivitySliChoiceToGlobalSpecType(f)
 	m1.SetS2SConnectivitySloChoiceToGlobalSpecType(f)
+	f.SiteErrors = m1.SiteErrors
 	f.SiteState = m1.SiteState
 	f.SoftwareSettings = m1.SoftwareSettings
 	f.TunnelDeadTimeout = m1.TunnelDeadTimeout
@@ -10484,6 +11192,9 @@ func (r *ReplaceSpecType) SetProviderChoiceToGlobalSpecType(o *GlobalSpecType) e
 	case *ReplaceSpecType_Baremetal:
 		o.ProviderChoice = &GlobalSpecType_Baremetal{Baremetal: of.Baremetal}
 
+	case *ReplaceSpecType_Equinix:
+		o.ProviderChoice = &GlobalSpecType_Equinix{Equinix: of.Equinix}
+
 	case *ReplaceSpecType_Gcp:
 		o.ProviderChoice = &GlobalSpecType_Gcp{Gcp: of.Gcp}
 
@@ -10525,6 +11236,9 @@ func (r *ReplaceSpecType) GetProviderChoiceFromGlobalSpecType(o *GlobalSpecType)
 	case *GlobalSpecType_Baremetal:
 		r.ProviderChoice = &ReplaceSpecType_Baremetal{Baremetal: of.Baremetal}
 
+	case *GlobalSpecType_Equinix:
+		r.ProviderChoice = &ReplaceSpecType_Equinix{Equinix: of.Equinix}
+
 	case *GlobalSpecType_Gcp:
 		r.ProviderChoice = &ReplaceSpecType_Gcp{Gcp: of.Gcp}
 
@@ -10545,6 +11259,41 @@ func (r *ReplaceSpecType) GetProviderChoiceFromGlobalSpecType(o *GlobalSpecType)
 
 	case *GlobalSpecType_Vmware:
 		r.ProviderChoice = &ReplaceSpecType_Vmware{Vmware: of.Vmware}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetProxyBypassChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ProxyBypassChoice.(type) {
+	case nil:
+		o.ProxyBypassChoice = nil
+
+	case *ReplaceSpecType_CustomProxyBypass:
+		o.ProxyBypassChoice = &GlobalSpecType_CustomProxyBypass{CustomProxyBypass: of.CustomProxyBypass}
+
+	case *ReplaceSpecType_NoProxyBypass:
+		o.ProxyBypassChoice = &GlobalSpecType_NoProxyBypass{NoProxyBypass: of.NoProxyBypass}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetProxyBypassChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ProxyBypassChoice.(type) {
+	case nil:
+		r.ProxyBypassChoice = nil
+
+	case *GlobalSpecType_CustomProxyBypass:
+		r.ProxyBypassChoice = &ReplaceSpecType_CustomProxyBypass{CustomProxyBypass: of.CustomProxyBypass}
+
+	case *GlobalSpecType_NoProxyBypass:
+		r.ProxyBypassChoice = &ReplaceSpecType_NoProxyBypass{NoProxyBypass: of.NoProxyBypass}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -10644,8 +11393,8 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetNodeHaChoiceFromGlobalSpecType(f)
 	m.OfflineSurvivabilityMode = f.GetOfflineSurvivabilityMode()
 	m.PerformanceEnhancementMode = f.GetPerformanceEnhancementMode()
-	m.ProactiveMonitoring = f.GetProactiveMonitoring()
 	m.GetProviderChoiceFromGlobalSpecType(f)
+	m.GetProxyBypassChoiceFromGlobalSpecType(f)
 	m.ReSelect = f.GetReSelect()
 	m.GetS2SConnectivitySliChoiceFromGlobalSpecType(f)
 	m.GetS2SConnectivitySloChoiceFromGlobalSpecType(f)
@@ -10682,8 +11431,8 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetNodeHaChoiceToGlobalSpecType(f)
 	f.OfflineSurvivabilityMode = m1.OfflineSurvivabilityMode
 	f.PerformanceEnhancementMode = m1.PerformanceEnhancementMode
-	f.ProactiveMonitoring = m1.ProactiveMonitoring
 	m1.SetProviderChoiceToGlobalSpecType(f)
+	m1.SetProxyBypassChoiceToGlobalSpecType(f)
 	f.ReSelect = m1.ReSelect
 	m1.SetS2SConnectivitySliChoiceToGlobalSpecType(f)
 	m1.SetS2SConnectivitySloChoiceToGlobalSpecType(f)

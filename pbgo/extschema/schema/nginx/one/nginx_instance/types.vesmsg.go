@@ -156,138 +156,6 @@ func APIDiscoverySpecValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *DataplaneIdentifier) ToJSON() (string, error) {
-	return codec.ToJSON(m)
-}
-
-func (m *DataplaneIdentifier) ToYAML() (string, error) {
-	return codec.ToYAML(m)
-}
-
-func (m *DataplaneIdentifier) DeepCopy() *DataplaneIdentifier {
-	if m == nil {
-		return nil
-	}
-	ser, err := m.Marshal()
-	if err != nil {
-		return nil
-	}
-	c := &DataplaneIdentifier{}
-	err = c.Unmarshal(ser)
-	if err != nil {
-		return nil
-	}
-	return c
-}
-
-func (m *DataplaneIdentifier) DeepCopyProto() proto.Message {
-	if m == nil {
-		return nil
-	}
-	return m.DeepCopy()
-}
-
-func (m *DataplaneIdentifier) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return DataplaneIdentifierValidator().Validate(ctx, m, opts...)
-}
-
-type ValidateDataplaneIdentifier struct {
-	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateDataplaneIdentifier) DataplaneIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for dataplane_id")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateDataplaneIdentifier) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*DataplaneIdentifier)
-	if !ok {
-		switch t := pm.(type) {
-		case nil:
-			return nil
-		default:
-			return fmt.Errorf("Expected type *DataplaneIdentifier got type %s", t)
-		}
-	}
-	if m == nil {
-		return nil
-	}
-
-	if fv, exists := v.FldValidators["dataplane_id"]; exists {
-		val := m.GetDataplaneId()
-		vOpts := append(opts,
-			db.WithValidateField("dataplane_id"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
-	switch m.GetDataplaneId().(type) {
-	case *DataplaneIdentifier_InstanceObjectId:
-		if fv, exists := v.FldValidators["dataplane_id.instance_object_id"]; exists {
-			val := m.GetDataplaneId().(*DataplaneIdentifier_InstanceObjectId).InstanceObjectId
-			vOpts := append(opts,
-				db.WithValidateField("dataplane_id"),
-				db.WithValidateField("instance_object_id"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *DataplaneIdentifier_CsgObjectId:
-		if fv, exists := v.FldValidators["dataplane_id.csg_object_id"]; exists {
-			val := m.GetDataplaneId().(*DataplaneIdentifier_CsgObjectId).CsgObjectId
-			vOpts := append(opts,
-				db.WithValidateField("dataplane_id"),
-				db.WithValidateField("csg_object_id"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
-	}
-
-	return nil
-}
-
-// Well-known symbol for default validator implementation
-var DefaultDataplaneIdentifierValidator = func() *ValidateDataplaneIdentifier {
-	v := &ValidateDataplaneIdentifier{FldValidators: map[string]db.ValidatorFunc{}}
-
-	var (
-		err error
-		vFn db.ValidatorFunc
-	)
-	_, _ = err, vFn
-	vFnMap := map[string]db.ValidatorFunc{}
-	_ = vFnMap
-
-	vrhDataplaneId := v.DataplaneIdValidationRuleHandler
-	rulesDataplaneId := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhDataplaneId(rulesDataplaneId)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DataplaneIdentifier.dataplane_id: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["dataplane_id"] = vFn
-
-	return v
-}()
-
-func DataplaneIdentifierValidator() db.Validator {
-	return DefaultDataplaneIdentifierValidator
-}
-
-// augmented methods on protoc/std generated struct
-
 func (m *GetSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -350,10 +218,10 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["dataplane_id"]; exists {
+	if fv, exists := v.FldValidators["object_id"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("dataplane_id"))
-		if err := fv(ctx, m.GetDataplaneId(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("object_id"))
+		if err := fv(ctx, m.GetObjectId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -378,8 +246,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["waf_spec"] = WAFSpecValidator().Validate
 
 	v.FldValidators["api_discovery_spec"] = APIDiscoverySpecValidator().Validate
-
-	v.FldValidators["dataplane_id"] = DataplaneIdentifierValidator().Validate
 
 	return v
 }()
@@ -452,10 +318,10 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["dataplane_id"]; exists {
+	if fv, exists := v.FldValidators["object_id"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("dataplane_id"))
-		if err := fv(ctx, m.GetDataplaneId(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("object_id"))
+		if err := fv(ctx, m.GetObjectId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -480,8 +346,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["waf_spec"] = WAFSpecValidator().Validate
 
 	v.FldValidators["api_discovery_spec"] = APIDiscoverySpecValidator().Validate
-
-	v.FldValidators["dataplane_id"] = DataplaneIdentifierValidator().Validate
 
 	return v
 }()
@@ -531,6 +395,22 @@ type ValidateWAFSpec struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateWAFSpec) PolicyManagementPlatformValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for policy_management_platform")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateWAFSpec) WafModeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for waf_mode")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateWAFSpec) PolicyFileNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -564,6 +444,42 @@ func (v *ValidateWAFSpec) Validate(ctx context.Context, pm interface{}, opts ...
 
 	}
 
+	if fv, exists := v.FldValidators["policy_management_platform"]; exists {
+		val := m.GetPolicyManagementPlatform()
+		vOpts := append(opts,
+			db.WithValidateField("policy_management_platform"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPolicyManagementPlatform().(type) {
+	case *WAFSpec_NginxPolicyManagement:
+		if fv, exists := v.FldValidators["policy_management_platform.nginx_policy_management"]; exists {
+			val := m.GetPolicyManagementPlatform().(*WAFSpec_NginxPolicyManagement).NginxPolicyManagement
+			vOpts := append(opts,
+				db.WithValidateField("policy_management_platform"),
+				db.WithValidateField("nginx_policy_management"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WAFSpec_DistributedCloudPolicyManagement:
+		if fv, exists := v.FldValidators["policy_management_platform.distributed_cloud_policy_management"]; exists {
+			val := m.GetPolicyManagementPlatform().(*WAFSpec_DistributedCloudPolicyManagement).DistributedCloudPolicyManagement
+			vOpts := append(opts,
+				db.WithValidateField("policy_management_platform"),
+				db.WithValidateField("distributed_cloud_policy_management"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["security_log_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("security_log_enabled"))
@@ -585,6 +501,53 @@ func (v *ValidateWAFSpec) Validate(ctx context.Context, pm interface{}, opts ...
 
 	}
 
+	if fv, exists := v.FldValidators["waf_mode"]; exists {
+		val := m.GetWafMode()
+		vOpts := append(opts,
+			db.WithValidateField("waf_mode"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetWafMode().(type) {
+	case *WAFSpec_NoneWafMode:
+		if fv, exists := v.FldValidators["waf_mode.none_waf_mode"]; exists {
+			val := m.GetWafMode().(*WAFSpec_NoneWafMode).NoneWafMode
+			vOpts := append(opts,
+				db.WithValidateField("waf_mode"),
+				db.WithValidateField("none_waf_mode"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WAFSpec_MonitoringWafMode:
+		if fv, exists := v.FldValidators["waf_mode.monitoring_waf_mode"]; exists {
+			val := m.GetWafMode().(*WAFSpec_MonitoringWafMode).MonitoringWafMode
+			vOpts := append(opts,
+				db.WithValidateField("waf_mode"),
+				db.WithValidateField("monitoring_waf_mode"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WAFSpec_BlockingWafMode:
+		if fv, exists := v.FldValidators["waf_mode.blocking_waf_mode"]; exists {
+			val := m.GetWafMode().(*WAFSpec_BlockingWafMode).BlockingWafMode
+			vOpts := append(opts,
+				db.WithValidateField("waf_mode"),
+				db.WithValidateField("blocking_waf_mode"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	return nil
 }
 
@@ -599,6 +562,28 @@ var DefaultWAFSpecValidator = func() *ValidateWAFSpec {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhPolicyManagementPlatform := v.PolicyManagementPlatformValidationRuleHandler
+	rulesPolicyManagementPlatform := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPolicyManagementPlatform(rulesPolicyManagementPlatform)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WAFSpec.policy_management_platform: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["policy_management_platform"] = vFn
+
+	vrhWafMode := v.WafModeValidationRuleHandler
+	rulesWafMode := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhWafMode(rulesWafMode)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WAFSpec.waf_mode: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_mode"] = vFn
 
 	vrhPolicyFileName := v.PolicyFileNameValidationRuleHandler
 	rulesPolicyFileName := map[string]string{
@@ -623,7 +608,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.ApiDiscoverySpec = f.GetApiDiscoverySpec()
-	m.DataplaneId = f.GetDataplaneId()
+	m.ObjectId = f.GetObjectId()
 	m.WafSpec = f.GetWafSpec()
 }
 
@@ -643,7 +628,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.ApiDiscoverySpec = m1.ApiDiscoverySpec
-	f.DataplaneId = m1.DataplaneId
+	f.ObjectId = m1.ObjectId
 	f.WafSpec = m1.WafSpec
 }
 

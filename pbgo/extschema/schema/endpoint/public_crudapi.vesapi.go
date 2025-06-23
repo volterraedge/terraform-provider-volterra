@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/endpoints/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -2271,7 +2284,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the endpoint\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "spec",
-                    "$ref": "#/definitions/endpointCreateSpecType",
+                    "$ref": "#/definitions/schemaendpointCreateSpecType",
                     "x-displayname": "Spec",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -2295,7 +2308,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the endpoint\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "spec",
-                    "$ref": "#/definitions/endpointGetSpecType",
+                    "$ref": "#/definitions/schemaendpointGetSpecType",
                     "x-displayname": "Spec",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -2306,80 +2319,6 @@ var APISwaggerJSON string = `{
                     "title": "system metadata",
                     "$ref": "#/definitions/schemaSystemObjectGetMetaType",
                     "x-displayname": "System Metadata"
-                }
-            }
-        },
-        "endpointCreateSpecType": {
-            "type": "object",
-            "description": "Create endpoint will create the object in the storage backend for namespace metadata.namespace",
-            "title": "Create Endpoint",
-            "x-displayname": "Create Endpoint",
-            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"service_info\"]",
-            "x-ves-proto-message": "ves.io.schema.endpoint.CreateSpecType",
-            "properties": {
-                "dns_name": {
-                    "type": "string",
-                    "description": "Exclusive with [dns_name_advanced ip service_info]\n Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "maxLength": 256,
-                    "x-displayname": "Endpoint Name",
-                    "x-ves-example": "ves.io",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.hostname": "true",
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                },
-                "dns_name_advanced": {
-                    "description": "Exclusive with [dns_name ip service_info]\n Specifies name and TTL used for DNS resolution.",
-                    "$ref": "#/definitions/endpointDnsNameAdvancedType",
-                    "x-displayname": "Endpoint Name (Advanced)"
-                },
-                "health_check_port": {
-                    "type": "integer",
-                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "format": "int64",
-                    "x-displayname": "Port used for health check",
-                    "x-ves-example": "9080",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "65535"
-                    }
-                },
-                "ip": {
-                    "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n Endpoint is reachable at the given ipv4/ipv6 address\n\nExample: - \"10.5.2.4/2001::20\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Endpoint IP Address",
-                    "x-ves-example": "10.5.2.4/2001::20",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "port": {
-                    "type": "integer",
-                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "format": "int64",
-                    "x-displayname": "Port",
-                    "x-ves-example": "9080",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "65535"
-                    }
-                },
-                "protocol": {
-                    "type": "string",
-                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"TCP\\\",\\\"UDP\\\"]\n",
-                    "x-displayname": "Protocol",
-                    "x-ves-example": "TCP",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"TCP\\\",\\\"UDP\\\"]"
-                    }
-                },
-                "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n It contains information about how the service is selected (either by service name or\n label selector) and where the service is discovered (either in K8s or Consul)\n\n   Service Name.\n\n     String represent name of the service. System will perform discovery based on the\n     discovery method.\n\n     In case of K8S, System will watch K8s API server and automatically discover services and\n     endpoints of interest.\n     In case Virtual K8s cluster, system already has access to it.\n     In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n     In case of Consul, System will watch the consul server and automatically discover the\n     services and endpoints of interest.\n\n   Label selector for selecting the services\n\n     Label selector expression for selecting services or serverless functions\n     to automatically discover services and endpoint of interest.\n\n     discovery_type specifies where endpoint will be discovered\n\n     Endpoint can be discovered in K8S or Consul\n     In case of K8S, labels on the service is matched against service_selector\n     In case of Consul, tags on the service is matched against service_selector",
-                    "$ref": "#/definitions/endpointServiceInfoType",
-                    "x-displayname": "Service Selector Info"
-                },
-                "where": {
-                    "description": " This endpoint is present in site, virtual_site or virtual_network selected by following field.",
-                    "$ref": "#/definitions/schemaNetworkSiteRefSelector",
-                    "x-displayname": "Where"
                 }
             }
         },
@@ -2552,7 +2491,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the endpoint\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "spec",
-                    "$ref": "#/definitions/endpointGetSpecType",
+                    "$ref": "#/definitions/schemaendpointGetSpecType",
                     "x-displayname": "Spec",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -2589,80 +2528,6 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_BROKEN_REFERENCES"
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
-        },
-        "endpointGetSpecType": {
-            "type": "object",
-            "description": "Get endpoint will get the object from the storage backend for namespace metadata.namespace",
-            "title": "Get Endpoint",
-            "x-displayname": "Get Endpoint",
-            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"service_info\"]",
-            "x-ves-proto-message": "ves.io.schema.endpoint.GetSpecType",
-            "properties": {
-                "dns_name": {
-                    "type": "string",
-                    "description": "Exclusive with [dns_name_advanced ip service_info]\n Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "maxLength": 256,
-                    "x-displayname": "Endpoint Name",
-                    "x-ves-example": "ves.io",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.hostname": "true",
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                },
-                "dns_name_advanced": {
-                    "description": "Exclusive with [dns_name ip service_info]\n Specifies name and TTL used for DNS resolution.",
-                    "$ref": "#/definitions/endpointDnsNameAdvancedType",
-                    "x-displayname": "Endpoint Name (Advanced)"
-                },
-                "health_check_port": {
-                    "type": "integer",
-                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "format": "int64",
-                    "x-displayname": "Port used for health check",
-                    "x-ves-example": "9080",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "65535"
-                    }
-                },
-                "ip": {
-                    "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n Endpoint is reachable at the given ipv4/ipv6 address\n\nExample: - \"10.5.2.4/2001::20\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Endpoint IP Address",
-                    "x-ves-example": "10.5.2.4/2001::20",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "port": {
-                    "type": "integer",
-                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "format": "int64",
-                    "x-displayname": "Port",
-                    "x-ves-example": "9080",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "65535"
-                    }
-                },
-                "protocol": {
-                    "type": "string",
-                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"TCP\\\",\\\"UDP\\\"]\n",
-                    "x-displayname": "Protocol",
-                    "x-ves-example": "TCP",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"TCP\\\",\\\"UDP\\\"]"
-                    }
-                },
-                "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n It contains information about how the service is selected (either by service name or\n label selector) and where the service is discovered (either in K8s or Consul)\n\n   Service Name.\n\n     String represent name of the service. System will perform discovery based on the\n     discovery method.\n\n     In case of K8S, System will watch K8s API server and automatically discover services and\n     endpoints of interest.\n     In case Virtual K8s cluster, system already has access to it.\n     In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n     In case of Consul, System will watch the consul server and automatically discover the\n     services and endpoints of interest.\n\n   Label selector for selecting the services\n\n     Label selector expression for selecting services or serverless functions\n     to automatically discover services and endpoint of interest.\n\n     discovery_type specifies where endpoint will be discovered\n\n     Endpoint can be discovered in K8S or Consul\n     In case of K8S, labels on the service is matched against service_selector\n     In case of Consul, tags on the service is matched against service_selector",
-                    "$ref": "#/definitions/endpointServiceInfoType",
-                    "x-displayname": "Service Selector Info"
-                },
-                "where": {
-                    "description": " This endpoint is present in site, virtual_site or virtual_network selected by following field.",
-                    "$ref": "#/definitions/schemaNetworkSiteRefSelector",
-                    "x-displayname": "Where"
-                }
-            }
         },
         "endpointHealthCheckInfoType": {
             "type": "object",
@@ -2824,7 +2689,7 @@ var APISwaggerJSON string = `{
                 "get_spec": {
                     "description": " If ListRequest has any specified report_fields, it will appear in object",
                     "title": "get_spec",
-                    "$ref": "#/definitions/endpointGetSpecType",
+                    "$ref": "#/definitions/schemaendpointGetSpecType",
                     "x-displayname": "Get Specification"
                 },
                 "labels": {
@@ -2921,7 +2786,7 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "description": " Specification of the desired behavior of the endpoint\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "spec",
-                    "$ref": "#/definitions/endpointReplaceSpecType",
+                    "$ref": "#/definitions/schemaendpointReplaceSpecType",
                     "x-displayname": "Spec",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -2932,80 +2797,6 @@ var APISwaggerJSON string = `{
         "endpointReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.endpoint.ReplaceResponse"
-        },
-        "endpointReplaceSpecType": {
-            "type": "object",
-            "description": "Replacing an endpoint object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.",
-            "title": "Replace Endpoint",
-            "x-displayname": "Replace Endpoint",
-            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"service_info\"]",
-            "x-ves-proto-message": "ves.io.schema.endpoint.ReplaceSpecType",
-            "properties": {
-                "dns_name": {
-                    "type": "string",
-                    "description": "Exclusive with [dns_name_advanced ip service_info]\n Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "maxLength": 256,
-                    "x-displayname": "Endpoint Name",
-                    "x-ves-example": "ves.io",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.hostname": "true",
-                        "ves.io.schema.rules.string.max_len": "256"
-                    }
-                },
-                "dns_name_advanced": {
-                    "description": "Exclusive with [dns_name ip service_info]\n Specifies name and TTL used for DNS resolution.",
-                    "$ref": "#/definitions/endpointDnsNameAdvancedType",
-                    "x-displayname": "Endpoint Name (Advanced)"
-                },
-                "health_check_port": {
-                    "type": "integer",
-                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "format": "int64",
-                    "x-displayname": "Port used for health check",
-                    "x-ves-example": "9080",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "65535"
-                    }
-                },
-                "ip": {
-                    "type": "string",
-                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n Endpoint is reachable at the given ipv4/ipv6 address\n\nExample: - \"10.5.2.4/2001::20\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
-                    "x-displayname": "Endpoint IP Address",
-                    "x-ves-example": "10.5.2.4/2001::20",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ip": "true"
-                    }
-                },
-                "port": {
-                    "type": "integer",
-                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "format": "int64",
-                    "x-displayname": "Port",
-                    "x-ves-example": "9080",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "65535"
-                    }
-                },
-                "protocol": {
-                    "type": "string",
-                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"TCP\\\",\\\"UDP\\\"]\n",
-                    "x-displayname": "Protocol",
-                    "x-ves-example": "TCP",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"TCP\\\",\\\"UDP\\\"]"
-                    }
-                },
-                "service_info": {
-                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n It contains information about how the service is selected (either by service name or\n label selector) and where the service is discovered (either in K8s or Consul)\n\n   Service Name.\n\n     String represent name of the service. System will perform discovery based on the\n     discovery method.\n\n     In case of K8S, System will watch K8s API server and automatically discover services and\n     endpoints of interest.\n     In case Virtual K8s cluster, system already has access to it.\n     In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n     In case of Consul, System will watch the consul server and automatically discover the\n     services and endpoints of interest.\n\n   Label selector for selecting the services\n\n     Label selector expression for selecting services or serverless functions\n     to automatically discover services and endpoint of interest.\n\n     discovery_type specifies where endpoint will be discovered\n\n     Endpoint can be discovered in K8S or Consul\n     In case of K8S, labels on the service is matched against service_selector\n     In case of Consul, tags on the service is matched against service_selector",
-                    "$ref": "#/definitions/endpointServiceInfoType",
-                    "x-displayname": "Service Selector Info"
-                },
-                "where": {
-                    "description": " This endpoint is present in site, virtual_site or virtual_network selected by following field.",
-                    "$ref": "#/definitions/schemaNetworkSiteRefSelector",
-                    "x-displayname": "Where"
-                }
-            }
         },
         "endpointServiceInfoType": {
             "type": "object",
@@ -4059,6 +3850,243 @@ var APISwaggerJSON string = `{
             "x-displayname": "Virtual Network Type",
             "x-ves-proto-enum": "ves.io.schema.VirtualNetworkType"
         },
+        "schemaendpointCreateSpecType": {
+            "type": "object",
+            "description": "Create endpoint will create the object in the storage backend for namespace metadata.namespace",
+            "title": "Create Endpoint",
+            "x-displayname": "Create Endpoint",
+            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"service_info\"]",
+            "x-ves-proto-message": "ves.io.schema.endpoint.CreateSpecType",
+            "properties": {
+                "dns_name": {
+                    "type": "string",
+                    "description": "Exclusive with [dns_name_advanced ip service_info]\n Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Endpoint Name",
+                    "x-ves-example": "ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "dns_name_advanced": {
+                    "description": "Exclusive with [dns_name ip service_info]\n Specifies name and TTL used for DNS resolution.",
+                    "$ref": "#/definitions/endpointDnsNameAdvancedType",
+                    "x-displayname": "Endpoint Name (Advanced)"
+                },
+                "health_check_port": {
+                    "type": "integer",
+                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "format": "int64",
+                    "x-displayname": "Port used for health check",
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "ip": {
+                    "type": "string",
+                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n Endpoint is reachable at the given ipv4/ipv6 address\n\nExample: - \"10.5.2.4/2001::20\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "Endpoint IP Address",
+                    "x-ves-example": "10.5.2.4/2001::20",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "format": "int64",
+                    "x-displayname": "Port",
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"TCP\\\",\\\"UDP\\\"]\n",
+                    "x-displayname": "Protocol",
+                    "x-ves-example": "TCP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"TCP\\\",\\\"UDP\\\"]"
+                    }
+                },
+                "service_info": {
+                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n It contains information about how the service is selected (either by service name or\n label selector) and where the service is discovered (either in K8s or Consul)\n\n   Service Name.\n\n     String represent name of the service. System will perform discovery based on the\n     discovery method.\n\n     In case of K8S, System will watch K8s API server and automatically discover services and\n     endpoints of interest.\n     In case Virtual K8s cluster, system already has access to it.\n     In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n     In case of Consul, System will watch the consul server and automatically discover the\n     services and endpoints of interest.\n\n   Label selector for selecting the services\n\n     Label selector expression for selecting services or serverless functions\n     to automatically discover services and endpoint of interest.\n\n     discovery_type specifies where endpoint will be discovered\n\n     Endpoint can be discovered in K8S or Consul\n     In case of K8S, labels on the service is matched against service_selector\n     In case of Consul, tags on the service is matched against service_selector",
+                    "$ref": "#/definitions/endpointServiceInfoType",
+                    "x-displayname": "Service Selector Info"
+                },
+                "snat_pool": {
+                    "description": " Configured SNAT Pool",
+                    "$ref": "#/definitions/viewsSnatPoolConfiguration",
+                    "x-displayname": "Configured SNAT Pool"
+                },
+                "where": {
+                    "description": " This endpoint is present in site, virtual_site or virtual_network selected by following field.",
+                    "$ref": "#/definitions/schemaNetworkSiteRefSelector",
+                    "x-displayname": "Where"
+                }
+            }
+        },
+        "schemaendpointGetSpecType": {
+            "type": "object",
+            "description": "Get endpoint will get the object from the storage backend for namespace metadata.namespace",
+            "title": "Get Endpoint",
+            "x-displayname": "Get Endpoint",
+            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"service_info\"]",
+            "x-ves-proto-message": "ves.io.schema.endpoint.GetSpecType",
+            "properties": {
+                "dns_name": {
+                    "type": "string",
+                    "description": "Exclusive with [dns_name_advanced ip service_info]\n Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Endpoint Name",
+                    "x-ves-example": "ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "dns_name_advanced": {
+                    "description": "Exclusive with [dns_name ip service_info]\n Specifies name and TTL used for DNS resolution.",
+                    "$ref": "#/definitions/endpointDnsNameAdvancedType",
+                    "x-displayname": "Endpoint Name (Advanced)"
+                },
+                "health_check_port": {
+                    "type": "integer",
+                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "format": "int64",
+                    "x-displayname": "Port used for health check",
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "ip": {
+                    "type": "string",
+                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n Endpoint is reachable at the given ipv4/ipv6 address\n\nExample: - \"10.5.2.4/2001::20\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "Endpoint IP Address",
+                    "x-ves-example": "10.5.2.4/2001::20",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "format": "int64",
+                    "x-displayname": "Port",
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"TCP\\\",\\\"UDP\\\"]\n",
+                    "x-displayname": "Protocol",
+                    "x-ves-example": "TCP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"TCP\\\",\\\"UDP\\\"]"
+                    }
+                },
+                "service_info": {
+                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n It contains information about how the service is selected (either by service name or\n label selector) and where the service is discovered (either in K8s or Consul)\n\n   Service Name.\n\n     String represent name of the service. System will perform discovery based on the\n     discovery method.\n\n     In case of K8S, System will watch K8s API server and automatically discover services and\n     endpoints of interest.\n     In case Virtual K8s cluster, system already has access to it.\n     In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n     In case of Consul, System will watch the consul server and automatically discover the\n     services and endpoints of interest.\n\n   Label selector for selecting the services\n\n     Label selector expression for selecting services or serverless functions\n     to automatically discover services and endpoint of interest.\n\n     discovery_type specifies where endpoint will be discovered\n\n     Endpoint can be discovered in K8S or Consul\n     In case of K8S, labels on the service is matched against service_selector\n     In case of Consul, tags on the service is matched against service_selector",
+                    "$ref": "#/definitions/endpointServiceInfoType",
+                    "x-displayname": "Service Selector Info"
+                },
+                "snat_pool": {
+                    "description": " Configured SNAT Pool",
+                    "$ref": "#/definitions/viewsSnatPoolConfiguration",
+                    "x-displayname": "Configured SNAT Pool"
+                },
+                "where": {
+                    "description": " This endpoint is present in site, virtual_site or virtual_network selected by following field.",
+                    "$ref": "#/definitions/schemaNetworkSiteRefSelector",
+                    "x-displayname": "Where"
+                }
+            }
+        },
+        "schemaendpointReplaceSpecType": {
+            "type": "object",
+            "description": "Replacing an endpoint object will update the object by replacing the existing spec with the provided one.\nFor read-then-write operations a resourceVersion mismatch will occur if the object was modified between the read and write.",
+            "title": "Replace Endpoint",
+            "x-displayname": "Replace Endpoint",
+            "x-ves-oneof-field-endpoint_address": "[\"dns_name\",\"dns_name_advanced\",\"ip\",\"service_info\"]",
+            "x-ves-proto-message": "ves.io.schema.endpoint.ReplaceSpecType",
+            "properties": {
+                "dns_name": {
+                    "type": "string",
+                    "description": "Exclusive with [dns_name_advanced ip service_info]\n Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name.\n\nExample: - \"ves.io\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "maxLength": 256,
+                    "x-displayname": "Endpoint Name",
+                    "x-ves-example": "ves.io",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "dns_name_advanced": {
+                    "description": "Exclusive with [dns_name ip service_info]\n Specifies name and TTL used for DNS resolution.",
+                    "$ref": "#/definitions/endpointDnsNameAdvancedType",
+                    "x-displayname": "Endpoint Name (Advanced)"
+                },
+                "health_check_port": {
+                    "type": "integer",
+                    "description": " By default the health check port of an endpoint is the same as the endpoint’s port. This option provides an alternative health check port.\n Setting this with a non-zero value allows an endpoint to have different health check port.\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "format": "int64",
+                    "x-displayname": "Port used for health check",
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "ip": {
+                    "type": "string",
+                    "description": "Exclusive with [dns_name dns_name_advanced service_info]\n Endpoint is reachable at the given ipv4/ipv6 address\n\nExample: - \"10.5.2.4/2001::20\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "x-displayname": "Endpoint IP Address",
+                    "x-ves-example": "10.5.2.4/2001::20",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Endpoint service is available on this port\n\nExample: - \"9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "format": "int64",
+                    "x-displayname": "Port",
+                    "x-ves-example": "9080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Endpoint protocol. Default is TCP.\n Both TCP and UDP protocols are supported\n\nExample: - \"TCP\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"TCP\\\",\\\"UDP\\\"]\n",
+                    "x-displayname": "Protocol",
+                    "x-ves-example": "TCP",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"TCP\\\",\\\"UDP\\\"]"
+                    }
+                },
+                "service_info": {
+                    "description": "Exclusive with [dns_name dns_name_advanced ip]\n It contains information about how the service is selected (either by service name or\n label selector) and where the service is discovered (either in K8s or Consul)\n\n   Service Name.\n\n     String represent name of the service. System will perform discovery based on the\n     discovery method.\n\n     In case of K8S, System will watch K8s API server and automatically discover services and\n     endpoints of interest.\n     In case Virtual K8s cluster, system already has access to it.\n     In case K8s cluster outside ves.io, K8s cluster credentials come from the site configuration.\n\n     In case of Consul, System will watch the consul server and automatically discover the\n     services and endpoints of interest.\n\n   Label selector for selecting the services\n\n     Label selector expression for selecting services or serverless functions\n     to automatically discover services and endpoint of interest.\n\n     discovery_type specifies where endpoint will be discovered\n\n     Endpoint can be discovered in K8S or Consul\n     In case of K8S, labels on the service is matched against service_selector\n     In case of Consul, tags on the service is matched against service_selector",
+                    "$ref": "#/definitions/endpointServiceInfoType",
+                    "x-displayname": "Service Selector Info"
+                },
+                "snat_pool": {
+                    "description": " Configured SNAT Pool",
+                    "$ref": "#/definitions/viewsSnatPoolConfiguration",
+                    "x-displayname": "Configured SNAT Pool"
+                },
+                "where": {
+                    "description": " This endpoint is present in site, virtual_site or virtual_network selected by following field.",
+                    "$ref": "#/definitions/schemaNetworkSiteRefSelector",
+                    "x-displayname": "Where"
+                }
+            }
+        },
         "schemaviewsObjectRefType": {
             "type": "object",
             "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
@@ -4102,6 +4130,69 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "64"
                     }
+                }
+            }
+        },
+        "viewsPrefixStringListType": {
+            "type": "object",
+            "description": "x-example: \"192.168.20.0/24\"\nList of IPv4 prefixes that represent an endpoint",
+            "title": "ipv4 prefix list",
+            "x-displayname": "IPv4 Prefix List",
+            "x-ves-proto-message": "ves.io.schema.views.PrefixStringListType",
+            "properties": {
+                "ipv6_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ipv6 prefixes",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Prefix List",
+                    "x-ves-example": "fd48:fa09:d9d4::/48",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "prefixes": {
+                    "type": "array",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ipv4 prefix list",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv4 Prefix List",
+                    "x-ves-example": "192.168.20.0/24",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "viewsSnatPoolConfiguration": {
+            "type": "object",
+            "description": "Snat Pool configuration",
+            "title": "SnatPoolConfiguration",
+            "x-displayname": "Snat Pool",
+            "x-ves-oneof-field-snat_pool_choice": "[\"no_snat_pool\",\"snat_pool\"]",
+            "x-ves-proto-message": "ves.io.schema.views.SnatPoolConfiguration",
+            "properties": {
+                "no_snat_pool": {
+                    "description": "Exclusive with [snat_pool]\n No configured SNAT Pool to reach Origin Server",
+                    "title": "No SNAT Pool",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "No SNAT Pool"
+                },
+                "snat_pool": {
+                    "description": "Exclusive with [no_snat_pool]\n Configure SNAT Pool to reach Origin Server",
+                    "title": "SNAT Pool",
+                    "$ref": "#/definitions/viewsPrefixStringListType",
+                    "x-displayname": "Configured SNAT Pool"
                 }
             }
         }

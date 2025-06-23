@@ -47,13 +47,24 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.http_loadbalancer.HTTPLoadBalancerList"] = HTTPLoadBalancerListValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsReq"] = ListAvailableAPIDefinitionsReqValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ListAvailableAPIDefinitionsResp"] = ListAvailableAPIDefinitionsRespValidator()
+	vr["ves.io.schema.views.http_loadbalancer.SetL7DDoSRPSThresholdReq"] = SetL7DDoSRPSThresholdReqValidator()
+	vr["ves.io.schema.views.http_loadbalancer.SetL7DDoSRPSThresholdRsp"] = SetL7DDoSRPSThresholdRspValidator()
 
 	vr["ves.io.schema.views.http_loadbalancer.AdvancedOptionsType"] = AdvancedOptionsTypeValidator()
+	vr["ves.io.schema.views.http_loadbalancer.ApiKey"] = ApiKeyValidator()
+	vr["ves.io.schema.views.http_loadbalancer.ApiTesting"] = ApiTestingValidator()
+	vr["ves.io.schema.views.http_loadbalancer.BasicAuthentication"] = BasicAuthenticationValidator()
+	vr["ves.io.schema.views.http_loadbalancer.Bearer"] = BearerValidator()
 	vr["ves.io.schema.views.http_loadbalancer.BodySectionMaskingOptions"] = BodySectionMaskingOptionsValidator()
+	vr["ves.io.schema.views.http_loadbalancer.CachingPolicy"] = CachingPolicyValidator()
 	vr["ves.io.schema.views.http_loadbalancer.CreateSpecType"] = CreateSpecTypeValidator()
+	vr["ves.io.schema.views.http_loadbalancer.Credentials"] = CredentialsValidator()
+	vr["ves.io.schema.views.http_loadbalancer.DomainConfiguration"] = DomainConfigurationValidator()
 	vr["ves.io.schema.views.http_loadbalancer.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.HashPolicyListType"] = HashPolicyListTypeValidator()
+	vr["ves.io.schema.views.http_loadbalancer.L7DDoSProtectionSettings"] = L7DDoSProtectionSettingsValidator()
+	vr["ves.io.schema.views.http_loadbalancer.LoginEndpoint"] = LoginEndpointValidator()
 	vr["ves.io.schema.views.http_loadbalancer.MirrorPolicyType"] = MirrorPolicyTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.OriginServerSubsetRuleListType"] = OriginServerSubsetRuleListTypeValidator()
 	vr["ves.io.schema.views.http_loadbalancer.ProxyTypeHttp"] = ProxyTypeHttpValidator()
@@ -150,11 +161,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense",
-			AddonServices: []string{"shape-bot,f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense_advanced",
-			AddonServices: []string{"shape-bot,f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.cache_options.caching_policy",
+			AddonServices: []string{"f5xc-content-delivery-network-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.challenge_type.policy_based_challenge.rule_list.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
@@ -162,7 +177,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.client_side_defense_choice.client_side_defense",
-			AddonServices: []string{"client-side-defense"},
+			AddonServices: []string{"f5xc-client-side-defense-standard"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.ddos_mitigation_rules.mitigation_choice.ip_prefix_list.ipv6_prefixes",
@@ -177,7 +192,27 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-waap-advanced"},
 		},
 		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.malware_protection.malware_protection_settings",
+			AddonServices: []string{"f5xc-malware-protection-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.origin_pool_choice.default_pool.origin_servers.choice.consul_service.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.origin_pool_choice.default_pool.origin_servers.choice.k8s_service.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.origin_pool_choice.default_pool.origin_servers.choice.private_ip.private_ip_choice.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.origin_pool_choice.default_pool.origin_servers.choice.private_ip.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.CreateRequest.spec.origin_pool_choice.default_pool.origin_servers.choice.private_name.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -220,6 +255,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = []string{
 		"spec.api_rate_limit_legacy",
+		"spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.jwt_validation.jwks",
 		"spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
@@ -227,6 +263,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Create"] = []string{
 		"spec.api_rate_limit_legacy",
+		"spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.jwt_validation.jwks",
 		"spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
@@ -246,6 +283,22 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.api_specification.validation_custom_list.open_api_validation_rules.#.metadata.disable",
 		"spec.api_specification.validation_custom_list.settings.fail_close",
 		"spec.api_specification.validation_custom_list.settings.fail_open",
+		"spec.api_testing.domains.#.credentials.#.api_key.value.blindfold_secret_info_internal",
+		"spec.api_testing.domains.#.credentials.#.api_key.value.secret_encoding_type",
+		"spec.api_testing.domains.#.credentials.#.api_key.value.vault_secret_info",
+		"spec.api_testing.domains.#.credentials.#.api_key.value.wingman_secret_info",
+		"spec.api_testing.domains.#.credentials.#.basic_auth.password.blindfold_secret_info_internal",
+		"spec.api_testing.domains.#.credentials.#.basic_auth.password.secret_encoding_type",
+		"spec.api_testing.domains.#.credentials.#.basic_auth.password.vault_secret_info",
+		"spec.api_testing.domains.#.credentials.#.basic_auth.password.wingman_secret_info",
+		"spec.api_testing.domains.#.credentials.#.bearer_token.token.blindfold_secret_info_internal",
+		"spec.api_testing.domains.#.credentials.#.bearer_token.token.secret_encoding_type",
+		"spec.api_testing.domains.#.credentials.#.bearer_token.token.vault_secret_info",
+		"spec.api_testing.domains.#.credentials.#.bearer_token.token.wingman_secret_info",
+		"spec.api_testing.domains.#.credentials.#.login_endpoint.json_payload.blindfold_secret_info_internal",
+		"spec.api_testing.domains.#.credentials.#.login_endpoint.json_payload.secret_encoding_type",
+		"spec.api_testing.domains.#.credentials.#.login_endpoint.json_payload.vault_secret_info",
+		"spec.api_testing.domains.#.credentials.#.login_endpoint.json_payload.wingman_secret_info",
 		"spec.blocked_clients.#.metadata.disable",
 		"spec.bot_defense",
 		"spec.bot_defense_advanced",
@@ -280,16 +333,26 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.jwt_validation.token_location.header",
 		"spec.jwt_validation.token_location.query_param",
 		"spec.l7_ddos_action_none",
+		"spec.l7_ddos_protection.mitigation_none",
 		"spec.malicious_user_mitigation",
 		"spec.malware_protection_settings.malware_protection_rules.#.metadata.disable",
+		"spec.malware_protection_settings.malware_protection_rules.#.protocol",
 		"spec.more_option.buffer_policy.max_request_time",
 		"spec.more_option.cookies_to_modify.#",
 		"spec.more_option.javascript_info",
 		"spec.more_option.jwt.#",
+		"spec.more_option.request_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.more_option.request_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.more_option.request_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.more_option.request_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.more_option.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.more_option.request_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.more_option.request_headers_to_add.#.secret_value.vault_secret_info",
 		"spec.more_option.request_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.more_option.response_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.more_option.response_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.more_option.response_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.more_option.response_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.more_option.response_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.more_option.response_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.more_option.response_headers_to_add.#.secret_value.vault_secret_info",
@@ -305,10 +368,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.routes.#.redirect_route.route_redirect.strip_query_params",
 		"spec.routes.#.simple_route.advanced_options.buffer_policy.max_request_time",
 		"spec.routes.#.simple_route.advanced_options.cors_policy.max_age",
+		"spec.routes.#.simple_route.advanced_options.request_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.routes.#.simple_route.advanced_options.request_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.routes.#.simple_route.advanced_options.request_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.routes.#.simple_route.advanced_options.request_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.routes.#.simple_route.advanced_options.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.routes.#.simple_route.advanced_options.request_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.routes.#.simple_route.advanced_options.request_headers_to_add.#.secret_value.vault_secret_info",
 		"spec.routes.#.simple_route.advanced_options.request_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.routes.#.simple_route.advanced_options.response_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.routes.#.simple_route.advanced_options.response_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.routes.#.simple_route.advanced_options.response_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.routes.#.simple_route.advanced_options.response_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.routes.#.simple_route.advanced_options.response_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.routes.#.simple_route.advanced_options.response_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.routes.#.simple_route.advanced_options.response_headers_to_add.#.secret_value.vault_secret_info",
@@ -322,6 +393,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.single_lb_app.enable_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.wingman_secret_info",
 		"spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 		"spec.trusted_clients.#.metadata.disable",
+		"spec.waf_exclusion",
 		"spec.waf_exclusion_rules.#.metadata.disable",
 	}
 
@@ -391,11 +463,31 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.cache_options",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
 			FieldPath:           "spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.default_pool.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -486,11 +578,31 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.cache_options",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
 			FieldPath:           "spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.default_pool.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -519,14 +631,17 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Get"] = []string{
 		"create_form.spec.api_rate_limit_legacy",
+		"create_form.spec.caching_policy.default_cache_action.eligible_for_cache",
 		"create_form.spec.enable_api_discovery.sensitive_data_detection_rules",
 		"create_form.spec.jwt_validation.jwks",
 		"create_form.spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 		"replace_form.spec.api_rate_limit_legacy",
+		"replace_form.spec.caching_policy.default_cache_action.eligible_for_cache",
 		"replace_form.spec.enable_api_discovery.sensitive_data_detection_rules",
 		"replace_form.spec.jwt_validation.jwks",
 		"replace_form.spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 		"spec.api_rate_limit_legacy",
+		"spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.jwt_validation.jwks",
 		"spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
@@ -598,11 +713,31 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "create_form.spec.cache_options",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
 			FieldPath:           "create_form.spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "create_form.spec.default_pool.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.default_pool.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "create_form.spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.default_pool.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.default_pool.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -690,11 +825,31 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "replace_form.spec.cache_options",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
 			FieldPath:           "replace_form.spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "replace_form.spec.default_pool.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.default_pool.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "replace_form.spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.default_pool.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.default_pool.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -782,11 +937,31 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.cache_options",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
 			FieldPath:           "spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.default_pool.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -813,6 +988,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.List"] = []string{
 		"items.#.get_spec.api_rate_limit_legacy",
+		"items.#.get_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"items.#.get_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"items.#.get_spec.jwt_validation.jwks",
 		"items.#.get_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
@@ -884,11 +1060,31 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "items.#.get_spec.cache_options",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
 			FieldPath:           "items.#.get_spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "items.#.get_spec.default_pool.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.default_pool.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "items.#.get_spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.default_pool.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.default_pool.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -976,11 +1172,15 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense",
-			AddonServices: []string{"shape-bot,f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense_advanced",
-			AddonServices: []string{"shape-bot,f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.cache_options.caching_policy",
+			AddonServices: []string{"f5xc-content-delivery-network-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.challenge_type.policy_based_challenge.rule_list.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
@@ -988,7 +1188,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.client_side_defense_choice.client_side_defense",
-			AddonServices: []string{"client-side-defense"},
+			AddonServices: []string{"f5xc-client-side-defense-standard"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.ddos_mitigation_rules.mitigation_choice.ip_prefix_list.ipv6_prefixes",
@@ -1003,7 +1203,27 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-waap-advanced"},
 		},
 		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.malware_protection.malware_protection_settings",
+			AddonServices: []string{"f5xc-malware-protection-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.origin_pool_choice.default_pool.origin_servers.choice.consul_service.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.origin_pool_choice.default_pool.origin_servers.choice.k8s_service.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
 			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.origin_pool_choice.default_pool.origin_servers.choice.private_ip.private_ip_choice.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.origin_pool_choice.default_pool.origin_servers.choice.private_ip.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.http_loadbalancer.ReplaceRequest.spec.origin_pool_choice.default_pool.origin_servers.choice.private_name.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -1046,6 +1266,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.http_loadbalancer.API.Replace"] = []string{
 		"spec.api_rate_limit_legacy",
+		"spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.jwt_validation.jwks",
 		"spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
@@ -1065,6 +1286,22 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.api_specification.validation_custom_list.open_api_validation_rules.#.metadata.disable",
 		"spec.api_specification.validation_custom_list.settings.fail_close",
 		"spec.api_specification.validation_custom_list.settings.fail_open",
+		"spec.api_testing.domains.#.credentials.#.api_key.value.blindfold_secret_info_internal",
+		"spec.api_testing.domains.#.credentials.#.api_key.value.secret_encoding_type",
+		"spec.api_testing.domains.#.credentials.#.api_key.value.vault_secret_info",
+		"spec.api_testing.domains.#.credentials.#.api_key.value.wingman_secret_info",
+		"spec.api_testing.domains.#.credentials.#.basic_auth.password.blindfold_secret_info_internal",
+		"spec.api_testing.domains.#.credentials.#.basic_auth.password.secret_encoding_type",
+		"spec.api_testing.domains.#.credentials.#.basic_auth.password.vault_secret_info",
+		"spec.api_testing.domains.#.credentials.#.basic_auth.password.wingman_secret_info",
+		"spec.api_testing.domains.#.credentials.#.bearer_token.token.blindfold_secret_info_internal",
+		"spec.api_testing.domains.#.credentials.#.bearer_token.token.secret_encoding_type",
+		"spec.api_testing.domains.#.credentials.#.bearer_token.token.vault_secret_info",
+		"spec.api_testing.domains.#.credentials.#.bearer_token.token.wingman_secret_info",
+		"spec.api_testing.domains.#.credentials.#.login_endpoint.json_payload.blindfold_secret_info_internal",
+		"spec.api_testing.domains.#.credentials.#.login_endpoint.json_payload.secret_encoding_type",
+		"spec.api_testing.domains.#.credentials.#.login_endpoint.json_payload.vault_secret_info",
+		"spec.api_testing.domains.#.credentials.#.login_endpoint.json_payload.wingman_secret_info",
 		"spec.blocked_clients.#.metadata.disable",
 		"spec.bot_defense",
 		"spec.bot_defense_advanced",
@@ -1099,16 +1336,26 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.jwt_validation.token_location.header",
 		"spec.jwt_validation.token_location.query_param",
 		"spec.l7_ddos_action_none",
+		"spec.l7_ddos_protection.mitigation_none",
 		"spec.malicious_user_mitigation",
 		"spec.malware_protection_settings.malware_protection_rules.#.metadata.disable",
+		"spec.malware_protection_settings.malware_protection_rules.#.protocol",
 		"spec.more_option.buffer_policy.max_request_time",
 		"spec.more_option.cookies_to_modify.#",
 		"spec.more_option.javascript_info",
 		"spec.more_option.jwt.#",
+		"spec.more_option.request_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.more_option.request_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.more_option.request_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.more_option.request_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.more_option.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.more_option.request_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.more_option.request_headers_to_add.#.secret_value.vault_secret_info",
 		"spec.more_option.request_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.more_option.response_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.more_option.response_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.more_option.response_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.more_option.response_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.more_option.response_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.more_option.response_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.more_option.response_headers_to_add.#.secret_value.vault_secret_info",
@@ -1124,10 +1371,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.routes.#.redirect_route.route_redirect.strip_query_params",
 		"spec.routes.#.simple_route.advanced_options.buffer_policy.max_request_time",
 		"spec.routes.#.simple_route.advanced_options.cors_policy.max_age",
+		"spec.routes.#.simple_route.advanced_options.request_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.routes.#.simple_route.advanced_options.request_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.routes.#.simple_route.advanced_options.request_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.routes.#.simple_route.advanced_options.request_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.routes.#.simple_route.advanced_options.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.routes.#.simple_route.advanced_options.request_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.routes.#.simple_route.advanced_options.request_headers_to_add.#.secret_value.vault_secret_info",
 		"spec.routes.#.simple_route.advanced_options.request_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.routes.#.simple_route.advanced_options.response_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.routes.#.simple_route.advanced_options.response_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.routes.#.simple_route.advanced_options.response_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.routes.#.simple_route.advanced_options.response_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.routes.#.simple_route.advanced_options.response_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.routes.#.simple_route.advanced_options.response_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.routes.#.simple_route.advanced_options.response_headers_to_add.#.secret_value.vault_secret_info",
@@ -1141,6 +1396,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.single_lb_app.enable_discovery.api_crawler.api_crawler_config.domains.#.simple_login.password.wingman_secret_info",
 		"spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 		"spec.trusted_clients.#.metadata.disable",
+		"spec.waf_exclusion",
 		"spec.waf_exclusion_rules.#.metadata.disable",
 	}
 
@@ -1210,11 +1466,31 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.cache_options",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
 			FieldPath:           "spec.ddos_mitigation_rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.default_pool.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.default_pool.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -1245,6 +1521,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI"] = "ml/data"
+	sm["ves.io.schema.views.http_loadbalancer.CDNCustomAPI"] = "cdn"
 	sm["ves.io.schema.views.http_loadbalancer.API"] = "config"
 	sm["ves.io.schema.views.http_loadbalancer.CustomAPI"] = "config"
 
@@ -1282,6 +1559,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI"] = RegisterGwApiepLBCustomAPIHandler
 		customCSR.ServerRegistry["ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewApiepLBCustomAPIServer(svc)
+		}
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.views.http_loadbalancer.Object"] = CDNCustomAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.views.http_loadbalancer.CDNCustomAPI"] = NewCDNCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.views.http_loadbalancer.CDNCustomAPI"] = NewCDNCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.views.http_loadbalancer.CDNCustomAPI"] = RegisterCDNCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.views.http_loadbalancer.CDNCustomAPI"] = RegisterGwCDNCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.views.http_loadbalancer.CDNCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCDNCustomAPIServer(svc)
 		}
 
 	}()

@@ -31,6 +31,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Create"] = []string{
 		"spec.gc_spec.api_rate_limit_legacy",
+		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.gc_spec.jwt_validation.jwks",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
@@ -38,6 +39,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Create"] = []string{
 		"spec.gc_spec.api_rate_limit_legacy",
+		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.gc_spec.jwt_validation.jwks",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
@@ -47,6 +49,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Get"] = []string{
 		"spec.gc_spec.api_rate_limit_legacy",
+		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.gc_spec.jwt_validation.jwks",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
@@ -54,6 +57,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.List"] = []string{
 		"items.#.spec.gc_spec.api_rate_limit_legacy",
+		"items.#.spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"items.#.spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"items.#.spec.gc_spec.jwt_validation.jwks",
 		"items.#.spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
@@ -61,6 +65,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.ListStream"] = []string{
 		"items.#.spec.gc_spec.api_rate_limit_legacy",
+		"items.#.spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"items.#.spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"items.#.spec.gc_spec.jwt_validation.jwks",
 		"items.#.spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
@@ -68,6 +73,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.api_rate_limit_legacy",
+		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.gc_spec.jwt_validation.jwks",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
@@ -75,6 +81,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.http_loadbalancer.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.api_rate_limit_legacy",
+		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.gc_spec.jwt_validation.jwks",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",

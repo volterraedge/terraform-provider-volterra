@@ -833,6 +833,440 @@ func GlobalSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *InputHours) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *InputHours) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *InputHours) DeepCopy() *InputHours {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &InputHours{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *InputHours) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *InputHours) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return InputHoursValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateInputHours struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateInputHours) DurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for duration")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateInputHours) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*InputHours)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *InputHours got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["duration"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("duration"))
+		if err := fv(ctx, m.GetDuration(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultInputHoursValidator = func() *ValidateInputHours {
+	v := &ValidateInputHours{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDuration := v.DurationValidationRuleHandler
+	rulesDuration := map[string]string{
+		"ves.io.schema.rules.uint32.gt":  "0",
+		"ves.io.schema.rules.uint32.lte": "48",
+	}
+	vFn, err = vrhDuration(rulesDuration)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InputHours.duration: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["duration"] = vFn
+
+	return v
+}()
+
+func InputHoursValidator() db.Validator {
+	return DefaultInputHoursValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *InputMinutes) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *InputMinutes) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *InputMinutes) DeepCopy() *InputMinutes {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &InputMinutes{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *InputMinutes) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *InputMinutes) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return InputMinutesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateInputMinutes struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateInputMinutes) DurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for duration")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateInputMinutes) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*InputMinutes)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *InputMinutes got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["duration"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("duration"))
+		if err := fv(ctx, m.GetDuration(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultInputMinutesValidator = func() *ValidateInputMinutes {
+	v := &ValidateInputMinutes{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDuration := v.DurationValidationRuleHandler
+	rulesDuration := map[string]string{
+		"ves.io.schema.rules.uint32.gt":  "0",
+		"ves.io.schema.rules.uint32.lte": "60",
+	}
+	vFn, err = vrhDuration(rulesDuration)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InputMinutes.duration: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["duration"] = vFn
+
+	return v
+}()
+
+func InputMinutesValidator() db.Validator {
+	return DefaultInputMinutesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *InputSeconds) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *InputSeconds) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *InputSeconds) DeepCopy() *InputSeconds {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &InputSeconds{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *InputSeconds) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *InputSeconds) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return InputSecondsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateInputSeconds struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateInputSeconds) DurationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for duration")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateInputSeconds) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*InputSeconds)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *InputSeconds got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["duration"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("duration"))
+		if err := fv(ctx, m.GetDuration(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultInputSecondsValidator = func() *ValidateInputSeconds {
+	v := &ValidateInputSeconds{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDuration := v.DurationValidationRuleHandler
+	rulesDuration := map[string]string{
+		"ves.io.schema.rules.uint32.gt":  "0",
+		"ves.io.schema.rules.uint32.lte": "300",
+	}
+	vFn, err = vrhDuration(rulesDuration)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for InputSeconds.duration: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["duration"] = vFn
+
+	return v
+}()
+
+func InputSecondsValidator() db.Validator {
+	return DefaultInputSecondsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *RateLimitBlockAction) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RateLimitBlockAction) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RateLimitBlockAction) DeepCopy() *RateLimitBlockAction {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RateLimitBlockAction{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RateLimitBlockAction) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RateLimitBlockAction) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RateLimitBlockActionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRateLimitBlockAction struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRateLimitBlockAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RateLimitBlockAction)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RateLimitBlockAction got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetBlockDurationChoice().(type) {
+	case *RateLimitBlockAction_Seconds:
+		if fv, exists := v.FldValidators["block_duration_choice.seconds"]; exists {
+			val := m.GetBlockDurationChoice().(*RateLimitBlockAction_Seconds).Seconds
+			vOpts := append(opts,
+				db.WithValidateField("block_duration_choice"),
+				db.WithValidateField("seconds"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RateLimitBlockAction_Minutes:
+		if fv, exists := v.FldValidators["block_duration_choice.minutes"]; exists {
+			val := m.GetBlockDurationChoice().(*RateLimitBlockAction_Minutes).Minutes
+			vOpts := append(opts,
+				db.WithValidateField("block_duration_choice"),
+				db.WithValidateField("minutes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RateLimitBlockAction_Hours:
+		if fv, exists := v.FldValidators["block_duration_choice.hours"]; exists {
+			val := m.GetBlockDurationChoice().(*RateLimitBlockAction_Hours).Hours
+			vOpts := append(opts,
+				db.WithValidateField("block_duration_choice"),
+				db.WithValidateField("hours"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRateLimitBlockActionValidator = func() *ValidateRateLimitBlockAction {
+	v := &ValidateRateLimitBlockAction{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["block_duration_choice.seconds"] = InputSecondsValidator().Validate
+	v.FldValidators["block_duration_choice.minutes"] = InputMinutesValidator().Validate
+	v.FldValidators["block_duration_choice.hours"] = InputHoursValidator().Validate
+
+	return v
+}()
+
+func RateLimitBlockActionValidator() db.Validator {
+	return DefaultRateLimitBlockActionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *RateLimitValue) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -908,6 +1342,16 @@ func (v *ValidateRateLimitValue) BurstMultiplierValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateRateLimitValue) PeriodMultiplierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for period_multiplier")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRateLimitValue) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*RateLimitValue)
 	if !ok {
@@ -922,10 +1366,45 @@ func (v *ValidateRateLimitValue) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	switch m.GetActionChoice().(type) {
+	case *RateLimitValue_Disabled:
+		if fv, exists := v.FldValidators["action_choice.disabled"]; exists {
+			val := m.GetActionChoice().(*RateLimitValue_Disabled).Disabled
+			vOpts := append(opts,
+				db.WithValidateField("action_choice"),
+				db.WithValidateField("disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RateLimitValue_ActionBlock:
+		if fv, exists := v.FldValidators["action_choice.action_block"]; exists {
+			val := m.GetActionChoice().(*RateLimitValue_ActionBlock).ActionBlock
+			vOpts := append(opts,
+				db.WithValidateField("action_choice"),
+				db.WithValidateField("action_block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["burst_multiplier"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("burst_multiplier"))
 		if err := fv(ctx, m.GetBurstMultiplier(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["period_multiplier"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("period_multiplier"))
+		if err := fv(ctx, m.GetPeriodMultiplier(), vOpts...); err != nil {
 			return err
 		}
 
@@ -999,6 +1478,19 @@ var DefaultRateLimitValueValidator = func() *ValidateRateLimitValue {
 		panic(errMsg)
 	}
 	v.FldValidators["burst_multiplier"] = vFn
+
+	vrhPeriodMultiplier := v.PeriodMultiplierValidationRuleHandler
+	rulesPeriodMultiplier := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+	}
+	vFn, err = vrhPeriodMultiplier(rulesPeriodMultiplier)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RateLimitValue.period_multiplier: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["period_multiplier"] = vFn
+
+	v.FldValidators["action_choice.action_block"] = RateLimitBlockActionValidator().Validate
 
 	return v
 }()

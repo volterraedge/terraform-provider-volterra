@@ -23,10 +23,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nginx.one.nginx_server.ListResponse"] = ListResponseValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.ListResponseItem"] = ListResponseItemValidator()
 
-	vr["ves.io.schema.nginx.one.nginx_server.GetInstanceServerResponse"] = GetInstanceServerResponseValidator()
-	vr["ves.io.schema.nginx.one.nginx_server.GetInstanceServersRequest"] = GetInstanceServersRequestValidator()
-	vr["ves.io.schema.nginx.one.nginx_server.GetInstanceServersResponse"] = GetInstanceServersResponseValidator()
+	vr["ves.io.schema.nginx.one.nginx_server.GetDataplaneServerResponse"] = GetDataplaneServerResponseValidator()
+	vr["ves.io.schema.nginx.one.nginx_server.GetDataplaneServersRequest"] = GetDataplaneServersRequestValidator()
+	vr["ves.io.schema.nginx.one.nginx_server.GetDataplaneServersResponse"] = GetDataplaneServersResponseValidator()
 
+	vr["ves.io.schema.nginx.one.nginx_server.DataplaneReference"] = DataplaneReferenceValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.Location"] = LocationValidator()

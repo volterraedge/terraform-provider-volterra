@@ -232,18 +232,6 @@ func resourceVolterraBigipInstanceSite() *schema.Resource {
 										},
 									},
 
-									"is_management": {
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"is_primary": {
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
 									"labels": {
 										Type:     schema.TypeMap,
 										Optional: true,
@@ -514,7 +502,7 @@ func resourceVolterraBigipInstanceSiteCreate(d *schema.ResourceData, meta interf
 
 							}
 
-							if _, ok := interfaceListMapStrToI["dhcp_server"]; ok && !addressChoiceTypeFound {
+							if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 								addressChoiceTypeFound = true
 								addressChoiceInt := &ves_io_schema_views_common_node.Interface_DhcpServer{}
@@ -535,7 +523,7 @@ func resourceVolterraBigipInstanceSiteCreate(d *schema.ResourceData, meta interf
 
 							}
 
-							if _, ok := interfaceListMapStrToI["static_ip"]; ok && !addressChoiceTypeFound {
+							if v, ok := interfaceListMapStrToI["static_ip"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 								addressChoiceTypeFound = true
 								addressChoiceInt := &ves_io_schema_views_common_node.Interface_StaticIp{}
@@ -550,7 +538,7 @@ func resourceVolterraBigipInstanceSiteCreate(d *schema.ResourceData, meta interf
 
 							interfaceChoiceTypeFound := false
 
-							if _, ok := interfaceListMapStrToI["bond_interface"]; ok && !interfaceChoiceTypeFound {
+							if v, ok := interfaceListMapStrToI["bond_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
 
 								interfaceChoiceTypeFound = true
 								interfaceChoiceInt := &ves_io_schema_views_common_node.Interface_BondInterface{}
@@ -619,7 +607,7 @@ func resourceVolterraBigipInstanceSiteCreate(d *schema.ResourceData, meta interf
 
 							ipv6AddressChoiceTypeFound := false
 
-							if _, ok := interfaceListMapStrToI["ipv6_auto_config"]; ok && !ipv6AddressChoiceTypeFound {
+							if v, ok := interfaceListMapStrToI["ipv6_auto_config"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
 
 								ipv6AddressChoiceTypeFound = true
 								ipv6AddressChoiceInt := &ves_io_schema_views_common_node.Interface_Ipv6AutoConfig{}
@@ -640,21 +628,13 @@ func resourceVolterraBigipInstanceSiteCreate(d *schema.ResourceData, meta interf
 
 							}
 
-							if _, ok := interfaceListMapStrToI["static_ipv6_address"]; ok && !ipv6AddressChoiceTypeFound {
+							if v, ok := interfaceListMapStrToI["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
 
 								ipv6AddressChoiceTypeFound = true
 								ipv6AddressChoiceInt := &ves_io_schema_views_common_node.Interface_StaticIpv6Address{}
 								ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
 								interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
 
-							}
-
-							if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-								interfaceList[i].IsManagement = w.(bool)
-							}
-
-							if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-								interfaceList[i].IsPrimary = w.(bool)
 							}
 
 							if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
@@ -667,7 +647,7 @@ func resourceVolterraBigipInstanceSiteCreate(d *schema.ResourceData, meta interf
 
 							monitoringChoiceTypeFound := false
 
-							if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+							if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 								monitoringChoiceTypeFound = true
 								monitoringChoiceInt := &ves_io_schema_views_common_node.Interface_Monitor{}
@@ -1036,7 +1016,7 @@ func resourceVolterraBigipInstanceSiteUpdate(d *schema.ResourceData, meta interf
 
 							}
 
-							if _, ok := interfaceListMapStrToI["dhcp_server"]; ok && !addressChoiceTypeFound {
+							if v, ok := interfaceListMapStrToI["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 								addressChoiceTypeFound = true
 								addressChoiceInt := &ves_io_schema_views_common_node.Interface_DhcpServer{}
@@ -1057,7 +1037,7 @@ func resourceVolterraBigipInstanceSiteUpdate(d *schema.ResourceData, meta interf
 
 							}
 
-							if _, ok := interfaceListMapStrToI["static_ip"]; ok && !addressChoiceTypeFound {
+							if v, ok := interfaceListMapStrToI["static_ip"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
 
 								addressChoiceTypeFound = true
 								addressChoiceInt := &ves_io_schema_views_common_node.Interface_StaticIp{}
@@ -1072,7 +1052,7 @@ func resourceVolterraBigipInstanceSiteUpdate(d *schema.ResourceData, meta interf
 
 							interfaceChoiceTypeFound := false
 
-							if _, ok := interfaceListMapStrToI["bond_interface"]; ok && !interfaceChoiceTypeFound {
+							if v, ok := interfaceListMapStrToI["bond_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
 
 								interfaceChoiceTypeFound = true
 								interfaceChoiceInt := &ves_io_schema_views_common_node.Interface_BondInterface{}
@@ -1141,7 +1121,7 @@ func resourceVolterraBigipInstanceSiteUpdate(d *schema.ResourceData, meta interf
 
 							ipv6AddressChoiceTypeFound := false
 
-							if _, ok := interfaceListMapStrToI["ipv6_auto_config"]; ok && !ipv6AddressChoiceTypeFound {
+							if v, ok := interfaceListMapStrToI["ipv6_auto_config"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
 
 								ipv6AddressChoiceTypeFound = true
 								ipv6AddressChoiceInt := &ves_io_schema_views_common_node.Interface_Ipv6AutoConfig{}
@@ -1162,21 +1142,13 @@ func resourceVolterraBigipInstanceSiteUpdate(d *schema.ResourceData, meta interf
 
 							}
 
-							if _, ok := interfaceListMapStrToI["static_ipv6_address"]; ok && !ipv6AddressChoiceTypeFound {
+							if v, ok := interfaceListMapStrToI["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
 
 								ipv6AddressChoiceTypeFound = true
 								ipv6AddressChoiceInt := &ves_io_schema_views_common_node.Interface_StaticIpv6Address{}
 								ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
 								interfaceList[i].Ipv6AddressChoice = ipv6AddressChoiceInt
 
-							}
-
-							if w, ok := interfaceListMapStrToI["is_management"]; ok && !isIntfNil(w) {
-								interfaceList[i].IsManagement = w.(bool)
-							}
-
-							if w, ok := interfaceListMapStrToI["is_primary"]; ok && !isIntfNil(w) {
-								interfaceList[i].IsPrimary = w.(bool)
 							}
 
 							if w, ok := interfaceListMapStrToI["labels"]; ok && !isIntfNil(w) {
@@ -1189,7 +1161,7 @@ func resourceVolterraBigipInstanceSiteUpdate(d *schema.ResourceData, meta interf
 
 							monitoringChoiceTypeFound := false
 
-							if _, ok := interfaceListMapStrToI["monitor"]; ok && !monitoringChoiceTypeFound {
+							if v, ok := interfaceListMapStrToI["monitor"]; ok && !isIntfNil(v) && !monitoringChoiceTypeFound {
 
 								monitoringChoiceTypeFound = true
 								monitoringChoiceInt := &ves_io_schema_views_common_node.Interface_Monitor{}
@@ -1406,5 +1378,8 @@ func resourceVolterraBigipInstanceSiteDelete(d *schema.ResourceData, meta interf
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra BigipInstanceSite obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_views_bigip_instance_site.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_views_bigip_instance_site.ObjectType, namespace, name, opts...)
 }

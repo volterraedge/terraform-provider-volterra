@@ -2964,9 +2964,9 @@ var APISwaggerJSON string = `{
                 },
                 "destination_prefix_list": {
                     "description": "Exclusive with [all_destinations all_sli_vips all_slo_vips destination_aws_vpc_ids destination_ip_prefix_set destination_label_selector inside_destinations outside_destinations]\n Addresses that match one of the prefix in the list\n\nExample: - \"192.168.20.0/24\"-",
-                    "title": "ipv4 prefix list",
+                    "title": "IP Prefix List",
                     "$ref": "#/definitions/viewsPrefixStringListType",
-                    "x-displayname": "IPv4 Prefix List",
+                    "x-displayname": "IP Prefix List",
                     "x-ves-example": "192.168.20.0/24"
                 },
                 "insert_service": {

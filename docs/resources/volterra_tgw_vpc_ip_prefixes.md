@@ -1,6 +1,6 @@
 ---
 
-page_title: "Volterra: volterra_tgw_vpc_ip_prefixes" 
+page_title: "Volterra: volterra_tgw_vpc_ip_prefixes"
 
 description: "The volterra_tgw_vpc_ip_prefixes runs set_vpc_ip_prefixes api on aws_tgw_site"
 

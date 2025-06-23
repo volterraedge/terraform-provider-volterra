@@ -3444,7 +3444,7 @@ var APISwaggerJSON string = `{
         },
         "topologyProviderType": {
             "type": "string",
-            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
+            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend\nCE on k8s backend",
             "title": "ProviderType",
             "enum": [
                 "PROVIDER_TYPE_UNSPECIFIED",
@@ -3456,7 +3456,8 @@ var APISwaggerJSON string = `{
                 "PROVIDER_TYPE_KVM",
                 "PROVIDER_TYPE_OCI",
                 "PROVIDER_TYPE_BAREMETAL",
-                "PROVIDER_TYPE_F5RSERIES"
+                "PROVIDER_TYPE_F5RSERIES",
+                "PROVIDER_TYPE_K8S"
             ],
             "default": "PROVIDER_TYPE_UNSPECIFIED",
             "x-displayname": "Provider Type",

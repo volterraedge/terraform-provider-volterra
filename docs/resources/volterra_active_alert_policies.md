@@ -1,6 +1,6 @@
 ---
 
-page_title: "Volterra: active_alert_policies" 
+page_title: "Volterra: active_alert_policies"
 
 description: "The active_alert_policies allows setting of Active Alert Policies for a namespace on Volterra SaaS"
 

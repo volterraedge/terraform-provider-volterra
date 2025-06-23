@@ -2656,6 +2656,56 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bgpBgpRoutePolicies": {
+            "type": "object",
+            "description": "x-displayName: \"BGP Routing Policy\"\nList of rules which can be applied on all or particular nodes",
+            "title": "BGP Routing policies",
+            "properties": {
+                "route_policy": {
+                    "type": "array",
+                    "description": "x-displayName: \"BGP Routing policy\"\nRoute policy to be applied",
+                    "title": "route_policy",
+                    "items": {
+                        "$ref": "#/definitions/bgpBgpRoutePolicy"
+                    }
+                }
+            }
+        },
+        "bgpBgpRoutePolicy": {
+            "type": "object",
+            "description": "x-displayName: \"BGP Routing Policy\"\nList of filter rules which can be applied on all or particular nodes",
+            "title": "BGP Route policy",
+            "properties": {
+                "all_nodes": {
+                    "description": "x-displayName: \"All nodes\"\nApply filter on all nodes where Peer is valid",
+                    "title": "all",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "inbound": {
+                    "description": "x-displayName: \"Inbound\"\nApply policy on routes being imported",
+                    "title": "inbound",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "node_name": {
+                    "description": "x-displayName: \"Node name\"\nSelect nodes where BGP routing policy has to be applied",
+                    "title": "node_name",
+                    "$ref": "#/definitions/bgpNodes"
+                },
+                "object_refs": {
+                    "type": "array",
+                    "description": "x-displayName: \"BGP routing policy\"\nx-required\nSelect route policy to apply.",
+                    "title": "Policy to apply",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                },
+                "outbound": {
+                    "description": "x-displayName: \"Outbound\"\nApply policy on routes being exported",
+                    "title": "outbound",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
         "bgpFamilyInet": {
             "type": "object",
             "description": "x-displayName: \"BGP Family Inet\"\nParameters for inet family.",
@@ -2790,11 +2840,31 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "bgpNodes": {
+            "type": "object",
+            "description": "x-displayName: \"Nodes\"\nList of nodes on which BGP routing policy has to be applied",
+            "title": "Nodes",
+            "properties": {
+                "node": {
+                    "type": "array",
+                    "description": "x-displayName: \"Node of choice\"\nSelect BGP Session on which policy will be applied.",
+                    "title": "Node",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
         "bgpPeer": {
             "type": "object",
             "description": "x-displayName: \"BGP Peer\"\nBGP Peer parameters",
             "title": "Peer",
             "properties": {
+                "disable": {
+                    "description": "x-displayName: \"Disabled\"\nDisables the BGP routing policy",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
                 "external": {
                     "description": "x-displayName: \"External\"\nExternal BGP peer.",
                     "title": "external",
@@ -2804,6 +2874,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Internal\"\nInternal BGP peer.",
                     "title": "internal",
                     "$ref": "#/definitions/bgpPeerInternal"
+                },
+                "label": {
+                    "type": "string",
+                    "description": "x-displayName: \"Label\"\nSpecify whether this peer should be",
+                    "title": "label"
                 },
                 "metadata": {
                     "description": "x-displayName: \"Metadata\"\nx-required\nCommon attributes for the peer including name and description.",
@@ -2819,6 +2894,11 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Enabled\"",
                     "title": "passive_mode_enabled",
                     "$ref": "#/definitions/schemaEmpty"
+                },
+                "routing_policies": {
+                    "description": "x-displayName: \"Enabled\"\nBGP Routing policies are enabled, created policies need to be referenced with\na direction inbound or outbound and specify the node or nodes that this\npolicy applies to",
+                    "title": "routing_policies",
+                    "$ref": "#/definitions/bgpBgpRoutePolicies"
                 },
                 "target_service": {
                     "type": "string",
@@ -2866,6 +2946,11 @@ var APISwaggerJSON string = `{
                 "disable_v6": {
                     "description": "x-displayName: \"Disable\"\nNo Peer IPv6 Address.",
                     "title": "disable_v6",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "external_connector": {
+                    "description": "x-displayName: \"External connector peer\"\nPick Peer Address from External connector interface remote address.",
+                    "title": "external_connector",
                     "$ref": "#/definitions/schemaEmpty"
                 },
                 "family_inet": {

@@ -70,23 +70,23 @@ type RateLimitPeriodUnit int32
 const (
 	// Second
 	//
-	// x-displayName: "Second"
-	// Rate limit period is 1 second
+	// x-displayName: "Seconds"
+	// Rate limit period unit is seconds
 	SECOND RateLimitPeriodUnit = 0
 	// Minute
 	//
-	// x-displayName: "Minute"
-	// Rate limit period is 1 minute
+	// x-displayName: "Minutes"
+	// Rate limit period unit is minutes
 	MINUTE RateLimitPeriodUnit = 1
 	// Hour
 	//
-	// x-displayName: "Hour"
-	// Rate limit period is 1 hour
+	// x-displayName: "Hours"
+	// Rate limit period unit is hours
 	HOUR RateLimitPeriodUnit = 2
 	// Day
 	//
-	// x-displayName: "Day"
-	// Rate limit period is 1 day
+	// x-displayName: "Days"
+	// Rate limit period unit is days
 	DAY RateLimitPeriodUnit = 3
 )
 
@@ -108,6 +108,247 @@ func (RateLimitPeriodUnit) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_79d4234d464550a7, []int{1}
 }
 
+// Hours
+//
+// x-displayName: "Hours"
+// Input Duration Hours
+type InputHours struct {
+	// Duration
+	//
+	// x-displayName: "Duration"
+	Duration uint32 `protobuf:"varint,1,opt,name=duration,proto3" json:"duration,omitempty"`
+}
+
+func (m *InputHours) Reset()      { *m = InputHours{} }
+func (*InputHours) ProtoMessage() {}
+func (*InputHours) Descriptor() ([]byte, []int) {
+	return fileDescriptor_79d4234d464550a7, []int{0}
+}
+func (m *InputHours) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *InputHours) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *InputHours) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InputHours.Merge(m, src)
+}
+func (m *InputHours) XXX_Size() int {
+	return m.Size()
+}
+func (m *InputHours) XXX_DiscardUnknown() {
+	xxx_messageInfo_InputHours.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_InputHours proto.InternalMessageInfo
+
+func (m *InputHours) GetDuration() uint32 {
+	if m != nil {
+		return m.Duration
+	}
+	return 0
+}
+
+// Minutes
+//
+// x-displayName: "Minutes"
+// Input Duration Minutes
+type InputMinutes struct {
+	// Duration
+	//
+	// x-displayName: "Duration"
+	Duration uint32 `protobuf:"varint,1,opt,name=duration,proto3" json:"duration,omitempty"`
+}
+
+func (m *InputMinutes) Reset()      { *m = InputMinutes{} }
+func (*InputMinutes) ProtoMessage() {}
+func (*InputMinutes) Descriptor() ([]byte, []int) {
+	return fileDescriptor_79d4234d464550a7, []int{1}
+}
+func (m *InputMinutes) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *InputMinutes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *InputMinutes) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InputMinutes.Merge(m, src)
+}
+func (m *InputMinutes) XXX_Size() int {
+	return m.Size()
+}
+func (m *InputMinutes) XXX_DiscardUnknown() {
+	xxx_messageInfo_InputMinutes.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_InputMinutes proto.InternalMessageInfo
+
+func (m *InputMinutes) GetDuration() uint32 {
+	if m != nil {
+		return m.Duration
+	}
+	return 0
+}
+
+// Seconds
+//
+// x-displayName: "Seconds"
+// Input Duration Seconds
+type InputSeconds struct {
+	// Duration
+	//
+	// x-displayName: "Duration"
+	Duration uint32 `protobuf:"varint,1,opt,name=duration,proto3" json:"duration,omitempty"`
+}
+
+func (m *InputSeconds) Reset()      { *m = InputSeconds{} }
+func (*InputSeconds) ProtoMessage() {}
+func (*InputSeconds) Descriptor() ([]byte, []int) {
+	return fileDescriptor_79d4234d464550a7, []int{2}
+}
+func (m *InputSeconds) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *InputSeconds) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *InputSeconds) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InputSeconds.Merge(m, src)
+}
+func (m *InputSeconds) XXX_Size() int {
+	return m.Size()
+}
+func (m *InputSeconds) XXX_DiscardUnknown() {
+	xxx_messageInfo_InputSeconds.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_InputSeconds proto.InternalMessageInfo
+
+func (m *InputSeconds) GetDuration() uint32 {
+	if m != nil {
+		return m.Duration
+	}
+	return 0
+}
+
+// RateLimitBlockAction
+//
+// x-displayName: "Rate Limit Block Action"
+// Action where a user is blocked from making further requests after exceeding rate limit threshold.
+type RateLimitBlockAction struct {
+	// block_duration_choice
+	//
+	// x-displayName: "Duration"
+	// Period of time after rate limit threshold is exceeded where a user is blocked from making further requests.
+	//
+	// Types that are valid to be assigned to BlockDurationChoice:
+	//	*RateLimitBlockAction_Seconds
+	//	*RateLimitBlockAction_Minutes
+	//	*RateLimitBlockAction_Hours
+	BlockDurationChoice isRateLimitBlockAction_BlockDurationChoice `protobuf_oneof:"block_duration_choice"`
+}
+
+func (m *RateLimitBlockAction) Reset()      { *m = RateLimitBlockAction{} }
+func (*RateLimitBlockAction) ProtoMessage() {}
+func (*RateLimitBlockAction) Descriptor() ([]byte, []int) {
+	return fileDescriptor_79d4234d464550a7, []int{3}
+}
+func (m *RateLimitBlockAction) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RateLimitBlockAction) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RateLimitBlockAction) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RateLimitBlockAction.Merge(m, src)
+}
+func (m *RateLimitBlockAction) XXX_Size() int {
+	return m.Size()
+}
+func (m *RateLimitBlockAction) XXX_DiscardUnknown() {
+	xxx_messageInfo_RateLimitBlockAction.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RateLimitBlockAction proto.InternalMessageInfo
+
+type isRateLimitBlockAction_BlockDurationChoice interface {
+	isRateLimitBlockAction_BlockDurationChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type RateLimitBlockAction_Seconds struct {
+	Seconds *InputSeconds `protobuf:"bytes,2,opt,name=seconds,proto3,oneof" json:"seconds,omitempty"`
+}
+type RateLimitBlockAction_Minutes struct {
+	Minutes *InputMinutes `protobuf:"bytes,3,opt,name=minutes,proto3,oneof" json:"minutes,omitempty"`
+}
+type RateLimitBlockAction_Hours struct {
+	Hours *InputHours `protobuf:"bytes,4,opt,name=hours,proto3,oneof" json:"hours,omitempty"`
+}
+
+func (*RateLimitBlockAction_Seconds) isRateLimitBlockAction_BlockDurationChoice() {}
+func (*RateLimitBlockAction_Minutes) isRateLimitBlockAction_BlockDurationChoice() {}
+func (*RateLimitBlockAction_Hours) isRateLimitBlockAction_BlockDurationChoice()   {}
+
+func (m *RateLimitBlockAction) GetBlockDurationChoice() isRateLimitBlockAction_BlockDurationChoice {
+	if m != nil {
+		return m.BlockDurationChoice
+	}
+	return nil
+}
+
+func (m *RateLimitBlockAction) GetSeconds() *InputSeconds {
+	if x, ok := m.GetBlockDurationChoice().(*RateLimitBlockAction_Seconds); ok {
+		return x.Seconds
+	}
+	return nil
+}
+
+func (m *RateLimitBlockAction) GetMinutes() *InputMinutes {
+	if x, ok := m.GetBlockDurationChoice().(*RateLimitBlockAction_Minutes); ok {
+		return x.Minutes
+	}
+	return nil
+}
+
+func (m *RateLimitBlockAction) GetHours() *InputHours {
+	if x, ok := m.GetBlockDurationChoice().(*RateLimitBlockAction_Hours); ok {
+		return x.Hours
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*RateLimitBlockAction) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*RateLimitBlockAction_Seconds)(nil),
+		(*RateLimitBlockAction_Minutes)(nil),
+		(*RateLimitBlockAction_Hours)(nil),
+	}
+}
+
 // RateLimitValue
 //
 // x-displayName: "Rate Limit Value"
@@ -121,10 +362,10 @@ type RateLimitValue struct {
 	Unit RateLimitPeriodUnit `protobuf:"varint,1,opt,name=unit,proto3,enum=ves.io.schema.rate_limiter.RateLimitPeriodUnit" json:"unit,omitempty"`
 	// total_number
 	//
-	// x-displayName: "Number"
+	// x-displayName: "Number Of Requests"
 	// x-example: "1"
 	// x-required
-	// The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period.
+	// The total number of allowed requests per rate-limiting period.
 	TotalNumber uint32 `protobuf:"varint,2,opt,name=total_number,json=totalNumber,proto3" json:"total_number,omitempty"`
 	// burst_multiplier
 	//
@@ -132,12 +373,27 @@ type RateLimitValue struct {
 	// x-example: "1"
 	// The maximum burst of requests to accommodate, expressed as a multiple of the rate.
 	BurstMultiplier uint32 `protobuf:"varint,3,opt,name=burst_multiplier,json=burstMultiplier,proto3" json:"burst_multiplier,omitempty"`
+	// period_multiplier
+	//
+	// x-displayName: "Periods"
+	// x-example: "1"
+	// This setting, combined with Per Period units, provides a duration
+	PeriodMultiplier uint32 `protobuf:"varint,4,opt,name=period_multiplier,json=periodMultiplier,proto3" json:"period_multiplier,omitempty"`
+	// Rate Limiter Action
+	//
+	// x-displayName: "Mitigation Action"
+	// Applies the specified action to the user after threshold is reached.
+	//
+	// Types that are valid to be assigned to ActionChoice:
+	//	*RateLimitValue_Disabled
+	//	*RateLimitValue_ActionBlock
+	ActionChoice isRateLimitValue_ActionChoice `protobuf_oneof:"action_choice"`
 }
 
 func (m *RateLimitValue) Reset()      { *m = RateLimitValue{} }
 func (*RateLimitValue) ProtoMessage() {}
 func (*RateLimitValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_79d4234d464550a7, []int{0}
+	return fileDescriptor_79d4234d464550a7, []int{4}
 }
 func (m *RateLimitValue) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -162,6 +418,30 @@ func (m *RateLimitValue) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_RateLimitValue proto.InternalMessageInfo
 
+type isRateLimitValue_ActionChoice interface {
+	isRateLimitValue_ActionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type RateLimitValue_Disabled struct {
+	Disabled *schema.Empty `protobuf:"bytes,201,opt,name=disabled,proto3,oneof" json:"disabled,omitempty"`
+}
+type RateLimitValue_ActionBlock struct {
+	ActionBlock *RateLimitBlockAction `protobuf:"bytes,202,opt,name=action_block,json=actionBlock,proto3,oneof" json:"action_block,omitempty"`
+}
+
+func (*RateLimitValue_Disabled) isRateLimitValue_ActionChoice()    {}
+func (*RateLimitValue_ActionBlock) isRateLimitValue_ActionChoice() {}
+
+func (m *RateLimitValue) GetActionChoice() isRateLimitValue_ActionChoice {
+	if m != nil {
+		return m.ActionChoice
+	}
+	return nil
+}
+
 func (m *RateLimitValue) GetUnit() RateLimitPeriodUnit {
 	if m != nil {
 		return m.Unit
@@ -181,6 +461,35 @@ func (m *RateLimitValue) GetBurstMultiplier() uint32 {
 		return m.BurstMultiplier
 	}
 	return 0
+}
+
+func (m *RateLimitValue) GetPeriodMultiplier() uint32 {
+	if m != nil {
+		return m.PeriodMultiplier
+	}
+	return 0
+}
+
+func (m *RateLimitValue) GetDisabled() *schema.Empty {
+	if x, ok := m.GetActionChoice().(*RateLimitValue_Disabled); ok {
+		return x.Disabled
+	}
+	return nil
+}
+
+func (m *RateLimitValue) GetActionBlock() *RateLimitBlockAction {
+	if x, ok := m.GetActionChoice().(*RateLimitValue_ActionBlock); ok {
+		return x.ActionBlock
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*RateLimitValue) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*RateLimitValue_Disabled)(nil),
+		(*RateLimitValue_ActionBlock)(nil),
+	}
 }
 
 // GlobalSpecType
@@ -210,7 +519,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_79d4234d464550a7, []int{1}
+	return fileDescriptor_79d4234d464550a7, []int{5}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -268,7 +577,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_79d4234d464550a7, []int{2}
+	return fileDescriptor_79d4234d464550a7, []int{6}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -319,7 +628,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_79d4234d464550a7, []int{3}
+	return fileDescriptor_79d4234d464550a7, []int{7}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -370,7 +679,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_79d4234d464550a7, []int{4}
+	return fileDescriptor_79d4234d464550a7, []int{8}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -414,6 +723,14 @@ func init() {
 	golang_proto.RegisterEnum("ves.io.schema.rate_limiter.RateLimiterMode", RateLimiterMode_name, RateLimiterMode_value)
 	proto.RegisterEnum("ves.io.schema.rate_limiter.RateLimitPeriodUnit", RateLimitPeriodUnit_name, RateLimitPeriodUnit_value)
 	golang_proto.RegisterEnum("ves.io.schema.rate_limiter.RateLimitPeriodUnit", RateLimitPeriodUnit_name, RateLimitPeriodUnit_value)
+	proto.RegisterType((*InputHours)(nil), "ves.io.schema.rate_limiter.InputHours")
+	golang_proto.RegisterType((*InputHours)(nil), "ves.io.schema.rate_limiter.InputHours")
+	proto.RegisterType((*InputMinutes)(nil), "ves.io.schema.rate_limiter.InputMinutes")
+	golang_proto.RegisterType((*InputMinutes)(nil), "ves.io.schema.rate_limiter.InputMinutes")
+	proto.RegisterType((*InputSeconds)(nil), "ves.io.schema.rate_limiter.InputSeconds")
+	golang_proto.RegisterType((*InputSeconds)(nil), "ves.io.schema.rate_limiter.InputSeconds")
+	proto.RegisterType((*RateLimitBlockAction)(nil), "ves.io.schema.rate_limiter.RateLimitBlockAction")
+	golang_proto.RegisterType((*RateLimitBlockAction)(nil), "ves.io.schema.rate_limiter.RateLimitBlockAction")
 	proto.RegisterType((*RateLimitValue)(nil), "ves.io.schema.rate_limiter.RateLimitValue")
 	golang_proto.RegisterType((*RateLimitValue)(nil), "ves.io.schema.rate_limiter.RateLimitValue")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.rate_limiter.GlobalSpecType")
@@ -434,51 +751,72 @@ func init() {
 }
 
 var fileDescriptor_79d4234d464550a7 = []byte{
-	// 698 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x55, 0x41, 0x4f, 0x1a, 0x5b,
-	0x14, 0x9e, 0x03, 0xc8, 0x33, 0xd7, 0x27, 0xf0, 0xc6, 0xcd, 0x3c, 0x1e, 0x99, 0x10, 0x16, 0x2f,
-	0x86, 0xa7, 0x33, 0x11, 0x57, 0xcf, 0x85, 0xa9, 0x08, 0x55, 0x12, 0x01, 0x3b, 0x62, 0x93, 0x76,
-	0x33, 0x99, 0x81, 0x0b, 0xde, 0x76, 0xe0, 0x4e, 0x2e, 0x77, 0x68, 0x5d, 0x98, 0xf8, 0x0b, 0x9a,
-	0xa6, 0x7f, 0xa1, 0x9b, 0xa6, 0xdb, 0x26, 0x6d, 0x52, 0x36, 0x2e, 0x1b, 0x57, 0x2e, 0x89, 0xab,
-	0x3a, 0x6c, 0xec, 0xce, 0xf4, 0x17, 0x34, 0x5c, 0x29, 0x11, 0x4a, 0x13, 0xe3, 0xce, 0xdd, 0xb9,
-	0xf9, 0xbe, 0xf3, 0x9d, 0xef, 0x7c, 0x90, 0x33, 0xe8, 0xdf, 0x0e, 0x6e, 0x6b, 0x84, 0xea, 0xed,
-	0xea, 0x01, 0x6e, 0x5a, 0x3a, 0xb3, 0x38, 0x36, 0x1d, 0xd2, 0x24, 0x1c, 0x33, 0x9d, 0x1f, 0xba,
-	0xb8, 0xad, 0xb9, 0x8c, 0x72, 0x2a, 0xc7, 0xaf, 0x79, 0xda, 0x35, 0x4f, 0xbb, 0xc9, 0x8b, 0x2f,
-	0x37, 0x08, 0x3f, 0xf0, 0x6c, 0xad, 0x4a, 0x9b, 0x7a, 0x83, 0x36, 0xa8, 0x2e, 0x5a, 0x6c, 0xaf,
-	0x2e, 0x5e, 0xe2, 0x21, 0xaa, 0x6b, 0xa9, 0xf8, 0x3f, 0xe3, 0x23, 0xa9, 0xcb, 0x09, 0x6d, 0x0d,
-	0xe7, 0xc4, 0xff, 0x1e, 0x07, 0x6f, 0x58, 0x88, 0x27, 0xc6, 0xa1, 0x8e, 0xe5, 0x90, 0x9a, 0xc5,
-	0xf1, 0x10, 0x4d, 0x4e, 0xa0, 0x04, 0xbf, 0x30, 0xc7, 0xa4, 0x53, 0xe7, 0x80, 0x22, 0x86, 0xc5,
-	0xf1, 0xce, 0xc0, 0xf6, 0x63, 0xcb, 0xf1, 0xb0, 0x5c, 0x46, 0x21, 0xaf, 0x45, 0xb8, 0x02, 0x49,
-	0x58, 0x8c, 0x64, 0x74, 0xed, 0xf7, 0x4b, 0x6a, 0xa3, 0xce, 0x5d, 0xcc, 0x08, 0xad, 0xed, 0xb7,
-	0x08, 0xcf, 0xa2, 0xf3, 0x2e, 0x84, 0xf7, 0xf2, 0x9b, 0xe5, 0x52, 0xce, 0x10, 0x42, 0x72, 0x06,
-	0xfd, 0xc9, 0x29, 0xb7, 0x1c, 0xb3, 0xe5, 0x35, 0x6d, 0xcc, 0x94, 0x40, 0x12, 0x16, 0xe7, 0xb3,
-	0xd1, 0xf3, 0x2e, 0xc0, 0xca, 0xe7, 0x6f, 0x27, 0xc1, 0x99, 0x74, 0x50, 0x39, 0x7e, 0x60, 0xcc,
-	0x09, 0x52, 0x49, 0x70, 0xe4, 0xff, 0x51, 0xcc, 0xf6, 0x58, 0x9b, 0x9b, 0x4d, 0xcf, 0xe1, 0xc4,
-	0x75, 0x08, 0x66, 0x4a, 0x50, 0xf4, 0x45, 0x46, 0x7d, 0xa1, 0x74, 0x40, 0xa9, 0x19, 0x51, 0xc1,
-	0x2b, 0x8e, 0x68, 0x6b, 0xb3, 0xdf, 0xd7, 0x67, 0x32, 0x4b, 0x2b, 0x4b, 0xab, 0xa9, 0xb7, 0x01,
-	0x14, 0xd9, 0x72, 0xa8, 0x6d, 0x39, 0x7b, 0x2e, 0xae, 0x56, 0x0e, 0x5d, 0x2c, 0x97, 0x50, 0x58,
-	0x98, 0x6f, 0x2b, 0x90, 0x0c, 0x2e, 0xce, 0x65, 0xd2, 0xb7, 0x5a, 0x4f, 0x04, 0x93, 0x45, 0xc2,
-	0xec, 0x1b, 0x08, 0xc4, 0xc0, 0x18, 0xaa, 0xc8, 0x14, 0x2d, 0x78, 0x6d, 0xcc, 0x4c, 0x52, 0xc3,
-	0x2d, 0x4e, 0xea, 0xa4, 0x6a, 0x0d, 0xd2, 0x55, 0x02, 0x42, 0x3c, 0x31, 0x21, 0x5e, 0xb6, 0x9f,
-	0xe1, 0x2a, 0x37, 0x70, 0x7d, 0x60, 0x25, 0x9b, 0x7c, 0x7f, 0x34, 0xad, 0xf7, 0xc6, 0x10, 0x79,
-	0x00, 0x17, 0xc6, 0x50, 0x79, 0x1b, 0x85, 0x9a, 0xb4, 0x86, 0x45, 0x18, 0x91, 0xcc, 0x7f, 0xb7,
-	0xb2, 0x8f, 0x59, 0x91, 0xd6, 0x70, 0xf6, 0x8f, 0xde, 0x11, 0x5c, 0x76, 0x01, 0x0c, 0xa1, 0xb0,
-	0x16, 0x3e, 0xed, 0x0e, 0xa6, 0xa4, 0x3e, 0x02, 0x8a, 0x6c, 0x32, 0x6c, 0x71, 0x3c, 0x4a, 0x29,
-	0x7b, 0xf7, 0x94, 0x46, 0xc9, 0x14, 0xef, 0x9c, 0xcc, 0xb4, 0xbd, 0xd7, 0xfe, 0x3a, 0x5d, 0x9f,
-	0xf8, 0x2d, 0x53, 0x9f, 0x00, 0x45, 0x0d, 0xec, 0x3a, 0x56, 0xf5, 0xbe, 0x39, 0xff, 0x00, 0x68,
-	0x6e, 0x0b, 0xf3, 0xfb, 0xe5, 0x3a, 0xfd, 0x08, 0x45, 0x27, 0xfe, 0x52, 0x72, 0x12, 0x25, 0x8c,
-	0x8d, 0x4a, 0xde, 0xdc, 0x29, 0x14, 0x0b, 0x95, 0xbc, 0x61, 0x16, 0xcb, 0xb9, 0xbc, 0x59, 0x2a,
-	0x57, 0xcc, 0xbd, 0xed, 0x0d, 0x23, 0x9f, 0x8b, 0x49, 0x72, 0x02, 0x29, 0xbf, 0x32, 0x86, 0x28,
-	0xa4, 0x1f, 0xa2, 0x85, 0x29, 0x37, 0x44, 0x46, 0x68, 0x78, 0x41, 0x62, 0xd2, 0xa0, 0x2e, 0x16,
-	0x4a, 0xfb, 0x95, 0x7c, 0x0c, 0xe4, 0x59, 0x14, 0xda, 0x2e, 0xef, 0x1b, 0xb1, 0x80, 0x3c, 0x8f,
-	0x82, 0xb9, 0x8d, 0x27, 0xb1, 0x60, 0x3c, 0x74, 0xd2, 0x05, 0xc8, 0xbe, 0x82, 0xb3, 0x0b, 0x55,
-	0xea, 0x5d, 0xa8, 0xd2, 0xd5, 0x85, 0x0a, 0xc7, 0xbe, 0x0a, 0xef, 0x7c, 0x15, 0xbe, 0xf8, 0x2a,
-	0x9c, 0xf9, 0x2a, 0xf4, 0x7c, 0x15, 0xbe, 0xfa, 0x2a, 0x5c, 0xfa, 0xaa, 0x74, 0xe5, 0xab, 0xf0,
-	0xba, 0xaf, 0x4a, 0x27, 0x7d, 0x15, 0xce, 0xfa, 0xaa, 0xd4, 0xeb, 0xab, 0xd2, 0xd3, 0xdd, 0x06,
-	0x75, 0x9f, 0x37, 0xb4, 0x0e, 0x75, 0x38, 0x66, 0xcc, 0xd2, 0xbc, 0xb6, 0x2e, 0x8a, 0x3a, 0x65,
-	0xcd, 0x65, 0x97, 0xd1, 0x0e, 0xa9, 0x61, 0xb6, 0xfc, 0x13, 0xd6, 0x5d, 0xbb, 0x41, 0x75, 0xfc,
-	0x92, 0x0f, 0xcf, 0xea, 0x94, 0xcf, 0x84, 0x1d, 0x16, 0xe7, 0x75, 0xf5, 0x47, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0x69, 0x74, 0xd6, 0x0f, 0x4b, 0x06, 0x00, 0x00,
+	// 1034 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xd4, 0x56, 0x41, 0x4f, 0x1b, 0x47,
+	0x14, 0xde, 0xb7, 0x5e, 0xc0, 0x1a, 0xc0, 0x2c, 0x03, 0xa4, 0x8e, 0x8b, 0xb6, 0xae, 0xa5, 0x46,
+	0xc8, 0x35, 0x36, 0x98, 0x5c, 0x82, 0x22, 0x5a, 0x36, 0xb8, 0x31, 0x08, 0xe3, 0x74, 0x81, 0x48,
+	0xed, 0x65, 0xb5, 0xb6, 0x07, 0xb3, 0xcd, 0xda, 0xb3, 0xdd, 0x9d, 0xa5, 0xe5, 0x10, 0x29, 0x97,
+	0x4a, 0x3d, 0x55, 0x55, 0xd5, 0x7f, 0xd0, 0x4b, 0x55, 0xf5, 0x56, 0xa9, 0x95, 0xba, 0x3d, 0xa0,
+	0x9e, 0x80, 0x13, 0x47, 0x94, 0x53, 0x31, 0x97, 0xf4, 0xc6, 0x4f, 0xa8, 0x76, 0x76, 0x6d, 0x19,
+	0x42, 0x13, 0x94, 0x5b, 0x6e, 0xb3, 0x7e, 0xdf, 0xf7, 0xbd, 0xf7, 0xbe, 0xf7, 0x3c, 0x1a, 0x74,
+	0x67, 0x8f, 0xb8, 0x79, 0x93, 0x16, 0xdc, 0xfa, 0x2e, 0x69, 0x19, 0x05, 0xc7, 0x60, 0x44, 0xb7,
+	0xcc, 0x96, 0xc9, 0x88, 0x53, 0x60, 0xfb, 0x36, 0x71, 0xf3, 0xb6, 0x43, 0x19, 0xc5, 0xa9, 0x10,
+	0x97, 0x0f, 0x71, 0xf9, 0x7e, 0x5c, 0x6a, 0xb6, 0x69, 0xb2, 0x5d, 0xaf, 0x96, 0xaf, 0xd3, 0x56,
+	0xa1, 0x49, 0x9b, 0xb4, 0xc0, 0x29, 0x35, 0x6f, 0x87, 0x7f, 0xf1, 0x0f, 0x7e, 0x0a, 0xa5, 0x52,
+	0xef, 0x5e, 0x4e, 0x49, 0x6d, 0x66, 0xd2, 0x76, 0x94, 0x27, 0x75, 0xfb, 0x72, 0xb0, 0xaf, 0x84,
+	0xd4, 0xf4, 0xe5, 0xd0, 0x9e, 0x61, 0x99, 0x0d, 0x83, 0x91, 0x28, 0x9a, 0xbe, 0x12, 0x35, 0xc9,
+	0x57, 0xfa, 0x25, 0xe9, 0xcc, 0x7d, 0x84, 0x56, 0xdb, 0xb6, 0xc7, 0xca, 0xd4, 0x73, 0x5c, 0x9c,
+	0x47, 0xf1, 0x86, 0xe7, 0x18, 0x01, 0x20, 0x09, 0x69, 0x98, 0x19, 0x55, 0xf1, 0x73, 0x1f, 0x60,
+	0xfe, 0xdb, 0xbf, 0x20, 0xf6, 0xe7, 0xbf, 0x07, 0x31, 0x29, 0x2b, 0x26, 0xe7, 0xb4, 0x1e, 0x26,
+	0xb3, 0x84, 0x46, 0x38, 0xbb, 0x62, 0xb6, 0x3d, 0x46, 0x5e, 0xc9, 0x17, 0xbb, 0xfc, 0xfb, 0x7d,
+	0xfc, 0x8f, 0x22, 0xfe, 0x26, 0xa9, 0xd3, 0x76, 0xc3, 0xc5, 0x85, 0x97, 0xf8, 0x13, 0x5d, 0x3e,
+	0x04, 0xfc, 0x81, 0x6c, 0x2c, 0xf9, 0xab, 0xd8, 0x27, 0xf0, 0xa3, 0x88, 0x26, 0x35, 0x83, 0x91,
+	0xf5, 0xc0, 0x75, 0xd5, 0xa2, 0xf5, 0x27, 0xcb, 0xf5, 0x20, 0x80, 0x57, 0xd0, 0x90, 0x1b, 0x8a,
+	0x26, 0xc5, 0x34, 0xcc, 0x0c, 0x17, 0x67, 0xf2, 0xff, 0x3f, 0xac, 0x7c, 0x7f, 0x11, 0x65, 0x41,
+	0xeb, 0x52, 0x03, 0x95, 0x56, 0xd8, 0x5a, 0x32, 0x76, 0x43, 0x95, 0xc8, 0x8a, 0x40, 0x25, 0xa2,
+	0xe2, 0x25, 0x34, 0xb0, 0x1b, 0xd8, 0x9b, 0x94, 0xb8, 0xc6, 0x9d, 0xd7, 0x6a, 0xf0, 0x61, 0x94,
+	0x05, 0x2d, 0xa4, 0xa9, 0x59, 0x34, 0x55, 0x0b, 0x5a, 0xd3, 0xbb, 0x6d, 0xeb, 0xf5, 0x5d, 0x6a,
+	0xd6, 0x09, 0x1e, 0x3f, 0xf0, 0x41, 0x3c, 0xf1, 0x01, 0x3a, 0x3e, 0x0c, 0x14, 0x73, 0x0b, 0xb9,
+	0xbb, 0x6b, 0x52, 0x1c, 0x64, 0x31, 0xf3, 0x8d, 0x84, 0x12, 0x3d, 0x5b, 0x1e, 0x1b, 0x96, 0x47,
+	0x70, 0x15, 0x49, 0x5e, 0xdb, 0x64, 0xdc, 0xd6, 0x44, 0xb1, 0xf0, 0xaa, 0x1a, 0x7a, 0xcc, 0x47,
+	0xc4, 0x31, 0x69, 0x63, 0xbb, 0x6d, 0x32, 0x15, 0x3d, 0xf7, 0x61, 0x70, 0xb3, 0xf4, 0xa0, 0xba,
+	0xb1, 0xa2, 0x71, 0x21, 0x5c, 0x44, 0x23, 0x8c, 0x32, 0xc3, 0xd2, 0xdb, 0x5e, 0xab, 0x46, 0x1c,
+	0x6e, 0xf3, 0xa8, 0x3a, 0xc6, 0xe7, 0xd5, 0x9d, 0xd5, 0xb3, 0x8f, 0xb5, 0x61, 0x0e, 0xda, 0xe0,
+	0x18, 0x7c, 0x0f, 0xc9, 0x35, 0xcf, 0x71, 0x99, 0xde, 0xf2, 0x2c, 0x66, 0xda, 0x96, 0x49, 0x1c,
+	0x6e, 0xec, 0xa8, 0x9a, 0xe8, 0xf1, 0x82, 0x1d, 0x69, 0x68, 0x63, 0x1c, 0x57, 0xe9, 0xc1, 0xf0,
+	0x3d, 0x34, 0x6e, 0xf3, 0x72, 0xfa, 0xb9, 0x12, 0xe7, 0x8e, 0xf4, 0xb8, 0x62, 0x56, 0xd0, 0xe4,
+	0x10, 0xd6, 0x47, 0x5d, 0x40, 0xf1, 0x86, 0xe9, 0x1a, 0x35, 0x8b, 0x34, 0x92, 0x47, 0xc0, 0x67,
+	0x30, 0x79, 0xa5, 0xff, 0x52, 0xcb, 0x66, 0xfb, 0x65, 0x41, 0xeb, 0x01, 0xf1, 0x63, 0x34, 0x62,
+	0xf0, 0x55, 0xd2, 0xb9, 0xf7, 0xc9, 0xe3, 0x90, 0x38, 0x77, 0x23, 0xe3, 0xfa, 0x36, 0xb1, 0x2c,
+	0x68, 0xc3, 0xa1, 0x10, 0xff, 0x71, 0xf1, 0x83, 0xbf, 0x7d, 0x78, 0x1f, 0xbd, 0x87, 0x26, 0x35,
+	0xf2, 0xa5, 0x47, 0x5c, 0x96, 0x0e, 0x48, 0xe9, 0xf5, 0x50, 0x01, 0x0f, 0x15, 0x73, 0xf3, 0xb9,
+	0xbb, 0xb9, 0x05, 0x35, 0x8b, 0x46, 0xa3, 0xf4, 0xd1, 0xac, 0x6f, 0x1f, 0xf8, 0x70, 0x04, 0x27,
+	0x3e, 0x1c, 0x06, 0xd3, 0x1e, 0x2a, 0xce, 0xcd, 0xe7, 0x8a, 0x73, 0xc5, 0x0b, 0x1f, 0x60, 0x4d,
+	0x8a, 0x4f, 0xca, 0x53, 0x6b, 0x52, 0x7c, 0x4a, 0xbe, 0xb5, 0x26, 0xc5, 0x6f, 0xc9, 0xef, 0xac,
+	0x0d, 0xc6, 0x0f, 0x41, 0x3e, 0x82, 0xcc, 0x4f, 0x22, 0x4a, 0x3c, 0xb4, 0x68, 0xcd, 0xb0, 0x36,
+	0x6d, 0x52, 0xdf, 0xda, 0xb7, 0x09, 0xde, 0x40, 0x83, 0xbc, 0x5c, 0x37, 0x09, 0xe9, 0xd8, 0xcc,
+	0x70, 0x31, 0x7b, 0xa3, 0x86, 0xf8, 0x0e, 0xa9, 0x88, 0xcf, 0xf5, 0x07, 0x10, 0x65, 0xd0, 0x22,
+	0x15, 0x4c, 0xd1, 0x84, 0xe7, 0x12, 0x47, 0x37, 0x1b, 0xa4, 0xcd, 0xcc, 0x1d, 0xb3, 0x1e, 0xfe,
+	0x7b, 0x45, 0x2e, 0x3e, 0x7d, 0x45, 0xbc, 0x5a, 0xfb, 0x82, 0xd4, 0x99, 0x46, 0x76, 0x82, 0x52,
+	0xd4, 0xf4, 0x2f, 0x4f, 0xaf, 0xe3, 0xf6, 0x25, 0xc1, 0x41, 0x78, 0xf5, 0x52, 0x14, 0x97, 0x91,
+	0xd4, 0xa2, 0x0d, 0xc2, 0xf7, 0x26, 0x51, 0xfc, 0xf0, 0x46, 0xe5, 0x13, 0xa7, 0x42, 0x1b, 0x44,
+	0x1d, 0x3a, 0x7d, 0x0a, 0x2f, 0x7c, 0x00, 0x8d, 0x2b, 0x2c, 0x0e, 0x1e, 0xfb, 0x41, 0x96, 0xcc,
+	0xef, 0x80, 0x12, 0x0f, 0x1c, 0x62, 0x30, 0xd2, 0x73, 0x49, 0x7d, 0x73, 0x97, 0x7a, 0xce, 0x54,
+	0xde, 0xd8, 0x99, 0xeb, 0xfa, 0x5e, 0x1c, 0x3f, 0x5e, 0xba, 0x32, 0xcb, 0xcc, 0x1f, 0x80, 0xc6,
+	0x34, 0x62, 0x5b, 0x46, 0xfd, 0x6d, 0xab, 0xfc, 0x37, 0x40, 0xc3, 0x0f, 0x09, 0x7b, 0xbb, 0xaa,
+	0xce, 0x7e, 0x8a, 0xc6, 0xae, 0xac, 0x14, 0x4e, 0xa3, 0x69, 0x6d, 0x79, 0xab, 0xa4, 0xaf, 0xaf,
+	0x56, 0x56, 0xb7, 0x4a, 0x9a, 0x5e, 0xa9, 0xae, 0x94, 0xf4, 0x8d, 0xea, 0x96, 0xbe, 0x59, 0x5e,
+	0xd6, 0x4a, 0x2b, 0xb2, 0x80, 0xa7, 0x51, 0xf2, 0x65, 0x44, 0x14, 0x85, 0xec, 0x27, 0x68, 0xe2,
+	0x9a, 0xeb, 0x16, 0x23, 0x14, 0x5d, 0xb6, 0xb2, 0x10, 0x9c, 0x2b, 0xab, 0x1b, 0xdb, 0x5b, 0x25,
+	0x19, 0x70, 0x1c, 0x49, 0xe5, 0xea, 0xb6, 0x26, 0x8b, 0x78, 0x14, 0xc5, 0x56, 0x96, 0x3f, 0x93,
+	0x63, 0x29, 0xe9, 0xc0, 0x07, 0x50, 0xbf, 0x83, 0x93, 0x33, 0x45, 0x38, 0x3d, 0x53, 0x84, 0x8b,
+	0x33, 0x05, 0x9e, 0x75, 0x14, 0xf8, 0xb9, 0xa3, 0xc0, 0x61, 0x47, 0x81, 0x93, 0x8e, 0x02, 0xa7,
+	0x1d, 0x05, 0xfe, 0xe9, 0x28, 0xf0, 0xa2, 0xa3, 0x08, 0x17, 0x1d, 0x05, 0xbe, 0x3f, 0x57, 0x84,
+	0x83, 0x73, 0x05, 0x4e, 0xce, 0x15, 0xe1, 0xf4, 0x5c, 0x11, 0x3e, 0x7f, 0xd4, 0xa4, 0xf6, 0x93,
+	0x66, 0x7e, 0x8f, 0x5a, 0x8c, 0x38, 0x8e, 0x91, 0xf7, 0xdc, 0x02, 0x3f, 0xec, 0x50, 0xa7, 0x35,
+	0x6b, 0x3b, 0x74, 0xcf, 0x6c, 0x10, 0x67, 0xb6, 0x1b, 0x2e, 0xd8, 0xb5, 0x26, 0x2d, 0x90, 0xaf,
+	0x59, 0xf4, 0xae, 0xb8, 0xe6, 0x9d, 0x54, 0x1b, 0xe4, 0xef, 0x8b, 0x85, 0xff, 0x02, 0x00, 0x00,
+	0xff, 0xff, 0x35, 0xe1, 0xb6, 0x4e, 0x4c, 0x09, 0x00, 0x00,
 }
 
 func (x RateLimiterMode) String() string {
@@ -494,6 +832,180 @@ func (x RateLimitPeriodUnit) String() string {
 		return s
 	}
 	return strconv.Itoa(int(x))
+}
+func (this *InputHours) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*InputHours)
+	if !ok {
+		that2, ok := that.(InputHours)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Duration != that1.Duration {
+		return false
+	}
+	return true
+}
+func (this *InputMinutes) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*InputMinutes)
+	if !ok {
+		that2, ok := that.(InputMinutes)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Duration != that1.Duration {
+		return false
+	}
+	return true
+}
+func (this *InputSeconds) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*InputSeconds)
+	if !ok {
+		that2, ok := that.(InputSeconds)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Duration != that1.Duration {
+		return false
+	}
+	return true
+}
+func (this *RateLimitBlockAction) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RateLimitBlockAction)
+	if !ok {
+		that2, ok := that.(RateLimitBlockAction)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.BlockDurationChoice == nil {
+		if this.BlockDurationChoice != nil {
+			return false
+		}
+	} else if this.BlockDurationChoice == nil {
+		return false
+	} else if !this.BlockDurationChoice.Equal(that1.BlockDurationChoice) {
+		return false
+	}
+	return true
+}
+func (this *RateLimitBlockAction_Seconds) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RateLimitBlockAction_Seconds)
+	if !ok {
+		that2, ok := that.(RateLimitBlockAction_Seconds)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Seconds.Equal(that1.Seconds) {
+		return false
+	}
+	return true
+}
+func (this *RateLimitBlockAction_Minutes) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RateLimitBlockAction_Minutes)
+	if !ok {
+		that2, ok := that.(RateLimitBlockAction_Minutes)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Minutes.Equal(that1.Minutes) {
+		return false
+	}
+	return true
+}
+func (this *RateLimitBlockAction_Hours) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RateLimitBlockAction_Hours)
+	if !ok {
+		that2, ok := that.(RateLimitBlockAction_Hours)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Hours.Equal(that1.Hours) {
+		return false
+	}
+	return true
 }
 func (this *RateLimitValue) Equal(that interface{}) bool {
 	if that == nil {
@@ -521,6 +1033,66 @@ func (this *RateLimitValue) Equal(that interface{}) bool {
 		return false
 	}
 	if this.BurstMultiplier != that1.BurstMultiplier {
+		return false
+	}
+	if this.PeriodMultiplier != that1.PeriodMultiplier {
+		return false
+	}
+	if that1.ActionChoice == nil {
+		if this.ActionChoice != nil {
+			return false
+		}
+	} else if this.ActionChoice == nil {
+		return false
+	} else if !this.ActionChoice.Equal(that1.ActionChoice) {
+		return false
+	}
+	return true
+}
+func (this *RateLimitValue_Disabled) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RateLimitValue_Disabled)
+	if !ok {
+		that2, ok := that.(RateLimitValue_Disabled)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Disabled.Equal(that1.Disabled) {
+		return false
+	}
+	return true
+}
+func (this *RateLimitValue_ActionBlock) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RateLimitValue_ActionBlock)
+	if !ok {
+		that2, ok := that.(RateLimitValue_ActionBlock)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ActionBlock.Equal(that1.ActionBlock) {
 		return false
 	}
 	return true
@@ -676,17 +1248,103 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *RateLimitValue) GoString() string {
+func (this *InputHours) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&rate_limiter.InputHours{")
+	s = append(s, "Duration: "+fmt.Sprintf("%#v", this.Duration)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *InputMinutes) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&rate_limiter.InputMinutes{")
+	s = append(s, "Duration: "+fmt.Sprintf("%#v", this.Duration)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *InputSeconds) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&rate_limiter.InputSeconds{")
+	s = append(s, "Duration: "+fmt.Sprintf("%#v", this.Duration)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *RateLimitBlockAction) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 7)
+	s = append(s, "&rate_limiter.RateLimitBlockAction{")
+	if this.BlockDurationChoice != nil {
+		s = append(s, "BlockDurationChoice: "+fmt.Sprintf("%#v", this.BlockDurationChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *RateLimitBlockAction_Seconds) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&rate_limiter.RateLimitBlockAction_Seconds{` +
+		`Seconds:` + fmt.Sprintf("%#v", this.Seconds) + `}`}, ", ")
+	return s
+}
+func (this *RateLimitBlockAction_Minutes) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&rate_limiter.RateLimitBlockAction_Minutes{` +
+		`Minutes:` + fmt.Sprintf("%#v", this.Minutes) + `}`}, ", ")
+	return s
+}
+func (this *RateLimitBlockAction_Hours) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&rate_limiter.RateLimitBlockAction_Hours{` +
+		`Hours:` + fmt.Sprintf("%#v", this.Hours) + `}`}, ", ")
+	return s
+}
+func (this *RateLimitValue) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
 	s = append(s, "&rate_limiter.RateLimitValue{")
 	s = append(s, "Unit: "+fmt.Sprintf("%#v", this.Unit)+",\n")
 	s = append(s, "TotalNumber: "+fmt.Sprintf("%#v", this.TotalNumber)+",\n")
 	s = append(s, "BurstMultiplier: "+fmt.Sprintf("%#v", this.BurstMultiplier)+",\n")
+	s = append(s, "PeriodMultiplier: "+fmt.Sprintf("%#v", this.PeriodMultiplier)+",\n")
+	if this.ActionChoice != nil {
+		s = append(s, "ActionChoice: "+fmt.Sprintf("%#v", this.ActionChoice)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *RateLimitValue_Disabled) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&rate_limiter.RateLimitValue_Disabled{` +
+		`Disabled:` + fmt.Sprintf("%#v", this.Disabled) + `}`}, ", ")
+	return s
+}
+func (this *RateLimitValue_ActionBlock) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&rate_limiter.RateLimitValue_ActionBlock{` +
+		`ActionBlock:` + fmt.Sprintf("%#v", this.ActionBlock) + `}`}, ", ")
+	return s
 }
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
@@ -757,6 +1415,185 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
 }
+func (m *InputHours) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *InputHours) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *InputHours) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Duration != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Duration))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *InputMinutes) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *InputMinutes) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *InputMinutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Duration != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Duration))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *InputSeconds) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *InputSeconds) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *InputSeconds) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Duration != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Duration))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RateLimitBlockAction) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RateLimitBlockAction) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimitBlockAction) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.BlockDurationChoice != nil {
+		{
+			size := m.BlockDurationChoice.Size()
+			i -= size
+			if _, err := m.BlockDurationChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RateLimitBlockAction_Seconds) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimitBlockAction_Seconds) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Seconds != nil {
+		{
+			size, err := m.Seconds.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *RateLimitBlockAction_Minutes) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimitBlockAction_Minutes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Minutes != nil {
+		{
+			size, err := m.Minutes.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *RateLimitBlockAction_Hours) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimitBlockAction_Hours) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Hours != nil {
+		{
+			size, err := m.Hours.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
 func (m *RateLimitValue) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -777,6 +1614,20 @@ func (m *RateLimitValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ActionChoice != nil {
+		{
+			size := m.ActionChoice.Size()
+			i -= size
+			if _, err := m.ActionChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.PeriodMultiplier != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.PeriodMultiplier))
+		i--
+		dAtA[i] = 0x20
+	}
 	if m.BurstMultiplier != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.BurstMultiplier))
 		i--
@@ -795,6 +1646,52 @@ func (m *RateLimitValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *RateLimitValue_Disabled) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimitValue_Disabled) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Disabled != nil {
+		{
+			size, err := m.Disabled.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xc
+		i--
+		dAtA[i] = 0xca
+	}
+	return len(dAtA) - i, nil
+}
+func (m *RateLimitValue_ActionBlock) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimitValue_ActionBlock) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ActionBlock != nil {
+		{
+			size, err := m.ActionBlock.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xc
+		i--
+		dAtA[i] = 0xd2
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1015,6 +1912,90 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *InputHours) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Duration != 0 {
+		n += 1 + sovTypes(uint64(m.Duration))
+	}
+	return n
+}
+
+func (m *InputMinutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Duration != 0 {
+		n += 1 + sovTypes(uint64(m.Duration))
+	}
+	return n
+}
+
+func (m *InputSeconds) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Duration != 0 {
+		n += 1 + sovTypes(uint64(m.Duration))
+	}
+	return n
+}
+
+func (m *RateLimitBlockAction) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BlockDurationChoice != nil {
+		n += m.BlockDurationChoice.Size()
+	}
+	return n
+}
+
+func (m *RateLimitBlockAction_Seconds) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Seconds != nil {
+		l = m.Seconds.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *RateLimitBlockAction_Minutes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Minutes != nil {
+		l = m.Minutes.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *RateLimitBlockAction_Hours) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Hours != nil {
+		l = m.Hours.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *RateLimitValue) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1030,9 +2011,39 @@ func (m *RateLimitValue) Size() (n int) {
 	if m.BurstMultiplier != 0 {
 		n += 1 + sovTypes(uint64(m.BurstMultiplier))
 	}
+	if m.PeriodMultiplier != 0 {
+		n += 1 + sovTypes(uint64(m.PeriodMultiplier))
+	}
+	if m.ActionChoice != nil {
+		n += m.ActionChoice.Size()
+	}
 	return n
 }
 
+func (m *RateLimitValue_Disabled) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Disabled != nil {
+		l = m.Disabled.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *RateLimitValue_ActionBlock) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ActionBlock != nil {
+		l = m.ActionBlock.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1126,6 +2137,76 @@ func sovTypes(x uint64) (n int) {
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
+func (this *InputHours) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&InputHours{`,
+		`Duration:` + fmt.Sprintf("%v", this.Duration) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *InputMinutes) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&InputMinutes{`,
+		`Duration:` + fmt.Sprintf("%v", this.Duration) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *InputSeconds) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&InputSeconds{`,
+		`Duration:` + fmt.Sprintf("%v", this.Duration) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RateLimitBlockAction) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RateLimitBlockAction{`,
+		`BlockDurationChoice:` + fmt.Sprintf("%v", this.BlockDurationChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RateLimitBlockAction_Seconds) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RateLimitBlockAction_Seconds{`,
+		`Seconds:` + strings.Replace(fmt.Sprintf("%v", this.Seconds), "InputSeconds", "InputSeconds", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RateLimitBlockAction_Minutes) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RateLimitBlockAction_Minutes{`,
+		`Minutes:` + strings.Replace(fmt.Sprintf("%v", this.Minutes), "InputMinutes", "InputMinutes", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RateLimitBlockAction_Hours) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RateLimitBlockAction_Hours{`,
+		`Hours:` + strings.Replace(fmt.Sprintf("%v", this.Hours), "InputHours", "InputHours", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *RateLimitValue) String() string {
 	if this == nil {
 		return "nil"
@@ -1134,6 +2215,28 @@ func (this *RateLimitValue) String() string {
 		`Unit:` + fmt.Sprintf("%v", this.Unit) + `,`,
 		`TotalNumber:` + fmt.Sprintf("%v", this.TotalNumber) + `,`,
 		`BurstMultiplier:` + fmt.Sprintf("%v", this.BurstMultiplier) + `,`,
+		`PeriodMultiplier:` + fmt.Sprintf("%v", this.PeriodMultiplier) + `,`,
+		`ActionChoice:` + fmt.Sprintf("%v", this.ActionChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RateLimitValue_Disabled) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RateLimitValue_Disabled{`,
+		`Disabled:` + strings.Replace(fmt.Sprintf("%v", this.Disabled), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RateLimitValue_ActionBlock) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RateLimitValue_ActionBlock{`,
+		`ActionBlock:` + strings.Replace(fmt.Sprintf("%v", this.ActionBlock), "RateLimitBlockAction", "RateLimitBlockAction", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1231,6 +2334,380 @@ func valueToStringTypes(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
+func (m *InputHours) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: InputHours: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: InputHours: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Duration", wireType)
+			}
+			m.Duration = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Duration |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *InputMinutes) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: InputMinutes: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: InputMinutes: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Duration", wireType)
+			}
+			m.Duration = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Duration |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *InputSeconds) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: InputSeconds: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: InputSeconds: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Duration", wireType)
+			}
+			m.Duration = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Duration |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RateLimitBlockAction) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RateLimitBlockAction: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RateLimitBlockAction: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Seconds", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &InputSeconds{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BlockDurationChoice = &RateLimitBlockAction_Seconds{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Minutes", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &InputMinutes{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BlockDurationChoice = &RateLimitBlockAction_Minutes{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Hours", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &InputHours{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BlockDurationChoice = &RateLimitBlockAction_Hours{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *RateLimitValue) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -1317,6 +2794,95 @@ func (m *RateLimitValue) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field PeriodMultiplier", wireType)
+			}
+			m.PeriodMultiplier = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.PeriodMultiplier |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 201:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Disabled", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ActionChoice = &RateLimitValue_Disabled{v}
+			iNdEx = postIndex
+		case 202:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActionBlock", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &RateLimitBlockAction{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ActionChoice = &RateLimitValue_ActionBlock{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])

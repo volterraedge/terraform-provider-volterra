@@ -9,11 +9,11 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"gopkg.volterra.us/stdlib/client"
+	"gopkg.volterra.us/stdlib/server"
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
-	"gopkg.volterra.us/stdlib/client"
-	"gopkg.volterra.us/stdlib/server"
 )
 
 const (

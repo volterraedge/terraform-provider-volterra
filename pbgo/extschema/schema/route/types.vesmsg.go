@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (
@@ -3758,6 +3759,18 @@ func (m *RouteType) Redact(ctx context.Context) error {
 		}
 	}
 
+	for idx, e := range m.GetRequestCookiesToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting RouteType.request_cookies_to_add idx %v", idx)
+		}
+	}
+
+	for idx, e := range m.GetResponseCookiesToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting RouteType.response_cookies_to_add idx %v", idx)
+		}
+	}
+
 	return nil
 }
 
@@ -3796,6 +3809,12 @@ func (m *RouteType) GetDRefInfo() ([]db.DRefInfo, error) {
 	var drInfos []db.DRefInfo
 	if fdrInfos, err := m.GetRouteActionDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetRouteActionDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetWafExclusionChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusionChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -3840,6 +3859,71 @@ func (m *RouteType) GetRouteActionDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
+}
+
+func (m *RouteType) GetWafExclusionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetWafExclusionChoice().(type) {
+	case *RouteType_InheritedWafExclusion:
+
+		return nil, nil
+
+	case *RouteType_WafExclusionPolicy:
+
+		vref := m.GetWafExclusionPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("waf_exclusion_policy.Object")
+		dri := db.DRefInfo{
+			RefdType:   "waf_exclusion_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "waf_exclusion_policy",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetWafExclusionChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *RouteType) GetWafExclusionChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetWafExclusionChoice().(type) {
+	case *RouteType_InheritedWafExclusion:
+
+	case *RouteType_WafExclusionPolicy:
+		refdType, err := d.TypeForEntryKind("", "", "waf_exclusion_policy.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: waf_exclusion_policy")
+		}
+
+		vref := m.GetWafExclusionPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "waf_exclusion_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
 }
 
 // GetDRefInfo for the field's type
@@ -4100,6 +4184,186 @@ func (v *ValidateRouteType) ResponseHeadersToRemoveValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateRouteType) RequestCookiesToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for request_cookies_to_add")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieValueOption, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieValueOptionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_cookies_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieValueOption)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieValueOption, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_cookies_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_cookies_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteType) RequestCookiesToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for request_cookies_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_cookies_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_cookies_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_cookies_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteType) ResponseCookiesToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for response_cookies_to_add")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.SetCookieValueOption, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.SetCookieValueOptionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_cookies_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.SetCookieValueOption)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.SetCookieValueOption, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_cookies_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_cookies_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteType) ResponseCookiesToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for response_cookies_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_cookies_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_cookies_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_cookies_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*RouteType)
 	if !ok {
@@ -4175,6 +4439,22 @@ func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["request_cookies_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_cookies_to_add"))
+		if err := fv(ctx, m.GetRequestCookiesToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_cookies_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_cookies_to_remove"))
+		if err := fv(ctx, m.GetRequestCookiesToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["request_headers_to_add"]; exists {
 		vOpts := append(opts, db.WithValidateField("request_headers_to_add"))
 		if err := fv(ctx, m.GetRequestHeadersToAdd(), vOpts...); err != nil {
@@ -4186,6 +4466,22 @@ func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts .
 	if fv, exists := v.FldValidators["request_headers_to_remove"]; exists {
 		vOpts := append(opts, db.WithValidateField("request_headers_to_remove"))
 		if err := fv(ctx, m.GetRequestHeadersToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_cookies_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_cookies_to_add"))
+		if err := fv(ctx, m.GetResponseCookiesToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_cookies_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_cookies_to_remove"))
+		if err := fv(ctx, m.GetResponseCookiesToRemove(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4268,6 +4564,32 @@ func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts .
 		vOpts := append(opts, db.WithValidateField("skip_lb_override"))
 		if err := fv(ctx, m.GetSkipLbOverride(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetWafExclusionChoice().(type) {
+	case *RouteType_InheritedWafExclusion:
+		if fv, exists := v.FldValidators["waf_exclusion_choice.inherited_waf_exclusion"]; exists {
+			val := m.GetWafExclusionChoice().(*RouteType_InheritedWafExclusion).InheritedWafExclusion
+			vOpts := append(opts,
+				db.WithValidateField("waf_exclusion_choice"),
+				db.WithValidateField("inherited_waf_exclusion"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RouteType_WafExclusionPolicy:
+		if fv, exists := v.FldValidators["waf_exclusion_choice.waf_exclusion_policy"]; exists {
+			val := m.GetWafExclusionChoice().(*RouteType_WafExclusionPolicy).WafExclusionPolicy
+			vOpts := append(opts,
+				db.WithValidateField("waf_exclusion_choice"),
+				db.WithValidateField("waf_exclusion_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4366,11 +4688,65 @@ var DefaultRouteTypeValidator = func() *ValidateRouteType {
 	}
 	v.FldValidators["response_headers_to_remove"] = vFn
 
+	vrhRequestCookiesToAdd := v.RequestCookiesToAddValidationRuleHandler
+	rulesRequestCookiesToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestCookiesToAdd(rulesRequestCookiesToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteType.request_cookies_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_cookies_to_add"] = vFn
+
+	vrhRequestCookiesToRemove := v.RequestCookiesToRemoveValidationRuleHandler
+	rulesRequestCookiesToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhRequestCookiesToRemove(rulesRequestCookiesToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteType.request_cookies_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_cookies_to_remove"] = vFn
+
+	vrhResponseCookiesToAdd := v.ResponseCookiesToAddValidationRuleHandler
+	rulesResponseCookiesToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseCookiesToAdd(rulesResponseCookiesToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteType.response_cookies_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_cookies_to_add"] = vFn
+
+	vrhResponseCookiesToRemove := v.ResponseCookiesToRemoveValidationRuleHandler
+	rulesResponseCookiesToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhResponseCookiesToRemove(rulesResponseCookiesToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteType.response_cookies_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_cookies_to_remove"] = vFn
+
 	v.FldValidators["bot_defense_javascript_injection_choice.bot_defense_javascript_injection"] = BotDefenseJavascriptInjectionTypeValidator().Validate
 
 	v.FldValidators["route_action.route_destination"] = RouteDestinationListValidator().Validate
 	v.FldValidators["route_action.route_redirect"] = RouteRedirectValidator().Validate
 	v.FldValidators["route_action.route_direct_response"] = RouteDirectResponseValidator().Validate
+
+	v.FldValidators["waf_exclusion_choice.waf_exclusion_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["waf_type"] = ves_io_schema.WafTypeValidator().Validate
 

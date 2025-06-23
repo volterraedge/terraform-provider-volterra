@@ -3169,6 +3169,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.ip": "true"
                     }
                 },
+                "cluster_ipv6": {
+                    "type": "string",
+                    "description": " IPv6 Address of the service\n\nExample: - \"2001:0db8:85a3:0000:0000:8a2e:0370:7334\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",
+                    "title": "Service IPv6",
+                    "x-displayname": "IPv6",
+                    "x-ves-example": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ip": "true"
+                    }
+                },
                 "labels": {
                     "type": "object",
                     "description": " Key value pairs defined as labels for the service\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n  ves.io.schema.rules.map.values.string.k8s_label_value: true\n",

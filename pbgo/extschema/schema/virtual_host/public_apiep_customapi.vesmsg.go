@@ -1935,6 +1935,533 @@ func ApiEndpointsStatsRspValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CreateJiraIssueRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CreateJiraIssueRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CreateJiraIssueRequest) DeepCopy() *CreateJiraIssueRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CreateJiraIssueRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CreateJiraIssueRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CreateJiraIssueRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CreateJiraIssueRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCreateJiraIssueRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateJiraIssueRequest) ProjectValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for project")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateJiraIssueRequest) IssueTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for issue_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateJiraIssueRequest) SummaryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for summary")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateJiraIssueRequest) DescriptionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for description")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateJiraIssueRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CreateJiraIssueRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CreateJiraIssueRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["issue_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("issue_type"))
+		if err := fv(ctx, m.GetIssueType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["project"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("project"))
+		if err := fv(ctx, m.GetProject(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["summary"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("summary"))
+		if err := fv(ctx, m.GetSummary(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCreateJiraIssueRequestValidator = func() *ValidateCreateJiraIssueRequest {
+	v := &ValidateCreateJiraIssueRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhProject := v.ProjectValidationRuleHandler
+	rulesProject := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhProject(rulesProject)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateJiraIssueRequest.project: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["project"] = vFn
+
+	vrhIssueType := v.IssueTypeValidationRuleHandler
+	rulesIssueType := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhIssueType(rulesIssueType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateJiraIssueRequest.issue_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["issue_type"] = vFn
+
+	vrhSummary := v.SummaryValidationRuleHandler
+	rulesSummary := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "8096",
+	}
+	vFn, err = vrhSummary(rulesSummary)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateJiraIssueRequest.summary: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["summary"] = vFn
+
+	vrhDescription := v.DescriptionValidationRuleHandler
+	rulesDescription := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFn, err = vrhDescription(rulesDescription)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateJiraIssueRequest.description: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["description"] = vFn
+
+	return v
+}()
+
+func CreateJiraIssueRequestValidator() db.Validator {
+	return DefaultCreateJiraIssueRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CreateTicketRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CreateTicketRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CreateTicketRequest) DeepCopy() *CreateTicketRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CreateTicketRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CreateTicketRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CreateTicketRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CreateTicketRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCreateTicketRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateTicketRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateTicketRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateTicketRequest) LabelsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemKeyRules := db.GetMapStringKeyRules(rules)
+	itemKeyFn, err := db.NewStringValidationRuleHandler(itemKeyRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item key ValidationRuleHandler for labels")
+	}
+	itemValRules := db.GetMapStringValueRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemValRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item value ValidationRuleHandler for labels")
+	}
+	itemsValidatorFn := func(ctx context.Context, kv map[string]string, opts ...db.ValidateOpt) error {
+		for key, value := range kv {
+			if err := itemKeyFn(ctx, key, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element with key %v", key))
+			}
+			if err := itemValFn(ctx, value, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("value for element with key %v", key))
+			}
+		}
+		return nil
+	}
+	mapValFn, err := db.NewMapValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Map ValidationRuleHandler for labels")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.(map[string]string)
+		if !ok {
+			return fmt.Errorf("Map validation expected map[ string ]string, got %T", val)
+		}
+		if err := mapValFn(ctx, len(elems), opts...); err != nil {
+			return errors.Wrap(err, "map labels")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items labels")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateTicketRequest) TicketTrackingSystemValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ticket_tracking_system")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateTicketRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CreateTicketRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CreateTicketRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["jira_issue"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("jira_issue"))
+		if err := fv(ctx, m.GetJiraIssue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["labels"]; exists {
+		vOpts := append(opts, db.WithValidateField("labels"))
+		if err := fv(ctx, m.GetLabels(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ticket_tracking_system"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ticket_tracking_system"))
+		if err := fv(ctx, m.GetTicketTrackingSystem(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCreateTicketRequestValidator = func() *ValidateCreateTicketRequest {
+	v := &ValidateCreateTicketRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateTicketRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateTicketRequest.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	vrhLabels := v.LabelsValidationRuleHandler
+	rulesLabels := map[string]string{
+		"ves.io.schema.rules.map.max_pairs": "16",
+	}
+	vFn, err = vrhLabels(rulesLabels)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateTicketRequest.labels: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["labels"] = vFn
+
+	vrhTicketTrackingSystem := v.TicketTrackingSystemValidationRuleHandler
+	rulesTicketTrackingSystem := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
+	}
+	vFn, err = vrhTicketTrackingSystem(rulesTicketTrackingSystem)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateTicketRequest.ticket_tracking_system: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ticket_tracking_system"] = vFn
+
+	v.FldValidators["jira_issue"] = CreateJiraIssueRequestValidator().Validate
+
+	return v
+}()
+
+func CreateTicketRequestValidator() db.Validator {
+	return DefaultCreateTicketRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CreateTicketResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CreateTicketResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CreateTicketResponse) DeepCopy() *CreateTicketResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CreateTicketResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CreateTicketResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CreateTicketResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CreateTicketResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCreateTicketResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCreateTicketResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CreateTicketResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CreateTicketResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["errors"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("errors"))
+		for idx, item := range m.GetErrors() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCreateTicketResponseValidator = func() *ValidateCreateTicketResponse {
+	v := &ValidateCreateTicketResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CreateTicketResponseValidator() db.Validator {
+	return DefaultCreateTicketResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetAPICallSummaryReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3672,6 +4199,414 @@ func SwaggerSpecRspValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *TicketDetails) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TicketDetails) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TicketDetails) DeepCopy() *TicketDetails {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TicketDetails{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TicketDetails) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TicketDetails) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TicketDetailsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTicketDetails struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTicketDetails) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TicketDetails)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TicketDetails got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["external_link"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("external_link"))
+		if err := fv(ctx, m.GetExternalLink(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["jira_issue"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("jira_issue"))
+		if err := fv(ctx, m.GetJiraIssue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ticket_tracking_system_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ticket_tracking_system_type"))
+		if err := fv(ctx, m.GetTicketTrackingSystemType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTicketDetailsValidator = func() *ValidateTicketDetails {
+	v := &ValidateTicketDetails{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func TicketDetailsValidator() db.Validator {
+	return DefaultTicketDetailsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UnlinkTicketsRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UnlinkTicketsRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UnlinkTicketsRequest) DeepCopy() *UnlinkTicketsRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UnlinkTicketsRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UnlinkTicketsRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UnlinkTicketsRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UnlinkTicketsRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUnlinkTicketsRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUnlinkTicketsRequest) UnlinkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for unlink_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateUnlinkTicketsRequest) UnlinkChoiceLabelFilterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_LabelFilter, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label_filter")
+	}
+	return oValidatorFn_LabelFilter, nil
+}
+func (v *ValidateUnlinkTicketsRequest) UnlinkChoiceTicketUidValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_TicketUid, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ticket_uid")
+	}
+	return oValidatorFn_TicketUid, nil
+}
+
+func (v *ValidateUnlinkTicketsRequest) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUnlinkTicketsRequest) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateUnlinkTicketsRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UnlinkTicketsRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UnlinkTicketsRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["unlink_choice"]; exists {
+		val := m.GetUnlinkChoice()
+		vOpts := append(opts,
+			db.WithValidateField("unlink_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetUnlinkChoice().(type) {
+	case *UnlinkTicketsRequest_LabelFilter:
+		if fv, exists := v.FldValidators["unlink_choice.label_filter"]; exists {
+			val := m.GetUnlinkChoice().(*UnlinkTicketsRequest_LabelFilter).LabelFilter
+			vOpts := append(opts,
+				db.WithValidateField("unlink_choice"),
+				db.WithValidateField("label_filter"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UnlinkTicketsRequest_TicketUid:
+		if fv, exists := v.FldValidators["unlink_choice.ticket_uid"]; exists {
+			val := m.GetUnlinkChoice().(*UnlinkTicketsRequest_TicketUid).TicketUid
+			vOpts := append(opts,
+				db.WithValidateField("unlink_choice"),
+				db.WithValidateField("ticket_uid"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUnlinkTicketsRequestValidator = func() *ValidateUnlinkTicketsRequest {
+	v := &ValidateUnlinkTicketsRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhUnlinkChoice := v.UnlinkChoiceValidationRuleHandler
+	rulesUnlinkChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhUnlinkChoice(rulesUnlinkChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UnlinkTicketsRequest.unlink_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["unlink_choice"] = vFn
+
+	vrhUnlinkChoiceLabelFilter := v.UnlinkChoiceLabelFilterValidationRuleHandler
+	rulesUnlinkChoiceLabelFilter := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["unlink_choice.label_filter"], err = vrhUnlinkChoiceLabelFilter(rulesUnlinkChoiceLabelFilter)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field UnlinkTicketsRequest.unlink_choice_label_filter: %s", err)
+		panic(errMsg)
+	}
+	vrhUnlinkChoiceTicketUid := v.UnlinkChoiceTicketUidValidationRuleHandler
+	rulesUnlinkChoiceTicketUid := map[string]string{
+		"ves.io.schema.rules.string.max_len": "128",
+	}
+	vFnMap["unlink_choice.ticket_uid"], err = vrhUnlinkChoiceTicketUid(rulesUnlinkChoiceTicketUid)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field UnlinkTicketsRequest.unlink_choice_ticket_uid: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["unlink_choice.label_filter"] = vFnMap["unlink_choice.label_filter"]
+	v.FldValidators["unlink_choice.ticket_uid"] = vFnMap["unlink_choice.ticket_uid"]
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UnlinkTicketsRequest.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UnlinkTicketsRequest.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	return v
+}()
+
+func UnlinkTicketsRequestValidator() db.Validator {
+	return DefaultUnlinkTicketsRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UnlinkTicketsResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UnlinkTicketsResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UnlinkTicketsResponse) DeepCopy() *UnlinkTicketsResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UnlinkTicketsResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UnlinkTicketsResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UnlinkTicketsResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UnlinkTicketsResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUnlinkTicketsResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUnlinkTicketsResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UnlinkTicketsResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UnlinkTicketsResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["errors"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("errors"))
+		for idx, item := range m.GetErrors() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUnlinkTicketsResponseValidator = func() *ValidateUnlinkTicketsResponse {
+	v := &ValidateUnlinkTicketsResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UnlinkTicketsResponseValidator() db.Validator {
+	return DefaultUnlinkTicketsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *UpdateAPIEndpointsSchemasReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4643,6 +5578,15 @@ func (v *ValidateVulnerability) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["source"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("source"))
+		if err := fv(ctx, m.GetSource(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["status"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("status"))
@@ -4656,6 +5600,15 @@ func (v *ValidateVulnerability) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("status_change_time"))
 		if err := fv(ctx, m.GetStatusChangeTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ticket"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ticket"))
+		if err := fv(ctx, m.GetTicket(), vOpts...); err != nil {
 			return err
 		}
 

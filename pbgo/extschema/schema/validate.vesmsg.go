@@ -2133,6 +2133,24 @@ func (v *ValidateMessageRules) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["validate_ipv4_range"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("validate_ipv4_range"))
+		if err := fv(ctx, m.GetValidateIpv4Range(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["validate_ipv6_range"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("validate_ipv6_range"))
+		if err := fv(ctx, m.GetValidateIpv6Range(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 

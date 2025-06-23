@@ -83,13 +83,6 @@ func resourceVolterraMaliciousUserMitigation() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"alert_only": {
-
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
 												"block_temporarily": {
 
 													Type:     schema.TypeBool,
@@ -106,13 +99,6 @@ func resourceVolterraMaliciousUserMitigation() *schema.Resource {
 
 													Type:     schema.TypeBool,
 													Optional: true,
-												},
-
-												"none": {
-
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -240,18 +226,6 @@ func resourceVolterraMaliciousUserMitigationCreate(d *schema.ResourceData, meta 
 
 										mitigationActionTypeFound := false
 
-										if v, ok := mitigationActionMapStrToI["alert_only"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
-
-											mitigationActionTypeFound = true
-
-											if v.(bool) {
-												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_AlertOnly{}
-												mitigationActionInt.AlertOnly = &ves_io_schema.Empty{}
-												mitigationAction.MitigationAction = mitigationActionInt
-											}
-
-										}
-
 										if v, ok := mitigationActionMapStrToI["block_temporarily"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
 
 											mitigationActionTypeFound = true
@@ -283,18 +257,6 @@ func resourceVolterraMaliciousUserMitigationCreate(d *schema.ResourceData, meta 
 											if v.(bool) {
 												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_JavascriptChallenge{}
 												mitigationActionInt.JavascriptChallenge = &ves_io_schema.Empty{}
-												mitigationAction.MitigationAction = mitigationActionInt
-											}
-
-										}
-
-										if v, ok := mitigationActionMapStrToI["none"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
-
-											mitigationActionTypeFound = true
-
-											if v.(bool) {
-												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_None{}
-												mitigationActionInt.None = &ves_io_schema.Empty{}
 												mitigationAction.MitigationAction = mitigationActionInt
 											}
 
@@ -496,18 +458,6 @@ func resourceVolterraMaliciousUserMitigationUpdate(d *schema.ResourceData, meta 
 
 										mitigationActionTypeFound := false
 
-										if v, ok := mitigationActionMapStrToI["alert_only"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
-
-											mitigationActionTypeFound = true
-
-											if v.(bool) {
-												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_AlertOnly{}
-												mitigationActionInt.AlertOnly = &ves_io_schema.Empty{}
-												mitigationAction.MitigationAction = mitigationActionInt
-											}
-
-										}
-
 										if v, ok := mitigationActionMapStrToI["block_temporarily"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
 
 											mitigationActionTypeFound = true
@@ -539,18 +489,6 @@ func resourceVolterraMaliciousUserMitigationUpdate(d *schema.ResourceData, meta 
 											if v.(bool) {
 												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_JavascriptChallenge{}
 												mitigationActionInt.JavascriptChallenge = &ves_io_schema.Empty{}
-												mitigationAction.MitigationAction = mitigationActionInt
-											}
-
-										}
-
-										if v, ok := mitigationActionMapStrToI["none"]; ok && !isIntfNil(v) && !mitigationActionTypeFound {
-
-											mitigationActionTypeFound = true
-
-											if v.(bool) {
-												mitigationActionInt := &ves_io_schema_malicious_user_mitigation.MaliciousUserMitigationAction_None{}
-												mitigationActionInt.None = &ves_io_schema.Empty{}
 												mitigationAction.MitigationAction = mitigationActionInt
 											}
 
@@ -649,5 +587,8 @@ func resourceVolterraMaliciousUserMitigationDelete(d *schema.ResourceData, meta 
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra MaliciousUserMitigation obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_malicious_user_mitigation.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_malicious_user_mitigation.ObjectType, namespace, name, opts...)
 }

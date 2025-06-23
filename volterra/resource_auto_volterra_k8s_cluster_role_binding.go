@@ -495,5 +495,8 @@ func resourceVolterraK8SClusterRoleBindingDelete(d *schema.ResourceData, meta in
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra K8SClusterRoleBinding obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_k8s_cluster_role_binding.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_k8s_cluster_role_binding.ObjectType, namespace, name, opts...)
 }

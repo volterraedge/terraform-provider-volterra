@@ -2051,6 +2051,16 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
+                "server_name": {
+                    "type": "string",
+                    "description": " Virtual Server name\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "title": "Server Name",
+                    "maxLength": 1024,
+                    "x-displayname": "Server Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1024"
+                    }
+                },
                 "status": {
                     "description": " Availability Status of virtual server.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Availability Status of virtual server",
@@ -3061,10 +3071,10 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [port_ranges use_default_port]\n TCP port to Listen.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "title": "TCP port to listen",
+                    "description": "Exclusive with [port_ranges use_default_port]\n Port to Listen.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Port to listen",
                     "format": "int64",
-                    "x-displayname": "TCP Listen Port",
+                    "x-displayname": "Listen Port",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "65535"
@@ -3073,10 +3083,10 @@ var CustomAPISwaggerJSON string = `{
                 "port_ranges": {
                     "type": "string",
                     "description": "Exclusive with [port use_default_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
-                    "title": "TCP port ranges to listen",
+                    "title": "Port ranges to listen",
                     "minLength": 1,
                     "maxLength": 512,
-                    "x-displayname": "TCP Listen Port Ranges",
+                    "x-displayname": "Listen Port Ranges",
                     "x-ves-example": "80,443,8080-8191,9080",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "512",
@@ -3104,10 +3114,10 @@ var CustomAPISwaggerJSON string = `{
                     "x-displayname": "Segment on Site"
                 },
                 "use_default_port": {
-                    "description": "Exclusive with [port port_ranges]\n For HTTP, default is 80. For HTTPS/SNI, default is 443.",
+                    "description": "Exclusive with [port port_ranges]\n Inherit the Load Balancer's Listen Port.",
                     "title": "Use Default port",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Use Default TCP Listen Port"
+                    "x-displayname": "Use Default Listen Port"
                 },
                 "virtual_network": {
                     "description": "Exclusive with [advertise_on_public cloud_edge_segment segment site site_segment virtual_site virtual_site_segment virtual_site_with_vip vk8s_service]\n Advertise on a virtual network",

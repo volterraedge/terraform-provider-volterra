@@ -317,10 +317,9 @@ func (c *CustomPrivateAPIRestClient) doRPCUnlinkTickets(ctx context.Context, cal
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("service_feature", fmt.Sprintf("%v", req.ServiceFeature))
-		for _, item := range req.TicketUids {
-			q.Add("ticket_uids", fmt.Sprintf("%v", item))
-		}
+		q.Add("unlink_choice", fmt.Sprintf("%v", req.UnlinkChoice))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -830,6 +829,14 @@ var CustomPrivateAPISwaggerJSON string = `{
                     "format": "byte"
                 }
             }
+        },
+        "protobufNullValue": {
+            "type": "string",
+            "description": "-NullValue- is a singleton enumeration to represent the null value for the\n-Value- type union.\n\n The JSON representation for -NullValue- is JSON -null-.\n\n - NULL_VALUE: Null value.",
+            "enum": [
+                "NULL_VALUE"
+            ],
+            "default": "NULL_VALUE"
         },
         "schemaErrorCode": {
             "type": "string",
@@ -1565,6 +1572,16 @@ var CustomPrivateAPISwaggerJSON string = `{
             "x-ves-oneof-field-ticket": "[\"jira_issue\"]",
             "x-ves-proto-message": "ves.io.schema.ticket_management.ticket.TicketResponseSpec",
             "properties": {
+                "author": {
+                    "type": "string",
+                    "description": " The user that initiated creation of this ticket\n\nExample: - \"user@email.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.email: true\n",
+                    "title": "author",
+                    "x-displayname": "Author",
+                    "x-ves-example": "user@email.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.email": "true"
+                    }
+                },
                 "external_id": {
                     "type": "string",
                     "description": " The external ID of the ticket used by the ticket tracking system system",
@@ -1618,22 +1635,33 @@ var CustomPrivateAPISwaggerJSON string = `{
             "type": "object",
             "title": "UnlinkTicketsRequest",
             "x-displayname": "Unlink Tickets Request",
+            "x-ves-oneof-field-unlink_choice": "[\"label_filter\",\"ticket_uid\"]",
             "x-ves-proto-message": "ves.io.schema.ticket_management.ticket.UnlinkTicketsRequest",
             "properties": {
+                "label_filter": {
+                    "type": "string",
+                    "description": "Exclusive with [ticket_uid]\n A LabelSelectorType expression for targetting which tickets to unlink\n\nExample: - \"env in (staging, testing), tier in (web, db)\"-",
+                    "title": "label_filter",
+                    "x-displayname": "Label Filter",
+                    "x-ves-example": "env in (staging, testing), tier in (web, db)"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " namespace of the ticket(s) to unlink",
+                    "title": "namespace",
+                    "x-displayname": "Namespace"
+                },
                 "service_feature": {
                     "type": "string",
                     "description": " Service feature of the tickets to be deleted",
                     "title": "Service Feature",
                     "x-displayname": "Service Feature"
                 },
-                "ticket_uids": {
-                    "type": "array",
-                    "description": " The UIDs of the tickets to be unlinked",
-                    "title": "Ticket UIDs",
-                    "items": {
-                        "type": "string"
-                    },
-                    "x-displayname": "Ticket UIDs"
+                "ticket_uid": {
+                    "type": "string",
+                    "description": "Exclusive with [label_filter]\n The UID of the tickets to be unlinked",
+                    "title": "Ticket UID",
+                    "x-displayname": "Ticket UID"
                 }
             }
         },
@@ -1678,6 +1706,12 @@ var CustomPrivateAPISwaggerJSON string = `{
             "x-displayname": "Jira Issue Fields",
             "x-ves-proto-message": "ves.io.schema.ticket_management.JiraIssueFields",
             "properties": {
+                "description": {
+                    "type": "object",
+                    "description": " The description of the ticket in Atlassian Document Format JSON\n\nExample: - {\"type\"\"doc\", \"version\": 1, \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\": \"text\": \"Sample description\"}]}]}-",
+                    "title": "description",
+                    "x-displayname": "Description"
+                },
                 "issuetype": {
                     "description": " Information about the issue type",
                     "title": "issuetype",
@@ -1695,6 +1729,12 @@ var CustomPrivateAPISwaggerJSON string = `{
                     "title": "status",
                     "$ref": "#/definitions/ticket_managementJiraIssueStatus",
                     "x-displayname": "Status"
+                },
+                "summary": {
+                    "type": "string",
+                    "description": " The summary (title) of the JIRA issue",
+                    "title": "summary",
+                    "x-displayname": "Summary"
                 }
             }
         },
@@ -1725,6 +1765,35 @@ var CustomPrivateAPISwaggerJSON string = `{
                     "title": "name",
                     "x-displayname": "Name",
                     "x-ves-example": "In Progress"
+                },
+                "status_category": {
+                    "description": " Status category information like color name and ID",
+                    "title": "status_category",
+                    "$ref": "#/definitions/ticket_managementJiraIssueStatusCategory",
+                    "x-displayname": "Status Category"
+                }
+            }
+        },
+        "ticket_managementJiraIssueStatusCategory": {
+            "type": "object",
+            "description": "Status category information like color name and ID - modeled after the JIRA REST API response format",
+            "title": "JiraIssueStatusCategory",
+            "x-displayname": "Jira Issue Status Category",
+            "x-ves-proto-message": "ves.io.schema.ticket_management.JiraIssueStatusCategory",
+            "properties": {
+                "color_name": {
+                    "type": "string",
+                    "description": " Color of the status category\n\nExample: - \"blue-gray\"-",
+                    "title": "color_name",
+                    "x-displayname": "Color Name",
+                    "x-ves-example": "blue-gray"
+                },
+                "id": {
+                    "type": "string",
+                    "description": " External ID of the status color\n\nExample: - 3-",
+                    "title": "id",
+                    "format": "uint64",
+                    "x-displayname": "ID"
                 }
             }
         },

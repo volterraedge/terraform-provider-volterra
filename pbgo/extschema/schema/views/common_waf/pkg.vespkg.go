@@ -64,6 +64,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.common_waf.ValidationPropertySetting"] = ValidationPropertySettingValidator()
 	vr["ves.io.schema.views.common_waf.ValidationSettingForHeaders"] = ValidationSettingForHeadersValidator()
 	vr["ves.io.schema.views.common_waf.ValidationSettingForQueryParameters"] = ValidationSettingForQueryParametersValidator()
+	vr["ves.io.schema.views.common_waf.WafExclusion"] = WafExclusionValidator()
+	vr["ves.io.schema.views.common_waf.WafExclusionInlineRules"] = WafExclusionInlineRulesValidator()
 
 }
 

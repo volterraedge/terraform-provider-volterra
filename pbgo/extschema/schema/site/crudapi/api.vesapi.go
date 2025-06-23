@@ -2656,6 +2656,37 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bgpBgpPeerProtocolState": {
+            "type": "string",
+            "description": "Status of BGP connection to this Peer\n\nConnection state is not known\nConnection state is Idle\nConnection state is Connecting\nConnection state is Active\nConnection state is Open Sent\nConnection state is Open Confirm\nConnection state is Established\nConnection state is Clearing\nConnection state is Deleted",
+            "title": "BGP Protocol Status",
+            "enum": [
+                "Unknown",
+                "Idle",
+                "Connect",
+                "Active",
+                "OpenSent",
+                "OpenConfirm",
+                "Established",
+                "Clearing",
+                "Deleted"
+            ],
+            "default": "Unknown",
+            "x-displayname": "BGP Peer Status",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BgpPeerProtocolState"
+        },
+        "bgpBgpPeerUpDownType": {
+            "type": "string",
+            "description": "Indicates the state of BGP Peering session\n\nPeering session is Down (not in Established state)\nPeering session is Up (in Established state)",
+            "title": "BGP Peer States",
+            "enum": [
+                "BGP_PEER_DOWN",
+                "BGP_PEER_UP"
+            ],
+            "default": "BGP_PEER_DOWN",
+            "x-displayname": "BGP Peer States",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BgpPeerUpDownType"
+        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.site.crudapi.ObjectCreateReq",
@@ -2988,12 +3019,13 @@ var APISwaggerJSON string = `{
         },
         "schemaCloudLinkState": {
             "type": "string",
-            "description": "State of the CloudLink connections\n\n - UP: Up\n\nCloudLink and their corresponding Direct Connect connections are up and healthy\n - DOWN: Down\n\nCloudLink and their corresponding Direct Connect connections are down\n - DEGRADED: Degraded\n\nSome of Direct Connect connections with the CloudLink are down",
+            "description": "State of the CloudLink connections\n\n - UP: Up\n\nCloudLink and their corresponding Direct Connect connections are up and healthy\n - DOWN: Down\n\nCloudLink and their corresponding Direct Connect connections are down\n - DEGRADED: Degraded\n\nSome of Direct Connect connections with the CloudLink are down\n - NOT_APPLICABLE: NotApplicable\n\nCloudLinkState not applicable",
             "title": "CloudLink State",
             "enum": [
                 "UP",
                 "DOWN",
-                "DEGRADED"
+                "DEGRADED",
+                "NOT_APPLICABLE"
             ],
             "default": "UP",
             "x-displayname": "CloudLink State",
@@ -4163,12 +4195,6 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ip": "true"
                     }
-                },
-                "proactive_monitoring": {
-                    "description": " Proactive Monitoring",
-                    "title": "Proactive Monitoring",
-                    "$ref": "#/definitions/viewsProactiveMonitoringChoice",
-                    "x-displayname": "Proactive Monitoring"
                 },
                 "public_ip": {
                     "type": "string",
@@ -5941,6 +5967,34 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteSiteReachabilityStatus": {
+            "type": "object",
+            "description": "F5XC domain reachability in the site",
+            "title": "F5XC Site Reachability Scan Status",
+            "x-displayname": "F5XC Site Reachability Scan Status",
+            "x-ves-displayorder": "3,1,2",
+            "x-ves-proto-message": "ves.io.schema.site.SiteReachabilityStatus",
+            "properties": {
+                "error_message": {
+                    "type": "string",
+                    "description": " The error message during network reachbility scan",
+                    "title": "error_message",
+                    "x-displayname": "Error Message"
+                },
+                "node_name": {
+                    "type": "string",
+                    "description": " Name of the node on the site.",
+                    "title": "node_name",
+                    "x-displayname": "Node name"
+                },
+                "scan_result": {
+                    "type": "object",
+                    "description": " Result of the domain reachability scan",
+                    "title": "scan_result",
+                    "x-displayname": "Scan Result"
+                }
+            }
+        },
         "siteSiteSoftwareOverrideType": {
             "type": "string",
             "description": "Decide which software version takes effect in case of conflict between site and fleet\n\nSoftware version in site will take precedence.\nBetween site and fleet newer software version will take precedence.\nSoftware version in fleet will take precedence.",
@@ -5956,7 +6010,7 @@ var APISwaggerJSON string = `{
         },
         "siteSiteState": {
             "type": "string",
-            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration",
+            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.",
             "title": "SiteState",
             "enum": [
                 "ONLINE",
@@ -5967,7 +6021,16 @@ var APISwaggerJSON string = `{
                 "REREGISTRATION",
                 "WAITINGNODES",
                 "DECOMMISSIONING",
-                "WAITING_FOR_REGISTRATION"
+                "WAITING_FOR_REGISTRATION",
+                "ORCHESTRATION_IN_PROGRESS",
+                "ORCHESTRATION_COMPLETE",
+                "ERROR_IN_ORCHESTRATION",
+                "DELETING_CLOUD_RESOURCES",
+                "DELETED_CLOUD_RESOURCES",
+                "ERROR_DELETING_CLOUD_RESOURCES",
+                "VALIDATION_IN_PROGRESS",
+                "VALIDATION_SUCCESS",
+                "VALIDATION_FAILED"
             ],
             "default": "ONLINE",
             "x-displayname": "Site State",
@@ -5975,12 +6038,13 @@ var APISwaggerJSON string = `{
         },
         "siteSiteSubtype": {
             "type": "string",
-            "description": "Sit Subtype\n\nNo Subtype\nRegional Edge for ves-io use only\nCE running in Kubernetes",
+            "description": "Sit Subtype\n\nNo Subtype\nRegional Edge isn't ready yet. Configuration isn't propagated for this site.\nRegional Edge which is hidden from customer. Configuration will be propagated.\nCE running in Kubernetes",
             "title": "SiteSubtype",
             "enum": [
                 "NO_SUBTYPE",
                 "VES_IO_USE_RE",
-                "VES_IO_CE_IN_K8S"
+                "VES_IO_CE_IN_K8S",
+                "VES_IO_HIDDEN_RE"
             ],
             "default": "NO_SUBTYPE",
             "x-displayname": "Site Subtype",
@@ -6055,7 +6119,7 @@ var APISwaggerJSON string = `{
             "description": "Most recently observed status of site object",
             "title": "Site Status Object",
             "x-displayname": "Status",
-            "x-ves-displayorder": "1,3,5,13,6,7,8,12,9,10,11,14,15,16,17,18,19,20,21,22",
+            "x-ves-displayorder": "1,3,5,13,6,7,8,12,9,10,11,14,15,16,17,18,19,20,21,22,24",
             "x-ves-proto-message": "ves.io.schema.site.StatusObject",
             "properties": {
                 "certified_hardware": {
@@ -6168,6 +6232,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaSiteMeshGroupStatus",
                     "x-displayname": "Site Mesh Group Status"
                 },
+                "site_reachability_scan_status_list": {
+                    "type": "array",
+                    "description": " List of SiteReachabilityStatus status shows status of domain reachability during registration",
+                    "title": "Site Reachability Scan Status List",
+                    "items": {
+                        "$ref": "#/definitions/siteSiteReachabilityStatus"
+                    },
+                    "x-displayname": "Site Reachability Scan Status List"
+                },
                 "ver_master_status": {
                     "description": " Identify the master node in the cluster",
                     "title": "Ver Master Status",
@@ -6253,6 +6326,31 @@ var APISwaggerJSON string = `{
             "x-displayname": "Tunnel Connection Status",
             "x-ves-proto-message": "ves.io.schema.site.TunnelConnectionStatus",
             "properties": {
+                "bgp": {
+                    "type": "array",
+                    "description": " Internal reference to BGP object corresponding to this tunnel\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "BGP Object",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "BGP Object",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "bgp_peer_protocol_state": {
+                    "description": " Protocol state for each BGP peer connection established over this tunnel",
+                    "title": "BGP Peer Protocol Status",
+                    "$ref": "#/definitions/bgpBgpPeerProtocolState",
+                    "x-displayname": "BGP Peer Protocol Status"
+                },
+                "bgp_status": {
+                    "description": " BGP peer connection status established over this tunnel",
+                    "title": "BGP Peer Status",
+                    "$ref": "#/definitions/bgpBgpPeerUpDownType",
+                    "x-displayname": "BGP Peer Status"
+                },
                 "encap": {
                     "description": " Encapsulation type of tunnel",
                     "title": "encap",
@@ -6295,6 +6393,19 @@ var APISwaggerJSON string = `{
                     "title": "state",
                     "$ref": "#/definitions/siteTunnelState",
                     "x-displayname": "Connection State"
+                },
+                "tunnel": {
+                    "type": "array",
+                    "description": " Internal reference to Tunnel object corresponding to this status\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Tunnel Object",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Tunnel Object",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "tunnelName": {
                     "type": "string",
@@ -6643,6 +6754,15 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/siteTunnelConnectionStatus"
                     },
                     "x-displayname": "Configured Tunnel Connection Status"
+                },
+                "ext_connector_tunnel_status": {
+                    "type": "array",
+                    "description": " Status/details of every tunnel configured as external connector",
+                    "title": "external_connector_tunnel_status",
+                    "items": {
+                        "$ref": "#/definitions/siteTunnelConnectionStatus"
+                    },
+                    "x-displayname": "External Connector Tunnel Status"
                 },
                 "intf_status": {
                     "type": "array",
@@ -7276,23 +7396,18 @@ var APISwaggerJSON string = `{
         },
         "viewsProactiveMonitoringChoice": {
             "type": "object",
-            "description": "Enable proactive collection of debuglogs from this Customer Edge site to enable faster troubleshooting and issue resolution.\nWhen enabled, nodes of this Customer Edge site will be able to stream required service debug logs to F5 Distributed Cloud.\nWhen disabled, nodes of this Customer Edge site will not be able to send any debug logs and might cause delays in troubleshooting and issue resolution.\nIt is recommended to have this setting enabled.\nNote: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted.",
+            "description": "x-displayName: \"Proactive Monitoring\"\nEnable proactive collection of debuglogs from this Customer Edge site to enable faster troubleshooting and issue resolution.\nWhen enabled, nodes of this Customer Edge site will be able to stream required service debug logs to F5 Distributed Cloud.\nWhen disabled, nodes of this Customer Edge site will not be able to send any debug logs and might cause delays in troubleshooting and issue resolution.\nIt is recommended to have this setting enabled.\nNote: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted.",
             "title": "Proactive Monitoring",
-            "x-displayname": "Proactive Monitoring",
-            "x-ves-oneof-field-proactive_monitoring_choice": "[\"proactive_monitoring_disable\",\"proactive_monitoring_enable\"]",
-            "x-ves-proto-message": "ves.io.schema.views.ProactiveMonitoringChoice",
             "properties": {
                 "proactive_monitoring_disable": {
-                    "description": "Exclusive with [proactive_monitoring_enable]\n Disable Proactive Monitoring",
+                    "description": "x-displayName: \"Disable\"\nDisable Proactive Monitoring",
                     "title": "disable",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable"
+                    "$ref": "#/definitions/schemaEmpty"
                 },
                 "proactive_monitoring_enable": {
-                    "description": "Exclusive with [proactive_monitoring_disable]\n Enable Proactive Monitoring",
+                    "description": "x-displayName: \"Enable\"\nEnable Proactive Monitoring",
                     "title": "enable",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Enable"
+                    "$ref": "#/definitions/schemaEmpty"
                 }
             }
         },

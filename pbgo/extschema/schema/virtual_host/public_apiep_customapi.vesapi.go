@@ -35,6 +35,15 @@ type ApiepCustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
+func (c *ApiepCustomAPIGrpcClient) doRPCCreateTicket(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &CreateTicketRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.CreateTicketRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.CreateTicket(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *ApiepCustomAPIGrpcClient) doRPCGetAPICallSummary(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &GetAPICallSummaryReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -134,6 +143,15 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetVulnerabilities(ctx context.Context, 
 	return rsp, err
 }
 
+func (c *ApiepCustomAPIGrpcClient) doRPCUnlinkTickets(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &UnlinkTicketsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.UnlinkTicketsRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.UnlinkTickets(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *ApiepCustomAPIGrpcClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateAPIEndpointsSchemasReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -182,6 +200,8 @@ func NewApiepCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewApiepCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
+	rpcFns["CreateTicket"] = ccl.doRPCCreateTicket
+
 	rpcFns["GetAPICallSummary"] = ccl.doRPCGetAPICallSummary
 
 	rpcFns["GetAPIEndpoint"] = ccl.doRPCGetAPIEndpoint
@@ -204,6 +224,8 @@ func NewApiepCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 
 	rpcFns["GetVulnerabilities"] = ccl.doRPCGetVulnerabilities
 
+	rpcFns["UnlinkTickets"] = ccl.doRPCUnlinkTickets
+
 	rpcFns["UpdateAPIEndpointsSchemas"] = ccl.doRPCUpdateAPIEndpointsSchemas
 
 	rpcFns["UpdateVulnerabilitiesState"] = ccl.doRPCUpdateVulnerabilitiesState
@@ -219,6 +241,93 @@ type ApiepCustomAPIRestClient struct {
 	client  http.Client
 	// map of rpc name to its invocation
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
+}
+
+func (c *ApiepCustomAPIRestClient) doRPCCreateTicket(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &CreateTicketRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.CreateTicketRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("jira_issue", fmt.Sprintf("%v", req.JiraIssue))
+		q.Add("labels", fmt.Sprintf("%v", req.Labels))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("ticket_tracking_system", fmt.Sprintf("%v", req.TicketTrackingSystem))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &CreateTicketResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.CreateTicketResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
 }
 
 func (c *ApiepCustomAPIRestClient) doRPCGetAPICallSummary(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
@@ -1198,6 +1307,91 @@ func (c *ApiepCustomAPIRestClient) doRPCGetVulnerabilities(ctx context.Context, 
 	return pbRsp, nil
 }
 
+func (c *ApiepCustomAPIRestClient) doRPCUnlinkTickets(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &UnlinkTicketsRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.UnlinkTicketsRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("unlink_choice", fmt.Sprintf("%v", req.UnlinkChoice))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &UnlinkTicketsResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.UnlinkTicketsResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *ApiepCustomAPIRestClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1397,6 +1591,8 @@ func NewApiepCustomAPIRestClient(baseURL string, hc http.Client) server.CustomCl
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
+	rpcFns["CreateTicket"] = ccl.doRPCCreateTicket
+
 	rpcFns["GetAPICallSummary"] = ccl.doRPCGetAPICallSummary
 
 	rpcFns["GetAPIEndpoint"] = ccl.doRPCGetAPIEndpoint
@@ -1419,6 +1615,8 @@ func NewApiepCustomAPIRestClient(baseURL string, hc http.Client) server.CustomCl
 
 	rpcFns["GetVulnerabilities"] = ccl.doRPCGetVulnerabilities
 
+	rpcFns["UnlinkTickets"] = ccl.doRPCUnlinkTickets
+
 	rpcFns["UpdateAPIEndpointsSchemas"] = ccl.doRPCUpdateAPIEndpointsSchemas
 
 	rpcFns["UpdateVulnerabilitiesState"] = ccl.doRPCUpdateVulnerabilitiesState
@@ -1435,6 +1633,10 @@ type apiepCustomAPIInprocClient struct {
 	ApiepCustomAPIServer
 }
 
+func (c *apiepCustomAPIInprocClient) CreateTicket(ctx context.Context, in *CreateTicketRequest, opts ...grpc.CallOption) (*CreateTicketResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.CreateTicket")
+	return c.ApiepCustomAPIServer.CreateTicket(ctx, in)
+}
 func (c *apiepCustomAPIInprocClient) GetAPICallSummary(ctx context.Context, in *GetAPICallSummaryReq, opts ...grpc.CallOption) (*GetAPICallSummaryRsp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPICallSummary")
 	return c.ApiepCustomAPIServer.GetAPICallSummary(ctx, in)
@@ -1479,6 +1681,10 @@ func (c *apiepCustomAPIInprocClient) GetVulnerabilities(ctx context.Context, in 
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetVulnerabilities")
 	return c.ApiepCustomAPIServer.GetVulnerabilities(ctx, in)
 }
+func (c *apiepCustomAPIInprocClient) UnlinkTickets(ctx context.Context, in *UnlinkTicketsRequest, opts ...grpc.CallOption) (*UnlinkTicketsResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.UnlinkTickets")
+	return c.ApiepCustomAPIServer.UnlinkTickets(ctx, in)
+}
 func (c *apiepCustomAPIInprocClient) UpdateAPIEndpointsSchemas(ctx context.Context, in *UpdateAPIEndpointsSchemasReq, opts ...grpc.CallOption) (*UpdateAPIEndpointsSchemasResp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.UpdateAPIEndpointsSchemas")
 	return c.ApiepCustomAPIServer.UpdateAPIEndpointsSchemas(ctx, in)
@@ -1509,6 +1715,55 @@ type apiepCustomAPISrv struct {
 	svc svcfw.Service
 }
 
+func (s *apiepCustomAPISrv) CreateTicket(ctx context.Context, in *CreateTicketRequest) (*CreateTicketResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
+	cah, ok := ah.(ApiepCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *CreateTicketResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.CreateTicketRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepCustomAPI.CreateTicket' operation on 'virtual_host'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.CreateTicket"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.CreateTicket(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.CreateTicketResponse", rsp)...)
+
+	return rsp, nil
+}
 func (s *apiepCustomAPISrv) GetAPICallSummary(ctx context.Context, in *GetAPICallSummaryReq) (*GetAPICallSummaryRsp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
 	cah, ok := ah.(ApiepCustomAPIServer)
@@ -2045,6 +2300,55 @@ func (s *apiepCustomAPISrv) GetVulnerabilities(ctx context.Context, in *GetVulne
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetVulnerabilitiesRsp", rsp)...)
+
+	return rsp, nil
+}
+func (s *apiepCustomAPISrv) UnlinkTickets(ctx context.Context, in *UnlinkTicketsRequest) (*UnlinkTicketsResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
+	cah, ok := ah.(ApiepCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *UnlinkTicketsResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.UnlinkTicketsRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepCustomAPI.UnlinkTickets' operation on 'virtual_host'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.UnlinkTickets"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.UnlinkTickets(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.UnlinkTicketsResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -3362,6 +3666,206 @@ var ApiepCustomAPISwaggerJSON string = `{
             "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         },
+        "/public/namespaces/{namespace}/virtual_hosts/{name}/create_ticket": {
+            "post": {
+                "summary": "Create a ticket for a vulnerability",
+                "description": "Create a ticket for the given vulnerability",
+                "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.CreateTicket",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostCreateTicketResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-required\nNamespace for the ticket",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Virtual Host Name\n\nx-required\nx-example: \"blogging-app-vhost\"\nVirtual Host name for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostCreateTicketRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "ApiepCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-createticket"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.CreateTicket"
+            },
+            "x-displayname": "API Endpoints by Virtual Host Custom API",
+            "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/virtual_hosts/{name}/unlink_tickets": {
+            "post": {
+                "summary": "Unlink Tickets",
+                "description": "Remove the Ticket from vulnerability in XC platform\nExternal ticket systems will continue to have the record",
+                "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.UnlinkTickets",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostUnlinkTicketsResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-required\nNamespace for the ticket",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Virtual Host Name\n\nx-required\nx-example: \"blogging-app-vhost\"\nVirtual Host name for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostUnlinkTicketsRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "ApiepCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-unlinktickets"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.UnlinkTickets"
+            },
+            "x-displayname": "API Endpoints by Virtual Host Custom API",
+            "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/virtual_hosts/{name}/vulnerabilities": {
             "post": {
                 "summary": "Get Vulnerabilities for Virtual Host",
@@ -3749,12 +4253,26 @@ var ApiepCustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "Engines"
                 },
+                "err_rsp_count": {
+                    "type": "string",
+                    "description": " Number of request with 4xx or 5xx response for the API Endpoint\n\nExample: - 1234-",
+                    "title": "error status code count",
+                    "format": "uint64",
+                    "x-displayname": "Error Count"
+                },
                 "has_learnt_schema": {
                     "type": "boolean",
                     "description": "Has Learnt Schema flag for request API endpoint.\n\nExample: - true-",
                     "title": "Has Learnt Schema",
                     "format": "boolean",
                     "x-displayname": "Has Learnt Schema"
+                },
+                "last_tested": {
+                    "type": "string",
+                    "description": " api testing last tested time is the time when the API endpoint\n was last tested",
+                    "title": "last api testing",
+                    "format": "date-time",
+                    "x-displayname": "Last tested"
                 },
                 "max_latency": {
                     "type": "number",
@@ -4427,6 +4945,61 @@ var ApiepCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "protobufNullValue": {
+            "type": "string",
+            "description": "-NullValue- is a singleton enumeration to represent the null value for the\n-Value- type union.\n\n The JSON representation for -NullValue- is JSON -null-.\n\n - NULL_VALUE: Null value.",
+            "enum": [
+                "NULL_VALUE"
+            ],
+            "default": "NULL_VALUE"
+        },
+        "schemaErrorCode": {
+            "type": "string",
+            "description": "Union of all possible error-codes from system\n\n - EOK: No error\n - EPERMS: Permissions error\n - EBADINPUT: Input is not correct\n - ENOTFOUND: Not found\n - EEXISTS: Already exists\n - EUNKNOWN: Unknown/catchall error\n - ESERIALIZE: Error in serializing/de-serializing\n - EINTERNAL: Server error\n - EPARTIAL: Partial error",
+            "title": "ErrorCode",
+            "enum": [
+                "EOK",
+                "EPERMS",
+                "EBADINPUT",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN",
+                "ESERIALIZE",
+                "EINTERNAL",
+                "EPARTIAL"
+            ],
+            "default": "EOK",
+            "x-displayname": "Error Code",
+            "x-ves-proto-enum": "ves.io.schema.ErrorCode"
+        },
+        "schemaErrorType": {
+            "type": "object",
+            "description": "Information about a error in API operation",
+            "title": "ErrorType",
+            "x-displayname": "Error Type",
+            "x-ves-proto-message": "ves.io.schema.ErrorType",
+            "properties": {
+                "code": {
+                    "description": " A simple general code by category",
+                    "title": "code",
+                    "$ref": "#/definitions/schemaErrorCode",
+                    "x-displayname": "Code"
+                },
+                "error_obj": {
+                    "description": " A structured error object for machine parsing",
+                    "title": "error_obj",
+                    "$ref": "#/definitions/protobufAny",
+                    "x-displayname": "Error Object"
+                },
+                "message": {
+                    "type": "string",
+                    "description": " A human readable string of the error\n\nExample: - \"value\"-",
+                    "title": "message",
+                    "x-displayname": "Message",
+                    "x-ves-example": "value"
+                }
+            }
+        },
         "schemaHttpMethod": {
             "type": "string",
             "description": "Specifies the HTTP method used to access a resource.\n\nAny HTTP Method",
@@ -4495,6 +5068,220 @@ var ApiepCustomAPISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "ticket_managementJiraIssue": {
+            "type": "object",
+            "description": "Top level object representing a Jira issue (ticket) - modeled after the JIRA REST API response format",
+            "title": "JiraIssue",
+            "x-displayname": "Jira Issue",
+            "x-ves-proto-message": "ves.io.schema.ticket_management.JiraIssue",
+            "properties": {
+                "fields": {
+                    "title": "fields",
+                    "$ref": "#/definitions/ticket_managementJiraIssueFields",
+                    "x-displayname": "Fields"
+                },
+                "id": {
+                    "type": "string",
+                    "description": " External ID of the Jira issue\n\nExample: - \"10000\"-",
+                    "title": "id",
+                    "x-displayname": "ID",
+                    "x-ves-example": "10000"
+                },
+                "key": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"TES-123\"-",
+                    "title": "key",
+                    "x-displayname": "Key",
+                    "x-ves-example": "TES-123"
+                }
+            }
+        },
+        "ticket_managementJiraIssueFields": {
+            "type": "object",
+            "description": "Contains fields and information that are specific to Jira issues (ticket) - modeled after the JIRA REST API response format",
+            "title": "JiraIssueFields",
+            "x-displayname": "Jira Issue Fields",
+            "x-ves-proto-message": "ves.io.schema.ticket_management.JiraIssueFields",
+            "properties": {
+                "description": {
+                    "type": "object",
+                    "description": " The description of the ticket in Atlassian Document Format JSON\n\nExample: - {\"type\"\"doc\", \"version\": 1, \"content\": [{\"type\": \"paragraph\", \"content\": [{\"type\": \"text\": \"text\": \"Sample description\"}]}]}-",
+                    "title": "description",
+                    "x-displayname": "Description"
+                },
+                "issuetype": {
+                    "description": " Information about the issue type",
+                    "title": "issuetype",
+                    "$ref": "#/definitions/ticket_managementJiraIssueType",
+                    "x-displayname": "Issue Type"
+                },
+                "project": {
+                    "description": " external ID of the project ",
+                    "title": "project",
+                    "$ref": "#/definitions/ticket_managementJiraProject",
+                    "x-displayname": "Project"
+                },
+                "status": {
+                    "description": " Human readable status as it would appear in the external ticket tracking system's UI",
+                    "title": "status",
+                    "$ref": "#/definitions/ticket_managementJiraIssueStatus",
+                    "x-displayname": "Status"
+                },
+                "summary": {
+                    "type": "string",
+                    "description": " The summary (title) of the JIRA issue",
+                    "title": "summary",
+                    "x-displayname": "Summary"
+                }
+            }
+        },
+        "ticket_managementJiraIssueStatus": {
+            "type": "object",
+            "description": "Issue status type information that's specific to Jira - modeled after the JIRA REST API response format",
+            "title": "JiraIssueStatus",
+            "x-displayname": "Jira Issue Status",
+            "x-ves-proto-message": "ves.io.schema.ticket_management.JiraIssueStatus",
+            "properties": {
+                "icon_url": {
+                    "type": "string",
+                    "description": " Externally accessible URL for the avatar of the status\n\nExample: - \"https://example.atlassian.net/images/icons/statuses/inprogress.png\"-",
+                    "title": "icon_url",
+                    "x-displayname": "Icon URL",
+                    "x-ves-example": "https://example.atlassian.net/images/icons/statuses/inprogress.png"
+                },
+                "id": {
+                    "type": "string",
+                    "description": " External ID of the status\n\nExample: - \"3\"-",
+                    "title": "id",
+                    "x-displayname": "ID",
+                    "x-ves-example": "3"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Human readable status as it would appear in the external ticket tracking system's UI\n\nExample: - \"In Progress\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "In Progress"
+                },
+                "status_category": {
+                    "description": " Status category information like color name and ID",
+                    "title": "status_category",
+                    "$ref": "#/definitions/ticket_managementJiraIssueStatusCategory",
+                    "x-displayname": "Status Category"
+                }
+            }
+        },
+        "ticket_managementJiraIssueStatusCategory": {
+            "type": "object",
+            "description": "Status category information like color name and ID - modeled after the JIRA REST API response format",
+            "title": "JiraIssueStatusCategory",
+            "x-displayname": "Jira Issue Status Category",
+            "x-ves-proto-message": "ves.io.schema.ticket_management.JiraIssueStatusCategory",
+            "properties": {
+                "color_name": {
+                    "type": "string",
+                    "description": " Color of the status category\n\nExample: - \"blue-gray\"-",
+                    "title": "color_name",
+                    "x-displayname": "Color Name",
+                    "x-ves-example": "blue-gray"
+                },
+                "id": {
+                    "type": "string",
+                    "description": " External ID of the status color\n\nExample: - 3-",
+                    "title": "id",
+                    "format": "uint64",
+                    "x-displayname": "ID"
+                }
+            }
+        },
+        "ticket_managementJiraIssueType": {
+            "type": "object",
+            "description": "Issue (ticket) type information that's specific to Jira - modeled after the JIRA REST API response format",
+            "title": "JiraIssueType",
+            "x-displayname": "Jira Issue Type",
+            "x-ves-proto-message": "ves.io.schema.ticket_management.JiraIssueType",
+            "properties": {
+                "avatar_id": {
+                    "type": "string",
+                    "description": " External ID of the avatar\n\nExample: - \"10303\"-",
+                    "title": "avatar_id",
+                    "x-displayname": "Avatar ID",
+                    "x-ves-example": "10303"
+                },
+                "icon_url": {
+                    "type": "string",
+                    "description": " Externally accessible URL for the avatar of the issue type\n\nExample: - \"https://example.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10303?size=medium\"-",
+                    "title": "icon_url",
+                    "x-displayname": "Icon URL",
+                    "x-ves-example": "https://example.atlassian.net/rest/api/2/universal_avatar/view/type/issuetype/avatar/10303?size=medium"
+                },
+                "id": {
+                    "type": "string",
+                    "description": " External ID of the Jira issue type\n\nExample: - \"10000\"-",
+                    "title": "id",
+                    "x-displayname": "ID",
+                    "x-ves-example": "10000"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name (human readable) of the Jira issue type\n\nExample: - \"Bug\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "Bug"
+                }
+            }
+        },
+        "ticket_managementJiraProject": {
+            "type": "object",
+            "description": "Contains fields and information that are specific to Jira projects - modeled after the JIRA REST API response format",
+            "title": "JiraProject",
+            "x-displayname": "Jira Project",
+            "x-ves-proto-message": "ves.io.schema.ticket_management.JiraProject",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": " External ID of the project\n\nExample: - \"10000\"-",
+                    "title": "id",
+                    "x-displayname": "ID",
+                    "x-ves-example": "10000"
+                },
+                "issue_types": {
+                    "type": "array",
+                    "description": " Returns available issue types for the project",
+                    "title": "issue_types",
+                    "items": {
+                        "$ref": "#/definitions/ticket_managementJiraIssueType"
+                    },
+                    "x-displayname": "Issue Types"
+                },
+                "key": {
+                    "type": "string",
+                    "description": " Key of the status\n\nExample: - \"TES\"-",
+                    "title": "key",
+                    "x-displayname": "Key",
+                    "x-ves-example": "TES"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Human readable name as it would appear in the external ticket tracking system's UI\n\nExample: - \"Test project\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "Test project"
+                }
+            }
+        },
+        "ticket_managementTicketTrackingSystemType": {
+            "type": "string",
+            "description": "The type of ticket tracking system - JIRA, ServiceNow, etc.\n\nDefault enum value for type\nJira ticket type",
+            "title": "TicketTrackingSystemType",
+            "enum": [
+                "TYPE_UNKNOWN",
+                "TYPE_JIRA"
+            ],
+            "default": "TYPE_UNKNOWN",
+            "x-displayname": "Ticket Tracking System Type",
+            "x-ves-proto-enum": "ves.io.schema.ticket_management.TicketTrackingSystemType"
         },
         "viewsApiEndpointWithSchema": {
             "type": "object",
@@ -4898,6 +5685,141 @@ var ApiepCustomAPISwaggerJSON string = `{
             "x-displayname": "API Inventory Schema Query Type",
             "x-ves-proto-enum": "ves.io.schema.virtual_host.ApiInventorySchemaQueryType"
         },
+        "virtual_hostCreateJiraIssueRequest": {
+            "type": "object",
+            "title": "CreateJiraIssueRequest",
+            "x-displayname": "Create Jira Issue Request",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.CreateJiraIssueRequest",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Optional description\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",
+                    "title": "description",
+                    "maxLength": 8096,
+                    "x-displayname": "Description",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8096"
+                    }
+                },
+                "issue_type": {
+                    "type": "string",
+                    "description": " Name of the issue type\n\nExample: - \"Bug\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "issue_type",
+                    "maxLength": 256,
+                    "x-displayname": "Issue Type",
+                    "x-ves-example": "Bug",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "project": {
+                    "type": "string",
+                    "description": " external ID of the project \n\nExample: - \"10001\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "project",
+                    "maxLength": 256,
+                    "x-displayname": "Project",
+                    "x-ves-example": "10001",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "summary": {
+                    "type": "string",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 8096\n",
+                    "title": "summary",
+                    "maxLength": 8096,
+                    "x-displayname": "Summary",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "8096"
+                    }
+                }
+            }
+        },
+        "virtual_hostCreateTicketRequest": {
+            "type": "object",
+            "title": "CreateTicketRequest",
+            "x-displayname": "Create Ticket Request",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.CreateTicketRequest",
+            "properties": {
+                "jira_issue": {
+                    "description": " The contents of the Jira tIssueicket to be created",
+                    "title": "jira_issue",
+                    "$ref": "#/definitions/virtual_hostCreateJiraIssueRequest",
+                    "x-displayname": "Jira Issue"
+                },
+                "labels": {
+                    "type": "object",
+                    "description": " Map of string keys and values that can be used to organize and categorize\n (scope and select) objects as chosen by the user. Values specified here will be used\n by selector expression\n\nValidation Rules:\n  ves.io.schema.rules.map.max_pairs: 16\n",
+                    "title": "labels",
+                    "x-displayname": "Labels",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.max_pairs": "16"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Virtual Host name for current request\n\nExample: - \"blogging-app-vhost\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Virtual Host Name",
+                    "maxLength": 256,
+                    "x-displayname": "Virtual Host Name",
+                    "x-ves-example": "blogging-app-vhost",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace for the ticket\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "namespace",
+                    "maxLength": 256,
+                    "x-displayname": "Namespace",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "ticket_tracking_system": {
+                    "type": "string",
+                    "description": " The primary identifier (name) of the ticket tracking system system\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "ticket_tracking_system",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Ticket Tracking System",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                }
+            }
+        },
+        "virtual_hostCreateTicketResponse": {
+            "type": "object",
+            "title": "CreateTicketResponse",
+            "x-displayname": "Create Ticket Response",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.CreateTicketResponse",
+            "properties": {
+                "errors": {
+                    "type": "array",
+                    "description": " Errors related to ticket creation",
+                    "title": "errors",
+                    "items": {
+                        "$ref": "#/definitions/schemaErrorType"
+                    },
+                    "x-displayname": "Errors"
+                }
+            }
+        },
         "virtual_hostGetAPICallSummaryReq": {
             "type": "object",
             "description": "Request model for GetAPICallSummary API",
@@ -5297,6 +6219,105 @@ var ApiepCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostTicketDetails": {
+            "type": "object",
+            "description": "Ticket details from the ticket tracking system - JIRA, ServiceNow, etc.",
+            "title": "Ticket Details",
+            "x-displayname": "Ticket Details",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.TicketDetails",
+            "properties": {
+                "external_link": {
+                    "type": "string",
+                    "description": " Fully resolvable hyperlink w/ FQDN to the ticket.\n This will be the ticket tracking system organization subdomain + external ID",
+                    "title": "external_link",
+                    "x-displayname": "External Link"
+                },
+                "jira_issue": {
+                    "description": " Details of the Jira Issue",
+                    "title": "jira_issue",
+                    "$ref": "#/definitions/ticket_managementJiraIssue",
+                    "x-displayname": "Jira Issue"
+                },
+                "ticket_tracking_system_type": {
+                    "description": " The type of ticket tracking system this ticket belongs to - JIRA, ServiceNow, etc.",
+                    "title": "ticket_tracking_system_type",
+                    "$ref": "#/definitions/ticket_managementTicketTrackingSystemType",
+                    "x-displayname": "Ticket Tracking System Type"
+                }
+            }
+        },
+        "virtual_hostUnlinkTicketsRequest": {
+            "type": "object",
+            "title": "UnlinkTicketsRequest",
+            "x-displayname": "Unlink Tickets Request",
+            "x-ves-oneof-field-unlink_choice": "[\"label_filter\",\"ticket_uid\"]",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.UnlinkTicketsRequest",
+            "properties": {
+                "label_filter": {
+                    "type": "string",
+                    "description": "Exclusive with [ticket_uid]\n A LabelSelectorType expression for targetting which tickets to unlink\n\nExample: - \"env in (staging, testing), tier in (web, db)\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",
+                    "title": "label_filter",
+                    "maxLength": 8096,
+                    "x-displayname": "Label Filter",
+                    "x-ves-example": "env in (staging, testing), tier in (web, db)",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8096"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Virtual Host name for current request\n\nExample: - \"blogging-app-vhost\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "Virtual Host Name",
+                    "maxLength": 256,
+                    "x-displayname": "Virtual Host Name",
+                    "x-ves-example": "blogging-app-vhost",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace for the ticket\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "namespace",
+                    "maxLength": 256,
+                    "x-displayname": "Namespace",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "ticket_uid": {
+                    "type": "string",
+                    "description": "Exclusive with [label_filter]\n The UID of the tickets to be unlinked\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "title": "Ticket UID",
+                    "maxLength": 128,
+                    "x-displayname": "Ticket UID",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "128"
+                    }
+                }
+            }
+        },
+        "virtual_hostUnlinkTicketsResponse": {
+            "type": "object",
+            "title": "UnlinkTicketsResponse",
+            "x-displayname": "Unlink Tickets Response",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.UnlinkTicketsResponse",
+            "properties": {
+                "errors": {
+                    "type": "array",
+                    "description": " Errors related to ticket unlink",
+                    "title": "errors",
+                    "items": {
+                        "$ref": "#/definitions/schemaErrorType"
+                    },
+                    "x-displayname": "Errors"
+                }
+            }
+        },
         "virtual_hostUpdateAPIEndpointsSchemasReq": {
             "type": "object",
             "description": "Request shape for Update API Endpoints Schemas",
@@ -5501,11 +6522,12 @@ var ApiepCustomAPISwaggerJSON string = `{
         },
         "virtual_hostVulnEvidenceType": {
             "type": "string",
-            "description": "Evidence Type where vulnerability found\n\nVulnerability has been identified in requests.\nVulnerability has been identified in sec-events.",
+            "description": "Evidence Type where vulnerability found\n\nVulnerability has been identified in requests.\nVulnerability has been identified in sec-events.\nVulnerability has been identified in sec-incidents.",
             "title": "EvidenceType",
             "enum": [
                 "EVIDENCE_TYPE_REQUESTS",
-                "EVIDENCE_TYPE_SEC_EVENTS"
+                "EVIDENCE_TYPE_SEC_EVENTS",
+                "EVIDENCE_TYPE_SEC_INCIDENTS"
             ],
             "default": "EVIDENCE_TYPE_REQUESTS",
             "x-displayname": "Evidence Type",
@@ -5630,6 +6652,12 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/virtual_hostVulnRisk",
                     "x-displayname": "Risk"
                 },
+                "source": {
+                    "description": " Source of the vulnerability",
+                    "title": "source",
+                    "$ref": "#/definitions/virtual_hostVulnerabilitySource",
+                    "x-displayname": "Source"
+                },
                 "status": {
                     "description": " Status of the vulnerability found.",
                     "title": "status",
@@ -5642,6 +6670,12 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "title": "status_change_time",
                     "format": "date-time",
                     "x-displayname": "Status Change Time"
+                },
+                "ticket": {
+                    "description": " The ticket associated with this vulnerability.",
+                    "title": "ticket",
+                    "$ref": "#/definitions/virtual_hostTicketDetails",
+                    "x-displayname": "Ticket"
                 },
                 "title": {
                     "type": "string",
@@ -5656,6 +6690,19 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "x-displayname": "vulnerability_id"
                 }
             }
+        },
+        "virtual_hostVulnerabilitySource": {
+            "type": "string",
+            "description": "The Source of Vulnerability\n\n - VULNERABILITY_SOURCE_UNSPECIFIED: Source unspecified\n - VULNERABILITY_SOURCE_TRAFFIC_ANALYSIS: Source Traffic Analysis\n - VULNERABILITY_SOURCE_API_TESTING: Source Api Testing",
+            "title": "Vulnerability Source",
+            "enum": [
+                "VULNERABILITY_SOURCE_UNSPECIFIED",
+                "VULNERABILITY_SOURCE_TRAFFIC_ANALYSIS",
+                "VULNERABILITY_SOURCE_API_TESTING"
+            ],
+            "default": "VULNERABILITY_SOURCE_UNSPECIFIED",
+            "x-displayname": "Vulnerability Source",
+            "x-ves-proto-enum": "ves.io.schema.virtual_host.VulnerabilitySource"
         }
     },
     "x-displayname": "Virtual Host",

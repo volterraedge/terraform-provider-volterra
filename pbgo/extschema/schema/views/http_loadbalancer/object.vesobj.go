@@ -1300,6 +1300,24 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["cdn_site_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdn_site_status"))
+		if err := fv(ctx, e.GetCdnSiteStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cdn_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdn_status"))
+		if err := fv(ctx, e.GetCdnStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["conditions"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("conditions"))

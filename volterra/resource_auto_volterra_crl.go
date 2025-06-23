@@ -95,12 +95,6 @@ func resourceVolterraCrl() *schema.Resource {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
-
-			"verify_all_certs_with_crl": {
-				Type:       schema.TypeBool,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-			},
 		},
 	}
 }
@@ -162,7 +156,7 @@ func resourceVolterraCrlCreate(d *schema.ResourceData, meta interface{}) error {
 
 	accessInfoChoiceTypeFound := false
 
-	if v, ok := d.GetOk("http_access"); ok && !accessInfoChoiceTypeFound {
+	if v, ok := d.GetOk("http_access"); ok && !isIntfNil(v) && !accessInfoChoiceTypeFound {
 
 		accessInfoChoiceTypeFound = true
 		accessInfoChoiceInt := &ves_io_schema_crl.CreateSpecType_HttpAccess{}
@@ -214,14 +208,6 @@ func resourceVolterraCrlCreate(d *schema.ResourceData, meta interface{}) error {
 
 		createSpec.Timeout =
 			uint32(v.(int))
-
-	}
-
-	//verify_all_certs_with_crl
-	if v, ok := d.GetOk("verify_all_certs_with_crl"); ok && !isIntfNil(v) {
-
-		createSpec.VerifyAllCertsWithCrl =
-			v.(bool)
 
 	}
 
@@ -326,7 +312,7 @@ func resourceVolterraCrlUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	accessInfoChoiceTypeFound := false
 
-	if v, ok := d.GetOk("http_access"); ok && !accessInfoChoiceTypeFound {
+	if v, ok := d.GetOk("http_access"); ok && !isIntfNil(v) && !accessInfoChoiceTypeFound {
 
 		accessInfoChoiceTypeFound = true
 		accessInfoChoiceInt := &ves_io_schema_crl.ReplaceSpecType_HttpAccess{}
@@ -377,13 +363,6 @@ func resourceVolterraCrlUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	}
 
-	if v, ok := d.GetOk("verify_all_certs_with_crl"); ok && !isIntfNil(v) {
-
-		updateSpec.VerifyAllCertsWithCrl =
-			v.(bool)
-
-	}
-
 	log.Printf("[DEBUG] Updating Volterra Crl obj with struct: %+v", updateReq)
 
 	err := client.ReplaceObject(context.Background(), ves_io_schema_crl.ObjectType, updateReq)
@@ -410,5 +389,8 @@ func resourceVolterraCrlDelete(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra Crl obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_crl.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_crl.ObjectType, namespace, name, opts...)
 }

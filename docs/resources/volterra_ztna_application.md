@@ -17,8 +17,9 @@ Example Usage
 
 ```hcl
 resource "volterra_ztna_application" "example" {
-  name           = "acmecorp-web"
-  namespace      = "staging"
+  name      = "acmecorp-web"
+  namespace = "staging"
+
   transport_type = ["transport_type"]
 }
 
@@ -109,7 +110,7 @@ Do not advertise this proxy.
 
 Where should this load balancer be available.
 
-###### One of the arguments from this list "advertise_on_public, cloud_edge_segment, segment, site, site_segment, virtual_network, virtual_site, virtual_site_segment, virtual_site_with_vip, vk8s_service" must be set
+###### One of the arguments from this list "advertise_on_public, site, site_segment, virtual_network, virtual_site, virtual_site_segment, virtual_site_with_vip, vk8s_service" must be set
 
 `advertise_on_public` - (Optional) Advertise this load balancer on public network. See [Choice Advertise On Public ](#choice-advertise-on-public) below for details.
 
@@ -121,17 +122,19 @@ Where should this load balancer be available.
 
 `virtual_site` - (Optional) Advertise on a customer virtual site and a given network.. See [Choice Virtual Site ](#choice-virtual-site) below for details.
 
+`virtual_site_segment` - (Optional) Advertise on a segment on a virtual site. See [Choice Virtual Site Segment ](#choice-virtual-site-segment) below for details.
+
 `virtual_site_with_vip` - (Optional) Advertise on a customer virtual site and a given network and IP.. See [Choice Virtual Site With Vip ](#choice-virtual-site-with-vip) below for details.
 
 `vk8s_service` - (Optional) Advertise on vK8s Service Network on RE.. See [Choice Vk8s Service ](#choice-vk8s-service) below for details.
 
 ###### One of the arguments from this list "port, port_ranges, use_default_port" must be set
 
-`port` - (Optional) TCP port to Listen. (`Int`).
+`port` - (Optional) Port to Listen. (`Int`).
 
 `port_ranges` - (Optional) Each port range consists of a single port or two ports separated by "-". (`String`).
 
-`use_default_port` - (Optional) For HTTP, default is 80. For HTTPS/SNI, default is 443. (`Bool`).
+`use_default_port` - (Optional) Inherit the Load Balancer's Listen Port. (`Bool`).
 
 ### Choice Advertise On Public
 
@@ -189,6 +192,18 @@ Advertise on a customer virtual site and a given network..
 
 `virtual_site` - (Required) Reference to virtual site object. See [ref](#ref) below for details.
 
+### Choice Virtual Site Segment
+
+Advertise on a segment on a virtual site.
+
+`ip` - (Required) Use given IP address as VIP on the site (`String`).
+
+`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
+
+`segment` - (Required) x-required. See [ref](#ref) below for details.
+
+`virtual_site` - (Required) Reference to virtual site object. See [ref](#ref) below for details.
+
 ### Choice Virtual Site With Vip
 
 Advertise on a customer virtual site and a given network and IP..
@@ -223,7 +238,7 @@ Used to set the Service IP.
 
 ### Port Choice Use Default Port
 
-For HTTP, default is 80. For HTTPS/SNI, default is 443..
+Inherit the Load Balancer's Listen Port..
 
 ### Ref
 

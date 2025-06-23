@@ -26,6 +26,101 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *ConfigureType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ConfigureType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ConfigureType) DeepCopy() *ConfigureType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ConfigureType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ConfigureType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ConfigureType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ConfigureTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateConfigureType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateConfigureType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ConfigureType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ConfigureType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetCfgType().(type) {
+	case *ConfigureType_ExtConnIpsec:
+		if fv, exists := v.FldValidators["cfg_type.ext_conn_ipsec"]; exists {
+			val := m.GetCfgType().(*ConfigureType_ExtConnIpsec).ExtConnIpsec
+			vOpts := append(opts,
+				db.WithValidateField("cfg_type"),
+				db.WithValidateField("ext_conn_ipsec"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ConfigureType_ExtConnGre:
+		if fv, exists := v.FldValidators["cfg_type.ext_conn_gre"]; exists {
+			val := m.GetCfgType().(*ConfigureType_ExtConnGre).ExtConnGre
+			vOpts := append(opts,
+				db.WithValidateField("cfg_type"),
+				db.WithValidateField("ext_conn_gre"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultConfigureTypeValidator = func() *ValidateConfigureType {
+	v := &ValidateConfigureType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ConfigureTypeValidator() db.Validator {
+	return DefaultConfigureTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -80,7 +175,20 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetLocalIpDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetLocalIpDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetLocalIpDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetParamsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetParamsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -97,6 +205,24 @@ func (m *CreateSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "local_ip." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetParamsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetParams() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetParams().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "params." + dri.DRField
 	}
 	return drInfos, err
 
@@ -266,6 +392,111 @@ func CreateSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ESPProposal) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ESPProposal) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ESPProposal) DeepCopy() *ESPProposal {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ESPProposal{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ESPProposal) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ESPProposal) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ESPProposalValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateESPProposal struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateESPProposal) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ESPProposal)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ESPProposal got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["authentication_algos"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("authentication_algos"))
+		for idx, item := range m.GetAuthenticationAlgos() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dh_groups"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dh_groups"))
+		for idx, item := range m.GetDhGroups() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["encryption_algos"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("encryption_algos"))
+		for idx, item := range m.GetEncryptionAlgos() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultESPProposalValidator = func() *ValidateESPProposal {
+	v := &ValidateESPProposal{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ESPProposalValidator() db.Validator {
+	return DefaultESPProposalValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -320,7 +551,20 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetLocalIpDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetLocalIpDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetLocalIpDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetParamsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetParamsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -337,6 +581,24 @@ func (m *GetSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "local_ip." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetParamsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetParams() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetParams().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "params." + dri.DRField
 	}
 	return drInfos, err
 
@@ -560,7 +822,20 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetLocalIpDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetLocalIpDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetLocalIpDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetParamsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetParamsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -577,6 +852,24 @@ func (m *GlobalSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "local_ip." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetParamsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetParams() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetParams().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "params." + dri.DRField
 	}
 	return drInfos, err
 
@@ -656,6 +949,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["cfg_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cfg_type"))
+		if err := fv(ctx, m.GetCfgType(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["deployment_vpn_tunnel_type"]; exists {
@@ -806,6 +1108,123 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IKEProposal) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IKEProposal) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IKEProposal) DeepCopy() *IKEProposal {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IKEProposal{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IKEProposal) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IKEProposal) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IKEProposalValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIKEProposal struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIKEProposal) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IKEProposal)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IKEProposal got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["authentication_algos"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("authentication_algos"))
+		for idx, item := range m.GetAuthenticationAlgos() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["dh_groups"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dh_groups"))
+		for idx, item := range m.GetDhGroups() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["encryption_algos"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("encryption_algos"))
+		for idx, item := range m.GetEncryptionAlgos() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["prf"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("prf"))
+		for idx, item := range m.GetPrf() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIKEProposalValidator = func() *ValidateIKEProposal {
+	v := &ValidateIKEProposal{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func IKEProposalValidator() db.Validator {
+	return DefaultIKEProposalValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1057,8 +1476,130 @@ func (m *IpsecTunnelParams) Validate(ctx context.Context, opts ...db.ValidateOpt
 	return IpsecTunnelParamsValidator().Validate(ctx, m, opts...)
 }
 
+func (m *IpsecTunnelParams) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIkePhase1ProfileDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIkePhase1ProfileDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetIkePhase2ProfileDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIkePhase2ProfileDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *IpsecTunnelParams) GetIkePhase1ProfileDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetIkePhase1Profile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("IpsecTunnelParams.ike_phase1_profile[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ike1.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ike_phase1_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetIkePhase1ProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *IpsecTunnelParams) GetIkePhase1ProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "ike1.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: ike1")
+	}
+	for _, ref := range m.GetIkePhase1Profile() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *IpsecTunnelParams) GetIkePhase2ProfileDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetIkePhase2Profile()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("IpsecTunnelParams.ike_phase2_profile[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "ike2.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ike_phase2_profile",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetIkePhase2ProfileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *IpsecTunnelParams) GetIkePhase2ProfileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "ike2.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: ike2")
+	}
+	for _, ref := range m.GetIkePhase2Profile() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
 type ValidateIpsecTunnelParams struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIpsecTunnelParams) DpdKeepAliveTimerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dpd_keep_alive_timer")
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateIpsecTunnelParams) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -1075,10 +1616,115 @@ func (v *ValidateIpsecTunnelParams) Validate(ctx context.Context, pm interface{}
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["dpd_keep_alive_timer"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dpd_keep_alive_timer"))
+		if err := fv(ctx, m.GetDpdKeepAliveTimer(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["esp_proposal"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("esp_proposal"))
+		if err := fv(ctx, m.GetEspProposal(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ike_phase1_key_lifetime"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ike_phase1_key_lifetime"))
+		if err := fv(ctx, m.GetIkePhase1KeyLifetime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ike_phase1_profile"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ike_phase1_profile"))
+		for idx, item := range m.GetIkePhase1Profile() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ike_phase2_key_lifetime"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ike_phase2_key_lifetime"))
+		if err := fv(ctx, m.GetIkePhase2KeyLifetime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ike_phase2_profile"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ike_phase2_profile"))
+		for idx, item := range m.GetIkePhase2Profile() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ike_proposal"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ike_proposal"))
+		if err := fv(ctx, m.GetIkeProposal(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ike_reauth_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ike_reauth_timeout"))
+		if err := fv(ctx, m.GetIkeReauthTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ipsec_psk"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ipsec_psk"))
 		if err := fv(ctx, m.GetIpsecPsk(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["local_ike_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("local_ike_id"))
+		if err := fv(ctx, m.GetLocalIkeId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["remote_ike_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("remote_ike_id"))
+		if err := fv(ctx, m.GetRemoteIkeId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tunnel_initiator"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tunnel_initiator"))
+		if err := fv(ctx, m.GetTunnelInitiator(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1090,6 +1736,26 @@ func (v *ValidateIpsecTunnelParams) Validate(ctx context.Context, pm interface{}
 // Well-known symbol for default validator implementation
 var DefaultIpsecTunnelParamsValidator = func() *ValidateIpsecTunnelParams {
 	v := &ValidateIpsecTunnelParams{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDpdKeepAliveTimer := v.DpdKeepAliveTimerValidationRuleHandler
+	rulesDpdKeepAliveTimer := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "3",
+	}
+	vFn, err = vrhDpdKeepAliveTimer(rulesDpdKeepAliveTimer)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IpsecTunnelParams.dpd_keep_alive_timer: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dpd_keep_alive_timer"] = vFn
 
 	v.FldValidators["ipsec_psk"] = ves_io_schema.SecretTypeValidator().Validate
 
@@ -1168,6 +1834,18 @@ func (m *LocalIpAddressSelector) GetTypeDRefInfo() ([]db.DRefInfo, error) {
 
 		return nil, nil
 
+	case *LocalIpAddressSelector_NodeInterface:
+
+		drInfos, err := m.GetNodeInterface().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodeInterface().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "node_interface." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -1215,6 +1893,17 @@ func (v *ValidateLocalIpAddressSelector) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *LocalIpAddressSelector_NodeInterface:
+		if fv, exists := v.FldValidators["type.node_interface"]; exists {
+			val := m.GetType().(*LocalIpAddressSelector_NodeInterface).NodeInterface
+			vOpts := append(opts,
+				db.WithValidateField("type"),
+				db.WithValidateField("node_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1227,6 +1916,7 @@ var DefaultLocalIpAddressSelectorValidator = func() *ValidateLocalIpAddressSelec
 
 	v.FldValidators["type.intf"] = InterfaceTypeValidator().Validate
 	v.FldValidators["type.ip_address"] = LocalIpAddressTypeValidator().Validate
+	v.FldValidators["type.node_interface"] = ves_io_schema.NodeInterfaceTypeValidator().Validate
 
 	return v
 }()
@@ -1778,7 +2468,20 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetLocalIpDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetLocalIpDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetLocalIpDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetParamsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetParamsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -1795,6 +2498,24 @@ func (m *ReplaceSpecType) GetLocalIpDRefInfo() ([]db.DRefInfo, error) {
 	for i := range drInfos {
 		dri := &drInfos[i]
 		dri.DRField = "local_ip." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetParamsDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetParams() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetParams().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetParams().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "params." + dri.DRField
 	}
 	return drInfos, err
 
@@ -2011,6 +2732,39 @@ func (m *TunnelParams) DeepCopyProto() proto.Message {
 
 func (m *TunnelParams) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 	return TunnelParamsValidator().Validate(ctx, m, opts...)
+}
+
+func (m *TunnelParams) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTypeDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *TunnelParams) GetTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetType() == nil {
+		return nil, nil
+	}
+	switch m.GetType().(type) {
+	case *TunnelParams_Ipsec:
+
+		drInfos, err := m.GetIpsec().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpsec().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipsec." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
 }
 
 type ValidateTunnelParams struct {

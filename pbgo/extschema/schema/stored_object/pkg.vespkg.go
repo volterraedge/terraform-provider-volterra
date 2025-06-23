@@ -22,6 +22,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.stored_object.ListItemDescriptor"] = ListItemDescriptorValidator()
 	vr["ves.io.schema.stored_object.ListObjectsRequest"] = ListObjectsRequestValidator()
 	vr["ves.io.schema.stored_object.ListObjectsResponse"] = ListObjectsResponseValidator()
+	vr["ves.io.schema.stored_object.MobileAppShieldAttributes"] = MobileAppShieldAttributesValidator()
 	vr["ves.io.schema.stored_object.MobileIntegratorAttributes"] = MobileIntegratorAttributesValidator()
 	vr["ves.io.schema.stored_object.MobileSDKAttributes"] = MobileSDKAttributesValidator()
 	vr["ves.io.schema.stored_object.PreSignedUrl"] = PreSignedUrlValidator()
@@ -61,6 +62,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.stored_object.CustomAPI"] = "object_store"
+	sm["ves.io.schema.stored_object.MobileAppShieldCustomAPI"] = "object_store"
 	sm["ves.io.schema.stored_object.MobileIntegratorCustomAPI"] = "object_store"
 
 }
@@ -112,6 +114,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcGwRegisterHandlers["ves.io.schema.stored_object.CustomAPI"] = RegisterGwCustomAPIHandler
 		customCSR.ServerRegistry["ves.io.schema.stored_object.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
 			return NewCustomAPIServer(svc)
+		}
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.stored_object.Object"] = MobileAppShieldCustomAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.stored_object.MobileAppShieldCustomAPI"] = NewMobileAppShieldCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.stored_object.MobileAppShieldCustomAPI"] = NewMobileAppShieldCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.stored_object.MobileAppShieldCustomAPI"] = RegisterMobileAppShieldCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.stored_object.MobileAppShieldCustomAPI"] = RegisterGwMobileAppShieldCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.stored_object.MobileAppShieldCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewMobileAppShieldCustomAPIServer(svc)
 		}
 
 	}()

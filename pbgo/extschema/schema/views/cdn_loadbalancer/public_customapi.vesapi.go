@@ -20,6 +20,8 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
+
+	ves_io_schema_views_common_cdn "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_cdn"
 )
 
 var (
@@ -53,9 +55,9 @@ func (c *CustomAPIGrpcClient) doRPCCDNAccessLogs(ctx context.Context, yamlReq st
 }
 
 func (c *CustomAPIGrpcClient) doRPCCDNCachePurge(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &LilacCDNCachePurgeRequest{}
+	req := &ves_io_schema_views_common_cdn.LilacCDNCachePurgeRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeRequest", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.common_cdn.LilacCDNCachePurgeRequest", yamlReq)
 	}
 	rsp, err := c.grpcClient.CDNCachePurge(ctx, req, opts...)
 	return rsp, err
@@ -71,18 +73,18 @@ func (c *CustomAPIGrpcClient) doRPCCDNMetrics(ctx context.Context, yamlReq strin
 }
 
 func (c *CustomAPIGrpcClient) doRPCGetServiceOperation(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &GetServiceOperationReq{}
+	req := &ves_io_schema_views_common_cdn.GetServiceOperationReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.cdn_loadbalancer.GetServiceOperationReq", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.common_cdn.GetServiceOperationReq", yamlReq)
 	}
 	rsp, err := c.grpcClient.GetServiceOperation(ctx, req, opts...)
 	return rsp, err
 }
 
 func (c *CustomAPIGrpcClient) doRPCListServiceOperations(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &ListServiceOperationsReq{}
+	req := &ves_io_schema_views_common_cdn.ListServiceOperationsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsReq", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.common_cdn.ListServiceOperationsReq", yamlReq)
 	}
 	rsp, err := c.grpcClient.ListServiceOperations(ctx, req, opts...)
 	return rsp, err
@@ -352,9 +354,9 @@ func (c *CustomAPIRestClient) doRPCCDNCachePurge(ctx context.Context, callOpts *
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &LilacCDNCachePurgeRequest{}
+	req := &ves_io_schema_views_common_cdn.LilacCDNCachePurgeRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeRequest: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.common_cdn.LilacCDNCachePurgeRequest: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -420,9 +422,9 @@ func (c *CustomAPIRestClient) doRPCCDNCachePurge(ctx context.Context, callOpts *
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &LilacCDNCachePurgeResponse{}
+	pbRsp := &ves_io_schema_views_common_cdn.LilacCDNCachePurgeResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_cdn.LilacCDNCachePurgeResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -534,9 +536,9 @@ func (c *CustomAPIRestClient) doRPCGetServiceOperation(ctx context.Context, call
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &GetServiceOperationReq{}
+	req := &ves_io_schema_views_common_cdn.GetServiceOperationReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.cdn_loadbalancer.GetServiceOperationReq: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.common_cdn.GetServiceOperationReq: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -600,9 +602,9 @@ func (c *CustomAPIRestClient) doRPCGetServiceOperation(ctx context.Context, call
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &GetServiceOperationRsp{}
+	pbRsp := &ves_io_schema_views_common_cdn.GetServiceOperationRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.cdn_loadbalancer.GetServiceOperationRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_cdn.GetServiceOperationRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -619,9 +621,9 @@ func (c *CustomAPIRestClient) doRPCListServiceOperations(ctx context.Context, ca
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &ListServiceOperationsReq{}
+	req := &ves_io_schema_views_common_cdn.ListServiceOperationsReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsReq: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.views.common_cdn.ListServiceOperationsReq: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -685,9 +687,9 @@ func (c *CustomAPIRestClient) doRPCListServiceOperations(ctx context.Context, ca
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &ListServiceOperationsRsp{}
+	pbRsp := &ves_io_schema_views_common_cdn.ListServiceOperationsRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsRsp", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.views.common_cdn.ListServiceOperationsRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -921,7 +923,7 @@ func (c *customAPIInprocClient) CDNAccessLogs(ctx context.Context, in *CDNAccess
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNAccessLogs")
 	return c.CustomAPIServer.CDNAccessLogs(ctx, in)
 }
-func (c *customAPIInprocClient) CDNCachePurge(ctx context.Context, in *LilacCDNCachePurgeRequest, opts ...grpc.CallOption) (*LilacCDNCachePurgeResponse, error) {
+func (c *customAPIInprocClient) CDNCachePurge(ctx context.Context, in *ves_io_schema_views_common_cdn.LilacCDNCachePurgeRequest, opts ...grpc.CallOption) (*ves_io_schema_views_common_cdn.LilacCDNCachePurgeResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNCachePurge")
 	return c.CustomAPIServer.CDNCachePurge(ctx, in)
 }
@@ -929,11 +931,11 @@ func (c *customAPIInprocClient) CDNMetrics(ctx context.Context, in *LilacCDNMetr
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.CDNMetrics")
 	return c.CustomAPIServer.CDNMetrics(ctx, in)
 }
-func (c *customAPIInprocClient) GetServiceOperation(ctx context.Context, in *GetServiceOperationReq, opts ...grpc.CallOption) (*GetServiceOperationRsp, error) {
+func (c *customAPIInprocClient) GetServiceOperation(ctx context.Context, in *ves_io_schema_views_common_cdn.GetServiceOperationReq, opts ...grpc.CallOption) (*ves_io_schema_views_common_cdn.GetServiceOperationRsp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.GetServiceOperation")
 	return c.CustomAPIServer.GetServiceOperation(ctx, in)
 }
-func (c *customAPIInprocClient) ListServiceOperations(ctx context.Context, in *ListServiceOperationsReq, opts ...grpc.CallOption) (*ListServiceOperationsRsp, error) {
+func (c *customAPIInprocClient) ListServiceOperations(ctx context.Context, in *ves_io_schema_views_common_cdn.ListServiceOperationsReq, opts ...grpc.CallOption) (*ves_io_schema_views_common_cdn.ListServiceOperationsRsp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.views.cdn_loadbalancer.CustomAPI.ListServiceOperations")
 	return c.CustomAPIServer.ListServiceOperations(ctx, in)
 }
@@ -1065,7 +1067,7 @@ func (s *customAPISrv) CDNAccessLogs(ctx context.Context, in *CDNAccessLogReques
 
 	return rsp, nil
 }
-func (s *customAPISrv) CDNCachePurge(ctx context.Context, in *LilacCDNCachePurgeRequest) (*LilacCDNCachePurgeResponse, error) {
+func (s *customAPISrv) CDNCachePurge(ctx context.Context, in *ves_io_schema_views_common_cdn.LilacCDNCachePurgeRequest) (*ves_io_schema_views_common_cdn.LilacCDNCachePurgeResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -1073,11 +1075,11 @@ func (s *customAPISrv) CDNCachePurge(ctx context.Context, in *LilacCDNCachePurge
 	}
 
 	var (
-		rsp *LilacCDNCachePurgeResponse
+		rsp *ves_io_schema_views_common_cdn.LilacCDNCachePurgeResponse
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.common_cdn.LilacCDNCachePurgeRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1110,7 +1112,7 @@ func (s *customAPISrv) CDNCachePurge(ctx context.Context, in *LilacCDNCachePurge
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_cdn.LilacCDNCachePurgeResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -1163,7 +1165,7 @@ func (s *customAPISrv) CDNMetrics(ctx context.Context, in *LilacCDNMetricsReques
 
 	return rsp, nil
 }
-func (s *customAPISrv) GetServiceOperation(ctx context.Context, in *GetServiceOperationReq) (*GetServiceOperationRsp, error) {
+func (s *customAPISrv) GetServiceOperation(ctx context.Context, in *ves_io_schema_views_common_cdn.GetServiceOperationReq) (*ves_io_schema_views_common_cdn.GetServiceOperationRsp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -1171,11 +1173,11 @@ func (s *customAPISrv) GetServiceOperation(ctx context.Context, in *GetServiceOp
 	}
 
 	var (
-		rsp *GetServiceOperationRsp
+		rsp *ves_io_schema_views_common_cdn.GetServiceOperationRsp
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.GetServiceOperationReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.common_cdn.GetServiceOperationReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1208,11 +1210,11 @@ func (s *customAPISrv) GetServiceOperation(ctx context.Context, in *GetServiceOp
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.GetServiceOperationRsp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_cdn.GetServiceOperationRsp", rsp)...)
 
 	return rsp, nil
 }
-func (s *customAPISrv) ListServiceOperations(ctx context.Context, in *ListServiceOperationsReq) (*ListServiceOperationsRsp, error) {
+func (s *customAPISrv) ListServiceOperations(ctx context.Context, in *ves_io_schema_views_common_cdn.ListServiceOperationsReq) (*ves_io_schema_views_common_cdn.ListServiceOperationsRsp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.views.cdn_loadbalancer.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -1220,11 +1222,11 @@ func (s *customAPISrv) ListServiceOperations(ctx context.Context, in *ListServic
 	}
 
 	var (
-		rsp *ListServiceOperationsRsp
+		rsp *ves_io_schema_views_common_cdn.ListServiceOperationsRsp
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsReq", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.views.common_cdn.ListServiceOperationsReq", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
@@ -1257,7 +1259,7 @@ func (s *customAPISrv) ListServiceOperations(ctx context.Context, in *ListServic
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsRsp", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.views.common_cdn.ListServiceOperationsRsp", rsp)...)
 
 	return rsp, nil
 }
@@ -1744,7 +1746,7 @@ var CustomAPISwaggerJSON string = `{
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/cdn_loadbalancerGetServiceOperationRsp"
+                            "$ref": "#/definitions/common_cdnGetServiceOperationRsp"
                         }
                     },
                     "401": {
@@ -1810,7 +1812,7 @@ var CustomAPISwaggerJSON string = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/cdn_loadbalancerGetServiceOperationReq"
+                            "$ref": "#/definitions/common_cdnGetServiceOperationReq"
                         }
                     }
                 ],
@@ -1836,7 +1838,7 @@ var CustomAPISwaggerJSON string = `{
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/cdn_loadbalancerListServiceOperationsRsp"
+                            "$ref": "#/definitions/common_cdnListServiceOperationsRsp"
                         }
                     },
                     "401": {
@@ -1902,7 +1904,7 @@ var CustomAPISwaggerJSON string = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/cdn_loadbalancerListServiceOperationsReq"
+                            "$ref": "#/definitions/common_cdnListServiceOperationsReq"
                         }
                     }
                 ],
@@ -2020,7 +2022,7 @@ var CustomAPISwaggerJSON string = `{
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/cdn_loadbalancerLilacCDNCachePurgeResponse"
+                            "$ref": "#/definitions/common_cdnLilacCDNCachePurgeResponse"
                         }
                     },
                     "401": {
@@ -2094,7 +2096,7 @@ var CustomAPISwaggerJSON string = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/cdn_loadbalancerLilacCDNCachePurgeRequest"
+                            "$ref": "#/definitions/common_cdnLilacCDNCachePurgeRequest"
                         }
                     }
                 ],
@@ -2463,73 +2465,6 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "cdn_loadbalancerGetServiceOperationReq": {
-            "type": "object",
-            "description": "Get Service Operation Request",
-            "title": "Service Operation Request",
-            "x-displayname": "Get Service Operation Request",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.GetServiceOperationReq",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "description": " Name of the CDN distribution.\n Format: string\n\nExample: - \"cdn-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "CDN Distribution Name",
-                    "x-displayname": "Name of the CDN distribution",
-                    "x-ves-example": "cdn-1",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " Namespace scope of the operation request\n\nExample: - \"default\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "default",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "service_op_id": {
-                    "type": "integer",
-                    "description": " Operation ID for which status is requested\n\nExample: - \"101\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Service Operation ID",
-                    "format": "int64",
-                    "x-displayname": "Service Operation ID",
-                    "x-ves-example": "101",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                }
-            }
-        },
-        "cdn_loadbalancerGetServiceOperationRsp": {
-            "type": "object",
-            "description": "Get Service Operation Response",
-            "title": "Service Operation Response",
-            "x-displayname": "Service Operation Response",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.GetServiceOperationRsp",
-            "properties": {
-                "error": {
-                    "description": " Errors(if any) while listing items from collection ",
-                    "title": "error",
-                    "$ref": "#/definitions/schemaErrorType",
-                    "x-displayname": "Errors"
-                },
-                "items": {
-                    "type": "array",
-                    "description": " items represents the collection in response",
-                    "title": "Serice Operation Status Details",
-                    "items": {
-                        "$ref": "#/definitions/cdn_loadbalancerServiceOperationItem"
-                    },
-                    "x-displayname": "Operation Status Details"
-                }
-            }
-        },
         "cdn_loadbalancerLilacCDNAccessLogsResponseData": {
             "type": "object",
             "description": "CDN Access-Log item",
@@ -2760,82 +2695,6 @@ var CustomAPISwaggerJSON string = `{
                     "title": "HTTP User Agent",
                     "x-displayname": "HTTP User Agent",
                     "x-ves-example": "Mozilla/5.0"
-                }
-            }
-        },
-        "cdn_loadbalancerLilacCDNCachePurgeRequest": {
-            "type": "object",
-            "description": "CDN Cache Purge",
-            "title": "Cache Purge Request",
-            "x-displayname": "Cache Purge",
-            "x-ves-oneof-field-pattern_type": "[\"hostname\",\"pattern\",\"purge_all\",\"url\"]",
-            "x-ves-oneof-field-purge_type": "[\"hard_purge\",\"soft_purge\"]",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeRequest",
-            "properties": {
-                "hard_purge": {
-                    "description": "Exclusive with [soft_purge]\n Delete the Cache entries",
-                    "title": "Hard Purge",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Hard Purge"
-                },
-                "hostname": {
-                    "type": "string",
-                    "description": "Exclusive with [pattern purge_all url]\n Format: string.\n Purge all content by Hostname\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.vh_domain: true\n",
-                    "title": "Hostname",
-                    "x-displayname": "Hostname",
-                    "x-ves-example": "xyz.com",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.vh_domain": "true"
-                    }
-                },
-                "pattern": {
-                    "type": "string",
-                    "description": "Exclusive with [hostname purge_all url]\n Format: string.\n Purge content using RegEx\n\nExample: - \"*.ts\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
-                    "title": "Regex Pattern to match",
-                    "minLength": 1,
-                    "maxLength": 256,
-                    "x-displayname": "Pattern",
-                    "x-ves-example": "*.ts",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.regex": "true"
-                    }
-                },
-                "purge_all": {
-                    "description": "Exclusive with [hostname pattern url]\n Purge all cached content for this distribution",
-                    "title": "Purge All",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "All"
-                },
-                "soft_purge": {
-                    "description": "Exclusive with [hard_purge]\n Invalidate the Cache entries",
-                    "title": "Soft Purge",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Soft Purge"
-                },
-                "url": {
-                    "type": "string",
-                    "description": "Exclusive with [hostname pattern purge_all]\n Format: string.\n Purge cache by using a URL path\n\nExample: - \"/path1\"-",
-                    "title": "URL",
-                    "x-displayname": "URL",
-                    "x-ves-example": "/path1"
-                }
-            }
-        },
-        "cdn_loadbalancerLilacCDNCachePurgeResponse": {
-            "type": "object",
-            "description": "Cache Purge message",
-            "title": "Purge Response",
-            "x-displayname": "Cache Purge Response",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeResponse",
-            "properties": {
-                "purge_request_id": {
-                    "type": "integer",
-                    "description": " Request Id to track the status of the purge request",
-                    "title": "Purge Request Id",
-                    "format": "int64",
-                    "x-displayname": "Purge Request Id"
                 }
             }
         },
@@ -3150,13 +3009,184 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Tags",
             "x-ves-proto-enum": "ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsTag"
         },
-        "cdn_loadbalancerListServiceOperationsReq": {
+        "cdn_loadbalancerSubscribeRequest": {
+            "type": "object",
+            "description": "Request to subscribe to CDN Loadbalancer",
+            "title": "SubscribeRequest",
+            "x-displayname": "Subscribe Request",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.SubscribeRequest"
+        },
+        "cdn_loadbalancerSubscribeResponse": {
+            "type": "object",
+            "description": "Response of subscribe to CDN Loadbalancer",
+            "title": "SubscribeResponse",
+            "x-displayname": "Subscribe Response",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.SubscribeResponse"
+        },
+        "cdn_loadbalancerUnsubscribeRequest": {
+            "type": "object",
+            "description": "Request to unsubscribe to CDN Loadbalancer",
+            "title": "UnsubscribeRequest",
+            "x-displayname": "Unsubscribe Request",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.UnsubscribeRequest"
+        },
+        "cdn_loadbalancerUnsubscribeResponse": {
+            "type": "object",
+            "description": "Response of unsubscribe to CDN Loadbalancer",
+            "title": "UnsubscribeResponse",
+            "x-displayname": "Unsubscribe Response",
+            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.UnsubscribeResponse"
+        },
+        "common_cdnGetServiceOperationReq": {
+            "type": "object",
+            "description": "Get Service Operation Request",
+            "title": "Service Operation Request",
+            "x-displayname": "Get Service Operation Request",
+            "x-ves-proto-message": "ves.io.schema.views.common_cdn.GetServiceOperationReq",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the CDN distribution.\n Format: string\n\nExample: - \"cdn-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "CDN Distribution Name",
+                    "x-displayname": "Name of the CDN distribution",
+                    "x-ves-example": "cdn-1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace scope of the operation request\n\nExample: - \"default\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "default",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "service_op_id": {
+                    "type": "integer",
+                    "description": " Operation ID for which status is requested\n\nExample: - \"101\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Service Operation ID",
+                    "format": "int64",
+                    "x-displayname": "Service Operation ID",
+                    "x-ves-example": "101",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "common_cdnGetServiceOperationRsp": {
+            "type": "object",
+            "description": "Get Service Operation Response",
+            "title": "Service Operation Response",
+            "x-displayname": "Service Operation Response",
+            "x-ves-proto-message": "ves.io.schema.views.common_cdn.GetServiceOperationRsp",
+            "properties": {
+                "error": {
+                    "description": " Errors(if any) while listing items from collection ",
+                    "title": "error",
+                    "$ref": "#/definitions/schemaErrorType",
+                    "x-displayname": "Errors"
+                },
+                "items": {
+                    "type": "array",
+                    "description": " items represents the collection in response",
+                    "title": "Serice Operation Status Details",
+                    "items": {
+                        "$ref": "#/definitions/common_cdnServiceOperationItem"
+                    },
+                    "x-displayname": "Operation Status Details"
+                }
+            }
+        },
+        "common_cdnLilacCDNCachePurgeRequest": {
+            "type": "object",
+            "description": "CDN Cache Purge",
+            "title": "Cache Purge Request",
+            "x-displayname": "Cache Purge",
+            "x-ves-oneof-field-pattern_type": "[\"hostname\",\"pattern\",\"purge_all\",\"url\"]",
+            "x-ves-oneof-field-purge_type": "[\"hard_purge\",\"soft_purge\"]",
+            "x-ves-proto-message": "ves.io.schema.views.common_cdn.LilacCDNCachePurgeRequest",
+            "properties": {
+                "hard_purge": {
+                    "description": "Exclusive with [soft_purge]\n Delete the cache entries",
+                    "title": "Hard Purge",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Hard Purge"
+                },
+                "hostname": {
+                    "type": "string",
+                    "description": "Exclusive with [pattern purge_all url]\n Purge cached content by Hostname.\n\nExample: - \"xyz.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.vh_domain: true\n",
+                    "title": "Hostname",
+                    "x-displayname": "Hostname",
+                    "x-ves-example": "xyz.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.vh_domain": "true"
+                    }
+                },
+                "pattern": {
+                    "type": "string",
+                    "description": "Exclusive with [hostname purge_all url]\n Purge cached content using RegEx.\n\nExample: - \"*.ts\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "Regex Pattern to match",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Pattern",
+                    "x-ves-example": "*.ts",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
+                },
+                "purge_all": {
+                    "description": "Exclusive with [hostname pattern url]\n Purge all cached content.",
+                    "title": "Purge All",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "All"
+                },
+                "soft_purge": {
+                    "description": "Exclusive with [hard_purge]\n Invalidate the cache entries",
+                    "title": "Soft Purge",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Soft Purge"
+                },
+                "url": {
+                    "type": "string",
+                    "description": "Exclusive with [hostname pattern purge_all]\n Purge cache by using a URL path\n\nExample: - \"/path1\"-",
+                    "title": "URL",
+                    "x-displayname": "URL",
+                    "x-ves-example": "/path1"
+                }
+            }
+        },
+        "common_cdnLilacCDNCachePurgeResponse": {
+            "type": "object",
+            "description": "Cache Purge message",
+            "title": "Purge Response",
+            "x-displayname": "Cache Purge Response",
+            "x-ves-proto-message": "ves.io.schema.views.common_cdn.LilacCDNCachePurgeResponse",
+            "properties": {
+                "purge_request_id": {
+                    "type": "integer",
+                    "description": " Request Id to track the status of the purge request",
+                    "title": "Purge Request Id",
+                    "format": "int64",
+                    "x-displayname": "Purge Request Id"
+                }
+            }
+        },
+        "common_cdnListServiceOperationsReq": {
             "type": "object",
             "description": "List Service Operations Request",
             "title": "Service Operations Request",
             "x-displayname": "List Service Operations Request",
             "x-ves-oneof-field-options": "[\"lastn\",\"time_range\"]",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsReq",
+            "x-ves-proto-message": "ves.io.schema.views.common_cdn.ListServiceOperationsReq",
             "properties": {
                 "lastn": {
                     "type": "integer",
@@ -3187,17 +3217,17 @@ var CustomAPISwaggerJSON string = `{
                 "time_range": {
                     "description": "Exclusive with [lastn]\n service operations between a start and end time.",
                     "title": "time-range",
-                    "$ref": "#/definitions/cdn_loadbalancerServiceOperationsTimeRange",
+                    "$ref": "#/definitions/common_cdnServiceOperationsTimeRange",
                     "x-displayname": "Time Range"
                 }
             }
         },
-        "cdn_loadbalancerListServiceOperationsRsp": {
+        "common_cdnListServiceOperationsRsp": {
             "type": "object",
             "description": "Get Service Operations Response",
             "title": "Service Operations Response",
             "x-displayname": "Service Operations Response",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsRsp",
+            "x-ves-proto-message": "ves.io.schema.views.common_cdn.ListServiceOperationsRsp",
             "properties": {
                 "error": {
                     "description": " Errors(if any) while listing items from collection",
@@ -3210,18 +3240,18 @@ var CustomAPISwaggerJSON string = `{
                     "description": " items represents the collection in response",
                     "title": "Details of the Service Operation",
                     "items": {
-                        "$ref": "#/definitions/cdn_loadbalancerServiceOperationsItem"
+                        "$ref": "#/definitions/common_cdnServiceOperationsItem"
                     },
                     "x-displayname": "Details of the Service Operation"
                 }
             }
         },
-        "cdn_loadbalancerPurgeOperationItem": {
+        "common_cdnPurgeOperationItem": {
             "type": "object",
             "description": "Purge Operation Status",
             "title": "Purge Operation Status",
             "x-displayname": "Purge Operation Status",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.PurgeOperationItem",
+            "x-ves-proto-message": "ves.io.schema.views.common_cdn.PurgeOperationItem",
             "properties": {
                 "bytes_not_purged": {
                     "type": "string",
@@ -3289,17 +3319,17 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "cdn_loadbalancerServiceOperationItem": {
+        "common_cdnServiceOperationItem": {
             "type": "object",
             "description": "Service Operation Item",
             "title": "Service Operation Item",
             "x-displayname": "Service Operation Item",
             "x-ves-oneof-field-op_status": "[\"purge\"]",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.ServiceOperationItem",
+            "x-ves-proto-message": "ves.io.schema.views.common_cdn.ServiceOperationItem",
             "properties": {
                 "purge": {
                     "description": "Exclusive with []\n",
-                    "$ref": "#/definitions/cdn_loadbalancerPurgeOperationItem"
+                    "$ref": "#/definitions/common_cdnPurgeOperationItem"
                 },
                 "service_op_id": {
                     "type": "integer",
@@ -3317,12 +3347,12 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "cdn_loadbalancerServiceOperationsItem": {
+        "common_cdnServiceOperationsItem": {
             "type": "object",
             "description": "List of Service Operations",
             "title": "Service Operations Item",
             "x-displayname": "List of Service Operations",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.ServiceOperationsItem",
+            "x-ves-proto-message": "ves.io.schema.views.common_cdn.ServiceOperationsItem",
             "properties": {
                 "created_time": {
                     "type": "string",
@@ -3358,12 +3388,12 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "cdn_loadbalancerServiceOperationsTimeRange": {
+        "common_cdnServiceOperationsTimeRange": {
             "type": "object",
             "description": "Option to specify lastn or start-end time.",
             "title": "Service Operations Time Range",
             "x-displayname": "Service Operations Options",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.ServiceOperationsTimeRange",
+            "x-ves-proto-message": "ves.io.schema.views.common_cdn.ServiceOperationsTimeRange",
             "properties": {
                 "finish_time": {
                     "type": "string",
@@ -3390,34 +3420,6 @@ var CustomAPISwaggerJSON string = `{
                     }
                 }
             }
-        },
-        "cdn_loadbalancerSubscribeRequest": {
-            "type": "object",
-            "description": "Request to subscribe to CDN Loadbalancer",
-            "title": "SubscribeRequest",
-            "x-displayname": "Subscribe Request",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.SubscribeRequest"
-        },
-        "cdn_loadbalancerSubscribeResponse": {
-            "type": "object",
-            "description": "Response of subscribe to CDN Loadbalancer",
-            "title": "SubscribeResponse",
-            "x-displayname": "Subscribe Response",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.SubscribeResponse"
-        },
-        "cdn_loadbalancerUnsubscribeRequest": {
-            "type": "object",
-            "description": "Request to unsubscribe to CDN Loadbalancer",
-            "title": "UnsubscribeRequest",
-            "x-displayname": "Unsubscribe Request",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.UnsubscribeRequest"
-        },
-        "cdn_loadbalancerUnsubscribeResponse": {
-            "type": "object",
-            "description": "Response of unsubscribe to CDN Loadbalancer",
-            "title": "UnsubscribeResponse",
-            "x-displayname": "Unsubscribe Response",
-            "x-ves-proto-message": "ves.io.schema.views.cdn_loadbalancer.UnsubscribeResponse"
         },
         "ioschemaEmpty": {
             "type": "object",

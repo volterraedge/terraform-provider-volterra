@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/azure_vnet_sites/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -2579,6 +2592,20 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
                     "x-displayname": "Active Firewall Policies"
                 },
+                "az_nodes": {
+                    "type": "array",
+                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
+                    "title": "Nodes",
+                    "items": {
+                        "$ref": "#/definitions/viewsAzureVnetTwoInterfaceNodeType"
+                    },
+                    "x-displayname": "Ingress/Egress Gateway (two Interface) Nodes in AZ",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.num_items": "1,3"
+                    }
+                },
                 "dc_cluster_group_inside_vn": {
                     "description": "Exclusive with [dc_cluster_group_outside_vn no_dc_cluster_group]\n This site is member of dc cluster group connected via inside network",
                     "title": "Member of DC cluster Group via Inside Network",
@@ -2859,7 +2886,15 @@ var APISwaggerJSON string = `{
             "description": "Single interface Azure ingress site for Alternate Region",
             "title": "Azure Ingress Gateway for Alternate Region",
             "x-displayname": "Azure Ingress Gateway for Alternate Region",
-            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwARReplaceType"
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwARReplaceType",
+            "properties": {
+                "node": {
+                    "description": " Ingress Gateway (One Interface) Node information",
+                    "title": "Node Information",
+                    "$ref": "#/definitions/viewsAzureVnetOneInterfaceNodeARType",
+                    "x-displayname": "Ingress Gateway (One Interface) Node information"
+                }
+            }
         },
         "azure_vnet_siteAzureVnetIngressGwARType": {
             "type": "object",
@@ -2907,7 +2942,23 @@ var APISwaggerJSON string = `{
             "description": "Single interface Azure ingress site",
             "title": "Azure Ingress Gateway",
             "x-displayname": "Azure Ingress Gateway",
-            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwReplaceType"
+            "x-ves-proto-message": "ves.io.schema.views.azure_vnet_site.AzureVnetIngressGwReplaceType",
+            "properties": {
+                "az_nodes": {
+                    "type": "array",
+                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
+                    "title": "Nodes",
+                    "items": {
+                        "$ref": "#/definitions/viewsAzureVnetOneInterfaceNodeType"
+                    },
+                    "x-displayname": "Ingress Gateway (One Interface) Nodes in AZ",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.num_items": "1,3"
+                    }
+                }
+            }
         },
         "azure_vnet_siteAzureVnetIngressGwType": {
             "type": "object",
@@ -3114,6 +3165,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Static Routes"
                 },
+                "node": {
+                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.",
+                    "title": "Node Information",
+                    "$ref": "#/definitions/viewsAzureVnetOneInterfaceNodeARType",
+                    "x-displayname": "Ingress Gateway (One Interface) Node information"
+                },
                 "outside_static_routes": {
                     "description": "Exclusive with [no_outside_static_routes]\n Manage static routes for outside network.",
                     "title": "Manage Static routes",
@@ -3315,6 +3372,20 @@ var APISwaggerJSON string = `{
                     "title": "Manage Firewall Policy",
                     "$ref": "#/definitions/network_firewallActiveNetworkPoliciesType",
                     "x-displayname": "Active Firewall Policies"
+                },
+                "az_nodes": {
+                    "type": "array",
+                    "description": " Only Single AZ or Three AZ(s) nodes are supported currently.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.num_items: 1,3\n",
+                    "title": "Nodes",
+                    "items": {
+                        "$ref": "#/definitions/viewsAzureVnetOneInterfaceNodeType"
+                    },
+                    "x-displayname": "App Stack Cluster (One Interface) Nodes in AZ",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.num_items": "1,3"
+                    }
                 },
                 "dc_cluster_group": {
                     "description": "Exclusive with [no_dc_cluster_group]\n This site is member of dc cluster group via Outside Network",
@@ -6040,7 +6111,7 @@ var APISwaggerJSON string = `{
         },
         "siteSiteState": {
             "type": "string",
-            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration",
+            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.",
             "title": "SiteState",
             "enum": [
                 "ONLINE",
@@ -6051,7 +6122,16 @@ var APISwaggerJSON string = `{
                 "REREGISTRATION",
                 "WAITINGNODES",
                 "DECOMMISSIONING",
-                "WAITING_FOR_REGISTRATION"
+                "WAITING_FOR_REGISTRATION",
+                "ORCHESTRATION_IN_PROGRESS",
+                "ORCHESTRATION_COMPLETE",
+                "ERROR_IN_ORCHESTRATION",
+                "DELETING_CLOUD_RESOURCES",
+                "DELETED_CLOUD_RESOURCES",
+                "ERROR_DELETING_CLOUD_RESOURCES",
+                "VALIDATION_IN_PROGRESS",
+                "VALIDATION_SUCCESS",
+                "VALIDATION_FAILED"
             ],
             "default": "ONLINE",
             "x-displayname": "Site State",

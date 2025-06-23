@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/securemesh_site_v2s/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -3889,16 +3902,6 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_ip_prefix_length": "28"
                     }
                 },
-                "ipv6": {
-                    "type": "string",
-                    "description": " IPv6 subnet prefix for this subnet\n\nExample: - \"1234:568:abcd:9100::/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
-                    "title": "IPv6 Subnet",
-                    "x-displayname": "IPv6 Subnet",
-                    "x-ves-example": "1234:568:abcd:9100::/64",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6_prefix": "true"
-                    }
-                },
                 "name": {
                     "type": "string",
                     "description": "Exclusive with [autogenerate]\n Specify the Subnet Name\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
@@ -3923,6 +3926,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-private_connectivity_choice": "[\"private_connectivity\",\"private_connectivity_disabled\"]",
             "x-ves-oneof-field-security_group_choice": "[\"custom_security_group\",\"f5xc_security_group\"]",
             "x-ves-oneof-field-service_vpc_choice": "[\"new_vpc\",\"vpc_id\"]",
+            "x-ves-oneof-field-site_type": "[\"multiple_interface\",\"single_interface\"]",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.AWSManagedMode",
             "properties": {
                 "aws_cred": {
@@ -4000,17 +4004,17 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.string.max_len": "64"
                     }
                 },
+                "multiple_interface": {
+                    "description": "Exclusive with [single_interface]\n Multiple interface site is useful when site is used as ingress/egress gateway to the VPC.",
+                    "title": "Multiple Interface Site",
+                    "$ref": "#/definitions/securemesh_site_v2MultipleInterface",
+                    "x-displayname": "Multiple Interface"
+                },
                 "new_vpc": {
                     "description": "Exclusive with [vpc_id]\n Details needed to create new VPC",
                     "title": "New VPC",
                     "$ref": "#/definitions/viewsAWSVPCParamsType",
                     "x-displayname": "New VPC"
-                },
-                "node_list": {
-                    "description": " This section will show nodes associated with this site.",
-                    "title": "Nodes",
-                    "$ref": "#/definitions/securemesh_site_v2AWSManagedNodeList",
-                    "x-displayname": "Nodes"
                 },
                 "private_connectivity": {
                     "description": "Exclusive with [private_connectivity_disabled]\n Enable Private Connectivity to Site via CloudLink",
@@ -4023,6 +4027,12 @@ var APISwaggerJSON string = `{
                     "title": "Disable Private Connectivity",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable Private Connectivity"
+                },
+                "single_interface": {
+                    "description": "Exclusive with [multiple_interface]\n One interface site is useful when site is only used as ingress gateway to the VPC.",
+                    "title": "One Interface",
+                    "$ref": "#/definitions/securemesh_site_v2SingleInterface",
+                    "x-displayname": "One Interface"
                 },
                 "tags": {
                     "type": "object",
@@ -4098,12 +4108,14 @@ var APISwaggerJSON string = `{
                 },
                 "type": {
                     "type": "string",
-                    "description": " Type for this Node, can be Control or Worker\n\nExample: - \"Control\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Control\\\",\\\"Worker\\\"]\n",
+                    "description": " Type for this Node, can be Control\n\nExample: - \"Control\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"Control\\\"]\n",
                     "title": "Type",
                     "x-displayname": "Type",
                     "x-ves-example": "Control",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.in": "[\\\"Control\\\",\\\"Worker\\\"]"
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"Control\\\"]"
                     }
                 }
             }
@@ -4117,14 +4129,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "node_list": {
                     "type": "array",
-                    "description": " This section will show nodes associated with this site.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " This section will show nodes associated with this site.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Nodes",
                     "maxItems": 128,
                     "items": {
                         "$ref": "#/definitions/securemesh_site_v2AWSManagedNode"
                     },
                     "x-displayname": "Nodes",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "128",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -4136,22 +4150,9 @@ var APISwaggerJSON string = `{
             "description": "Interfaces belonging to this node",
             "title": "AWSOrchestratedInterface",
             "x-displayname": "Interfaces",
-            "x-ves-oneof-field-monitoring_choice": "[\"monitor\",\"monitor_disabled\"]",
             "x-ves-oneof-field-site_to_site_connectivity_interface_choice": "[\"site_to_site_connectivity_interface_disabled\",\"site_to_site_connectivity_interface_enabled\"]",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.AWSOrchestratedInterface",
             "properties": {
-                "monitor": {
-                    "description": "Exclusive with [monitor_disabled]\n",
-                    "title": "Monitoring enabled",
-                    "$ref": "#/definitions/network_interfaceLinkQualityMonitorConfig",
-                    "x-displayname": "Enabled"
-                },
-                "monitor_disabled": {
-                    "description": "Exclusive with [monitor]\n",
-                    "title": "Monitoring disabled",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disabled"
-                },
                 "mtu": {
                     "type": "integer",
                     "description": " Maximum packet size (Maximum Transfer Unit) of the interface\n When configured, mtu must be between 512 and 16384\n\nExample: - \"1450\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 0,512-16384\n",
@@ -4164,25 +4165,13 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "network_option": {
-                    "description": " Select virtual network (VRF) for this interface.\n There are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.\n A site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.\n Global VRFs are configured via Networking \u003e Segments. A site can have multple Network Segments (global VRFs).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Select virtual network (VRF) for this interface.\n There are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.\n A site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.\n Global VRFs are configured via Networking \u003e Segments. A site can have multiple Network Segments (global VRFs).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Select VRF",
                     "$ref": "#/definitions/viewsNetworkSelectType",
                     "x-displayname": "Select VRF",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "priority": {
-                    "type": "integer",
-                    "description": " For a node, if multiple interfaces are configured in a VRF, interfaces with highest priority will be used as active\n and interfaces with lower priority will be used as backup.\n If multiple interfaces have the same priority, ECMP will be used.\n Greater the value, higher the priority\n\nExample: - \"42\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 255\n",
-                    "title": "Priority",
-                    "format": "int64",
-                    "x-displayname": "Priority",
-                    "x-ves-example": "42",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "255"
                     }
                 },
                 "site_to_site_connectivity_interface_disabled": {
@@ -4255,6 +4244,280 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "securemesh_site_v2AzureManagedMode": {
+            "type": "object",
+            "description": "F5 Distributed Cloud will automate provisioning (ex: node bringup) for this Azure site.",
+            "title": "AzureManagedMode",
+            "x-displayname": "Managed By F5XC",
+            "x-ves-oneof-field-cloud_connect_attachments": "[\"disabled\",\"enabled\"]",
+            "x-ves-oneof-field-site_type": "[\"multiple_interface\",\"single_interface\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.AzureManagedMode",
+            "properties": {
+                "accelerated_networking": {
+                    "description": " Accelerated Networking to reduce Latency, When Mode is toggled, traffic \n disruption will be seen",
+                    "title": "Accelerated Networking",
+                    "$ref": "#/definitions/viewsAcceleratedNetworkingType",
+                    "x-displayname": "Accelerated Networking"
+                },
+                "azure_cred": {
+                    "description": " Reference to Azure credentials for automatic deployment\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Automatic Deployment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Cloud Credentials",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "azure_region": {
+                    "type": "string",
+                    "description": " Name of the azure region which supports availability zones.\n\nExample: - \"eastus\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "Recommended Azure Region Name",
+                    "maxLength": 64,
+                    "x-displayname": "Recommended Azure Region Name",
+                    "x-ves-example": "eastus",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
+                "disabled": {
+                    "description": "Exclusive with [enabled]\n Disable Cloud Connect for this site",
+                    "title": "Disable Cloud Connect for this site",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "disk_size": {
+                    "type": "integer",
+                    "description": " Disk size to be used for this instance in GiB. 80 is 80 GiB\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 64000\n",
+                    "title": "Cloud Disk size",
+                    "format": "int64",
+                    "x-displayname": "Cloud Disk Size",
+                    "x-ves-example": "80",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "64000"
+                    }
+                },
+                "enabled": {
+                    "description": "Exclusive with [disabled]\n Enable Cloud Connect for this site",
+                    "title": "Enable Cloud Connect for this site",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
+                "machine_type": {
+                    "type": "string",
+                    "description": " Select Instance size based on performance needed.\n The default setting for Accelerated Networking is enabled, thus make sure \n you select a Virtual Machine that supports accelerated networking or \n disable the setting under, Select Ingress Gateway or Ingress/Egress Gateway \n \u003e advanced options.\n\nExample: - \"Standard_D3_v2\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "Machine Type",
+                    "maxLength": 64,
+                    "x-displayname": "Azure Machine Type for Node",
+                    "x-ves-example": "Standard_D3_v2",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
+                "multiple_interface": {
+                    "description": "Exclusive with [single_interface]\n Multiple interface site is useful when site is used as ingress/egress gateway to the VNET.",
+                    "title": "Multiple Interface Site",
+                    "$ref": "#/definitions/securemesh_site_v2AzureMultipleInterface",
+                    "x-displayname": "Multiple Interface"
+                },
+                "resource_group": {
+                    "type": "string",
+                    "description": " Azure resource group for resources that will be created\n\nExample: - \"my-resources\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Resource Group",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Resource Group",
+                    "x-ves-example": "my-resources",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "single_interface": {
+                    "description": "Exclusive with [multiple_interface]\n One interface site is useful when site is only used as ingress gateway to the VNET.",
+                    "title": "One Interface",
+                    "$ref": "#/definitions/securemesh_site_v2AzureSingleInterface",
+                    "x-displayname": "One Interface"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " Azure Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in Azure console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 40\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "title": "Azure Tags",
+                    "x-displayname": "Azure Tags",
+                    "x-ves-example": "dev: staging",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "40",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
+                },
+                "vnet": {
+                    "description": " Choice of using existing VNet or create new VNet\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Vnet",
+                    "$ref": "#/definitions/viewsAzureVnetChoiceType",
+                    "x-displayname": "Vnet",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "securemesh_site_v2AzureManagedNode": {
+            "type": "object",
+            "description": "This section will show nodes associated with this site.",
+            "title": "AzureManagedNode",
+            "x-displayname": "Nodes",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.AzureManagedNode",
+            "properties": {
+                "azure_az": {
+                    "type": "string",
+                    "description": " Azure availability zone.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"1\\\",\\\"2\\\",\\\"3\\\"]\n",
+                    "title": "Azure AZ",
+                    "x-displayname": "Azure AZ Name",
+                    "x-ves-example": "1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.in": "[\\\"1\\\",\\\"2\\\",\\\"3\\\"]"
+                    }
+                },
+                "hostname": {
+                    "type": "string",
+                    "description": " Hostname for this Node\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
+                    "title": "Hostname",
+                    "maxLength": 512,
+                    "x-displayname": "Hostname",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
+                },
+                "interface_list": {
+                    "type": "array",
+                    "description": " Interfaces belonging to this node\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 2\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "AzureOrchestratedInterface",
+                    "minItems": 1,
+                    "maxItems": 2,
+                    "items": {
+                        "$ref": "#/definitions/securemesh_site_v2AzureOrchestratedInterface"
+                    },
+                    "x-displayname": "Interfaces",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "2",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "type": {
+                    "type": "string",
+                    "description": " Type for this Node, can be Control\n\nExample: - \"Control\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Type",
+                    "x-displayname": "Type",
+                    "x-ves-example": "Control",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "securemesh_site_v2AzureManagedNodeList": {
+            "type": "object",
+            "description": "This section will show nodes associated with this site.",
+            "title": "AzureManagedNodeList",
+            "x-displayname": "List of Nodes",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.AzureManagedNodeList",
+            "properties": {
+                "node_list": {
+                    "type": "array",
+                    "description": " This section will show nodes associated with this site.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Nodes",
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/securemesh_site_v2AzureManagedNode"
+                    },
+                    "x-displayname": "Nodes",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "securemesh_site_v2AzureMultipleInterface": {
+            "type": "object",
+            "description": "Multiple interface site is useful when site is used as ingress/egress gateway to the VNET.",
+            "title": "Multiple Interface Site",
+            "x-displayname": "Multiple Interface",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.AzureMultipleInterface",
+            "properties": {
+                "node_list": {
+                    "description": " This section will show nodes associated with this site.",
+                    "title": "Nodes",
+                    "$ref": "#/definitions/securemesh_site_v2AzureManagedNodeList",
+                    "x-displayname": "Nodes"
+                }
+            }
+        },
+        "securemesh_site_v2AzureOrchestratedInterface": {
+            "type": "object",
+            "description": "Interfaces belonging to this node",
+            "title": "AzureOrchestratedInterface",
+            "x-displayname": "Interfaces",
+            "x-ves-oneof-field-site_to_site_connectivity_interface_choice": "[\"site_to_site_connectivity_interface_disabled\",\"site_to_site_connectivity_interface_enabled\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.AzureOrchestratedInterface",
+            "properties": {
+                "mtu": {
+                    "type": "integer",
+                    "description": " Maximum packet size (Maximum Transfer Unit) of the interface\n When configured, mtu must be between 512 and 16384\n\nExample: - \"1450\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 0,512-16384\n",
+                    "title": "Maximum Packet Size (MTU)",
+                    "format": "int64",
+                    "x-displayname": "Maximum Packet Size (MTU)",
+                    "x-ves-example": "1450",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.ranges": "0,512-16384"
+                    }
+                },
+                "network_option": {
+                    "description": " Select virtual network (VRF) for this interface.\n There are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.\n A site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.\n Global VRFs are configured via Networking \u003e Segments. A site can have multple Network Segments (global VRFs).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Select VRF",
+                    "$ref": "#/definitions/viewsNetworkSelectType",
+                    "x-displayname": "Select VRF",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "site_to_site_connectivity_interface_disabled": {
+                    "description": "Exclusive with [site_to_site_connectivity_interface_enabled]\n Do not use this interface for site to site connectivity.",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "site_to_site_connectivity_interface_enabled": {
+                    "description": "Exclusive with [site_to_site_connectivity_interface_disabled]\n Use this this interface for site to site connectivity.",
+                    "title": "Enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enabled"
+                },
+                "subnet": {
+                    "description": " Select Existing Subnet or Create New",
+                    "title": "Subnet Choice",
+                    "$ref": "#/definitions/viewssecuremesh_site_v2AzureSubnetChoiceType",
+                    "x-displayname": "Specify Subnet"
+                }
+            }
+        },
         "securemesh_site_v2AzureProviderType": {
             "type": "object",
             "description": "Azure Provider Type",
@@ -4263,11 +4526,32 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-orchestration_choice": "[\"not_managed\"]",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.AzureProviderType",
             "properties": {
+                "managed": {
+                    "description": " F5 Distributed Cloud will automate provisioning (ex: node bringup) for this site.",
+                    "title": "Managed By F5XC",
+                    "$ref": "#/definitions/securemesh_site_v2AzureManagedMode",
+                    "x-displayname": "Managed By F5XC"
+                },
                 "not_managed": {
                     "description": "Exclusive with []\n F5 Distributed Cloud will not automate any provisioning (ex: node bringup) for this site.\n Customers will need to do this either via provider specific manual workflows\n or by using automation tools such as Terraform.",
                     "title": "Not Managed By F5XC",
                     "$ref": "#/definitions/securemesh_site_v2NodeList",
                     "x-displayname": "Not Managed By F5XC"
+                }
+            }
+        },
+        "securemesh_site_v2AzureSingleInterface": {
+            "type": "object",
+            "description": "One interface site is useful when site is only used as ingress gateway to the VNET.",
+            "title": "One Interface",
+            "x-displayname": "One Interface",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.AzureSingleInterface",
+            "properties": {
+                "node_list": {
+                    "description": " This section will show nodes associated with this site.",
+                    "title": "Nodes",
+                    "$ref": "#/definitions/securemesh_site_v2AzureManagedNodeList",
+                    "x-displayname": "Nodes"
                 }
             }
         },
@@ -4433,6 +4717,32 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "securemesh_site_v2CustomProxyBypassSettings": {
+            "type": "object",
+            "description": "List of domains to bypass the proxy",
+            "title": "Proxy Bypass",
+            "x-displayname": "Proxy Bypass",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.CustomProxyBypassSettings",
+            "properties": {
+                "proxy_bypass": {
+                    "type": "array",
+                    "description": " List of domains to bypass the proxy\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname_or_ip: true\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.max_items: 64\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Proxy Bypass",
+                    "maxItems": 64,
+                    "items": {
+                        "type": "string",
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Proxy Bypass",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.hostname_or_ip": "true",
+                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
+                        "ves.io.schema.rules.repeated.max_items": "64",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "securemesh_site_v2DNSNTPServerConfig": {
             "type": "object",
             "description": "Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site.",
@@ -4498,6 +4808,323 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "securemesh_site_v2EquinixProviderType": {
+            "type": "object",
+            "description": "x-displayName: \"Equinix Provider Type\"\nEquinix Provider Type",
+            "title": "Equinix Provider Type",
+            "properties": {
+                "not_managed": {
+                    "description": "x-displayName: \"Not Managed By F5XC\"\nF5 Distributed Cloud will not automate any provisioning (ex: node bringup) for this site.\nCustomers will need to do this either via provider specific manual workflows\nor by using automation tools such as Terraform.",
+                    "title": "Not Managed By F5XC",
+                    "$ref": "#/definitions/securemesh_site_v2NodeList"
+                }
+            }
+        },
+        "securemesh_site_v2GCPCloudSubnetParamType": {
+            "type": "object",
+            "description": "Parameters for creating a new cloud subnet",
+            "title": "Cloud Subnet Param",
+            "x-displayname": "New Cloud Subnet Parameters",
+            "x-ves-displayorder": "1,4",
+            "x-ves-oneof-field-name_choice": "[\"autogenerate\",\"name\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.GCPCloudSubnetParamType",
+            "properties": {
+                "autogenerate": {
+                    "description": "Exclusive with [name]\n This options auto generates a subnet name for your subnet",
+                    "title": "autogenerate",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Autogenerated Subnet Name"
+                },
+                "ipv4": {
+                    "type": "string",
+                    "description": " Enter an IPv4 prefix for this subnet. The IP address must be in a private address space.\n\nExample: - \"10.1.0.0/16\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.max_ip_prefix_length: 28\n  ves.io.schema.rules.string.min_ip_prefix_length: 8\n",
+                    "title": "IPv4 CIDR block",
+                    "x-displayname": "IPv4 Subnet Prefix",
+                    "x-ves-example": "10.1.0.0/16",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.string.max_ip_prefix_length": "28",
+                        "ves.io.schema.rules.string.min_ip_prefix_length": "8"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Exclusive with [autogenerate]\n This options allows you to enter subnet name. \n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "name",
+                    "maxLength": 64,
+                    "x-displayname": "User Specified Subnet Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                }
+            }
+        },
+        "securemesh_site_v2GCPCloudVPCParamsType": {
+            "type": "object",
+            "description": "Parameters to create new GCP VPC",
+            "title": "GCP VPC Parameters",
+            "x-displayname": "GCP VPC Parameters",
+            "x-ves-displayorder": "1",
+            "x-ves-oneof-field-name_choice": "[\"autogenerate\",\"name_tag\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.GCPCloudVPCParamsType",
+            "properties": {
+                "autogenerate": {
+                    "description": "Exclusive with [name_tag]\n With this option the VPC Name is auto generated by F5 Distributed Cloud",
+                    "title": "autogenerate",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Autogenerated Name"
+                },
+                "name_tag": {
+                    "type": "string",
+                    "description": "Exclusive with [autogenerate]\n With this option, user can specify a unique name for VPC.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "name_tag",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "User Specified Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                }
+            }
+        },
+        "securemesh_site_v2GCPManagedMode": {
+            "type": "object",
+            "description": "F5 Distributed Cloud will automate all provisioning (ex: node bringup, cloud route table addition) for this site.",
+            "title": "GCPManagedMode",
+            "x-displayname": "Managed By F5XC",
+            "x-ves-oneof-field-private_connectivity_choice": "[\"private_connectivity\",\"private_connectivity_disabled\"]",
+            "x-ves-oneof-field-site_type": "[\"multiple_interface\",\"single_interface\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.GCPManagedMode",
+            "properties": {
+                "disk_size": {
+                    "type": "integer",
+                    "description": " Select the disk size of the node. The default value is 80GB.\n\nExample: - \"80\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 64000\n",
+                    "title": "Node Disk size",
+                    "format": "int64",
+                    "x-displayname": "Node Disk Size",
+                    "x-ves-example": "80",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "64000"
+                    }
+                },
+                "gcp_cred": {
+                    "description": " Select the GCP cloud credential object using which GCP cloud resources are to be deployed.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Automatic Deployment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Credential Reference",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "gcp_region": {
+                    "type": "string",
+                    "description": " Select the GCP Region where you want to deploy F5 Distributed Cloud Customer Edge site.\n\nExample: - \"us-east-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "GCP Region",
+                    "x-displayname": "GCP Region",
+                    "x-ves-example": "us-east-1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "instance_type": {
+                    "type": "string",
+                    "description": " Select the GCP instance type for deploying nodes of CE (customer edge) site.\n\nExample: - \"a1.xlarge\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "GCP Instance Type",
+                    "maxLength": 64,
+                    "x-displayname": "GCP Instance Type",
+                    "x-ves-example": "a1.xlarge",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
+                "multiple_interface": {
+                    "description": "Exclusive with [single_interface]\n This option deploys the CE (Customer Edge) Site as an ingress/egress gateway.",
+                    "title": "Multiple Interface Site",
+                    "$ref": "#/definitions/securemesh_site_v2GCPMultipleInterface",
+                    "x-displayname": "Multiple Interfaces"
+                },
+                "private_connectivity": {
+                    "description": "Exclusive with [private_connectivity_disabled]\n This option enables private connectivity for this site using Cloudlink.",
+                    "title": "Enable Private Connectivity via CloudLink",
+                    "$ref": "#/definitions/viewsPrivateConnectConfigType",
+                    "x-displayname": "Enable"
+                },
+                "private_connectivity_disabled": {
+                    "description": "Exclusive with [private_connectivity]\n This option disables private connectivity for this site.",
+                    "title": "Disable Private Connectivity",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "single_interface": {
+                    "description": "Exclusive with [multiple_interface]\n This option deploys the CE (Customer Edge) Site as an ingress gateway.",
+                    "title": "One Interface",
+                    "$ref": "#/definitions/securemesh_site_v2GCPSingleInterface",
+                    "x-displayname": "One Interface"
+                },
+                "tags": {
+                    "type": "object",
+                    "description": " GCP Tags is a label consisting of a user-defined key and value.\n It helps to manage, identify, organize, search for, and filter resources in GCP console.\n\nExample: - \"devstaging\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 127\n  ves.io.schema.rules.map.max_pairs: 40\n  ves.io.schema.rules.map.values.string.max_len: 255\n",
+                    "title": "GCP Tags",
+                    "x-displayname": "GCP Tags",
+                    "x-ves-example": "dev: staging",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.map.keys.string.max_len": "127",
+                        "ves.io.schema.rules.map.max_pairs": "40",
+                        "ves.io.schema.rules.map.values.string.max_len": "255"
+                    }
+                }
+            }
+        },
+        "securemesh_site_v2GCPManagedNode": {
+            "type": "object",
+            "description": "This section will show nodes associated with this site.",
+            "title": "GCPManagedNode",
+            "x-displayname": "Nodes",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.GCPManagedNode",
+            "properties": {
+                "gcp_az_name": {
+                    "type": "string",
+                    "description": " Select the GCP availability zone. This must be consistent with the selected GCP region.\n\nExample: - \"us-west-2a\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "GCP AZ",
+                    "x-displayname": "GCP Availability Zone",
+                    "x-ves-example": "us-west-2a",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "hostname": {
+                    "type": "string",
+                    "description": " Hostname for this Node\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n",
+                    "title": "Hostname",
+                    "maxLength": 512,
+                    "x-displayname": "Hostname",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512"
+                    }
+                },
+                "interface_list": {
+                    "type": "array",
+                    "description": " Configure Interfaces for this node\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 2\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "GCPOrchestratedInterface",
+                    "minItems": 1,
+                    "maxItems": 2,
+                    "items": {
+                        "$ref": "#/definitions/securemesh_site_v2GCPOrchestratedInterface"
+                    },
+                    "x-displayname": "Interfaces",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "2",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "securemesh_site_v2GCPManagedNodeList": {
+            "type": "object",
+            "description": "This section will show nodes associated with this site.",
+            "title": "GCPManagedNodeList",
+            "x-displayname": "List of Nodes",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.GCPManagedNodeList",
+            "properties": {
+                "node_list": {
+                    "type": "array",
+                    "description": " This section will show nodes associated with this site.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Nodes",
+                    "maxItems": 128,
+                    "items": {
+                        "$ref": "#/definitions/securemesh_site_v2GCPManagedNode"
+                    },
+                    "x-displayname": "Nodes",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "securemesh_site_v2GCPMultipleInterface": {
+            "type": "object",
+            "description": "This option deploys the CE (Customer Edge) Site as an ingress/egress gateway.",
+            "title": "Multiple Interface Site",
+            "x-displayname": "Multiple Interfaces",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.GCPMultipleInterface",
+            "properties": {
+                "node_list": {
+                    "description": " This section will show nodes associated with this site.",
+                    "title": "Nodes",
+                    "$ref": "#/definitions/securemesh_site_v2GCPManagedNodeList",
+                    "x-displayname": "Nodes"
+                }
+            }
+        },
+        "securemesh_site_v2GCPOrchestratedInterface": {
+            "type": "object",
+            "description": "Interfaces belonging to this node",
+            "title": "GCPOrchestratedInterface",
+            "x-displayname": "Interfaces",
+            "x-ves-oneof-field-site_to_site_connectivity_interface_choice": "[\"site_to_site_connectivity_interface_disabled\",\"site_to_site_connectivity_interface_enabled\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.GCPOrchestratedInterface",
+            "properties": {
+                "mtu": {
+                    "type": "integer",
+                    "description": " Maximum packet size (Maximum Transfer Unit) of the interface\n When configured, mtu must be between 512 and 16384\n\nExample: - \"1450\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 0,512-16384\n",
+                    "title": "Maximum Packet Size (MTU)",
+                    "format": "int64",
+                    "x-displayname": "Maximum Packet Size (MTU)",
+                    "x-ves-example": "1450",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.ranges": "0,512-16384"
+                    }
+                },
+                "network_option": {
+                    "description": " Select virtual network (VRF) for this interface.\n There are 2 kinds of VRFs, local VRFs which are local to the site and global VRFs which extend into multiple sites.\n A site can have 2 Local VRFs, Site Local Outside (SLO), which is required for every site and Site Local Inside (SLI) which is optional.\n Global VRFs are configured via Networking \u003e Segments. A site can have multple Network Segments (global VRFs).\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Select VRF",
+                    "$ref": "#/definitions/viewsNetworkSelectType",
+                    "x-displayname": "Select VRF",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "site_to_site_connectivity_interface_disabled": {
+                    "description": "Exclusive with [site_to_site_connectivity_interface_enabled]\n Do not use this interface for site to site connectivity.",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "site_to_site_connectivity_interface_enabled": {
+                    "description": "Exclusive with [site_to_site_connectivity_interface_disabled]\n Use this this interface for site to site connectivity.",
+                    "title": "Enabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enabled"
+                },
+                "subnet": {
+                    "description": " Provide Subnet details. User can either create a new subnet or use an existing subnet.",
+                    "title": "Subnet Choice",
+                    "$ref": "#/definitions/securemesh_site_v2GCPSubnetChoiceType",
+                    "x-displayname": "Subnet Parameters"
+                },
+                "vpc": {
+                    "description": " Provide VPC details. User can either create a new VPC or use an existing VPC",
+                    "title": "VPC Choice",
+                    "$ref": "#/definitions/securemesh_site_v2GCPVPCChoiceType",
+                    "x-displayname": "VPC Parameters"
+                }
+            }
+        },
         "securemesh_site_v2GCPProviderType": {
             "type": "object",
             "description": "GCP Provider Type",
@@ -4506,11 +5133,90 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-orchestration_choice": "[\"not_managed\"]",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.GCPProviderType",
             "properties": {
+                "managed": {
+                    "description": " F5 Distributed Cloud will automate provisioning (ex: node bringup) for this site.",
+                    "title": "Managed By F5XC",
+                    "$ref": "#/definitions/securemesh_site_v2GCPManagedMode",
+                    "x-displayname": "Managed By F5XC"
+                },
                 "not_managed": {
                     "description": "Exclusive with []\n F5 Distributed Cloud will not automate any provisioning (ex: node bringup) for this site.\n Customers will need to do this either via provider specific manual workflows\n or by using automation tools such as Terraform.",
                     "title": "Not Managed By F5XC",
                     "$ref": "#/definitions/securemesh_site_v2NodeList",
                     "x-displayname": "Not Managed By F5XC"
+                }
+            }
+        },
+        "securemesh_site_v2GCPSingleInterface": {
+            "type": "object",
+            "description": "This option deploys the CE (Customer Edge) Site as an ingress gateway.",
+            "title": "One Interface",
+            "x-displayname": "One Interface",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.GCPSingleInterface",
+            "properties": {
+                "node_list": {
+                    "description": " This section will show nodes associated with this site",
+                    "title": "Nodes",
+                    "$ref": "#/definitions/securemesh_site_v2GCPManagedNodeList",
+                    "x-displayname": "Nodes"
+                }
+            }
+        },
+        "securemesh_site_v2GCPSubnetChoiceType": {
+            "type": "object",
+            "description": "Parameters for subnet",
+            "title": "GCP Subnet",
+            "x-displayname": "GCP Subnet",
+            "x-ves-oneof-field-choice": "[\"existing_subnet_id\",\"subnet_param\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.GCPSubnetChoiceType",
+            "properties": {
+                "existing_subnet_id": {
+                    "type": "string",
+                    "description": "Exclusive with [subnet_param]\n Select this option when you want to use an existing subnet\n\nExample: - \"subnet-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Existing Subnet ID",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Existing Subnet ID",
+                    "x-ves-example": "subnet-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "subnet_param": {
+                    "description": "Exclusive with [existing_subnet_id]\n Select this option when you want a new subnet to be created",
+                    "title": "New Subnet",
+                    "$ref": "#/definitions/securemesh_site_v2GCPCloudSubnetParamType",
+                    "x-displayname": "New Subnet"
+                }
+            }
+        },
+        "securemesh_site_v2GCPVPCChoiceType": {
+            "type": "object",
+            "description": "Parameters for VPC",
+            "title": "GCP VPC",
+            "x-displayname": "GCP VPC",
+            "x-ves-oneof-field-service_vpc_choice": "[\"existing_vpc_id\",\"new_vpc\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.GCPVPCChoiceType",
+            "properties": {
+                "existing_vpc_id": {
+                    "type": "string",
+                    "description": "Exclusive with [new_vpc]\n Select this option when you want to use an existing VPC.\n\nExample: - \"inside-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Existing VPC ID",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Existing VPC ID",
+                    "x-ves-example": "inside-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "new_vpc": {
+                    "description": "Exclusive with [existing_vpc_id]\n Select this option when you want a new VPC to be created.",
+                    "title": "New VPC",
+                    "$ref": "#/definitions/securemesh_site_v2GCPCloudVPCParamsType",
+                    "x-displayname": "New VPC"
                 }
             }
         },
@@ -4953,6 +5659,21 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "securemesh_site_v2MultipleInterface": {
+            "type": "object",
+            "description": "Multiple interface site is useful when site is used as ingress/egress gateway to the VPC.",
+            "title": "Multiple Interface Site",
+            "x-displayname": "Multiple Interface",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.MultipleInterface",
+            "properties": {
+                "node_list": {
+                    "description": " This section will show nodes associated with this site.",
+                    "title": "Nodes",
+                    "$ref": "#/definitions/securemesh_site_v2AWSManagedNodeList",
+                    "x-displayname": "Nodes"
+                }
+            }
+        },
         "securemesh_site_v2NodeList": {
             "type": "object",
             "description": "This section will show nodes associated with this site. Note: For sites that are not orchestrated by F5XC, create nodes in the chosen provider.\nOnce a node is created and registers with the site, it will be shown in this section.",
@@ -5064,6 +5785,21 @@ var APISwaggerJSON string = `{
         "securemesh_site_v2ReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.ReplaceResponse"
+        },
+        "securemesh_site_v2SingleInterface": {
+            "type": "object",
+            "description": "One interface site is useful when site is only used as ingress gateway to the VPC.",
+            "title": "One Interface",
+            "x-displayname": "One Interface",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.SingleInterface",
+            "properties": {
+                "node_list": {
+                    "description": " This section will show nodes associated with this site.",
+                    "title": "Nodes",
+                    "$ref": "#/definitions/securemesh_site_v2AWSManagedNodeList",
+                    "x-displayname": "Nodes"
+                }
+            }
         },
         "securemesh_site_v2SiteMeshGroupType": {
             "type": "object",
@@ -5336,7 +6072,7 @@ var APISwaggerJSON string = `{
         },
         "siteSiteState": {
             "type": "string",
-            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration",
+            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.",
             "title": "SiteState",
             "enum": [
                 "ONLINE",
@@ -5347,7 +6083,16 @@ var APISwaggerJSON string = `{
                 "REREGISTRATION",
                 "WAITINGNODES",
                 "DECOMMISSIONING",
-                "WAITING_FOR_REGISTRATION"
+                "WAITING_FOR_REGISTRATION",
+                "ORCHESTRATION_IN_PROGRESS",
+                "ORCHESTRATION_COMPLETE",
+                "ERROR_IN_ORCHESTRATION",
+                "DELETING_CLOUD_RESOURCES",
+                "DELETED_CLOUD_RESOURCES",
+                "ERROR_DELETING_CLOUD_RESOURCES",
+                "VALIDATION_IN_PROGRESS",
+                "VALIDATION_SUCCESS",
+                "VALIDATION_FAILED"
             ],
             "default": "ONLINE",
             "x-displayname": "Site State",
@@ -5436,6 +6181,28 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsAcceleratedNetworkingType": {
+            "type": "object",
+            "description": "x-required\nAccelerated Networking to reduce Latency, When Mode is toggled, traffic\ndisruption will be seen",
+            "title": "Accelerated Networking Type",
+            "x-displayname": "Accelerated Networking Type",
+            "x-ves-oneof-field-accelerated_networking": "[\"disable\",\"enable\"]",
+            "x-ves-proto-message": "ves.io.schema.views.AcceleratedNetworkingType",
+            "properties": {
+                "disable": {
+                    "description": "Exclusive with [enable]\n\n Site not optimized for accelerated networking. All networking traffic in and\n out of the VM traverses the host and the virtual switch on Azure hosting\n infrastructure.",
+                    "title": "Disable Accelerated Networking",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Accelerated Networking"
+                },
+                "enable": {
+                    "description": "Exclusive with [disable]\n\n Enable Accelerated Networking- Site optimized for accelerated networking.\n All Network traffic that arrives at the VM's network interface (NIC) is\n forwarded directly to the VM on Azure hosting infrastructure,  greatly\n improving networking performance",
+                    "title": "Enable Accelerated Networking",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable Accelerated Networking"
+                }
+            }
+        },
         "viewsAdminUserCredentialsType": {
             "type": "object",
             "description": "Setup user credentials to manage access to nodes belonging to the site.\nWhen configured, 'admin' user will be setup and customers can access these nodes via\neither the node local WebUI or via SSH to access shell/CLI\nEnsure 'Node Local Services' are enabled to allow for required access",
@@ -5458,6 +6225,123 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "ssh-rsa AAAAB...",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "8192"
+                    }
+                }
+            }
+        },
+        "viewsAzureVnetChoiceType": {
+            "type": "object",
+            "description": "This defines choice about Azure Vnet for a view",
+            "title": "Azure Vnet choice",
+            "x-displayname": "Azure Vnet choice",
+            "x-ves-oneof-field-choice": "[\"existing_vnet\",\"new_vnet\"]",
+            "x-ves-proto-message": "ves.io.schema.views.AzureVnetChoiceType",
+            "properties": {
+                "existing_vnet": {
+                    "description": "Exclusive with [new_vnet]\n Information about existing Vnet",
+                    "title": "Existing VPC",
+                    "$ref": "#/definitions/viewsAzureVnetType",
+                    "x-displayname": "Existing Vnet"
+                },
+                "new_vnet": {
+                    "description": "Exclusive with [existing_vnet]\n Parameters for creating new Vnet",
+                    "title": "New VPC",
+                    "$ref": "#/definitions/viewsAzureVnetParamsType",
+                    "x-displayname": "New Vnet Parameters"
+                }
+            }
+        },
+        "viewsAzureVnetParamsType": {
+            "type": "object",
+            "description": "Parameters to create a new Azure Vnet",
+            "title": "Azure Vnet Parameters",
+            "x-displayname": "Azure Vnet Parameters",
+            "x-ves-displayorder": "3,2",
+            "x-ves-oneof-field-name_choice": "[\"autogenerate\",\"name\"]",
+            "x-ves-proto-message": "ves.io.schema.views.AzureVnetParamsType",
+            "properties": {
+                "autogenerate": {
+                    "description": "Exclusive with [name]\n Autogenerate the Vnet Name",
+                    "title": "autogenerate",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Autogenerate Vnet Name"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Exclusive with [autogenerate]\n Specify the Vnet Name\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Choose Vnet Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "primary_ipv4": {
+                    "type": "string",
+                    "description": " IPv4 CIDR block for this Vnet. It has to be private address space.\n\nExample: - \"10.1.0.0/16\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.max_ip_prefix_length: 28\n  ves.io.schema.rules.string.min_ip_prefix_length: 8\n",
+                    "title": "IPv4 CIDR block",
+                    "x-displayname": "IPv4 CIDR block",
+                    "x-ves-example": "10.1.0.0/16",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.string.max_ip_prefix_length": "28",
+                        "ves.io.schema.rules.string.min_ip_prefix_length": "8"
+                    }
+                }
+            }
+        },
+        "viewsAzureVnetType": {
+            "type": "object",
+            "description": "Resource group and name of existing Azure Vnet",
+            "title": "Azure Existing Vnet Type",
+            "x-displayname": "Azure Existing Vnet Type",
+            "x-ves-oneof-field-routing_type": "[\"f5_orchestrated_routing\",\"manual_routing\"]",
+            "x-ves-proto-message": "ves.io.schema.views.AzureVnetType",
+            "properties": {
+                "f5_orchestrated_routing": {
+                    "description": "Exclusive with [manual_routing]\n F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE.",
+                    "title": "F5 Orchestrated Routing",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "F5 Orchestrated Routing"
+                },
+                "manual_routing": {
+                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. ",
+                    "title": "Manual Routing",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Manual Routing"
+                },
+                "resource_group": {
+                    "type": "string",
+                    "description": " Resource group of existing Vnet\n\nExample: - \"MyResourceGroup\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Existing Vnet Resource Group",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Existing Vnet Resource Group",
+                    "x-ves-example": "MyResourceGroup",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "vnet_name": {
+                    "type": "string",
+                    "description": " Name of existing Vnet\n\nExample: - \"MyVnet\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "Existing Vnet Name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Existing Vnet Name",
+                    "x-ves-example": "MyVnet",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 }
             }
@@ -5689,28 +6573,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "viewsProactiveMonitoringChoice": {
-            "type": "object",
-            "description": "Enable proactive collection of debuglogs from this Customer Edge site to enable faster troubleshooting and issue resolution.\nWhen enabled, nodes of this Customer Edge site will be able to stream required service debug logs to F5 Distributed Cloud.\nWhen disabled, nodes of this Customer Edge site will not be able to send any debug logs and might cause delays in troubleshooting and issue resolution.\nIt is recommended to have this setting enabled.\nNote: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted.",
-            "title": "Proactive Monitoring",
-            "x-displayname": "Proactive Monitoring",
-            "x-ves-oneof-field-proactive_monitoring_choice": "[\"proactive_monitoring_disable\",\"proactive_monitoring_enable\"]",
-            "x-ves-proto-message": "ves.io.schema.views.ProactiveMonitoringChoice",
-            "properties": {
-                "proactive_monitoring_disable": {
-                    "description": "Exclusive with [proactive_monitoring_enable]\n Disable Proactive Monitoring",
-                    "title": "disable",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disable"
-                },
-                "proactive_monitoring_enable": {
-                    "description": "Exclusive with [proactive_monitoring_disable]\n Enable Proactive Monitoring",
-                    "title": "enable",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Enable"
-                }
-            }
-        },
         "viewsRegionalEdgeSelection": {
             "type": "object",
             "description": "Selection criteria to connect the site with F5 Distributed Cloud Regional Edge(s).",
@@ -5767,6 +6629,29 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsSiteError": {
+            "type": "object",
+            "description": "Site Error",
+            "title": "Site Error",
+            "x-displayname": "Site Error",
+            "x-ves-proto-message": "ves.io.schema.views.SiteError",
+            "properties": {
+                "error_description": {
+                    "type": "string",
+                    "description": " Error Description \n\nExample: - \"invalid VPC ID\"-",
+                    "title": "Error Description",
+                    "x-displayname": "Error Description",
+                    "x-ves-example": "invalid VPC ID"
+                },
+                "suggested_action": {
+                    "type": "string",
+                    "description": " Suggested Action \n\nExample: - \"update VPC ID\"-",
+                    "title": "Suggested Action",
+                    "x-displayname": "Suggested Action",
+                    "x-ves-example": "update VPC ID"
+                }
+            }
+        },
         "viewsSpecificRE": {
             "type": "object",
             "description": "Select specific REs. This is useful when a site needs to deterministically connect to a set of REs. A site will always be connected to 2 REs.",
@@ -5816,6 +6701,107 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewssecuremesh_site_v2AzureSubnetChoiceType": {
+            "type": "object",
+            "description": "Parameters for Azure subnet",
+            "title": "Azure Cloud Subnet",
+            "x-displayname": "Azure Subnet",
+            "x-ves-oneof-field-choice": "[\"existing_subnet\",\"subnet_param\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.AzureSubnetChoiceType",
+            "properties": {
+                "existing_subnet": {
+                    "description": "Exclusive with [subnet_param]\n Information about existing subnet.\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Existing Subnet",
+                    "$ref": "#/definitions/viewssecuremesh_site_v2AzureSubnetType",
+                    "x-displayname": "Existing Subnet",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "subnet_param": {
+                    "description": "Exclusive with [existing_subnet]\n Parameters for creating new subnet.\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "New Subnet",
+                    "$ref": "#/definitions/viewssecuremesh_site_v2CloudSubnetParamType",
+                    "x-displayname": "New Subnet",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "viewssecuremesh_site_v2AzureSubnetType": {
+            "type": "object",
+            "description": "Parameters for Azure subnet",
+            "title": "Azure Cloud Subnet",
+            "x-displayname": "Azure Subnet",
+            "x-ves-displayorder": "3,1",
+            "x-ves-oneof-field-resource_group_choice": "[\"vnet_resource_group\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.AzureSubnetType",
+            "properties": {
+                "subnet_name": {
+                    "type": "string",
+                    "description": " Name of existing subnet.\n\nExample: - \"MySubnet\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "title": "Existing Subnet Name",
+                    "maxLength": 64,
+                    "x-displayname": "Subnet Name",
+                    "x-ves-example": "MySubnet",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "64"
+                    }
+                },
+                "vnet_resource_group": {
+                    "description": "Exclusive with []\n Use the same Resource Group as the Vnet",
+                    "title": "vnet_resource_group",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Vnet Resource Group"
+                }
+            }
+        },
+        "viewssecuremesh_site_v2CloudSubnetParamType": {
+            "type": "object",
+            "description": "Parameters for creating a new cloud subnet",
+            "title": "Cloud Subnet Param",
+            "x-displayname": "New Cloud Subnet Parameters",
+            "x-ves-displayorder": "1,2",
+            "x-ves-oneof-field-name_choice": "[\"autogenerate\",\"name\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.CloudSubnetParamType",
+            "properties": {
+                "autogenerate": {
+                    "description": "Exclusive with [name]\n Autogenerate Subnet Name",
+                    "title": "autogenerate",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Autogenerate Subnet Name"
+                },
+                "ipv4": {
+                    "type": "string",
+                    "description": " IPv4 subnet prefix for this subnet\n\nExample: - \"10.1.2.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.max_ip_prefix_length: 28\n",
+                    "title": "IPv4 Subnet",
+                    "x-displayname": "IPv4 Subnet",
+                    "x-ves-example": "10.1.2.0/24",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.string.max_ip_prefix_length": "28"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Exclusive with [autogenerate]\n Specify the Subnet Name\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.pattern: ^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 64,
+                    "x-displayname": "Choose Subnet Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.pattern": "^(subnet-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                }
+            }
+        },
         "viewssecuremesh_site_v2CreateSpecType": {
             "type": "object",
             "description": "Shape of the Secure Mesh site specification",
@@ -5828,6 +6814,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-network_policy_choice": "[\"active_enhanced_firewall_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-node_ha_choice": "[\"disable_ha\",\"enable_ha\"]",
             "x-ves-oneof-field-provider_choice": "[\"aws\",\"azure\",\"gcp\",\"kvm\",\"nutanix\",\"oci\",\"openstack\",\"rseries\",\"vmware\"]",
+            "x-ves-oneof-field-proxy_bypass_choice": "[\"custom_proxy_bypass\",\"no_proxy_bypass\"]",
             "x-ves-oneof-field-s2s_connectivity_sli_choice": "[\"dc_cluster_group_sli\",\"no_s2s_connectivity_sli\"]",
             "x-ves-oneof-field-s2s_connectivity_slo_choice": "[\"dc_cluster_group_slo\",\"no_s2s_connectivity_slo\",\"site_mesh_group_on_slo\"]",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.CreateSpecType",
@@ -5872,6 +6859,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/securemesh_site_v2CustomProxy",
                     "x-displayname": "Custom Enterprise Proxy"
                 },
+                "custom_proxy_bypass": {
+                    "description": "Exclusive with [no_proxy_bypass]\n User specified domains will bypass the proxy",
+                    "$ref": "#/definitions/securemesh_site_v2CustomProxyBypassSettings",
+                    "x-displayname": "Custom"
+                },
                 "dc_cluster_group_sli": {
                     "description": "Exclusive with [no_s2s_connectivity_sli]\n Use a DC Cluster Group to connect to other sites.",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
@@ -5905,7 +6897,7 @@ var APISwaggerJSON string = `{
                 "gcp": {
                     "description": "Exclusive with [aws azure kvm nutanix oci openstack rseries vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2GCPProviderType",
-                    "x-displayname": "GCP (EA)"
+                    "x-displayname": "GCP"
                 },
                 "kvm": {
                     "description": "Exclusive with [aws azure gcp nutanix oci openstack rseries vmware]\n",
@@ -5942,6 +6934,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "no_proxy_bypass": {
+                    "description": "Exclusive with [custom_proxy_bypass]\n No domains will bypass the proxy",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
+                },
                 "no_s2s_connectivity_sli": {
                     "description": "Exclusive with [dc_cluster_group_sli]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -5955,12 +6952,12 @@ var APISwaggerJSON string = `{
                 "nutanix": {
                     "description": "Exclusive with [aws azure gcp kvm oci openstack rseries vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2NutanixProviderType",
-                    "x-displayname": "Nutanix (EA)"
+                    "x-displayname": "Nutanix"
                 },
                 "oci": {
                     "description": "Exclusive with [aws azure gcp kvm nutanix openstack rseries vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OCIProviderType",
-                    "x-displayname": "OCI (EA)"
+                    "x-displayname": "OCI"
                 },
                 "offline_survivability_mode": {
                     "description": " Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC).\n When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline.\n The certificates needed to keep the services running on this site are signed using a local CA.\n Secrets would also be cached locally to handle any connectivity loss.\n When the mode is toggled, services will restart and traffic disruption will be seen.",
@@ -5970,17 +6967,12 @@ var APISwaggerJSON string = `{
                 "openstack": {
                     "description": "Exclusive with [aws azure gcp kvm nutanix oci rseries vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OpenstackProviderType",
-                    "x-displayname": "Openstack (EA)"
+                    "x-displayname": "OpenStack"
                 },
                 "performance_enhancement_mode": {
                     "description": " Optimize the site for L3 or L7 traffic processing. By default, the site is optimized for L7 traffic processing.",
                     "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
                     "x-displayname": "Performance Enhancement Mode"
-                },
-                "proactive_monitoring": {
-                    "description": " Enable proactive collection of debuglogs from this Customer Edge site to enable faster troubleshooting and issue resolution.\n When enabled, nodes of this Customer Edge site will be able to stream required service debug logs to F5 Distributed Cloud.\n When disabled, nodes of this Customer Edge site will not be able to send any debug logs and might cause delays in troubleshooting and issue resolution.\n It is recommended to have this setting enabled.\n Note: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted.",
-                    "$ref": "#/definitions/viewsProactiveMonitoringChoice",
-                    "x-displayname": "Proactive Monitoring"
                 },
                 "re_select": {
                     "description": " Selection criteria to connect the site with F5 Distributed Cloud Regional Edge(s).",
@@ -6075,6 +7067,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-network_policy_choice": "[\"active_enhanced_firewall_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-node_ha_choice": "[\"disable_ha\",\"enable_ha\"]",
             "x-ves-oneof-field-provider_choice": "[\"aws\",\"azure\",\"gcp\",\"kvm\",\"nutanix\",\"oci\",\"openstack\",\"rseries\",\"vmware\"]",
+            "x-ves-oneof-field-proxy_bypass_choice": "[\"custom_proxy_bypass\",\"no_proxy_bypass\"]",
             "x-ves-oneof-field-s2s_connectivity_sli_choice": "[\"dc_cluster_group_sli\",\"no_s2s_connectivity_sli\"]",
             "x-ves-oneof-field-s2s_connectivity_slo_choice": "[\"dc_cluster_group_slo\",\"no_s2s_connectivity_slo\",\"site_mesh_group_on_slo\"]",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.GetSpecType",
@@ -6119,6 +7112,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/securemesh_site_v2CustomProxy",
                     "x-displayname": "Custom Enterprise Proxy"
                 },
+                "custom_proxy_bypass": {
+                    "description": "Exclusive with [no_proxy_bypass]\n User specified domains will bypass the proxy",
+                    "$ref": "#/definitions/securemesh_site_v2CustomProxyBypassSettings",
+                    "x-displayname": "Custom"
+                },
                 "dc_cluster_group_sli": {
                     "description": "Exclusive with [no_s2s_connectivity_sli]\n Use a DC Cluster Group to connect to other sites.",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
@@ -6152,7 +7150,7 @@ var APISwaggerJSON string = `{
                 "gcp": {
                     "description": "Exclusive with [aws azure kvm nutanix oci openstack rseries vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2GCPProviderType",
-                    "x-displayname": "GCP (EA)"
+                    "x-displayname": "GCP"
                 },
                 "kvm": {
                     "description": "Exclusive with [aws azure gcp nutanix oci openstack rseries vmware]\n",
@@ -6189,6 +7187,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "no_proxy_bypass": {
+                    "description": "Exclusive with [custom_proxy_bypass]\n No domains will bypass the proxy",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
+                },
                 "no_s2s_connectivity_sli": {
                     "description": "Exclusive with [dc_cluster_group_sli]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -6202,12 +7205,12 @@ var APISwaggerJSON string = `{
                 "nutanix": {
                     "description": "Exclusive with [aws azure gcp kvm oci openstack rseries vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2NutanixProviderType",
-                    "x-displayname": "Nutanix (EA)"
+                    "x-displayname": "Nutanix"
                 },
                 "oci": {
                     "description": "Exclusive with [aws azure gcp kvm nutanix openstack rseries vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OCIProviderType",
-                    "x-displayname": "OCI (EA)"
+                    "x-displayname": "OCI"
                 },
                 "offline_survivability_mode": {
                     "description": " Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC).\n When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline.\n The certificates needed to keep the services running on this site are signed using a local CA.\n Secrets would also be cached locally to handle any connectivity loss.\n When the mode is toggled, services will restart and traffic disruption will be seen.",
@@ -6217,7 +7220,7 @@ var APISwaggerJSON string = `{
                 "openstack": {
                     "description": "Exclusive with [aws azure gcp kvm nutanix oci rseries vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OpenstackProviderType",
-                    "x-displayname": "Openstack (EA)"
+                    "x-displayname": "OpenStack"
                 },
                 "operating_system_version": {
                     "type": "string",
@@ -6234,11 +7237,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
                     "x-displayname": "Performance Enhancement Mode"
                 },
-                "proactive_monitoring": {
-                    "description": " Enable proactive collection of debuglogs from this Customer Edge site to enable faster troubleshooting and issue resolution.\n When enabled, nodes of this Customer Edge site will be able to stream required service debug logs to F5 Distributed Cloud.\n When disabled, nodes of this Customer Edge site will not be able to send any debug logs and might cause delays in troubleshooting and issue resolution.\n It is recommended to have this setting enabled.\n Note: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted.",
-                    "$ref": "#/definitions/viewsProactiveMonitoringChoice",
-                    "x-displayname": "Proactive Monitoring"
-                },
                 "re_select": {
                     "description": " Selection criteria to connect the site with F5 Distributed Cloud Regional Edge(s).",
                     "$ref": "#/definitions/viewsRegionalEdgeSelection",
@@ -6248,6 +7246,15 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [aws azure gcp kvm nutanix oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2RSeriesProviderType",
                     "x-displayname": "F5 rSeries (EA)"
+                },
+                "site_errors": {
+                    "type": "array",
+                    "description": " Errors on site including suggested action\n\nExample: - \"Site Errors\"-",
+                    "items": {
+                        "$ref": "#/definitions/viewsSiteError"
+                    },
+                    "x-displayname": "Site Errors",
+                    "x-ves-example": "Site Errors"
                 },
                 "site_mesh_group_on_slo": {
                     "description": "Exclusive with [dc_cluster_group_slo no_s2s_connectivity_slo]\n Use a Site Mesh Group to connect to other sites.",
@@ -6369,6 +7376,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-network_policy_choice": "[\"active_enhanced_firewall_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-node_ha_choice": "[\"disable_ha\",\"enable_ha\"]",
             "x-ves-oneof-field-provider_choice": "[\"aws\",\"azure\",\"gcp\",\"kvm\",\"nutanix\",\"oci\",\"openstack\",\"rseries\",\"vmware\"]",
+            "x-ves-oneof-field-proxy_bypass_choice": "[\"custom_proxy_bypass\",\"no_proxy_bypass\"]",
             "x-ves-oneof-field-s2s_connectivity_sli_choice": "[\"dc_cluster_group_sli\",\"no_s2s_connectivity_sli\"]",
             "x-ves-oneof-field-s2s_connectivity_slo_choice": "[\"dc_cluster_group_slo\",\"no_s2s_connectivity_slo\",\"site_mesh_group_on_slo\"]",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.ReplaceSpecType",
@@ -6413,6 +7421,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/securemesh_site_v2CustomProxy",
                     "x-displayname": "Custom Enterprise Proxy"
                 },
+                "custom_proxy_bypass": {
+                    "description": "Exclusive with [no_proxy_bypass]\n User specified domains will bypass the proxy",
+                    "$ref": "#/definitions/securemesh_site_v2CustomProxyBypassSettings",
+                    "x-displayname": "Custom"
+                },
                 "dc_cluster_group_sli": {
                     "description": "Exclusive with [no_s2s_connectivity_sli]\n Use a DC Cluster Group to connect to other sites.",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
@@ -6446,7 +7459,7 @@ var APISwaggerJSON string = `{
                 "gcp": {
                     "description": "Exclusive with [aws azure kvm nutanix oci openstack rseries vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2GCPProviderType",
-                    "x-displayname": "GCP (EA)"
+                    "x-displayname": "GCP"
                 },
                 "kvm": {
                     "description": "Exclusive with [aws azure gcp nutanix oci openstack rseries vmware]\n",
@@ -6483,6 +7496,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "no_proxy_bypass": {
+                    "description": "Exclusive with [custom_proxy_bypass]\n No domains will bypass the proxy",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
+                },
                 "no_s2s_connectivity_sli": {
                     "description": "Exclusive with [dc_cluster_group_sli]\n",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -6496,12 +7514,12 @@ var APISwaggerJSON string = `{
                 "nutanix": {
                     "description": "Exclusive with [aws azure gcp kvm oci openstack rseries vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2NutanixProviderType",
-                    "x-displayname": "Nutanix (EA)"
+                    "x-displayname": "Nutanix"
                 },
                 "oci": {
                     "description": "Exclusive with [aws azure gcp kvm nutanix openstack rseries vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OCIProviderType",
-                    "x-displayname": "OCI (EA)"
+                    "x-displayname": "OCI"
                 },
                 "offline_survivability_mode": {
                     "description": " Offline Survivability allows the Site to continue functioning normally without traffic loss during periods of connectivity loss to the Regional Edge (RE) or the Global Controller (GC).\n When this feature is enabled, a site can continue to function as is with existing configuration for upto 7 days, even when the site is offline.\n The certificates needed to keep the services running on this site are signed using a local CA.\n Secrets would also be cached locally to handle any connectivity loss.\n When the mode is toggled, services will restart and traffic disruption will be seen.",
@@ -6511,17 +7529,12 @@ var APISwaggerJSON string = `{
                 "openstack": {
                     "description": "Exclusive with [aws azure gcp kvm nutanix oci rseries vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OpenstackProviderType",
-                    "x-displayname": "Openstack (EA)"
+                    "x-displayname": "OpenStack"
                 },
                 "performance_enhancement_mode": {
                     "description": " Optimize the site for L3 or L7 traffic processing. By default, the site is optimized for L7 traffic processing.",
                     "$ref": "#/definitions/viewsPerformanceEnhancementModeType",
                     "x-displayname": "Performance Enhancement Mode"
-                },
-                "proactive_monitoring": {
-                    "description": " Enable proactive collection of debuglogs from this Customer Edge site to enable faster troubleshooting and issue resolution.\n When enabled, nodes of this Customer Edge site will be able to stream required service debug logs to F5 Distributed Cloud.\n When disabled, nodes of this Customer Edge site will not be able to send any debug logs and might cause delays in troubleshooting and issue resolution.\n It is recommended to have this setting enabled.\n Note: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted.",
-                    "$ref": "#/definitions/viewsProactiveMonitoringChoice",
-                    "x-displayname": "Proactive Monitoring"
                 },
                 "re_select": {
                     "description": " Selection criteria to connect the site with F5 Distributed Cloud Regional Edge(s).",

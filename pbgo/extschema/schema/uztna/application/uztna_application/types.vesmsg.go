@@ -356,7 +356,7 @@ func (m *CreateSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
 		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "bigip_instance_site.Object",
+			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
 			RefdTenant: ref.Tenant,
 			RefdNS:     ref.Namespace,
@@ -372,9 +372,9 @@ func (m *CreateSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 // GetLocationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *CreateSpecType) GetLocationDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "bigip_instance_site.Object")
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_instance_site")
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
 	for _, ref := range m.GetLocation() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
@@ -536,54 +536,6 @@ func (v *ValidateCreateSpecType) AppTagsValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) LocationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for location")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for location")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated location")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items location")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) ExtendedAppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -715,6 +667,54 @@ func (v *ValidateCreateSpecType) UztnaDomainRefValidationRuleHandler(rules map[s
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items uztna_domain_ref")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) LocationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for location")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for location")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated location")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items location")
 		}
 		return nil
 	}
@@ -876,18 +876,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["app_tags"] = vFn
 
-	vrhLocation := v.LocationValidationRuleHandler
-	rulesLocation := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhLocation(rulesLocation)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.location: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["location"] = vFn
-
 	vrhExtendedAppTags := v.ExtendedAppTagsValidationRuleHandler
 	rulesExtendedAppTags := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.max_len": "256",
@@ -921,6 +909,18 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["uztna_domain_ref"] = vFn
+
+	vrhLocation := v.LocationValidationRuleHandler
+	rulesLocation := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhLocation(rulesLocation)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.location: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["location"] = vFn
 
 	v.FldValidators["protocol"] = ProtocolValidator().Validate
 
@@ -1069,7 +1069,7 @@ func (m *GetSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
 		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "bigip_instance_site.Object",
+			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
 			RefdTenant: ref.Tenant,
 			RefdNS:     ref.Namespace,
@@ -1085,9 +1085,9 @@ func (m *GetSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 // GetLocationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GetSpecType) GetLocationDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "bigip_instance_site.Object")
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_instance_site")
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
 	for _, ref := range m.GetLocation() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
@@ -1249,54 +1249,6 @@ func (v *ValidateGetSpecType) AppTagsValidationRuleHandler(rules map[string]stri
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) LocationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for location")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for location")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated location")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items location")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGetSpecType) ExtendedAppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -1428,6 +1380,54 @@ func (v *ValidateGetSpecType) UztnaDomainRefValidationRuleHandler(rules map[stri
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items uztna_domain_ref")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) LocationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for location")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for location")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated location")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items location")
 		}
 		return nil
 	}
@@ -1589,18 +1589,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["app_tags"] = vFn
 
-	vrhLocation := v.LocationValidationRuleHandler
-	rulesLocation := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhLocation(rulesLocation)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.location: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["location"] = vFn
-
 	vrhExtendedAppTags := v.ExtendedAppTagsValidationRuleHandler
 	rulesExtendedAppTags := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.max_len": "256",
@@ -1634,6 +1622,18 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["uztna_domain_ref"] = vFn
+
+	vrhLocation := v.LocationValidationRuleHandler
+	rulesLocation := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhLocation(rulesLocation)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.location: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["location"] = vFn
 
 	v.FldValidators["protocol"] = ProtocolValidator().Validate
 
@@ -1782,7 +1782,7 @@ func (m *GlobalSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
 		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "bigip_instance_site.Object",
+			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
 			RefdTenant: ref.Tenant,
 			RefdNS:     ref.Namespace,
@@ -1798,9 +1798,9 @@ func (m *GlobalSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 // GetLocationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetLocationDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "bigip_instance_site.Object")
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_instance_site")
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
 	for _, ref := range m.GetLocation() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
@@ -1962,54 +1962,6 @@ func (v *ValidateGlobalSpecType) AppTagsValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) LocationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for location")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for location")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated location")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items location")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGlobalSpecType) ExtendedAppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -2141,6 +2093,54 @@ func (v *ValidateGlobalSpecType) UztnaDomainRefValidationRuleHandler(rules map[s
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items uztna_domain_ref")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) LocationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for location")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for location")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated location")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items location")
 		}
 		return nil
 	}
@@ -2302,18 +2302,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["app_tags"] = vFn
 
-	vrhLocation := v.LocationValidationRuleHandler
-	rulesLocation := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhLocation(rulesLocation)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.location: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["location"] = vFn
-
 	vrhExtendedAppTags := v.ExtendedAppTagsValidationRuleHandler
 	rulesExtendedAppTags := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.max_len": "256",
@@ -2347,6 +2335,18 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["uztna_domain_ref"] = vFn
+
+	vrhLocation := v.LocationValidationRuleHandler
+	rulesLocation := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhLocation(rulesLocation)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.location: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["location"] = vFn
 
 	v.FldValidators["protocol"] = ProtocolValidator().Validate
 
@@ -3019,7 +3019,7 @@ func (m *ReplaceSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
 		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "bigip_instance_site.Object",
+			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
 			RefdTenant: ref.Tenant,
 			RefdNS:     ref.Namespace,
@@ -3035,9 +3035,9 @@ func (m *ReplaceSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 // GetLocationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *ReplaceSpecType) GetLocationDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "bigip_instance_site.Object")
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_instance_site")
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
 	for _, ref := range m.GetLocation() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
@@ -3199,54 +3199,6 @@ func (v *ValidateReplaceSpecType) AppTagsValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) LocationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for location")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for location")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated location")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items location")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) ExtendedAppTagsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepStringItemRules(rules)
@@ -3378,6 +3330,54 @@ func (v *ValidateReplaceSpecType) UztnaDomainRefValidationRuleHandler(rules map[
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items uztna_domain_ref")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) LocationValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for location")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for location")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated location")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items location")
 		}
 		return nil
 	}
@@ -3539,18 +3539,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["app_tags"] = vFn
 
-	vrhLocation := v.LocationValidationRuleHandler
-	rulesLocation := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhLocation(rulesLocation)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.location: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["location"] = vFn
-
 	vrhExtendedAppTags := v.ExtendedAppTagsValidationRuleHandler
 	rulesExtendedAppTags := map[string]string{
 		"ves.io.schema.rules.repeated.items.string.max_len": "256",
@@ -3584,6 +3572,18 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["uztna_domain_ref"] = vFn
+
+	vrhLocation := v.LocationValidationRuleHandler
+	rulesLocation := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhLocation(rulesLocation)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.location: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["location"] = vFn
 
 	v.FldValidators["protocol"] = ProtocolValidator().Validate
 

@@ -15,7 +15,6 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_route "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
 )
 
@@ -123,42 +122,6 @@ func resourceVolterraRoute() *schema.Resource {
 
 							Type:     schema.TypeBool,
 							Optional: true,
-						},
-
-						"bot_defense_javascript_injection_inline_mode": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"element_selector": {
-										Type:       schema.TypeString,
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"insert_content": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"position": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-								},
-							},
-						},
-
-						"disable_custom_script": {
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"disable_location_add": {
@@ -304,21 +267,21 @@ func resourceVolterraRoute() *schema.Resource {
 							},
 						},
 
-						"request_headers_to_add": {
+						"request_cookies_to_add": {
 
 							Type:     schema.TypeList,
 							Optional: true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"append": {
-										Type:     schema.TypeBool,
-										Optional: true,
-									},
-
 									"name": {
 										Type:     schema.TypeString,
 										Required: true,
+									},
+
+									"overwrite": {
+										Type:     schema.TypeBool,
+										Optional: true,
 									},
 
 									"secret_value": {
@@ -328,42 +291,6 @@ func resourceVolterraRoute() *schema.Resource {
 										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
-
-												"blindfold_secret_info_internal": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"decryption_provider": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"location": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"store_provider": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-														},
-													},
-												},
-
-												"secret_encoding_type": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
 
 												"blindfold_secret_info": {
 
@@ -411,62 +338,96 @@ func resourceVolterraRoute() *schema.Resource {
 														},
 													},
 												},
+											},
+										},
+									},
 
-												"vault_secret_info": {
+									"value": {
 
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"request_cookies_to_remove": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
+						"request_headers_to_add": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"append": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Required: true,
+									},
+
+									"secret_value": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"blindfold_secret_info": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
-															"key": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+															"decryption_provider": {
+																Type:     schema.TypeString,
+																Optional: true,
 															},
 
 															"location": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+																Type:     schema.TypeString,
+																Required: true,
 															},
 
-															"provider": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"secret_encoding": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"version": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+															"store_provider": {
+																Type:     schema.TypeString,
+																Optional: true,
 															},
 														},
 													},
 												},
 
-												"wingman_secret_info": {
+												"clear_secret_info": {
 
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
-															"name": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
+															"provider": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"url": {
+																Type:     schema.TypeString,
+																Required: true,
 															},
 														},
 													},
@@ -485,6 +446,214 @@ func resourceVolterraRoute() *schema.Resource {
 						},
 
 						"request_headers_to_remove": {
+
+							Type: schema.TypeList,
+
+							Optional: true,
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
+						"response_cookies_to_add": {
+
+							Type:     schema.TypeList,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"add_domain": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"ignore_domain": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"add_expiry": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"ignore_expiry": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"add_httponly": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ignore_httponly": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ignore_max_age": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"max_age_value": {
+
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"name": {
+										Type:     schema.TypeString,
+										Required: true,
+									},
+
+									"overwrite": {
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"add_partitioned": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ignore_partitioned": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"add_path": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+
+									"ignore_path": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ignore_samesite": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"samesite_lax": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"samesite_none": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"samesite_strict": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"add_secure": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ignore_secure": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"ignore_value": {
+
+										Type:     schema.TypeBool,
+										Optional: true,
+									},
+
+									"secret_value": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"blindfold_secret_info": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"decryption_provider": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"location": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+
+															"store_provider": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"clear_secret_info": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"provider": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+
+															"url": {
+																Type:     schema.TypeString,
+																Required: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"value": {
+
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"response_cookies_to_remove": {
 
 							Type: schema.TypeList,
 
@@ -519,42 +688,6 @@ func resourceVolterraRoute() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"blindfold_secret_info_internal": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"decryption_provider": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"location": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"store_provider": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-														},
-													},
-												},
-
-												"secret_encoding_type": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
 												"blindfold_secret_info": {
 
 													Type:     schema.TypeList,
@@ -597,66 +730,6 @@ func resourceVolterraRoute() *schema.Resource {
 															"url": {
 																Type:     schema.TypeString,
 																Required: true,
-															},
-														},
-													},
-												},
-
-												"vault_secret_info": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"key": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"location": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"provider": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"secret_encoding": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"version": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-														},
-													},
-												},
-
-												"wingman_secret_info": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"name": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -708,12 +781,6 @@ func resourceVolterraRoute() *schema.Resource {
 												"max_request_bytes": {
 													Type:     schema.TypeInt,
 													Optional: true,
-												},
-
-												"max_request_time": {
-													Type:       schema.TypeInt,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -782,12 +849,6 @@ func resourceVolterraRoute() *schema.Resource {
 												"expose_headers": {
 													Type:     schema.TypeString,
 													Optional: true,
-												},
-
-												"max_age": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"maximum_age": {
@@ -1165,12 +1226,6 @@ func resourceVolterraRoute() *schema.Resource {
 														Type: schema.TypeString,
 													},
 												},
-
-												"retry_on": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
 											},
 										},
 									},
@@ -1276,22 +1331,9 @@ func resourceVolterraRoute() *schema.Resource {
 										Optional: true,
 									},
 
-									"port_redirect": {
-										Type:       schema.TypeInt,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
 									"proto_redirect": {
 										Type:     schema.TypeString,
 										Optional: true,
-									},
-
-									"all_params": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"remove_all_params": {
@@ -1310,29 +1352,6 @@ func resourceVolterraRoute() *schema.Resource {
 
 										Type:     schema.TypeBool,
 										Optional: true,
-									},
-
-									"strip_query_params": {
-
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"query_params": {
-
-													Type: schema.TypeList,
-
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
-												},
-											},
-										},
 									},
 
 									"path_redirect": {
@@ -1363,24 +1382,6 @@ func resourceVolterraRoute() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"context_extensions": {
-
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"context_extensions": {
-													Type:       schema.TypeMap,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-
 									"disable": {
 
 										Type:     schema.TypeBool,
@@ -1388,12 +1389,6 @@ func resourceVolterraRoute() *schema.Resource {
 									},
 								},
 							},
-						},
-
-						"skip_lb_override": {
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"waf_type": {
@@ -1607,38 +1602,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						routes[i].BotDefenseJavascriptInjectionChoice = botDefenseJavascriptInjectionChoiceInt
 					}
 
-				}
-
-				if v, ok := routesMapStrToI["bot_defense_javascript_injection_inline_mode"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					botDefenseJavascriptInjectionInlineMode := &ves_io_schema_route.ContentRewriteType{}
-					routes[i].BotDefenseJavascriptInjectionInlineMode = botDefenseJavascriptInjectionInlineMode
-					for _, set := range sl {
-						if set != nil {
-							botDefenseJavascriptInjectionInlineModeMapStrToI := set.(map[string]interface{})
-
-							if w, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["element_selector"]; ok && !isIntfNil(w) {
-								botDefenseJavascriptInjectionInlineMode.ElementSelector = w.(string)
-							}
-
-							if w, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["insert_content"]; ok && !isIntfNil(w) {
-								botDefenseJavascriptInjectionInlineMode.InsertContent = w.(string)
-							}
-
-							if v, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["position"]; ok && !isIntfNil(v) {
-
-								botDefenseJavascriptInjectionInlineMode.Position = ves_io_schema_policy.HTMLPosition(ves_io_schema_policy.HTMLPosition_value[v.(string)])
-
-							}
-
-						}
-					}
-
-				}
-
-				if w, ok := routesMapStrToI["disable_custom_script"]; ok && !isIntfNil(w) {
-					routes[i].DisableCustomScript = w.(bool)
 				}
 
 				if w, ok := routesMapStrToI["disable_location_add"]; ok && !isIntfNil(w) {
@@ -1866,69 +1829,37 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 				}
 
-				if v, ok := routesMapStrToI["request_headers_to_add"]; ok && !isIntfNil(v) {
+				if v, ok := routesMapStrToI["request_cookies_to_add"]; ok && !isIntfNil(v) {
 
 					sl := v.([]interface{})
-					requestHeadersToAdd := make([]*ves_io_schema.HeaderManipulationOptionType, len(sl))
-					routes[i].RequestHeadersToAdd = requestHeadersToAdd
+					requestCookiesToAdd := make([]*ves_io_schema.CookieValueOption, len(sl))
+					routes[i].RequestCookiesToAdd = requestCookiesToAdd
 					for i, set := range sl {
 						if set != nil {
-							requestHeadersToAdd[i] = &ves_io_schema.HeaderManipulationOptionType{}
-							requestHeadersToAddMapStrToI := set.(map[string]interface{})
+							requestCookiesToAdd[i] = &ves_io_schema.CookieValueOption{}
+							requestCookiesToAddMapStrToI := set.(map[string]interface{})
 
-							if w, ok := requestHeadersToAddMapStrToI["append"]; ok && !isIntfNil(w) {
-								requestHeadersToAdd[i].Append = w.(bool)
+							if w, ok := requestCookiesToAddMapStrToI["name"]; ok && !isIntfNil(w) {
+								requestCookiesToAdd[i].Name = w.(string)
 							}
 
-							if w, ok := requestHeadersToAddMapStrToI["name"]; ok && !isIntfNil(w) {
-								requestHeadersToAdd[i].Name = w.(string)
+							if w, ok := requestCookiesToAddMapStrToI["overwrite"]; ok && !isIntfNil(w) {
+								requestCookiesToAdd[i].Overwrite = w.(bool)
 							}
 
 							valueChoiceTypeFound := false
 
-							if v, ok := requestHeadersToAddMapStrToI["secret_value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
+							if v, ok := requestCookiesToAddMapStrToI["secret_value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
 
 								valueChoiceTypeFound = true
-								valueChoiceInt := &ves_io_schema.HeaderManipulationOptionType_SecretValue{}
+								valueChoiceInt := &ves_io_schema.CookieValueOption_SecretValue{}
 								valueChoiceInt.SecretValue = &ves_io_schema.SecretType{}
-								requestHeadersToAdd[i].ValueChoice = valueChoiceInt
+								requestCookiesToAdd[i].ValueChoice = valueChoiceInt
 
 								sl := v.([]interface{})
 								for _, set := range sl {
 									if set != nil {
 										cs := set.(map[string]interface{})
-
-										if v, ok := cs["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-											valueChoiceInt.SecretValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-											for _, set := range sl {
-												if set != nil {
-													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.Location = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.StoreProvider = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := cs["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-											valueChoiceInt.SecretValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-										}
 
 										secretInfoOneofTypeFound := false
 
@@ -1996,11 +1927,79 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 										}
 
-										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+									}
+								}
+
+							}
+
+							if v, ok := requestCookiesToAddMapStrToI["value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
+
+								valueChoiceTypeFound = true
+								valueChoiceInt := &ves_io_schema.CookieValueOption_Value{}
+
+								requestCookiesToAdd[i].ValueChoice = valueChoiceInt
+
+								valueChoiceInt.Value = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := routesMapStrToI["request_cookies_to_remove"]; ok && !isIntfNil(w) {
+					ls := make([]string, len(w.([]interface{})))
+					for i, v := range w.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field request_cookies_to_remove")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					routes[i].RequestCookiesToRemove = ls
+				}
+
+				if v, ok := routesMapStrToI["request_headers_to_add"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					requestHeadersToAdd := make([]*ves_io_schema.HeaderManipulationOptionType, len(sl))
+					routes[i].RequestHeadersToAdd = requestHeadersToAdd
+					for i, set := range sl {
+						if set != nil {
+							requestHeadersToAdd[i] = &ves_io_schema.HeaderManipulationOptionType{}
+							requestHeadersToAddMapStrToI := set.(map[string]interface{})
+
+							if w, ok := requestHeadersToAddMapStrToI["append"]; ok && !isIntfNil(w) {
+								requestHeadersToAdd[i].Append = w.(bool)
+							}
+
+							if w, ok := requestHeadersToAddMapStrToI["name"]; ok && !isIntfNil(w) {
+								requestHeadersToAdd[i].Name = w.(string)
+							}
+
+							valueChoiceTypeFound := false
+
+							if v, ok := requestHeadersToAddMapStrToI["secret_value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
+
+								valueChoiceTypeFound = true
+								valueChoiceInt := &ves_io_schema.HeaderManipulationOptionType_SecretValue{}
+								valueChoiceInt.SecretValue = &ves_io_schema.SecretType{}
+								requestHeadersToAdd[i].ValueChoice = valueChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										secretInfoOneofTypeFound := false
+
+										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
-											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+											secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
 											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 											sl := v.([]interface{})
@@ -2008,33 +2007,21 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 												if set != nil {
 													cs := set.(map[string]interface{})
 
-													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
-														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
 
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
-														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
 
 													}
 
-													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
-														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-													}
-
-													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
-
-													if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
 
 													}
 
@@ -2043,11 +2030,11 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 										}
 
-										if v, ok := cs["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+										if v, ok := cs["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
-											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+											secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
 											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 											sl := v.([]interface{})
@@ -2055,9 +2042,15 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 												if set != nil {
 													cs := set.(map[string]interface{})
 
-													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
-														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
 
 													}
 
@@ -2090,9 +2083,386 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 				if w, ok := routesMapStrToI["request_headers_to_remove"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field request_headers_to_remove")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					routes[i].RequestHeadersToRemove = ls
+				}
+
+				if v, ok := routesMapStrToI["response_cookies_to_add"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					responseCookiesToAdd := make([]*ves_io_schema.SetCookieValueOption, len(sl))
+					routes[i].ResponseCookiesToAdd = responseCookiesToAdd
+					for i, set := range sl {
+						if set != nil {
+							responseCookiesToAdd[i] = &ves_io_schema.SetCookieValueOption{}
+							responseCookiesToAddMapStrToI := set.(map[string]interface{})
+
+							domainChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["add_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.SetCookieValueOption_AddDomain{}
+
+								responseCookiesToAdd[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.AddDomain = v.(string)
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+
+								if v.(bool) {
+									domainChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreDomain{}
+									domainChoiceInt.IgnoreDomain = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].DomainChoice = domainChoiceInt
+								}
+
+							}
+
+							expiryChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["add_expiry"]; ok && !isIntfNil(v) && !expiryChoiceTypeFound {
+
+								expiryChoiceTypeFound = true
+								expiryChoiceInt := &ves_io_schema.SetCookieValueOption_AddExpiry{}
+
+								responseCookiesToAdd[i].ExpiryChoice = expiryChoiceInt
+
+								expiryChoiceInt.AddExpiry = v.(string)
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_expiry"]; ok && !isIntfNil(v) && !expiryChoiceTypeFound {
+
+								expiryChoiceTypeFound = true
+
+								if v.(bool) {
+									expiryChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreExpiry{}
+									expiryChoiceInt.IgnoreExpiry = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].ExpiryChoice = expiryChoiceInt
+								}
+
+							}
+
+							httponlyChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["add_httponly"]; ok && !isIntfNil(v) && !httponlyChoiceTypeFound {
+
+								httponlyChoiceTypeFound = true
+
+								if v.(bool) {
+									httponlyChoiceInt := &ves_io_schema.SetCookieValueOption_AddHttponly{}
+									httponlyChoiceInt.AddHttponly = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].HttponlyChoice = httponlyChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyChoiceTypeFound {
+
+								httponlyChoiceTypeFound = true
+
+								if v.(bool) {
+									httponlyChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreHttponly{}
+									httponlyChoiceInt.IgnoreHttponly = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].HttponlyChoice = httponlyChoiceInt
+								}
+
+							}
+
+							maxAgeChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_max_age"]; ok && !isIntfNil(v) && !maxAgeChoiceTypeFound {
+
+								maxAgeChoiceTypeFound = true
+
+								if v.(bool) {
+									maxAgeChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreMaxAge{}
+									maxAgeChoiceInt.IgnoreMaxAge = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].MaxAgeChoice = maxAgeChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["max_age_value"]; ok && !isIntfNil(v) && !maxAgeChoiceTypeFound {
+
+								maxAgeChoiceTypeFound = true
+								maxAgeChoiceInt := &ves_io_schema.SetCookieValueOption_MaxAgeValue{}
+
+								responseCookiesToAdd[i].MaxAgeChoice = maxAgeChoiceInt
+
+								maxAgeChoiceInt.MaxAgeValue = int32(v.(int))
+
+							}
+
+							if w, ok := responseCookiesToAddMapStrToI["name"]; ok && !isIntfNil(w) {
+								responseCookiesToAdd[i].Name = w.(string)
+							}
+
+							if w, ok := responseCookiesToAddMapStrToI["overwrite"]; ok && !isIntfNil(w) {
+								responseCookiesToAdd[i].Overwrite = w.(bool)
+							}
+
+							partitionedChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["add_partitioned"]; ok && !isIntfNil(v) && !partitionedChoiceTypeFound {
+
+								partitionedChoiceTypeFound = true
+
+								if v.(bool) {
+									partitionedChoiceInt := &ves_io_schema.SetCookieValueOption_AddPartitioned{}
+									partitionedChoiceInt.AddPartitioned = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].PartitionedChoice = partitionedChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_partitioned"]; ok && !isIntfNil(v) && !partitionedChoiceTypeFound {
+
+								partitionedChoiceTypeFound = true
+
+								if v.(bool) {
+									partitionedChoiceInt := &ves_io_schema.SetCookieValueOption_IgnorePartitioned{}
+									partitionedChoiceInt.IgnorePartitioned = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].PartitionedChoice = partitionedChoiceInt
+								}
+
+							}
+
+							pathChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["add_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema.SetCookieValueOption_AddPath{}
+
+								responseCookiesToAdd[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.AddPath = v.(string)
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+
+								if v.(bool) {
+									pathChoiceInt := &ves_io_schema.SetCookieValueOption_IgnorePath{}
+									pathChoiceInt.IgnorePath = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].PathChoice = pathChoiceInt
+								}
+
+							}
+
+							samesiteChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteChoiceTypeFound {
+
+								samesiteChoiceTypeFound = true
+
+								if v.(bool) {
+									samesiteChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreSamesite{}
+									samesiteChoiceInt.IgnoreSamesite = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].SamesiteChoice = samesiteChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["samesite_lax"]; ok && !isIntfNil(v) && !samesiteChoiceTypeFound {
+
+								samesiteChoiceTypeFound = true
+
+								if v.(bool) {
+									samesiteChoiceInt := &ves_io_schema.SetCookieValueOption_SamesiteLax{}
+									samesiteChoiceInt.SamesiteLax = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].SamesiteChoice = samesiteChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["samesite_none"]; ok && !isIntfNil(v) && !samesiteChoiceTypeFound {
+
+								samesiteChoiceTypeFound = true
+
+								if v.(bool) {
+									samesiteChoiceInt := &ves_io_schema.SetCookieValueOption_SamesiteNone{}
+									samesiteChoiceInt.SamesiteNone = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].SamesiteChoice = samesiteChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["samesite_strict"]; ok && !isIntfNil(v) && !samesiteChoiceTypeFound {
+
+								samesiteChoiceTypeFound = true
+
+								if v.(bool) {
+									samesiteChoiceInt := &ves_io_schema.SetCookieValueOption_SamesiteStrict{}
+									samesiteChoiceInt.SamesiteStrict = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].SamesiteChoice = samesiteChoiceInt
+								}
+
+							}
+
+							secureChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["add_secure"]; ok && !isIntfNil(v) && !secureChoiceTypeFound {
+
+								secureChoiceTypeFound = true
+
+								if v.(bool) {
+									secureChoiceInt := &ves_io_schema.SetCookieValueOption_AddSecure{}
+									secureChoiceInt.AddSecure = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].SecureChoice = secureChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_secure"]; ok && !isIntfNil(v) && !secureChoiceTypeFound {
+
+								secureChoiceTypeFound = true
+
+								if v.(bool) {
+									secureChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreSecure{}
+									secureChoiceInt.IgnoreSecure = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].SecureChoice = secureChoiceInt
+								}
+
+							}
+
+							valueChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
+
+								valueChoiceTypeFound = true
+
+								if v.(bool) {
+									valueChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreValue{}
+									valueChoiceInt.IgnoreValue = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].ValueChoice = valueChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["secret_value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
+
+								valueChoiceTypeFound = true
+								valueChoiceInt := &ves_io_schema.SetCookieValueOption_SecretValue{}
+								valueChoiceInt.SecretValue = &ves_io_schema.SecretType{}
+								responseCookiesToAdd[i].ValueChoice = valueChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										secretInfoOneofTypeFound := false
+
+										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+											secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+											secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
+
+								valueChoiceTypeFound = true
+								valueChoiceInt := &ves_io_schema.SetCookieValueOption_Value{}
+
+								responseCookiesToAdd[i].ValueChoice = valueChoiceInt
+
+								valueChoiceInt.Value = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := routesMapStrToI["response_cookies_to_remove"]; ok && !isIntfNil(w) {
+					ls := make([]string, len(w.([]interface{})))
+					for i, v := range w.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field response_cookies_to_remove")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					routes[i].ResponseCookiesToRemove = ls
 				}
 
 				if v, ok := routesMapStrToI["response_headers_to_add"]; ok && !isIntfNil(v) {
@@ -2127,38 +2497,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 									if set != nil {
 										cs := set.(map[string]interface{})
 
-										if v, ok := cs["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-											valueChoiceInt.SecretValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-											for _, set := range sl {
-												if set != nil {
-													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.Location = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.StoreProvider = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := cs["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-											valueChoiceInt.SecretValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-										}
-
 										secretInfoOneofTypeFound := false
 
 										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -2225,76 +2563,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 										}
 
-										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-											secretInfoOneofTypeFound = true
-											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-													}
-
-													if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-													}
-
-													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-													}
-
-													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
-
-													if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := cs["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-											secretInfoOneofTypeFound = true
-											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-													}
-
-												}
-											}
-
-										}
-
 									}
 								}
 
@@ -2319,7 +2587,12 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 				if w, ok := routesMapStrToI["response_headers_to_remove"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field response_headers_to_remove")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					routes[i].ResponseHeadersToRemove = ls
 				}
@@ -2353,10 +2626,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 										if w, ok := bufferPolicyMapStrToI["max_request_bytes"]; ok && !isIntfNil(w) {
 											bufferPolicy.MaxRequestBytes = uint32(w.(int))
-										}
-
-										if w, ok := bufferPolicyMapStrToI["max_request_time"]; ok && !isIntfNil(w) {
-											bufferPolicy.MaxRequestTime = uint32(w.(int))
 										}
 
 									}
@@ -2414,7 +2683,12 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 										if w, ok := corsPolicyMapStrToI["allow_origin"]; ok && !isIntfNil(w) {
 											ls := make([]string, len(w.([]interface{})))
 											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field allow_origin")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											corsPolicy.AllowOrigin = ls
 										}
@@ -2422,7 +2696,12 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 										if w, ok := corsPolicyMapStrToI["allow_origin_regex"]; ok && !isIntfNil(w) {
 											ls := make([]string, len(w.([]interface{})))
 											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field allow_origin_regex")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											corsPolicy.AllowOriginRegex = ls
 										}
@@ -2433,10 +2712,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 										if w, ok := corsPolicyMapStrToI["expose_headers"]; ok && !isIntfNil(w) {
 											corsPolicy.ExposeHeaders = w.(string)
-										}
-
-										if w, ok := corsPolicyMapStrToI["max_age"]; ok && !isIntfNil(w) {
-											corsPolicy.MaxAge = w.(string)
 										}
 
 										if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
@@ -2487,7 +2762,12 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field domains")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														allowedDomainsInt.CustomDomainList.Domains = ls
 
@@ -2968,13 +3248,14 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 										if w, ok := retryPolicyMapStrToI["retry_condition"]; ok && !isIntfNil(w) {
 											ls := make([]string, len(w.([]interface{})))
 											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field retry_condition")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											retryPolicy.RetryCondition = ls
-										}
-
-										if w, ok := retryPolicyMapStrToI["retry_on"]; ok && !isIntfNil(w) {
-											retryPolicy.RetryOn = w.(string)
 										}
 
 									}
@@ -3118,12 +3399,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 							}
 
-							if v, ok := cs["port_redirect"]; ok && !isIntfNil(v) {
-
-								routeActionInt.RouteRedirect.PortRedirect = uint32(v.(int))
-
-							}
-
 							if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
 
 								routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
@@ -3131,17 +3406,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 							}
 
 							queryParamsTypeFound := false
-
-							if v, ok := cs["all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
-
-								queryParamsTypeFound = true
-								queryParamsInt := &ves_io_schema_route.RouteRedirect_AllParams{}
-
-								routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-
-								queryParamsInt.AllParams = v.(bool)
-
-							}
 
 							if v, ok := cs["remove_all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
 
@@ -3174,33 +3438,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 									queryParamsInt := &ves_io_schema_route.RouteRedirect_RetainAllParams{}
 									queryParamsInt.RetainAllParams = &ves_io_schema.Empty{}
 									routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-								}
-
-							}
-
-							if v, ok := cs["strip_query_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
-
-								queryParamsTypeFound = true
-								queryParamsInt := &ves_io_schema_route.RouteRedirect_StripQueryParams{}
-								queryParamsInt.StripQueryParams = &ves_io_schema_route.RouteQueryParams{}
-								routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["query_params"]; ok && !isIntfNil(v) {
-
-											ls := make([]string, len(v.([]interface{})))
-											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
-											}
-											queryParamsInt.StripQueryParams.QueryParams = ls
-
-										}
-
-									}
 								}
 
 							}
@@ -3251,32 +3488,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 							servicePolicyChoiceTypeFound := false
 
-							if v, ok := servicePolicyMapStrToI["context_extensions"]; ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
-
-								servicePolicyChoiceTypeFound = true
-								servicePolicyChoiceInt := &ves_io_schema_route.ServicePolicyInfo_ContextExtensions{}
-								servicePolicyChoiceInt.ContextExtensions = &ves_io_schema_route.ContextExtensionInfo{}
-								servicePolicy.ServicePolicyChoice = servicePolicyChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["context_extensions"]; ok && !isIntfNil(v) {
-
-											ms := map[string]string{}
-											for k, v := range v.(map[string]interface{}) {
-												ms[k] = v.(string)
-											}
-											servicePolicyChoiceInt.ContextExtensions.ContextExtensions = ms
-										}
-
-									}
-								}
-
-							}
-
 							if v, ok := servicePolicyMapStrToI["disable"]; ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
 
 								servicePolicyChoiceTypeFound = true
@@ -3291,10 +3502,6 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						}
 					}
 
-				}
-
-				if w, ok := routesMapStrToI["skip_lb_override"]; ok && !isIntfNil(w) {
-					routes[i].SkipLbOverride = w.(bool)
 				}
 
 				if v, ok := routesMapStrToI["waf_type"]; ok && !isIntfNil(v) {
@@ -3581,38 +3788,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 				}
 
-				if v, ok := routesMapStrToI["bot_defense_javascript_injection_inline_mode"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					botDefenseJavascriptInjectionInlineMode := &ves_io_schema_route.ContentRewriteType{}
-					routes[i].BotDefenseJavascriptInjectionInlineMode = botDefenseJavascriptInjectionInlineMode
-					for _, set := range sl {
-						if set != nil {
-							botDefenseJavascriptInjectionInlineModeMapStrToI := set.(map[string]interface{})
-
-							if w, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["element_selector"]; ok && !isIntfNil(w) {
-								botDefenseJavascriptInjectionInlineMode.ElementSelector = w.(string)
-							}
-
-							if w, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["insert_content"]; ok && !isIntfNil(w) {
-								botDefenseJavascriptInjectionInlineMode.InsertContent = w.(string)
-							}
-
-							if v, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["position"]; ok && !isIntfNil(v) {
-
-								botDefenseJavascriptInjectionInlineMode.Position = ves_io_schema_policy.HTMLPosition(ves_io_schema_policy.HTMLPosition_value[v.(string)])
-
-							}
-
-						}
-					}
-
-				}
-
-				if w, ok := routesMapStrToI["disable_custom_script"]; ok && !isIntfNil(w) {
-					routes[i].DisableCustomScript = w.(bool)
-				}
-
 				if w, ok := routesMapStrToI["disable_location_add"]; ok && !isIntfNil(w) {
 					routes[i].DisableLocationAdd = w.(bool)
 				}
@@ -3838,69 +4013,37 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 				}
 
-				if v, ok := routesMapStrToI["request_headers_to_add"]; ok && !isIntfNil(v) {
+				if v, ok := routesMapStrToI["request_cookies_to_add"]; ok && !isIntfNil(v) {
 
 					sl := v.([]interface{})
-					requestHeadersToAdd := make([]*ves_io_schema.HeaderManipulationOptionType, len(sl))
-					routes[i].RequestHeadersToAdd = requestHeadersToAdd
+					requestCookiesToAdd := make([]*ves_io_schema.CookieValueOption, len(sl))
+					routes[i].RequestCookiesToAdd = requestCookiesToAdd
 					for i, set := range sl {
 						if set != nil {
-							requestHeadersToAdd[i] = &ves_io_schema.HeaderManipulationOptionType{}
-							requestHeadersToAddMapStrToI := set.(map[string]interface{})
+							requestCookiesToAdd[i] = &ves_io_schema.CookieValueOption{}
+							requestCookiesToAddMapStrToI := set.(map[string]interface{})
 
-							if w, ok := requestHeadersToAddMapStrToI["append"]; ok && !isIntfNil(w) {
-								requestHeadersToAdd[i].Append = w.(bool)
+							if w, ok := requestCookiesToAddMapStrToI["name"]; ok && !isIntfNil(w) {
+								requestCookiesToAdd[i].Name = w.(string)
 							}
 
-							if w, ok := requestHeadersToAddMapStrToI["name"]; ok && !isIntfNil(w) {
-								requestHeadersToAdd[i].Name = w.(string)
+							if w, ok := requestCookiesToAddMapStrToI["overwrite"]; ok && !isIntfNil(w) {
+								requestCookiesToAdd[i].Overwrite = w.(bool)
 							}
 
 							valueChoiceTypeFound := false
 
-							if v, ok := requestHeadersToAddMapStrToI["secret_value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
+							if v, ok := requestCookiesToAddMapStrToI["secret_value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
 
 								valueChoiceTypeFound = true
-								valueChoiceInt := &ves_io_schema.HeaderManipulationOptionType_SecretValue{}
+								valueChoiceInt := &ves_io_schema.CookieValueOption_SecretValue{}
 								valueChoiceInt.SecretValue = &ves_io_schema.SecretType{}
-								requestHeadersToAdd[i].ValueChoice = valueChoiceInt
+								requestCookiesToAdd[i].ValueChoice = valueChoiceInt
 
 								sl := v.([]interface{})
 								for _, set := range sl {
 									if set != nil {
 										cs := set.(map[string]interface{})
-
-										if v, ok := cs["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-											valueChoiceInt.SecretValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-											for _, set := range sl {
-												if set != nil {
-													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.Location = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.StoreProvider = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := cs["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-											valueChoiceInt.SecretValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-										}
 
 										secretInfoOneofTypeFound := false
 
@@ -3968,11 +4111,79 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 										}
 
-										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+									}
+								}
+
+							}
+
+							if v, ok := requestCookiesToAddMapStrToI["value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
+
+								valueChoiceTypeFound = true
+								valueChoiceInt := &ves_io_schema.CookieValueOption_Value{}
+
+								requestCookiesToAdd[i].ValueChoice = valueChoiceInt
+
+								valueChoiceInt.Value = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := routesMapStrToI["request_cookies_to_remove"]; ok && !isIntfNil(w) {
+					ls := make([]string, len(w.([]interface{})))
+					for i, v := range w.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field request_cookies_to_remove")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					routes[i].RequestCookiesToRemove = ls
+				}
+
+				if v, ok := routesMapStrToI["request_headers_to_add"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					requestHeadersToAdd := make([]*ves_io_schema.HeaderManipulationOptionType, len(sl))
+					routes[i].RequestHeadersToAdd = requestHeadersToAdd
+					for i, set := range sl {
+						if set != nil {
+							requestHeadersToAdd[i] = &ves_io_schema.HeaderManipulationOptionType{}
+							requestHeadersToAddMapStrToI := set.(map[string]interface{})
+
+							if w, ok := requestHeadersToAddMapStrToI["append"]; ok && !isIntfNil(w) {
+								requestHeadersToAdd[i].Append = w.(bool)
+							}
+
+							if w, ok := requestHeadersToAddMapStrToI["name"]; ok && !isIntfNil(w) {
+								requestHeadersToAdd[i].Name = w.(string)
+							}
+
+							valueChoiceTypeFound := false
+
+							if v, ok := requestHeadersToAddMapStrToI["secret_value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
+
+								valueChoiceTypeFound = true
+								valueChoiceInt := &ves_io_schema.HeaderManipulationOptionType_SecretValue{}
+								valueChoiceInt.SecretValue = &ves_io_schema.SecretType{}
+								requestHeadersToAdd[i].ValueChoice = valueChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										secretInfoOneofTypeFound := false
+
+										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
-											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+											secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
 											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 											sl := v.([]interface{})
@@ -3980,33 +4191,21 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 												if set != nil {
 													cs := set.(map[string]interface{})
 
-													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
 
-														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
 
 													}
 
 													if v, ok := cs["location"]; ok && !isIntfNil(v) {
 
-														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
 
 													}
 
-													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
 
-														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-													}
-
-													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
-
-													if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
 
 													}
 
@@ -4015,11 +4214,11 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 										}
 
-										if v, ok := cs["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+										if v, ok := cs["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
 
 											secretInfoOneofTypeFound = true
-											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+											secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
 											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
 
 											sl := v.([]interface{})
@@ -4027,9 +4226,15 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 												if set != nil {
 													cs := set.(map[string]interface{})
 
-													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
 
-														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
 
 													}
 
@@ -4062,9 +4267,386 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 				if w, ok := routesMapStrToI["request_headers_to_remove"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field request_headers_to_remove")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					routes[i].RequestHeadersToRemove = ls
+				}
+
+				if v, ok := routesMapStrToI["response_cookies_to_add"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					responseCookiesToAdd := make([]*ves_io_schema.SetCookieValueOption, len(sl))
+					routes[i].ResponseCookiesToAdd = responseCookiesToAdd
+					for i, set := range sl {
+						if set != nil {
+							responseCookiesToAdd[i] = &ves_io_schema.SetCookieValueOption{}
+							responseCookiesToAddMapStrToI := set.(map[string]interface{})
+
+							domainChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["add_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+								domainChoiceInt := &ves_io_schema.SetCookieValueOption_AddDomain{}
+
+								responseCookiesToAdd[i].DomainChoice = domainChoiceInt
+
+								domainChoiceInt.AddDomain = v.(string)
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_domain"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+								domainChoiceTypeFound = true
+
+								if v.(bool) {
+									domainChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreDomain{}
+									domainChoiceInt.IgnoreDomain = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].DomainChoice = domainChoiceInt
+								}
+
+							}
+
+							expiryChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["add_expiry"]; ok && !isIntfNil(v) && !expiryChoiceTypeFound {
+
+								expiryChoiceTypeFound = true
+								expiryChoiceInt := &ves_io_schema.SetCookieValueOption_AddExpiry{}
+
+								responseCookiesToAdd[i].ExpiryChoice = expiryChoiceInt
+
+								expiryChoiceInt.AddExpiry = v.(string)
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_expiry"]; ok && !isIntfNil(v) && !expiryChoiceTypeFound {
+
+								expiryChoiceTypeFound = true
+
+								if v.(bool) {
+									expiryChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreExpiry{}
+									expiryChoiceInt.IgnoreExpiry = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].ExpiryChoice = expiryChoiceInt
+								}
+
+							}
+
+							httponlyChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["add_httponly"]; ok && !isIntfNil(v) && !httponlyChoiceTypeFound {
+
+								httponlyChoiceTypeFound = true
+
+								if v.(bool) {
+									httponlyChoiceInt := &ves_io_schema.SetCookieValueOption_AddHttponly{}
+									httponlyChoiceInt.AddHttponly = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].HttponlyChoice = httponlyChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_httponly"]; ok && !isIntfNil(v) && !httponlyChoiceTypeFound {
+
+								httponlyChoiceTypeFound = true
+
+								if v.(bool) {
+									httponlyChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreHttponly{}
+									httponlyChoiceInt.IgnoreHttponly = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].HttponlyChoice = httponlyChoiceInt
+								}
+
+							}
+
+							maxAgeChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_max_age"]; ok && !isIntfNil(v) && !maxAgeChoiceTypeFound {
+
+								maxAgeChoiceTypeFound = true
+
+								if v.(bool) {
+									maxAgeChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreMaxAge{}
+									maxAgeChoiceInt.IgnoreMaxAge = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].MaxAgeChoice = maxAgeChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["max_age_value"]; ok && !isIntfNil(v) && !maxAgeChoiceTypeFound {
+
+								maxAgeChoiceTypeFound = true
+								maxAgeChoiceInt := &ves_io_schema.SetCookieValueOption_MaxAgeValue{}
+
+								responseCookiesToAdd[i].MaxAgeChoice = maxAgeChoiceInt
+
+								maxAgeChoiceInt.MaxAgeValue = int32(v.(int))
+
+							}
+
+							if w, ok := responseCookiesToAddMapStrToI["name"]; ok && !isIntfNil(w) {
+								responseCookiesToAdd[i].Name = w.(string)
+							}
+
+							if w, ok := responseCookiesToAddMapStrToI["overwrite"]; ok && !isIntfNil(w) {
+								responseCookiesToAdd[i].Overwrite = w.(bool)
+							}
+
+							partitionedChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["add_partitioned"]; ok && !isIntfNil(v) && !partitionedChoiceTypeFound {
+
+								partitionedChoiceTypeFound = true
+
+								if v.(bool) {
+									partitionedChoiceInt := &ves_io_schema.SetCookieValueOption_AddPartitioned{}
+									partitionedChoiceInt.AddPartitioned = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].PartitionedChoice = partitionedChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_partitioned"]; ok && !isIntfNil(v) && !partitionedChoiceTypeFound {
+
+								partitionedChoiceTypeFound = true
+
+								if v.(bool) {
+									partitionedChoiceInt := &ves_io_schema.SetCookieValueOption_IgnorePartitioned{}
+									partitionedChoiceInt.IgnorePartitioned = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].PartitionedChoice = partitionedChoiceInt
+								}
+
+							}
+
+							pathChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["add_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+								pathChoiceInt := &ves_io_schema.SetCookieValueOption_AddPath{}
+
+								responseCookiesToAdd[i].PathChoice = pathChoiceInt
+
+								pathChoiceInt.AddPath = v.(string)
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_path"]; ok && !isIntfNil(v) && !pathChoiceTypeFound {
+
+								pathChoiceTypeFound = true
+
+								if v.(bool) {
+									pathChoiceInt := &ves_io_schema.SetCookieValueOption_IgnorePath{}
+									pathChoiceInt.IgnorePath = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].PathChoice = pathChoiceInt
+								}
+
+							}
+
+							samesiteChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_samesite"]; ok && !isIntfNil(v) && !samesiteChoiceTypeFound {
+
+								samesiteChoiceTypeFound = true
+
+								if v.(bool) {
+									samesiteChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreSamesite{}
+									samesiteChoiceInt.IgnoreSamesite = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].SamesiteChoice = samesiteChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["samesite_lax"]; ok && !isIntfNil(v) && !samesiteChoiceTypeFound {
+
+								samesiteChoiceTypeFound = true
+
+								if v.(bool) {
+									samesiteChoiceInt := &ves_io_schema.SetCookieValueOption_SamesiteLax{}
+									samesiteChoiceInt.SamesiteLax = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].SamesiteChoice = samesiteChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["samesite_none"]; ok && !isIntfNil(v) && !samesiteChoiceTypeFound {
+
+								samesiteChoiceTypeFound = true
+
+								if v.(bool) {
+									samesiteChoiceInt := &ves_io_schema.SetCookieValueOption_SamesiteNone{}
+									samesiteChoiceInt.SamesiteNone = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].SamesiteChoice = samesiteChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["samesite_strict"]; ok && !isIntfNil(v) && !samesiteChoiceTypeFound {
+
+								samesiteChoiceTypeFound = true
+
+								if v.(bool) {
+									samesiteChoiceInt := &ves_io_schema.SetCookieValueOption_SamesiteStrict{}
+									samesiteChoiceInt.SamesiteStrict = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].SamesiteChoice = samesiteChoiceInt
+								}
+
+							}
+
+							secureChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["add_secure"]; ok && !isIntfNil(v) && !secureChoiceTypeFound {
+
+								secureChoiceTypeFound = true
+
+								if v.(bool) {
+									secureChoiceInt := &ves_io_schema.SetCookieValueOption_AddSecure{}
+									secureChoiceInt.AddSecure = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].SecureChoice = secureChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_secure"]; ok && !isIntfNil(v) && !secureChoiceTypeFound {
+
+								secureChoiceTypeFound = true
+
+								if v.(bool) {
+									secureChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreSecure{}
+									secureChoiceInt.IgnoreSecure = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].SecureChoice = secureChoiceInt
+								}
+
+							}
+
+							valueChoiceTypeFound := false
+
+							if v, ok := responseCookiesToAddMapStrToI["ignore_value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
+
+								valueChoiceTypeFound = true
+
+								if v.(bool) {
+									valueChoiceInt := &ves_io_schema.SetCookieValueOption_IgnoreValue{}
+									valueChoiceInt.IgnoreValue = &ves_io_schema.Empty{}
+									responseCookiesToAdd[i].ValueChoice = valueChoiceInt
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["secret_value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
+
+								valueChoiceTypeFound = true
+								valueChoiceInt := &ves_io_schema.SetCookieValueOption_SecretValue{}
+								valueChoiceInt.SecretValue = &ves_io_schema.SecretType{}
+								responseCookiesToAdd[i].ValueChoice = valueChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										secretInfoOneofTypeFound := false
+
+										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+											secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+											secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := responseCookiesToAddMapStrToI["value"]; ok && !isIntfNil(v) && !valueChoiceTypeFound {
+
+								valueChoiceTypeFound = true
+								valueChoiceInt := &ves_io_schema.SetCookieValueOption_Value{}
+
+								responseCookiesToAdd[i].ValueChoice = valueChoiceInt
+
+								valueChoiceInt.Value = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := routesMapStrToI["response_cookies_to_remove"]; ok && !isIntfNil(w) {
+					ls := make([]string, len(w.([]interface{})))
+					for i, v := range w.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field response_cookies_to_remove")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					routes[i].ResponseCookiesToRemove = ls
 				}
 
 				if v, ok := routesMapStrToI["response_headers_to_add"]; ok && !isIntfNil(v) {
@@ -4099,38 +4681,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 									if set != nil {
 										cs := set.(map[string]interface{})
 
-										if v, ok := cs["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-											valueChoiceInt.SecretValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-											for _, set := range sl {
-												if set != nil {
-													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.Location = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.StoreProvider = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := cs["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-											valueChoiceInt.SecretValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-										}
-
 										secretInfoOneofTypeFound := false
 
 										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -4197,76 +4747,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 										}
 
-										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-											secretInfoOneofTypeFound = true
-											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-													}
-
-													if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-													}
-
-													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-													}
-
-													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
-
-													if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := cs["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-											secretInfoOneofTypeFound = true
-											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-													}
-
-												}
-											}
-
-										}
-
 									}
 								}
 
@@ -4291,7 +4771,12 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 				if w, ok := routesMapStrToI["response_headers_to_remove"]; ok && !isIntfNil(w) {
 					ls := make([]string, len(w.([]interface{})))
 					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field response_headers_to_remove")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					routes[i].ResponseHeadersToRemove = ls
 				}
@@ -4325,10 +4810,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 										if w, ok := bufferPolicyMapStrToI["max_request_bytes"]; ok && !isIntfNil(w) {
 											bufferPolicy.MaxRequestBytes = uint32(w.(int))
-										}
-
-										if w, ok := bufferPolicyMapStrToI["max_request_time"]; ok && !isIntfNil(w) {
-											bufferPolicy.MaxRequestTime = uint32(w.(int))
 										}
 
 									}
@@ -4386,7 +4867,12 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 										if w, ok := corsPolicyMapStrToI["allow_origin"]; ok && !isIntfNil(w) {
 											ls := make([]string, len(w.([]interface{})))
 											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field allow_origin")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											corsPolicy.AllowOrigin = ls
 										}
@@ -4394,7 +4880,12 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 										if w, ok := corsPolicyMapStrToI["allow_origin_regex"]; ok && !isIntfNil(w) {
 											ls := make([]string, len(w.([]interface{})))
 											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field allow_origin_regex")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											corsPolicy.AllowOriginRegex = ls
 										}
@@ -4405,10 +4896,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 										if w, ok := corsPolicyMapStrToI["expose_headers"]; ok && !isIntfNil(w) {
 											corsPolicy.ExposeHeaders = w.(string)
-										}
-
-										if w, ok := corsPolicyMapStrToI["max_age"]; ok && !isIntfNil(w) {
-											corsPolicy.MaxAge = w.(string)
 										}
 
 										if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
@@ -4459,7 +4946,12 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field domains")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														allowedDomainsInt.CustomDomainList.Domains = ls
 
@@ -4940,13 +5432,14 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 										if w, ok := retryPolicyMapStrToI["retry_condition"]; ok && !isIntfNil(w) {
 											ls := make([]string, len(w.([]interface{})))
 											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field retry_condition")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											retryPolicy.RetryCondition = ls
-										}
-
-										if w, ok := retryPolicyMapStrToI["retry_on"]; ok && !isIntfNil(w) {
-											retryPolicy.RetryOn = w.(string)
 										}
 
 									}
@@ -5090,12 +5583,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 							}
 
-							if v, ok := cs["port_redirect"]; ok && !isIntfNil(v) {
-
-								routeActionInt.RouteRedirect.PortRedirect = uint32(v.(int))
-
-							}
-
 							if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
 
 								routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
@@ -5103,17 +5590,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 							}
 
 							queryParamsTypeFound := false
-
-							if v, ok := cs["all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
-
-								queryParamsTypeFound = true
-								queryParamsInt := &ves_io_schema_route.RouteRedirect_AllParams{}
-
-								routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-
-								queryParamsInt.AllParams = v.(bool)
-
-							}
 
 							if v, ok := cs["remove_all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
 
@@ -5146,33 +5622,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 									queryParamsInt := &ves_io_schema_route.RouteRedirect_RetainAllParams{}
 									queryParamsInt.RetainAllParams = &ves_io_schema.Empty{}
 									routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-								}
-
-							}
-
-							if v, ok := cs["strip_query_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
-
-								queryParamsTypeFound = true
-								queryParamsInt := &ves_io_schema_route.RouteRedirect_StripQueryParams{}
-								queryParamsInt.StripQueryParams = &ves_io_schema_route.RouteQueryParams{}
-								routeActionInt.RouteRedirect.QueryParams = queryParamsInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["query_params"]; ok && !isIntfNil(v) {
-
-											ls := make([]string, len(v.([]interface{})))
-											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
-											}
-											queryParamsInt.StripQueryParams.QueryParams = ls
-
-										}
-
-									}
 								}
 
 							}
@@ -5223,32 +5672,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 							servicePolicyChoiceTypeFound := false
 
-							if v, ok := servicePolicyMapStrToI["context_extensions"]; ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
-
-								servicePolicyChoiceTypeFound = true
-								servicePolicyChoiceInt := &ves_io_schema_route.ServicePolicyInfo_ContextExtensions{}
-								servicePolicyChoiceInt.ContextExtensions = &ves_io_schema_route.ContextExtensionInfo{}
-								servicePolicy.ServicePolicyChoice = servicePolicyChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["context_extensions"]; ok && !isIntfNil(v) {
-
-											ms := map[string]string{}
-											for k, v := range v.(map[string]interface{}) {
-												ms[k] = v.(string)
-											}
-											servicePolicyChoiceInt.ContextExtensions.ContextExtensions = ms
-										}
-
-									}
-								}
-
-							}
-
 							if v, ok := servicePolicyMapStrToI["disable"]; ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
 
 								servicePolicyChoiceTypeFound = true
@@ -5263,10 +5686,6 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 						}
 					}
 
-				}
-
-				if w, ok := routesMapStrToI["skip_lb_override"]; ok && !isIntfNil(w) {
-					routes[i].SkipLbOverride = w.(bool)
 				}
 
 				if v, ok := routesMapStrToI["waf_type"]; ok && !isIntfNil(v) {
@@ -5389,5 +5808,8 @@ func resourceVolterraRouteDelete(d *schema.ResourceData, meta interface{}) error
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra Route obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_route.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_route.ObjectType, namespace, name, opts...)
 }

@@ -726,5 +726,8 @@ func resourceVolterraUserIdentificationDelete(d *schema.ResourceData, meta inter
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra UserIdentification obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_user_identification.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_user_identification.ObjectType, namespace, name, opts...)
 }

@@ -21,7 +21,13 @@ resource "volterra_rate_limiter" "example" {
   namespace = "staging"
 
   limits {
+    // One of the arguments from this list "action_block disabled" can be set
+
+    disabled = true
+
     burst_multiplier = "1"
+
+    period_multiplier = "1"
 
     total_number = "1"
 
@@ -58,11 +64,53 @@ Argument Reference
 
 A list of RateLimitValues that specifies the total number of allowed requests for each specified period..
 
+###### One of the arguments from this list "action_block, disabled" can be set
+
+`action_block` - (Optional) Blocks the user for a specified duration of time. See [Action Choice Action Block ](#action-choice-action-block) below for details.
+
+`disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
+
 `burst_multiplier` - (Optional) The maximum burst of requests to accommodate, expressed as a multiple of the rate. (`Int`).
 
-`total_number` - (Required) The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period. (`Int`).
+`period_multiplier` - (Optional) This setting, combined with Per Period units, provides a duration (`Int`).
+
+`total_number` - (Required) The total number of allowed requests per rate-limiting period. (`Int`).
 
 `unit` - (Required) Unit for the period per which the rate limit is applied. (`String`).
+
+### Action Choice Action Block
+
+Blocks the user for a specified duration of time.
+
+###### One of the arguments from this list "hours, minutes, seconds" can be set
+
+`hours` - (Optional) User block mitigation time in Hours. See [Block Duration Choice Hours ](#block-duration-choice-hours) below for details.
+
+`minutes` - (Optional) User block mitigation time in Minutes. See [Block Duration Choice Minutes ](#block-duration-choice-minutes) below for details.
+
+`seconds` - (Optional) User block mitigation time in Seconds. See [Block Duration Choice Seconds ](#block-duration-choice-seconds) below for details.
+
+### Action Choice Disabled
+
+x-displayName: "Disabled".
+
+### Block Duration Choice Hours
+
+User block mitigation time in Hours.
+
+`duration` - (Optional) x-displayName: "Duration" (`Int`).
+
+### Block Duration Choice Minutes
+
+User block mitigation time in Minutes.
+
+`duration` - (Optional) x-displayName: "Duration" (`Int`).
+
+### Block Duration Choice Seconds
+
+User block mitigation time in Seconds.
+
+`duration` - (Optional) x-displayName: "Duration" (`Int`).
 
 ### Ref
 

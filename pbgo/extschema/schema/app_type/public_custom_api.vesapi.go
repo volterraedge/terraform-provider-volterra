@@ -2629,12 +2629,26 @@ var CustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "Engines"
                 },
+                "err_rsp_count": {
+                    "type": "string",
+                    "description": " Number of request with 4xx or 5xx response for the API Endpoint\n\nExample: - 1234-",
+                    "title": "error status code count",
+                    "format": "uint64",
+                    "x-displayname": "Error Count"
+                },
                 "has_learnt_schema": {
                     "type": "boolean",
                     "description": "Has Learnt Schema flag for request API endpoint.\n\nExample: - true-",
                     "title": "Has Learnt Schema",
                     "format": "boolean",
                     "x-displayname": "Has Learnt Schema"
+                },
+                "last_tested": {
+                    "type": "string",
+                    "description": " api testing last tested time is the time when the API endpoint\n was last tested",
+                    "title": "last api testing",
+                    "format": "date-time",
+                    "x-displayname": "Last tested"
                 },
                 "max_latency": {
                     "type": "number",

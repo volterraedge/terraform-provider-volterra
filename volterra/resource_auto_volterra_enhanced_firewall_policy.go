@@ -296,27 +296,6 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 										Optional: true,
 									},
 
-									"destination_aws_subnet_ids": {
-
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"subnet_id": {
-
-													Type: schema.TypeList,
-
-													Required: true,
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
-												},
-											},
-										},
-									},
-
 									"destination_aws_vpc_ids": {
 
 										Type:     schema.TypeList,
@@ -398,13 +377,6 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 										},
 									},
 
-									"destination_namespace": {
-
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
 									"destination_prefix_list": {
 
 										Type:     schema.TypeList,
@@ -482,12 +454,6 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 													Optional: true,
 												},
 
-												"disable": {
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
 												"name": {
 													Type:     schema.TypeString,
 													Required: true,
@@ -512,27 +478,6 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 										Type:     schema.TypeBool,
 										Optional: true,
-									},
-
-									"source_aws_subnet_ids": {
-
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"subnet_id": {
-
-													Type: schema.TypeList,
-
-													Required: true,
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
-												},
-											},
-										},
 									},
 
 									"source_aws_vpc_ids": {
@@ -614,13 +559,6 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 												},
 											},
 										},
-									},
-
-									"source_namespace": {
-
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"source_prefix_list": {
@@ -904,7 +842,7 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 	}
 
-	if v, ok := d.GetOk("allowed_destinations"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("allowed_destinations"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_enhanced_firewall_policy.CreateSpecType_AllowedDestinations{}
@@ -920,7 +858,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.AllowedDestinations.Ipv6Prefix = ls
 
@@ -930,7 +873,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.AllowedDestinations.Prefix = ls
 
@@ -941,7 +889,7 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 	}
 
-	if v, ok := d.GetOk("allowed_sources"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("allowed_sources"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_enhanced_firewall_policy.CreateSpecType_AllowedSources{}
@@ -957,7 +905,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.AllowedSources.Ipv6Prefix = ls
 
@@ -967,7 +920,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.AllowedSources.Prefix = ls
 
@@ -978,7 +936,7 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 	}
 
-	if v, ok := d.GetOk("denied_destinations"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("denied_destinations"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_enhanced_firewall_policy.CreateSpecType_DeniedDestinations{}
@@ -994,7 +952,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.DeniedDestinations.Ipv6Prefix = ls
 
@@ -1004,7 +967,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.DeniedDestinations.Prefix = ls
 
@@ -1015,7 +983,7 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 	}
 
-	if v, ok := d.GetOk("denied_sources"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("denied_sources"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_enhanced_firewall_policy.CreateSpecType_DeniedSources{}
@@ -1031,7 +999,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.DeniedSources.Ipv6Prefix = ls
 
@@ -1041,7 +1014,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.DeniedSources.Prefix = ls
 
@@ -1064,7 +1042,7 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 	}
 
-	if v, ok := d.GetOk("rule_list"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("rule_list"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_enhanced_firewall_policy.CreateSpecType_RuleList{}
@@ -1211,33 +1189,6 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 							}
 
-							if v, ok := rulesMapStrToI["destination_aws_subnet_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-								destinationChoiceTypeFound = true
-								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationAwsSubnetIds{}
-								destinationChoiceInt.DestinationAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
-								rules[i].DestinationChoice = destinationChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
-
-											ls := make([]string, len(v.([]interface{})))
-											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
-											}
-											destinationChoiceInt.DestinationAwsSubnetIds.SubnetId = ls
-
-										}
-
-									}
-								}
-
-							}
-
 							if v, ok := rulesMapStrToI["destination_aws_vpc_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
 								destinationChoiceTypeFound = true
@@ -1254,7 +1205,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field vpc_id")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DestinationAwsVpcIds.VpcId = ls
 
@@ -1330,7 +1286,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field expressions")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DestinationLabelSelector.Expressions = ls
 
@@ -1338,17 +1299,6 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 									}
 								}
-
-							}
-
-							if v, ok := rulesMapStrToI["destination_namespace"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-								destinationChoiceTypeFound = true
-								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationNamespace{}
-
-								rules[i].DestinationChoice = destinationChoiceInt
-
-								destinationChoiceInt.DestinationNamespace = v.(string)
 
 							}
 
@@ -1368,7 +1318,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DestinationPrefixList.Ipv6Prefixes = ls
 
@@ -1378,7 +1333,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DestinationPrefixList.Prefixes = ls
 
@@ -1425,7 +1385,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 										if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
 											ls := make([]string, len(w.([]interface{})))
 											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field keys")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											labelMatcher.Keys = ls
 										}
@@ -1446,10 +1411,6 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 											metadata.Description = w.(string)
-										}
-
-										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-											metadata.Disable = w.(bool)
 										}
 
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -1499,33 +1460,6 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 							}
 
-							if v, ok := rulesMapStrToI["source_aws_subnet_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-								sourceChoiceTypeFound = true
-								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceAwsSubnetIds{}
-								sourceChoiceInt.SourceAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
-								rules[i].SourceChoice = sourceChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
-
-											ls := make([]string, len(v.([]interface{})))
-											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
-											}
-											sourceChoiceInt.SourceAwsSubnetIds.SubnetId = ls
-
-										}
-
-									}
-								}
-
-							}
-
 							if v, ok := rulesMapStrToI["source_aws_vpc_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
 
 								sourceChoiceTypeFound = true
@@ -1542,7 +1476,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field vpc_id")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.SourceAwsVpcIds.VpcId = ls
 
@@ -1618,7 +1557,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field expressions")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.SourceLabelSelector.Expressions = ls
 
@@ -1626,17 +1570,6 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 									}
 								}
-
-							}
-
-							if v, ok := rulesMapStrToI["source_namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-								sourceChoiceTypeFound = true
-								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceNamespace{}
-
-								rules[i].SourceChoice = sourceChoiceInt
-
-								sourceChoiceInt.SourceNamespace = v.(string)
 
 							}
 
@@ -1656,7 +1589,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.SourcePrefixList.Ipv6Prefixes = ls
 
@@ -1666,7 +1604,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.SourcePrefixList.Prefixes = ls
 
@@ -1731,6 +1674,9 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 											applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
 											for _, j := range v.([]interface{}) {
+												if j == nil {
+													return fmt.Errorf("please provide valid non-empty enum value of field applications")
+												}
 												applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
 											}
 											trafficChoiceInt.Applications.Applications = applicationsList
@@ -1758,7 +1704,12 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field port_ranges")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											trafficChoiceInt.ProtocolPortRange.PortRanges = ls
 
@@ -2039,7 +1990,7 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 	}
 
-	if v, ok := d.GetOk("allowed_destinations"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("allowed_destinations"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_enhanced_firewall_policy.ReplaceSpecType_AllowedDestinations{}
@@ -2055,7 +2006,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.AllowedDestinations.Ipv6Prefix = ls
 
@@ -2065,7 +2021,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.AllowedDestinations.Prefix = ls
 
@@ -2076,7 +2037,7 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 	}
 
-	if v, ok := d.GetOk("allowed_sources"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("allowed_sources"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_enhanced_firewall_policy.ReplaceSpecType_AllowedSources{}
@@ -2092,7 +2053,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.AllowedSources.Ipv6Prefix = ls
 
@@ -2102,7 +2068,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.AllowedSources.Prefix = ls
 
@@ -2113,7 +2084,7 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 	}
 
-	if v, ok := d.GetOk("denied_destinations"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("denied_destinations"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_enhanced_firewall_policy.ReplaceSpecType_DeniedDestinations{}
@@ -2129,7 +2100,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.DeniedDestinations.Ipv6Prefix = ls
 
@@ -2139,7 +2115,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.DeniedDestinations.Prefix = ls
 
@@ -2150,7 +2131,7 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 	}
 
-	if v, ok := d.GetOk("denied_sources"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("denied_sources"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_enhanced_firewall_policy.ReplaceSpecType_DeniedSources{}
@@ -2166,7 +2147,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.DeniedSources.Ipv6Prefix = ls
 
@@ -2176,7 +2162,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.DeniedSources.Prefix = ls
 
@@ -2199,7 +2190,7 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 	}
 
-	if v, ok := d.GetOk("rule_list"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("rule_list"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_enhanced_firewall_policy.ReplaceSpecType_RuleList{}
@@ -2346,33 +2337,6 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 							}
 
-							if v, ok := rulesMapStrToI["destination_aws_subnet_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-								destinationChoiceTypeFound = true
-								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationAwsSubnetIds{}
-								destinationChoiceInt.DestinationAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
-								rules[i].DestinationChoice = destinationChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
-
-											ls := make([]string, len(v.([]interface{})))
-											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
-											}
-											destinationChoiceInt.DestinationAwsSubnetIds.SubnetId = ls
-
-										}
-
-									}
-								}
-
-							}
-
 							if v, ok := rulesMapStrToI["destination_aws_vpc_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
 								destinationChoiceTypeFound = true
@@ -2389,7 +2353,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field vpc_id")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DestinationAwsVpcIds.VpcId = ls
 
@@ -2465,7 +2434,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field expressions")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DestinationLabelSelector.Expressions = ls
 
@@ -2473,17 +2447,6 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 									}
 								}
-
-							}
-
-							if v, ok := rulesMapStrToI["destination_namespace"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
-
-								destinationChoiceTypeFound = true
-								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationNamespace{}
-
-								rules[i].DestinationChoice = destinationChoiceInt
-
-								destinationChoiceInt.DestinationNamespace = v.(string)
 
 							}
 
@@ -2503,7 +2466,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DestinationPrefixList.Ipv6Prefixes = ls
 
@@ -2513,7 +2481,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DestinationPrefixList.Prefixes = ls
 
@@ -2560,7 +2533,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 										if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
 											ls := make([]string, len(w.([]interface{})))
 											for i, v := range w.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field keys")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											labelMatcher.Keys = ls
 										}
@@ -2581,10 +2559,6 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 											metadata.Description = w.(string)
-										}
-
-										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-											metadata.Disable = w.(bool)
 										}
 
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -2634,33 +2608,6 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 							}
 
-							if v, ok := rulesMapStrToI["source_aws_subnet_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-								sourceChoiceTypeFound = true
-								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceAwsSubnetIds{}
-								sourceChoiceInt.SourceAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
-								rules[i].SourceChoice = sourceChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
-
-											ls := make([]string, len(v.([]interface{})))
-											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
-											}
-											sourceChoiceInt.SourceAwsSubnetIds.SubnetId = ls
-
-										}
-
-									}
-								}
-
-							}
-
 							if v, ok := rulesMapStrToI["source_aws_vpc_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
 
 								sourceChoiceTypeFound = true
@@ -2677,7 +2624,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field vpc_id")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.SourceAwsVpcIds.VpcId = ls
 
@@ -2753,7 +2705,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field expressions")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.SourceLabelSelector.Expressions = ls
 
@@ -2761,17 +2718,6 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 									}
 								}
-
-							}
-
-							if v, ok := rulesMapStrToI["source_namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-								sourceChoiceTypeFound = true
-								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceNamespace{}
-
-								rules[i].SourceChoice = sourceChoiceInt
-
-								sourceChoiceInt.SourceNamespace = v.(string)
 
 							}
 
@@ -2791,7 +2737,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.SourcePrefixList.Ipv6Prefixes = ls
 
@@ -2801,7 +2752,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.SourcePrefixList.Prefixes = ls
 
@@ -2866,6 +2822,9 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 											applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
 											for _, j := range v.([]interface{}) {
+												if j == nil {
+													return fmt.Errorf("please provide valid non-empty enum value of field applications")
+												}
 												applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
 											}
 											trafficChoiceInt.Applications.Applications = applicationsList
@@ -2893,7 +2852,12 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field port_ranges")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											trafficChoiceInt.ProtocolPortRange.PortRanges = ls
 
@@ -3086,5 +3050,8 @@ func resourceVolterraEnhancedFirewallPolicyDelete(d *schema.ResourceData, meta i
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra EnhancedFirewallPolicy obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_enhanced_firewall_policy.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_enhanced_firewall_policy.ObjectType, namespace, name, opts...)
 }

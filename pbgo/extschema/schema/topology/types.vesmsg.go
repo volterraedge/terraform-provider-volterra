@@ -3863,6 +3863,15 @@ func (v *ValidateSiteType) Validate(ctx context.Context, pm interface{}, opts ..
 
 	}
 
+	if fv, exists := v.FldValidators["orchestration_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("orchestration_mode"))
+		if err := fv(ctx, m.GetOrchestrationMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["provider_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("provider_info"))
@@ -4538,6 +4547,8 @@ func (v *ValidateTunnelSetType) Validate(ctx context.Context, pm interface{}, op
 var DefaultTunnelSetTypeValidator = func() *ValidateTunnelSetType {
 	v := &ValidateTunnelSetType{FldValidators: map[string]db.ValidatorFunc{}}
 
+	v.FldValidators["tunnels"] = TunnelTypeValidator().Validate
+
 	return v
 }()
 
@@ -4588,6 +4599,12 @@ func (m *TunnelType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetConnectionDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetConnectionDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetSiteDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetSiteDRefInfo() FAILED")
 	} else {
@@ -4601,6 +4618,24 @@ func (m *TunnelType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *TunnelType) GetConnectionDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetConnection() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetConnection().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetConnection().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "connection." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -4751,6 +4786,8 @@ func (v *ValidateTunnelType) Validate(ctx context.Context, pm interface{}, opts 
 // Well-known symbol for default validator implementation
 var DefaultTunnelTypeValidator = func() *ValidateTunnelType {
 	v := &ValidateTunnelType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["connection"] = ves_io_schema_site.TunnelConnectionStatusValidator().Validate
 
 	return v
 }()

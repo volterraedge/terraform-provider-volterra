@@ -2975,14 +2975,15 @@ var APISwaggerJSON string = `{
         },
         "cloud_linkCloudLinkDeploymentStatus": {
             "type": "string",
-            "description": "Status of the CloudLink deployment\n\n - IN_PROGRESS: In-Progress\n\nCloudLink provisioning is in-progress\n - ERROR: Error\n\nAn error occurred while deploying CloudLink. Check the error description and suggested action\n - READY: Ready\n\nCloudLink is ready for use\n - DELETING: Deleting\n\nCloudLink deleting in progress\n - CUSTOMER_DEPLOYED: Customer Deployed\n\nCustomer deploys the CloudLink",
+            "description": "Status of the CloudLink deployment\n\n - IN_PROGRESS: In-Progress\n\nCloudLink provisioning is in-progress\n - ERROR: Error\n\nAn error occurred while deploying CloudLink. Check the error description and suggested action\n - READY: Ready\n\nCloudLink is ready for use\n - DELETING: Deleting\n\nCloudLink deleting in progress\n - CUSTOMER_DEPLOYED: Customer Deployed\n\nCustomer deploys the CloudLink\n - NOT_APPLICABLE: NotApplicable\n\nDeployment status not applicable",
             "title": "CloudLink Status",
             "enum": [
                 "IN_PROGRESS",
                 "ERROR",
                 "READY",
                 "DELETING",
-                "CUSTOMER_DEPLOYED"
+                "CUSTOMER_DEPLOYED",
+                "NOT_APPLICABLE"
             ],
             "default": "IN_PROGRESS",
             "x-displayname": "Status",
@@ -4131,12 +4132,13 @@ var APISwaggerJSON string = `{
         },
         "schemaCloudLinkState": {
             "type": "string",
-            "description": "State of the CloudLink connections\n\n - UP: Up\n\nCloudLink and their corresponding Direct Connect connections are up and healthy\n - DOWN: Down\n\nCloudLink and their corresponding Direct Connect connections are down\n - DEGRADED: Degraded\n\nSome of Direct Connect connections with the CloudLink are down",
+            "description": "State of the CloudLink connections\n\n - UP: Up\n\nCloudLink and their corresponding Direct Connect connections are up and healthy\n - DOWN: Down\n\nCloudLink and their corresponding Direct Connect connections are down\n - DEGRADED: Degraded\n\nSome of Direct Connect connections with the CloudLink are down\n - NOT_APPLICABLE: NotApplicable\n\nCloudLinkState not applicable",
             "title": "CloudLink State",
             "enum": [
                 "UP",
                 "DOWN",
-                "DEGRADED"
+                "DEGRADED",
+                "NOT_APPLICABLE"
             ],
             "default": "UP",
             "x-displayname": "CloudLink State",

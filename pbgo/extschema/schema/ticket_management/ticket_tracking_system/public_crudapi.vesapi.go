@@ -756,22 +756,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/ticket_tracking_systems/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -1756,7 +1769,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.API.Create"
             },
             "x-displayname": "Ticket Tracking System",
@@ -1857,7 +1869,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.API.Replace"
             },
             "x-displayname": "Ticket Tracking System",
@@ -1974,7 +1985,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.API.List"
             },
             "x-displayname": "Ticket Tracking System",
@@ -2084,7 +2094,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.API.Get"
             },
             "delete": {
@@ -2178,7 +2187,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.API.Delete"
             },
             "x-displayname": "Ticket Tracking System",
@@ -2819,18 +2827,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "ticket_managementTicketTrackingSystemType": {
-            "type": "string",
-            "description": "The type of ticket tracking system - JIRA, ServiceNow, etc.\n\nDefault enum value for type\nJira ticket type",
-            "title": "TicketTrackingSystemType",
-            "enum": [
-                "TYPE_UNKNOWN",
-                "TYPE_JIRA"
-            ],
-            "default": "TYPE_UNKNOWN",
-            "x-displayname": "Ticket Tracking System Type",
-            "x-ves-proto-enum": "ves.io.schema.ticket_management.TicketTrackingSystemType"
-        },
         "ticket_tracking_systemCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -2888,7 +2884,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with []\n Configuration when JIRA is the ticket provider system",
                     "title": "jira_config",
                     "$ref": "#/definitions/ticket_tracking_systemJiraConfigurationType",
-                    "x-displayname": "Jira Configuration"
+                    "x-displayname": "Jira"
                 }
             }
         },
@@ -3014,13 +3010,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with []\n Configuration when JIRA is the ticket provider system",
                     "title": "jira_config",
                     "$ref": "#/definitions/ticket_tracking_systemJiraConfigurationType",
-                    "x-displayname": "Jira Configuration"
-                },
-                "type": {
-                    "description": " Type of the ticket tracking system.  JIRA, ServiceNow, etc.",
-                    "title": "type",
-                    "$ref": "#/definitions/ticket_managementTicketTrackingSystemType",
-                    "x-displayname": "Type"
+                    "x-displayname": "Jira"
                 }
             }
         },
@@ -3238,7 +3228,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with []\n Configuration when JIRA is the ticket provider system",
                     "title": "jira_config",
                     "$ref": "#/definitions/ticket_tracking_systemJiraConfigurationType",
-                    "x-displayname": "Jira Configuration"
+                    "x-displayname": "Jira"
                 }
             }
         }

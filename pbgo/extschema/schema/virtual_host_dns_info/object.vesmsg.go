@@ -87,6 +87,15 @@ func (v *ValidateDnsInfo) Validate(ctx context.Context, pm interface{}, opts ...
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["internal_cdn_service_domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("internal_cdn_service_domain"))
+		if err := fv(ctx, m.GetInternalCdnServiceDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["ip_address"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("ip_address"))

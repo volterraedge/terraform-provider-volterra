@@ -18,11 +18,16 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.downstream_cos.StatusObject"] = StatusObjectValidator()
 
 	vr["ves.io.schema.downstream_cos.CreateSpecType"] = CreateSpecTypeValidator()
+	vr["ves.io.schema.downstream_cos.CustomKeyScopeType"] = CustomKeyScopeTypeValidator()
 	vr["ves.io.schema.downstream_cos.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.downstream_cos.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.downstream_cos.HttpLimitOptions"] = HttpLimitOptionsValidator()
 	vr["ves.io.schema.downstream_cos.PerCpuUtilizationLimit"] = PerCpuUtilizationLimitValidator()
+	vr["ves.io.schema.downstream_cos.RateLimitEntry"] = RateLimitEntryValidator()
 	vr["ves.io.schema.downstream_cos.ReplaceSpecType"] = ReplaceSpecTypeValidator()
+	vr["ves.io.schema.downstream_cos.Sanction"] = SanctionValidator()
+	vr["ves.io.schema.downstream_cos.Scope"] = ScopeValidator()
+	vr["ves.io.schema.downstream_cos.Threshold"] = ThresholdValidator()
 
 }
 

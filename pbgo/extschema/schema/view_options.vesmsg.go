@@ -2826,6 +2826,93 @@ func StoredObjectURLValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SuffixText) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SuffixText) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SuffixText) DeepCopy() *SuffixText {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SuffixText{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SuffixText) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SuffixText) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SuffixTextValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSuffixText struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSuffixText) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SuffixText)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SuffixText got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["field_path_value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("field_path_value"))
+		if err := fv(ctx, m.GetFieldPathValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSuffixTextValidator = func() *ValidateSuffixText {
+	v := &ValidateSuffixText{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SuffixTextValidator() db.Validator {
+	return DefaultSuffixTextValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SuggestedValues) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

@@ -474,5 +474,8 @@ func resourceVolterraVirtualK8SDelete(d *schema.ResourceData, meta interface{}) 
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra VirtualK8S obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_virtual_k8s.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_virtual_k8s.ObjectType, namespace, name, opts...)
 }

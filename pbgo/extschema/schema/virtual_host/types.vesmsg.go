@@ -745,6 +745,517 @@ func AutoCertInfoTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CDNOriginServerPublicIP) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CDNOriginServerPublicIP) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CDNOriginServerPublicIP) DeepCopy() *CDNOriginServerPublicIP {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CDNOriginServerPublicIP{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CDNOriginServerPublicIP) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CDNOriginServerPublicIP) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CDNOriginServerPublicIPValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCDNOriginServerPublicIP struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCDNOriginServerPublicIP) PublicIpChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for public_ip_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCDNOriginServerPublicIP) PublicIpChoiceIpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ip, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ip")
+	}
+	return oValidatorFn_Ip, nil
+}
+func (v *ValidateCDNOriginServerPublicIP) PublicIpChoiceIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Ipv6, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for ipv6")
+	}
+	return oValidatorFn_Ipv6, nil
+}
+
+func (v *ValidateCDNOriginServerPublicIP) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CDNOriginServerPublicIP)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CDNOriginServerPublicIP got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["public_ip_choice"]; exists {
+		val := m.GetPublicIpChoice()
+		vOpts := append(opts,
+			db.WithValidateField("public_ip_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetPublicIpChoice().(type) {
+	case *CDNOriginServerPublicIP_Ip:
+		if fv, exists := v.FldValidators["public_ip_choice.ip"]; exists {
+			val := m.GetPublicIpChoice().(*CDNOriginServerPublicIP_Ip).Ip
+			vOpts := append(opts,
+				db.WithValidateField("public_ip_choice"),
+				db.WithValidateField("ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CDNOriginServerPublicIP_Ipv6:
+		if fv, exists := v.FldValidators["public_ip_choice.ipv6"]; exists {
+			val := m.GetPublicIpChoice().(*CDNOriginServerPublicIP_Ipv6).Ipv6
+			vOpts := append(opts,
+				db.WithValidateField("public_ip_choice"),
+				db.WithValidateField("ipv6"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCDNOriginServerPublicIPValidator = func() *ValidateCDNOriginServerPublicIP {
+	v := &ValidateCDNOriginServerPublicIP{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPublicIpChoice := v.PublicIpChoiceValidationRuleHandler
+	rulesPublicIpChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhPublicIpChoice(rulesPublicIpChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNOriginServerPublicIP.public_ip_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["public_ip_choice"] = vFn
+
+	vrhPublicIpChoiceIp := v.PublicIpChoiceIpValidationRuleHandler
+	rulesPublicIpChoiceIp := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFnMap["public_ip_choice.ip"], err = vrhPublicIpChoiceIp(rulesPublicIpChoiceIp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CDNOriginServerPublicIP.public_ip_choice_ip: %s", err)
+		panic(errMsg)
+	}
+	vrhPublicIpChoiceIpv6 := v.PublicIpChoiceIpv6ValidationRuleHandler
+	rulesPublicIpChoiceIpv6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFnMap["public_ip_choice.ipv6"], err = vrhPublicIpChoiceIpv6(rulesPublicIpChoiceIpv6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CDNOriginServerPublicIP.public_ip_choice_ipv6: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["public_ip_choice.ip"] = vFnMap["public_ip_choice.ip"]
+	v.FldValidators["public_ip_choice.ipv6"] = vFnMap["public_ip_choice.ipv6"]
+
+	return v
+}()
+
+func CDNOriginServerPublicIPValidator() db.Validator {
+	return DefaultCDNOriginServerPublicIPValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CDNOriginServerPublicName) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CDNOriginServerPublicName) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CDNOriginServerPublicName) DeepCopy() *CDNOriginServerPublicName {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CDNOriginServerPublicName{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CDNOriginServerPublicName) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CDNOriginServerPublicName) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CDNOriginServerPublicNameValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCDNOriginServerPublicName struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCDNOriginServerPublicName) DnsNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dns_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCDNOriginServerPublicName) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CDNOriginServerPublicName)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CDNOriginServerPublicName got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dns_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dns_name"))
+		if err := fv(ctx, m.GetDnsName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCDNOriginServerPublicNameValidator = func() *ValidateCDNOriginServerPublicName {
+	v := &ValidateCDNOriginServerPublicName{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDnsName := v.DnsNameValidationRuleHandler
+	rulesDnsName := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+	}
+	vFn, err = vrhDnsName(rulesDnsName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNOriginServerPublicName.dns_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dns_name"] = vFn
+
+	return v
+}()
+
+func CDNOriginServerPublicNameValidator() db.Validator {
+	return DefaultCDNOriginServerPublicNameValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CDNOriginServerType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CDNOriginServerType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CDNOriginServerType) DeepCopy() *CDNOriginServerType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CDNOriginServerType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CDNOriginServerType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CDNOriginServerType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CDNOriginServerTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCDNOriginServerType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCDNOriginServerType) ChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCDNOriginServerType) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCDNOriginServerType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CDNOriginServerType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CDNOriginServerType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["choice"]; exists {
+		val := m.GetChoice()
+		vOpts := append(opts,
+			db.WithValidateField("choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetChoice().(type) {
+	case *CDNOriginServerType_PublicIp:
+		if fv, exists := v.FldValidators["choice.public_ip"]; exists {
+			val := m.GetChoice().(*CDNOriginServerType_PublicIp).PublicIp
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("public_ip"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CDNOriginServerType_PublicName:
+		if fv, exists := v.FldValidators["choice.public_name"]; exists {
+			val := m.GetChoice().(*CDNOriginServerType_PublicName).PublicName
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("public_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCDNOriginServerTypeValidator = func() *ValidateCDNOriginServerType {
+	v := &ValidateCDNOriginServerType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhChoice := v.ChoiceValidationRuleHandler
+	rulesChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhChoice(rulesChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNOriginServerType.choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["choice"] = vFn
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CDNOriginServerType.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
+
+	v.FldValidators["choice.public_ip"] = CDNOriginServerPublicIPValidator().Validate
+	v.FldValidators["choice.public_name"] = CDNOriginServerPublicNameValidator().Validate
+
+	return v
+}()
+
+func CDNOriginServerTypeValidator() db.Validator {
+	return DefaultCDNOriginServerTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CDNUpstreamTlsParameters) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CDNUpstreamTlsParameters) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CDNUpstreamTlsParameters) DeepCopy() *CDNUpstreamTlsParameters {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CDNUpstreamTlsParameters{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CDNUpstreamTlsParameters) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CDNUpstreamTlsParameters) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CDNUpstreamTlsParametersValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCDNUpstreamTlsParameters struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCDNUpstreamTlsParameters) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CDNUpstreamTlsParameters)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CDNUpstreamTlsParameters got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCDNUpstreamTlsParametersValidator = func() *ValidateCDNUpstreamTlsParameters {
+	v := &ValidateCDNUpstreamTlsParameters{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CDNUpstreamTlsParametersValidator() db.Validator {
+	return DefaultCDNUpstreamTlsParametersValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CaptchaChallengeType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -884,12 +1395,289 @@ func CaptchaChallengeTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CdnOriginPoolType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CdnOriginPoolType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CdnOriginPoolType) DeepCopy() *CdnOriginPoolType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CdnOriginPoolType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CdnOriginPoolType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CdnOriginPoolType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CdnOriginPoolTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCdnOriginPoolType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCdnOriginPoolType) TlsChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tls_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCdnOriginPoolType) OriginServersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for origin_servers")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*CDNOriginServerType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := CDNOriginServerTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for origin_servers")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*CDNOriginServerType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*CDNOriginServerType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated origin_servers")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items origin_servers")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCdnOriginPoolType) OriginRequestTimeoutValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for origin_request_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCdnOriginPoolType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CdnOriginPoolType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CdnOriginPoolType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["follow_origin_redirect"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("follow_origin_redirect"))
+		if err := fv(ctx, m.GetFollowOriginRedirect(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["more_origin_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("more_origin_options"))
+		if err := fv(ctx, m.GetMoreOriginOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["origin_request_timeout"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("origin_request_timeout"))
+		if err := fv(ctx, m.GetOriginRequestTimeout(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["origin_servers"]; exists {
+		vOpts := append(opts, db.WithValidateField("origin_servers"))
+		if err := fv(ctx, m.GetOriginServers(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["public_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("public_name"))
+		if err := fv(ctx, m.GetPublicName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tls_choice"]; exists {
+		val := m.GetTlsChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tls_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTlsChoice().(type) {
+	case *CdnOriginPoolType_NoTls:
+		if fv, exists := v.FldValidators["tls_choice.no_tls"]; exists {
+			val := m.GetTlsChoice().(*CdnOriginPoolType_NoTls).NoTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("no_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CdnOriginPoolType_UseTls:
+		if fv, exists := v.FldValidators["tls_choice.use_tls"]; exists {
+			val := m.GetTlsChoice().(*CdnOriginPoolType_UseTls).UseTls
+			vOpts := append(opts,
+				db.WithValidateField("tls_choice"),
+				db.WithValidateField("use_tls"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCdnOriginPoolTypeValidator = func() *ValidateCdnOriginPoolType {
+	v := &ValidateCdnOriginPoolType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTlsChoice := v.TlsChoiceValidationRuleHandler
+	rulesTlsChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTlsChoice(rulesTlsChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CdnOriginPoolType.tls_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tls_choice"] = vFn
+
+	vrhOriginServers := v.OriginServersValidationRuleHandler
+	rulesOriginServers := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhOriginServers(rulesOriginServers)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CdnOriginPoolType.origin_servers: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["origin_servers"] = vFn
+
+	vrhOriginRequestTimeout := v.OriginRequestTimeoutValidationRuleHandler
+	rulesOriginRequestTimeout := map[string]string{
+		"ves.io.schema.rules.string.max_time_interval": "10m",
+		"ves.io.schema.rules.string.min_time_interval": "10s",
+		"ves.io.schema.rules.string.time_interval":     "true",
+	}
+	vFn, err = vrhOriginRequestTimeout(rulesOriginRequestTimeout)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CdnOriginPoolType.origin_request_timeout: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["origin_request_timeout"] = vFn
+
+	v.FldValidators["public_name"] = CDNOriginServerPublicNameValidator().Validate
+
+	return v
+}()
+
+func CdnOriginPoolTypeValidator() db.Validator {
+	return DefaultCdnOriginPoolTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CdnServiceType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
 func (m *CdnServiceType) ToYAML() (string, error) {
 	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *CdnServiceType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetOtherSettings().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CdnServiceType.other_settings")
+	}
+
+	return nil
 }
 
 func (m *CdnServiceType) DeepCopy() *CdnServiceType {
@@ -917,6 +1705,70 @@ func (m *CdnServiceType) DeepCopyProto() proto.Message {
 
 func (m *CdnServiceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
 	return CdnServiceTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *CdnServiceType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCdnCacheRuleDRefInfo()
+
+}
+
+func (m *CdnServiceType) GetCdnCacheRuleDRefInfo() ([]db.DRefInfo, error) {
+	vrefs := m.GetCdnCacheRule()
+	if len(vrefs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(vrefs))
+	for i, vref := range vrefs {
+		if vref == nil {
+			return nil, fmt.Errorf("CdnServiceType.cdn_cache_rule[%d] has a nil value", i)
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("cdn_cache_rule.Object")
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "cdn_cache_rule.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "cdn_cache_rule",
+			Ref:        vdRef,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetCdnCacheRuleDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *CdnServiceType) GetCdnCacheRuleDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cdn_cache_rule.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cdn_cache_rule")
+	}
+	for i, vref := range m.GetCdnCacheRule() {
+		if vref == nil {
+			return nil, fmt.Errorf("CdnServiceType.cdn_cache_rule[%d] has a nil value", i)
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "cdn_cache_rule.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
 }
 
 type ValidateCdnServiceType struct {
@@ -949,6 +1801,27 @@ func (v *ValidateCdnServiceType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("cache_ttl"))
 		if err := fv(ctx, m.GetCacheTtl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cdn_cache_rule"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdn_cache_rule"))
+		for idx, item := range m.GetCdnCacheRule() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cdn_origin_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdn_origin_pool"))
+		if err := fv(ctx, m.GetCdnOriginPool(), vOpts...); err != nil {
 			return err
 		}
 
@@ -990,6 +1863,24 @@ func (v *ValidateCdnServiceType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["default_cache_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("default_cache_action"))
+		if err := fv(ctx, m.GetDefaultCacheAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["other_settings"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("other_settings"))
+		if err := fv(ctx, m.GetOtherSettings(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["service_domains"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("service_domains"))
@@ -998,6 +1889,15 @@ func (v *ValidateCdnServiceType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_policy_option"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_policy_option"))
+		if err := fv(ctx, m.GetServicePolicyOption(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1027,6 +1927,14 @@ var DefaultCdnServiceTypeValidator = func() *ValidateCdnServiceType {
 		panic(errMsg)
 	}
 	v.FldValidators["content_choice"] = vFn
+
+	v.FldValidators["cdn_origin_pool"] = CdnOriginPoolTypeValidator().Validate
+
+	v.FldValidators["cdn_cache_rule"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["other_settings"] = OtherSettingsValidator().Validate
+
+	v.FldValidators["default_cache_action"] = DefaultCacheActionValidator().Validate
 
 	return v
 }()
@@ -1402,6 +2310,18 @@ func (m *CreateSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetAuthentication().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting CreateSpecType.authentication")
+	}
+
+	for idx, e := range m.GetRequestCookiesToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting CreateSpecType.request_cookies_to_add idx %v", idx)
+		}
+	}
+
+	for idx, e := range m.GetResponseCookiesToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting CreateSpecType.response_cookies_to_add idx %v", idx)
+		}
 	}
 
 	return nil
@@ -2417,6 +3337,186 @@ func (v *ValidateCreateSpecType) ConnectionIdleTimeoutValidationRuleHandler(rule
 	return validatorFn, nil
 }
 
+func (v *ValidateCreateSpecType) RequestCookiesToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for request_cookies_to_add")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieValueOption, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieValueOptionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_cookies_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieValueOption)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieValueOption, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_cookies_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_cookies_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) RequestCookiesToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for request_cookies_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_cookies_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_cookies_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_cookies_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ResponseCookiesToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for response_cookies_to_add")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.SetCookieValueOption, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.SetCookieValueOptionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_cookies_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.SetCookieValueOption)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.SetCookieValueOption, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_cookies_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_cookies_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) ResponseCookiesToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for response_cookies_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_cookies_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_cookies_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_cookies_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) MaxDirectResponseBodySizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
@@ -2793,6 +3893,22 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["request_cookies_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_cookies_to_add"))
+		if err := fv(ctx, m.GetRequestCookiesToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_cookies_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_cookies_to_remove"))
+		if err := fv(ctx, m.GetRequestCookiesToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["request_headers_to_add"]; exists {
 		vOpts := append(opts, db.WithValidateField("request_headers_to_add"))
 		if err := fv(ctx, m.GetRequestHeadersToAdd(), vOpts...); err != nil {
@@ -2804,6 +3920,22 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["request_headers_to_remove"]; exists {
 		vOpts := append(opts, db.WithValidateField("request_headers_to_remove"))
 		if err := fv(ctx, m.GetRequestHeadersToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_cookies_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_cookies_to_add"))
+		if err := fv(ctx, m.GetResponseCookiesToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_cookies_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_cookies_to_remove"))
+		if err := fv(ctx, m.GetResponseCookiesToRemove(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3201,6 +4333,58 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["connection_idle_timeout"] = vFn
+
+	vrhRequestCookiesToAdd := v.RequestCookiesToAddValidationRuleHandler
+	rulesRequestCookiesToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestCookiesToAdd(rulesRequestCookiesToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.request_cookies_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_cookies_to_add"] = vFn
+
+	vrhRequestCookiesToRemove := v.RequestCookiesToRemoveValidationRuleHandler
+	rulesRequestCookiesToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhRequestCookiesToRemove(rulesRequestCookiesToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.request_cookies_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_cookies_to_remove"] = vFn
+
+	vrhResponseCookiesToAdd := v.ResponseCookiesToAddValidationRuleHandler
+	rulesResponseCookiesToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseCookiesToAdd(rulesResponseCookiesToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.response_cookies_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_cookies_to_add"] = vFn
+
+	vrhResponseCookiesToRemove := v.ResponseCookiesToRemoveValidationRuleHandler
+	rulesResponseCookiesToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhResponseCookiesToRemove(rulesResponseCookiesToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.response_cookies_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_cookies_to_remove"] = vFn
 
 	vrhMaxDirectResponseBodySize := v.MaxDirectResponseBodySizeValidationRuleHandler
 	rulesMaxDirectResponseBodySize := map[string]string{
@@ -4052,6 +5236,327 @@ func DNSVHostStatusTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *DefaultCacheAction) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DefaultCacheAction) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DefaultCacheAction) DeepCopy() *DefaultCacheAction {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DefaultCacheAction{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DefaultCacheAction) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DefaultCacheAction) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DefaultCacheActionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDefaultCacheAction struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDefaultCacheAction) CacheActionsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_actions")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDefaultCacheAction) CacheActionsCacheTtlDefaultValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_CacheTtlDefault, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_ttl_default")
+	}
+	return oValidatorFn_CacheTtlDefault, nil
+}
+func (v *ValidateDefaultCacheAction) CacheActionsCacheTtlOverrideValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_CacheTtlOverride, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cache_ttl_override")
+	}
+	return oValidatorFn_CacheTtlOverride, nil
+}
+
+func (v *ValidateDefaultCacheAction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DefaultCacheAction)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DefaultCacheAction got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cache_actions"]; exists {
+		val := m.GetCacheActions()
+		vOpts := append(opts,
+			db.WithValidateField("cache_actions"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetCacheActions().(type) {
+	case *DefaultCacheAction_CacheTtlDefault:
+		if fv, exists := v.FldValidators["cache_actions.cache_ttl_default"]; exists {
+			val := m.GetCacheActions().(*DefaultCacheAction_CacheTtlDefault).CacheTtlDefault
+			vOpts := append(opts,
+				db.WithValidateField("cache_actions"),
+				db.WithValidateField("cache_ttl_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DefaultCacheAction_CacheTtlOverride:
+		if fv, exists := v.FldValidators["cache_actions.cache_ttl_override"]; exists {
+			val := m.GetCacheActions().(*DefaultCacheAction_CacheTtlOverride).CacheTtlOverride
+			vOpts := append(opts,
+				db.WithValidateField("cache_actions"),
+				db.WithValidateField("cache_ttl_override"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DefaultCacheAction_CacheDisabled:
+		if fv, exists := v.FldValidators["cache_actions.cache_disabled"]; exists {
+			val := m.GetCacheActions().(*DefaultCacheAction_CacheDisabled).CacheDisabled
+			vOpts := append(opts,
+				db.WithValidateField("cache_actions"),
+				db.WithValidateField("cache_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDefaultCacheActionValidator = func() *ValidateDefaultCacheAction {
+	v := &ValidateDefaultCacheAction{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCacheActions := v.CacheActionsValidationRuleHandler
+	rulesCacheActions := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhCacheActions(rulesCacheActions)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DefaultCacheAction.cache_actions: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cache_actions"] = vFn
+
+	vrhCacheActionsCacheTtlDefault := v.CacheActionsCacheTtlDefaultValidationRuleHandler
+	rulesCacheActionsCacheTtlDefault := map[string]string{
+		"ves.io.schema.rules.string.time_interval": "true",
+	}
+	vFnMap["cache_actions.cache_ttl_default"], err = vrhCacheActionsCacheTtlDefault(rulesCacheActionsCacheTtlDefault)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DefaultCacheAction.cache_actions_cache_ttl_default: %s", err)
+		panic(errMsg)
+	}
+	vrhCacheActionsCacheTtlOverride := v.CacheActionsCacheTtlOverrideValidationRuleHandler
+	rulesCacheActionsCacheTtlOverride := map[string]string{
+		"ves.io.schema.rules.string.time_interval": "true",
+	}
+	vFnMap["cache_actions.cache_ttl_override"], err = vrhCacheActionsCacheTtlOverride(rulesCacheActionsCacheTtlOverride)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field DefaultCacheAction.cache_actions_cache_ttl_override: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["cache_actions.cache_ttl_default"] = vFnMap["cache_actions.cache_ttl_default"]
+	v.FldValidators["cache_actions.cache_ttl_override"] = vFnMap["cache_actions.cache_ttl_override"]
+
+	return v
+}()
+
+func DefaultCacheActionValidator() db.Validator {
+	return DefaultDefaultCacheActionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DelegationLocationSelection) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DelegationLocationSelection) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DelegationLocationSelection) DeepCopy() *DelegationLocationSelection {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DelegationLocationSelection{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DelegationLocationSelection) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DelegationLocationSelection) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DelegationLocationSelectionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateDelegationLocationSelection struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDelegationLocationSelection) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DelegationLocationSelection)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DelegationLocationSelection got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["direct_response_route"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("direct_response_route"))
+		if err := fv(ctx, m.GetDirectResponseRoute(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["l7ddos"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("l7ddos"))
+		if err := fv(ctx, m.GetL7Ddos(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["redirect_route"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("redirect_route"))
+		if err := fv(ctx, m.GetRedirectRoute(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_header_manipulation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_header_manipulation"))
+		if err := fv(ctx, m.GetRequestHeaderManipulation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_rewrite"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("request_rewrite"))
+		if err := fv(ctx, m.GetRequestRewrite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_header_manipulation"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("response_header_manipulation"))
+		if err := fv(ctx, m.GetResponseHeaderManipulation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["simple_route"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("simple_route"))
+		if err := fv(ctx, m.GetSimpleRoute(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waap"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waap"))
+		if err := fv(ctx, m.GetWaap(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDelegationLocationSelectionValidator = func() *ValidateDelegationLocationSelection {
+	v := &ValidateDelegationLocationSelection{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func DelegationLocationSelectionValidator() db.Validator {
+	return DefaultDelegationLocationSelectionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *DomainCertificates) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4489,6 +5994,22 @@ func (m *GetSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting GetSpecType.authentication")
 	}
 
+	if err := m.GetCdnService().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GetSpecType.cdn_service")
+	}
+
+	for idx, e := range m.GetRequestCookiesToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GetSpecType.request_cookies_to_add idx %v", idx)
+		}
+	}
+
+	for idx, e := range m.GetResponseCookiesToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GetSpecType.response_cookies_to_add idx %v", idx)
+		}
+	}
+
 	return nil
 }
 
@@ -4539,6 +6060,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetAuthenticationChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetAuthenticationChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetCdnServiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCdnServiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -4689,6 +6216,24 @@ func (m *GetSpecType) GetAuthenticationChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetCdnServiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetCdnService() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetCdnService().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCdnService().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cdn_service." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -5486,6 +7031,186 @@ func (v *ValidateGetSpecType) ConnectionIdleTimeoutValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) RequestCookiesToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for request_cookies_to_add")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieValueOption, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieValueOptionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_cookies_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieValueOption)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieValueOption, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_cookies_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_cookies_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) RequestCookiesToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for request_cookies_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_cookies_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_cookies_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_cookies_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ResponseCookiesToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for response_cookies_to_add")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.SetCookieValueOption, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.SetCookieValueOptionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_cookies_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.SetCookieValueOption)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.SetCookieValueOption, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_cookies_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_cookies_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) ResponseCookiesToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for response_cookies_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_cookies_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_cookies_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_cookies_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) MaxDirectResponseBodySizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
@@ -5710,6 +7435,54 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	switch m.GetDdosAutoMitigationAction().(type) {
+	case *GetSpecType_Block:
+		if fv, exists := v.FldValidators["ddos_auto_mitigation_action.block"]; exists {
+			val := m.GetDdosAutoMitigationAction().(*GetSpecType_Block).Block
+			vOpts := append(opts,
+				db.WithValidateField("ddos_auto_mitigation_action"),
+				db.WithValidateField("block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DdosJsChallenge:
+		if fv, exists := v.FldValidators["ddos_auto_mitigation_action.ddos_js_challenge"]; exists {
+			val := m.GetDdosAutoMitigationAction().(*GetSpecType_DdosJsChallenge).DdosJsChallenge
+			vOpts := append(opts,
+				db.WithValidateField("ddos_auto_mitigation_action"),
+				db.WithValidateField("ddos_js_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_L7DdosActionDefault:
+		if fv, exists := v.FldValidators["ddos_auto_mitigation_action.l7_ddos_action_default"]; exists {
+			val := m.GetDdosAutoMitigationAction().(*GetSpecType_L7DdosActionDefault).L7DdosActionDefault
+			vOpts := append(opts,
+				db.WithValidateField("ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_default"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_L7DdosActionNone:
+		if fv, exists := v.FldValidators["ddos_auto_mitigation_action.l7_ddos_action_none"]; exists {
+			val := m.GetDdosAutoMitigationAction().(*GetSpecType_L7DdosActionNone).L7DdosActionNone
+			vOpts := append(opts,
+				db.WithValidateField("ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_action_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	switch m.GetDefaultLbChoice().(type) {
 	case *GetSpecType_NonDefaultLoadbalancer:
 		if fv, exists := v.FldValidators["default_lb_choice.non_default_loadbalancer"]; exists {
@@ -5866,6 +7639,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["l7_ddos_rps_threshold"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("l7_ddos_rps_threshold"))
+		if err := fv(ctx, m.GetL7DdosRpsThreshold(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["masking_config"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("masking_config"))
@@ -5936,6 +7718,22 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["request_cookies_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_cookies_to_add"))
+		if err := fv(ctx, m.GetRequestCookiesToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_cookies_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_cookies_to_remove"))
+		if err := fv(ctx, m.GetRequestCookiesToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["request_headers_to_add"]; exists {
 		vOpts := append(opts, db.WithValidateField("request_headers_to_add"))
 		if err := fv(ctx, m.GetRequestHeadersToAdd(), vOpts...); err != nil {
@@ -5947,6 +7745,22 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 	if fv, exists := v.FldValidators["request_headers_to_remove"]; exists {
 		vOpts := append(opts, db.WithValidateField("request_headers_to_remove"))
 		if err := fv(ctx, m.GetRequestHeadersToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_cookies_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_cookies_to_add"))
+		if err := fv(ctx, m.GetResponseCookiesToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_cookies_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_cookies_to_remove"))
+		if err := fv(ctx, m.GetResponseCookiesToRemove(), vOpts...); err != nil {
 			return err
 		}
 
@@ -6352,6 +8166,58 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["connection_idle_timeout"] = vFn
 
+	vrhRequestCookiesToAdd := v.RequestCookiesToAddValidationRuleHandler
+	rulesRequestCookiesToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestCookiesToAdd(rulesRequestCookiesToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.request_cookies_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_cookies_to_add"] = vFn
+
+	vrhRequestCookiesToRemove := v.RequestCookiesToRemoveValidationRuleHandler
+	rulesRequestCookiesToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhRequestCookiesToRemove(rulesRequestCookiesToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.request_cookies_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_cookies_to_remove"] = vFn
+
+	vrhResponseCookiesToAdd := v.ResponseCookiesToAddValidationRuleHandler
+	rulesResponseCookiesToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseCookiesToAdd(rulesResponseCookiesToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.response_cookies_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_cookies_to_add"] = vFn
+
+	vrhResponseCookiesToRemove := v.ResponseCookiesToRemoveValidationRuleHandler
+	rulesResponseCookiesToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhResponseCookiesToRemove(rulesResponseCookiesToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.response_cookies_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_cookies_to_remove"] = vFn
+
 	vrhMaxDirectResponseBodySize := v.MaxDirectResponseBodySizeValidationRuleHandler
 	rulesMaxDirectResponseBodySize := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "65536",
@@ -6367,6 +8233,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["challenge_type.js_challenge"] = JavascriptChallengeTypeValidator().Validate
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
+
+	v.FldValidators["ddos_auto_mitigation_action.ddos_js_challenge"] = JavascriptChallengeTypeValidator().Validate
 
 	v.FldValidators["strict_sni_host_header_check_choice.additional_domains"] = ves_io_schema.DomainNameListValidator().Validate
 
@@ -6457,6 +8325,22 @@ func (m *GlobalSpecType) Redact(ctx context.Context) error {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.authentication")
 	}
 
+	if err := m.GetCdnService().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting GlobalSpecType.cdn_service")
+	}
+
+	for idx, e := range m.GetRequestCookiesToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GlobalSpecType.request_cookies_to_add idx %v", idx)
+		}
+	}
+
+	for idx, e := range m.GetResponseCookiesToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting GlobalSpecType.response_cookies_to_add idx %v", idx)
+		}
+	}
+
 	if err := m.GetBotDefense().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting GlobalSpecType.bot_defense")
 	}
@@ -6517,6 +8401,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetBotDefenseChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetBotDefenseChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetCdnServiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCdnServiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -6619,6 +8509,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetUserIdentificationDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetUserIdentificationDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetWafExclusionPolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusionPolicyDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -6755,6 +8651,24 @@ func (m *GlobalSpecType) GetBotDefenseChoiceDRefInfo() ([]db.DRefInfo, error) {
 	default:
 		return nil, nil
 	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetCdnServiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetCdnService() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetCdnService().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCdnService().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cdn_service." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -7439,6 +9353,51 @@ func (m *GlobalSpecType) GetUserIdentificationDBEntries(ctx context.Context, d d
 		return nil, errors.Wrap(err, "Cannot find type for kind: user_identification")
 	}
 	for _, ref := range m.GetUserIdentification() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *GlobalSpecType) GetWafExclusionPolicyDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetWafExclusionPolicy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("GlobalSpecType.waf_exclusion_policy[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "waf_exclusion_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "waf_exclusion_policy",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetWafExclusionPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GlobalSpecType) GetWafExclusionPolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "waf_exclusion_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: waf_exclusion_policy")
+	}
+	for _, ref := range m.GetWafExclusionPolicy() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
 		if err != nil {
 			return nil, errors.Wrap(err, "Getting referred entry")
@@ -8138,6 +10097,234 @@ func (v *ValidateGlobalSpecType) DownstreamCosValidationRuleHandler(rules map[st
 		}
 		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
 			return errors.Wrap(err, "items downstream_cos")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) RequestCookiesToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for request_cookies_to_add")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieValueOption, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieValueOptionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_cookies_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieValueOption)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieValueOption, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_cookies_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_cookies_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) RequestCookiesToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for request_cookies_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_cookies_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_cookies_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_cookies_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ResponseCookiesToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for response_cookies_to_add")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.SetCookieValueOption, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.SetCookieValueOptionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_cookies_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.SetCookieValueOption)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.SetCookieValueOption, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_cookies_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_cookies_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ResponseCookiesToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for response_cookies_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_cookies_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_cookies_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_cookies_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) WafExclusionPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf_exclusion_policy")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for waf_exclusion_policy")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated waf_exclusion_policy")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items waf_exclusion_policy")
 		}
 		return nil
 	}
@@ -8943,6 +11130,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["enable_per_packet_load_balancing"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("enable_per_packet_load_balancing"))
+		if err := fv(ctx, m.GetEnablePerPacketLoadBalancing(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["fast_acl"]; exists {
 		vOpts := append(opts, db.WithValidateField("fast_acl"))
 		if err := fv(ctx, m.GetFastAcl(), vOpts...); err != nil {
@@ -9020,6 +11216,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["l7_acl"]; exists {
 		vOpts := append(opts, db.WithValidateField("l7_acl"))
 		if err := fv(ctx, m.GetL7Acl(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["l7_ddos_rps_threshold"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("l7_ddos_rps_threshold"))
+		if err := fv(ctx, m.GetL7DdosRpsThreshold(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9120,6 +11325,22 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["request_cookies_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_cookies_to_add"))
+		if err := fv(ctx, m.GetRequestCookiesToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_cookies_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_cookies_to_remove"))
+		if err := fv(ctx, m.GetRequestCookiesToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["request_headers_to_add"]; exists {
 		vOpts := append(opts, db.WithValidateField("request_headers_to_add"))
 		if err := fv(ctx, m.GetRequestHeadersToAdd(), vOpts...); err != nil {
@@ -9131,6 +11352,22 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 	if fv, exists := v.FldValidators["request_headers_to_remove"]; exists {
 		vOpts := append(opts, db.WithValidateField("request_headers_to_remove"))
 		if err := fv(ctx, m.GetRequestHeadersToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_cookies_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_cookies_to_add"))
+		if err := fv(ctx, m.GetResponseCookiesToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_cookies_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_cookies_to_remove"))
+		if err := fv(ctx, m.GetResponseCookiesToRemove(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9221,6 +11458,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("server_header_choice"),
 				db.WithValidateField("pass_through"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetServiceActionDelegation().(type) {
+	case *GlobalSpecType_Selected:
+		if fv, exists := v.FldValidators["service_action_delegation.selected"]; exists {
+			val := m.GetServiceActionDelegation().(*GlobalSpecType_Selected).Selected
+			vOpts := append(opts,
+				db.WithValidateField("service_action_delegation"),
+				db.WithValidateField("selected"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_All:
+		if fv, exists := v.FldValidators["service_action_delegation.all"]; exists {
+			val := m.GetServiceActionDelegation().(*GlobalSpecType_All).All
+			vOpts := append(opts,
+				db.WithValidateField("service_action_delegation"),
+				db.WithValidateField("all"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -9399,6 +11662,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("volterra_cert"))
 		if err := fv(ctx, m.GetVolterraCert(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_exclusion_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("waf_exclusion_policy"))
+		if err := fv(ctx, m.GetWafExclusionPolicy(), vOpts...); err != nil {
 			return err
 		}
 
@@ -9659,6 +11930,69 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["downstream_cos"] = vFn
 
+	vrhRequestCookiesToAdd := v.RequestCookiesToAddValidationRuleHandler
+	rulesRequestCookiesToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestCookiesToAdd(rulesRequestCookiesToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.request_cookies_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_cookies_to_add"] = vFn
+
+	vrhRequestCookiesToRemove := v.RequestCookiesToRemoveValidationRuleHandler
+	rulesRequestCookiesToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhRequestCookiesToRemove(rulesRequestCookiesToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.request_cookies_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_cookies_to_remove"] = vFn
+
+	vrhResponseCookiesToAdd := v.ResponseCookiesToAddValidationRuleHandler
+	rulesResponseCookiesToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseCookiesToAdd(rulesResponseCookiesToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.response_cookies_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_cookies_to_add"] = vFn
+
+	vrhResponseCookiesToRemove := v.ResponseCookiesToRemoveValidationRuleHandler
+	rulesResponseCookiesToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhResponseCookiesToRemove(rulesResponseCookiesToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.response_cookies_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_cookies_to_remove"] = vFn
+
+	vrhWafExclusionPolicy := v.WafExclusionPolicyValidationRuleHandler
+	rulesWafExclusionPolicy := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhWafExclusionPolicy(rulesWafExclusionPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.waf_exclusion_policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_exclusion_policy"] = vFn
+
 	vrhDnsDomains := v.DnsDomainsValidationRuleHandler
 	rulesDnsDomains := map[string]string{
 		"ves.io.schema.rules.repeated.max_items": "256",
@@ -9798,6 +12132,369 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *HeaderControlType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *HeaderControlType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *HeaderControlType) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	for idx, e := range m.GetRequestHeadersToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting HeaderControlType.request_headers_to_add idx %v", idx)
+		}
+	}
+
+	for idx, e := range m.GetResponseHeadersToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting HeaderControlType.response_headers_to_add idx %v", idx)
+		}
+	}
+
+	return nil
+}
+
+func (m *HeaderControlType) DeepCopy() *HeaderControlType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &HeaderControlType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *HeaderControlType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *HeaderControlType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return HeaderControlTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateHeaderControlType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateHeaderControlType) RequestHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for request_headers_to_add")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_headers_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_headers_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_headers_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHeaderControlType) RequestHeadersToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for request_headers_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_headers_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_headers_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_headers_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHeaderControlType) ResponseHeadersToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for response_headers_to_add")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.HeaderManipulationOptionType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.HeaderManipulationOptionTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_headers_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.HeaderManipulationOptionType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.HeaderManipulationOptionType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_headers_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_headers_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHeaderControlType) ResponseHeadersToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for response_headers_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_headers_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_headers_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_headers_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateHeaderControlType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*HeaderControlType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *HeaderControlType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["request_headers_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_headers_to_add"))
+		if err := fv(ctx, m.GetRequestHeadersToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_headers_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_headers_to_remove"))
+		if err := fv(ctx, m.GetRequestHeadersToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_headers_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_headers_to_add"))
+		if err := fv(ctx, m.GetResponseHeadersToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_headers_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_headers_to_remove"))
+		if err := fv(ctx, m.GetResponseHeadersToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultHeaderControlTypeValidator = func() *ValidateHeaderControlType {
+	v := &ValidateHeaderControlType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRequestHeadersToAdd := v.RequestHeadersToAddValidationRuleHandler
+	rulesRequestHeadersToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestHeadersToAdd(rulesRequestHeadersToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HeaderControlType.request_headers_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_headers_to_add"] = vFn
+
+	vrhRequestHeadersToRemove := v.RequestHeadersToRemoveValidationRuleHandler
+	rulesRequestHeadersToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.items.string.pattern":   "^[0-9A-Za-z_\\-\\.]+$",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhRequestHeadersToRemove(rulesRequestHeadersToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HeaderControlType.request_headers_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_headers_to_remove"] = vFn
+
+	vrhResponseHeadersToAdd := v.ResponseHeadersToAddValidationRuleHandler
+	rulesResponseHeadersToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseHeadersToAdd(rulesResponseHeadersToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HeaderControlType.response_headers_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_headers_to_add"] = vFn
+
+	vrhResponseHeadersToRemove := v.ResponseHeadersToRemoveValidationRuleHandler
+	rulesResponseHeadersToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.pattern": "^[0-9A-Za-z_\\-\\.]+$",
+		"ves.io.schema.rules.repeated.max_items":            "32",
+		"ves.io.schema.rules.repeated.unique":               "true",
+	}
+	vFn, err = vrhResponseHeadersToRemove(rulesResponseHeadersToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HeaderControlType.response_headers_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_headers_to_remove"] = vFn
+
+	return v
+}()
+
+func HeaderControlTypeValidator() db.Validator {
+	return DefaultHeaderControlTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -10362,6 +13059,236 @@ func JavascriptChallengeTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *LogHeaderOptions) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LogHeaderOptions) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LogHeaderOptions) DeepCopy() *LogHeaderOptions {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LogHeaderOptions{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LogHeaderOptions) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LogHeaderOptions) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LogHeaderOptionsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLogHeaderOptions struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLogHeaderOptions) HeaderListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for header_list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for header_list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated header_list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items header_list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLogHeaderOptions) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LogHeaderOptions)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LogHeaderOptions got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["header_list"]; exists {
+		vOpts := append(opts, db.WithValidateField("header_list"))
+		if err := fv(ctx, m.GetHeaderList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLogHeaderOptionsValidator = func() *ValidateLogHeaderOptions {
+	v := &ValidateLogHeaderOptions{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHeaderList := v.HeaderListValidationRuleHandler
+	rulesHeaderList := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "64",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhHeaderList(rulesHeaderList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LogHeaderOptions.header_list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["header_list"] = vFn
+
+	return v
+}()
+
+func LogHeaderOptionsValidator() db.Validator {
+	return DefaultLogHeaderOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *LoggingOptionsType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LoggingOptionsType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LoggingOptionsType) DeepCopy() *LoggingOptionsType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LoggingOptionsType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LoggingOptionsType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LoggingOptionsType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LoggingOptionsTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLoggingOptionsType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLoggingOptionsType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LoggingOptionsType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LoggingOptionsType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["client_log_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("client_log_options"))
+		if err := fv(ctx, m.GetClientLogOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["origin_log_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("origin_log_options"))
+		if err := fv(ctx, m.GetOriginLogOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLoggingOptionsTypeValidator = func() *ValidateLoggingOptionsType {
+	v := &ValidateLoggingOptionsType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["client_log_options"] = LogHeaderOptionsValidator().Validate
+
+	v.FldValidators["origin_log_options"] = LogHeaderOptionsValidator().Validate
+
+	return v
+}()
+
+func LoggingOptionsTypeValidator() db.Validator {
+	return DefaultLoggingOptionsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *MaskingConfiguration) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -10558,6 +13485,207 @@ var DefaultOpenApiValidationSettingsValidator = func() *ValidateOpenApiValidatio
 
 func OpenApiValidationSettingsValidator() db.Validator {
 	return DefaultOpenApiValidationSettingsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OriginAdvancedConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OriginAdvancedConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *OriginAdvancedConfiguration) DeepCopy() *OriginAdvancedConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OriginAdvancedConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OriginAdvancedConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OriginAdvancedConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OriginAdvancedConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateOriginAdvancedConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOriginAdvancedConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OriginAdvancedConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OriginAdvancedConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["disable_byte_range_request"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("disable_byte_range_request"))
+		if err := fv(ctx, m.GetDisableByteRangeRequest(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["websocket_proxy"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("websocket_proxy"))
+		if err := fv(ctx, m.GetWebsocketProxy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOriginAdvancedConfigurationValidator = func() *ValidateOriginAdvancedConfiguration {
+	v := &ValidateOriginAdvancedConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func OriginAdvancedConfigurationValidator() db.Validator {
+	return DefaultOriginAdvancedConfigurationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *OtherSettings) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *OtherSettings) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *OtherSettings) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetHeaderOptions().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting OtherSettings.header_options")
+	}
+
+	return nil
+}
+
+func (m *OtherSettings) DeepCopy() *OtherSettings {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &OtherSettings{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *OtherSettings) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *OtherSettings) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return OtherSettingsValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateOtherSettings struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateOtherSettings) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*OtherSettings)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *OtherSettings got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["add_location"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("add_location"))
+		if err := fv(ctx, m.GetAddLocation(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["header_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("header_options"))
+		if err := fv(ctx, m.GetHeaderOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["logging_options"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("logging_options"))
+		if err := fv(ctx, m.GetLoggingOptions(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultOtherSettingsValidator = func() *ValidateOtherSettings {
+	v := &ValidateOtherSettings{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["logging_options"] = LoggingOptionsTypeValidator().Validate
+
+	v.FldValidators["header_options"] = HeaderControlTypeValidator().Validate
+
+	return v
+}()
+
+func OtherSettingsValidator() db.Validator {
+	return DefaultOtherSettingsValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -10892,6 +14020,18 @@ func (m *ReplaceSpecType) Redact(ctx context.Context) error {
 
 	if err := m.GetAuthentication().Redact(ctx); err != nil {
 		return errors.Wrapf(err, "Redacting ReplaceSpecType.authentication")
+	}
+
+	for idx, e := range m.GetRequestCookiesToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting ReplaceSpecType.request_cookies_to_add idx %v", idx)
+		}
+	}
+
+	for idx, e := range m.GetResponseCookiesToAdd() {
+		if err := e.Redact(ctx); err != nil {
+			return errors.Wrapf(err, "Redacting ReplaceSpecType.response_cookies_to_add idx %v", idx)
+		}
 	}
 
 	return nil
@@ -11907,6 +15047,186 @@ func (v *ValidateReplaceSpecType) ConnectionIdleTimeoutValidationRuleHandler(rul
 	return validatorFn, nil
 }
 
+func (v *ValidateReplaceSpecType) RequestCookiesToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for request_cookies_to_add")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.CookieValueOption, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.CookieValueOptionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_cookies_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.CookieValueOption)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.CookieValueOption, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_cookies_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_cookies_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) RequestCookiesToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for request_cookies_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for request_cookies_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated request_cookies_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items request_cookies_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ResponseCookiesToAddValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for response_cookies_to_add")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.SetCookieValueOption, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.SetCookieValueOptionValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_cookies_to_add")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.SetCookieValueOption)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.SetCookieValueOption, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_cookies_to_add")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_cookies_to_add")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) ResponseCookiesToRemoveValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for response_cookies_to_remove")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for response_cookies_to_remove")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated response_cookies_to_remove")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items response_cookies_to_remove")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) MaxDirectResponseBodySizeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
@@ -12283,6 +15603,22 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["request_cookies_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_cookies_to_add"))
+		if err := fv(ctx, m.GetRequestCookiesToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["request_cookies_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("request_cookies_to_remove"))
+		if err := fv(ctx, m.GetRequestCookiesToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["request_headers_to_add"]; exists {
 		vOpts := append(opts, db.WithValidateField("request_headers_to_add"))
 		if err := fv(ctx, m.GetRequestHeadersToAdd(), vOpts...); err != nil {
@@ -12294,6 +15630,22 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 	if fv, exists := v.FldValidators["request_headers_to_remove"]; exists {
 		vOpts := append(opts, db.WithValidateField("request_headers_to_remove"))
 		if err := fv(ctx, m.GetRequestHeadersToRemove(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_cookies_to_add"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_cookies_to_add"))
+		if err := fv(ctx, m.GetResponseCookiesToAdd(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_cookies_to_remove"]; exists {
+		vOpts := append(opts, db.WithValidateField("response_cookies_to_remove"))
+		if err := fv(ctx, m.GetResponseCookiesToRemove(), vOpts...); err != nil {
 			return err
 		}
 
@@ -12691,6 +16043,58 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["connection_idle_timeout"] = vFn
+
+	vrhRequestCookiesToAdd := v.RequestCookiesToAddValidationRuleHandler
+	rulesRequestCookiesToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhRequestCookiesToAdd(rulesRequestCookiesToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.request_cookies_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_cookies_to_add"] = vFn
+
+	vrhRequestCookiesToRemove := v.RequestCookiesToRemoveValidationRuleHandler
+	rulesRequestCookiesToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhRequestCookiesToRemove(rulesRequestCookiesToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.request_cookies_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["request_cookies_to_remove"] = vFn
+
+	vrhResponseCookiesToAdd := v.ResponseCookiesToAddValidationRuleHandler
+	rulesResponseCookiesToAdd := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhResponseCookiesToAdd(rulesResponseCookiesToAdd)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.response_cookies_to_add: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_cookies_to_add"] = vFn
+
+	vrhResponseCookiesToRemove := v.ResponseCookiesToRemoveValidationRuleHandler
+	rulesResponseCookiesToRemove := map[string]string{
+		"ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+		"ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
+	}
+	vFn, err = vrhResponseCookiesToRemove(rulesResponseCookiesToRemove)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.response_cookies_to_remove: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_cookies_to_remove"] = vFn
 
 	vrhMaxDirectResponseBodySize := v.MaxDirectResponseBodySizeValidationRuleHandler
 	rulesMaxDirectResponseBodySize := map[string]string{
@@ -14529,8 +17933,12 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
 	m.Proxy = f.GetProxy()
 	m.RateLimiterAllowedPrefixes = f.GetRateLimiterAllowedPrefixes()
+	m.RequestCookiesToAdd = f.GetRequestCookiesToAdd()
+	m.RequestCookiesToRemove = f.GetRequestCookiesToRemove()
 	m.RequestHeadersToAdd = f.GetRequestHeadersToAdd()
 	m.RequestHeadersToRemove = f.GetRequestHeadersToRemove()
+	m.ResponseCookiesToAdd = f.GetResponseCookiesToAdd()
+	m.ResponseCookiesToRemove = f.GetResponseCookiesToRemove()
 	m.ResponseHeadersToAdd = f.GetResponseHeadersToAdd()
 	m.ResponseHeadersToRemove = f.GetResponseHeadersToRemove()
 	m.RetryPolicy = f.GetRetryPolicy()
@@ -14590,8 +17998,12 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
 	f.Proxy = m1.Proxy
 	f.RateLimiterAllowedPrefixes = m1.RateLimiterAllowedPrefixes
+	f.RequestCookiesToAdd = m1.RequestCookiesToAdd
+	f.RequestCookiesToRemove = m1.RequestCookiesToRemove
 	f.RequestHeadersToAdd = m1.RequestHeadersToAdd
 	f.RequestHeadersToRemove = m1.RequestHeadersToRemove
+	f.ResponseCookiesToAdd = m1.ResponseCookiesToAdd
+	f.ResponseCookiesToRemove = m1.ResponseCookiesToRemove
 	f.ResponseHeadersToAdd = m1.ResponseHeadersToAdd
 	f.ResponseHeadersToRemove = m1.ResponseHeadersToRemove
 	f.RetryPolicy = m1.RetryPolicy
@@ -14684,6 +18096,53 @@ func (r *GetSpecType) GetChallengeTypeFromGlobalSpecType(o *GlobalSpecType) erro
 
 	case *GlobalSpecType_NoChallenge:
 		r.ChallengeType = &GetSpecType_NoChallenge{NoChallenge: of.NoChallenge}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetDdosAutoMitigationActionToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.DdosAutoMitigationAction.(type) {
+	case nil:
+		o.DdosAutoMitigationAction = nil
+
+	case *GetSpecType_Block:
+		o.DdosAutoMitigationAction = &GlobalSpecType_Block{Block: of.Block}
+
+	case *GetSpecType_DdosJsChallenge:
+		o.DdosAutoMitigationAction = &GlobalSpecType_DdosJsChallenge{DdosJsChallenge: of.DdosJsChallenge}
+
+	case *GetSpecType_L7DdosActionDefault:
+		o.DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *GetSpecType_L7DdosActionNone:
+		o.DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetDdosAutoMitigationActionFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.DdosAutoMitigationAction.(type) {
+	case nil:
+		r.DdosAutoMitigationAction = nil
+
+	case *GlobalSpecType_Block:
+		r.DdosAutoMitigationAction = &GetSpecType_Block{Block: of.Block}
+
+	case *GlobalSpecType_DdosJsChallenge:
+		r.DdosAutoMitigationAction = &GetSpecType_DdosJsChallenge{DdosJsChallenge: of.DdosJsChallenge}
+
+	case *GlobalSpecType_L7DdosActionDefault:
+		r.DdosAutoMitigationAction = &GetSpecType_L7DdosActionDefault{L7DdosActionDefault: of.L7DdosActionDefault}
+
+	case *GlobalSpecType_L7DdosActionNone:
+		r.DdosAutoMitigationAction = &GetSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -14933,6 +18392,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.CorsPolicy = f.GetCorsPolicy()
 	m.CsrfPolicy = f.GetCsrfPolicy()
 	m.CustomErrors = f.GetCustomErrors()
+	m.GetDdosAutoMitigationActionFromGlobalSpecType(f)
 	m.GetDefaultLbChoiceFromGlobalSpecType(f)
 	m.DisableDefaultErrorPages = f.GetDisableDefaultErrorPages()
 	m.DisableDnsResolve = f.GetDisableDnsResolve()
@@ -14946,14 +18406,19 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.HostName = f.GetHostName()
 	m.HttpProtocolOptions = f.GetHttpProtocolOptions()
 	m.IdleTimeout = f.GetIdleTimeout()
+	m.L7DdosRpsThreshold = f.GetL7DdosRpsThreshold()
 	m.MaskingConfig = f.GetMaskingConfig()
 	m.MaxDirectResponseBodySize = f.GetMaxDirectResponseBodySize()
 	m.MaxRequestHeaderSize = f.GetMaxRequestHeaderSize()
 	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
 	m.Proxy = f.GetProxy()
 	m.RateLimiterAllowedPrefixes = f.GetRateLimiterAllowedPrefixes()
+	m.RequestCookiesToAdd = f.GetRequestCookiesToAdd()
+	m.RequestCookiesToRemove = f.GetRequestCookiesToRemove()
 	m.RequestHeadersToAdd = f.GetRequestHeadersToAdd()
 	m.RequestHeadersToRemove = f.GetRequestHeadersToRemove()
+	m.ResponseCookiesToAdd = f.GetResponseCookiesToAdd()
+	m.ResponseCookiesToRemove = f.GetResponseCookiesToRemove()
 	m.ResponseHeadersToAdd = f.GetResponseHeadersToAdd()
 	m.ResponseHeadersToRemove = f.GetResponseHeadersToRemove()
 	m.RetryPolicy = f.GetRetryPolicy()
@@ -15002,6 +18467,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.CorsPolicy = m1.CorsPolicy
 	f.CsrfPolicy = m1.CsrfPolicy
 	f.CustomErrors = m1.CustomErrors
+	m1.SetDdosAutoMitigationActionToGlobalSpecType(f)
 	m1.SetDefaultLbChoiceToGlobalSpecType(f)
 	f.DisableDefaultErrorPages = m1.DisableDefaultErrorPages
 	f.DisableDnsResolve = m1.DisableDnsResolve
@@ -15015,14 +18481,19 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.HostName = m1.HostName
 	f.HttpProtocolOptions = m1.HttpProtocolOptions
 	f.IdleTimeout = m1.IdleTimeout
+	f.L7DdosRpsThreshold = m1.L7DdosRpsThreshold
 	f.MaskingConfig = m1.MaskingConfig
 	f.MaxDirectResponseBodySize = m1.MaxDirectResponseBodySize
 	f.MaxRequestHeaderSize = m1.MaxRequestHeaderSize
 	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
 	f.Proxy = m1.Proxy
 	f.RateLimiterAllowedPrefixes = m1.RateLimiterAllowedPrefixes
+	f.RequestCookiesToAdd = m1.RequestCookiesToAdd
+	f.RequestCookiesToRemove = m1.RequestCookiesToRemove
 	f.RequestHeadersToAdd = m1.RequestHeadersToAdd
 	f.RequestHeadersToRemove = m1.RequestHeadersToRemove
+	f.ResponseCookiesToAdd = m1.ResponseCookiesToAdd
+	f.ResponseCookiesToRemove = m1.ResponseCookiesToRemove
 	f.ResponseHeadersToAdd = m1.ResponseHeadersToAdd
 	f.ResponseHeadersToRemove = m1.ResponseHeadersToRemove
 	f.RetryPolicy = m1.RetryPolicy
@@ -15344,8 +18815,12 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetPathNormalizeChoiceFromGlobalSpecType(f)
 	m.Proxy = f.GetProxy()
 	m.RateLimiterAllowedPrefixes = f.GetRateLimiterAllowedPrefixes()
+	m.RequestCookiesToAdd = f.GetRequestCookiesToAdd()
+	m.RequestCookiesToRemove = f.GetRequestCookiesToRemove()
 	m.RequestHeadersToAdd = f.GetRequestHeadersToAdd()
 	m.RequestHeadersToRemove = f.GetRequestHeadersToRemove()
+	m.ResponseCookiesToAdd = f.GetResponseCookiesToAdd()
+	m.ResponseCookiesToRemove = f.GetResponseCookiesToRemove()
 	m.ResponseHeadersToAdd = f.GetResponseHeadersToAdd()
 	m.ResponseHeadersToRemove = f.GetResponseHeadersToRemove()
 	m.RetryPolicy = f.GetRetryPolicy()
@@ -15405,8 +18880,12 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetPathNormalizeChoiceToGlobalSpecType(f)
 	f.Proxy = m1.Proxy
 	f.RateLimiterAllowedPrefixes = m1.RateLimiterAllowedPrefixes
+	f.RequestCookiesToAdd = m1.RequestCookiesToAdd
+	f.RequestCookiesToRemove = m1.RequestCookiesToRemove
 	f.RequestHeadersToAdd = m1.RequestHeadersToAdd
 	f.RequestHeadersToRemove = m1.RequestHeadersToRemove
+	f.ResponseCookiesToAdd = m1.ResponseCookiesToAdd
+	f.ResponseCookiesToRemove = m1.ResponseCookiesToRemove
 	f.ResponseHeadersToAdd = m1.ResponseHeadersToAdd
 	f.ResponseHeadersToRemove = m1.ResponseHeadersToRemove
 	f.RetryPolicy = m1.RetryPolicy

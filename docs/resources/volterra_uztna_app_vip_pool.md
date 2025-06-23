@@ -21,7 +21,7 @@ resource "volterra_uztna_app_vip_pool" "example" {
   namespace = "staging"
 
   ip_version {
-    // One of the arguments from this list "ipv4_vip ipv6_vip" can be set
+    // One of the arguments from this list "ipv4_vip" can be set
 
     ipv4_vip {
       prefix = ["['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']"]
@@ -66,27 +66,17 @@ Argument Reference
 
 IP address ranges for the Application VIP Pool Range .
 
-###### One of the arguments from this list "ipv4_vip, ipv6_vip" can be set
+###### One of the arguments from this list "ipv4_vip" can be set
 
 `ipv4_vip` - (Optional) IPV4 Only Appllication VIP Pool. See [Ip Vip Ipv4 Vip ](#ip-vip-ipv4-vip) below for details.
-
-`ipv6_vip` - (Optional) IPV6 Only Appllication VIP Pool. See [Ip Vip Ipv6 Vip ](#ip-vip-ipv6-vip) below for details.(Deprecated)
 
 ### Ip Vip Ipv4 Vip
 
 IPV4 Only Appllication VIP Pool.
 
-`prefix` - (Required) IPV4 Application IP Pool Network (`String`).
+`prefix` - (Optional) IPV4 Application IP Pool Network (`String`).
 
 `vip4_range` - (Optional) IPV4 Application VIP Pool Range. See [Ipv4 Vip Vip4 Range ](#ipv4-vip-vip4-range) below for details.
-
-### Ip Vip Ipv6 Vip
-
-IPV6 Only Appllication VIP Pool.
-
-`ipv6_prefix` - (Optional) IPV6 Application IP Pool Network (`String`).
-
-`vip6_range` - (Required) IPV6 Application VIP Pool Range. See [Ipv6 Vip Vip6 Range ](#ipv6-vip-vip6-range) below for details.
 
 ### Ipv4 Vip Vip4 Range
 
@@ -95,14 +85,6 @@ IPV4 Application VIP Pool Range.
 `end_address` - (Optional) IPV4 End Address. See [Vip4 Range End Address ](#vip4-range-end-address) below for details.
 
 `start_address` - (Optional) IPV4 Start Address. See [Vip4 Range Start Address ](#vip4-range-start-address) below for details.
-
-### Ipv6 Vip Vip6 Range
-
-IPV6 Application VIP Pool Range.
-
-`end_address` - (Optional) IPV6 End Address. See [Vip6 Range End Address ](#vip6-range-end-address) below for details.
-
-`start_address` - (Optional) IPV6 Start Address. See [Vip6 Range Start Address ](#vip6-range-start-address) below for details.
 
 ### Vip4 Range End Address
 
@@ -115,18 +97,6 @@ IPV4 End Address.
 IPV4 Start Address.
 
 `addr` - (Optional) IPv4 Address in string form with dot-decimal notation (`String`).
-
-### Vip6 Range End Address
-
-IPV6 End Address.
-
-`addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
-
-### Vip6 Range Start Address
-
-IPV6 Start Address.
-
-`addr` - (Optional) e.g. '2001:db8:0:0:0:0:2:1' becomes '2001:db8::2:1' or '2001:db8:0:0:0:2:0:0' becomes '2001:db8::2::' (`String`).
 
 Attribute Reference
 -------------------

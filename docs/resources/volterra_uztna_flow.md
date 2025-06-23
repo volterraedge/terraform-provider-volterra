@@ -23,11 +23,62 @@ resource "volterra_uztna_flow" "example" {
   flow_type {
     // One of the arguments from this list "geo_match saml_message" must be set
 
-    geo_match {
-      match_cri {
-        custom_geo_location_selector {
-          expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+    saml_message {
+      application_tag {
+        saml_app_tag = "saml_app_tag"
+      }
+
+      idp {
+        idp_assert_verification_cert {
+          certificate {
+            name      = "test1"
+            namespace = "staging"
+            tenant    = "acmecorp"
+          }
         }
+
+        idp_security_property {
+          // One of the arguments from this list "no yes" must be set
+
+          no = true
+        }
+
+        issuer = "https://issuerentity.com"
+
+        // One of the arguments from this list "post redirect" must be set
+
+        post = true
+        sso_url = "https://issuersignon.com"
+      }
+
+      service_provider_properties {
+        audience_uri {
+          // One of the arguments from this list "uniform_resource_locator" can be set
+
+          uniform_resource_locator {
+            url = "url"
+          }
+        }
+
+        force_authentication = true
+
+        relay_state = "relay_state"
+
+        sign_authentication_request {
+          // One of the arguments from this list "no_auth_req sign_auth" must be set
+
+          no_auth_req = true
+        }
+
+        type = "type"
+
+        want_encrypted_assertion {
+          // One of the arguments from this list "encrypt_req no_encrypt_req" must be set
+
+          no_encrypt_req = true
+        }
+
+        want_signed_assertion = true
       }
     }
   }
@@ -71,14 +122,6 @@ Flow Type.
 x-required.
 
 `url` - (Required) x-required (`String`).
-
-### Audience Uri Choice Uniform Resource Name
-
-x-required.
-
-`host_name` - (Required) Host name of Uniform resource (`String`).
-
-`urn` - (Required) Name of Uniform resource (`String`).
 
 ### Auth Request Signed No
 
@@ -168,8 +211,6 @@ including security certificates and endpoints used for single sign-on (SSO). .
 
 `issuer` - (Required) and it is used to identify the entity in SAML messages (`String`).
 
-`name` - (Optional) Filled by the internal service which is used to refer the Identity provide (`String`).(Deprecated)
-
 ###### One of the arguments from this list "post, redirect" must be set
 
 `post` - (Optional) SSO Service binding as POST request (`Bool`).
@@ -200,11 +241,9 @@ Service Provider Properties.
 
 x-required.
 
-###### One of the arguments from this list "uniform_resource_locator, uniform_resource_name" can be set
+###### One of the arguments from this list "uniform_resource_locator" can be set
 
-`uniform_resource_locator` - (Required) x-required. See [Audience Uri Choice Uniform Resource Locator ](#audience-uri-choice-uniform-resource-locator) below for details.
-
-`uniform_resource_name` - (Required) x-required. See [Audience Uri Choice Uniform Resource Name ](#audience-uri-choice-uniform-resource-name) below for details.
+`uniform_resource_locator` - (Optional) x-required. See [Audience Uri Choice Uniform Resource Locator ](#audience-uri-choice-uniform-resource-locator) below for details.
 
 ### Service Provider Properties Sign Authentication Request
 

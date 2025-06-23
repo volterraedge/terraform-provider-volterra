@@ -70,39 +70,6 @@ func resourceVolterraUztnaApplication() *schema.Resource {
 				},
 			},
 
-			"app_vh": {
-
-				Type:       schema.TypeList,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"kind": {
-							Type:       schema.TypeString,
-							Computed:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"name": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"namespace": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"tenant": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-					},
-				},
-			},
-
 			"application_vip": {
 
 				Type:     schema.TypeList,
@@ -418,42 +385,14 @@ func resourceVolterraUztnaApplicationCreate(d *schema.ResourceData, meta interfa
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field app_tags")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		createSpec.AppTags = ls
-
-	}
-
-	//app_vh
-	if v, ok := d.GetOk("app_vh"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		appVhInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		createSpec.AppVh = appVhInt
-		for i, ps := range sl {
-
-			avMapToStrVal := ps.(map[string]interface{})
-			appVhInt[i] = &ves_io_schema.ObjectRefType{}
-
-			appVhInt[i].Kind = "virtual_host"
-
-			if v, ok := avMapToStrVal["name"]; ok && !isIntfNil(v) {
-				appVhInt[i].Name = v.(string)
-			}
-
-			if v, ok := avMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				appVhInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := avMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				appVhInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := avMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				appVhInt[i].Uid = v.(string)
-			}
-
-		}
 
 	}
 
@@ -525,7 +464,12 @@ func resourceVolterraUztnaApplicationCreate(d *schema.ResourceData, meta interfa
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field extended_app_tags")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		createSpec.ExtendedAppTags = ls
 
@@ -542,7 +486,7 @@ func resourceVolterraUztnaApplicationCreate(d *schema.ResourceData, meta interfa
 			lMapToStrVal := ps.(map[string]interface{})
 			locationInt[i] = &ves_io_schema.ObjectRefType{}
 
-			locationInt[i].Kind = "bigip_instance_site"
+			locationInt[i].Kind = "site"
 
 			if v, ok := lMapToStrVal["name"]; ok && !isIntfNil(v) {
 				locationInt[i].Name = v.(string)
@@ -897,41 +841,14 @@ func resourceVolterraUztnaApplicationUpdate(d *schema.ResourceData, meta interfa
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field app_tags")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		updateSpec.AppTags = ls
-
-	}
-
-	if v, ok := d.GetOk("app_vh"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		appVhInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		updateSpec.AppVh = appVhInt
-		for i, ps := range sl {
-
-			avMapToStrVal := ps.(map[string]interface{})
-			appVhInt[i] = &ves_io_schema.ObjectRefType{}
-
-			appVhInt[i].Kind = "virtual_host"
-
-			if v, ok := avMapToStrVal["name"]; ok && !isIntfNil(v) {
-				appVhInt[i].Name = v.(string)
-			}
-
-			if v, ok := avMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				appVhInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := avMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				appVhInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := avMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				appVhInt[i].Uid = v.(string)
-			}
-
-		}
 
 	}
 
@@ -1001,7 +918,12 @@ func resourceVolterraUztnaApplicationUpdate(d *schema.ResourceData, meta interfa
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field extended_app_tags")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		updateSpec.ExtendedAppTags = ls
 
@@ -1017,7 +939,7 @@ func resourceVolterraUztnaApplicationUpdate(d *schema.ResourceData, meta interfa
 			lMapToStrVal := ps.(map[string]interface{})
 			locationInt[i] = &ves_io_schema.ObjectRefType{}
 
-			locationInt[i].Kind = "bigip_instance_site"
+			locationInt[i].Kind = "site"
 
 			if v, ok := lMapToStrVal["name"]; ok && !isIntfNil(v) {
 				locationInt[i].Name = v.(string)
@@ -1290,5 +1212,8 @@ func resourceVolterraUztnaApplicationDelete(d *schema.ResourceData, meta interfa
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra UztnaApplication obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_uztna_application_uztna_application.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_uztna_application_uztna_application.ObjectType, namespace, name, opts...)
 }

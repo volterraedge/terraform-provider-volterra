@@ -30,58 +30,15 @@ resource "volterra_app_firewall" "example" {
 
   // One of the arguments from this list "blocking_page use_default_blocking_page" must be set
 
-  blocking_page {
-    blocking_page = "<html><head><title>Request Rejected</title></head><body>The requested URL was rejected. Please consult with your administrator.<br/><br/>Your support ID is: {{request_id}}<br/><br/><a href=\\\"javascript:history.back()\\\">[Go Back]</a></body></html>"
-
-    response_code = "response_code"
-  }
-
-  // One of the arguments from this list "bot_protection_setting default_bot_setting" must be set
-
-  bot_protection_setting {
-    good_bot_action = "good_bot_action"
-
-    malicious_bot_action = "malicious_bot_action"
-
-    suspicious_bot_action = "suspicious_bot_action"
-  }
+  use_default_blocking_page = true
 
   // One of the arguments from this list "ai_risk_based_blocking default_detection_settings detection_settings" must be set
 
-  detection_settings {
-    // One of the arguments from this list "bot_protection_setting default_bot_setting" must be set
+  default_detection_settings = true
 
-    default_bot_setting = true
+  // One of the arguments from this list "blocking monitoring" must be set
 
-    // One of the arguments from this list "disable_suppression enable_suppression" must be set
-
-    enable_suppression = true
-    signature_selection_setting {
-      // One of the arguments from this list "attack_type_settings default_attack_type_settings" must be set
-
-      default_attack_type_settings = true
-
-      // One of the arguments from this list "high_medium_accuracy_signatures high_medium_low_accuracy_signatures only_high_accuracy_signatures" must be set
-
-      high_medium_low_accuracy_signatures = true
-    }
-
-    // One of the arguments from this list "disable_staging stage_new_and_updated_signatures stage_new_signatures" can be set
-
-    disable_staging = true
-
-    // One of the arguments from this list "disable_threat_campaigns enable_threat_campaigns" must be set
-
-    enable_threat_campaigns = true
-
-    // One of the arguments from this list "default_violation_settings violation_settings" must be set
-
-    default_violation_settings = true
-  }
-
-  // One of the arguments from this list "blocking monitoring use_loadbalancer_setting" must be set
-
-  use_loadbalancer_setting = true
+  blocking = true
 }
 
 ```
@@ -125,12 +82,6 @@ Argument Reference
 
 `use_default_blocking_page` - (Optional) The system returns the system-supplied response page in HTML. No further configuration is needed. (`Bool`).
 
-###### One of the arguments from this list "bot_protection_setting, default_bot_setting" must be set
-
-`bot_protection_setting` - (Optional) Define custom Bot Protection settings. See [Bot Protection Choice Bot Protection Setting ](#bot-protection-choice-bot-protection-setting) below for details.(Deprecated)
-
-`default_bot_setting` - (Optional) Malicious bots will be blocked, Suspicious and Good bots will be reported. (`Bool`).(Deprecated)
-
 ###### One of the arguments from this list "ai_risk_based_blocking, default_detection_settings, detection_settings" must be set
 
 `ai_risk_based_blocking` - (Optional) only high-risk requests will be blocked by default. This feature is in preview mode.. See [Detection Setting Choice Ai Risk Based Blocking ](#detection-setting-choice-ai-risk-based-blocking) below for details.
@@ -139,13 +90,11 @@ Argument Reference
 
 `detection_settings` - (Optional) Define Custom Security Policy settings. See [Detection Setting Choice Detection Settings ](#detection-setting-choice-detection-settings) below for details.
 
-###### One of the arguments from this list "blocking, monitoring, use_loadbalancer_setting" must be set
+###### One of the arguments from this list "blocking, monitoring" must be set
 
 `blocking` - (Optional) Log and block threats (`Bool`).
 
 `monitoring` - (Optional) Log threats (`Bool`).
-
-`use_loadbalancer_setting` - (Optional) Use the mode as specified in the load balancer (`Bool`).(Deprecated)
 
 ### Allowed Response Codes Choice Allowed Response Codes
 
