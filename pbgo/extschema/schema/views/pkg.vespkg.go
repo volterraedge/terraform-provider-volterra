@@ -49,7 +49,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.OfflineSurvivabilityModeType"] = OfflineSurvivabilityModeTypeValidator()
 	vr["ves.io.schema.views.PrivateConnectConfigType"] = PrivateConnectConfigTypeValidator()
 	vr["ves.io.schema.views.PrivateConnectivityType"] = PrivateConnectivityTypeValidator()
+	vr["ves.io.schema.views.SMSv2InterfaceOptions"] = SMSv2InterfaceOptionsValidator()
 	vr["ves.io.schema.views.SecurityGroupType"] = SecurityGroupTypeValidator()
+	vr["ves.io.schema.views.SegmentSubnetType"] = SegmentSubnetTypeValidator()
 	vr["ves.io.schema.views.SiteCloudLinkType"] = SiteCloudLinkTypeValidator()
 	vr["ves.io.schema.views.SiteError"] = SiteErrorValidator()
 	vr["ves.io.schema.views.SiteStaticRoutesListType"] = SiteStaticRoutesListTypeValidator()
@@ -100,9 +102,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.SiteLocator"] = SiteLocatorValidator()
 	vr["ves.io.schema.views.SiteReferenceListType"] = SiteReferenceListTypeValidator()
 	vr["ves.io.schema.views.SiteRegionLocator"] = SiteRegionLocatorValidator()
+	vr["ves.io.schema.views.SnatPoolConfiguration"] = SnatPoolConfigurationValidator()
 	vr["ves.io.schema.views.SpecificRE"] = SpecificREValidator()
 	vr["ves.io.schema.views.TGWAssignedASNType"] = TGWAssignedASNTypeValidator()
 	vr["ves.io.schema.views.TGWParamsType"] = TGWParamsTypeValidator()
+	vr["ves.io.schema.views.ThirdPartyAuthorizationToken"] = ThirdPartyAuthorizationTokenValidator()
 	vr["ves.io.schema.views.TlsConfig"] = TlsConfigValidator()
 	vr["ves.io.schema.views.VolterraSoftwareType"] = VolterraSoftwareTypeValidator()
 	vr["ves.io.schema.views.WhereCloudEdgeSegment"] = WhereCloudEdgeSegmentValidator()
@@ -150,11 +154,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

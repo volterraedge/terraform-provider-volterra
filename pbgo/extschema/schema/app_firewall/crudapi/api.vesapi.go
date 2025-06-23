@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.app_firewall.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.app_firewall.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2704,7 +2704,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "response_code": {
                     "type": "array",
-                    "description": " List of HTTP response status codes that are allowed\n\nExample: - \"[200, 201, 204, 300, 302, 400, 403, 404, 500, 501, 503]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.uint32.gte: 100\n  ves.io.schema.rules.repeated.items.uint32.lte: 599\n  ves.io.schema.rules.repeated.max_items: 48\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of HTTP response status codes that are allowed\n\nExample: - \"[200, 201, 204, 300, 302, 400, 403, 404, 500, 501, 503]\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.uint32.gte: 100\n  ves.io.schema.rules.repeated.items.uint32.lte: 999\n  ves.io.schema.rules.repeated.max_items: 48\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "response_code",
                     "minItems": 1,
                     "maxItems": 48,
@@ -2718,7 +2718,7 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.uint32.gte": "100",
-                        "ves.io.schema.rules.repeated.items.uint32.lte": "599",
+                        "ves.io.schema.rules.repeated.items.uint32.lte": "999",
                         "ves.io.schema.rules.repeated.max_items": "48",
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
@@ -3048,7 +3048,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Custom"
                 },
                 "default_bot_setting": {
-                    "description": "Exclusive with [bot_protection_setting]\n Default Bot Protection settings will be applied.\n Malicious bots will be blocked, Suspicious and Good bots will be reported.",
+                    "description": "Exclusive with [bot_protection_setting]\n Default Bot Protection settings will be applied.\n Malicious bots will be blocked, Suspicious and Good bots will be ignored.",
                     "title": "Default Bot Settings",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default"
@@ -4094,6 +4094,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

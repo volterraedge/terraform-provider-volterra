@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.ztna_application.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.ztna_application.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3382,6 +3382,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -3802,10 +3809,10 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [port_ranges use_default_port]\n TCP port to Listen.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "title": "TCP port to listen",
+                    "description": "Exclusive with [port_ranges use_default_port]\n Port to Listen.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Port to listen",
                     "format": "int64",
-                    "x-displayname": "TCP Listen Port",
+                    "x-displayname": "Listen Port",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "65535"
@@ -3814,10 +3821,10 @@ var APISwaggerJSON string = `{
                 "port_ranges": {
                     "type": "string",
                     "description": "Exclusive with [port use_default_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
-                    "title": "TCP port ranges to listen",
+                    "title": "Port ranges to listen",
                     "minLength": 1,
                     "maxLength": 512,
-                    "x-displayname": "TCP Listen Port Ranges",
+                    "x-displayname": "Listen Port Ranges",
                     "x-ves-example": "80,443,8080-8191,9080",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "512",
@@ -3845,10 +3852,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Segment on Site"
                 },
                 "use_default_port": {
-                    "description": "Exclusive with [port port_ranges]\n For HTTP, default is 80. For HTTPS/SNI, default is 443.",
+                    "description": "Exclusive with [port port_ranges]\n Inherit the Load Balancer's Listen Port.",
                     "title": "Use Default port",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Use Default TCP Listen Port"
+                    "x-displayname": "Use Default Listen Port"
                 },
                 "virtual_network": {
                     "description": "Exclusive with [advertise_on_public cloud_edge_segment segment site site_segment virtual_site virtual_site_segment virtual_site_with_vip vk8s_service]\n Advertise on a virtual network",

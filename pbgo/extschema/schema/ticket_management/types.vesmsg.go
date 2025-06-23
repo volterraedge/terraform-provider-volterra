@@ -173,6 +173,15 @@ func (v *ValidateJiraIssueFields) Validate(ctx context.Context, pm interface{}, 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("description"))
+		if err := fv(ctx, m.GetDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["issuetype"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("issuetype"))
@@ -195,6 +204,15 @@ func (v *ValidateJiraIssueFields) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["summary"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("summary"))
+		if err := fv(ctx, m.GetSummary(), vOpts...); err != nil {
 			return err
 		}
 
@@ -296,6 +314,15 @@ func (v *ValidateJiraIssueStatus) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["status_category"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status_category"))
+		if err := fv(ctx, m.GetStatusCategory(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -308,6 +335,93 @@ var DefaultJiraIssueStatusValidator = func() *ValidateJiraIssueStatus {
 
 func JiraIssueStatusValidator() db.Validator {
 	return DefaultJiraIssueStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *JiraIssueStatusCategory) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *JiraIssueStatusCategory) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *JiraIssueStatusCategory) DeepCopy() *JiraIssueStatusCategory {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &JiraIssueStatusCategory{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *JiraIssueStatusCategory) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *JiraIssueStatusCategory) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return JiraIssueStatusCategoryValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateJiraIssueStatusCategory struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateJiraIssueStatusCategory) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*JiraIssueStatusCategory)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *JiraIssueStatusCategory got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["color_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("color_name"))
+		if err := fv(ctx, m.GetColorName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultJiraIssueStatusCategoryValidator = func() *ValidateJiraIssueStatusCategory {
+	v := &ValidateJiraIssueStatusCategory{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func JiraIssueStatusCategoryValidator() db.Validator {
+	return DefaultJiraIssueStatusCategoryValidator
 }
 
 // augmented methods on protoc/std generated struct

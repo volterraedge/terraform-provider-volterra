@@ -19,7 +19,8 @@ Example Usage
 resource "volterra_secret_policy_rule" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
-  action    = ["action"]
+
+  action = ["action"]
 
   // One of the arguments from this list "client_name client_name_matcher client_selector" must be set
 
@@ -56,14 +57,6 @@ Argument Reference
 `client_name_matcher` - (Optional) The predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.. See [Client Choice Client Name Matcher ](#client-choice-client-name-matcher) below for details.
 
 `client_selector` - (Optional) The predicate evaluates to true if the expressions in the label selector are true for the client labels.. See [Client Choice Client Selector ](#client-choice-client-selector) below for details.
-
-`label_matcher` - (Optional) The values of any other labels do not matter.. See [Label Matcher ](#label-matcher) below for details.(Deprecated)
-
-### Label Matcher
-
-The values of any other labels do not matter..
-
-`keys` - (Optional) The list of label key names that have to match (`String`).
 
 ### Client Choice Client Name Matcher
 

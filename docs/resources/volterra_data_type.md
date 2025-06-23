@@ -19,6 +19,16 @@ Example Usage
 resource "volterra_data_type" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
+
+  rules {
+    // One of the arguments from this list "key_pattern key_value_pattern value_pattern" must be set
+
+    key_pattern {
+      // One of the arguments from this list "exact_values regex_value substring_value" must be set
+
+      regex_value = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}$"
+    }
+  }
 }
 
 ```
@@ -48,7 +58,7 @@ Argument Reference
 
 `is_sensitive_data` - (Optional) Select this option to classify the custom data type as sensitive, enabling detection of API vulnerabilities related to this data type. (`Bool`).
 
-`rules` - (Optional) Configure key/value or regex match rules to enable the platform to detect this custom data type in the API request or response. See [Rules ](#rules) below for details.
+`rules` - (Required) Configure key/value or regex match rules to enable the platform to detect this custom data type in the API request or response. See [Rules ](#rules) below for details.
 
 ### Rules
 

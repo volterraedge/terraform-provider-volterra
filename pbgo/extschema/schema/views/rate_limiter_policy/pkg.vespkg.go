@@ -51,13 +51,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Create"] = []svcfw.SubscriptionField{
-		{
-			FieldPath:     "ves.io.schema.views.rate_limiter_policy.CreateRequest.spec.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Create"] = []string{
 		"spec.rules.#.metadata.disable",
 	}
@@ -95,13 +88,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "items.#.get_spec.rules.#.spec.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-	}
-
-	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.rate_limiter_policy.API.Replace"] = []svcfw.SubscriptionField{
-		{
-			FieldPath:     "ves.io.schema.views.rate_limiter_policy.ReplaceRequest.spec.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
 
@@ -164,11 +150,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

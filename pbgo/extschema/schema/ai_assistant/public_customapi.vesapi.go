@@ -1037,7 +1037,7 @@ var SahayaAPISwaggerJSON string = `{
         },
         "commonDisplayType": {
             "type": "string",
-            "description": "Render Type defines the format to which data has to be rendered on UI.\n\n - DISPLAY_TYPE_NONE: None\n\nNone type\n - ICON: icon\n\nValue to be displayed as ICON\n - PROGRESS_BAR: progress bar\n\n - DATE: date\n\n - DURATION: duration\n",
+            "description": "Render Type defines the format to which data has to be rendered on UI.\n\n - DISPLAY_TYPE_NONE: None\n\nNone type\n - ICON: icon\n\nValue to be displayed as ICON\n - PROGRESS_BAR: progress bar\n\n - DATE: date\n\n - DURATION: duration\n\n - PROVIDER_ICON: provider icon\n",
             "title": "DisplayType",
             "enum": [
                 "DISPLAY_TYPE_NONE",
@@ -1045,7 +1045,8 @@ var SahayaAPISwaggerJSON string = `{
                 "DOT_WITH_VALUE",
                 "PROGRESS_BAR",
                 "DATE",
-                "DURATION"
+                "DURATION",
+                "PROVIDER_ICON"
             ],
             "default": "DISPLAY_TYPE_NONE",
             "x-displayname": "DisplayType Type",

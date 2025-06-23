@@ -61,39 +61,6 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 				ForceNew: true,
 			},
 
-			"hub": {
-
-				Type:       schema.TypeList,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"kind": {
-							Type:       schema.TypeString,
-							Computed:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"name": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"namespace": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"tenant": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-					},
-				},
-			},
-
 			"full_mesh": {
 
 				Type:     schema.TypeList,
@@ -123,20 +90,7 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"control_and_data_plane_mesh": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"data_plane_mesh": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-					},
+					Schema: map[string]*schema.Schema{},
 				},
 			},
 
@@ -171,26 +125,8 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 								},
 							},
 						},
-
-						"control_and_data_plane_mesh": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
-
-						"data_plane_mesh": {
-
-							Type:     schema.TypeBool,
-							Optional: true,
-						},
 					},
 				},
-			},
-
-			"type": {
-				Type:       schema.TypeString,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"virtual_site": {
@@ -277,44 +213,11 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 			v.(string)
 	}
 
-	//hub
-	if v, ok := d.GetOk("hub"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		hubInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		createSpec.Hub = hubInt
-		for i, ps := range sl {
-
-			hMapToStrVal := ps.(map[string]interface{})
-			hubInt[i] = &ves_io_schema.ObjectRefType{}
-
-			hubInt[i].Kind = "site_mesh_group"
-
-			if v, ok := hMapToStrVal["name"]; ok && !isIntfNil(v) {
-				hubInt[i].Name = v.(string)
-			}
-
-			if v, ok := hMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				hubInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := hMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				hubInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := hMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				hubInt[i].Uid = v.(string)
-			}
-
-		}
-
-	}
-
 	//mesh_choice
 
 	meshChoiceTypeFound := false
 
-	if v, ok := d.GetOk("full_mesh"); ok && !meshChoiceTypeFound {
+	if v, ok := d.GetOk("full_mesh"); ok && !isIntfNil(v) && !meshChoiceTypeFound {
 
 		meshChoiceTypeFound = true
 		meshChoiceInt := &ves_io_schema_site_mesh_group.CreateSpecType_FullMesh{}
@@ -374,7 +277,7 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("spoke_mesh"); ok && !meshChoiceTypeFound {
+	if v, ok := d.GetOk("spoke_mesh"); ok && !isIntfNil(v) && !meshChoiceTypeFound {
 
 		meshChoiceTypeFound = true
 		meshChoiceInt := &ves_io_schema_site_mesh_group.CreateSpecType_SpokeMesh{}
@@ -412,13 +315,6 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 
 			}
 		}
-
-	}
-
-	//type
-	if v, ok := d.GetOk("type"); ok && !isIntfNil(v) {
-
-		createSpec.Type = ves_io_schema_site_mesh_group.SiteMeshGroupType(ves_io_schema_site_mesh_group.SiteMeshGroupType_value[v.(string)])
 
 	}
 
@@ -554,41 +450,9 @@ func resourceVolterraSiteMeshGroupUpdate(d *schema.ResourceData, meta interface{
 			v.(string)
 	}
 
-	if v, ok := d.GetOk("hub"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		hubInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-		updateSpec.Hub = hubInt
-		for i, ps := range sl {
-
-			hMapToStrVal := ps.(map[string]interface{})
-			hubInt[i] = &ves_io_schema.ObjectRefType{}
-
-			hubInt[i].Kind = "site_mesh_group"
-
-			if v, ok := hMapToStrVal["name"]; ok && !isIntfNil(v) {
-				hubInt[i].Name = v.(string)
-			}
-
-			if v, ok := hMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				hubInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := hMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				hubInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := hMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				hubInt[i].Uid = v.(string)
-			}
-
-		}
-
-	}
-
 	meshChoiceTypeFound := false
 
-	if v, ok := d.GetOk("full_mesh"); ok && !meshChoiceTypeFound {
+	if v, ok := d.GetOk("full_mesh"); ok && !isIntfNil(v) && !meshChoiceTypeFound {
 
 		meshChoiceTypeFound = true
 		meshChoiceInt := &ves_io_schema_site_mesh_group.ReplaceSpecType_FullMesh{}
@@ -648,7 +512,7 @@ func resourceVolterraSiteMeshGroupUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("spoke_mesh"); ok && !meshChoiceTypeFound {
+	if v, ok := d.GetOk("spoke_mesh"); ok && !isIntfNil(v) && !meshChoiceTypeFound {
 
 		meshChoiceTypeFound = true
 		meshChoiceInt := &ves_io_schema_site_mesh_group.ReplaceSpecType_SpokeMesh{}
@@ -686,12 +550,6 @@ func resourceVolterraSiteMeshGroupUpdate(d *schema.ResourceData, meta interface{
 
 			}
 		}
-
-	}
-
-	if v, ok := d.GetOk("type"); ok && !isIntfNil(v) {
-
-		updateSpec.Type = ves_io_schema_site_mesh_group.SiteMeshGroupType(ves_io_schema_site_mesh_group.SiteMeshGroupType_value[v.(string)])
 
 	}
 
@@ -753,5 +611,8 @@ func resourceVolterraSiteMeshGroupDelete(d *schema.ResourceData, meta interface{
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra SiteMeshGroup obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_site_mesh_group.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_site_mesh_group.ObjectType, namespace, name, opts...)
 }

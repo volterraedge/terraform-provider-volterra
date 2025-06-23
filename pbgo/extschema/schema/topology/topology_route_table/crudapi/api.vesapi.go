@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.topology.topology_route_table.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.topology.topology_route_table.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3153,6 +3153,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -3368,7 +3375,7 @@ var APISwaggerJSON string = `{
         },
         "topologyGCPRouteType": {
             "type": "string",
-            "description": "x-displayName: GCP Route type\nGCP Route Type\n\n - GCP_ROUTE_TYPE_NONE: GCP Route Type None\n\nx-displayName: GCP Route Type None\nGCP Route Type None\n - GCP_ROUTE_TYPE_TRANSIT: GCP Route Type Transit\n\nx-displayName: GCP Route Type Transit\nGCP Route Type Transit\n - GCP_ROUTE_TYPE_SUBNET: GCP Route Type Subnet\n\nx-displayName: GCP Route Type Subnet\nGCP Route Type Subnet\n - GCP_ROUTE_TYPE_STATIC: GCP Route Type Static\n\nx-displayName: GCP Route Type Static\nGCP Route Type Static\n - GCP_ROUTE_TYPE_BGP: GCP Route Type BGP\n\nx-displayName: GCP Route Type BGP\nGCP Route Type BGP",
+            "description": "GCP Route Type\n\n - GCP_ROUTE_TYPE_NONE: GCP Route Type None\n\nGCP Route Type None\n - GCP_ROUTE_TYPE_TRANSIT: GCP Route Type Transit\n\nGCP Route Type Transit\n - GCP_ROUTE_TYPE_SUBNET: GCP Route Type Subnet\n\nGCP Route Type Subnet\n - GCP_ROUTE_TYPE_STATIC: GCP Route Type Static\n\nGCP Route Type Static\n - GCP_ROUTE_TYPE_BGP: GCP Route Type BGP\n\nGCP Route Type BGP",
             "title": "GCPRouteType",
             "enum": [
                 "GCP_ROUTE_TYPE_NONE",
@@ -3378,7 +3385,7 @@ var APISwaggerJSON string = `{
                 "GCP_ROUTE_TYPE_BGP"
             ],
             "default": "GCP_ROUTE_TYPE_NONE",
-            "x-displayname": "",
+            "x-displayname": "GCP Route type",
             "x-ves-proto-enum": "ves.io.schema.topology.GCPRouteType"
         },
         "topologyMetaType": {
@@ -3444,7 +3451,7 @@ var APISwaggerJSON string = `{
         },
         "topologyProviderType": {
             "type": "string",
-            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
+            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend\nCE on k8s backend",
             "title": "ProviderType",
             "enum": [
                 "PROVIDER_TYPE_UNSPECIFIED",
@@ -3456,7 +3463,8 @@ var APISwaggerJSON string = `{
                 "PROVIDER_TYPE_KVM",
                 "PROVIDER_TYPE_OCI",
                 "PROVIDER_TYPE_BAREMETAL",
-                "PROVIDER_TYPE_F5RSERIES"
+                "PROVIDER_TYPE_F5RSERIES",
+                "PROVIDER_TYPE_K8S"
             ],
             "default": "PROVIDER_TYPE_UNSPECIFIED",
             "x-displayname": "Provider Type",
@@ -3464,7 +3472,7 @@ var APISwaggerJSON string = `{
         },
         "topologyRouteNextHopTypeEnum": {
             "type": "string",
-            "description": "x-displayName: RouteNextHopTypeEnum\nRouteNextHopTypeEnum\n\n - VIRTUAL_NETWORK_GATEWAY: VIRTUAL NETWORK GATEWAY\n\nx-displayName: VIRTUAL NETWORK GATEWAY\nVIRTUAL NETWORK GATEWAY\n - VNET_LOCAL: VNET LOCAL\n\nx-displayName: VNET LOCAL\nVNET LOCAL\n - INTERNET: INTERNET\n\nx-displayName: INTERNET\nINTERNET\n - VIRTUAL_APPLIANCE: VIRTUAL APPLIANCE\n\nx-displayName: VIRTUAL APPLIANCE\nVIRTUAL APPLIANCE\n - NONE: NONE\n\nx-displayName: NONE\nNONE\n - VNET_PEERING: VNET PEERING\n\nx-displayName: VNET PEERING\nVNET PEERING\n - VIRTUAL_NETWORK_SERVICE_ENDPOINT: VIRTUAL NETWORK SERVICE ENDPOINT\n\nx-displayName: VIRTUAL NETWORK SERVICE ENDPOINT\nVIRTUAL NETWORK SERVICE ENDPOINT\n - NEXT_HOP_TYPE_NOT_APPLICABLE: NEXT_HOP_TYPE_NOT_APPLICABLE\n\nx-displayName: NEXT_HOP_TYPE_NOT_APPLICABLE\nNEXT_HOP_TYPE_NOT_APPLICABLE should be used when the cloud provider doesn't support this.\n - LOADBALANCER: LOAD BALANCER\n\nx-displayName: LOAD BALANCER\nLOAD BALANCER\n - VPC_NETWORK: VPC NETWORK\n\nx-displayName: VPC NETWORK\nVPC NETWORK\n - VPC_PEERING: VPC PEERING\n\nx-displayName: VPC PEERING\nVPC PEERING\n - INTERNAL_LOAD_BALANCER: INTERNAL LOAD BALANCER\n\nx-displayName: INTERNAL LOAD BALANCER\nINTERNAL LOAD BALANCER\n - INSTANCE: INSTANCE\n\nx-displayName: INSTANCE\nINSTANCE\n - INTERCONNECT: INTERCONNECT\n\nx-displayName: INTERCONNECT\nINTERCONNECT\n - INTERNET_GATEWAY: INTERNET GATEWAY\n\nx-displayName: INTERNET GATEWAY\nINTERNET GATEWAY\n - IP: IP\n\nx-displayName: IP\nIP\n - VPN_TUNNEL: VPN TUNNEL\n\nx-displayName: VPN TUNNEL\nVPN TUNNEL\n - TGW_ATTACHMENT: TGW ATTACHMENT\n\nx-displayName: TGW ATTACHMENT\nTGW ATTACHMENT",
+            "description": "RouteNextHopTypeEnum\n\n - VIRTUAL_NETWORK_GATEWAY: VIRTUAL NETWORK GATEWAY\n\nVIRTUAL NETWORK GATEWAY\n - VNET_LOCAL: VNET LOCAL\n\nVNET LOCAL\n - INTERNET: INTERNET\n\nINTERNET\n - VIRTUAL_APPLIANCE: VIRTUAL APPLIANCE\n\nVIRTUAL APPLIANCE\n - NONE: NONE\n\nNONE\n - VNET_PEERING: VNET PEERING\n\nVNET PEERING\n - VIRTUAL_NETWORK_SERVICE_ENDPOINT: VIRTUAL NETWORK SERVICE ENDPOINT\n\nVIRTUAL NETWORK SERVICE ENDPOINT\n - NEXT_HOP_TYPE_NOT_APPLICABLE: NEXT_HOP_TYPE_NOT_APPLICABLE\n\nNEXT_HOP_TYPE_NOT_APPLICABLE should be used when the cloud provider doesn't support this.\n - LOADBALANCER: LOAD BALANCER\n\nLOAD BALANCER\n - VPC_NETWORK: VPC NETWORK\n\nVPC NETWORK\n - VPC_PEERING: VPC PEERING\n\nVPC PEERING\n - INTERNAL_LOAD_BALANCER: INTERNAL LOAD BALANCER\n\nINTERNAL LOAD BALANCER\n - INSTANCE: INSTANCE\n\nINSTANCE\n - INTERCONNECT: INTERCONNECT\n\nINTERCONNECT\n - INTERNET_GATEWAY: INTERNET GATEWAY\n\nINTERNET GATEWAY\n - IP: IP\n\nIP\n - VPN_TUNNEL: VPN TUNNEL\n\nVPN TUNNEL\n - TGW_ATTACHMENT: TGW ATTACHMENT\n\nTGW ATTACHMENT",
             "title": "RouteNextHopTypeEnum",
             "enum": [
                 "VIRTUAL_NETWORK_GATEWAY",
@@ -3487,12 +3495,12 @@ var APISwaggerJSON string = `{
                 "TGW_ATTACHMENT"
             ],
             "default": "VIRTUAL_NETWORK_GATEWAY",
-            "x-displayname": "",
+            "x-displayname": "RouteNextHopTypeEnum",
             "x-ves-proto-enum": "ves.io.schema.topology.RouteNextHopTypeEnum"
         },
         "topologyRouteSourceTypeEnum": {
             "type": "string",
-            "description": "x-displayName: RouteSourceTypeEnum\nRouteSourceTypeEnum\n\n - INVALID_SOURCE: INVALID_SOURCE\n\nx-displayName: INVALID_SOURCE\nINVALID_SOURCE\n - DEFAULT: DEFAULT\n\nx-displayName: DEFAULT\nDEFAULT\n - USER: USER\n\nx-displayName: USER\nUSER\n - UNKNOWN: UNKNOWN\n\nx-displayName: UNKNOWN\nUNKNOWN\n - VIRTUAL_NETWORK_GATEWAY_SOURCE: VIRTUAL_NETWORK_GATEWAY_SOURCE\n\nx-displayName: VIRTUAL_NETWORK_GATEWAY_SOURCE\nVIRTUAL_NETWORK_GATEWAY_SOURCE\n - SOURCE_NOT_APPLICABLE: SOURCE_NOT_APPLICABLE\n\nx-displayName: SOURCE_NOT_APPLICABLE\nSOURCE_NOT_APPLICABLE should be used when the cloud provider does not supports this.",
+            "description": "RouteSourceTypeEnum\n\n - INVALID_SOURCE: INVALID_SOURCE\n\nINVALID_SOURCE\n - DEFAULT: DEFAULT\n\nDEFAULT\n - USER: USER\n\nUSER\n - UNKNOWN: UNKNOWN\n\nUNKNOWN\n - VIRTUAL_NETWORK_GATEWAY_SOURCE: VIRTUAL_NETWORK_GATEWAY_SOURCE\n\nVIRTUAL_NETWORK_GATEWAY_SOURCE\n - SOURCE_NOT_APPLICABLE: SOURCE_NOT_APPLICABLE\n\nSOURCE_NOT_APPLICABLE should be used when the cloud provider does not supports this.",
             "title": "RouteSourceTypeEnum",
             "enum": [
                 "INVALID_SOURCE",
@@ -3503,12 +3511,12 @@ var APISwaggerJSON string = `{
                 "SOURCE_NOT_APPLICABLE"
             ],
             "default": "INVALID_SOURCE",
-            "x-displayname": "",
+            "x-displayname": "RouteSourceTypeEnum",
             "x-ves-proto-enum": "ves.io.schema.topology.RouteSourceTypeEnum"
         },
         "topologyRouteStateTypeEnum": {
             "type": "string",
-            "description": "x-displayName: RouteStateTypeEnum\nRouteStateTypeEnum\n\n - ACTIVE_STATE: ACTIVE_STATE\n\nx-displayName: ACTIVE_STATE\nACTIVE_STATE\n - INVALID_STATE: INVALID_STATE\n\nx-displayName: INVALID_STATE\nINVALID_STATE\n - STATE_NOT_APPLICABLE: STATE_NOT_APPLICABLE\n\nx-displayName: STATE_NOT_APPLICABLE\nSTATE_NOT_APPLICABLE should be used when the cloud provider doesn't supports this\n - STATE_BLACKHOLE: STATE_BLACKHOLE\n\nx-displayName: STATE_BLACKHOLE\nSTATE_BLACKHOLE\n - STATE_UNAVAILABLE: STATE_UNAVAILABLE\n\nx-displayName: STATE_UNAVAILABLE\nSTATE_UNAVAILABLE\n - STATE_PENDING: STATE_PENDING\n\nx-displayName: STATE_PENDING\nSTATE_PENDING\n - STATE_DELETING: STATE_DELETING\n\nx-displayName: STATE_DELETING\nSTATE_DELETING\n - STATE_DELETED: STATE_DELETING\n\nx-displayName: STATE_DELETED\nSTATE_DELETED",
+            "description": "RouteStateTypeEnum\n\n - ACTIVE_STATE: ACTIVE_STATE\n\nACTIVE_STATE\n - INVALID_STATE: INVALID_STATE\n\nINVALID_STATE\n - STATE_NOT_APPLICABLE: STATE_NOT_APPLICABLE\n\nSTATE_NOT_APPLICABLE should be used when the cloud provider doesn't supports this\n - STATE_BLACKHOLE: STATE_BLACKHOLE\n\nSTATE_BLACKHOLE\n - STATE_UNAVAILABLE: STATE_UNAVAILABLE\n\nSTATE_UNAVAILABLE\n - STATE_PENDING: STATE_PENDING\n\nSTATE_PENDING\n - STATE_DELETING: STATE_DELETING\n\nSTATE_DELETING\n - STATE_DELETED: STATE_DELETING\n\nSTATE_DELETED",
             "title": "RouteStateTypeEnum",
             "enum": [
                 "ACTIVE_STATE",
@@ -3521,7 +3529,7 @@ var APISwaggerJSON string = `{
                 "STATE_DELETED"
             ],
             "default": "ACTIVE_STATE",
-            "x-displayname": "",
+            "x-displayname": "RouteStateTypeEnum",
             "x-ves-proto-enum": "ves.io.schema.topology.RouteStateTypeEnum"
         },
         "topologyRouteTableStateEnum": {

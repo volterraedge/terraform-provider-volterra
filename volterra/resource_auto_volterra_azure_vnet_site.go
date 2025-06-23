@@ -77,42 +77,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
-						"blindfold_secret_info_internal": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"decryption_provider": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"location": {
-										Type:       schema.TypeString,
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"store_provider": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-								},
-							},
-						},
-
-						"secret_encoding_type": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
 						"blindfold_secret_info": {
 
 							Type:     schema.TypeList,
@@ -155,66 +119,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"url": {
 										Type:     schema.TypeString,
 										Required: true,
-									},
-								},
-							},
-						},
-
-						"vault_secret_info": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"key": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"location": {
-										Type:       schema.TypeString,
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"provider": {
-										Type:       schema.TypeString,
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"secret_encoding": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"version": {
-										Type:       schema.TypeInt,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-								},
-							},
-						},
-
-						"wingman_secret_info": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"name": {
-										Type:       schema.TypeString,
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -388,30 +292,9 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 										Optional: true,
 									},
 
-									"drain_max_unavailable_node_percentage": {
-
-										Type:       schema.TypeInt,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
 									"drain_node_timeout": {
 										Type:     schema.TypeInt,
 										Required: true,
-									},
-
-									"disable_vega_upgrade_mode": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"enable_vega_upgrade_mode": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -559,12 +442,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 									"azure_az": {
 										Type:     schema.TypeString,
 										Required: true,
-									},
-
-									"disk_size": {
-										Type:       schema.TypeInt,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"inside_subnet": {
@@ -889,407 +766,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 														},
 													},
 												},
-
-												"disable_forward_proxy": {
-
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"enable_forward_proxy": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"connection_timeout": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"max_connect_attempts": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"no_interception": {
-
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"tls_intercept": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"enable_for_all_domains": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"policy": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interception_rules": {
-
-																						Type:       schema.TypeList,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"domain_match": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"exact_value": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"regex_value": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"suffix_value": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"disable_interception": {
-
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"enable_interception": {
-
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"custom_certificate": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"certificate_url": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"description": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"custom_hash_algorithms": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"hash_algorithms": {
-
-																									Type: schema.TypeList,
-
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Schema{
-																										Type: schema.TypeString,
-																									},
-																								},
-																							},
-																						},
-																					},
-
-																					"disable_ocsp_stapling": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{},
-																						},
-																					},
-
-																					"use_system_defaults": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{},
-																						},
-																					},
-
-																					"private_key": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"blindfold_secret_info_internal": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"decryption_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"location": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"store_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"secret_encoding_type": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"blindfold_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"decryption_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"location": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"store_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"clear_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"url": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"vault_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"key": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"location": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"provider": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"secret_encoding": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"version": {
-																												Type:       schema.TypeInt,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"wingman_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"name": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"volterra_certificate": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"trusted_ca_url": {
-
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"volterra_trusted_ca": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"white_listed_ports": {
-
-																Type: schema.TypeList,
-
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Schema{
-																	Type: schema.TypeInt,
-																},
-															},
-
-															"white_listed_prefixes": {
-
-																Type: schema.TypeList,
-
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Schema{
-																	Type: schema.TypeString,
-																},
-															},
-														},
-													},
-												},
 											},
 										},
 									},
@@ -1357,12 +833,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																			Optional: true,
 																		},
 
-																		"disable": {
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
 																		"name": {
 																			Type:     schema.TypeString,
 																			Required: true,
@@ -1392,42 +862,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
-
-																					"blindfold_secret_info_internal": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"decryption_provider": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"location": {
-																									Type:       schema.TypeString,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"store_provider": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"secret_encoding_type": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
 
 																					"blindfold_secret_info": {
 
@@ -1471,66 +905,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																								"url": {
 																									Type:     schema.TypeString,
 																									Required: true,
-																								},
-																							},
-																						},
-																					},
-
-																					"vault_secret_info": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"key": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"location": {
-																									Type:       schema.TypeString,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"provider": {
-																									Type:       schema.TypeString,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"secret_encoding": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"version": {
-																									Type:       schema.TypeInt,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"wingman_secret_info": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -2562,407 +1936,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 														},
 													},
 												},
-
-												"disable_forward_proxy": {
-
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"enable_forward_proxy": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"connection_timeout": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"max_connect_attempts": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"no_interception": {
-
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"tls_intercept": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"enable_for_all_domains": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"policy": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interception_rules": {
-
-																						Type:       schema.TypeList,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"domain_match": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"exact_value": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"regex_value": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"suffix_value": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"disable_interception": {
-
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"enable_interception": {
-
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"custom_certificate": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"certificate_url": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"description": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"custom_hash_algorithms": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"hash_algorithms": {
-
-																									Type: schema.TypeList,
-
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Schema{
-																										Type: schema.TypeString,
-																									},
-																								},
-																							},
-																						},
-																					},
-
-																					"disable_ocsp_stapling": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{},
-																						},
-																					},
-
-																					"use_system_defaults": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{},
-																						},
-																					},
-
-																					"private_key": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"blindfold_secret_info_internal": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"decryption_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"location": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"store_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"secret_encoding_type": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"blindfold_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"decryption_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"location": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"store_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"clear_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"url": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"vault_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"key": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"location": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"provider": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"secret_encoding": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"version": {
-																												Type:       schema.TypeInt,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"wingman_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"name": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"volterra_certificate": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"trusted_ca_url": {
-
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"volterra_trusted_ca": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"white_listed_ports": {
-
-																Type: schema.TypeList,
-
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Schema{
-																	Type: schema.TypeInt,
-																},
-															},
-
-															"white_listed_prefixes": {
-
-																Type: schema.TypeList,
-
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Schema{
-																	Type: schema.TypeString,
-																},
-															},
-														},
-													},
-												},
 											},
 										},
 									},
@@ -3030,12 +2003,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																			Optional: true,
 																		},
 
-																		"disable": {
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
 																		"name": {
 																			Type:     schema.TypeString,
 																			Required: true,
@@ -3065,42 +2032,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
-
-																					"blindfold_secret_info_internal": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"decryption_provider": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"location": {
-																									Type:       schema.TypeString,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"store_provider": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"secret_encoding_type": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
 
 																					"blindfold_secret_info": {
 
@@ -3144,66 +2075,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																								"url": {
 																									Type:     schema.TypeString,
 																									Required: true,
-																								},
-																							},
-																						},
-																					},
-
-																					"vault_secret_info": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"key": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"location": {
-																									Type:       schema.TypeString,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"provider": {
-																									Type:       schema.TypeString,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"secret_encoding": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"version": {
-																									Type:       schema.TypeInt,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-
-																					"wingman_secret_info": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"name": {
-																									Type:       schema.TypeString,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -4194,12 +3065,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 										Required: true,
 									},
 
-									"disk_size": {
-										Type:       schema.TypeInt,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
 									"local_subnet": {
 
 										Type:     schema.TypeList,
@@ -4519,12 +3384,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 										Required: true,
 									},
 
-									"disk_size": {
-										Type:       schema.TypeInt,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
 									"local_subnet": {
 
 										Type:     schema.TypeList,
@@ -4758,407 +3617,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																			Optional: true,
 																		},
 																	},
-																},
-															},
-														},
-													},
-												},
-
-												"disable_forward_proxy": {
-
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"enable_forward_proxy": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"connection_timeout": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"max_connect_attempts": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"no_interception": {
-
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"tls_intercept": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"enable_for_all_domains": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"policy": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interception_rules": {
-
-																						Type:       schema.TypeList,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"domain_match": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"exact_value": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"regex_value": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"suffix_value": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"disable_interception": {
-
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"enable_interception": {
-
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"custom_certificate": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"certificate_url": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"description": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"custom_hash_algorithms": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"hash_algorithms": {
-
-																									Type: schema.TypeList,
-
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Schema{
-																										Type: schema.TypeString,
-																									},
-																								},
-																							},
-																						},
-																					},
-
-																					"disable_ocsp_stapling": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{},
-																						},
-																					},
-
-																					"use_system_defaults": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{},
-																						},
-																					},
-
-																					"private_key": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"blindfold_secret_info_internal": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"decryption_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"location": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"store_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"secret_encoding_type": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"blindfold_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"decryption_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"location": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"store_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"clear_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"url": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"vault_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"key": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"location": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"provider": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"secret_encoding": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"version": {
-																												Type:       schema.TypeInt,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"wingman_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"name": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"volterra_certificate": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"trusted_ca_url": {
-
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"volterra_trusted_ca": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"white_listed_ports": {
-
-																Type: schema.TypeList,
-
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Schema{
-																	Type: schema.TypeInt,
-																},
-															},
-
-															"white_listed_prefixes": {
-
-																Type: schema.TypeList,
-
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Schema{
-																	Type: schema.TypeString,
 																},
 															},
 														},
@@ -5732,407 +4190,6 @@ func resourceVolterraAzureVnetSite() *schema.Resource {
 																			Optional: true,
 																		},
 																	},
-																},
-															},
-														},
-													},
-												},
-
-												"disable_forward_proxy": {
-
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"enable_forward_proxy": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"connection_timeout": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"max_connect_attempts": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"no_interception": {
-
-																Type:       schema.TypeBool,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"tls_intercept": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"enable_for_all_domains": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"policy": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"interception_rules": {
-
-																						Type:       schema.TypeList,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"domain_match": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"exact_value": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"regex_value": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"suffix_value": {
-
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"disable_interception": {
-
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"enable_interception": {
-
-																									Type:       schema.TypeBool,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"custom_certificate": {
-
-																			Type:       schema.TypeList,
-																			MaxItems:   1,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																			Elem: &schema.Resource{
-																				Schema: map[string]*schema.Schema{
-
-																					"certificate_url": {
-																						Type:       schema.TypeString,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"description": {
-																						Type:       schema.TypeString,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																					},
-
-																					"custom_hash_algorithms": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"hash_algorithms": {
-
-																									Type: schema.TypeList,
-
-																									Required:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Schema{
-																										Type: schema.TypeString,
-																									},
-																								},
-																							},
-																						},
-																					},
-
-																					"disable_ocsp_stapling": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{},
-																						},
-																					},
-
-																					"use_system_defaults": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Optional:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{},
-																						},
-																					},
-
-																					"private_key": {
-
-																						Type:       schema.TypeList,
-																						MaxItems:   1,
-																						Required:   true,
-																						Deprecated: "This field is deprecated and will be removed in future release.",
-																						Elem: &schema.Resource{
-																							Schema: map[string]*schema.Schema{
-
-																								"blindfold_secret_info_internal": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"decryption_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"location": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"store_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"secret_encoding_type": {
-																									Type:       schema.TypeString,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																								},
-
-																								"blindfold_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"decryption_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"location": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"store_provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"clear_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"provider": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"url": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"vault_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"key": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"location": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"provider": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"secret_encoding": {
-																												Type:       schema.TypeString,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-
-																											"version": {
-																												Type:       schema.TypeInt,
-																												Optional:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-
-																								"wingman_secret_info": {
-
-																									Type:       schema.TypeList,
-																									MaxItems:   1,
-																									Optional:   true,
-																									Deprecated: "This field is deprecated and will be removed in future release.",
-																									Elem: &schema.Resource{
-																										Schema: map[string]*schema.Schema{
-
-																											"name": {
-																												Type:       schema.TypeString,
-																												Required:   true,
-																												Deprecated: "This field is deprecated and will be removed in future release.",
-																											},
-																										},
-																									},
-																								},
-																							},
-																						},
-																					},
-																				},
-																			},
-																		},
-
-																		"volterra_certificate": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"trusted_ca_url": {
-
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"volterra_trusted_ca": {
-
-																			Type:       schema.TypeBool,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"white_listed_ports": {
-
-																Type: schema.TypeList,
-
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Schema{
-																	Type: schema.TypeInt,
-																},
-															},
-
-															"white_listed_prefixes": {
-
-																Type: schema.TypeList,
-
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Schema{
-																	Type: schema.TypeString,
 																},
 															},
 														},
@@ -6788,38 +4845,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 			if set != nil {
 				adminPasswordMapStrToI := set.(map[string]interface{})
 
-				if v, ok := adminPasswordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-					sl := v.([]interface{})
-					blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-					adminPassword.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-					for _, set := range sl {
-						if set != nil {
-							blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-							}
-
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.Location = w.(string)
-							}
-
-							if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-								blindfoldSecretInfoInternal.StoreProvider = w.(string)
-							}
-
-						}
-					}
-
-				}
-
-				if v, ok := adminPasswordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-					adminPassword.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-				}
-
 				secretInfoOneofTypeFound := false
 
 				if v, ok := adminPasswordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -6886,76 +4911,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 				}
 
-				if v, ok := adminPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-					secretInfoOneofTypeFound = true
-					secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-					secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-					adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-							}
-
-							if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-							}
-
-							if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-							}
-
-							if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-							}
-
-							if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-							}
-
-						}
-					}
-
-				}
-
-				if v, ok := adminPasswordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-					secretInfoOneofTypeFound = true
-					secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-					secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-					adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-							}
-
-						}
-					}
-
-				}
-
 			}
 		}
 
@@ -6977,7 +4932,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
+	if v, ok := d.GetOk("blocked_services"); ok && !isIntfNil(v) && !blockedServicesChoiceTypeFound {
 
 		blockedServicesChoiceTypeFound = true
 		blockedServicesChoiceInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_BlockedServices{}
@@ -7123,7 +5078,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	deploymentTypeFound := false
 
-	if v, ok := d.GetOk("azure_cred"); ok && !deploymentTypeFound {
+	if v, ok := d.GetOk("azure_cred"); ok && !isIntfNil(v) && !deploymentTypeFound {
 
 		deploymentTypeFound = true
 		deploymentInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_AzureCred{}
@@ -7215,46 +5170,9 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 							}
 
-							if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
-
-								drainMaxUnavailableChoiceTypeFound = true
-								drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
-
-								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
-
-								drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
-
-							}
-
 							if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
 
 								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
-
-							}
-
-							vegaUpgradeModeToggleChoiceTypeFound := false
-
-							if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
-
-								vegaUpgradeModeToggleChoiceTypeFound = true
-
-								if v.(bool) {
-									vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
-									vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
-									kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
-
-								vegaUpgradeModeToggleChoiceTypeFound = true
-
-								if v.(bool) {
-									vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
-									vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
-									kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
-								}
 
 							}
 
@@ -7272,7 +5190,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	logsReceiverChoiceTypeFound := false
 
-	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
+	if v, ok := d.GetOk("log_receiver"); ok && !isIntfNil(v) && !logsReceiverChoiceTypeFound {
 
 		logsReceiverChoiceTypeFound = true
 		logsReceiverChoiceInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_LogReceiver{}
@@ -7412,7 +5330,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	regionChoiceTypeFound := false
 
-	if v, ok := d.GetOk("alternate_region"); ok && !regionChoiceTypeFound {
+	if v, ok := d.GetOk("alternate_region"); ok && !isIntfNil(v) && !regionChoiceTypeFound {
 
 		regionChoiceTypeFound = true
 		regionChoiceInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_AlternateRegion{}
@@ -7423,7 +5341,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("azure_region"); ok && !regionChoiceTypeFound {
+	if v, ok := d.GetOk("azure_region"); ok && !isIntfNil(v) && !regionChoiceTypeFound {
 
 		regionChoiceTypeFound = true
 		regionChoiceInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_AzureRegion{}
@@ -7446,7 +5364,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	siteTypeTypeFound := false
 
-	if v, ok := d.GetOk("ingress_egress_gw"); ok && !siteTypeTypeFound {
+	if v, ok := d.GetOk("ingress_egress_gw"); ok && !isIntfNil(v) && !siteTypeTypeFound {
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_IngressEgressGw{}
@@ -7510,10 +5428,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 							if w, ok := azNodesMapStrToI["azure_az"]; ok && !isIntfNil(w) {
 								azNodes[i].AzureAz = w.(string)
-							}
-
-							if w, ok := azNodesMapStrToI["disk_size"]; ok && !isIntfNil(w) {
-								azNodes[i].DiskSize = uint32(w.(int))
 							}
 
 							if v, ok := azNodesMapStrToI["inside_subnet"]; ok && !isIntfNil(v) {
@@ -7978,518 +5892,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 										}
 
-										forwardProxyChoiceTypeFound := false
-
-										if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-
-											if v.(bool) {
-												forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
-												forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
-												globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-											}
-
-										}
-
-										if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-											forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
-											forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
-											globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
-
-													}
-
-													tlsInterceptionChoiceTypeFound := false
-
-													if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-
-														if v.(bool) {
-															tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
-															tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
-															forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-														}
-
-													}
-
-													if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-														tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
-														tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
-														forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																interceptionPolicyChoiceTypeFound := false
-
-																if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
-																		interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-																	interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
-																	interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
-																	tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
-																				interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
-																				for i, set := range sl {
-																					if set != nil {
-																						interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-																						interceptionRulesMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							domainMatch := &ves_io_schema.DomainType{}
-																							interceptionRules[i].DomainMatch = domainMatch
-																							for _, set := range sl {
-																								if set != nil {
-																									domainMatchMapStrToI := set.(map[string]interface{})
-
-																									domainChoiceTypeFound := false
-
-																									if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.ExactValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.RegexValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.SuffixValue = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						enableDisableChoiceTypeFound := false
-
-																						if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
-																								enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																						if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
-																								enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																signingCertChoiceTypeFound := false
-
-																if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-																	signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
-																	signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
-																	tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
-
-																			}
-
-																			if v, ok := cs["description"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.Description = v.(string)
-
-																			}
-
-																			ocspStaplingChoiceTypeFound := false
-
-																			if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-																				ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-																							hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-																							for _, j := range v.([]interface{}) {
-																								hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
-																							}
-																							ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-																				ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-																				ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				privateKey := &ves_io_schema.SecretType{}
-																				signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
-																				for _, set := range sl {
-																					if set != nil {
-																						privateKeyMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																							for _, set := range sl {
-																								if set != nil {
-																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.Location = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																							privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																						}
-
-																						secretInfoOneofTypeFound := false
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-																							secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-																							secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																									}
-
-																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-
-																	if v.(bool) {
-																		signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
-																		signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-																	}
-
-																}
-
-																trustedCaChoiceTypeFound := false
-
-																if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-																	trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
-
-																	tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-
-																	trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-																}
-
-																if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-
-																	if v.(bool) {
-																		trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
-																		trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
-
-														ls := make([]uint32, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = uint32(v.(int))
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
-
-													}
-
-													if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
-
-														ls := make([]string, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
-
-													}
-
-												}
-											}
-
-										}
-
 									}
 								}
 
@@ -8600,10 +6002,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	metadata.Description = w.(string)
 																}
 
-																if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-																	metadata.Disable = w.(bool)
-																}
-
 																if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 																	metadata.Name = w.(string)
 																}
@@ -8646,38 +6044,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	for _, set := range sl {
 																		if set != nil {
 																			authorizedKeyMapStrToI := set.(map[string]interface{})
-
-																			if v, ok := authorizedKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																				authorizedKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																				for _, set := range sl {
-																					if set != nil {
-																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																						}
-
-																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																							blindfoldSecretInfoInternal.Location = w.(string)
-																						}
-
-																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := authorizedKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																				authorizedKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																			}
 
 																			secretInfoOneofTypeFound := false
 
@@ -8737,76 +6103,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := authorizedKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																				secretInfoOneofTypeFound = true
-																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																				authorizedKey.SecretInfoOneof = secretInfoOneofInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																						}
-
-																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																						}
-
-																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																						}
-
-																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																						}
-
-																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := authorizedKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																				secretInfoOneofTypeFound = true
-																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																				authorizedKey.SecretInfoOneof = secretInfoOneofInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																						}
 
@@ -9312,6 +6608,9 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
@@ -9708,6 +7007,9 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
@@ -10040,7 +7342,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("ingress_egress_gw_ar"); ok && !siteTypeTypeFound {
+	if v, ok := d.GetOk("ingress_egress_gw_ar"); ok && !isIntfNil(v) && !siteTypeTypeFound {
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_IngressEgressGwAr{}
@@ -10363,518 +7665,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 										}
 
-										forwardProxyChoiceTypeFound := false
-
-										if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-
-											if v.(bool) {
-												forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
-												forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
-												globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-											}
-
-										}
-
-										if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-											forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
-											forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
-											globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
-
-													}
-
-													tlsInterceptionChoiceTypeFound := false
-
-													if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-
-														if v.(bool) {
-															tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
-															tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
-															forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-														}
-
-													}
-
-													if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-														tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
-														tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
-														forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																interceptionPolicyChoiceTypeFound := false
-
-																if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
-																		interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-																	interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
-																	interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
-																	tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
-																				interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
-																				for i, set := range sl {
-																					if set != nil {
-																						interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-																						interceptionRulesMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							domainMatch := &ves_io_schema.DomainType{}
-																							interceptionRules[i].DomainMatch = domainMatch
-																							for _, set := range sl {
-																								if set != nil {
-																									domainMatchMapStrToI := set.(map[string]interface{})
-
-																									domainChoiceTypeFound := false
-
-																									if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.ExactValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.RegexValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.SuffixValue = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						enableDisableChoiceTypeFound := false
-
-																						if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
-																								enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																						if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
-																								enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																signingCertChoiceTypeFound := false
-
-																if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-																	signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
-																	signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
-																	tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
-
-																			}
-
-																			if v, ok := cs["description"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.Description = v.(string)
-
-																			}
-
-																			ocspStaplingChoiceTypeFound := false
-
-																			if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-																				ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-																							hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-																							for _, j := range v.([]interface{}) {
-																								hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
-																							}
-																							ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-																				ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-																				ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				privateKey := &ves_io_schema.SecretType{}
-																				signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
-																				for _, set := range sl {
-																					if set != nil {
-																						privateKeyMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																							for _, set := range sl {
-																								if set != nil {
-																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.Location = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																							privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																						}
-
-																						secretInfoOneofTypeFound := false
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-																							secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-																							secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																									}
-
-																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-
-																	if v.(bool) {
-																		signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
-																		signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-																	}
-
-																}
-
-																trustedCaChoiceTypeFound := false
-
-																if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-																	trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
-
-																	tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-
-																	trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-																}
-
-																if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-
-																	if v.(bool) {
-																		trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
-																		trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
-
-														ls := make([]uint32, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = uint32(v.(int))
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
-
-													}
-
-													if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
-
-														ls := make([]string, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
-
-													}
-
-												}
-											}
-
-										}
-
 									}
 								}
 
@@ -10985,10 +7775,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	metadata.Description = w.(string)
 																}
 
-																if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-																	metadata.Disable = w.(bool)
-																}
-
 																if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 																	metadata.Name = w.(string)
 																}
@@ -11031,38 +7817,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																	for _, set := range sl {
 																		if set != nil {
 																			authorizedKeyMapStrToI := set.(map[string]interface{})
-
-																			if v, ok := authorizedKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																				authorizedKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																				for _, set := range sl {
-																					if set != nil {
-																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																						}
-
-																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																							blindfoldSecretInfoInternal.Location = w.(string)
-																						}
-
-																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := authorizedKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																				authorizedKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																			}
 
 																			secretInfoOneofTypeFound := false
 
@@ -11122,76 +7876,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := authorizedKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																				secretInfoOneofTypeFound = true
-																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																				authorizedKey.SecretInfoOneof = secretInfoOneofInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																						}
-
-																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																						}
-
-																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																						}
-
-																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																						}
-
-																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := authorizedKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																				secretInfoOneofTypeFound = true
-																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																				authorizedKey.SecretInfoOneof = secretInfoOneofInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																						}
 
@@ -11697,6 +8381,9 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
@@ -12305,6 +8992,9 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
@@ -12637,7 +9327,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("ingress_gw"); ok && !siteTypeTypeFound {
+	if v, ok := d.GetOk("ingress_gw"); ok && !isIntfNil(v) && !siteTypeTypeFound {
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_IngressGw{}
@@ -12701,10 +9391,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 							if w, ok := azNodesMapStrToI["azure_az"]; ok && !isIntfNil(w) {
 								azNodes[i].AzureAz = w.(string)
-							}
-
-							if w, ok := azNodesMapStrToI["disk_size"]; ok && !isIntfNil(w) {
-								azNodes[i].DiskSize = uint32(w.(int))
 							}
 
 							if v, ok := azNodesMapStrToI["local_subnet"]; ok && !isIntfNil(v) {
@@ -12887,7 +9573,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("ingress_gw_ar"); ok && !siteTypeTypeFound {
+	if v, ok := d.GetOk("ingress_gw_ar"); ok && !isIntfNil(v) && !siteTypeTypeFound {
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_IngressGwAr{}
@@ -13140,7 +9826,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("voltstack_cluster"); ok && !siteTypeTypeFound {
+	if v, ok := d.GetOk("voltstack_cluster"); ok && !isIntfNil(v) && !siteTypeTypeFound {
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_VoltstackCluster{}
@@ -13204,10 +9890,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 							if w, ok := azNodesMapStrToI["azure_az"]; ok && !isIntfNil(w) {
 								azNodes[i].AzureAz = w.(string)
-							}
-
-							if w, ok := azNodesMapStrToI["disk_size"]; ok && !isIntfNil(w) {
-								azNodes[i].DiskSize = uint32(w.(int))
 							}
 
 							if v, ok := azNodesMapStrToI["local_subnet"]; ok && !isIntfNil(v) {
@@ -13544,518 +10226,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 										}
 
-										forwardProxyChoiceTypeFound := false
-
-										if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-
-											if v.(bool) {
-												forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
-												forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
-												globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-											}
-
-										}
-
-										if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-											forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
-											forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
-											globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
-
-													}
-
-													tlsInterceptionChoiceTypeFound := false
-
-													if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-
-														if v.(bool) {
-															tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
-															tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
-															forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-														}
-
-													}
-
-													if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-														tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
-														tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
-														forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																interceptionPolicyChoiceTypeFound := false
-
-																if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
-																		interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-																	interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
-																	interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
-																	tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
-																				interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
-																				for i, set := range sl {
-																					if set != nil {
-																						interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-																						interceptionRulesMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							domainMatch := &ves_io_schema.DomainType{}
-																							interceptionRules[i].DomainMatch = domainMatch
-																							for _, set := range sl {
-																								if set != nil {
-																									domainMatchMapStrToI := set.(map[string]interface{})
-
-																									domainChoiceTypeFound := false
-
-																									if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.ExactValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.RegexValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.SuffixValue = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						enableDisableChoiceTypeFound := false
-
-																						if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
-																								enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																						if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
-																								enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																signingCertChoiceTypeFound := false
-
-																if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-																	signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
-																	signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
-																	tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
-
-																			}
-
-																			if v, ok := cs["description"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.Description = v.(string)
-
-																			}
-
-																			ocspStaplingChoiceTypeFound := false
-
-																			if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-																				ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-																							hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-																							for _, j := range v.([]interface{}) {
-																								hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
-																							}
-																							ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-																				ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-																				ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				privateKey := &ves_io_schema.SecretType{}
-																				signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
-																				for _, set := range sl {
-																					if set != nil {
-																						privateKeyMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																							for _, set := range sl {
-																								if set != nil {
-																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.Location = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																							privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																						}
-
-																						secretInfoOneofTypeFound := false
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-																							secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-																							secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																									}
-
-																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-
-																	if v.(bool) {
-																		signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
-																		signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-																	}
-
-																}
-
-																trustedCaChoiceTypeFound := false
-
-																if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-																	trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
-
-																	tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-
-																	trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-																}
-
-																if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-
-																	if v.(bool) {
-																		trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
-																		trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
-
-														ls := make([]uint32, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = uint32(v.(int))
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
-
-													}
-
-													if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
-
-														ls := make([]string, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
-
-													}
-
-												}
-											}
-
-										}
-
 									}
 								}
 
@@ -14281,6 +10451,9 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
@@ -14596,7 +10769,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("voltstack_cluster_ar"); ok && !siteTypeTypeFound {
+	if v, ok := d.GetOk("voltstack_cluster_ar"); ok && !isIntfNil(v) && !siteTypeTypeFound {
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_VoltstackClusterAr{}
@@ -14876,518 +11049,6 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 															}
 														}
-
-													}
-
-												}
-											}
-
-										}
-
-										forwardProxyChoiceTypeFound := false
-
-										if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-
-											if v.(bool) {
-												forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
-												forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
-												globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-											}
-
-										}
-
-										if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-											forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
-											forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
-											globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
-
-													}
-
-													tlsInterceptionChoiceTypeFound := false
-
-													if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-
-														if v.(bool) {
-															tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
-															tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
-															forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-														}
-
-													}
-
-													if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-														tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
-														tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
-														forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																interceptionPolicyChoiceTypeFound := false
-
-																if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
-																		interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-																	interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
-																	interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
-																	tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
-																				interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
-																				for i, set := range sl {
-																					if set != nil {
-																						interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-																						interceptionRulesMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							domainMatch := &ves_io_schema.DomainType{}
-																							interceptionRules[i].DomainMatch = domainMatch
-																							for _, set := range sl {
-																								if set != nil {
-																									domainMatchMapStrToI := set.(map[string]interface{})
-
-																									domainChoiceTypeFound := false
-
-																									if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.ExactValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.RegexValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.SuffixValue = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						enableDisableChoiceTypeFound := false
-
-																						if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
-																								enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																						if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
-																								enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																signingCertChoiceTypeFound := false
-
-																if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-																	signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
-																	signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
-																	tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
-
-																			}
-
-																			if v, ok := cs["description"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.Description = v.(string)
-
-																			}
-
-																			ocspStaplingChoiceTypeFound := false
-
-																			if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-																				ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-																							hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-																							for _, j := range v.([]interface{}) {
-																								hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
-																							}
-																							ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-																				ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-																				ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				privateKey := &ves_io_schema.SecretType{}
-																				signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
-																				for _, set := range sl {
-																					if set != nil {
-																						privateKeyMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																							for _, set := range sl {
-																								if set != nil {
-																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.Location = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																							privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																						}
-
-																						secretInfoOneofTypeFound := false
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-																							secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-																							secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																									}
-
-																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-
-																	if v.(bool) {
-																		signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
-																		signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-																	}
-
-																}
-
-																trustedCaChoiceTypeFound := false
-
-																if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-																	trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
-
-																	tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-
-																	trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-																}
-
-																if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-
-																	if v.(bool) {
-																		trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
-																		trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
-
-														ls := make([]uint32, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = uint32(v.(int))
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
-
-													}
-
-													if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
-
-														ls := make([]string, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
 
 													}
 
@@ -15740,6 +11401,9 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
@@ -16249,7 +11913,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("nodes_per_az"); ok && !workerNodesTypeFound {
+	if v, ok := d.GetOk("nodes_per_az"); ok && !isIntfNil(v) && !workerNodesTypeFound {
 
 		workerNodesTypeFound = true
 		workerNodesInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_NodesPerAz{}
@@ -16260,7 +11924,7 @@ func resourceVolterraAzureVnetSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("total_nodes"); ok && !workerNodesTypeFound {
+	if v, ok := d.GetOk("total_nodes"); ok && !isIntfNil(v) && !workerNodesTypeFound {
 
 		workerNodesTypeFound = true
 		workerNodesInt := &ves_io_schema_views_azure_vnet_site.CreateSpecType_TotalNodes{}
@@ -16391,7 +12055,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("blocked_services"); ok && !blockedServicesChoiceTypeFound {
+	if v, ok := d.GetOk("blocked_services"); ok && !isIntfNil(v) && !blockedServicesChoiceTypeFound {
 
 		blockedServicesChoiceTypeFound = true
 		blockedServicesChoiceInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_BlockedServices{}
@@ -16533,7 +12197,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	deploymentTypeFound := false
 
-	if v, ok := d.GetOk("azure_cred"); ok && !deploymentTypeFound {
+	if v, ok := d.GetOk("azure_cred"); ok && !isIntfNil(v) && !deploymentTypeFound {
 
 		deploymentTypeFound = true
 		deploymentInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_AzureCred{}
@@ -16623,46 +12287,9 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 							}
 
-							if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
-
-								drainMaxUnavailableChoiceTypeFound = true
-								drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
-
-								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
-
-								drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
-
-							}
-
 							if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
 
 								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
-
-							}
-
-							vegaUpgradeModeToggleChoiceTypeFound := false
-
-							if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
-
-								vegaUpgradeModeToggleChoiceTypeFound = true
-
-								if v.(bool) {
-									vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
-									vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
-									kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
-								}
-
-							}
-
-							if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
-
-								vegaUpgradeModeToggleChoiceTypeFound = true
-
-								if v.(bool) {
-									vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
-									vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
-									kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
-								}
 
 							}
 
@@ -16678,7 +12305,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	logsReceiverChoiceTypeFound := false
 
-	if v, ok := d.GetOk("log_receiver"); ok && !logsReceiverChoiceTypeFound {
+	if v, ok := d.GetOk("log_receiver"); ok && !isIntfNil(v) && !logsReceiverChoiceTypeFound {
 
 		logsReceiverChoiceTypeFound = true
 		logsReceiverChoiceInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_LogReceiver{}
@@ -16774,7 +12401,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	regionChoiceTypeFound := false
 
-	if v, ok := d.GetOk("alternate_region"); ok && !regionChoiceTypeFound {
+	if v, ok := d.GetOk("alternate_region"); ok && !isIntfNil(v) && !regionChoiceTypeFound {
 
 		regionChoiceTypeFound = true
 		regionChoiceInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_AlternateRegion{}
@@ -16785,7 +12412,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("azure_region"); ok && !regionChoiceTypeFound {
+	if v, ok := d.GetOk("azure_region"); ok && !isIntfNil(v) && !regionChoiceTypeFound {
 
 		regionChoiceTypeFound = true
 		regionChoiceInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_AzureRegion{}
@@ -16805,7 +12432,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	siteTypeTypeFound := false
 
-	if v, ok := d.GetOk("ingress_egress_gw"); ok && !siteTypeTypeFound {
+	if v, ok := d.GetOk("ingress_egress_gw"); ok && !isIntfNil(v) && !siteTypeTypeFound {
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_IngressEgressGw{}
@@ -16816,6 +12443,211 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 		for _, set := range sl {
 			if set != nil {
 				cs := set.(map[string]interface{})
+
+				if v, ok := cs["az_nodes"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					azNodes := make([]*ves_io_schema_views.AzureVnetTwoInterfaceNodeType, len(sl))
+					siteTypeInt.IngressEgressGw.AzNodes = azNodes
+					for i, set := range sl {
+						if set != nil {
+							azNodes[i] = &ves_io_schema_views.AzureVnetTwoInterfaceNodeType{}
+							azNodesMapStrToI := set.(map[string]interface{})
+
+							if w, ok := azNodesMapStrToI["azure_az"]; ok && !isIntfNil(w) {
+								azNodes[i].AzureAz = w.(string)
+							}
+
+							if v, ok := azNodesMapStrToI["inside_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								insideSubnet := &ves_io_schema_views.AzureSubnetChoiceType{}
+								azNodes[i].InsideSubnet = insideSubnet
+								for _, set := range sl {
+									if set != nil {
+										insideSubnetMapStrToI := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := insideSubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceType_Subnet{}
+											choiceInt.Subnet = &ves_io_schema_views.AzureSubnetType{}
+											insideSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													resourceGroupChoiceTypeFound := false
+
+													if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+														resourceGroupChoiceTypeFound = true
+														resourceGroupChoiceInt := &ves_io_schema_views.AzureSubnetType_SubnetResourceGrp{}
+
+														choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+														resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+													}
+
+													if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+														resourceGroupChoiceTypeFound = true
+
+														if v.(bool) {
+															resourceGroupChoiceInt := &ves_io_schema_views.AzureSubnetType_VnetResourceGroup{}
+															resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+															choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+														choiceInt.Subnet.SubnetName = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := insideSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceType_SubnetParam{}
+											choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+											insideSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv4 = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv6 = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := azNodesMapStrToI["outside_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								outsideSubnet := &ves_io_schema_views.AzureSubnetChoiceType{}
+								azNodes[i].OutsideSubnet = outsideSubnet
+								for _, set := range sl {
+									if set != nil {
+										outsideSubnetMapStrToI := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := outsideSubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceType_Subnet{}
+											choiceInt.Subnet = &ves_io_schema_views.AzureSubnetType{}
+											outsideSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													resourceGroupChoiceTypeFound := false
+
+													if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+														resourceGroupChoiceTypeFound = true
+														resourceGroupChoiceInt := &ves_io_schema_views.AzureSubnetType_SubnetResourceGrp{}
+
+														choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+														resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+													}
+
+													if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+														resourceGroupChoiceTypeFound = true
+
+														if v.(bool) {
+															resourceGroupChoiceInt := &ves_io_schema_views.AzureSubnetType_VnetResourceGroup{}
+															resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+															choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+														choiceInt.Subnet.SubnetName = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := outsideSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceType_SubnetParam{}
+											choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+											outsideSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv4 = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv6 = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
 
 				dcClusterGroupChoiceTypeFound := false
 
@@ -17082,518 +12914,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 										}
 
-										forwardProxyChoiceTypeFound := false
-
-										if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-
-											if v.(bool) {
-												forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
-												forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
-												globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-											}
-
-										}
-
-										if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-											forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
-											forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
-											globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
-
-													}
-
-													tlsInterceptionChoiceTypeFound := false
-
-													if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-
-														if v.(bool) {
-															tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
-															tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
-															forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-														}
-
-													}
-
-													if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-														tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
-														tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
-														forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																interceptionPolicyChoiceTypeFound := false
-
-																if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
-																		interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-																	interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
-																	interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
-																	tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
-																				interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
-																				for i, set := range sl {
-																					if set != nil {
-																						interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-																						interceptionRulesMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							domainMatch := &ves_io_schema.DomainType{}
-																							interceptionRules[i].DomainMatch = domainMatch
-																							for _, set := range sl {
-																								if set != nil {
-																									domainMatchMapStrToI := set.(map[string]interface{})
-
-																									domainChoiceTypeFound := false
-
-																									if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.ExactValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.RegexValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.SuffixValue = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						enableDisableChoiceTypeFound := false
-
-																						if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
-																								enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																						if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
-																								enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																signingCertChoiceTypeFound := false
-
-																if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-																	signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
-																	signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
-																	tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
-
-																			}
-
-																			if v, ok := cs["description"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.Description = v.(string)
-
-																			}
-
-																			ocspStaplingChoiceTypeFound := false
-
-																			if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-																				ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-																							hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-																							for _, j := range v.([]interface{}) {
-																								hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
-																							}
-																							ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-																				ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-																				ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				privateKey := &ves_io_schema.SecretType{}
-																				signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
-																				for _, set := range sl {
-																					if set != nil {
-																						privateKeyMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																							for _, set := range sl {
-																								if set != nil {
-																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.Location = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																							privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																						}
-
-																						secretInfoOneofTypeFound := false
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-																							secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-																							secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																									}
-
-																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-
-																	if v.(bool) {
-																		signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
-																		signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-																	}
-
-																}
-
-																trustedCaChoiceTypeFound := false
-
-																if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-																	trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
-
-																	tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-
-																	trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-																}
-
-																if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-
-																	if v.(bool) {
-																		trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
-																		trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
-
-														ls := make([]uint32, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = uint32(v.(int))
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
-
-													}
-
-													if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
-
-														ls := make([]string, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
-
-													}
-
-												}
-											}
-
-										}
-
 									}
 								}
 
@@ -17704,10 +13024,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	metadata.Description = w.(string)
 																}
 
-																if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-																	metadata.Disable = w.(bool)
-																}
-
 																if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 																	metadata.Name = w.(string)
 																}
@@ -17750,38 +13066,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	for _, set := range sl {
 																		if set != nil {
 																			authorizedKeyMapStrToI := set.(map[string]interface{})
-
-																			if v, ok := authorizedKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																				authorizedKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																				for _, set := range sl {
-																					if set != nil {
-																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																						}
-
-																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																							blindfoldSecretInfoInternal.Location = w.(string)
-																						}
-
-																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := authorizedKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																				authorizedKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																			}
 
 																			secretInfoOneofTypeFound := false
 
@@ -17841,76 +13125,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := authorizedKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																				secretInfoOneofTypeFound = true
-																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																				authorizedKey.SecretInfoOneof = secretInfoOneofInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																						}
-
-																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																						}
-
-																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																						}
-
-																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																						}
-
-																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := authorizedKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																				secretInfoOneofTypeFound = true
-																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																				authorizedKey.SecretInfoOneof = secretInfoOneofInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																						}
 
@@ -18416,6 +13630,9 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
@@ -18812,6 +14029,9 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
@@ -19144,7 +14364,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("ingress_egress_gw_ar"); ok && !siteTypeTypeFound {
+	if v, ok := d.GetOk("ingress_egress_gw_ar"); ok && !isIntfNil(v) && !siteTypeTypeFound {
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_IngressEgressGwAr{}
@@ -19421,518 +14641,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 										}
 
-										forwardProxyChoiceTypeFound := false
-
-										if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-
-											if v.(bool) {
-												forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
-												forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
-												globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-											}
-
-										}
-
-										if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-											forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
-											forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
-											globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
-
-													}
-
-													tlsInterceptionChoiceTypeFound := false
-
-													if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-
-														if v.(bool) {
-															tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
-															tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
-															forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-														}
-
-													}
-
-													if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-														tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
-														tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
-														forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																interceptionPolicyChoiceTypeFound := false
-
-																if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
-																		interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-																	interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
-																	interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
-																	tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
-																				interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
-																				for i, set := range sl {
-																					if set != nil {
-																						interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-																						interceptionRulesMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							domainMatch := &ves_io_schema.DomainType{}
-																							interceptionRules[i].DomainMatch = domainMatch
-																							for _, set := range sl {
-																								if set != nil {
-																									domainMatchMapStrToI := set.(map[string]interface{})
-
-																									domainChoiceTypeFound := false
-
-																									if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.ExactValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.RegexValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.SuffixValue = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						enableDisableChoiceTypeFound := false
-
-																						if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
-																								enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																						if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
-																								enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																signingCertChoiceTypeFound := false
-
-																if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-																	signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
-																	signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
-																	tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
-
-																			}
-
-																			if v, ok := cs["description"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.Description = v.(string)
-
-																			}
-
-																			ocspStaplingChoiceTypeFound := false
-
-																			if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-																				ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-																							hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-																							for _, j := range v.([]interface{}) {
-																								hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
-																							}
-																							ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-																				ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-																				ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				privateKey := &ves_io_schema.SecretType{}
-																				signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
-																				for _, set := range sl {
-																					if set != nil {
-																						privateKeyMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																							for _, set := range sl {
-																								if set != nil {
-																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.Location = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																							privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																						}
-
-																						secretInfoOneofTypeFound := false
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-																							secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-																							secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																									}
-
-																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-
-																	if v.(bool) {
-																		signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
-																		signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-																	}
-
-																}
-
-																trustedCaChoiceTypeFound := false
-
-																if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-																	trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
-
-																	tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-
-																	trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-																}
-
-																if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-
-																	if v.(bool) {
-																		trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
-																		trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
-
-														ls := make([]uint32, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = uint32(v.(int))
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
-
-													}
-
-													if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
-
-														ls := make([]string, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
-
-													}
-
-												}
-											}
-
-										}
-
 									}
 								}
 
@@ -20043,10 +14751,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	metadata.Description = w.(string)
 																}
 
-																if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-																	metadata.Disable = w.(bool)
-																}
-
 																if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 																	metadata.Name = w.(string)
 																}
@@ -20089,38 +14793,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																	for _, set := range sl {
 																		if set != nil {
 																			authorizedKeyMapStrToI := set.(map[string]interface{})
-
-																			if v, ok := authorizedKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																				authorizedKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																				for _, set := range sl {
-																					if set != nil {
-																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																						}
-
-																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																							blindfoldSecretInfoInternal.Location = w.(string)
-																						}
-
-																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := authorizedKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																				authorizedKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																			}
 
 																			secretInfoOneofTypeFound := false
 
@@ -20180,76 +14852,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := authorizedKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																				secretInfoOneofTypeFound = true
-																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																				authorizedKey.SecretInfoOneof = secretInfoOneofInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																						}
-
-																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																						}
-
-																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																						}
-
-																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																						}
-
-																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if v, ok := authorizedKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																				secretInfoOneofTypeFound = true
-																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																				authorizedKey.SecretInfoOneof = secretInfoOneofInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																						}
 
@@ -20755,6 +15357,9 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
@@ -21363,6 +15968,9 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
@@ -21695,25 +16303,272 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if _, ok := d.GetOk("ingress_gw"); ok && !siteTypeTypeFound {
+	if v, ok := d.GetOk("ingress_gw"); ok && !isIntfNil(v) && !siteTypeTypeFound {
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_IngressGw{}
 		siteTypeInt.IngressGw = &ves_io_schema_views_azure_vnet_site.AzureVnetIngressGwReplaceType{}
 		updateSpec.SiteType = siteTypeInt
 
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["az_nodes"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					azNodes := make([]*ves_io_schema_views.AzureVnetOneInterfaceNodeType, len(sl))
+					siteTypeInt.IngressGw.AzNodes = azNodes
+					for i, set := range sl {
+						if set != nil {
+							azNodes[i] = &ves_io_schema_views.AzureVnetOneInterfaceNodeType{}
+							azNodesMapStrToI := set.(map[string]interface{})
+
+							if w, ok := azNodesMapStrToI["azure_az"]; ok && !isIntfNil(w) {
+								azNodes[i].AzureAz = w.(string)
+							}
+
+							if v, ok := azNodesMapStrToI["local_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								localSubnet := &ves_io_schema_views.AzureSubnetChoiceType{}
+								azNodes[i].LocalSubnet = localSubnet
+								for _, set := range sl {
+									if set != nil {
+										localSubnetMapStrToI := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := localSubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceType_Subnet{}
+											choiceInt.Subnet = &ves_io_schema_views.AzureSubnetType{}
+											localSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													resourceGroupChoiceTypeFound := false
+
+													if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+														resourceGroupChoiceTypeFound = true
+														resourceGroupChoiceInt := &ves_io_schema_views.AzureSubnetType_SubnetResourceGrp{}
+
+														choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+														resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+													}
+
+													if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+														resourceGroupChoiceTypeFound = true
+
+														if v.(bool) {
+															resourceGroupChoiceInt := &ves_io_schema_views.AzureSubnetType_VnetResourceGroup{}
+															resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+															choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+														choiceInt.Subnet.SubnetName = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := localSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceType_SubnetParam{}
+											choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+											localSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv4 = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv6 = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
 	}
 
-	if _, ok := d.GetOk("ingress_gw_ar"); ok && !siteTypeTypeFound {
+	if v, ok := d.GetOk("ingress_gw_ar"); ok && !isIntfNil(v) && !siteTypeTypeFound {
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_IngressGwAr{}
 		siteTypeInt.IngressGwAr = &ves_io_schema_views_azure_vnet_site.AzureVnetIngressGwARReplaceType{}
 		updateSpec.SiteType = siteTypeInt
 
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["node"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					node := &ves_io_schema_views.AzureVnetOneInterfaceNodeARType{}
+					siteTypeInt.IngressGwAr.Node = node
+					for _, set := range sl {
+						if set != nil {
+							nodeMapStrToI := set.(map[string]interface{})
+
+							if w, ok := nodeMapStrToI["fault_domain"]; ok && !isIntfNil(w) {
+								node.FaultDomain = uint32(w.(int))
+							}
+
+							if v, ok := nodeMapStrToI["local_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								localSubnet := &ves_io_schema_views.AzureSubnetChoiceType{}
+								node.LocalSubnet = localSubnet
+								for _, set := range sl {
+									if set != nil {
+										localSubnetMapStrToI := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := localSubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceType_Subnet{}
+											choiceInt.Subnet = &ves_io_schema_views.AzureSubnetType{}
+											localSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													resourceGroupChoiceTypeFound := false
+
+													if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+														resourceGroupChoiceTypeFound = true
+														resourceGroupChoiceInt := &ves_io_schema_views.AzureSubnetType_SubnetResourceGrp{}
+
+														choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+														resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+													}
+
+													if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+														resourceGroupChoiceTypeFound = true
+
+														if v.(bool) {
+															resourceGroupChoiceInt := &ves_io_schema_views.AzureSubnetType_VnetResourceGroup{}
+															resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+															choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+														choiceInt.Subnet.SubnetName = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := localSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceType_SubnetParam{}
+											choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+											localSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv4 = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv6 = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if w, ok := nodeMapStrToI["node_number"]; ok && !isIntfNil(w) {
+								node.NodeNumber = uint32(w.(int))
+							}
+
+							if w, ok := nodeMapStrToI["update_domain"]; ok && !isIntfNil(w) {
+								node.UpdateDomain = uint32(w.(int))
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
 	}
 
-	if v, ok := d.GetOk("voltstack_cluster"); ok && !siteTypeTypeFound {
+	if v, ok := d.GetOk("voltstack_cluster"); ok && !isIntfNil(v) && !siteTypeTypeFound {
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_VoltstackCluster{}
@@ -21724,6 +16579,118 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 		for _, set := range sl {
 			if set != nil {
 				cs := set.(map[string]interface{})
+
+				if v, ok := cs["az_nodes"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					azNodes := make([]*ves_io_schema_views.AzureVnetOneInterfaceNodeType, len(sl))
+					siteTypeInt.VoltstackCluster.AzNodes = azNodes
+					for i, set := range sl {
+						if set != nil {
+							azNodes[i] = &ves_io_schema_views.AzureVnetOneInterfaceNodeType{}
+							azNodesMapStrToI := set.(map[string]interface{})
+
+							if w, ok := azNodesMapStrToI["azure_az"]; ok && !isIntfNil(w) {
+								azNodes[i].AzureAz = w.(string)
+							}
+
+							if v, ok := azNodesMapStrToI["local_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								localSubnet := &ves_io_schema_views.AzureSubnetChoiceType{}
+								azNodes[i].LocalSubnet = localSubnet
+								for _, set := range sl {
+									if set != nil {
+										localSubnetMapStrToI := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := localSubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceType_Subnet{}
+											choiceInt.Subnet = &ves_io_schema_views.AzureSubnetType{}
+											localSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													resourceGroupChoiceTypeFound := false
+
+													if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+														resourceGroupChoiceTypeFound = true
+														resourceGroupChoiceInt := &ves_io_schema_views.AzureSubnetType_SubnetResourceGrp{}
+
+														choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+														resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+													}
+
+													if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+														resourceGroupChoiceTypeFound = true
+
+														if v.(bool) {
+															resourceGroupChoiceInt := &ves_io_schema_views.AzureSubnetType_VnetResourceGroup{}
+															resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+															choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+														choiceInt.Subnet.SubnetName = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := localSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceType_SubnetParam{}
+											choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+											localSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv4 = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv6 = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
 
 				dcClusterGroupChoiceTypeFound := false
 
@@ -21955,518 +16922,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 										}
 
-										forwardProxyChoiceTypeFound := false
-
-										if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-
-											if v.(bool) {
-												forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
-												forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
-												globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-											}
-
-										}
-
-										if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-											forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
-											forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
-											globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
-
-													}
-
-													tlsInterceptionChoiceTypeFound := false
-
-													if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-
-														if v.(bool) {
-															tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
-															tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
-															forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-														}
-
-													}
-
-													if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-														tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
-														tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
-														forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																interceptionPolicyChoiceTypeFound := false
-
-																if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
-																		interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-																	interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
-																	interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
-																	tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
-																				interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
-																				for i, set := range sl {
-																					if set != nil {
-																						interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-																						interceptionRulesMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							domainMatch := &ves_io_schema.DomainType{}
-																							interceptionRules[i].DomainMatch = domainMatch
-																							for _, set := range sl {
-																								if set != nil {
-																									domainMatchMapStrToI := set.(map[string]interface{})
-
-																									domainChoiceTypeFound := false
-
-																									if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.ExactValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.RegexValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.SuffixValue = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						enableDisableChoiceTypeFound := false
-
-																						if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
-																								enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																						if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
-																								enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																signingCertChoiceTypeFound := false
-
-																if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-																	signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
-																	signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
-																	tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
-
-																			}
-
-																			if v, ok := cs["description"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.Description = v.(string)
-
-																			}
-
-																			ocspStaplingChoiceTypeFound := false
-
-																			if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-																				ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-																							hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-																							for _, j := range v.([]interface{}) {
-																								hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
-																							}
-																							ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-																				ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-																				ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				privateKey := &ves_io_schema.SecretType{}
-																				signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
-																				for _, set := range sl {
-																					if set != nil {
-																						privateKeyMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																							for _, set := range sl {
-																								if set != nil {
-																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.Location = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																							privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																						}
-
-																						secretInfoOneofTypeFound := false
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-																							secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-																							secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																									}
-
-																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-
-																	if v.(bool) {
-																		signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
-																		signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-																	}
-
-																}
-
-																trustedCaChoiceTypeFound := false
-
-																if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-																	trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
-
-																	tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-
-																	trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-																}
-
-																if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-
-																	if v.(bool) {
-																		trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
-																		trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
-
-														ls := make([]uint32, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = uint32(v.(int))
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
-
-													}
-
-													if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
-
-														ls := make([]string, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
-
-													}
-
-												}
-											}
-
-										}
-
 									}
 								}
 
@@ -22643,6 +17098,9 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
@@ -22904,7 +17362,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("voltstack_cluster_ar"); ok && !siteTypeTypeFound {
+	if v, ok := d.GetOk("voltstack_cluster_ar"); ok && !isIntfNil(v) && !siteTypeTypeFound {
 
 		siteTypeTypeFound = true
 		siteTypeInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_VoltstackClusterAr{}
@@ -23146,518 +17604,6 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 										}
 
-										forwardProxyChoiceTypeFound := false
-
-										if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-
-											if v.(bool) {
-												forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
-												forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
-												globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-											}
-
-										}
-
-										if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
-
-											forwardProxyChoiceTypeFound = true
-											forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
-											forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
-											globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
-
-													}
-
-													if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
-
-														forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
-
-													}
-
-													tlsInterceptionChoiceTypeFound := false
-
-													if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-
-														if v.(bool) {
-															tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
-															tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
-															forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-														}
-
-													}
-
-													if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
-
-														tlsInterceptionChoiceTypeFound = true
-														tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
-														tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
-														forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																interceptionPolicyChoiceTypeFound := false
-
-																if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-
-																	if v.(bool) {
-																		interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
-																		interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-																	}
-
-																}
-
-																if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
-
-																	interceptionPolicyChoiceTypeFound = true
-																	interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
-																	interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
-																	tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
-																				interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
-																				for i, set := range sl {
-																					if set != nil {
-																						interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
-																						interceptionRulesMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							domainMatch := &ves_io_schema.DomainType{}
-																							interceptionRules[i].DomainMatch = domainMatch
-																							for _, set := range sl {
-																								if set != nil {
-																									domainMatchMapStrToI := set.(map[string]interface{})
-
-																									domainChoiceTypeFound := false
-
-																									if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.ExactValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.RegexValue = v.(string)
-
-																									}
-
-																									if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
-
-																										domainChoiceTypeFound = true
-																										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
-
-																										domainMatch.DomainChoice = domainChoiceInt
-
-																										domainChoiceInt.SuffixValue = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						enableDisableChoiceTypeFound := false
-
-																						if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
-																								enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																						if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
-
-																							enableDisableChoiceTypeFound = true
-
-																							if v.(bool) {
-																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
-																								enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
-																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																signingCertChoiceTypeFound := false
-
-																if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-																	signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
-																	signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
-																	tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-
-																	sl := v.([]interface{})
-																	for _, set := range sl {
-																		if set != nil {
-																			cs := set.(map[string]interface{})
-
-																			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
-
-																			}
-
-																			if v, ok := cs["description"]; ok && !isIntfNil(v) {
-
-																				signingCertChoiceInt.CustomCertificate.Description = v.(string)
-
-																			}
-
-																			ocspStaplingChoiceTypeFound := false
-
-																			if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
-																				ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																				sl := v.([]interface{})
-																				for _, set := range sl {
-																					if set != nil {
-																						cs := set.(map[string]interface{})
-
-																						if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
-
-																							hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
-																							for _, j := range v.([]interface{}) {
-																								hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
-																							}
-																							ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																			if _, ok := cs["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
-																				ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if _, ok := cs["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
-
-																				ocspStaplingChoiceTypeFound = true
-																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
-																				ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
-																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
-
-																			}
-
-																			if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
-
-																				sl := v.([]interface{})
-																				privateKey := &ves_io_schema.SecretType{}
-																				signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
-																				for _, set := range sl {
-																					if set != nil {
-																						privateKeyMapStrToI := set.(map[string]interface{})
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-																							sl := v.([]interface{})
-																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-																							for _, set := range sl {
-																								if set != nil {
-																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.Location = w.(string)
-																									}
-
-																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-																							privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																						}
-
-																						secretInfoOneofTypeFound := false
-
-																						if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
-																							secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
-																							secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["url"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																									}
-
-																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																									}
-
-																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																									}
-
-																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																									}
-
-																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																						if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-																							secretInfoOneofTypeFound = true
-																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-																							privateKey.SecretInfoOneof = secretInfoOneofInt
-
-																							sl := v.([]interface{})
-																							for _, set := range sl {
-																								if set != nil {
-																									cs := set.(map[string]interface{})
-
-																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																									}
-
-																								}
-																							}
-
-																						}
-
-																					}
-																				}
-
-																			}
-
-																		}
-																	}
-
-																}
-
-																if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
-
-																	signingCertChoiceTypeFound = true
-
-																	if v.(bool) {
-																		signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
-																		signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
-																	}
-
-																}
-
-																trustedCaChoiceTypeFound := false
-
-																if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-																	trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
-
-																	tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-
-																	trustedCaChoiceInt.TrustedCaUrl = v.(string)
-
-																}
-
-																if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
-
-																	trustedCaChoiceTypeFound = true
-
-																	if v.(bool) {
-																		trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
-																		trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
-																		tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
-																	}
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
-
-														ls := make([]uint32, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = uint32(v.(int))
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
-
-													}
-
-													if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
-
-														ls := make([]string, len(v.([]interface{})))
-														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
-														}
-														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
-
-													}
-
-												}
-											}
-
-										}
-
 									}
 								}
 
@@ -23780,6 +17726,125 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 				}
 
+				if v, ok := cs["node"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					node := &ves_io_schema_views.AzureVnetOneInterfaceNodeARType{}
+					siteTypeInt.VoltstackClusterAr.Node = node
+					for _, set := range sl {
+						if set != nil {
+							nodeMapStrToI := set.(map[string]interface{})
+
+							if w, ok := nodeMapStrToI["fault_domain"]; ok && !isIntfNil(w) {
+								node.FaultDomain = uint32(w.(int))
+							}
+
+							if v, ok := nodeMapStrToI["local_subnet"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								localSubnet := &ves_io_schema_views.AzureSubnetChoiceType{}
+								node.LocalSubnet = localSubnet
+								for _, set := range sl {
+									if set != nil {
+										localSubnetMapStrToI := set.(map[string]interface{})
+
+										choiceTypeFound := false
+
+										if v, ok := localSubnetMapStrToI["subnet"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceType_Subnet{}
+											choiceInt.Subnet = &ves_io_schema_views.AzureSubnetType{}
+											localSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													resourceGroupChoiceTypeFound := false
+
+													if v, ok := cs["subnet_resource_grp"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+														resourceGroupChoiceTypeFound = true
+														resourceGroupChoiceInt := &ves_io_schema_views.AzureSubnetType_SubnetResourceGrp{}
+
+														choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+
+														resourceGroupChoiceInt.SubnetResourceGrp = v.(string)
+
+													}
+
+													if v, ok := cs["vnet_resource_group"]; ok && !isIntfNil(v) && !resourceGroupChoiceTypeFound {
+
+														resourceGroupChoiceTypeFound = true
+
+														if v.(bool) {
+															resourceGroupChoiceInt := &ves_io_schema_views.AzureSubnetType_VnetResourceGroup{}
+															resourceGroupChoiceInt.VnetResourceGroup = &ves_io_schema.Empty{}
+															choiceInt.Subnet.ResourceGroupChoice = resourceGroupChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["subnet_name"]; ok && !isIntfNil(v) {
+
+														choiceInt.Subnet.SubnetName = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := localSubnetMapStrToI["subnet_param"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.AzureSubnetChoiceType_SubnetParam{}
+											choiceInt.SubnetParam = &ves_io_schema_views.CloudSubnetParamType{}
+											localSubnet.Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ipv4"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv4 = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceInt.SubnetParam.Ipv6 = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if w, ok := nodeMapStrToI["node_number"]; ok && !isIntfNil(w) {
+								node.NodeNumber = uint32(w.(int))
+							}
+
+							if w, ok := nodeMapStrToI["update_domain"]; ok && !isIntfNil(w) {
+								node.UpdateDomain = uint32(w.(int))
+							}
+
+						}
+					}
+
+				}
+
 				outsideStaticRouteChoiceTypeFound := false
 
 				if v, ok := cs["no_outside_static_routes"]; ok && !isIntfNil(v) && !outsideStaticRouteChoiceTypeFound {
@@ -23834,6 +17899,9 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 														attrsList := []ves_io_schema.RouteAttrType{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
 															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
 														}
 														configModeChoiceInt.CustomStaticRoute.Attrs = attrsList
@@ -24235,7 +18303,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("nodes_per_az"); ok && !workerNodesTypeFound {
+	if v, ok := d.GetOk("nodes_per_az"); ok && !isIntfNil(v) && !workerNodesTypeFound {
 
 		workerNodesTypeFound = true
 		workerNodesInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_NodesPerAz{}
@@ -24246,7 +18314,7 @@ func resourceVolterraAzureVnetSiteUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("total_nodes"); ok && !workerNodesTypeFound {
+	if v, ok := d.GetOk("total_nodes"); ok && !isIntfNil(v) && !workerNodesTypeFound {
 
 		workerNodesTypeFound = true
 		workerNodesInt := &ves_io_schema_views_azure_vnet_site.ReplaceSpecType_TotalNodes{}
@@ -24283,5 +18351,8 @@ func resourceVolterraAzureVnetSiteDelete(d *schema.ResourceData, meta interface{
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra AzureVnetSite obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_views_azure_vnet_site.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_views_azure_vnet_site.ObjectType, namespace, name, opts...)
 }

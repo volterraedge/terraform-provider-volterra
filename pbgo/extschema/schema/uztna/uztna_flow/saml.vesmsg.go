@@ -174,9 +174,6 @@ type ValidateAudienceUri struct {
 func (v *ValidateAudienceUri) AudienceUriChoiceUniformResourceLocatorValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	return UniformResourceLocatorValidator().Validate, nil
 }
-func (v *ValidateAudienceUri) AudienceUriChoiceUniformResourceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	return UniformResourceNameValidator().Validate, nil
-}
 
 func (v *ValidateAudienceUri) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AudienceUri)
@@ -242,18 +239,10 @@ var DefaultAudienceUriValidator = func() *ValidateAudienceUri {
 		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AudienceUri.audience_uri_choice_uniform_resource_locator: %s", err)
 		panic(errMsg)
 	}
-	vrhAudienceUriChoiceUniformResourceName := v.AudienceUriChoiceUniformResourceNameValidationRuleHandler
-	rulesAudienceUriChoiceUniformResourceName := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFnMap["audience_uri_choice.uniform_resource_name"], err = vrhAudienceUriChoiceUniformResourceName(rulesAudienceUriChoiceUniformResourceName)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AudienceUri.audience_uri_choice_uniform_resource_name: %s", err)
-		panic(errMsg)
-	}
 
 	v.FldValidators["audience_uri_choice.uniform_resource_locator"] = vFnMap["audience_uri_choice.uniform_resource_locator"]
-	v.FldValidators["audience_uri_choice.uniform_resource_name"] = vFnMap["audience_uri_choice.uniform_resource_name"]
+
+	v.FldValidators["audience_uri_choice.uniform_resource_name"] = UniformResourceNameValidator().Validate
 
 	return v
 }()
@@ -1827,8 +1816,9 @@ var DefaultUniformResourceLocatorValidator = func() *ValidateUniformResourceLoca
 
 	vrhUrl := v.UrlValidationRuleHandler
 	rulesUrl := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "1024",
+		"ves.io.schema.rules.message.required":      "true",
+		"ves.io.schema.rules.string.max_bytes":      "1024",
+		"ves.io.schema.rules.string.url_or_uri_ref": "true",
 	}
 	vFn, err = vrhUrl(rulesUrl)
 	if err != nil {

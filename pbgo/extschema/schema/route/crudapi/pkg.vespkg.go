@@ -29,7 +29,35 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.route.crudapi.API.Create"] = []string{
+		"spec.gc_spec.routes.#.route_direct_response.response_body",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.route.crudapi.API.Create"] = []string{
+		"spec.gc_spec.routes.#.route_direct_response.response_body",
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.route.crudapi.API.Create"] = "ves.io.schema.route.crudapi.ObjectCreateReq"
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.route.crudapi.API.Get"] = []string{
+		"spec.gc_spec.routes.#.route_direct_response.response_body",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.route.crudapi.API.List"] = []string{
+		"items.#.spec.gc_spec.routes.#.route_direct_response.response_body",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.route.crudapi.API.ListStream"] = []string{
+		"items.#.spec.gc_spec.routes.#.route_direct_response.response_body",
+	}
+
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.route.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.routes.#.route_direct_response.response_body",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.route.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.routes.#.route_direct_response.response_body",
+	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.route.crudapi.API.Replace"] = "ves.io.schema.route.crudapi.ObjectReplaceReq"
 
@@ -74,11 +102,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

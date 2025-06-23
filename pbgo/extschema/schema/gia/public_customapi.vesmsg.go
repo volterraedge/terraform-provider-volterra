@@ -77,6 +77,15 @@ func (v *ValidateAllocateIPRequest) Validate(ctx context.Context, pm interface{}
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["context"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("context"))
+		if err := fv(ctx, m.GetContext(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["use_v6_range"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("use_v6_range"))
@@ -250,6 +259,15 @@ func (v *ValidateDeallocateIPRequest) Validate(ctx context.Context, pm interface
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["context"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("context"))
+		if err := fv(ctx, m.GetContext(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["ip"]; exists {

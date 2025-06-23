@@ -1208,6 +1208,14 @@ func (m *MatchCriteriaType) GetNetworkChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *MatchCriteriaType_SiteLocalNetwork:
+
+		return nil, nil
+
+	case *MatchCriteriaType_SiteLocalInsideNetwork:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -1372,6 +1380,28 @@ func (v *ValidateMatchCriteriaType) Validate(ctx context.Context, pm interface{}
 				return err
 			}
 		}
+	case *MatchCriteriaType_SiteLocalNetwork:
+		if fv, exists := v.FldValidators["network_choice.site_local_network"]; exists {
+			val := m.GetNetworkChoice().(*MatchCriteriaType_SiteLocalNetwork).SiteLocalNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("site_local_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *MatchCriteriaType_SiteLocalInsideNetwork:
+		if fv, exists := v.FldValidators["network_choice.site_local_inside_network"]; exists {
+			val := m.GetNetworkChoice().(*MatchCriteriaType_SiteLocalInsideNetwork).SiteLocalInsideNetwork
+			vOpts := append(opts,
+				db.WithValidateField("network_choice"),
+				db.WithValidateField("site_local_inside_network"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1380,6 +1410,54 @@ func (v *ValidateMatchCriteriaType) Validate(ctx context.Context, pm interface{}
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetProtocolChoice().(type) {
+	case *MatchCriteriaType_Any:
+		if fv, exists := v.FldValidators["protocol_choice.any"]; exists {
+			val := m.GetProtocolChoice().(*MatchCriteriaType_Any).Any
+			vOpts := append(opts,
+				db.WithValidateField("protocol_choice"),
+				db.WithValidateField("any"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *MatchCriteriaType_Tcp:
+		if fv, exists := v.FldValidators["protocol_choice.tcp"]; exists {
+			val := m.GetProtocolChoice().(*MatchCriteriaType_Tcp).Tcp
+			vOpts := append(opts,
+				db.WithValidateField("protocol_choice"),
+				db.WithValidateField("tcp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *MatchCriteriaType_Udp:
+		if fv, exists := v.FldValidators["protocol_choice.udp"]; exists {
+			val := m.GetProtocolChoice().(*MatchCriteriaType_Udp).Udp
+			vOpts := append(opts,
+				db.WithValidateField("protocol_choice"),
+				db.WithValidateField("udp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *MatchCriteriaType_Icmp:
+		if fv, exists := v.FldValidators["protocol_choice.icmp"]; exists {
+			val := m.GetProtocolChoice().(*MatchCriteriaType_Icmp).Icmp
+			vOpts := append(opts,
+				db.WithValidateField("protocol_choice"),
+				db.WithValidateField("icmp"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1452,6 +1530,9 @@ var DefaultMatchCriteriaTypeValidator = func() *ValidateMatchCriteriaType {
 	v.FldValidators["network_choice.virtual_network"] = ves_io_schema.VirtualNetworkReferenceTypeValidator().Validate
 	v.FldValidators["network_choice.segment"] = ves_io_schema.SegmentRefTypeValidator().Validate
 
+	v.FldValidators["protocol_choice.tcp"] = PortConfigurationValidator().Validate
+	v.FldValidators["protocol_choice.udp"] = PortConfigurationValidator().Validate
+
 	v.FldValidators["source_port"] = ves_io_schema.PortMatcherTypeValidator().Validate
 
 	v.FldValidators["destination_port"] = ves_io_schema.PortMatcherTypeValidator().Validate
@@ -1461,6 +1542,97 @@ var DefaultMatchCriteriaTypeValidator = func() *ValidateMatchCriteriaType {
 
 func MatchCriteriaTypeValidator() db.Validator {
 	return DefaultMatchCriteriaTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PortConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PortConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PortConfiguration) DeepCopy() *PortConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PortConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PortConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PortConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PortConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePortConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePortConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PortConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PortConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["destination_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("destination_port"))
+		if err := fv(ctx, m.GetDestinationPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["source_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("source_port"))
+		if err := fv(ctx, m.GetSourcePort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPortConfigurationValidator = func() *ValidatePortConfiguration {
+	v := &ValidatePortConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["source_port"] = ves_io_schema.PortMatcherTypeValidator().Validate
+
+	v.FldValidators["destination_port"] = ves_io_schema.PortMatcherTypeValidator().Validate
+
+	return v
+}()
+
+func PortConfigurationValidator() db.Validator {
+	return DefaultPortConfigurationValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1877,6 +2049,18 @@ func (m *RuleType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *RuleType_NodeInterface:
+
+		drInfos, err := m.GetNodeInterface().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodeInterface().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "node_interface." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -2066,6 +2250,17 @@ func (v *ValidateRuleType) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
+	case *RuleType_NodeInterface:
+		if fv, exists := v.FldValidators["scope_choice.node_interface"]; exists {
+			val := m.GetScopeChoice().(*RuleType_NodeInterface).NodeInterface
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("node_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2132,6 +2327,7 @@ var DefaultRuleTypeValidator = func() *ValidateRuleType {
 	v.FldValidators["scope_choice.network_interface"] = ves_io_schema.NetworkInterfaceRefTypeValidator().Validate
 	v.FldValidators["scope_choice.segment"] = ves_io_schema.SegmentRefTypeValidator().Validate
 	v.FldValidators["scope_choice.virtual_network"] = ves_io_schema.VirtualNetworkReferenceTypeValidator().Validate
+	v.FldValidators["scope_choice.node_interface"] = ves_io_schema.NodeInterfaceTypeValidator().Validate
 
 	v.FldValidators["criteria"] = MatchCriteriaTypeValidator().Validate
 

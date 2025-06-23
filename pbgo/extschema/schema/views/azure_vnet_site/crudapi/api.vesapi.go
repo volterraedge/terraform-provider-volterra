@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.azure_vnet_site.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.azure_vnet_site.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -5414,6 +5414,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -6230,7 +6237,7 @@ var APISwaggerJSON string = `{
                 },
                 "update_domain": {
                     "type": "integer",
-                    "description": " Namuber of update domains to be used while creating the availability set\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 20\n",
+                    "description": " Number of update domains to be used while creating the availability set\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 20\n",
                     "title": "Number of update domains",
                     "format": "int64",
                     "x-displayname": "Number of update domains",
@@ -6252,9 +6259,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "azure_az": {
                     "type": "string",
-                    "description": " Azure availability zone.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"1\\\",\\\"2\\\",\\\"3\\\"]\n",
+                    "description": " A zone depicting a grouping of datacenters within an Azure region. Expecting numeric input\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"1\\\",\\\"2\\\",\\\"3\\\"]\n",
                     "title": "Azure AZ",
-                    "x-displayname": "Azure AZ name",
+                    "x-displayname": "Azure Availability Zone",
                     "x-ves-example": "1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -6360,7 +6367,7 @@ var APISwaggerJSON string = `{
                 },
                 "update_domain": {
                     "type": "integer",
-                    "description": " Namuber of update domains to be used while creating the availability set\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 20\n",
+                    "description": " Number of update domains to be used while creating the availability set\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 20\n",
                     "title": "Number of update domains",
                     "format": "int64",
                     "x-displayname": "Number of update domains",
@@ -6382,9 +6389,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "azure_az": {
                     "type": "string",
-                    "description": " Azure availability zone.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"1\\\",\\\"2\\\",\\\"3\\\"]\n",
+                    "description": " A zone depicting a grouping of datacenters within an Azure region. Expecting numeric input\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"1\\\",\\\"2\\\",\\\"3\\\"]\n",
                     "title": "Azure AZ",
-                    "x-displayname": "Azure AZ Name",
+                    "x-displayname": "Azure Availability Zone",
                     "x-ves-example": "1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -6979,7 +6986,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Site's geographical address that can be used to determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "address",
                     "maxLength": 256,
                     "x-displayname": "Geographical Address",
@@ -7120,11 +7127,11 @@ var APISwaggerJSON string = `{
                 },
                 "machine_type": {
                     "type": "string",
-                    "description": " Select Instance size based on performance needed.\n The default setting for Accelerated Networking is enabled, thus make sure \n you select a Virtual Machine that supports accelerated networking or \n disable the setting under, Select Ingress Gateway or Ingress/Egress Gateway \n \u003e advanced options.\n\nExample: - \"Standard_D3_v2\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Select Instance size based on performance needed.\n The default setting for Accelerated Networking is enabled, thus make sure\n you select a Virtual Machine that supports accelerated networking or\n disable the setting under, Select Ingress Gateway or Ingress/Egress Gateway\n \u003e advanced options.\n\nExample: - \"Standard_D4s_v4\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "Machine Type",
                     "maxLength": 64,
                     "x-displayname": "Azure Machine Type for Node",
-                    "x-ves-example": "Standard_D3_v2",
+                    "x-ves-example": "Standard_D4s_v4",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",

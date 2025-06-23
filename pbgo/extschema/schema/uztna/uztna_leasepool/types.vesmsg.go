@@ -500,11 +500,9 @@ var DefaultIPV4LeasePoolConfigValidator = func() *ValidateIPV4LeasePoolConfig {
 
 	vrhPrefix := v.PrefixValidationRuleHandler
 	rulesPrefix := map[string]string{
-		"ves.io.schema.rules.message.required":                  "true",
 		"ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
 		"ves.io.schema.rules.repeated.items.string.not_empty":   "true",
 		"ves.io.schema.rules.repeated.max_items":                "1024",
-		"ves.io.schema.rules.repeated.min_items":                "1",
 		"ves.io.schema.rules.repeated.unique":                   "true",
 	}
 	vFn, err = vrhPrefix(rulesPrefix)
@@ -697,54 +695,6 @@ func (v *ValidateIPV6LeasePoolConfig) Ipv6PrefixValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
-func (v *ValidateIPV6LeasePoolConfig) Vip6RangeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for vip6_range")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*IPV6LeasePoolRange, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := IPV6LeasePoolRangeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vip6_range")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*IPV6LeasePoolRange)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*IPV6LeasePoolRange, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated vip6_range")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items vip6_range")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateIPV6LeasePoolConfig) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*IPV6LeasePoolConfig)
 	if !ok {
@@ -768,9 +718,13 @@ func (v *ValidateIPV6LeasePoolConfig) Validate(ctx context.Context, pm interface
 	}
 
 	if fv, exists := v.FldValidators["vip6_range"]; exists {
+
 		vOpts := append(opts, db.WithValidateField("vip6_range"))
-		if err := fv(ctx, m.GetVip6Range(), vOpts...); err != nil {
-			return err
+		for idx, item := range m.GetVip6Range() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -804,16 +758,7 @@ var DefaultIPV6LeasePoolConfigValidator = func() *ValidateIPV6LeasePoolConfig {
 	}
 	v.FldValidators["ipv6_prefix"] = vFn
 
-	vrhVip6Range := v.Vip6RangeValidationRuleHandler
-	rulesVip6Range := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhVip6Range(rulesVip6Range)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for IPV6LeasePoolConfig.vip6_range: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["vip6_range"] = vFn
+	v.FldValidators["vip6_range"] = IPV6LeasePoolRangeValidator().Validate
 
 	return v
 }()

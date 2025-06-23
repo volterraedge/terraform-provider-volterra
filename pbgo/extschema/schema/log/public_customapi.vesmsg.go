@@ -14,11 +14,13 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_log_access_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/access_log"
 	ves_io_schema_log_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/audit_log"
 	ves_io_schema_log_firewall_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/firewall_log"
 	ves_io_schema_log_k8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_audit_log"
 	ves_io_schema_log_k8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_events"
+	ves_io_schema_log_platform_event "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/platform_event"
 	ves_io_schema_log_vk8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_audit_log"
 	ves_io_schema_log_vk8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_events"
 )
@@ -758,6 +760,269 @@ var DefaultAuditLogRequestV2Validator = func() *ValidateAuditLogRequestV2 {
 
 func AuditLogRequestV2Validator() db.Validator {
 	return DefaultAuditLogRequestV2Validator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ExternalConnectorRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ExternalConnectorRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ExternalConnectorRequest) DeepCopy() *ExternalConnectorRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ExternalConnectorRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ExternalConnectorRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ExternalConnectorRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ExternalConnectorRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateExternalConnectorRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateExternalConnectorRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateExternalConnectorRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateExternalConnectorRequest) LimitValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for limit")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateExternalConnectorRequest) LabelFilterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for label_filter")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*LabelFilter, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := LabelFilterValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for label_filter")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*LabelFilter)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*LabelFilter, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated label_filter")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items label_filter")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateExternalConnectorRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ExternalConnectorRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ExternalConnectorRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["external_connector"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("external_connector"))
+		if err := fv(ctx, m.GetExternalConnector(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["label_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("label_filter"))
+		if err := fv(ctx, m.GetLabelFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("limit"))
+		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site"))
+		if err := fv(ctx, m.GetSite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultExternalConnectorRequestValidator = func() *ValidateExternalConnectorRequest {
+	v := &ValidateExternalConnectorRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ExternalConnectorRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ExternalConnectorRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
+	vrhLimit := v.LimitValidationRuleHandler
+	rulesLimit := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "500",
+	}
+	vFn, err = vrhLimit(rulesLimit)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ExternalConnectorRequest.limit: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["limit"] = vFn
+
+	vrhLabelFilter := v.LabelFilterValidationRuleHandler
+	rulesLabelFilter := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "5",
+	}
+	vFn, err = vrhLabelFilter(rulesLabelFilter)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ExternalConnectorRequest.label_filter: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label_filter"] = vFn
+
+	return v
+}()
+
+func ExternalConnectorRequestValidator() db.Validator {
+	return DefaultExternalConnectorRequestValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1893,6 +2158,187 @@ func K8SEventsRequestValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *LabelFilter) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LabelFilter) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LabelFilter) DeepCopy() *LabelFilter {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LabelFilter{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LabelFilter) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LabelFilter) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LabelFilterValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLabelFilter struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLabelFilter) LabelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(Label)
+		return int32(i)
+	}
+	// Label_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, Label_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for label")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLabelFilter) OpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.MetricLabelOp)
+		return int32(i)
+	}
+	// ves_io_schema.MetricLabelOp_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.MetricLabelOp_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for op")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLabelFilter) ValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateLabelFilter) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LabelFilter)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LabelFilter got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["label"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("label"))
+		if err := fv(ctx, m.GetLabel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["op"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("op"))
+		if err := fv(ctx, m.GetOp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value"))
+		if err := fv(ctx, m.GetValue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLabelFilterValidator = func() *ValidateLabelFilter {
+	v := &ValidateLabelFilter{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhLabel := v.LabelValidationRuleHandler
+	rulesLabel := map[string]string{
+		"ves.io.schema.rules.enum.not_in":      "0",
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhLabel(rulesLabel)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LabelFilter.label: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["label"] = vFn
+
+	vrhOp := v.OpValidationRuleHandler
+	rulesOp := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhOp(rulesOp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LabelFilter.op: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["op"] = vFn
+
+	vrhValue := v.ValueValidationRuleHandler
+	rulesValue := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFn, err = vrhValue(rulesValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for LabelFilter.value: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["value"] = vFn
+
+	return v
+}()
+
+func LabelFilterValidator() db.Validator {
+	return DefaultLabelFilterValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *LogAggregationResponse) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -2181,6 +2627,380 @@ var DefaultLogScrollRequestValidator = func() *ValidateLogScrollRequest {
 
 func LogScrollRequestValidator() db.Validator {
 	return DefaultLogScrollRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PlatformEventAggregationRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PlatformEventAggregationRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PlatformEventAggregationRequest) DeepCopy() *PlatformEventAggregationRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PlatformEventAggregationRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PlatformEventAggregationRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PlatformEventAggregationRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PlatformEventAggregationRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePlatformEventAggregationRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePlatformEventAggregationRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePlatformEventAggregationRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePlatformEventAggregationRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PlatformEventAggregationRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PlatformEventAggregationRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["aggs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aggs"))
+		for key, value := range m.GetAggs() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query"))
+		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPlatformEventAggregationRequestValidator = func() *ValidatePlatformEventAggregationRequest {
+	v := &ValidatePlatformEventAggregationRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PlatformEventAggregationRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PlatformEventAggregationRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
+	v.FldValidators["aggs"] = ves_io_schema_log_platform_event.AggregationRequestValidator().Validate
+
+	return v
+}()
+
+func PlatformEventAggregationRequestValidator() db.Validator {
+	return DefaultPlatformEventAggregationRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *PlatformEventRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *PlatformEventRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *PlatformEventRequest) DeepCopy() *PlatformEventRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &PlatformEventRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *PlatformEventRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *PlatformEventRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return PlatformEventRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidatePlatformEventRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePlatformEventRequest) StartTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePlatformEventRequest) EndTimeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_time")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidatePlatformEventRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*PlatformEventRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *PlatformEventRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["aggs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("aggs"))
+		for key, value := range m.GetAggs() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["end_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_time"))
+		if err := fv(ctx, m.GetEndTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["include_config_changes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("include_config_changes"))
+		if err := fv(ctx, m.GetIncludeConfigChanges(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["limit"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("limit"))
+		if err := fv(ctx, m.GetLimit(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["query"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("query"))
+		if err := fv(ctx, m.GetQuery(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scroll"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("scroll"))
+		if err := fv(ctx, m.GetScroll(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sort"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sort"))
+		if err := fv(ctx, m.GetSort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_time"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_time"))
+		if err := fv(ctx, m.GetStartTime(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultPlatformEventRequestValidator = func() *ValidatePlatformEventRequest {
+	v := &ValidatePlatformEventRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartTime := v.StartTimeValidationRuleHandler
+	rulesStartTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhStartTime(rulesStartTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PlatformEventRequest.start_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_time"] = vFn
+
+	vrhEndTime := v.EndTimeValidationRuleHandler
+	rulesEndTime := map[string]string{
+		"ves.io.schema.rules.string.query_time": "true",
+	}
+	vFn, err = vrhEndTime(rulesEndTime)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for PlatformEventRequest.end_time: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_time"] = vFn
+
+	v.FldValidators["aggs"] = ves_io_schema_log_platform_event.AggregationRequestValidator().Validate
+
+	return v
+}()
+
+func PlatformEventRequestValidator() db.Validator {
+	return DefaultPlatformEventRequestValidator
 }
 
 // augmented methods on protoc/std generated struct

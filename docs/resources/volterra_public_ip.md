@@ -1,6 +1,6 @@
 ---
 
-page_title: "Volterra: volterra_public_ip" 
+page_title: "Volterra: volterra_public_ip"
 
 description: "The volterra_public_ip helps update public IP fields on Volterra SaaS"
 

@@ -17,11 +17,11 @@ import (
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -261,9 +261,9 @@ func (*F5CSDNSZoneConfiguration) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// Import DNS Zone
+// Import AXFR for Primary Zone
 //
-// x-displayName: "Import DNS Zone"
+// x-displayName: "Import AXFR for Primary Zone"
 // DNS zone import via AXFR
 type ImportAXFRRequest struct {
 	// Primary Server

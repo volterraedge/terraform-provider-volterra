@@ -64,6 +64,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.common_waf.ValidationPropertySetting"] = ValidationPropertySettingValidator()
 	vr["ves.io.schema.views.common_waf.ValidationSettingForHeaders"] = ValidationSettingForHeadersValidator()
 	vr["ves.io.schema.views.common_waf.ValidationSettingForQueryParameters"] = ValidationSettingForQueryParametersValidator()
+	vr["ves.io.schema.views.common_waf.WafExclusion"] = WafExclusionValidator()
+	vr["ves.io.schema.views.common_waf.WafExclusionInlineRules"] = WafExclusionInlineRulesValidator()
 
 }
 
@@ -97,11 +99,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

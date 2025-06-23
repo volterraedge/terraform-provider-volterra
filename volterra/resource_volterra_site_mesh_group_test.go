@@ -38,7 +38,6 @@ func testSiteMeshGrpConfig(name string) string {
 		resource "volterra_site_mesh_group" "smg-full-mesh" {
 			name = "%s"
 			namespace = "system"
-			type = "SITE_MESH_GROUP_TYPE_FULL_MESH"
 			virtual_site {
 				name = "test"
 				namespace = "system"

@@ -1,6 +1,6 @@
 ---
 
-page_title: "Volterra: volterra_known_label" 
+page_title: "Volterra: volterra_known_label"
 
 description: "The volterra_known_label allows CRD of namespace resource on Volterra SaaS"
 

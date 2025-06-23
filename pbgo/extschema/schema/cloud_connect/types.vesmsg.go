@@ -4203,7 +4203,6 @@ var DefaultAzureRouteTablesValidator = func() *ValidateAzureRouteTables {
 	rulesRouteTableId := map[string]string{
 		"ves.io.schema.rules.repeated.unique": "true",
 		"ves.io.schema.rules.string.max_len":  "256",
-		"ves.io.schema.rules.string.pattern":  "^\\/[-\\w\\._\\(\\)]+\\/[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$",
 	}
 	vFn, err = vrhRouteTableId(rulesRouteTableId)
 	if err != nil {
@@ -4300,6 +4299,18 @@ func (v *ValidateAzureVNETAttachmentType) Validate(ctx context.Context, pm inter
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["labels"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("labels"))
+		for key, value := range m.GetLabels() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["routing_choice"]; exists {
@@ -4409,7 +4420,6 @@ var DefaultAzureVNETAttachmentTypeValidator = func() *ValidateAzureVNETAttachmen
 	rulesVnetId := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.string.max_len":   "256",
-		"ves.io.schema.rules.string.pattern":   "^\\/[-\\w\\._\\(\\)]+\\/[a-zA-Z0-9][a-zA-Z0-9-_.]{0,78}[a-zA-Z0-9_]$",
 	}
 	vFn, err = vrhVnetId(rulesVnetId)
 	if err != nil {

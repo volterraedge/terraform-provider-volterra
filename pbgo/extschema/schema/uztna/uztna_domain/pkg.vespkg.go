@@ -17,27 +17,19 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_domain.Object"] = ObjectValidator()
 	vr["ves.io.schema.uztna.uztna_domain.StatusObject"] = StatusObjectValidator()
 
-	vr["ves.io.schema.uztna.uztna_domain.CreateRequest"] = CreateRequestValidator()
-	vr["ves.io.schema.uztna.uztna_domain.CreateResponse"] = CreateResponseValidator()
-	vr["ves.io.schema.uztna.uztna_domain.DeleteRequest"] = DeleteRequestValidator()
-	vr["ves.io.schema.uztna.uztna_domain.GetRequest"] = GetRequestValidator()
-	vr["ves.io.schema.uztna.uztna_domain.GetResponse"] = GetResponseValidator()
-	vr["ves.io.schema.uztna.uztna_domain.ListRequest"] = ListRequestValidator()
-	vr["ves.io.schema.uztna.uztna_domain.ListResponse"] = ListResponseValidator()
-	vr["ves.io.schema.uztna.uztna_domain.ListResponseItem"] = ListResponseItemValidator()
-	vr["ves.io.schema.uztna.uztna_domain.ReplaceRequest"] = ReplaceRequestValidator()
-	vr["ves.io.schema.uztna.uztna_domain.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.uztna.uztna_domain.AppVIPPool"] = AppVIPPoolValidator()
 	vr["ves.io.schema.uztna.uztna_domain.Certificate"] = CertificateValidator()
 	vr["ves.io.schema.uztna.uztna_domain.CloudGatewayAdvertisement"] = CloudGatewayAdvertisementValidator()
 	vr["ves.io.schema.uztna.uztna_domain.CloudGateways"] = CloudGatewaysValidator()
 	vr["ves.io.schema.uztna.uztna_domain.CreateSpecType"] = CreateSpecTypeValidator()
+	vr["ves.io.schema.uztna.uztna_domain.DualStackAppVipPool"] = DualStackAppVipPoolValidator()
 	vr["ves.io.schema.uztna.uztna_domain.DualStackLeasePool"] = DualStackLeasePoolValidator()
 	vr["ves.io.schema.uztna.uztna_domain.Gateways"] = GatewaysValidator()
 	vr["ves.io.schema.uztna.uztna_domain.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_domain.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.uztna.uztna_domain.IPv4AppVipPool"] = IPv4AppVipPoolValidator()
 	vr["ves.io.schema.uztna.uztna_domain.IPv4Leasepool"] = IPv4LeasepoolValidator()
+	vr["ves.io.schema.uztna.uztna_domain.IPv6AppVipPool"] = IPv6AppVipPoolValidator()
 	vr["ves.io.schema.uztna.uztna_domain.IPv6Leasepool"] = IPv6LeasepoolValidator()
 	vr["ves.io.schema.uztna.uztna_domain.LeasePoolList"] = LeasePoolListValidator()
 	vr["ves.io.schema.uztna.uztna_domain.Policy"] = PolicyValidator()
@@ -59,20 +51,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_domain.API.Create"] = []string{
-		"spec.cdn_ce_vh_api_gw.#",
-		"spec.vip_dns_proxy",
-	}
-
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_domain.API.Replace"] = []string{
-		"spec.cdn_ce_vh_api_gw.#",
-		"spec.vip_dns_proxy",
-	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-	sm["ves.io.schema.uztna.uztna_domain.API"] = "config"
 
 }
 
@@ -92,24 +73,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 
-	csr = mdr.PubCRUDServiceRegistry
-
-	func() {
-		// set swagger jsons for our and external schemas
-		csr.CRUDSwaggerRegistry["ves.io.schema.uztna.uztna_domain.Object"] = APISwaggerJSON
-		csr.CRUDGrpcClientRegistry["ves.io.schema.uztna.uztna_domain.Object"] = NewCRUDAPIGrpcClient
-		csr.CRUDRestClientRegistry["ves.io.schema.uztna.uztna_domain.Object"] = NewCRUDAPIRestClient
-		csr.CRUDInprocClientRegistry["ves.io.schema.uztna.uztna_domain.Object"] = NewCRUDAPIInprocClient
-		if isExternal {
-			return
-		}
-		// registration of api handlers if our own schema
-		mdr.SvcRegisterHandlers["ves.io.schema.uztna.uztna_domain.API"] = RegisterAPIServer
-		mdr.SvcGwRegisterHandlers["ves.io.schema.uztna.uztna_domain.API"] = RegisterGwAPIHandler
-		csr.CRUDServerRegistry["ves.io.schema.uztna.uztna_domain.Object"] = NewCRUDAPIServer
-
-	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -117,11 +80,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

@@ -601,7 +601,7 @@ type AvailabilitySetsInfoType struct {
 	//
 	// x-displayName: "Number of update domains"
 	// x-example: "1"
-	// Namuber of update domains to be used while creating the availability set
+	// Number of update domains to be used while creating the availability set
 	UpdateDomains uint32 `protobuf:"varint,5,opt,name=update_domains,json=updateDomains,proto3" json:"update_domains,omitempty"`
 }
 

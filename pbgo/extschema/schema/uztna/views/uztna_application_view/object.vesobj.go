@@ -77,6 +77,12 @@ func LocateObject(ctx context.Context, locator db.EntryLocator, uid, tenant, nam
 	return obj, nil
 }
 
+func (o *Object) SetRevision(r int64) {
+	if o.SystemMetadata != nil {
+		o.SystemMetadata.SetRevision(r)
+	}
+}
+
 func FindObject(ctx context.Context, finder db.EntryFinder, key string, opts ...db.FindEntryOpt) (*DBObject, bool, error) {
 	e, exist, err := finder.FindEntry(ctx, ObjectDefTblName, key, opts...)
 	if !exist || err != nil {
@@ -152,8 +158,16 @@ type DBObject struct {
 
 // GetObjectIndexers returns the associated store.Indexers for Object
 func GetObjectIndexers() store.Indexers {
-
-	return nil
+	indexers := store.Indexers{
+		"spec.gc_spec.fqdn": store.NewIndexInfo(store.WithUniqueSecondaryIndex(func(e store.Entry) ([]string, error) {
+			obj, ok := e.(*Object)
+			if !ok {
+				return nil, fmt.Errorf("Index spec.gc_spec.fqdn expected *ves.io.schema.uztna.views.uztna_application_view.Object, got %T: %#v", e, e)
+			}
+			return []string{obj.GetSpec().GetGcSpec().GetFqdn()}, nil
+		})),
+	}
+	return indexers
 
 }
 

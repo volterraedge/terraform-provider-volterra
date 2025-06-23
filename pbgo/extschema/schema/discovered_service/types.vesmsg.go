@@ -1830,6 +1830,16 @@ func (v *ValidateVirtualServer) MgmtIpValidationRuleHandler(rules map[string]str
 	return validatorFn, nil
 }
 
+func (v *ValidateVirtualServer) ServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateVirtualServer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*VirtualServer)
 	if !ok {
@@ -1929,6 +1939,15 @@ func (v *ValidateVirtualServer) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("protocol"))
 		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["server_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("server_name"))
+		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2062,6 +2081,17 @@ var DefaultVirtualServerValidator = func() *ValidateVirtualServer {
 		panic(errMsg)
 	}
 	v.FldValidators["mgmt_ip"] = vFn
+
+	vrhServerName := v.ServerNameValidationRuleHandler
+	rulesServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "1024",
+	}
+	vFn, err = vrhServerName(rulesServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualServer.server_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["server_name"] = vFn
 
 	v.FldValidators["discovery_object"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 

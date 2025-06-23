@@ -8,6 +8,7 @@ import (
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	io "io"
 	math "math"
 	math_bits "math/bits"
@@ -137,6 +138,444 @@ func (m *PerCpuUtilizationLimit) GetRoutePriorityLimit() *schema.FractionalPerce
 	return nil
 }
 
+type CustomKeyScopeType struct {
+	// x-displayName: "Scope Key"
+	// Define optional scope key override
+	Key string `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+}
+
+func (m *CustomKeyScopeType) Reset()      { *m = CustomKeyScopeType{} }
+func (*CustomKeyScopeType) ProtoMessage() {}
+func (*CustomKeyScopeType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_80855f3dbb83809d, []int{1}
+}
+func (m *CustomKeyScopeType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CustomKeyScopeType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CustomKeyScopeType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CustomKeyScopeType.Merge(m, src)
+}
+func (m *CustomKeyScopeType) XXX_Size() int {
+	return m.Size()
+}
+func (m *CustomKeyScopeType) XXX_DiscardUnknown() {
+	xxx_messageInfo_CustomKeyScopeType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CustomKeyScopeType proto.InternalMessageInfo
+
+func (m *CustomKeyScopeType) GetKey() string {
+	if m != nil {
+		return m.Key
+	}
+	return ""
+}
+
+// x-displayName: "Scope"
+// Defines the scope of rate limit entry.
+type Scope struct {
+	// x-displayName: "Scope Type"
+	// x-required
+	// Scope type defines the scope of the rate limiter
+	//
+	// Types that are valid to be assigned to ScopeTypeChoice:
+	//	*Scope_NoneScope
+	//	*Scope_ListenerScope
+	//	*Scope_TenantScope
+	//	*Scope_CosScope
+	//	*Scope_SuspectScope
+	ScopeTypeChoice isScope_ScopeTypeChoice `protobuf_oneof:"scope_type_choice"`
+}
+
+func (m *Scope) Reset()      { *m = Scope{} }
+func (*Scope) ProtoMessage() {}
+func (*Scope) Descriptor() ([]byte, []int) {
+	return fileDescriptor_80855f3dbb83809d, []int{2}
+}
+func (m *Scope) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Scope) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Scope) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Scope.Merge(m, src)
+}
+func (m *Scope) XXX_Size() int {
+	return m.Size()
+}
+func (m *Scope) XXX_DiscardUnknown() {
+	xxx_messageInfo_Scope.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Scope proto.InternalMessageInfo
+
+type isScope_ScopeTypeChoice interface {
+	isScope_ScopeTypeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type Scope_NoneScope struct {
+	NoneScope *schema.Empty `protobuf:"bytes,2,opt,name=none_scope,json=noneScope,proto3,oneof" json:"none_scope,omitempty"`
+}
+type Scope_ListenerScope struct {
+	ListenerScope *schema.Empty `protobuf:"bytes,3,opt,name=listener_scope,json=listenerScope,proto3,oneof" json:"listener_scope,omitempty"`
+}
+type Scope_TenantScope struct {
+	TenantScope *schema.Empty `protobuf:"bytes,4,opt,name=tenant_scope,json=tenantScope,proto3,oneof" json:"tenant_scope,omitempty"`
+}
+type Scope_CosScope struct {
+	CosScope *schema.Empty `protobuf:"bytes,5,opt,name=cos_scope,json=cosScope,proto3,oneof" json:"cos_scope,omitempty"`
+}
+type Scope_SuspectScope struct {
+	SuspectScope *CustomKeyScopeType `protobuf:"bytes,6,opt,name=suspect_scope,json=suspectScope,proto3,oneof" json:"suspect_scope,omitempty"`
+}
+
+func (*Scope_NoneScope) isScope_ScopeTypeChoice()     {}
+func (*Scope_ListenerScope) isScope_ScopeTypeChoice() {}
+func (*Scope_TenantScope) isScope_ScopeTypeChoice()   {}
+func (*Scope_CosScope) isScope_ScopeTypeChoice()      {}
+func (*Scope_SuspectScope) isScope_ScopeTypeChoice()  {}
+
+func (m *Scope) GetScopeTypeChoice() isScope_ScopeTypeChoice {
+	if m != nil {
+		return m.ScopeTypeChoice
+	}
+	return nil
+}
+
+func (m *Scope) GetNoneScope() *schema.Empty {
+	if x, ok := m.GetScopeTypeChoice().(*Scope_NoneScope); ok {
+		return x.NoneScope
+	}
+	return nil
+}
+
+func (m *Scope) GetListenerScope() *schema.Empty {
+	if x, ok := m.GetScopeTypeChoice().(*Scope_ListenerScope); ok {
+		return x.ListenerScope
+	}
+	return nil
+}
+
+func (m *Scope) GetTenantScope() *schema.Empty {
+	if x, ok := m.GetScopeTypeChoice().(*Scope_TenantScope); ok {
+		return x.TenantScope
+	}
+	return nil
+}
+
+func (m *Scope) GetCosScope() *schema.Empty {
+	if x, ok := m.GetScopeTypeChoice().(*Scope_CosScope); ok {
+		return x.CosScope
+	}
+	return nil
+}
+
+func (m *Scope) GetSuspectScope() *CustomKeyScopeType {
+	if x, ok := m.GetScopeTypeChoice().(*Scope_SuspectScope); ok {
+		return x.SuspectScope
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Scope) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*Scope_NoneScope)(nil),
+		(*Scope_ListenerScope)(nil),
+		(*Scope_TenantScope)(nil),
+		(*Scope_CosScope)(nil),
+		(*Scope_SuspectScope)(nil),
+	}
+}
+
+// x-displayName: "Sanction"
+// Defines the sanction applied when rate limit is exceeded
+type Sanction struct {
+	// x-displayName: "Sanction Type"
+	// x-required
+	// Sanction types applied when rate limit is exceeded.
+	//
+	// Types that are valid to be assigned to SanctionTypeChoice:
+	//	*Sanction_NoneLimit
+	//	*Sanction_SoftLimit
+	//	*Sanction_HardLimit
+	//	*Sanction_CloseLimit
+	//	*Sanction_HttpLimit
+	//	*Sanction_RoutePriorityLimit
+	SanctionTypeChoice isSanction_SanctionTypeChoice `protobuf_oneof:"sanction_type_choice"`
+}
+
+func (m *Sanction) Reset()      { *m = Sanction{} }
+func (*Sanction) ProtoMessage() {}
+func (*Sanction) Descriptor() ([]byte, []int) {
+	return fileDescriptor_80855f3dbb83809d, []int{3}
+}
+func (m *Sanction) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Sanction) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Sanction) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Sanction.Merge(m, src)
+}
+func (m *Sanction) XXX_Size() int {
+	return m.Size()
+}
+func (m *Sanction) XXX_DiscardUnknown() {
+	xxx_messageInfo_Sanction.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Sanction proto.InternalMessageInfo
+
+type isSanction_SanctionTypeChoice interface {
+	isSanction_SanctionTypeChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type Sanction_NoneLimit struct {
+	NoneLimit *schema.Empty `protobuf:"bytes,2,opt,name=none_limit,json=noneLimit,proto3,oneof" json:"none_limit,omitempty"`
+}
+type Sanction_SoftLimit struct {
+	SoftLimit *schema.Empty `protobuf:"bytes,3,opt,name=soft_limit,json=softLimit,proto3,oneof" json:"soft_limit,omitempty"`
+}
+type Sanction_HardLimit struct {
+	HardLimit *schema.Empty `protobuf:"bytes,4,opt,name=hard_limit,json=hardLimit,proto3,oneof" json:"hard_limit,omitempty"`
+}
+type Sanction_CloseLimit struct {
+	CloseLimit *schema.Empty `protobuf:"bytes,5,opt,name=close_limit,json=closeLimit,proto3,oneof" json:"close_limit,omitempty"`
+}
+type Sanction_HttpLimit struct {
+	HttpLimit *schema.Empty `protobuf:"bytes,6,opt,name=http_limit,json=httpLimit,proto3,oneof" json:"http_limit,omitempty"`
+}
+type Sanction_RoutePriorityLimit struct {
+	RoutePriorityLimit *schema.Empty `protobuf:"bytes,7,opt,name=route_priority_limit,json=routePriorityLimit,proto3,oneof" json:"route_priority_limit,omitempty"`
+}
+
+func (*Sanction_NoneLimit) isSanction_SanctionTypeChoice()          {}
+func (*Sanction_SoftLimit) isSanction_SanctionTypeChoice()          {}
+func (*Sanction_HardLimit) isSanction_SanctionTypeChoice()          {}
+func (*Sanction_CloseLimit) isSanction_SanctionTypeChoice()         {}
+func (*Sanction_HttpLimit) isSanction_SanctionTypeChoice()          {}
+func (*Sanction_RoutePriorityLimit) isSanction_SanctionTypeChoice() {}
+
+func (m *Sanction) GetSanctionTypeChoice() isSanction_SanctionTypeChoice {
+	if m != nil {
+		return m.SanctionTypeChoice
+	}
+	return nil
+}
+
+func (m *Sanction) GetNoneLimit() *schema.Empty {
+	if x, ok := m.GetSanctionTypeChoice().(*Sanction_NoneLimit); ok {
+		return x.NoneLimit
+	}
+	return nil
+}
+
+func (m *Sanction) GetSoftLimit() *schema.Empty {
+	if x, ok := m.GetSanctionTypeChoice().(*Sanction_SoftLimit); ok {
+		return x.SoftLimit
+	}
+	return nil
+}
+
+func (m *Sanction) GetHardLimit() *schema.Empty {
+	if x, ok := m.GetSanctionTypeChoice().(*Sanction_HardLimit); ok {
+		return x.HardLimit
+	}
+	return nil
+}
+
+func (m *Sanction) GetCloseLimit() *schema.Empty {
+	if x, ok := m.GetSanctionTypeChoice().(*Sanction_CloseLimit); ok {
+		return x.CloseLimit
+	}
+	return nil
+}
+
+func (m *Sanction) GetHttpLimit() *schema.Empty {
+	if x, ok := m.GetSanctionTypeChoice().(*Sanction_HttpLimit); ok {
+		return x.HttpLimit
+	}
+	return nil
+}
+
+func (m *Sanction) GetRoutePriorityLimit() *schema.Empty {
+	if x, ok := m.GetSanctionTypeChoice().(*Sanction_RoutePriorityLimit); ok {
+		return x.RoutePriorityLimit
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*Sanction) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*Sanction_NoneLimit)(nil),
+		(*Sanction_SoftLimit)(nil),
+		(*Sanction_HardLimit)(nil),
+		(*Sanction_CloseLimit)(nil),
+		(*Sanction_HttpLimit)(nil),
+		(*Sanction_RoutePriorityLimit)(nil),
+	}
+}
+
+// x-displayName: "Threshold"
+// Defines threshold values for rate limit entry
+type Threshold struct {
+	// CPU Utilization Percent
+	CpuUtilization *schema.FractionalPercent `protobuf:"bytes,1,opt,name=cpu_utilization,json=cpuUtilization,proto3" json:"cpu_utilization,omitempty"`
+	// Upstream failure rate percentage, calculated as: (upstream failure rate / downstream requests rate)
+	UpstreamFailureRate *schema.FractionalPercent `protobuf:"bytes,2,opt,name=upstream_failure_rate,json=upstreamFailureRate,proto3" json:"upstream_failure_rate,omitempty"`
+}
+
+func (m *Threshold) Reset()      { *m = Threshold{} }
+func (*Threshold) ProtoMessage() {}
+func (*Threshold) Descriptor() ([]byte, []int) {
+	return fileDescriptor_80855f3dbb83809d, []int{4}
+}
+func (m *Threshold) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *Threshold) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *Threshold) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Threshold.Merge(m, src)
+}
+func (m *Threshold) XXX_Size() int {
+	return m.Size()
+}
+func (m *Threshold) XXX_DiscardUnknown() {
+	xxx_messageInfo_Threshold.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Threshold proto.InternalMessageInfo
+
+func (m *Threshold) GetCpuUtilization() *schema.FractionalPercent {
+	if m != nil {
+		return m.CpuUtilization
+	}
+	return nil
+}
+
+func (m *Threshold) GetUpstreamFailureRate() *schema.FractionalPercent {
+	if m != nil {
+		return m.UpstreamFailureRate
+	}
+	return nil
+}
+
+// x-displayName: "Rate Limit Entry"
+// Rate limit entry configures Envoy Ept traffic throttling
+type RateLimitEntry struct {
+	// Scope
+	//
+	// x-displayName: "Scope"
+	// Rate limiter Scope
+	Scope *Scope `protobuf:"bytes,1,opt,name=scope,proto3" json:"scope,omitempty"`
+	// Sanction
+	//
+	// x-displayName: "Sanction"
+	// Sanction applied when rate limit is exceeded
+	Sanction *Sanction `protobuf:"bytes,2,opt,name=sanction,proto3" json:"sanction,omitempty"`
+	// Threshold
+	//
+	// x-displayName: "Threshold"
+	// Rate Limiter Thresholds
+	Threshold *Threshold `protobuf:"bytes,3,opt,name=threshold,proto3" json:"threshold,omitempty"`
+	// Site type
+	//
+	// x-displayName: "Site Type"
+	// Defines if this rate limiter should be applied to CUSTOMER_EDGE or REGIONAL_EDGE
+	SiteType site.SiteType `protobuf:"varint,4,opt,name=site_type,json=siteType,proto3,enum=ves.io.schema.site.SiteType" json:"site_type,omitempty"`
+}
+
+func (m *RateLimitEntry) Reset()      { *m = RateLimitEntry{} }
+func (*RateLimitEntry) ProtoMessage() {}
+func (*RateLimitEntry) Descriptor() ([]byte, []int) {
+	return fileDescriptor_80855f3dbb83809d, []int{5}
+}
+func (m *RateLimitEntry) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *RateLimitEntry) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *RateLimitEntry) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RateLimitEntry.Merge(m, src)
+}
+func (m *RateLimitEntry) XXX_Size() int {
+	return m.Size()
+}
+func (m *RateLimitEntry) XXX_DiscardUnknown() {
+	xxx_messageInfo_RateLimitEntry.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RateLimitEntry proto.InternalMessageInfo
+
+func (m *RateLimitEntry) GetScope() *Scope {
+	if m != nil {
+		return m.Scope
+	}
+	return nil
+}
+
+func (m *RateLimitEntry) GetSanction() *Sanction {
+	if m != nil {
+		return m.Sanction
+	}
+	return nil
+}
+
+func (m *RateLimitEntry) GetThreshold() *Threshold {
+	if m != nil {
+		return m.Threshold
+	}
+	return nil
+}
+
+func (m *RateLimitEntry) GetSiteType() site.SiteType {
+	if m != nil {
+		return m.SiteType
+	}
+	return site.INVALID
+}
+
 // HttpLimitOptions
 //
 // x-displayName: "HTTP Limit Options"
@@ -208,7 +647,7 @@ type HttpLimitOptions struct {
 func (m *HttpLimitOptions) Reset()      { *m = HttpLimitOptions{} }
 func (*HttpLimitOptions) ProtoMessage() {}
 func (*HttpLimitOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_80855f3dbb83809d, []int{1}
+	return fileDescriptor_80855f3dbb83809d, []int{6}
 }
 func (m *HttpLimitOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -322,12 +761,17 @@ type GlobalSpecType struct {
 	// x-displayName: "HTTP Limit Options"
 	// HTTP Protocol Settings applied to connections when HTTP Limit threshold is exceeded.
 	HttpLimitOptions *HttpLimitOptions `protobuf:"bytes,4,opt,name=http_limit_options,json=httpLimitOptions,proto3" json:"http_limit_options,omitempty"`
+	// Rate Limiters
+	//
+	// x-displayName: "Rate Limiters"
+	// Rate Limiter list
+	RateLimiters []*RateLimitEntry `protobuf:"bytes,5,rep,name=rate_limiters,json=rateLimiters,proto3" json:"rate_limiters,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_80855f3dbb83809d, []int{2}
+	return fileDescriptor_80855f3dbb83809d, []int{7}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -380,17 +824,25 @@ func (m *GlobalSpecType) GetHttpLimitOptions() *HttpLimitOptions {
 	return nil
 }
 
+func (m *GlobalSpecType) GetRateLimiters() []*RateLimitEntry {
+	if m != nil {
+		return m.RateLimiters
+	}
+	return nil
+}
+
 type GetSpecType struct {
 	TenantLimit      *PerCpuUtilizationLimit `protobuf:"bytes,1,opt,name=tenant_limit,json=tenantLimit,proto3" json:"tenant_limit,omitempty"`
 	CosLimit         *PerCpuUtilizationLimit `protobuf:"bytes,2,opt,name=cos_limit,json=cosLimit,proto3" json:"cos_limit,omitempty"`
 	ListenerLimit    *PerCpuUtilizationLimit `protobuf:"bytes,3,opt,name=listener_limit,json=listenerLimit,proto3" json:"listener_limit,omitempty"`
 	HttpLimitOptions *HttpLimitOptions       `protobuf:"bytes,4,opt,name=http_limit_options,json=httpLimitOptions,proto3" json:"http_limit_options,omitempty"`
+	RateLimiters     []*RateLimitEntry       `protobuf:"bytes,5,rep,name=rate_limiters,json=rateLimiters,proto3" json:"rate_limiters,omitempty"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_80855f3dbb83809d, []int{3}
+	return fileDescriptor_80855f3dbb83809d, []int{8}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -443,17 +895,25 @@ func (m *GetSpecType) GetHttpLimitOptions() *HttpLimitOptions {
 	return nil
 }
 
+func (m *GetSpecType) GetRateLimiters() []*RateLimitEntry {
+	if m != nil {
+		return m.RateLimiters
+	}
+	return nil
+}
+
 type CreateSpecType struct {
 	TenantLimit      *PerCpuUtilizationLimit `protobuf:"bytes,1,opt,name=tenant_limit,json=tenantLimit,proto3" json:"tenant_limit,omitempty"`
 	CosLimit         *PerCpuUtilizationLimit `protobuf:"bytes,2,opt,name=cos_limit,json=cosLimit,proto3" json:"cos_limit,omitempty"`
 	ListenerLimit    *PerCpuUtilizationLimit `protobuf:"bytes,3,opt,name=listener_limit,json=listenerLimit,proto3" json:"listener_limit,omitempty"`
 	HttpLimitOptions *HttpLimitOptions       `protobuf:"bytes,4,opt,name=http_limit_options,json=httpLimitOptions,proto3" json:"http_limit_options,omitempty"`
+	RateLimiters     []*RateLimitEntry       `protobuf:"bytes,5,rep,name=rate_limiters,json=rateLimiters,proto3" json:"rate_limiters,omitempty"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_80855f3dbb83809d, []int{4}
+	return fileDescriptor_80855f3dbb83809d, []int{9}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -506,17 +966,25 @@ func (m *CreateSpecType) GetHttpLimitOptions() *HttpLimitOptions {
 	return nil
 }
 
+func (m *CreateSpecType) GetRateLimiters() []*RateLimitEntry {
+	if m != nil {
+		return m.RateLimiters
+	}
+	return nil
+}
+
 type ReplaceSpecType struct {
 	TenantLimit      *PerCpuUtilizationLimit `protobuf:"bytes,1,opt,name=tenant_limit,json=tenantLimit,proto3" json:"tenant_limit,omitempty"`
 	CosLimit         *PerCpuUtilizationLimit `protobuf:"bytes,2,opt,name=cos_limit,json=cosLimit,proto3" json:"cos_limit,omitempty"`
 	ListenerLimit    *PerCpuUtilizationLimit `protobuf:"bytes,3,opt,name=listener_limit,json=listenerLimit,proto3" json:"listener_limit,omitempty"`
 	HttpLimitOptions *HttpLimitOptions       `protobuf:"bytes,4,opt,name=http_limit_options,json=httpLimitOptions,proto3" json:"http_limit_options,omitempty"`
+	RateLimiters     []*RateLimitEntry       `protobuf:"bytes,5,rep,name=rate_limiters,json=rateLimiters,proto3" json:"rate_limiters,omitempty"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_80855f3dbb83809d, []int{5}
+	return fileDescriptor_80855f3dbb83809d, []int{10}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -569,8 +1037,20 @@ func (m *ReplaceSpecType) GetHttpLimitOptions() *HttpLimitOptions {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetRateLimiters() []*RateLimitEntry {
+	if m != nil {
+		return m.RateLimiters
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*PerCpuUtilizationLimit)(nil), "ves.io.schema.downstream_cos.PerCpuUtilizationLimit")
+	proto.RegisterType((*CustomKeyScopeType)(nil), "ves.io.schema.downstream_cos.CustomKeyScopeType")
+	proto.RegisterType((*Scope)(nil), "ves.io.schema.downstream_cos.Scope")
+	proto.RegisterType((*Sanction)(nil), "ves.io.schema.downstream_cos.Sanction")
+	proto.RegisterType((*Threshold)(nil), "ves.io.schema.downstream_cos.Threshold")
+	proto.RegisterType((*RateLimitEntry)(nil), "ves.io.schema.downstream_cos.RateLimitEntry")
 	proto.RegisterType((*HttpLimitOptions)(nil), "ves.io.schema.downstream_cos.HttpLimitOptions")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.downstream_cos.GlobalSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.downstream_cos.GetSpecType")
@@ -583,57 +1063,83 @@ func init() {
 }
 
 var fileDescriptor_80855f3dbb83809d = []byte{
-	// 785 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x96, 0x4f, 0x6f, 0xeb, 0x44,
-	0x14, 0xc5, 0xe3, 0x24, 0xef, 0xf1, 0x32, 0x69, 0xf2, 0x5e, 0xdd, 0x7f, 0x21, 0xad, 0xac, 0x92,
-	0x0d, 0x55, 0xa5, 0xda, 0x12, 0x20, 0x16, 0x48, 0xb4, 0xa2, 0x41, 0xb4, 0x48, 0x08, 0x8a, 0x5b,
-	0x84, 0x04, 0x48, 0xd6, 0xc4, 0xbe, 0x4d, 0x46, 0xd8, 0x1e, 0x33, 0x1e, 0xa7, 0x09, 0x2b, 0x76,
-	0x48, 0xc0, 0xa2, 0x1f, 0x83, 0xcf, 0xc0, 0x8a, 0x25, 0x62, 0xd5, 0x65, 0x97, 0xd4, 0xdd, 0xc0,
-	0x8a, 0x8a, 0x0d, 0x5b, 0xe4, 0x99, 0x71, 0x5a, 0x87, 0xaa, 0x8a, 0xba, 0x78, 0xdd, 0x74, 0x17,
-	0xfb, 0x9c, 0xf3, 0x9b, 0xc9, 0xbd, 0x73, 0xad, 0x41, 0x1b, 0x43, 0x88, 0x4d, 0x42, 0xad, 0xd8,
-	0x1d, 0x40, 0x80, 0x2d, 0x8f, 0x9e, 0x84, 0x31, 0x67, 0x80, 0x03, 0xc7, 0xa5, 0xb1, 0xc5, 0xc7,
-	0x11, 0xc4, 0x66, 0xc4, 0x28, 0xa7, 0xfa, 0x9a, 0x74, 0x9a, 0xd2, 0x69, 0x16, 0x9d, 0xed, 0xad,
-	0x3e, 0xe1, 0x83, 0xa4, 0x67, 0xba, 0x34, 0xb0, 0xfa, 0xb4, 0x4f, 0x2d, 0x11, 0xea, 0x25, 0xc7,
-	0xe2, 0x49, 0x3c, 0x88, 0x5f, 0x12, 0xd6, 0x5e, 0x29, 0x2e, 0x1b, 0x02, 0x57, 0xc2, 0x6a, 0x51,
-	0xa0, 0x11, 0x27, 0x34, 0x54, 0x5b, 0x68, 0xbf, 0x5a, 0x14, 0x6f, 0xec, 0xae, 0xbd, 0x56, 0x94,
-	0x86, 0xd8, 0x27, 0x1e, 0xe6, 0xa0, 0xd4, 0xf5, 0x29, 0x95, 0xc0, 0x89, 0x53, 0x40, 0x77, 0xfe,
-	0x29, 0xa3, 0xe5, 0x03, 0x60, 0xdd, 0x28, 0xf9, 0x8c, 0x13, 0x9f, 0x7c, 0x8b, 0x33, 0xf1, 0x23,
-	0x12, 0x10, 0xae, 0xef, 0x20, 0x14, 0xd3, 0x63, 0xee, 0xf8, 0xd9, 0x53, 0x4b, 0x5b, 0xd7, 0x36,
-	0xea, 0x6f, 0xac, 0x9b, 0xc5, 0x6a, 0x7c, 0xc0, 0xb0, 0x9b, 0x25, 0xb0, 0x7f, 0x00, 0xcc, 0x85,
-	0x90, 0xdb, 0xb5, 0x2c, 0x33, 0x01, 0x0c, 0x30, 0xf3, 0x14, 0xa0, 0x3c, 0x2b, 0x20, 0xcb, 0x48,
-	0xc0, 0x7b, 0xa8, 0xee, 0xfa, 0x34, 0x06, 0x45, 0xa8, 0xcc, 0x48, 0x40, 0x22, 0x74, 0xbd, 0x07,
-	0xce, 0x23, 0x45, 0xa8, 0xce, 0xbc, 0x07, 0xce, 0x23, 0x09, 0xb0, 0xd1, 0x22, 0xa3, 0x09, 0x07,
-	0x27, 0x62, 0x84, 0x32, 0xc2, 0xc7, 0x0a, 0xf5, 0x64, 0x46, 0x94, 0x2e, 0xd2, 0x07, 0x2a, 0x2c,
-	0x98, 0x9d, 0xbf, 0x2b, 0xe8, 0xc5, 0x7e, 0xbe, 0xc2, 0x27, 0xb2, 0x1f, 0xfa, 0x0e, 0x5a, 0x0e,
-	0xf0, 0xc8, 0x71, 0x69, 0xe8, 0x26, 0x8c, 0x41, 0xc8, 0x1d, 0x79, 0xcc, 0x62, 0x51, 0xfa, 0xc6,
-	0x6e, 0xed, 0x97, 0xbf, 0x7e, 0xad, 0x54, 0x37, 0xcb, 0x2d, 0xcf, 0x5e, 0x0c, 0xf0, 0xa8, 0x3b,
-	0xf1, 0x1d, 0x4a, 0x9b, 0xfe, 0x2e, 0x5a, 0xcd, 0x00, 0x0c, 0xbe, 0x49, 0x20, 0xe6, 0xb1, 0x13,
-	0x01, 0xcb, 0x68, 0x21, 0x88, 0x1d, 0x89, 0xfa, 0x37, 0xec, 0x56, 0x80, 0x47, 0xb6, 0x72, 0x64,
-	0x7d, 0x9f, 0xe8, 0xfa, 0x36, 0x5a, 0xf2, 0xc0, 0xc7, 0x63, 0xf0, 0x1c, 0x59, 0x74, 0x4e, 0x02,
-	0xa0, 0x89, 0x2c, 0x7b, 0x63, 0x17, 0x65, 0xcb, 0x3f, 0xd9, 0xac, 0xb4, 0x4e, 0x3f, 0xb6, 0x17,
-	0x94, 0xb1, 0x9b, 0xf9, 0x8e, 0xa4, 0x4d, 0xb7, 0x50, 0xc3, 0x63, 0x98, 0x84, 0x93, 0x5c, 0xf5,
-	0x7f, 0xb9, 0x39, 0x61, 0xc8, 0x03, 0xaf, 0xa1, 0x39, 0xe2, 0xf9, 0xd7, 0xeb, 0x64, 0x15, 0xad,
-	0xda, 0xf5, 0xec, 0x5d, 0x6e, 0x31, 0xd1, 0x82, 0x9a, 0xb5, 0x82, 0xf3, 0xa9, 0x70, 0xce, 0x4b,
-	0xe9, 0xc3, 0x1b, 0xfe, 0xd7, 0xd1, 0x73, 0xf5, 0xf7, 0x27, 0xde, 0x57, 0x84, 0xb7, 0xa9, 0x5e,
-	0xe7, 0xc6, 0xb7, 0xd1, 0x4a, 0x6e, 0x1c, 0x00, 0xf6, 0x80, 0xc5, 0x93, 0xc0, 0x33, 0x11, 0x58,
-	0x52, 0xf2, 0xbe, 0x54, 0x6f, 0xe4, 0x54, 0x93, 0x54, 0xd9, 0x1c, 0x2f, 0x61, 0x62, 0x66, 0x5a,
-	0x35, 0x99, 0x93, 0xad, 0x51, 0xea, 0xfb, 0x4a, 0xec, 0xfc, 0x5b, 0x46, 0xcd, 0x3d, 0x9f, 0xf6,
-	0xb0, 0x7f, 0x18, 0x81, 0x7b, 0x34, 0x8e, 0x40, 0xff, 0x1c, 0xcd, 0x71, 0x08, 0x71, 0x58, 0x1c,
-	0xb0, 0xb7, 0xcc, 0xbb, 0x3e, 0x37, 0xe6, 0xed, 0xa3, 0x6a, 0xd7, 0x25, 0x49, 0x9e, 0xd8, 0x4f,
-	0x51, 0xcd, 0xa5, 0x71, 0x61, 0xea, 0xee, 0x47, 0x7d, 0xe6, 0xd2, 0x58, 0x22, 0xbf, 0x44, 0x4d,
-	0x9f, 0xc4, 0x1c, 0x42, 0x60, 0x85, 0x59, 0xbc, 0x1f, 0xb7, 0x91, 0xb3, 0x24, 0xfc, 0x2b, 0xa4,
-	0x5f, 0x8f, 0x68, 0xfe, 0x79, 0x52, 0xa3, 0x6a, 0xde, 0xbd, 0xc0, 0xf4, 0x10, 0xd9, 0x2f, 0x06,
-	0x53, 0x6f, 0x3a, 0xdf, 0x57, 0x50, 0x7d, 0x0f, 0xf8, 0x63, 0xd9, 0x5f, 0x6a, 0xd9, 0xdf, 0x99,
-	0xff, 0x7d, 0x7b, 0xea, 0xc0, 0x77, 0x7e, 0xa8, 0xa0, 0x66, 0x97, 0x01, 0xe6, 0xf0, 0xd8, 0x8c,
-	0x07, 0x6f, 0xc6, 0x8f, 0x15, 0xf4, 0xdc, 0x86, 0xc8, 0xc7, 0xee, 0x63, 0x37, 0x1e, 0xbc, 0x1b,
-	0xbb, 0x3f, 0x69, 0x67, 0x17, 0x46, 0xe9, 0xfc, 0xc2, 0x28, 0x5d, 0x5d, 0x18, 0xda, 0x77, 0xa9,
-	0xa1, 0xfd, 0x9c, 0x1a, 0xda, 0x6f, 0xa9, 0xa1, 0x9d, 0xa5, 0x86, 0x76, 0x9e, 0x1a, 0xda, 0x1f,
-	0xa9, 0xa1, 0xfd, 0x99, 0x1a, 0xa5, 0xab, 0xd4, 0xd0, 0x4e, 0x2f, 0x8d, 0xd2, 0xd9, 0xa5, 0x51,
-	0x3a, 0xbf, 0x34, 0x4a, 0x5f, 0xd8, 0x7d, 0x1a, 0x7d, 0xdd, 0x37, 0x87, 0xd4, 0xe7, 0xc0, 0x18,
-	0x36, 0x93, 0xd8, 0x12, 0x3f, 0x8e, 0x29, 0x0b, 0xb6, 0x22, 0x46, 0x87, 0xc4, 0x03, 0xb6, 0x95,
-	0xcb, 0x56, 0xd4, 0xeb, 0x53, 0x0b, 0x46, 0x5c, 0xdd, 0x08, 0x6f, 0xbd, 0xfe, 0xf6, 0x9e, 0x8a,
-	0xbb, 0xe1, 0x9b, 0xff, 0x05, 0x00, 0x00, 0xff, 0xff, 0x0e, 0xf2, 0x03, 0x1c, 0x25, 0x0b, 0x00,
-	0x00,
+	// 1204 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4f, 0x8f, 0xdb, 0x44,
+	0x14, 0x8f, 0xe3, 0x64, 0x9b, 0x4c, 0x36, 0xe9, 0xd6, 0xdd, 0xb6, 0xcb, 0xb6, 0x58, 0x4b, 0x90,
+	0xda, 0xaa, 0xa2, 0x0e, 0x6a, 0x59, 0x50, 0x91, 0xda, 0x8a, 0x2c, 0x6d, 0xb7, 0x80, 0xa0, 0xf5,
+	0x2e, 0xaa, 0xc4, 0x1f, 0x59, 0x5e, 0xfb, 0x6d, 0x62, 0xd5, 0xf1, 0x98, 0x99, 0xf1, 0x76, 0xc3,
+	0x89, 0x0f, 0xc0, 0xa1, 0xe5, 0x53, 0x70, 0xe0, 0x13, 0xd0, 0x4b, 0x8f, 0x88, 0xd3, 0x9e, 0x50,
+	0x85, 0x04, 0x62, 0xb3, 0x17, 0x10, 0x07, 0x2a, 0x3e, 0x01, 0xf2, 0xcc, 0xd8, 0xb1, 0xd3, 0xc5,
+	0x8d, 0x2a, 0xc4, 0xa1, 0xda, 0xdb, 0x38, 0xef, 0xf7, 0xfb, 0xcd, 0xe4, 0xbd, 0xf7, 0x7b, 0x63,
+	0x19, 0x9d, 0xdd, 0x02, 0x6a, 0x78, 0xb8, 0x43, 0x9d, 0x3e, 0x0c, 0xec, 0x8e, 0x8b, 0xef, 0x05,
+	0x94, 0x11, 0xb0, 0x07, 0x96, 0x83, 0x69, 0x87, 0x0d, 0x43, 0xa0, 0x46, 0x48, 0x30, 0xc3, 0xda,
+	0x29, 0x81, 0x34, 0x04, 0xd2, 0xc8, 0x23, 0x17, 0xcf, 0xf7, 0x3c, 0xd6, 0x8f, 0x36, 0x0c, 0x07,
+	0x0f, 0x3a, 0x3d, 0xdc, 0xc3, 0x1d, 0x4e, 0xda, 0x88, 0x36, 0xf9, 0x13, 0x7f, 0xe0, 0x2b, 0x21,
+	0xb6, 0x78, 0x22, 0xbf, 0x6d, 0x00, 0x4c, 0x06, 0x4e, 0xe6, 0x03, 0x38, 0x64, 0x1e, 0x0e, 0xe4,
+	0x11, 0x16, 0xf5, 0x7c, 0x90, 0x7a, 0x0c, 0xb2, 0x47, 0x5c, 0x7c, 0x29, 0x1f, 0xcf, 0x86, 0x4e,
+	0xe5, 0x43, 0x5b, 0xb6, 0xef, 0xb9, 0x36, 0x03, 0x19, 0x5d, 0x9a, 0x88, 0x7a, 0x70, 0xcf, 0xca,
+	0x6d, 0xdd, 0xfe, 0xbb, 0x8c, 0x8e, 0xdf, 0x02, 0xb2, 0x12, 0x46, 0x1f, 0x33, 0xcf, 0xf7, 0xbe,
+	0xb4, 0xe3, 0xe0, 0x07, 0xde, 0xc0, 0x63, 0xda, 0x55, 0x84, 0x28, 0xde, 0x64, 0x96, 0x1f, 0x3f,
+	0x2d, 0x28, 0x4b, 0xca, 0xd9, 0xc6, 0x85, 0x25, 0x23, 0x9f, 0xad, 0xeb, 0xc4, 0x76, 0x62, 0x86,
+	0xed, 0xdf, 0x02, 0xe2, 0x40, 0xc0, 0xcc, 0x7a, 0xcc, 0x49, 0x05, 0xfa, 0x36, 0x71, 0xa5, 0x40,
+	0x79, 0x5a, 0x81, 0x98, 0x23, 0x04, 0xde, 0x41, 0x0d, 0xc7, 0xc7, 0x14, 0xa4, 0x82, 0x3a, 0xa5,
+	0x02, 0xe2, 0xa4, 0xf1, 0x19, 0x18, 0x0b, 0xa5, 0x42, 0x65, 0xea, 0x33, 0x30, 0x16, 0x0a, 0x01,
+	0x13, 0xcd, 0x13, 0x1c, 0x31, 0xb0, 0x42, 0xe2, 0x61, 0xe2, 0xb1, 0xa1, 0x94, 0xaa, 0x4e, 0x29,
+	0xa5, 0x71, 0xf6, 0x2d, 0x49, 0xe6, 0x9a, 0xed, 0xd3, 0x48, 0x5b, 0x89, 0x28, 0xc3, 0x83, 0xf7,
+	0x61, 0xb8, 0xe6, 0xe0, 0x10, 0xd6, 0x87, 0x21, 0x68, 0x73, 0x48, 0xbd, 0x0b, 0x43, 0x9e, 0xe8,
+	0xba, 0x19, 0x2f, 0xdb, 0x7f, 0x96, 0x51, 0x95, 0xc7, 0xb5, 0x65, 0x84, 0x02, 0x1c, 0x80, 0x45,
+	0xe3, 0x27, 0x99, 0xca, 0xf9, 0x89, 0xbd, 0xaf, 0x0d, 0x42, 0x36, 0x5c, 0x2d, 0x99, 0xf5, 0x18,
+	0x29, 0x68, 0x97, 0x51, 0xcb, 0xf7, 0x28, 0x83, 0x00, 0x88, 0xa4, 0xaa, 0x85, 0xd4, 0x66, 0x82,
+	0x16, 0xf4, 0x4b, 0x68, 0x96, 0x41, 0x60, 0x07, 0x4c, 0x92, 0x2b, 0x85, 0xe4, 0x86, 0xc0, 0x0a,
+	0xea, 0x45, 0x54, 0x77, 0x30, 0x95, 0xbc, 0x6a, 0x21, 0xaf, 0xe6, 0x60, 0x2a, 0x48, 0x77, 0x50,
+	0x93, 0x46, 0x34, 0x04, 0x27, 0xd9, 0x70, 0x86, 0x13, 0x5f, 0x37, 0x8a, 0x2c, 0x6a, 0x3c, 0x9d,
+	0xca, 0xd5, 0x92, 0x39, 0x2b, 0x85, 0xf8, 0x6f, 0xdd, 0x97, 0xd1, 0x11, 0x2e, 0x68, 0xc5, 0xd6,
+	0xb1, 0x9c, 0x3e, 0xf6, 0x1c, 0xd0, 0x6a, 0x8f, 0x1e, 0x2a, 0xe5, 0x9d, 0x87, 0x8a, 0xf2, 0x5e,
+	0xa5, 0xa6, 0xcc, 0x95, 0xdb, 0x0f, 0x54, 0x54, 0x5b, 0xb3, 0x03, 0x5e, 0xbf, 0x34, 0xe1, 0xd9,
+	0xde, 0x2d, 0x4c, 0xb8, 0xe8, 0x96, 0xe5, 0x9c, 0x67, 0x8a, 0x93, 0x9d, 0x71, 0xca, 0x72, 0xce,
+	0x29, 0xc5, 0x69, 0xce, 0xf8, 0xe3, 0xad, 0xbc, 0x3f, 0x8a, 0xd3, 0x9c, 0x75, 0xc5, 0x72, 0xce,
+	0x15, 0x33, 0xcf, 0xd8, 0x2f, 0xf5, 0xc2, 0xea, 0xbf, 0x78, 0xe1, 0x50, 0xa1, 0xc0, 0x3e, 0x0e,
+	0xe8, 0x2e, 0xa1, 0x79, 0x2a, 0x53, 0x5d, 0x58, 0x93, 0xef, 0x14, 0x54, 0x5f, 0xef, 0x13, 0xa0,
+	0x7d, 0xec, 0xbb, 0xda, 0x4d, 0x74, 0xd8, 0x09, 0x23, 0x2b, 0x1a, 0x4f, 0xaa, 0xa9, 0xc7, 0x52,
+	0xcb, 0xc9, 0x4d, 0x38, 0x6d, 0x1d, 0x1d, 0x8b, 0x42, 0xd9, 0x44, 0x9b, 0xb6, 0xe7, 0x47, 0x04,
+	0x2c, 0x62, 0x33, 0x98, 0x7a, 0x4c, 0x1d, 0x4d, 0xe8, 0xd7, 0x05, 0xdb, 0xb4, 0x19, 0xb4, 0x1f,
+	0x94, 0x51, 0x2b, 0x5e, 0xf0, 0x3f, 0x79, 0x2d, 0x60, 0x64, 0xa8, 0x5d, 0x42, 0x55, 0xd1, 0xcb,
+	0xe2, 0xa4, 0xaf, 0x16, 0xf7, 0x32, 0x6f, 0x57, 0x53, 0x30, 0xb4, 0x2e, 0xaa, 0x25, 0x49, 0x92,
+	0xc7, 0x3a, 0xfd, 0x0c, 0xb6, 0x44, 0x9b, 0x29, 0x4f, 0xbb, 0x86, 0xea, 0x2c, 0xc9, 0x9f, 0xec,
+	0xc7, 0x33, 0xc5, 0x22, 0x69, 0xba, 0xcd, 0x31, 0x53, 0xbb, 0x84, 0xea, 0xf1, 0xad, 0xc4, 0x6b,
+	0xc5, 0xfb, 0xb3, 0x75, 0xe1, 0xd4, 0x84, 0x4c, 0x1c, 0x37, 0xd6, 0x3c, 0xc6, 0x1d, 0x68, 0xd6,
+	0xa8, 0x5c, 0xb5, 0xff, 0x52, 0xd1, 0xdc, 0x6a, 0xd2, 0x42, 0x1f, 0x89, 0xcb, 0x47, 0xbb, 0x8a,
+	0x8e, 0x0f, 0xec, 0x6d, 0xcb, 0xc1, 0x81, 0x13, 0x11, 0x02, 0xf1, 0x84, 0xe1, 0x27, 0xa0, 0x3c,
+	0x4d, 0xcd, 0x6e, 0xfd, 0xfb, 0x3f, 0x1e, 0xa9, 0x95, 0x73, 0xe5, 0x05, 0xd7, 0x9c, 0x1f, 0xd8,
+	0xdb, 0x2b, 0x29, 0x6e, 0x4d, 0xc0, 0xb4, 0xcb, 0xe8, 0x64, 0x2c, 0x40, 0xe0, 0x8b, 0x08, 0x28,
+	0xa3, 0x56, 0x08, 0x24, 0x56, 0x0b, 0x60, 0x9c, 0xae, 0xa6, 0xb9, 0x30, 0xb0, 0xb7, 0x4d, 0x89,
+	0x88, 0x2f, 0xb9, 0x34, 0xae, 0x5d, 0x41, 0xc7, 0x5c, 0xf0, 0xed, 0x21, 0xb8, 0x96, 0x70, 0x10,
+	0xf3, 0x06, 0x80, 0x23, 0x61, 0xd9, 0x66, 0x17, 0xc5, 0xdb, 0x57, 0xcf, 0xa9, 0x0b, 0xf7, 0x3f,
+	0x34, 0x8f, 0x4a, 0xe0, 0x4a, 0x8c, 0x5b, 0x17, 0x30, 0xad, 0x83, 0x9a, 0x2e, 0xb1, 0xbd, 0x20,
+	0xe5, 0x55, 0x9e, 0xe2, 0xcd, 0x72, 0x40, 0x42, 0x78, 0x05, 0xcd, 0x7a, 0xae, 0x3f, 0xde, 0x27,
+	0xf6, 0x6a, 0xc5, 0x6c, 0xc4, 0xbf, 0x25, 0x10, 0x03, 0x1d, 0x95, 0x65, 0xc8, 0x21, 0x67, 0x38,
+	0xf2, 0x88, 0x08, 0xdd, 0xcc, 0xe0, 0xcf, 0xa0, 0xc3, 0xf2, 0xef, 0xa7, 0xd8, 0x43, 0x1c, 0xdb,
+	0x92, 0x3f, 0x27, 0xc0, 0x37, 0xd1, 0x89, 0x04, 0xd8, 0x07, 0xdb, 0x05, 0x42, 0x53, 0x42, 0x8d,
+	0x13, 0x8e, 0xc9, 0xf0, 0xaa, 0x88, 0x66, 0x78, 0xb2, 0x48, 0x32, 0x6d, 0x96, 0x1b, 0x11, 0x61,
+	0xbb, 0xba, 0xe0, 0x89, 0xd2, 0xc8, 0xe8, 0xbb, 0x32, 0xd8, 0xfe, 0x49, 0x45, 0xad, 0x1b, 0x3e,
+	0xde, 0xb0, 0xfd, 0xb5, 0x10, 0x1c, 0x7e, 0xb7, 0xdd, 0x49, 0x6f, 0x92, 0xec, 0xdb, 0xc4, 0x1b,
+	0xc5, 0x9d, 0xb8, 0xff, 0x7b, 0x49, 0x72, 0xcf, 0x88, 0x91, 0x74, 0x5b, 0xdc, 0x33, 0xd9, 0x31,
+	0xfd, 0x7c, 0xaa, 0xf1, 0x2d, 0x24, 0x24, 0x3f, 0xcd, 0x5c, 0x9a, 0xd9, 0x39, 0xfe, 0x7c, 0xba,
+	0xe9, 0x95, 0x2a, 0xc4, 0x3f, 0x43, 0xda, 0x78, 0xf2, 0x26, 0xef, 0x62, 0x72, 0xe2, 0x1b, 0xc5,
+	0x1b, 0x4c, 0x9a, 0xc8, 0x9c, 0xeb, 0x4f, 0xda, 0xea, 0x73, 0xd4, 0x8c, 0x87, 0x98, 0x50, 0x07,
+	0x42, 0x17, 0xaa, 0x4b, 0xea, 0xd9, 0xc6, 0x85, 0xd7, 0x8a, 0x85, 0xf3, 0x13, 0x4b, 0x36, 0xf1,
+	0x37, 0x4a, 0x79, 0x6e, 0xde, 0x9c, 0x25, 0x49, 0x0c, 0x08, 0x6d, 0xff, 0xac, 0xa2, 0xc6, 0x0d,
+	0x60, 0x07, 0x55, 0xfd, 0x7f, 0xab, 0x7a, 0xfb, 0x3f, 0xa8, 0x6a, 0xbe, 0x92, 0x6f, 0x1f, 0xf9,
+	0xf1, 0xca, 0x84, 0x45, 0xdb, 0xbf, 0xa8, 0xa8, 0xb5, 0x42, 0xc0, 0x66, 0x70, 0x50, 0xdf, 0x17,
+	0xb1, 0xbe, 0xbf, 0xaa, 0xe8, 0xb0, 0x09, 0xa1, 0x6f, 0x3b, 0x07, 0x05, 0x7e, 0x11, 0x0b, 0xdc,
+	0xfd, 0x5a, 0xd9, 0xd9, 0xd5, 0x4b, 0x8f, 0x77, 0xf5, 0xd2, 0x93, 0x5d, 0x5d, 0xf9, 0x6a, 0xa4,
+	0x2b, 0xdf, 0x8e, 0x74, 0xe5, 0x87, 0x91, 0xae, 0xec, 0x8c, 0x74, 0xe5, 0xf1, 0x48, 0x57, 0x7e,
+	0x1b, 0xe9, 0xca, 0xef, 0x23, 0xbd, 0xf4, 0x64, 0xa4, 0x2b, 0xf7, 0xf7, 0xf4, 0xd2, 0xce, 0x9e,
+	0x5e, 0x7a, 0xbc, 0xa7, 0x97, 0x3e, 0x31, 0x7b, 0x38, 0xbc, 0xdb, 0x33, 0xb6, 0xb0, 0xcf, 0x80,
+	0x10, 0xdb, 0x88, 0x68, 0x87, 0x2f, 0x36, 0x31, 0x19, 0x9c, 0x0f, 0x09, 0xde, 0xf2, 0x5c, 0x20,
+	0xe7, 0x93, 0x70, 0x27, 0xdc, 0xe8, 0xe1, 0x0e, 0x6c, 0xb3, 0xe4, 0x7b, 0xc5, 0x7e, 0xdf, 0x58,
+	0x36, 0x66, 0xf8, 0x07, 0x86, 0x8b, 0xff, 0x04, 0x00, 0x00, 0xff, 0xff, 0x6a, 0x6e, 0x4c, 0x7a,
+	0x8a, 0x11, 0x00, 0x00,
 }
 
 func (this *PerCpuUtilizationLimit) Equal(that interface{}) bool {
@@ -668,6 +1174,414 @@ func (this *PerCpuUtilizationLimit) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.RoutePriorityLimit.Equal(that1.RoutePriorityLimit) {
+		return false
+	}
+	return true
+}
+func (this *CustomKeyScopeType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CustomKeyScopeType)
+	if !ok {
+		that2, ok := that.(CustomKeyScopeType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Key != that1.Key {
+		return false
+	}
+	return true
+}
+func (this *Scope) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Scope)
+	if !ok {
+		that2, ok := that.(Scope)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.ScopeTypeChoice == nil {
+		if this.ScopeTypeChoice != nil {
+			return false
+		}
+	} else if this.ScopeTypeChoice == nil {
+		return false
+	} else if !this.ScopeTypeChoice.Equal(that1.ScopeTypeChoice) {
+		return false
+	}
+	return true
+}
+func (this *Scope_NoneScope) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Scope_NoneScope)
+	if !ok {
+		that2, ok := that.(Scope_NoneScope)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoneScope.Equal(that1.NoneScope) {
+		return false
+	}
+	return true
+}
+func (this *Scope_ListenerScope) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Scope_ListenerScope)
+	if !ok {
+		that2, ok := that.(Scope_ListenerScope)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ListenerScope.Equal(that1.ListenerScope) {
+		return false
+	}
+	return true
+}
+func (this *Scope_TenantScope) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Scope_TenantScope)
+	if !ok {
+		that2, ok := that.(Scope_TenantScope)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.TenantScope.Equal(that1.TenantScope) {
+		return false
+	}
+	return true
+}
+func (this *Scope_CosScope) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Scope_CosScope)
+	if !ok {
+		that2, ok := that.(Scope_CosScope)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CosScope.Equal(that1.CosScope) {
+		return false
+	}
+	return true
+}
+func (this *Scope_SuspectScope) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Scope_SuspectScope)
+	if !ok {
+		that2, ok := that.(Scope_SuspectScope)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SuspectScope.Equal(that1.SuspectScope) {
+		return false
+	}
+	return true
+}
+func (this *Sanction) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Sanction)
+	if !ok {
+		that2, ok := that.(Sanction)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.SanctionTypeChoice == nil {
+		if this.SanctionTypeChoice != nil {
+			return false
+		}
+	} else if this.SanctionTypeChoice == nil {
+		return false
+	} else if !this.SanctionTypeChoice.Equal(that1.SanctionTypeChoice) {
+		return false
+	}
+	return true
+}
+func (this *Sanction_NoneLimit) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Sanction_NoneLimit)
+	if !ok {
+		that2, ok := that.(Sanction_NoneLimit)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NoneLimit.Equal(that1.NoneLimit) {
+		return false
+	}
+	return true
+}
+func (this *Sanction_SoftLimit) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Sanction_SoftLimit)
+	if !ok {
+		that2, ok := that.(Sanction_SoftLimit)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SoftLimit.Equal(that1.SoftLimit) {
+		return false
+	}
+	return true
+}
+func (this *Sanction_HardLimit) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Sanction_HardLimit)
+	if !ok {
+		that2, ok := that.(Sanction_HardLimit)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HardLimit.Equal(that1.HardLimit) {
+		return false
+	}
+	return true
+}
+func (this *Sanction_CloseLimit) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Sanction_CloseLimit)
+	if !ok {
+		that2, ok := that.(Sanction_CloseLimit)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CloseLimit.Equal(that1.CloseLimit) {
+		return false
+	}
+	return true
+}
+func (this *Sanction_HttpLimit) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Sanction_HttpLimit)
+	if !ok {
+		that2, ok := that.(Sanction_HttpLimit)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HttpLimit.Equal(that1.HttpLimit) {
+		return false
+	}
+	return true
+}
+func (this *Sanction_RoutePriorityLimit) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Sanction_RoutePriorityLimit)
+	if !ok {
+		that2, ok := that.(Sanction_RoutePriorityLimit)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.RoutePriorityLimit.Equal(that1.RoutePriorityLimit) {
+		return false
+	}
+	return true
+}
+func (this *Threshold) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*Threshold)
+	if !ok {
+		that2, ok := that.(Threshold)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.CpuUtilization.Equal(that1.CpuUtilization) {
+		return false
+	}
+	if !this.UpstreamFailureRate.Equal(that1.UpstreamFailureRate) {
+		return false
+	}
+	return true
+}
+func (this *RateLimitEntry) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*RateLimitEntry)
+	if !ok {
+		that2, ok := that.(RateLimitEntry)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Scope.Equal(that1.Scope) {
+		return false
+	}
+	if !this.Sanction.Equal(that1.Sanction) {
+		return false
+	}
+	if !this.Threshold.Equal(that1.Threshold) {
+		return false
+	}
+	if this.SiteType != that1.SiteType {
 		return false
 	}
 	return true
@@ -751,6 +1665,14 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if !this.HttpLimitOptions.Equal(that1.HttpLimitOptions) {
 		return false
 	}
+	if len(this.RateLimiters) != len(that1.RateLimiters) {
+		return false
+	}
+	for i := range this.RateLimiters {
+		if !this.RateLimiters[i].Equal(that1.RateLimiters[i]) {
+			return false
+		}
+	}
 	return true
 }
 func (this *GetSpecType) Equal(that interface{}) bool {
@@ -783,6 +1705,14 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	}
 	if !this.HttpLimitOptions.Equal(that1.HttpLimitOptions) {
 		return false
+	}
+	if len(this.RateLimiters) != len(that1.RateLimiters) {
+		return false
+	}
+	for i := range this.RateLimiters {
+		if !this.RateLimiters[i].Equal(that1.RateLimiters[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -817,6 +1747,14 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	if !this.HttpLimitOptions.Equal(that1.HttpLimitOptions) {
 		return false
 	}
+	if len(this.RateLimiters) != len(that1.RateLimiters) {
+		return false
+	}
+	for i := range this.RateLimiters {
+		if !this.RateLimiters[i].Equal(that1.RateLimiters[i]) {
+			return false
+		}
+	}
 	return true
 }
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
@@ -850,6 +1788,14 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if !this.HttpLimitOptions.Equal(that1.HttpLimitOptions) {
 		return false
 	}
+	if len(this.RateLimiters) != len(that1.RateLimiters) {
+		return false
+	}
+	for i := range this.RateLimiters {
+		if !this.RateLimiters[i].Equal(that1.RateLimiters[i]) {
+			return false
+		}
+	}
 	return true
 }
 func (this *PerCpuUtilizationLimit) GoString() string {
@@ -876,6 +1822,162 @@ func (this *PerCpuUtilizationLimit) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
+func (this *CustomKeyScopeType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&downstream_cos.CustomKeyScopeType{")
+	s = append(s, "Key: "+fmt.Sprintf("%#v", this.Key)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Scope) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&downstream_cos.Scope{")
+	if this.ScopeTypeChoice != nil {
+		s = append(s, "ScopeTypeChoice: "+fmt.Sprintf("%#v", this.ScopeTypeChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Scope_NoneScope) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&downstream_cos.Scope_NoneScope{` +
+		`NoneScope:` + fmt.Sprintf("%#v", this.NoneScope) + `}`}, ", ")
+	return s
+}
+func (this *Scope_ListenerScope) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&downstream_cos.Scope_ListenerScope{` +
+		`ListenerScope:` + fmt.Sprintf("%#v", this.ListenerScope) + `}`}, ", ")
+	return s
+}
+func (this *Scope_TenantScope) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&downstream_cos.Scope_TenantScope{` +
+		`TenantScope:` + fmt.Sprintf("%#v", this.TenantScope) + `}`}, ", ")
+	return s
+}
+func (this *Scope_CosScope) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&downstream_cos.Scope_CosScope{` +
+		`CosScope:` + fmt.Sprintf("%#v", this.CosScope) + `}`}, ", ")
+	return s
+}
+func (this *Scope_SuspectScope) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&downstream_cos.Scope_SuspectScope{` +
+		`SuspectScope:` + fmt.Sprintf("%#v", this.SuspectScope) + `}`}, ", ")
+	return s
+}
+func (this *Sanction) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&downstream_cos.Sanction{")
+	if this.SanctionTypeChoice != nil {
+		s = append(s, "SanctionTypeChoice: "+fmt.Sprintf("%#v", this.SanctionTypeChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Sanction_NoneLimit) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&downstream_cos.Sanction_NoneLimit{` +
+		`NoneLimit:` + fmt.Sprintf("%#v", this.NoneLimit) + `}`}, ", ")
+	return s
+}
+func (this *Sanction_SoftLimit) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&downstream_cos.Sanction_SoftLimit{` +
+		`SoftLimit:` + fmt.Sprintf("%#v", this.SoftLimit) + `}`}, ", ")
+	return s
+}
+func (this *Sanction_HardLimit) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&downstream_cos.Sanction_HardLimit{` +
+		`HardLimit:` + fmt.Sprintf("%#v", this.HardLimit) + `}`}, ", ")
+	return s
+}
+func (this *Sanction_CloseLimit) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&downstream_cos.Sanction_CloseLimit{` +
+		`CloseLimit:` + fmt.Sprintf("%#v", this.CloseLimit) + `}`}, ", ")
+	return s
+}
+func (this *Sanction_HttpLimit) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&downstream_cos.Sanction_HttpLimit{` +
+		`HttpLimit:` + fmt.Sprintf("%#v", this.HttpLimit) + `}`}, ", ")
+	return s
+}
+func (this *Sanction_RoutePriorityLimit) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&downstream_cos.Sanction_RoutePriorityLimit{` +
+		`RoutePriorityLimit:` + fmt.Sprintf("%#v", this.RoutePriorityLimit) + `}`}, ", ")
+	return s
+}
+func (this *Threshold) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&downstream_cos.Threshold{")
+	if this.CpuUtilization != nil {
+		s = append(s, "CpuUtilization: "+fmt.Sprintf("%#v", this.CpuUtilization)+",\n")
+	}
+	if this.UpstreamFailureRate != nil {
+		s = append(s, "UpstreamFailureRate: "+fmt.Sprintf("%#v", this.UpstreamFailureRate)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *RateLimitEntry) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&downstream_cos.RateLimitEntry{")
+	if this.Scope != nil {
+		s = append(s, "Scope: "+fmt.Sprintf("%#v", this.Scope)+",\n")
+	}
+	if this.Sanction != nil {
+		s = append(s, "Sanction: "+fmt.Sprintf("%#v", this.Sanction)+",\n")
+	}
+	if this.Threshold != nil {
+		s = append(s, "Threshold: "+fmt.Sprintf("%#v", this.Threshold)+",\n")
+	}
+	s = append(s, "SiteType: "+fmt.Sprintf("%#v", this.SiteType)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *HttpLimitOptions) GoString() string {
 	if this == nil {
 		return "nil"
@@ -898,7 +2000,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&downstream_cos.GlobalSpecType{")
 	if this.TenantLimit != nil {
 		s = append(s, "TenantLimit: "+fmt.Sprintf("%#v", this.TenantLimit)+",\n")
@@ -912,6 +2014,9 @@ func (this *GlobalSpecType) GoString() string {
 	if this.HttpLimitOptions != nil {
 		s = append(s, "HttpLimitOptions: "+fmt.Sprintf("%#v", this.HttpLimitOptions)+",\n")
 	}
+	if this.RateLimiters != nil {
+		s = append(s, "RateLimiters: "+fmt.Sprintf("%#v", this.RateLimiters)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -919,7 +2024,7 @@ func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&downstream_cos.GetSpecType{")
 	if this.TenantLimit != nil {
 		s = append(s, "TenantLimit: "+fmt.Sprintf("%#v", this.TenantLimit)+",\n")
@@ -933,6 +2038,9 @@ func (this *GetSpecType) GoString() string {
 	if this.HttpLimitOptions != nil {
 		s = append(s, "HttpLimitOptions: "+fmt.Sprintf("%#v", this.HttpLimitOptions)+",\n")
 	}
+	if this.RateLimiters != nil {
+		s = append(s, "RateLimiters: "+fmt.Sprintf("%#v", this.RateLimiters)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -940,7 +2048,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&downstream_cos.CreateSpecType{")
 	if this.TenantLimit != nil {
 		s = append(s, "TenantLimit: "+fmt.Sprintf("%#v", this.TenantLimit)+",\n")
@@ -954,6 +2062,9 @@ func (this *CreateSpecType) GoString() string {
 	if this.HttpLimitOptions != nil {
 		s = append(s, "HttpLimitOptions: "+fmt.Sprintf("%#v", this.HttpLimitOptions)+",\n")
 	}
+	if this.RateLimiters != nil {
+		s = append(s, "RateLimiters: "+fmt.Sprintf("%#v", this.RateLimiters)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -961,7 +2072,7 @@ func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 8)
+	s := make([]string, 0, 9)
 	s = append(s, "&downstream_cos.ReplaceSpecType{")
 	if this.TenantLimit != nil {
 		s = append(s, "TenantLimit: "+fmt.Sprintf("%#v", this.TenantLimit)+",\n")
@@ -974,6 +2085,9 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.HttpLimitOptions != nil {
 		s = append(s, "HttpLimitOptions: "+fmt.Sprintf("%#v", this.HttpLimitOptions)+",\n")
+	}
+	if this.RateLimiters != nil {
+		s = append(s, "RateLimiters: "+fmt.Sprintf("%#v", this.RateLimiters)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1057,6 +2171,442 @@ func (m *PerCpuUtilizationLimit) MarshalToSizedBuffer(dAtA []byte) (int, error) 
 	if m.SoftLimit != nil {
 		{
 			size, err := m.SoftLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CustomKeyScopeType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CustomKeyScopeType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CustomKeyScopeType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Key) > 0 {
+		i -= len(m.Key)
+		copy(dAtA[i:], m.Key)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Key)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Scope) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Scope) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Scope) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ScopeTypeChoice != nil {
+		{
+			size := m.ScopeTypeChoice.Size()
+			i -= size
+			if _, err := m.ScopeTypeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Scope_NoneScope) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Scope_NoneScope) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoneScope != nil {
+		{
+			size, err := m.NoneScope.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Scope_ListenerScope) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Scope_ListenerScope) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ListenerScope != nil {
+		{
+			size, err := m.ListenerScope.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Scope_TenantScope) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Scope_TenantScope) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.TenantScope != nil {
+		{
+			size, err := m.TenantScope.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Scope_CosScope) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Scope_CosScope) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CosScope != nil {
+		{
+			size, err := m.CosScope.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Scope_SuspectScope) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Scope_SuspectScope) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SuspectScope != nil {
+		{
+			size, err := m.SuspectScope.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Sanction) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Sanction) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Sanction) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.SanctionTypeChoice != nil {
+		{
+			size := m.SanctionTypeChoice.Size()
+			i -= size
+			if _, err := m.SanctionTypeChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *Sanction_NoneLimit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Sanction_NoneLimit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NoneLimit != nil {
+		{
+			size, err := m.NoneLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Sanction_SoftLimit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Sanction_SoftLimit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.SoftLimit != nil {
+		{
+			size, err := m.SoftLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Sanction_HardLimit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Sanction_HardLimit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HardLimit != nil {
+		{
+			size, err := m.HardLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Sanction_CloseLimit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Sanction_CloseLimit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.CloseLimit != nil {
+		{
+			size, err := m.CloseLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Sanction_HttpLimit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Sanction_HttpLimit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HttpLimit != nil {
+		{
+			size, err := m.HttpLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Sanction_RoutePriorityLimit) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Sanction_RoutePriorityLimit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.RoutePriorityLimit != nil {
+		{
+			size, err := m.RoutePriorityLimit.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *Threshold) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *Threshold) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *Threshold) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.UpstreamFailureRate != nil {
+		{
+			size, err := m.UpstreamFailureRate.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.CpuUtilization != nil {
+		{
+			size, err := m.CpuUtilization.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *RateLimitEntry) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *RateLimitEntry) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *RateLimitEntry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.SiteType != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.SiteType))
+		i--
+		dAtA[i] = 0x20
+	}
+	if m.Threshold != nil {
+		{
+			size, err := m.Threshold.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Sanction != nil {
+		{
+			size, err := m.Sanction.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Scope != nil {
+		{
+			size, err := m.Scope.MarshalToSizedBuffer(dAtA[:i])
 			if err != nil {
 				return 0, err
 			}
@@ -1157,6 +2707,20 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.RateLimiters) > 0 {
+		for iNdEx := len(m.RateLimiters) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RateLimiters[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
 	if m.HttpLimitOptions != nil {
 		{
 			size, err := m.HttpLimitOptions.MarshalToSizedBuffer(dAtA[:i])
@@ -1228,6 +2792,20 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.RateLimiters) > 0 {
+		for iNdEx := len(m.RateLimiters) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RateLimiters[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
 	if m.HttpLimitOptions != nil {
 		{
 			size, err := m.HttpLimitOptions.MarshalToSizedBuffer(dAtA[:i])
@@ -1299,6 +2877,20 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.RateLimiters) > 0 {
+		for iNdEx := len(m.RateLimiters) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RateLimiters[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
 	if m.HttpLimitOptions != nil {
 		{
 			size, err := m.HttpLimitOptions.MarshalToSizedBuffer(dAtA[:i])
@@ -1370,6 +2962,20 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.RateLimiters) > 0 {
+		for iNdEx := len(m.RateLimiters) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.RateLimiters[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x2a
+		}
+	}
 	if m.HttpLimitOptions != nil {
 		{
 			size, err := m.HttpLimitOptions.MarshalToSizedBuffer(dAtA[:i])
@@ -1461,6 +3067,216 @@ func (m *PerCpuUtilizationLimit) Size() (n int) {
 	return n
 }
 
+func (m *CustomKeyScopeType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Key)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *Scope) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ScopeTypeChoice != nil {
+		n += m.ScopeTypeChoice.Size()
+	}
+	return n
+}
+
+func (m *Scope_NoneScope) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoneScope != nil {
+		l = m.NoneScope.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *Scope_ListenerScope) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ListenerScope != nil {
+		l = m.ListenerScope.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *Scope_TenantScope) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.TenantScope != nil {
+		l = m.TenantScope.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *Scope_CosScope) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CosScope != nil {
+		l = m.CosScope.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *Scope_SuspectScope) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SuspectScope != nil {
+		l = m.SuspectScope.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *Sanction) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SanctionTypeChoice != nil {
+		n += m.SanctionTypeChoice.Size()
+	}
+	return n
+}
+
+func (m *Sanction_NoneLimit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NoneLimit != nil {
+		l = m.NoneLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *Sanction_SoftLimit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SoftLimit != nil {
+		l = m.SoftLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *Sanction_HardLimit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HardLimit != nil {
+		l = m.HardLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *Sanction_CloseLimit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CloseLimit != nil {
+		l = m.CloseLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *Sanction_HttpLimit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpLimit != nil {
+		l = m.HttpLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *Sanction_RoutePriorityLimit) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.RoutePriorityLimit != nil {
+		l = m.RoutePriorityLimit.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *Threshold) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CpuUtilization != nil {
+		l = m.CpuUtilization.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.UpstreamFailureRate != nil {
+		l = m.UpstreamFailureRate.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *RateLimitEntry) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Scope != nil {
+		l = m.Scope.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Sanction != nil {
+		l = m.Sanction.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Threshold != nil {
+		l = m.Threshold.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.SiteType != 0 {
+		n += 1 + sovTypes(uint64(m.SiteType))
+	}
+	return n
+}
+
 func (m *HttpLimitOptions) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1519,6 +3335,12 @@ func (m *GlobalSpecType) Size() (n int) {
 		l = m.HttpLimitOptions.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if len(m.RateLimiters) > 0 {
+		for _, e := range m.RateLimiters {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -1543,6 +3365,12 @@ func (m *GetSpecType) Size() (n int) {
 	if m.HttpLimitOptions != nil {
 		l = m.HttpLimitOptions.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.RateLimiters) > 0 {
+		for _, e := range m.RateLimiters {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
 	}
 	return n
 }
@@ -1569,6 +3397,12 @@ func (m *CreateSpecType) Size() (n int) {
 		l = m.HttpLimitOptions.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if len(m.RateLimiters) > 0 {
+		for _, e := range m.RateLimiters {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -1594,6 +3428,12 @@ func (m *ReplaceSpecType) Size() (n int) {
 		l = m.HttpLimitOptions.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
+	if len(m.RateLimiters) > 0 {
+		for _, e := range m.RateLimiters {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
 	return n
 }
 
@@ -1613,6 +3453,170 @@ func (this *PerCpuUtilizationLimit) String() string {
 		`CloseLimit:` + strings.Replace(fmt.Sprintf("%v", this.CloseLimit), "FractionalPercent", "schema.FractionalPercent", 1) + `,`,
 		`HttpLimit:` + strings.Replace(fmt.Sprintf("%v", this.HttpLimit), "FractionalPercent", "schema.FractionalPercent", 1) + `,`,
 		`RoutePriorityLimit:` + strings.Replace(fmt.Sprintf("%v", this.RoutePriorityLimit), "FractionalPercent", "schema.FractionalPercent", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CustomKeyScopeType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CustomKeyScopeType{`,
+		`Key:` + fmt.Sprintf("%v", this.Key) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Scope) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Scope{`,
+		`ScopeTypeChoice:` + fmt.Sprintf("%v", this.ScopeTypeChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Scope_NoneScope) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Scope_NoneScope{`,
+		`NoneScope:` + strings.Replace(fmt.Sprintf("%v", this.NoneScope), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Scope_ListenerScope) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Scope_ListenerScope{`,
+		`ListenerScope:` + strings.Replace(fmt.Sprintf("%v", this.ListenerScope), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Scope_TenantScope) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Scope_TenantScope{`,
+		`TenantScope:` + strings.Replace(fmt.Sprintf("%v", this.TenantScope), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Scope_CosScope) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Scope_CosScope{`,
+		`CosScope:` + strings.Replace(fmt.Sprintf("%v", this.CosScope), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Scope_SuspectScope) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Scope_SuspectScope{`,
+		`SuspectScope:` + strings.Replace(fmt.Sprintf("%v", this.SuspectScope), "CustomKeyScopeType", "CustomKeyScopeType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Sanction) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Sanction{`,
+		`SanctionTypeChoice:` + fmt.Sprintf("%v", this.SanctionTypeChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Sanction_NoneLimit) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Sanction_NoneLimit{`,
+		`NoneLimit:` + strings.Replace(fmt.Sprintf("%v", this.NoneLimit), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Sanction_SoftLimit) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Sanction_SoftLimit{`,
+		`SoftLimit:` + strings.Replace(fmt.Sprintf("%v", this.SoftLimit), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Sanction_HardLimit) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Sanction_HardLimit{`,
+		`HardLimit:` + strings.Replace(fmt.Sprintf("%v", this.HardLimit), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Sanction_CloseLimit) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Sanction_CloseLimit{`,
+		`CloseLimit:` + strings.Replace(fmt.Sprintf("%v", this.CloseLimit), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Sanction_HttpLimit) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Sanction_HttpLimit{`,
+		`HttpLimit:` + strings.Replace(fmt.Sprintf("%v", this.HttpLimit), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Sanction_RoutePriorityLimit) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Sanction_RoutePriorityLimit{`,
+		`RoutePriorityLimit:` + strings.Replace(fmt.Sprintf("%v", this.RoutePriorityLimit), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *Threshold) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&Threshold{`,
+		`CpuUtilization:` + strings.Replace(fmt.Sprintf("%v", this.CpuUtilization), "FractionalPercent", "schema.FractionalPercent", 1) + `,`,
+		`UpstreamFailureRate:` + strings.Replace(fmt.Sprintf("%v", this.UpstreamFailureRate), "FractionalPercent", "schema.FractionalPercent", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *RateLimitEntry) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&RateLimitEntry{`,
+		`Scope:` + strings.Replace(this.Scope.String(), "Scope", "Scope", 1) + `,`,
+		`Sanction:` + strings.Replace(this.Sanction.String(), "Sanction", "Sanction", 1) + `,`,
+		`Threshold:` + strings.Replace(this.Threshold.String(), "Threshold", "Threshold", 1) + `,`,
+		`SiteType:` + fmt.Sprintf("%v", this.SiteType) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1639,11 +3643,17 @@ func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRateLimiters := "[]*RateLimitEntry{"
+	for _, f := range this.RateLimiters {
+		repeatedStringForRateLimiters += strings.Replace(f.String(), "RateLimitEntry", "RateLimitEntry", 1) + ","
+	}
+	repeatedStringForRateLimiters += "}"
 	s := strings.Join([]string{`&GlobalSpecType{`,
 		`TenantLimit:` + strings.Replace(this.TenantLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`CosLimit:` + strings.Replace(this.CosLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`ListenerLimit:` + strings.Replace(this.ListenerLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`HttpLimitOptions:` + strings.Replace(this.HttpLimitOptions.String(), "HttpLimitOptions", "HttpLimitOptions", 1) + `,`,
+		`RateLimiters:` + repeatedStringForRateLimiters + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1652,11 +3662,17 @@ func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRateLimiters := "[]*RateLimitEntry{"
+	for _, f := range this.RateLimiters {
+		repeatedStringForRateLimiters += strings.Replace(f.String(), "RateLimitEntry", "RateLimitEntry", 1) + ","
+	}
+	repeatedStringForRateLimiters += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
 		`TenantLimit:` + strings.Replace(this.TenantLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`CosLimit:` + strings.Replace(this.CosLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`ListenerLimit:` + strings.Replace(this.ListenerLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`HttpLimitOptions:` + strings.Replace(this.HttpLimitOptions.String(), "HttpLimitOptions", "HttpLimitOptions", 1) + `,`,
+		`RateLimiters:` + repeatedStringForRateLimiters + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1665,11 +3681,17 @@ func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRateLimiters := "[]*RateLimitEntry{"
+	for _, f := range this.RateLimiters {
+		repeatedStringForRateLimiters += strings.Replace(f.String(), "RateLimitEntry", "RateLimitEntry", 1) + ","
+	}
+	repeatedStringForRateLimiters += "}"
 	s := strings.Join([]string{`&CreateSpecType{`,
 		`TenantLimit:` + strings.Replace(this.TenantLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`CosLimit:` + strings.Replace(this.CosLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`ListenerLimit:` + strings.Replace(this.ListenerLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`HttpLimitOptions:` + strings.Replace(this.HttpLimitOptions.String(), "HttpLimitOptions", "HttpLimitOptions", 1) + `,`,
+		`RateLimiters:` + repeatedStringForRateLimiters + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1678,11 +3700,17 @@ func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForRateLimiters := "[]*RateLimitEntry{"
+	for _, f := range this.RateLimiters {
+		repeatedStringForRateLimiters += strings.Replace(f.String(), "RateLimitEntry", "RateLimitEntry", 1) + ","
+	}
+	repeatedStringForRateLimiters += "}"
 	s := strings.Join([]string{`&ReplaceSpecType{`,
 		`TenantLimit:` + strings.Replace(this.TenantLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`CosLimit:` + strings.Replace(this.CosLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`ListenerLimit:` + strings.Replace(this.ListenerLimit.String(), "PerCpuUtilizationLimit", "PerCpuUtilizationLimit", 1) + `,`,
 		`HttpLimitOptions:` + strings.Replace(this.HttpLimitOptions.String(), "HttpLimitOptions", "HttpLimitOptions", 1) + `,`,
+		`RateLimiters:` + repeatedStringForRateLimiters + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1904,6 +3932,887 @@ func (m *PerCpuUtilizationLimit) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CustomKeyScopeType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CustomKeyScopeType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CustomKeyScopeType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Key = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Scope) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Scope: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Scope: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoneScope", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeTypeChoice = &Scope_NoneScope{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ListenerScope", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeTypeChoice = &Scope_ListenerScope{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TenantScope", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeTypeChoice = &Scope_TenantScope{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CosScope", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeTypeChoice = &Scope_CosScope{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SuspectScope", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &CustomKeyScopeType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ScopeTypeChoice = &Scope_SuspectScope{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Sanction) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Sanction: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Sanction: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NoneLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SanctionTypeChoice = &Sanction_NoneLimit{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SoftLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SanctionTypeChoice = &Sanction_SoftLimit{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HardLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SanctionTypeChoice = &Sanction_HardLimit{v}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CloseLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SanctionTypeChoice = &Sanction_CloseLimit{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SanctionTypeChoice = &Sanction_HttpLimit{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RoutePriorityLimit", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SanctionTypeChoice = &Sanction_RoutePriorityLimit{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Threshold) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Threshold: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Threshold: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CpuUtilization", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CpuUtilization == nil {
+				m.CpuUtilization = &schema.FractionalPercent{}
+			}
+			if err := m.CpuUtilization.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field UpstreamFailureRate", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.UpstreamFailureRate == nil {
+				m.UpstreamFailureRate = &schema.FractionalPercent{}
+			}
+			if err := m.UpstreamFailureRate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *RateLimitEntry) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: RateLimitEntry: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: RateLimitEntry: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Scope", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Scope == nil {
+				m.Scope = &Scope{}
+			}
+			if err := m.Scope.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Sanction", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Sanction == nil {
+				m.Sanction = &Sanction{}
+			}
+			if err := m.Sanction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Threshold", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Threshold == nil {
+				m.Threshold = &Threshold{}
+			}
+			if err := m.Threshold.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SiteType", wireType)
+			}
+			m.SiteType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.SiteType |= site.SiteType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -2325,6 +5234,40 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RateLimiters", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RateLimiters = append(m.RateLimiters, &RateLimitEntry{})
+			if err := m.RateLimiters[len(m.RateLimiters)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -2519,6 +5462,40 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				m.HttpLimitOptions = &HttpLimitOptions{}
 			}
 			if err := m.HttpLimitOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RateLimiters", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RateLimiters = append(m.RateLimiters, &RateLimitEntry{})
+			if err := m.RateLimiters[len(m.RateLimiters)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2719,6 +5696,40 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RateLimiters", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RateLimiters = append(m.RateLimiters, &RateLimitEntry{})
+			if err := m.RateLimiters[len(m.RateLimiters)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -2913,6 +5924,40 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				m.HttpLimitOptions = &HttpLimitOptions{}
 			}
 			if err := m.HttpLimitOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RateLimiters", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RateLimiters = append(m.RateLimiters, &RateLimitEntry{})
+			if err := m.RateLimiters[len(m.RateLimiters)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

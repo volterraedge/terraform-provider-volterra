@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.cluster.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.cluster.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2973,6 +2973,12 @@ var APISwaggerJSON string = `{
                     "title": "tls_parameters",
                     "$ref": "#/definitions/schemaUpstreamTlsParamsType",
                     "x-displayname": "TLS Parameters"
+                },
+                "upstream_conn_pool_reuse_type": {
+                    "description": " Select upstream connection pool reuse state for every downstream connection\n This configuration choice is for HTTP(S) LB only.",
+                    "title": "Select upstream connection pool reuse state",
+                    "$ref": "#/definitions/schemaUpstreamConnPoolReuseType",
+                    "x-displayname": "Select upstream connection pool reuse state"
                 }
             }
         },
@@ -3999,6 +4005,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -4292,6 +4305,28 @@ var APISwaggerJSON string = `{
                     "title": "validation_params",
                     "$ref": "#/definitions/schemaTlsValidationParamsType",
                     "x-displayname": "Root CA Validation parameters"
+                }
+            }
+        },
+        "schemaUpstreamConnPoolReuseType": {
+            "type": "object",
+            "description": "Select upstream connection pool reuse state for every downstream connection. This configuration choice is for HTTP(S) LB only.",
+            "title": "UpstreamConnPoolReuseType",
+            "x-displayname": "Select upstream connection pool reuse state",
+            "x-ves-oneof-field-map_downstream_to_upstream_conn_pool_type": "[\"disable_conn_pool_reuse\",\"enable_conn_pool_reuse\"]",
+            "x-ves-proto-message": "ves.io.schema.UpstreamConnPoolReuseType",
+            "properties": {
+                "disable_conn_pool_reuse": {
+                    "description": "Exclusive with [enable_conn_pool_reuse]\n Open new upstream connection pool for every new downstream connection",
+                    "title": "disable_conn_pool_reuse",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Connection Pool Reuse"
+                },
+                "enable_conn_pool_reuse": {
+                    "description": "Exclusive with [disable_conn_pool_reuse]\n Reuse upstream connection pool for multiple downstream connections",
+                    "title": "enable_conn_pool_reuse",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable Connection Pool Reuse"
                 }
             }
         },

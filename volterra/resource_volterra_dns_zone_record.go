@@ -14,10 +14,10 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"gopkg.volterra.us/stdlib/codec"
 	ves_io_schema_dns_zone "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone"
 	ves_io_schema_dns_zone_rrset "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/rrset"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-	"gopkg.volterra.us/stdlib/codec"
 )
 
 const (
@@ -1379,7 +1379,6 @@ func resourceVolterraSetRRSETRecordCreate(d *schema.ResourceData, meta interface
 							}
 
 						}
-
 					}
 
 				}
@@ -2396,7 +2395,7 @@ func resourceVolterraSetRRSETRecordRead(d *schema.ResourceData, meta interface{}
 
 			if v, ok := RrSetGroupMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = append(types, "LB")
+				types = append(types, "DNSLB")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
@@ -2583,7 +2582,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 
 						typeRecordSetInt.ARecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
-
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -2617,6 +2617,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.AaaaRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -2650,6 +2652,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.AfsdbRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -2696,6 +2700,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.AliasRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["value"]; ok && !isIntfNil(v) {
@@ -2725,6 +2731,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.CaaRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -2773,6 +2781,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.CdsRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -2884,6 +2894,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.CertRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -2969,6 +2981,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.DlvRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3080,6 +3094,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.DsRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3191,6 +3207,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.Eui48Record.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["value"]; ok && !isIntfNil(v) {
@@ -3220,6 +3238,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.Eui64Record.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["value"]; ok && !isIntfNil(v) {
@@ -3238,7 +3258,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LbRecord{}
 				typeRecordSetInt.LbRecord = &ves_io_schema_dns_zone.DNSLBResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = append(types, "LB")
+				types = append(types, "DNSLB")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3249,6 +3269,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.LbRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["value"]; ok && !isIntfNil(v) {
@@ -3294,6 +3316,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.LocRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3382,6 +3406,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.MxRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3426,6 +3452,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.NaptrRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3486,6 +3514,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.NsRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3519,6 +3549,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.PtrRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3604,6 +3636,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.SshfpRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3700,6 +3734,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.TlsaRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3758,6 +3794,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.TxtRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3780,23 +3818,57 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 
 	}
 	for i, rrSetGroup := range rslt {
-		reqUp := &ves_io_schema_dns_zone_rrset.ReplaceRequest{
+		req := &ves_io_schema_dns_zone_rrset.GetRequest{
 			DnsZoneName: dnsZoneName,
 			GroupName:   groupName,
 			RecordName:  recordName[i],
 			Type:        types[i],
-			Rrset:       rrSetGroup,
 		}
-		yamlReqUp, err := codec.ToYAML(reqUp)
+		yamlReq, err := codec.ToYAML(req)
 		if err != nil {
-			log.Printf("Ignored: Error marshalling rpc response to yaml: %s", err)
+			return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
 		}
-		log.Printf("[DEBUG] setting volterra dns_zone_record resource update request value: %+v", reqUp)
-		_, err = client.CustomAPI(context.Background(), http.MethodPut, fmt.Sprintf(urirrsetall, dnsZoneName, groupName, recordName[i], types[i]), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Replace"), yamlReqUp)
+		log.Printf("[DEBUG] setting volterra dns_zone_record resource get request value: %+v", req)
+		_, err = client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(urirrsetall, dnsZoneName, groupName, recordName[i], types[i]), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Get"), yamlReq)
 		if err != nil {
-			log.Printf("Update: Ignored: Error encountered while updating dns_zone_record resource. Error: : %s", err)
+			fmt.Printf("Error encountered while fetching dns_zone_record resource info. Error: %s", err)
+			req := &ves_io_schema_dns_zone_rrset.CreateRequest{
+				DnsZoneName: dnsZoneName,
+				GroupName:   groupName,
+				Rrset:       rrSetGroup,
+			}
+			yamlReq, err := codec.ToYAML(req)
+			if err != nil {
+				return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
+			}
+			log.Printf("[DEBUG] setting volterra record create request: %+v", req)
+			_, err = client.CustomAPI(context.Background(), http.MethodPost, fmt.Sprintf(urirrset, dnsZoneName, groupName), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Create"), yamlReq)
+			if err != nil {
+				if strings.Contains(err.Error(), "contains duplicate RR type: ") {
+					continue
+				}
+				return fmt.Errorf("Error encountered while creating a record. Error: %s", err)
+			}
+			time.Sleep(time.Duration(10 * time.Second))
+		} else {
+			reqUp := &ves_io_schema_dns_zone_rrset.ReplaceRequest{
+				DnsZoneName: dnsZoneName,
+				GroupName:   groupName,
+				RecordName:  recordName[i],
+				Type:        types[i],
+				Rrset:       rrSetGroup,
+			}
+			yamlReqUp, err := codec.ToYAML(reqUp)
+			if err != nil {
+				log.Printf("Ignored: Error marshalling rpc response to yaml: %s", err)
+			}
+			log.Printf("[DEBUG] setting volterra dns_zone_record resource update request value: %+v", reqUp)
+			_, err = client.CustomAPI(context.Background(), http.MethodPut, fmt.Sprintf(urirrsetall, dnsZoneName, groupName, recordName[i], types[i]), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Replace"), yamlReqUp)
+			if err != nil {
+				log.Printf("Update: Ignored: Error encountered while updating dns_zone_record resource. Error: : %s", err)
+			}
+			time.Sleep(time.Duration(10 * time.Second))
 		}
-		time.Sleep(time.Duration(10 * time.Second))
 	}
 	return nil
 }
@@ -3963,7 +4035,7 @@ func resourceVolterraSetRRSETRecordDelete(d *schema.ResourceData, meta interface
 
 			if v, ok := RrSetGroupMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = append(types, "LB")
+				types = append(types, "DNSLB")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})

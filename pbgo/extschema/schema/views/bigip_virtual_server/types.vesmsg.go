@@ -362,6 +362,16 @@ func (v *ValidateGetSpecType) TypeValidationRuleHandler(rules map[string]string)
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) ServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -448,10 +458,46 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["awaf_enforcement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("awaf_enforcement_mode"))
+		if err := fv(ctx, m.GetAwafEnforcementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["awaf_policy_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("awaf_policy_name"))
+		if err := fv(ctx, m.GetAwafPolicyName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bigip_hostname"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bigip_hostname"))
+		if err := fv(ctx, m.GetBigipHostname(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["bigip_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("bigip_version"))
 		if err := fv(ctx, m.GetBigipVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bigip_vs_description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bigip_vs_description"))
+		if err := fv(ctx, m.GetBigipVsDescription(), vOpts...); err != nil {
 			return err
 		}
 
@@ -497,6 +543,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["server_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("server_name"))
+		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -614,6 +669,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["type"] = vFn
+
+	vrhServerName := v.ServerNameValidationRuleHandler
+	rulesServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "1024",
+	}
+	vFn, err = vrhServerName(rulesServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.server_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["server_name"] = vFn
 
 	v.FldValidators["api_definition_choice.api_specification"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
 
@@ -1018,6 +1084,36 @@ func (v *ValidateGlobalSpecType) TypeValidationRuleHandler(rules map[string]stri
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) PartitionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for partition")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ClusterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) ServerNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for server_name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -1104,6 +1200,33 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["awaf_enforcement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("awaf_enforcement_mode"))
+		if err := fv(ctx, m.GetAwafEnforcementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["awaf_policy_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("awaf_policy_name"))
+		if err := fv(ctx, m.GetAwafPolicyName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bigip_hostname"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bigip_hostname"))
+		if err := fv(ctx, m.GetBigipHostname(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["bigip_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("bigip_version"))
@@ -1113,9 +1236,36 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["bigip_vs_description"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bigip_vs_description"))
+		if err := fv(ctx, m.GetBigipVsDescription(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cluster"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cluster"))
+		if err := fv(ctx, m.GetCluster(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["domains"]; exists {
 		vOpts := append(opts, db.WithValidateField("domains"))
 		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["partition"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("partition"))
+		if err := fv(ctx, m.GetPartition(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1153,6 +1303,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["server_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("server_name"))
+		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -1279,6 +1438,39 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["type"] = vFn
+
+	vrhPartition := v.PartitionValidationRuleHandler
+	rulesPartition := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhPartition(rulesPartition)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.partition: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["partition"] = vFn
+
+	vrhCluster := v.ClusterValidationRuleHandler
+	rulesCluster := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFn, err = vrhCluster(rulesCluster)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.cluster: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster"] = vFn
+
+	vrhServerName := v.ServerNameValidationRuleHandler
+	rulesServerName := map[string]string{
+		"ves.io.schema.rules.string.max_len": "1024",
+	}
+	vFn, err = vrhServerName(rulesServerName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.server_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["server_name"] = vFn
 
 	v.FldValidators["api_definition_choice.api_specification"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
 
@@ -1780,9 +1972,14 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	m.GetApiDefinitionChoiceFromGlobalSpecType(f)
 	m.GetApiDiscoveryChoiceFromGlobalSpecType(f)
+	m.AwafEnforcementMode = f.GetAwafEnforcementMode()
+	m.AwafPolicyName = f.GetAwafPolicyName()
+	m.BigipHostname = f.GetBigipHostname()
 	m.BigipVersion = f.GetBigipVersion()
+	m.BigipVsDescription = f.GetBigipVsDescription()
 	m.Domains = f.GetDomains()
 	m.GetSensitiveDataPolicyChoiceFromGlobalSpecType(f)
+	m.ServerName = f.GetServerName()
 	m.ServiceDiscovery = f.GetServiceDiscovery()
 	m.Type = f.GetType()
 }
@@ -1804,9 +2001,14 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	m1.SetApiDefinitionChoiceToGlobalSpecType(f)
 	m1.SetApiDiscoveryChoiceToGlobalSpecType(f)
+	f.AwafEnforcementMode = m1.AwafEnforcementMode
+	f.AwafPolicyName = m1.AwafPolicyName
+	f.BigipHostname = m1.BigipHostname
 	f.BigipVersion = m1.BigipVersion
+	f.BigipVsDescription = m1.BigipVsDescription
 	f.Domains = m1.Domains
 	m1.SetSensitiveDataPolicyChoiceToGlobalSpecType(f)
+	f.ServerName = m1.ServerName
 	f.ServiceDiscovery = m1.ServiceDiscovery
 	f.Type = m1.Type
 }

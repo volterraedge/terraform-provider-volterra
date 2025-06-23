@@ -77,6 +77,12 @@ func LocateObject(ctx context.Context, locator db.EntryLocator, uid, tenant, nam
 	return obj, nil
 }
 
+func (o *Object) SetRevision(r int64) {
+	if o.SystemMetadata != nil {
+		o.SystemMetadata.SetRevision(r)
+	}
+}
+
 func FindObject(ctx context.Context, finder db.EntryFinder, key string, opts ...db.FindEntryOpt) (*DBObject, bool, error) {
 	e, exist, err := finder.FindEntry(ctx, ObjectDefTblName, key, opts...)
 	if !exist || err != nil {
@@ -1158,30 +1164,58 @@ func (e *DBStatusObject) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, errors.Wrap(err, "GetDRefInfo, error in key")
 	}
 
-	drInfos, err := e.GetObjectRefsDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetObjectRefsDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
-		dri.DRField = "ves.io.schema.bgp.StatusObject." + dri.DRField
-		dri.RefrType = e.Type()
-		dri.RefrUID = refrUID
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := e.GetBgpStatusDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetBgpStatusDRefInfo() FAILED")
+	} else {
+		for i := range fdrInfos {
+			dri := &fdrInfos[i]
+			// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
+			dri.DRField = "ves.io.schema.bgp.StatusObject." + dri.DRField
+			dri.RefrType = e.Type()
+			dri.RefrUID = refrUID
 
-		// convert any ref_to schema annotation specified by kind value to type value
-		if !strings.HasPrefix(dri.RefdType, "ves.io") {
-			d, err := e.GetDB()
-			if err != nil {
-				return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+			// convert any ref_to schema annotation specified by kind value to type value
+			if !strings.HasPrefix(dri.RefdType, "ves.io") {
+				d, err := e.GetDB()
+				if err != nil {
+					return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+				}
+				refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
+				if err != nil {
+					return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
+				}
+				dri.RefdType = refdType
 			}
-			refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
-			if err != nil {
-				return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
-			}
-			dri.RefdType = refdType
 		}
+		drInfos = append(drInfos, fdrInfos...)
 	}
+	if fdrInfos, err := e.GetObjectRefsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetObjectRefsDRefInfo() FAILED")
+	} else {
+		for i := range fdrInfos {
+			dri := &fdrInfos[i]
+			// Convert Spec.LcSpec.vnRefs to ves.io.examplesvc.objectone.Object.Spec.LcSpec.vnRefs
+			dri.DRField = "ves.io.schema.bgp.StatusObject." + dri.DRField
+			dri.RefrType = e.Type()
+			dri.RefrUID = refrUID
+
+			// convert any ref_to schema annotation specified by kind value to type value
+			if !strings.HasPrefix(dri.RefdType, "ves.io") {
+				d, err := e.GetDB()
+				if err != nil {
+					return nil, errors.Wrap(err, "Cannot find db for entry to resolve kind to type")
+				}
+				refdType, err := d.TypeForEntryKind(dri.RefrType, dri.RefrUID, dri.RefdType)
+				if err != nil {
+					return nil, errors.Wrap(err, fmt.Sprintf("Cannot convert kind %s to type", dri.RefdType))
+				}
+				dri.RefdType = refdType
+			}
+		}
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -1224,6 +1258,24 @@ func NewEntryStatusObject(opts ...db.OpOption) db.Entry {
 		return NewDBStatusObject(v, opts...)
 	}
 	return nil
+}
+
+// GetDRefInfo for the field's type
+func (e *DBStatusObject) GetBgpStatusDRefInfo() ([]db.DRefInfo, error) {
+	if e.GetBgpStatus() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := e.GetBgpStatus().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetBgpStatus().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "bgp_status." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 func (e *DBStatusObject) GetObjectRefsDRefInfo() ([]db.DRefInfo, error) {

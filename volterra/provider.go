@@ -47,6 +47,7 @@ const (
 	setKnownLabelKey          = "volterra_known_label_key"
 	setKnownLabel             = "volterra_known_label"
 	setDnsZoneRRSET           = "volterra_dns_zone_record"
+	dcClusterGroup            = "volterra_dc_cluster_group"
 )
 
 // Provider returns a terraform.ResourceProvider.
@@ -207,7 +208,7 @@ func cleanupTempFile(filePath string) {
 func getResourceMap() map[string]*schema.Resource {
 	// auto generated resource map
 	resourceMap := getVolterraResourceMap()
-	// add custom respurce map
+	// add custom resource map
 	resourceMap[activeAlertPolicies] = resourceVolterraActiveAlertPolicies()
 	resourceMap[activeNetworkPolicies] = resourceVolterraActiveNetworkPolicies()
 	resourceMap[activeServicePolicies] = resourceVolterraActiveServicePolicies()
@@ -232,5 +233,6 @@ func getResourceMap() map[string]*schema.Resource {
 	resourceMap[setKnownLabelKey] = resourceVolterraSetKnownLabelKey()
 	resourceMap[setKnownLabel] = resourceVolterraSetKnownLabel()
 	resourceMap[setDnsZoneRRSET] = resourceVolterraSetRRSETRecord()
+	resourceMap[dcClusterGroup] = resourceVolterraDcClusterGroup()
 	return resourceMap
 }

@@ -73,6 +73,11 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 							Required: true,
 						},
 
+						"health_check_secondary_port": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
 						"receive": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -97,6 +102,11 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 						"health_check_port": {
 							Type:     schema.TypeInt,
 							Required: true,
+						},
+
+						"health_check_secondary_port": {
+							Type:     schema.TypeInt,
+							Optional: true,
 						},
 
 						"receive": {
@@ -131,6 +141,11 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 							Required: true,
 						},
 
+						"health_check_secondary_port": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
 						"receive": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -157,6 +172,11 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 							Required: true,
 						},
 
+						"health_check_secondary_port": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
 						"receive": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -181,6 +201,11 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 						"health_check_port": {
 							Type:     schema.TypeInt,
 							Required: true,
+						},
+
+						"health_check_secondary_port": {
+							Type:     schema.TypeInt,
+							Optional: true,
 						},
 
 						"receive": {
@@ -256,7 +281,7 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 
 	healthCheckTypeFound := false
 
-	if v, ok := d.GetOk("http_health_check"); ok && !healthCheckTypeFound {
+	if v, ok := d.GetOk("http_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
 
 		healthCheckTypeFound = true
 		healthCheckInt := &ves_io_schema_dns_lb_health_check.CreateSpecType_HttpHealthCheck{}
@@ -271,6 +296,12 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.HttpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 
@@ -291,7 +322,7 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("https_health_check"); ok && !healthCheckTypeFound {
+	if v, ok := d.GetOk("https_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
 
 		healthCheckTypeFound = true
 		healthCheckInt := &ves_io_schema_dns_lb_health_check.CreateSpecType_HttpsHealthCheck{}
@@ -306,6 +337,12 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.HttpsHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpsHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 
@@ -338,7 +375,7 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("tcp_health_check"); ok && !healthCheckTypeFound {
+	if v, ok := d.GetOk("tcp_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
 
 		healthCheckTypeFound = true
 		healthCheckInt := &ves_io_schema_dns_lb_health_check.CreateSpecType_TcpHealthCheck{}
@@ -353,6 +390,12 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.TcpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 
@@ -373,7 +416,7 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("tcp_hex_health_check"); ok && !healthCheckTypeFound {
+	if v, ok := d.GetOk("tcp_hex_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
 
 		healthCheckTypeFound = true
 		healthCheckInt := &ves_io_schema_dns_lb_health_check.CreateSpecType_TcpHexHealthCheck{}
@@ -388,6 +431,12 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.TcpHexHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHexHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 
@@ -408,7 +457,7 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("udp_health_check"); ok && !healthCheckTypeFound {
+	if v, ok := d.GetOk("udp_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
 
 		healthCheckTypeFound = true
 		healthCheckInt := &ves_io_schema_dns_lb_health_check.CreateSpecType_UdpHealthCheck{}
@@ -423,6 +472,12 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.UdpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.UdpHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 
@@ -544,7 +599,7 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 
 	healthCheckTypeFound := false
 
-	if v, ok := d.GetOk("http_health_check"); ok && !healthCheckTypeFound {
+	if v, ok := d.GetOk("http_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
 
 		healthCheckTypeFound = true
 		healthCheckInt := &ves_io_schema_dns_lb_health_check.ReplaceSpecType_HttpHealthCheck{}
@@ -559,6 +614,12 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.HttpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 
@@ -579,7 +640,7 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("https_health_check"); ok && !healthCheckTypeFound {
+	if v, ok := d.GetOk("https_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
 
 		healthCheckTypeFound = true
 		healthCheckInt := &ves_io_schema_dns_lb_health_check.ReplaceSpecType_HttpsHealthCheck{}
@@ -594,6 +655,12 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.HttpsHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpsHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 
@@ -626,7 +693,7 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("tcp_health_check"); ok && !healthCheckTypeFound {
+	if v, ok := d.GetOk("tcp_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
 
 		healthCheckTypeFound = true
 		healthCheckInt := &ves_io_schema_dns_lb_health_check.ReplaceSpecType_TcpHealthCheck{}
@@ -641,6 +708,12 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.TcpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 
@@ -661,7 +734,7 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("tcp_hex_health_check"); ok && !healthCheckTypeFound {
+	if v, ok := d.GetOk("tcp_hex_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
 
 		healthCheckTypeFound = true
 		healthCheckInt := &ves_io_schema_dns_lb_health_check.ReplaceSpecType_TcpHexHealthCheck{}
@@ -676,6 +749,12 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.TcpHexHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHexHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 
@@ -696,7 +775,7 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("udp_health_check"); ok && !healthCheckTypeFound {
+	if v, ok := d.GetOk("udp_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
 
 		healthCheckTypeFound = true
 		healthCheckInt := &ves_io_schema_dns_lb_health_check.ReplaceSpecType_UdpHealthCheck{}
@@ -711,6 +790,12 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.UdpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.UdpHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 
@@ -757,5 +842,8 @@ func resourceVolterraDnsLbHealthCheckDelete(d *schema.ResourceData, meta interfa
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra DnsLbHealthCheck obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_dns_lb_health_check.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_dns_lb_health_check.ObjectType, namespace, name, opts...)
 }

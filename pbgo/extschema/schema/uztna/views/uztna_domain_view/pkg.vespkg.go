@@ -17,29 +17,22 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.views.uztna_domain_view.Object"] = ObjectValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.StatusObject"] = StatusObjectValidator()
 
-	vr["ves.io.schema.uztna.views.uztna_domain_view.CreateRequest"] = CreateRequestValidator()
-	vr["ves.io.schema.uztna.views.uztna_domain_view.CreateResponse"] = CreateResponseValidator()
-	vr["ves.io.schema.uztna.views.uztna_domain_view.DeleteRequest"] = DeleteRequestValidator()
-	vr["ves.io.schema.uztna.views.uztna_domain_view.GetRequest"] = GetRequestValidator()
-	vr["ves.io.schema.uztna.views.uztna_domain_view.GetResponse"] = GetResponseValidator()
-	vr["ves.io.schema.uztna.views.uztna_domain_view.ListRequest"] = ListRequestValidator()
-	vr["ves.io.schema.uztna.views.uztna_domain_view.ListResponse"] = ListResponseValidator()
-	vr["ves.io.schema.uztna.views.uztna_domain_view.ListResponseItem"] = ListResponseItemValidator()
-	vr["ves.io.schema.uztna.views.uztna_domain_view.ReplaceRequest"] = ReplaceRequestValidator()
-	vr["ves.io.schema.uztna.views.uztna_domain_view.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.uztna.views.uztna_domain_view.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DVCloudGatewayAdvertisement"] = DVCloudGatewayAdvertisementValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewAppVIPPool"] = DomainViewAppVIPPoolValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewCertificate"] = DomainViewCertificateValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewCloudGateways"] = DomainViewCloudGatewaysValidator()
+	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewDualStackAppVipPool"] = DomainViewDualStackAppVipPoolValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewDualStackLeasePool"] = DomainViewDualStackLeasePoolValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewGateways"] = DomainViewGatewaysValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewLeasePoolList"] = DomainViewLeasePoolListValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewPolicy"] = DomainViewPolicyValidator()
+	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewPrivateGateways"] = DomainViewPrivateGatewaysValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewSites"] = DomainViewSitesValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.uztna.views.uztna_domain_view.IPv4LeasePool"] = IPv4LeasePoolValidator()
+	vr["ves.io.schema.uztna.views.uztna_domain_view.IPv6LeasePool"] = IPv6LeasePoolValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 
 }
@@ -58,18 +51,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.views.uztna_domain_view.API.Create"] = []string{
-		"spec.gateways.perimeter_re.re_sites",
-	}
-
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.views.uztna_domain_view.API.Replace"] = []string{
-		"spec.gateways.perimeter_re.re_sites",
-	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-	sm["ves.io.schema.uztna.views.uztna_domain_view.API"] = "config"
 
 }
 
@@ -89,24 +73,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 
-	csr = mdr.PubCRUDServiceRegistry
-
-	func() {
-		// set swagger jsons for our and external schemas
-		csr.CRUDSwaggerRegistry["ves.io.schema.uztna.views.uztna_domain_view.Object"] = APISwaggerJSON
-		csr.CRUDGrpcClientRegistry["ves.io.schema.uztna.views.uztna_domain_view.Object"] = NewCRUDAPIGrpcClient
-		csr.CRUDRestClientRegistry["ves.io.schema.uztna.views.uztna_domain_view.Object"] = NewCRUDAPIRestClient
-		csr.CRUDInprocClientRegistry["ves.io.schema.uztna.views.uztna_domain_view.Object"] = NewCRUDAPIInprocClient
-		if isExternal {
-			return
-		}
-		// registration of api handlers if our own schema
-		mdr.SvcRegisterHandlers["ves.io.schema.uztna.views.uztna_domain_view.API"] = RegisterAPIServer
-		mdr.SvcGwRegisterHandlers["ves.io.schema.uztna.views.uztna_domain_view.API"] = RegisterGwAPIHandler
-		csr.CRUDServerRegistry["ves.io.schema.uztna.views.uztna_domain_view.Object"] = NewCRUDAPIServer
-
-	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -114,11 +80,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

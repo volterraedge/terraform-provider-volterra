@@ -241,28 +241,30 @@ func resourceVolterraVirtualK8SCreate(d *schema.ResourceData, meta interface{}) 
 		vsiteRefsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		createSpec.VsiteRefs = vsiteRefsInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			vrMapToStrVal := ps.(map[string]interface{})
-			vsiteRefsInt[i] = &ves_io_schema.ObjectRefType{}
+				vrMapToStrVal := ps.(map[string]interface{})
+				vsiteRefsInt[i] = &ves_io_schema.ObjectRefType{}
 
-			vsiteRefsInt[i].Kind = "virtual_site"
+				vsiteRefsInt[i].Kind = "virtual_site"
 
-			if v, ok := vrMapToStrVal["name"]; ok && !isIntfNil(v) {
-				vsiteRefsInt[i].Name = v.(string)
+				if v, ok := vrMapToStrVal["name"]; ok && !isIntfNil(v) {
+					vsiteRefsInt[i].Name = v.(string)
+				}
+
+				if v, ok := vrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					vsiteRefsInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := vrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					vsiteRefsInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := vrMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					vsiteRefsInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := vrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				vsiteRefsInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := vrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				vsiteRefsInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := vrMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				vsiteRefsInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -422,28 +424,30 @@ func resourceVolterraVirtualK8SUpdate(d *schema.ResourceData, meta interface{}) 
 		vsiteRefsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		updateSpec.VsiteRefs = vsiteRefsInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			vrMapToStrVal := ps.(map[string]interface{})
-			vsiteRefsInt[i] = &ves_io_schema.ObjectRefType{}
+				vrMapToStrVal := ps.(map[string]interface{})
+				vsiteRefsInt[i] = &ves_io_schema.ObjectRefType{}
 
-			vsiteRefsInt[i].Kind = "virtual_site"
+				vsiteRefsInt[i].Kind = "virtual_site"
 
-			if v, ok := vrMapToStrVal["name"]; ok && !isIntfNil(v) {
-				vsiteRefsInt[i].Name = v.(string)
+				if v, ok := vrMapToStrVal["name"]; ok && !isIntfNil(v) {
+					vsiteRefsInt[i].Name = v.(string)
+				}
+
+				if v, ok := vrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					vsiteRefsInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := vrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					vsiteRefsInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := vrMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					vsiteRefsInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := vrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				vsiteRefsInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := vrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				vsiteRefsInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := vrMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				vsiteRefsInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -474,5 +478,8 @@ func resourceVolterraVirtualK8SDelete(d *schema.ResourceData, meta interface{}) 
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra VirtualK8S obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_virtual_k8s.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_virtual_k8s.ObjectType, namespace, name, opts...)
 }

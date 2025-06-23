@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.downstream_cos.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.downstream_cos.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2835,36 +2835,13 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "downstream_cosGlobalSpecType": {
+        "downstream_cosCustomKeyScopeType": {
             "type": "object",
-            "description": "Downstream Class of Service configures limits on downstream traffic for a given tenant and/or all tenants associated\nwith the given class of service.",
-            "title": "GlobalSpecType",
-            "x-displayname": "Downstream Class of Service Specification",
-            "x-ves-proto-message": "ves.io.schema.downstream_cos.GlobalSpecType",
+            "x-ves-proto-message": "ves.io.schema.downstream_cos.CustomKeyScopeType",
             "properties": {
-                "cos_limit": {
-                    "description": " Limit imposed on sum traffic of all tenants associated with this class of service.",
-                    "title": "Class of Service Limit",
-                    "$ref": "#/definitions/downstream_cosPerCpuUtilizationLimit",
-                    "x-displayname": "CoS Limit"
-                },
-                "http_limit_options": {
-                    "description": " HTTP Protocol Settings applied to connections when HTTP Limit threshold is exceeded.",
-                    "title": "Http Limit Options",
-                    "$ref": "#/definitions/downstream_cosHttpLimitOptions",
-                    "x-displayname": "HTTP Limit Options"
-                },
-                "listener_limit": {
-                    "description": " Limit imposed on traffic of individual listener associated with this class of service.",
-                    "title": "Listener Limit",
-                    "$ref": "#/definitions/downstream_cosPerCpuUtilizationLimit",
-                    "x-displayname": "Listener Limit"
-                },
-                "tenant_limit": {
-                    "description": " Limit imposed on traffic of each individual tenant associated with this class of service.",
-                    "title": "Tenant Limit",
-                    "$ref": "#/definitions/downstream_cosPerCpuUtilizationLimit",
-                    "x-displayname": "Tenant Limit"
+                "key": {
+                    "type": "string",
+                    "title": "x-displayName: \"Scope Key\"\nDefine optional scope key override"
                 }
             }
         },
@@ -2988,6 +2965,106 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "downstream_cosRateLimitEntry": {
+            "type": "object",
+            "title": "x-displayName: \"Rate Limit Entry\"\nRate limit entry configures Envoy Ept traffic throttling",
+            "x-displayname": "Rate Limit Entry",
+            "x-ves-proto-message": "ves.io.schema.downstream_cos.RateLimitEntry",
+            "properties": {
+                "sanction": {
+                    "description": " Sanction applied when rate limit is exceeded",
+                    "title": "Sanction",
+                    "$ref": "#/definitions/downstream_cosSanction",
+                    "x-displayname": "Sanction"
+                },
+                "scope": {
+                    "description": " Rate limiter Scope",
+                    "title": "Scope",
+                    "$ref": "#/definitions/downstream_cosScope",
+                    "x-displayname": "Scope"
+                },
+                "site_type": {
+                    "description": " Defines if this rate limiter should be applied to CUSTOMER_EDGE or REGIONAL_EDGE",
+                    "title": "Site type",
+                    "$ref": "#/definitions/siteSiteType",
+                    "x-displayname": "Site Type"
+                },
+                "threshold": {
+                    "description": " Rate Limiter Thresholds",
+                    "title": "Threshold",
+                    "$ref": "#/definitions/downstream_cosThreshold",
+                    "x-displayname": "Threshold"
+                }
+            }
+        },
+        "downstream_cosSanction": {
+            "type": "object",
+            "title": "x-displayName: \"Sanction\"\nDefines the sanction applied when rate limit is exceeded",
+            "x-displayname": "Sanction",
+            "x-ves-oneof-field-sanction_type_choice": "[\"close_limit\",\"hard_limit\",\"http_limit\",\"none_limit\",\"route_priority_limit\",\"soft_limit\"]",
+            "x-ves-proto-message": "ves.io.schema.downstream_cos.Sanction",
+            "properties": {
+                "close_limit": {
+                    "description": "Exclusive with [hard_limit http_limit none_limit route_priority_limit soft_limit]\n Connection close is done in two steps: first stop socket reads for a duration, and then close connection.\n This is a DDoS protection measure.",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Close Limit"
+                },
+                "hard_limit": {
+                    "description": "Exclusive with [close_limit http_limit none_limit route_priority_limit soft_limit]\nDownstream connection reads may be paused (for 50ms-5s), when this limit threshold is exceeded.",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "http_limit": {
+                    "description": "Exclusive with [close_limit hard_limit none_limit route_priority_limit soft_limit]\n HTTP throttling options are defined in HttpLimitOptions.",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "HTTP Limit"
+                },
+                "none_limit": {
+                    "description": "Exclusive with [close_limit hard_limit http_limit route_priority_limit soft_limit]\nNo configured limit.",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "route_priority_limit": {
+                    "description": "Exclusive with [close_limit hard_limit http_limit none_limit soft_limit]\nLower http route priority, when this limit threshold is exceeded.",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "soft_limit": {
+                    "description": "Exclusive with [close_limit hard_limit http_limit none_limit route_priority_limit]\nConnections may be be placed in low read priority mode, when this limit threshold is exceeded.",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "downstream_cosScope": {
+            "type": "object",
+            "description": "Defines the scope of rate limit entry.",
+            "x-displayname": "Scope",
+            "x-ves-oneof-field-scope_type_choice": "[\"cos_scope\",\"listener_scope\",\"none_scope\",\"suspect_scope\",\"tenant_scope\"]",
+            "x-ves-proto-message": "ves.io.schema.downstream_cos.Scope",
+            "properties": {
+                "cos_scope": {
+                    "description": "Exclusive with [listener_scope none_scope suspect_scope tenant_scope]\n",
+                    "title": "x-displayName: \"CoS Scope\"\nAll tenants associated with this class of service",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "listener_scope": {
+                    "description": "Exclusive with [cos_scope none_scope suspect_scope tenant_scope]\n",
+                    "title": "x-displayName: \"Listener Scope\"\nIndividual listener associated with this class of service",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "none_scope": {
+                    "description": "Exclusive with [cos_scope listener_scope suspect_scope tenant_scope]\nNo configured scope.",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "suspect_scope": {
+                    "description": "Exclusive with [cos_scope listener_scope none_scope tenant_scope]\n",
+                    "title": "x-displayName: \"Suspect Scope\"\nConnections flagged as 'Suspect' by envoy filter(s)",
+                    "$ref": "#/definitions/downstream_cosCustomKeyScopeType"
+                },
+                "tenant_scope": {
+                    "description": "Exclusive with [cos_scope listener_scope none_scope suspect_scope]\n",
+                    "title": "x-displayName: \"Tenant Scope\"\nIndividual tenant associated with this class of service",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
         "downstream_cosSpecType": {
             "type": "object",
             "description": "Shape of the Downstream CoS specification",
@@ -2997,7 +3074,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "gc_spec": {
                     "title": "gc_spec",
-                    "$ref": "#/definitions/downstream_cosGlobalSpecType",
+                    "$ref": "#/definitions/schemadownstream_cosGlobalSpecType",
                     "x-displayname": "GC Spec"
                 }
             }
@@ -3029,9 +3106,25 @@ var APISwaggerJSON string = `{
                     "description": " Object reference",
                     "title": "object_refs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                }
+            }
+        },
+        "downstream_cosThreshold": {
+            "type": "object",
+            "title": "x-displayName: \"Threshold\"\nDefines threshold values for rate limit entry",
+            "x-displayname": "Threshold",
+            "x-ves-proto-message": "ves.io.schema.downstream_cos.Threshold",
+            "properties": {
+                "cpu_utilization": {
+                    "title": "CPU Utilization Percent",
+                    "$ref": "#/definitions/schemaFractionalPercent"
+                },
+                "upstream_failure_rate": {
+                    "title": "Upstream failure rate percentage, calculated as: (upstream failure rate / downstream requests rate)",
+                    "$ref": "#/definitions/schemaFractionalPercent"
                 }
             }
         },
@@ -3046,6 +3139,50 @@ var APISwaggerJSON string = `{
             "default": "EOK",
             "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.downstream_cos.crudapi.ErrorCode"
+        },
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
         },
         "protobufAny": {
             "type": "object",
@@ -3154,6 +3291,13 @@ var APISwaggerJSON string = `{
             "default": "HUNDRED",
             "x-displayname": "Denominator",
             "x-ves-proto-enum": "ves.io.schema.DenominatorType"
+        },
+        "schemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "schemaFractionalPercent": {
             "type": "object",
@@ -3300,50 +3444,6 @@ var APISwaggerJSON string = `{
                 "uid": {
                     "type": "string",
                     "description": " uid is the unique in time and space value for this object. Object create will fail if\n provided by the client and the value exists in the system. Typically generated by the\n server on successful creation of an object and is not allowed to change once populated.\n Shadowed by SystemObjectMeta's uid field.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
-        },
-        "schemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
                     "title": "uid",
                     "x-displayname": "UID",
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
@@ -3539,7 +3639,7 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Namespace Reference",
                     "x-ves-validation-rules": {
@@ -3559,6 +3659,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",
@@ -3640,6 +3747,66 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
                 }
             }
+        },
+        "schemadownstream_cosGlobalSpecType": {
+            "type": "object",
+            "description": "Downstream Class of Service configures limits on downstream traffic for a given tenant and/or all tenants associated\nwith the given class of service.",
+            "title": "GlobalSpecType",
+            "x-displayname": "Downstream Class of Service Specification",
+            "x-ves-proto-message": "ves.io.schema.downstream_cos.GlobalSpecType",
+            "properties": {
+                "cos_limit": {
+                    "description": " Limit imposed on sum traffic of all tenants associated with this class of service.",
+                    "title": "Class of Service Limit",
+                    "$ref": "#/definitions/downstream_cosPerCpuUtilizationLimit",
+                    "x-displayname": "CoS Limit"
+                },
+                "http_limit_options": {
+                    "description": " HTTP Protocol Settings applied to connections when HTTP Limit threshold is exceeded.",
+                    "title": "Http Limit Options",
+                    "$ref": "#/definitions/downstream_cosHttpLimitOptions",
+                    "x-displayname": "HTTP Limit Options"
+                },
+                "listener_limit": {
+                    "description": " Limit imposed on traffic of individual listener associated with this class of service.",
+                    "title": "Listener Limit",
+                    "$ref": "#/definitions/downstream_cosPerCpuUtilizationLimit",
+                    "x-displayname": "Listener Limit"
+                },
+                "rate_limiters": {
+                    "type": "array",
+                    "description": " Rate Limiter list\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 20\n",
+                    "title": "Rate Limiters",
+                    "maxItems": 20,
+                    "items": {
+                        "$ref": "#/definitions/downstream_cosRateLimitEntry"
+                    },
+                    "x-displayname": "Rate Limiters",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "20"
+                    }
+                },
+                "tenant_limit": {
+                    "description": " Limit imposed on traffic of each individual tenant associated with this class of service.",
+                    "title": "Tenant Limit",
+                    "$ref": "#/definitions/downstream_cosPerCpuUtilizationLimit",
+                    "x-displayname": "Tenant Limit"
+                }
+            }
+        },
+        "siteSiteType": {
+            "type": "string",
+            "description": "Site Type which can either RE or CE\n\nInvalid type of site\nRegional Edge site\nCustomer Edge site",
+            "title": "SiteType",
+            "enum": [
+                "INVALID",
+                "REGIONAL_EDGE",
+                "CUSTOMER_EDGE",
+                "NGINX_ONE"
+            ],
+            "default": "INVALID",
+            "x-displayname": "Site Type",
+            "x-ves-proto-enum": "ves.io.schema.site.SiteType"
         }
     },
     "x-displayname": "",

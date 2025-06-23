@@ -58,7 +58,19 @@ Argument Reference
 
 `protocol` - (Optional) Both TCP and UDP protocols are supported (`String`).
 
+`snat_pool` - (Optional) Configured SNAT Pool. See [Snat Pool ](#snat-pool) below for details.
+
 `where` - (Optional) This endpoint is present in site, virtual_site or virtual_network selected by following field.. See [Where ](#where) below for details.
+
+### Snat Pool
+
+Configured SNAT Pool.
+
+###### One of the arguments from this list "no_snat_pool, snat_pool" can be set
+
+`no_snat_pool` - (Optional) No configured SNAT Pool to reach Origin Server (`Bool`).
+
+`snat_pool` - (Optional) Configure SNAT Pool to reach Origin Server. See [Snat Pool Choice Snat Pool ](#snat-pool-choice-snat-pool) below for details.
 
 ### Where
 
@@ -78,11 +90,9 @@ Specifies name and TTL used for DNS resolution..
 
 `name` - (Optional) Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
 
-###### One of the arguments from this list "refresh_interval, strict_ttl" can be set
+###### One of the arguments from this list "refresh_interval" can be set
 
 `refresh_interval` - (Optional) Interval for DNS refresh in seconds. (`Int`).
-
-`strict_ttl` - (Optional) Use TTL value returned by DNS Server during DNS resolution as DNS refresh interval (`Bool`).(Deprecated)
 
 ### Endpoint Address Service Info
 
@@ -130,8 +140,6 @@ Direct reference to site object.
 
 `ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
-`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
-
 ### Ref Or Selector Virtual Network
 
 Direct reference to virtual network object.
@@ -152,17 +160,23 @@ Direct reference to virtual site object.
 
 `ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
-`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
-
 ### Service Info Service Selector
 
 discovery has to happen. This implicit label is added to service_selector.
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
-### Ttl Choice Strict Ttl
+### Snat Pool Choice No Snat Pool
 
-Use TTL value returned by DNS Server during DNS resolution as DNS refresh interval.
+No configured SNAT Pool to reach Origin Server.
+
+### Snat Pool Choice Snat Pool
+
+Configure SNAT Pool to reach Origin Server.
+
+`ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
+
+`prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
 
 Attribute Reference
 -------------------

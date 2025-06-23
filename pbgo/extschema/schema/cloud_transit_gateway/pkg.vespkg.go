@@ -60,6 +60,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.cloud_transit_gateway.API.Create"] = []string{
 		"spec.aws.tgw_asn",
+		"spec.aws.tgw_cidr_ipv4",
 		"spec.aws.volterra_site_asn",
 	}
 
@@ -108,6 +109,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.cloud_transit_gateway.API.Replace"] = []string{
 		"spec.aws.tgw_asn",
+		"spec.aws.tgw_cidr_ipv4",
 		"spec.aws.volterra_site_asn",
 	}
 
@@ -166,11 +168,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

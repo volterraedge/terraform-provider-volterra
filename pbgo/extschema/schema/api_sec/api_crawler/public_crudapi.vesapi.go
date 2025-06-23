@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/api_crawlers/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -1122,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.api_sec.api_crawler.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.api_sec.api_crawler.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2221,6 +2234,22 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "api_crawlerApiCrawlingStatus": {
+            "type": "object",
+            "description": "Contains status information for API crawling configuration",
+            "title": "API Crawling Status Type",
+            "x-displayname": "API Crawling Status",
+            "x-ves-proto-message": "ves.io.schema.api_sec.api_crawler.ApiCrawlingStatus",
+            "properties": {
+                "last_updated": {
+                    "type": "string",
+                    "description": " Timestamp of the most recent change for the API Crawling configuration",
+                    "title": "last_updated",
+                    "format": "date-time",
+                    "x-displayname": "Last Updated"
+                }
+            }
+        },
         "api_crawlerCreateRequest": {
             "type": "object",
             "description": "This is the input message of the 'Create' RPC",
@@ -2339,14 +2368,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "simple_login": {
-                    "description": " Username and Password to assign credentials for the selected domain to crawl\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Username and Password to assign credentials for the selected domain to crawl",
                     "title": "The Domain credentials",
                     "$ref": "#/definitions/api_crawlerSimpleLogin",
-                    "x-displayname": "Credentials",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Credentials"
                 }
             }
         },
@@ -2631,6 +2656,80 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "api_crawlerScanInfo": {
+            "type": "object",
+            "description": "scanInfo represents the status and metadata of an API scan",
+            "title": "Scan Information",
+            "x-displayname": "Scan Information",
+            "x-ves-proto-message": "ves.io.schema.api_sec.api_crawler.ScanInfo",
+            "properties": {
+                "added_to_queue": {
+                    "type": "string",
+                    "description": " Timestamp when scan was added to the queue",
+                    "title": "added_to_queue",
+                    "format": "date-time",
+                    "x-displayname": "Added To Queue"
+                },
+                "domain": {
+                    "type": "string",
+                    "description": " The domain being scanned\n\nExample: - \"example1.com\"-",
+                    "title": "domain",
+                    "x-displayname": "Domain",
+                    "x-ves-example": "example1.com"
+                },
+                "endpoint_count": {
+                    "type": "integer",
+                    "description": " The total count of unique API endpoints discovered during the crawling process\n\nExample: - 42-",
+                    "title": "Number of endpoints discovered",
+                    "format": "int64",
+                    "x-displayname": "Number of EndPoints"
+                },
+                "error": {
+                    "type": "string",
+                    "description": " Error message if the scan encountered any issues\n\nExample: - \"Authentication failed\"-",
+                    "title": "error",
+                    "x-displayname": "Error Message",
+                    "x-ves-example": "Authentication failed"
+                },
+                "kafka_message_created_at": {
+                    "type": "string",
+                    "description": " Timestamp when the message was created in Kafka",
+                    "title": "kafka_message_created_at",
+                    "format": "date-time",
+                    "x-displayname": "Kafka Message Created At"
+                },
+                "last_status_update": {
+                    "type": "string",
+                    "description": " Timestamp of the last status update",
+                    "title": "last_status_update",
+                    "format": "date-time",
+                    "x-displayname": "Last Status Updated"
+                },
+                "status": {
+                    "description": " Current status of the scan\n\nExample: - \"Running\"-",
+                    "title": "status",
+                    "$ref": "#/definitions/api_crawlerScanStatus",
+                    "x-displayname": "Status",
+                    "x-ves-example": "Running"
+                }
+            }
+        },
+        "api_crawlerScanStatus": {
+            "type": "string",
+            "description": "Represents the current status of an API crawling scan\n\nDefault unspecified status\nScan has successfully completed\nScan is currently in progress\nScan has been initiated and is beginning execution\nScan is queued and waiting to start\nScan encountered an error",
+            "title": "Scan Status",
+            "enum": [
+                "UNSPECIFIED",
+                "COMPLETED",
+                "RUNNING",
+                "STARTED",
+                "PENDING",
+                "ERROR"
+            ],
+            "default": "UNSPECIFIED",
+            "x-displayname": "Scan Status",
+            "x-ves-proto-enum": "ves.io.schema.api_sec.api_crawler.ScanStatus"
+        },
         "api_crawlerSimpleLogin": {
             "type": "object",
             "title": "Simple Login",
@@ -2638,24 +2737,18 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.api_sec.api_crawler.SimpleLogin",
             "properties": {
                 "password": {
-                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Enter the password to assign credentials for the selected domain to crawl",
                     "title": "The custom domain password authentication",
                     "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Password",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Password"
                 },
                 "user": {
                     "type": "string",
-                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Enter the username to assign credentials for the selected domain to crawl\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "The custom domain user authentication",
                     "maxLength": 64,
                     "x-displayname": "User",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "64"
                     }
                 }
@@ -2667,6 +2760,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Status Object",
             "x-ves-proto-message": "ves.io.schema.api_sec.api_crawler.StatusObject",
             "properties": {
+                "api_crawling_status": {
+                    "description": " Status information about the API Crawling service including last update timestamp",
+                    "title": "api_crawling_status",
+                    "$ref": "#/definitions/api_crawlerApiCrawlingStatus",
+                    "x-displayname": "API Crawling Status"
+                },
                 "conditions": {
                     "type": "array",
                     "description": " Conditions reported by various component of the system.",
@@ -2674,7 +2773,8 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/schemaConditionType"
                     },
-                    "x-displayname": "Conditions"
+                    "x-displayname": "Conditions",
+                    "x-ves-deprecated": "Unused"
                 },
                 "metadata": {
                     "description": " Standard status's metadata",
@@ -2690,6 +2790,15 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                },
+                "scans": {
+                    "type": "array",
+                    "description": " List of current scanning status for all domains configured for API Crawling",
+                    "title": "scans_status",
+                    "items": {
+                        "$ref": "#/definitions/api_crawlerScanInfo"
+                    },
+                    "x-displayname": "Scans Status"
                 }
             }
         },

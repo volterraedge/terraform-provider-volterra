@@ -6583,6 +6583,103 @@ func SiteRegionLocatorValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SnatPoolConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SnatPoolConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SnatPoolConfiguration) DeepCopy() *SnatPoolConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SnatPoolConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SnatPoolConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SnatPoolConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SnatPoolConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSnatPoolConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSnatPoolConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SnatPoolConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SnatPoolConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetSnatPoolChoice().(type) {
+	case *SnatPoolConfiguration_NoSnatPool:
+		if fv, exists := v.FldValidators["snat_pool_choice.no_snat_pool"]; exists {
+			val := m.GetSnatPoolChoice().(*SnatPoolConfiguration_NoSnatPool).NoSnatPool
+			vOpts := append(opts,
+				db.WithValidateField("snat_pool_choice"),
+				db.WithValidateField("no_snat_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SnatPoolConfiguration_SnatPool:
+		if fv, exists := v.FldValidators["snat_pool_choice.snat_pool"]; exists {
+			val := m.GetSnatPoolChoice().(*SnatPoolConfiguration_SnatPool).SnatPool
+			vOpts := append(opts,
+				db.WithValidateField("snat_pool_choice"),
+				db.WithValidateField("snat_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSnatPoolConfigurationValidator = func() *ValidateSnatPoolConfiguration {
+	v := &ValidateSnatPoolConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["snat_pool_choice.snat_pool"] = PrefixStringListTypeValidator().Validate
+
+	return v
+}()
+
+func SnatPoolConfigurationValidator() db.Validator {
+	return DefaultSnatPoolConfigurationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SpecificRE) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -6969,6 +7066,203 @@ var DefaultTGWParamsTypeValidator = func() *ValidateTGWParamsType {
 
 func TGWParamsTypeValidator() db.Validator {
 	return DefaultTGWParamsTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ThirdPartyAuthorizationToken) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ThirdPartyAuthorizationToken) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ThirdPartyAuthorizationToken) DeepCopy() *ThirdPartyAuthorizationToken {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ThirdPartyAuthorizationToken{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ThirdPartyAuthorizationToken) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ThirdPartyAuthorizationToken) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ThirdPartyAuthorizationTokenValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateThirdPartyAuthorizationToken struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateThirdPartyAuthorizationToken) TenantValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tenant")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateThirdPartyAuthorizationToken) NamespaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateThirdPartyAuthorizationToken) VhNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vh_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateThirdPartyAuthorizationToken) AppTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for app_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateThirdPartyAuthorizationToken) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ThirdPartyAuthorizationToken)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ThirdPartyAuthorizationToken got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["app_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("app_type"))
+		if err := fv(ctx, m.GetAppType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant"))
+		if err := fv(ctx, m.GetTenant(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["vh_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("vh_name"))
+		if err := fv(ctx, m.GetVhName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultThirdPartyAuthorizationTokenValidator = func() *ValidateThirdPartyAuthorizationToken {
+	v := &ValidateThirdPartyAuthorizationToken{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTenant := v.TenantValidationRuleHandler
+	rulesTenant := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhTenant(rulesTenant)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ThirdPartyAuthorizationToken.tenant: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tenant"] = vFn
+
+	vrhNamespace := v.NamespaceValidationRuleHandler
+	rulesNamespace := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhNamespace(rulesNamespace)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ThirdPartyAuthorizationToken.namespace: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace"] = vFn
+
+	vrhVhName := v.VhNameValidationRuleHandler
+	rulesVhName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhVhName(rulesVhName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ThirdPartyAuthorizationToken.vh_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vh_name"] = vFn
+
+	vrhAppType := v.AppTypeValidationRuleHandler
+	rulesAppType := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAppType(rulesAppType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ThirdPartyAuthorizationToken.app_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["app_type"] = vFn
+
+	return v
+}()
+
+func ThirdPartyAuthorizationTokenValidator() db.Validator {
+	return DefaultThirdPartyAuthorizationTokenValidator
 }
 
 // augmented methods on protoc/std generated struct

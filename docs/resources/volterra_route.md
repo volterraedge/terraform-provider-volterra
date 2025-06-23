@@ -25,16 +25,6 @@ resource "volterra_route" "example" {
 
     inherited_bot_defense_javascript_injection = true
 
-    bot_defense_javascript_injection_inline_mode {
-      element_selector = "value"
-
-      insert_content = "value"
-
-      position = "position"
-    }
-
-    disable_custom_script = true
-
     disable_location_add = true
 
     match {
@@ -45,7 +35,7 @@ resource "volterra_route" "example" {
 
         // One of the arguments from this list "exact presence regex" can be set
 
-        presence = true
+        exact = "application/json"
       }
 
       http_method = "http_method"
@@ -71,6 +61,18 @@ resource "volterra_route" "example" {
       }
     }
 
+    request_cookies_to_add {
+      name = "value"
+
+      overwrite = true
+
+      // One of the arguments from this list "secret_value value" must be set
+
+      value = "value"
+    }
+
+    request_cookies_to_remove = ["request_cookies_to_remove"]
+
     request_headers_to_add {
       append = true
 
@@ -78,26 +80,52 @@ resource "volterra_route" "example" {
 
       // One of the arguments from this list "secret_value value" must be set
 
-      secret_value {
-        blindfold_secret_info_internal {
-          decryption_provider = "value"
-
-          location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-          store_provider = "value"
-        }
-
-        secret_encoding_type = "secret_encoding_type"
-
-        // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-        wingman_secret_info {
-          name = "ChargeBack-API-Key"
-        }
-      }
+      value = "value"
     }
 
     request_headers_to_remove = ["host"]
+
+    response_cookies_to_add {
+      // One of the arguments from this list "add_domain ignore_domain" can be set
+
+      ignore_domain = true
+
+      // One of the arguments from this list "add_expiry ignore_expiry" can be set
+
+      add_expiry = "add_expiry"
+
+      // One of the arguments from this list "add_httponly ignore_httponly" can be set
+
+      ignore_httponly = true
+
+      // One of the arguments from this list "ignore_max_age max_age_value" can be set
+
+      ignore_max_age = true
+      name = "value"
+      overwrite = true
+
+      // One of the arguments from this list "add_partitioned ignore_partitioned" can be set
+
+      ignore_partitioned = true
+
+      // One of the arguments from this list "add_path ignore_path" can be set
+
+      ignore_path = true
+
+      // One of the arguments from this list "ignore_samesite samesite_lax samesite_none samesite_strict" can be set
+
+      ignore_samesite = true
+
+      // One of the arguments from this list "add_secure ignore_secure" can be set
+
+      add_secure = true
+
+      // One of the arguments from this list "ignore_value secret_value value" can be set
+
+      ignore_value = true
+    }
+
+    response_cookies_to_remove = ["response_cookies_to_remove"]
 
     response_headers_to_add {
       append = true
@@ -113,21 +141,128 @@ resource "volterra_route" "example" {
 
     // One of the arguments from this list "route_destination route_direct_response route_redirect" must be set
 
-    route_direct_response {
-      response_body = "OK"
+    route_destination {
+      buffer_policy {
+        disabled = true
 
-      response_code = "200"
+        max_request_bytes = "2048"
+      }
+
+      // One of the arguments from this list "do_not_retract_cluster retract_cluster" can be set
+
+      retract_cluster = true
+      cors_policy {
+        allow_credentials = true
+
+        allow_headers = "value"
+
+        allow_methods = "GET"
+
+        allow_origin = ["value"]
+
+        allow_origin_regex = ["value"]
+
+        disabled = true
+
+        expose_headers = "value"
+
+        maximum_age = "-1"
+      }
+      csrf_policy {
+        // One of the arguments from this list "all_load_balancer_domains custom_domain_list disabled" must be set
+
+        all_load_balancer_domains = true
+      }
+      destinations {
+        cluster {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        endpoint_subsets = {
+          "key1" = "value1"
+        }
+
+        priority = "1"
+
+        weight = "10"
+      }
+      endpoint_subsets = {
+        "key1" = "value1"
+      }
+      hash_policy {
+        // One of the arguments from this list "cookie header_name source_ip" must be set
+
+        header_name = "host"
+
+        terminal = true
+      }
+
+      // One of the arguments from this list "auto_host_rewrite host_rewrite" must be set
+
+      host_rewrite = "one.volterra.com"
+      mirror_policy {
+        cluster {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        percent {
+          denominator = "denominator"
+
+          numerator = "5"
+        }
+      }
+      priority = "priority"
+      query_params {
+        // One of the arguments from this list "remove_all_params replace_params retain_all_params" must be set
+
+        remove_all_params = true
+      }
+      retry_policy {
+        back_off {
+          base_interval = "5"
+
+          max_interval = "60"
+        }
+
+        num_retries = "3"
+
+        per_try_timeout = "1000"
+
+        retriable_status_codes = ["403"]
+
+        retry_condition = ["5xx"]
+      }
+
+      // One of the arguments from this list "prefix_rewrite regex_rewrite" can be set
+
+      prefix_rewrite = "/"
+      spdy_config {
+        use_spdy = true
+      }
+      timeout = "2000"
+      web_socket_config {
+        use_websocket = true
+      }
     }
     service_policy {
-      // One of the arguments from this list "context_extensions disable" can be set
+      // One of the arguments from this list "disable" can be set
 
       disable = true
     }
-    skip_lb_override = true
     waf_type {
       // One of the arguments from this list "app_firewall disable_waf inherit_waf" must be set
 
-      inherit_waf = true
+      app_firewall {
+        app_firewall {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+      }
     }
   }
 }
@@ -165,17 +300,21 @@ List of routes to match for incoming request.
 
 `inherited_bot_defense_javascript_injection` - (Optional) Hence no custom configuration is applied on the route (`Bool`).
 
-`bot_defense_javascript_injection_inline_mode` - (Optional) Specifies whether bot defense js injection inline mode will be enabled. See [Routes Bot Defense Javascript Injection Inline Mode ](#routes-bot-defense-javascript-injection-inline-mode) below for details.(Deprecated)
-
-`disable_custom_script` - (Optional) disable execution of Javascript at route level, if it is configured at virtual-host level (`Bool`).(Deprecated)
-
 `disable_location_add` - (Optional) virtual-host level. This configuration is ignored on CE sites. (`Bool`).
 
 `match` - (Optional) route match condition. See [Routes Match ](#routes-match) below for details.
 
+`request_cookies_to_add` - (Optional) Cookies are key-value pairs to be added to HTTP request being routed towards upstream.. See [Routes Request Cookies To Add ](#routes-request-cookies-to-add) below for details.
+
+`request_cookies_to_remove` - (Optional) List of keys of Cookies to be removed from the HTTP request being sent towards upstream. (`String`).
+
 `request_headers_to_add` - (Optional) enclosing VirtualHost object level. See [Routes Request Headers To Add ](#routes-request-headers-to-add) below for details.
 
 `request_headers_to_remove` - (Optional) List of keys of Headers to be removed from the HTTP request being sent towards upstream. (`String`).
+
+`response_cookies_to_add` - (Optional) Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream.. See [Routes Response Cookies To Add ](#routes-response-cookies-to-add) below for details.
+
+`response_cookies_to_remove` - (Optional) List of name of Cookies to be removed from the HTTP response being sent towards downstream. Entire set-cookie header will be removed (`String`).
 
 `response_headers_to_add` - (Optional) enclosing VirtualHost object level. See [Routes Response Headers To Add ](#routes-response-headers-to-add) below for details.
 
@@ -190,8 +329,6 @@ List of routes to match for incoming request.
 `route_redirect` - (Optional) Send redirect response. See [Route Action Route Redirect ](#route-action-route-redirect) below for details.
 
 `service_policy` - (Optional) service policy configuration at route level which overrides configuration at virtual-host level. See [Routes Service Policy ](#routes-service-policy) below for details.
-
-`skip_lb_override` - (Optional) these routes. (`Bool`).(Deprecated)
 
 `waf_type` - (Optional) waf_type specified at route level overrides waf configuration at VirtualHost level. See [Routes Waf Type ](#routes-waf-type) below for details.
 
@@ -237,6 +374,14 @@ configuration..
 
 for route.
 
+### Domain Choice Ignore Domain
+
+Ignore max age attribute.
+
+### Expiry Choice Ignore Expiry
+
+Ignore expiry attribute.
+
 ### Httponly Add Httponly
 
 Add httponly attribute.
@@ -244,6 +389,14 @@ Add httponly attribute.
 ### Httponly Ignore Httponly
 
 Ignore httponly attribute.
+
+### Httponly Choice Add Httponly
+
+x-displayName: "Add".
+
+### Httponly Choice Ignore Httponly
+
+x-displayName: "Ignore".
 
 ### Javascript Tags Tag Attributes
 
@@ -305,6 +458,10 @@ List of (key, value) query parameters.
 
 `regex` - (Optional) Regex match value for the query parameter key (`String`).
 
+### Max Age Choice Ignore Max Age
+
+Ignore max age attribute.
+
 ### Mirror Policy Percent
 
 Percentage of requests to be mirrored.
@@ -312,6 +469,18 @@ Percentage of requests to be mirrored.
 `denominator` - (Required) Samples per denominator. numerator part per 100 or 10000 ro 1000000 (`String`).
 
 `numerator` - (Required) sampled parts per denominator. If denominator was 10000, then value of 5 will be 5 in 10000 (`Int`).
+
+### Partitioned Choice Add Partitioned
+
+x-displayName: "Add".
+
+### Partitioned Choice Ignore Partitioned
+
+x-displayName: "Ignore".
+
+### Path Choice Ignore Path
+
+Ignore path attribute.
 
 ### Policy Specifier Cookie
 
@@ -357,12 +526,6 @@ x-displayName: "Remove All Parameters".
 
 x-displayName: "Retain All Parameters".
 
-### Query Params Strip Query Params
-
-Specifies the list of query params to be removed. Not supported.
-
-`query_params` - (Optional) Query params keys to strip while manipulating the HTTP request (`String`).
-
 ### Ref
 
 Reference to another volterra object is shown like below
@@ -375,17 +538,17 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 ### Ref Type App Firewall
 
-A direct reference to an Application Firewall configuration object.
+A direct reference to an App Firewall configuration object.
 
 `app_firewall` - (Required) References to an Application Firewall configuration object. See [ref](#ref) below for details.
 
 ### Ref Type Disable Waf
 
-Any Application Firewall configuration will not be enforced.
+No App Firewall enforcement.
 
 ### Ref Type Inherit Waf
 
-Any Application Firewall configuration that was configured on a higher level will be enforced.
+Any App Firewall configuration that was configured on a higher level will be enforced.
 
 ### Retry Policy Back Off
 
@@ -457,21 +620,15 @@ Send redirect response.
 
 `host_redirect` - (Optional) swap host part of incoming URL in redirect URL (`String`).
 
-`port_redirect` - (Optional) Specify the port value to redirect to a URL with non default port(443) (`Int`).(Deprecated)
-
 `proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
-###### One of the arguments from this list "all_params, remove_all_params, replace_params, retain_all_params, strip_query_params" can be set
-
-`all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).(Deprecated)
+###### One of the arguments from this list "remove_all_params, replace_params, retain_all_params" can be set
 
 `remove_all_params` - (Optional) x-displayName: "Remove All Parameters" (`Bool`).
 
 `replace_params` - (Optional) x-displayName: "Replace All Parameters" (`String`).
 
 `retain_all_params` - (Optional) x-displayName: "Retain All Parameters" (`Bool`).
-
-`strip_query_params` - (Optional) Specifies the list of query params to be removed. Not supported. See [Query Params Strip Query Params ](#query-params-strip-query-params) below for details.(Deprecated)
 
 ###### One of the arguments from this list "path_redirect, prefix_rewrite" can be set
 
@@ -488,8 +645,6 @@ Route level buffer configuration overrides any configuration at VirtualHost leve
 `disabled` - (Optional) The value of this field is ignored for virtual-host (`Bool`).
 
 `max_request_bytes` - (Optional) manager will stop buffering and return a RequestEntityTooLarge (413) response. (`Int`).
-
-`max_request_time` - (Optional) request before returning a RequestTimeout (408) response (`Int`).(Deprecated)
 
 ### Route Destination Cors Policy
 
@@ -508,8 +663,6 @@ resources from a server at a different origin.
 `disabled` - (Optional) The value of this field is ignored for virtual-host (`Bool`).
 
 `expose_headers` - (Optional) Specifies the content for the access-control-expose-headers header (`String`).
-
-`max_age` - (Optional) Specifies the content for the access-control-max-age header (`String`).(Deprecated)
 
 `maximum_age` - (Optional) Maximum permitted value is 86400 seconds (24 hours) (`Int`).
 
@@ -585,8 +738,6 @@ Indicates that the route has a retry policy..
 
 `retry_condition` - (Required) (disconnect/reset/read timeout.) (`String`).
 
-`retry_on` - (Optional) matching one defined in retriable_status_codes field (`String`).(Deprecated)
-
 ### Route Destination Spdy Config
 
 SPDY configuration for each route.
@@ -607,16 +758,6 @@ would transform "/service/foo/v1/api" into "/v1/api/instance/foo"..
 
 `substitution` - (Optional) substitution operation to produce a new string. (`String`).
 
-### Routes Bot Defense Javascript Injection Inline Mode
-
-Specifies whether bot defense js injection inline mode will be enabled.
-
-`element_selector` - (Required) Element selector to insert into. (`String`).
-
-`insert_content` - (Optional) HTML content to insert. (`String`).
-
-`position` - (Optional) Position of HTML content to be inserted within HTML tag. (`String`).
-
 ### Routes Match
 
 route match condition.
@@ -631,6 +772,20 @@ route match condition.
 
 `query_params` - (Optional) List of (key, value) query parameters. See [Match Query Params ](#match-query-params) below for details.
 
+### Routes Request Cookies To Add
+
+Cookies are key-value pairs to be added to HTTP request being routed towards upstream..
+
+`name` - (Required) Name of the cookie in Cookie header. (`String`).
+
+`overwrite` - (Optional) Default value is do not overwrite (`Bool`).
+
+###### One of the arguments from this list "secret_value, value" must be set
+
+`secret_value` - (Optional) Secret Value of the Cookie header. See [Value Choice Secret Value ](#value-choice-secret-value) below for details.
+
+`value` - (Optional) Value of the Cookie header. (`String`).
+
 ### Routes Request Headers To Add
 
 enclosing VirtualHost object level.
@@ -644,6 +799,74 @@ enclosing VirtualHost object level.
 `secret_value` - (Optional) Secret Value of the HTTP header.. See [Value Choice Secret Value ](#value-choice-secret-value) below for details.
 
 `value` - (Optional) Value of the HTTP header. (`String`).
+
+### Routes Response Cookies To Add
+
+Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream..
+
+###### One of the arguments from this list "add_domain, ignore_domain" can be set
+
+`add_domain` - (Optional) Add domain attribute (`String`).
+
+`ignore_domain` - (Optional) Ignore max age attribute (`Bool`).
+
+###### One of the arguments from this list "add_expiry, ignore_expiry" can be set
+
+`add_expiry` - (Optional) Add expiry attribute (`String`).
+
+`ignore_expiry` - (Optional) Ignore expiry attribute (`Bool`).
+
+###### One of the arguments from this list "add_httponly, ignore_httponly" can be set
+
+`add_httponly` - (Optional) x-displayName: "Add" (`Bool`).
+
+`ignore_httponly` - (Optional) x-displayName: "Ignore" (`Bool`).
+
+###### One of the arguments from this list "ignore_max_age, max_age_value" can be set
+
+`ignore_max_age` - (Optional) Ignore max age attribute (`Bool`).
+
+`max_age_value` - (Optional) Add max age attribute (`Int`).
+
+`name` - (Required) Name of the cookie in Cookie header. (`String`).
+
+`overwrite` - (Optional) Default value is do not overwrite (`Bool`).
+
+###### One of the arguments from this list "add_partitioned, ignore_partitioned" can be set
+
+`add_partitioned` - (Optional) x-displayName: "Add" (`Bool`).
+
+`ignore_partitioned` - (Optional) x-displayName: "Ignore" (`Bool`).
+
+###### One of the arguments from this list "add_path, ignore_path" can be set
+
+`add_path` - (Optional) Add path attribute (`String`).
+
+`ignore_path` - (Optional) Ignore path attribute (`Bool`).
+
+###### One of the arguments from this list "ignore_samesite, samesite_lax, samesite_none, samesite_strict" can be set
+
+`ignore_samesite` - (Optional) Ignore Samesite attribute (`Bool`).
+
+`samesite_lax` - (Optional) Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests (`Bool`).
+
+`samesite_none` - (Optional) Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests (`Bool`).
+
+`samesite_strict` - (Optional) Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests (`Bool`).
+
+###### One of the arguments from this list "add_secure, ignore_secure" can be set
+
+`add_secure` - (Optional) x-displayName: "Add" (`Bool`).
+
+`ignore_secure` - (Optional) x-displayName: "Ignore" (`Bool`).
+
+###### One of the arguments from this list "ignore_value, secret_value, value" can be set
+
+`ignore_value` - (Optional) Ignore value of cookie (`Bool`).
+
+`secret_value` - (Optional) Secret Value of the Cookie header. See [Value Choice Secret Value ](#value-choice-secret-value) below for details.
+
+`value` - (Optional) Value of the Cookie header. (`String`).
 
 ### Routes Response Headers To Add
 
@@ -663,9 +886,7 @@ enclosing VirtualHost object level.
 
 service policy configuration at route level which overrides configuration at virtual-host level.
 
-###### One of the arguments from this list "context_extensions, disable" can be set
-
-`context_extensions` - (Optional) sending additional information to the external authorization server.. See [Service Policy Choice Context Extensions ](#service-policy-choice-context-extensions) below for details.(Deprecated)
+###### One of the arguments from this list "disable" can be set
 
 `disable` - (Optional) disable service policy at route level, if it is configured at virtual-host level (`Bool`).
 
@@ -675,11 +896,11 @@ waf_type specified at route level overrides waf configuration at VirtualHost lev
 
 ###### One of the arguments from this list "app_firewall, disable_waf, inherit_waf" must be set
 
-`app_firewall` - (Optional) A direct reference to an Application Firewall configuration object. See [Ref Type App Firewall ](#ref-type-app-firewall) below for details.
+`app_firewall` - (Optional) A direct reference to an App Firewall configuration object. See [Ref Type App Firewall ](#ref-type-app-firewall) below for details.
 
-`disable_waf` - (Optional) Any Application Firewall configuration will not be enforced (`Bool`).
+`disable_waf` - (Optional) No App Firewall enforcement (`Bool`).
 
-`inherit_waf` - (Optional) Any Application Firewall configuration that was configured on a higher level will be enforced (`Bool`).
+`inherit_waf` - (Optional) Any App Firewall configuration that was configured on a higher level will be enforced (`Bool`).
 
 ### Samesite Ignore Samesite
 
@@ -694,6 +915,22 @@ Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site
 Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests.
 
 ### Samesite Samesite Strict
+
+Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests.
+
+### Samesite Choice Ignore Samesite
+
+Ignore Samesite attribute.
+
+### Samesite Choice Samesite Lax
+
+Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests.
+
+### Samesite Choice Samesite None
+
+Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests.
+
+### Samesite Choice Samesite Strict
 
 Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests.
 
@@ -715,36 +952,6 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
-### Secret Info Oneof Vault Secret Info
-
-Vault Secret is used for the secrets managed by Hashicorp Vault.
-
-`key` - (Optional) If not provided entire secret will be returned. (`String`).
-
-`location` - (Required) Path to secret in Vault. (`String`).
-
-`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
-
-`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
-
-`version` - (Optional) If not provided latest version will be returned. (`Int`).
-
-### Secret Info Oneof Wingman Secret Info
-
-Secret is given as bootstrap secret in F5XC Security Sidecar.
-
-`name` - (Required) Name of the secret. (`String`).
-
-### Secret Value Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
 ### Secure Add Secure
 
 Add secure attribute.
@@ -753,29 +960,27 @@ Add secure attribute.
 
 Ignore secure attribute.
 
-### Service Policy Choice Context Extensions
+### Secure Choice Add Secure
 
-sending additional information to the external authorization server..
+x-displayName: "Add".
 
-`context_extensions` - (Optional) provide extra context for the external authorization server on specific virtual hosts or routes. (`String`).
+### Secure Choice Ignore Secure
+
+x-displayName: "Ignore".
+
+### Value Choice Ignore Value
+
+Ignore value of cookie.
 
 ### Value Choice Secret Value
 
-Secret Value of the HTTP header..
+Secret Value of the Cookie header.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Secret Value Blindfold Secret Info Internal ](#secret-value-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 Attribute Reference
 -------------------

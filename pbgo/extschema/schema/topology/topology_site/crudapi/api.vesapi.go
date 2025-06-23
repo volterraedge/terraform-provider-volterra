@@ -3271,10 +3271,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "DC Cluster Group"
                 },
                 "gateway_type": {
-                    "description": " Information related to the site provider",
-                    "title": "Provider Info",
+                    "description": " Gateway type of the site",
+                    "title": "Gateway Type",
                     "$ref": "#/definitions/topologyGatewayTypeEnum",
-                    "x-displayname": "Provider Info"
+                    "x-displayname": "Gateway Type"
                 },
                 "network": {
                     "type": "array",
@@ -3284,6 +3284,11 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Network"
+                },
+                "orchestration_mode": {
+                    "description": " x-displayName: Orchestration Mode\n Whether the site is managed or not managed",
+                    "title": "Orchestration Mode",
+                    "$ref": "#/definitions/topologyOrchestrationMode"
                 },
                 "site_type": {
                     "description": " Site type indicates whether the site is CUSTOMER_EDGE or REGIONAL_EDGE",
@@ -3419,6 +3424,18 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "topologyOrchestrationMode": {
+            "type": "string",
+            "description": "Orchestration mode of a given site\n\n - NOT_MANAGED: Unmanaged mode\n\nUnmanaged mode\n - MANAGED: Managed mode\n\nManaged mode",
+            "title": "Orchestration Mode",
+            "enum": [
+                "NOT_MANAGED",
+                "MANAGED"
+            ],
+            "default": "NOT_MANAGED",
+            "x-displayname": "Orchestration Mode",
+            "x-ves-proto-enum": "ves.io.schema.topology.OrchestrationMode"
+        },
         "topologyProviderInfo": {
             "type": "object",
             "description": "x-displayName: \"Provider Info\"\nCloud provider information",
@@ -3454,7 +3471,7 @@ var APISwaggerJSON string = `{
         },
         "topologyProviderType": {
             "type": "string",
-            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
+            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend\nCE on k8s backend",
             "title": "ProviderType",
             "enum": [
                 "PROVIDER_TYPE_UNSPECIFIED",
@@ -3466,7 +3483,8 @@ var APISwaggerJSON string = `{
                 "PROVIDER_TYPE_KVM",
                 "PROVIDER_TYPE_OCI",
                 "PROVIDER_TYPE_BAREMETAL",
-                "PROVIDER_TYPE_F5RSERIES"
+                "PROVIDER_TYPE_F5RSERIES",
+                "PROVIDER_TYPE_K8S"
             ],
             "default": "PROVIDER_TYPE_UNSPECIFIED",
             "x-displayname": "Provider Type",

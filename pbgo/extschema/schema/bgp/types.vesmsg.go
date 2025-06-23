@@ -343,7 +343,20 @@ func (m *BgpPeer) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetInterfaceRefsDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetInterfaceRefsDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetInterfaceRefsDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetRoutingPoliciesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetRoutingPoliciesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
 
 }
 
@@ -390,6 +403,24 @@ func (m *BgpPeer) GetInterfaceRefsDBEntries(ctx context.Context, d db.Interface)
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *BgpPeer) GetRoutingPoliciesDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetRoutingPolicies() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetRoutingPolicies().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRoutingPolicies().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "routing_policies." + dri.DRField
+	}
+	return drInfos, err
+
 }
 
 type ValidateBgpPeer struct {
@@ -669,6 +700,15 @@ func (v *ValidateBgpPeer) Validate(ctx context.Context, pm interface{}, opts ...
 
 	}
 
+	if fv, exists := v.FldValidators["routing_policies"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("routing_policies"))
+		if err := fv(ctx, m.GetRoutingPolicies(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -753,6 +793,8 @@ var DefaultBgpPeerValidator = func() *ValidateBgpPeer {
 	v.FldValidators["interface_refs"] = vFn
 
 	v.FldValidators["bgp_peer_address"] = ves_io_schema.IpAddressTypeValidator().Validate
+
+	v.FldValidators["routing_policies"] = BgpRoutePoliciesValidator().Validate
 
 	return v
 }()
@@ -888,6 +930,15 @@ func (v *ValidateBgpPeerStatusType) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["protocol_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("protocol_status"))
+		if err := fv(ctx, m.GetProtocolStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["received_prefix_count"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("received_prefix_count"))
@@ -933,6 +984,433 @@ func BgpPeerStatusTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *BgpRoutePolicies) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BgpRoutePolicies) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BgpRoutePolicies) DeepCopy() *BgpRoutePolicies {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BgpRoutePolicies{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BgpRoutePolicies) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BgpRoutePolicies) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BgpRoutePoliciesValidator().Validate(ctx, m, opts...)
+}
+
+func (m *BgpRoutePolicies) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetRoutePolicyDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *BgpRoutePolicies) GetRoutePolicyDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetRoutePolicy() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetRoutePolicy() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutePolicy() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("route_policy[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateBgpRoutePolicies struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBgpRoutePolicies) RoutePolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for route_policy")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*BgpRoutePolicy, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := BgpRoutePolicyValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for route_policy")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*BgpRoutePolicy)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*BgpRoutePolicy, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated route_policy")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items route_policy")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBgpRoutePolicies) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BgpRoutePolicies)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BgpRoutePolicies got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["route_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("route_policy"))
+		if err := fv(ctx, m.GetRoutePolicy(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBgpRoutePoliciesValidator = func() *ValidateBgpRoutePolicies {
+	v := &ValidateBgpRoutePolicies{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRoutePolicy := v.RoutePolicyValidationRuleHandler
+	rulesRoutePolicy := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "4",
+	}
+	vFn, err = vrhRoutePolicy(rulesRoutePolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BgpRoutePolicies.route_policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["route_policy"] = vFn
+
+	return v
+}()
+
+func BgpRoutePoliciesValidator() db.Validator {
+	return DefaultBgpRoutePoliciesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BgpRoutePolicy) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BgpRoutePolicy) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BgpRoutePolicy) DeepCopy() *BgpRoutePolicy {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BgpRoutePolicy{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BgpRoutePolicy) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BgpRoutePolicy) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BgpRoutePolicyValidator().Validate(ctx, m, opts...)
+}
+
+func (m *BgpRoutePolicy) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetObjectRefsDRefInfo()
+
+}
+
+func (m *BgpRoutePolicy) GetObjectRefsDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetObjectRefs()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("BgpRoutePolicy.object_refs[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "bgp_routing_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "object_refs",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetObjectRefsDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *BgpRoutePolicy) GetObjectRefsDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "bgp_routing_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: bgp_routing_policy")
+	}
+	for _, ref := range m.GetObjectRefs() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateBgpRoutePolicy struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBgpRoutePolicy) ObjectRefsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for object_refs")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for object_refs")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated object_refs")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items object_refs")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBgpRoutePolicy) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BgpRoutePolicy)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BgpRoutePolicy got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetDirection().(type) {
+	case *BgpRoutePolicy_Inbound:
+		if fv, exists := v.FldValidators["direction.inbound"]; exists {
+			val := m.GetDirection().(*BgpRoutePolicy_Inbound).Inbound
+			vOpts := append(opts,
+				db.WithValidateField("direction"),
+				db.WithValidateField("inbound"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BgpRoutePolicy_Outbound:
+		if fv, exists := v.FldValidators["direction.outbound"]; exists {
+			val := m.GetDirection().(*BgpRoutePolicy_Outbound).Outbound
+			vOpts := append(opts,
+				db.WithValidateField("direction"),
+				db.WithValidateField("outbound"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetNodeChoice().(type) {
+	case *BgpRoutePolicy_AllNodes:
+		if fv, exists := v.FldValidators["node_choice.all_nodes"]; exists {
+			val := m.GetNodeChoice().(*BgpRoutePolicy_AllNodes).AllNodes
+			vOpts := append(opts,
+				db.WithValidateField("node_choice"),
+				db.WithValidateField("all_nodes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BgpRoutePolicy_NodeName:
+		if fv, exists := v.FldValidators["node_choice.node_name"]; exists {
+			val := m.GetNodeChoice().(*BgpRoutePolicy_NodeName).NodeName
+			vOpts := append(opts,
+				db.WithValidateField("node_choice"),
+				db.WithValidateField("node_name"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["object_refs"]; exists {
+		vOpts := append(opts, db.WithValidateField("object_refs"))
+		if err := fv(ctx, m.GetObjectRefs(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBgpRoutePolicyValidator = func() *ValidateBgpRoutePolicy {
+	v := &ValidateBgpRoutePolicy{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhObjectRefs := v.ObjectRefsValidationRuleHandler
+	rulesObjectRefs := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+		"ves.io.schema.rules.repeated.min_items": "1",
+	}
+	vFn, err = vrhObjectRefs(rulesObjectRefs)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BgpRoutePolicy.object_refs: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["object_refs"] = vFn
+
+	return v
+}()
+
+func BgpRoutePolicyValidator() db.Validator {
+	return DefaultBgpRoutePolicyValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *BgpStatusType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -968,8 +1446,110 @@ func (m *BgpStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) er
 	return BgpStatusTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *BgpStatusType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetTunnelDRefInfo()
+
+}
+
+func (m *BgpStatusType) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetTunnel()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("BgpStatusType.tunnel[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tunnel.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "tunnel",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetTunnelDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *BgpStatusType) GetTunnelDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "tunnel.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: tunnel")
+	}
+	for _, ref := range m.GetTunnel() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
 type ValidateBgpStatusType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBgpStatusType) TunnelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for tunnel")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tunnel")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated tunnel")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items tunnel")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateBgpStatusType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -1016,12 +1596,39 @@ func (v *ValidateBgpStatusType) Validate(ctx context.Context, pm interface{}, op
 
 	}
 
+	if fv, exists := v.FldValidators["tunnel"]; exists {
+		vOpts := append(opts, db.WithValidateField("tunnel"))
+		if err := fv(ctx, m.GetTunnel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultBgpStatusTypeValidator = func() *ValidateBgpStatusType {
 	v := &ValidateBgpStatusType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTunnel := v.TunnelValidationRuleHandler
+	rulesTunnel := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhTunnel(rulesTunnel)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BgpStatusType.tunnel: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tunnel"] = vFn
 
 	v.FldValidators["peer_status_list"] = BgpPeerStatusTypeValidator().Validate
 
@@ -3496,6 +4103,87 @@ func InterfaceListValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *Nodes) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Nodes) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Nodes) DeepCopy() *Nodes {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Nodes{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Nodes) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Nodes) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NodesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNodes struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNodes) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Nodes)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Nodes got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["node"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node"))
+		for idx, item := range m.GetNode() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNodesValidator = func() *ValidateNodes {
+	v := &ValidateNodes{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func NodesValidator() db.Validator {
+	return DefaultNodesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *Peer) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -3550,7 +4238,48 @@ func (m *Peer) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetTypeChoiceDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetEnableChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetEnableChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetTypeChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTypeChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *Peer) GetEnableChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetEnableChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetEnableChoice().(type) {
+	case *Peer_Disable:
+
+		return nil, nil
+
+	case *Peer_RoutingPolicies:
+
+		drInfos, err := m.GetRoutingPolicies().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetRoutingPolicies().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "routing_policies." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
 
 }
 
@@ -3584,6 +4313,14 @@ func (m *Peer) GetTypeChoiceDRefInfo() ([]db.DRefInfo, error) {
 
 type ValidatePeer struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidatePeer) EnableChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for enable_choice")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidatePeer) PassiveChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -3635,6 +4372,51 @@ func (v *ValidatePeer) Validate(ctx context.Context, pm interface{}, opts ...db.
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["enable_choice"]; exists {
+		val := m.GetEnableChoice()
+		vOpts := append(opts,
+			db.WithValidateField("enable_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetEnableChoice().(type) {
+	case *Peer_Disable:
+		if fv, exists := v.FldValidators["enable_choice.disable"]; exists {
+			val := m.GetEnableChoice().(*Peer_Disable).Disable
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Peer_RoutingPolicies:
+		if fv, exists := v.FldValidators["enable_choice.routing_policies"]; exists {
+			val := m.GetEnableChoice().(*Peer_RoutingPolicies).RoutingPolicies
+			vOpts := append(opts,
+				db.WithValidateField("enable_choice"),
+				db.WithValidateField("routing_policies"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["label"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("label"))
+		if err := fv(ctx, m.GetLabel(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["metadata"]; exists {
@@ -3742,6 +4524,17 @@ var DefaultPeerValidator = func() *ValidatePeer {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
+	rulesEnableChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhEnableChoice(rulesEnableChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Peer.enable_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["enable_choice"] = vFn
+
 	vrhPassiveChoice := v.PassiveChoiceValidationRuleHandler
 	rulesPassiveChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -3774,6 +4567,8 @@ var DefaultPeerValidator = func() *ValidatePeer {
 		panic(errMsg)
 	}
 	v.FldValidators["metadata"] = vFn
+
+	v.FldValidators["enable_choice.routing_policies"] = BgpRoutePoliciesValidator().Validate
 
 	v.FldValidators["type_choice.external"] = PeerExternalValidator().Validate
 	v.FldValidators["type_choice.internal"] = PeerInternalValidator().Validate
@@ -4091,6 +4886,17 @@ func (v *ValidatePeerExternal) Validate(ctx context.Context, pm interface{}, opt
 			vOpts := append(opts,
 				db.WithValidateField("address_choice"),
 				db.WithValidateField("disable"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *PeerExternal_ExternalConnector:
+		if fv, exists := v.FldValidators["address_choice.external_connector"]; exists {
+			val := m.GetAddressChoice().(*PeerExternal_ExternalConnector).ExternalConnector
+			vOpts := append(opts,
+				db.WithValidateField("address_choice"),
+				db.WithValidateField("external_connector"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

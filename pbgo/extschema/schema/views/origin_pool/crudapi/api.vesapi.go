@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.origin_pool.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.origin_pool.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3318,7 +3318,7 @@ var APISwaggerJSON string = `{
                 },
                 "service_name": {
                     "type": "string",
-                    "description": " Consul service name of this origin server, including cluster-id.\n The format is servicename:cluster-id. If the servicename is \"frontend\",\n and cluster-id is \"prod\", then you will enter \"frontend:prod\".\n cluster-id is optional.\n\nExample: - \"matching:production\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Consul service name of this origin server will be listed, including cluster-id.\n The format is servicename:cluster-id.\n\nExample: - \"matching:production\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Service Name",
                     "x-displayname": "Service Name",
                     "x-ves-example": "matching:production",
@@ -3336,6 +3336,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "snat_pool": {
+                    "title": "SNAT Pool Configuration",
+                    "$ref": "#/definitions/viewsSnatPoolConfiguration",
+                    "x-displayname": "SNAT Pool Configuration"
                 }
             }
         },
@@ -3364,7 +3369,7 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with K8s service name and site information",
             "title": "OriginServerK8SService",
             "x-displayname": "K8s Service Name on given Sites",
-            "x-ves-displayorder": "10,2,3",
+            "x-ves-displayorder": "10,12,2,3",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\",\"vk8s_networks\"]",
             "x-ves-oneof-field-service_info": "[\"service_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerK8SService",
@@ -3381,9 +3386,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Outside Network"
                 },
+                "protocol": {
+                    "description": " Protocol to be used in the discovery.",
+                    "title": "Protocol",
+                    "$ref": "#/definitions/origin_poolProtocolType",
+                    "x-displayname": "Protocol"
+                },
                 "service_name": {
                     "type": "string",
-                    "description": "Exclusive with []\n K8s service name of the origin server, including the namespace and cluster-id\n The format is servicename.namespace:cluster-id. If the servicename is \"frontend\",\n namespace is \"speedtest\" and cluster-id is \"prod\", then you will enter \"frontend.speedtest:prod\".\n Both namespace and cluster-id are optional.\n\nExample: - \"matching.default:production\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ves_service_namespace_name: true\n",
+                    "description": "Exclusive with []\n K8s service name of the origin server will be listed, including the namespace and cluster-id.\n For vK8s services, you need to enter a string with the format servicename.namespace:cluster-id. If the servicename is \"frontend\",\n namespace is \"speedtest\" and cluster-id is \"prod\", then you will enter \"frontend.speedtest:prod\".\n Both namespace and cluster-id are optional.\n\nExample: - \"matching.default:production\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ves_service_namespace_name: true\n",
                     "title": "Service Name",
                     "x-displayname": "Service Name",
                     "x-ves-example": "matching.default:production",
@@ -3400,6 +3411,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "snat_pool": {
+                    "title": "SNAT Pool Configuration",
+                    "$ref": "#/definitions/viewsSnatPoolConfiguration",
+                    "x-displayname": "SNAT Pool Configuration"
                 },
                 "vk8s_networks": {
                     "description": "Exclusive with [inside_network outside_network]\n origin server are on vK8s network on the site",
@@ -3470,6 +3486,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "snat_pool": {
+                    "title": "SNAT Pool Configuration",
+                    "$ref": "#/definitions/viewsSnatPoolConfiguration",
+                    "x-displayname": "SNAT Pool Configuration"
                 }
             }
         },
@@ -3507,13 +3528,13 @@ var APISwaggerJSON string = `{
                 },
                 "refresh_interval": {
                     "type": "integer",
-                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 604800\n",
+                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 0,10-604800\n",
                     "title": "refresh_interval",
                     "format": "int64",
-                    "x-displayname": "DNS Refresh interval",
+                    "x-displayname": "DNS Refresh Interval",
                     "x-ves-example": "20",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "604800"
+                        "ves.io.schema.rules.uint32.ranges": "0,10-604800"
                     }
                 },
                 "segment": {
@@ -3535,6 +3556,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "snat_pool": {
+                    "title": "SNAT Pool Configuration",
+                    "$ref": "#/definitions/viewsSnatPoolConfiguration",
+                    "x-displayname": "SNAT Pool Configuration"
                 }
             }
         },
@@ -3595,13 +3621,13 @@ var APISwaggerJSON string = `{
                 },
                 "refresh_interval": {
                     "type": "integer",
-                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 604800\n",
+                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 0,10-604800\n",
                     "title": "refresh_interval",
                     "format": "int64",
-                    "x-displayname": "DNS Refresh interval",
+                    "x-displayname": "DNS Refresh Interval",
                     "x-ves-example": "20",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "604800"
+                        "ves.io.schema.rules.uint32.ranges": "0,10-604800"
                     }
                 }
             }
@@ -3754,6 +3780,18 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "origin_poolProtocolType": {
+            "type": "string",
+            "description": "Type of protocol\n\n - PROTOCOL_TCP: TCP\n\n - PROTOCOL_UDP: UDP\n",
+            "title": "Protocol Type",
+            "enum": [
+                "PROTOCOL_TCP",
+                "PROTOCOL_UDP"
+            ],
+            "default": "PROTOCOL_TCP",
+            "x-displayname": "Protocol Type",
+            "x-ves-proto-enum": "ves.io.schema.views.origin_pool.ProtocolType"
         },
         "origin_poolSpecType": {
             "type": "object",
@@ -4443,6 +4481,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -4562,6 +4607,28 @@ var APISwaggerJSON string = `{
             "default": "TLS_AUTO",
             "x-displayname": "TLS Protocol",
             "x-ves-proto-enum": "ves.io.schema.TlsProtocol"
+        },
+        "schemaUpstreamConnPoolReuseType": {
+            "type": "object",
+            "description": "Select upstream connection pool reuse state for every downstream connection. This configuration choice is for HTTP(S) LB only.",
+            "title": "UpstreamConnPoolReuseType",
+            "x-displayname": "Select upstream connection pool reuse state",
+            "x-ves-oneof-field-map_downstream_to_upstream_conn_pool_type": "[\"disable_conn_pool_reuse\",\"enable_conn_pool_reuse\"]",
+            "x-ves-proto-message": "ves.io.schema.UpstreamConnPoolReuseType",
+            "properties": {
+                "disable_conn_pool_reuse": {
+                    "description": "Exclusive with [enable_conn_pool_reuse]\n Open new upstream connection pool for every new downstream connection",
+                    "title": "disable_conn_pool_reuse",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Connection Pool Reuse"
+                },
+                "enable_conn_pool_reuse": {
+                    "description": "Exclusive with [disable_conn_pool_reuse]\n Reuse upstream connection pool for multiple downstream connections",
+                    "title": "enable_conn_pool_reuse",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable Connection Pool Reuse"
+                }
+            }
         },
         "schemaVaultSecretInfoType": {
             "type": "object",
@@ -4729,6 +4796,47 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsPrefixStringListType": {
+            "type": "object",
+            "description": "x-example: \"192.168.20.0/24\"\nList of IPv4 prefixes that represent an endpoint",
+            "title": "ipv4 prefix list",
+            "x-displayname": "IPv4 Prefix List",
+            "x-ves-proto-message": "ves.io.schema.views.PrefixStringListType",
+            "properties": {
+                "ipv6_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ipv6 prefixes",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Prefix List",
+                    "x-ves-example": "fd48:fa09:d9d4::/48",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "prefixes": {
+                    "type": "array",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ipv4 prefix list",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv4 Prefix List",
+                    "x-ves-example": "192.168.20.0/24",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "viewsSiteLocator": {
             "type": "object",
             "description": "This message defines a reference to a site or virtual site object",
@@ -4748,6 +4856,28 @@ var APISwaggerJSON string = `{
                     "title": "Virtual Site",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Virtual Site"
+                }
+            }
+        },
+        "viewsSnatPoolConfiguration": {
+            "type": "object",
+            "description": "Snat Pool configuration",
+            "title": "SnatPoolConfiguration",
+            "x-displayname": "Snat Pool",
+            "x-ves-oneof-field-snat_pool_choice": "[\"no_snat_pool\",\"snat_pool\"]",
+            "x-ves-proto-message": "ves.io.schema.views.SnatPoolConfiguration",
+            "properties": {
+                "no_snat_pool": {
+                    "description": "Exclusive with [snat_pool]\n No configured SNAT Pool to reach Origin Server",
+                    "title": "No SNAT Pool",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No SNAT Pool"
+                },
+                "snat_pool": {
+                    "description": "Exclusive with [no_snat_pool]\n Configure SNAT Pool to reach Origin Server",
+                    "title": "SNAT Pool",
+                    "$ref": "#/definitions/viewsPrefixStringListType",
+                    "x-displayname": "Configured SNAT Pool"
                 }
             }
         },
@@ -4898,6 +5028,12 @@ var APISwaggerJSON string = `{
                     "title": "Same as endpoint port",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Endpoint port"
+                },
+                "upstream_conn_pool_reuse_type": {
+                    "description": " Select upstream connection pool reuse state for every downstream connection\n This configuration choice is for HTTP(S) LB only.",
+                    "title": "Select upstream connection pool reuse state",
+                    "$ref": "#/definitions/schemaUpstreamConnPoolReuseType",
+                    "x-displayname": "Select upstream connection pool reuse state"
                 },
                 "use_tls": {
                     "description": "Exclusive with [no_tls]\n",

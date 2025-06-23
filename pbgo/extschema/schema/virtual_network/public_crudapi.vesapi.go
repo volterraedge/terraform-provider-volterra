@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/virtual_networks/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -1122,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.virtual_network.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.virtual_network.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2431,6 +2444,57 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaNodeInterfaceInfo": {
+            "type": "object",
+            "description": "On a multinode site, this list holds the nodes and corresponding tunnel transport interface",
+            "title": "NodeInterfaceInfo",
+            "x-displayname": "NodeInterfaceInfo",
+            "x-ves-proto-message": "ves.io.schema.NodeInterfaceInfo",
+            "properties": {
+                "interface": {
+                    "type": "array",
+                    "description": " Interface reference on this node\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Interface",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Interface",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "node": {
+                    "type": "string",
+                    "description": " Node name on this site\n\nExample: - \"master-0\"-",
+                    "title": "Node",
+                    "x-displayname": "Node",
+                    "x-ves-example": "master-0"
+                }
+            }
+        },
+        "schemaNodeInterfaceType": {
+            "type": "object",
+            "description": "On multinode site, this type holds the information about per node interfaces",
+            "title": "NodeInterfaceType",
+            "x-displayname": "NodeInterfaceType",
+            "x-ves-proto-message": "ves.io.schema.NodeInterfaceType",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "description": " On a multinode site, this list holds the nodes and corresponding networking_interface\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n",
+                    "title": "NodeInterfaceInfo",
+                    "maxItems": 8,
+                    "items": {
+                        "$ref": "#/definitions/schemaNodeInterfaceInfo"
+                    },
+                    "x-displayname": "Node Interface Info",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8"
+                    }
+                }
+            }
+        },
         "schemaObjectCreateMetaType": {
             "type": "object",
             "description": "ObjectCreateMetaType is metadata that can be specified in Create request of an object.",
@@ -2979,47 +3043,23 @@ var APISwaggerJSON string = `{
         },
         "schemaviewsObjectRefType": {
             "type": "object",
-            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "description": "x-displayName: \"Object reference\"\nThis type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
             "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
             "properties": {
                 "name": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
-                    "title": "name",
-                    "minLength": 1,
-                    "maxLength": 128,
-                    "x-displayname": "Name",
-                    "x-ves-example": "contacts-route",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "128",
-                        "ves.io.schema.rules.string.min_bytes": "1"
-                    }
+                    "description": "x-displayName: \"Name\"\nx-example: \"contacts-route\"\nx-required\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen name will hold the referred object's(e.g. route's) name.",
+                    "title": "name"
                 },
                 "namespace": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "namespace",
-                    "maxLength": 64,
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "64"
-                    }
+                    "description": "x-displayName: \"Namespace\"\nx-example: \"ns1\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen namespace will hold the referred object's(e.g. route's) namespace.",
+                    "title": "namespace"
                 },
                 "tenant": {
                     "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
-                    "title": "tenant",
-                    "maxLength": 64,
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_bytes": "64"
-                    }
+                    "description": "x-displayName: \"Tenant\"\nx-example: \"acmecorp\"\nWhen a configuration object(e.g. virtual_host) refers to another(e.g route)\nthen tenant will hold the referred object's(e.g. route's) tenant.",
+                    "title": "tenant"
                 }
             }
         },
@@ -3705,7 +3745,7 @@ var APISwaggerJSON string = `{
             "description": "Defines a static route, configuring a list of prefixes and a next-hop to be used for them",
             "title": "Static Route",
             "x-displayname": "Static Route",
-            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"interface\",\"ip_address\"]",
+            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"ip_address\",\"node_interface\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.StaticRouteViewType",
             "properties": {
                 "attrs": {
@@ -3723,20 +3763,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to the default gateway",
+                    "description": "Exclusive with [ip_address node_interface]\n Traffic matching the ip prefixes is sent to the default gateway",
                     "title": "Default Gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
-                "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
-                    "title": "Interface",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Interface"
-                },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [default_gateway node_interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP Address",
                     "x-displayname": "IP Address",
                     "x-ves-validation-rules": {
@@ -3762,6 +3796,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "node_interface": {
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
+                    "title": "Node Interface",
+                    "$ref": "#/definitions/schemaNodeInterfaceType",
+                    "x-displayname": "Node Interface"
                 }
             }
         },
@@ -3770,7 +3810,7 @@ var APISwaggerJSON string = `{
             "description": "Defines a static route of IPv6 prefixes, configuring a list of prefixes and a next-hop to be used for them",
             "title": "Static IPv6 Route",
             "x-displayname": "Static IPv6 Route",
-            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"interface\",\"ip_address\"]",
+            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"ip_address\",\"node_interface\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.StaticV6RouteViewType",
             "properties": {
                 "attrs": {
@@ -3788,20 +3828,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to the default gateway",
+                    "description": "Exclusive with [ip_address node_interface]\n Traffic matching the ip prefixes is sent to the default gateway",
                     "title": "Default Gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
-                "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
-                    "title": "Interface",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Interface"
-                },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": "Exclusive with [default_gateway node_interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IP Address",
                     "x-displayname": "IP Address",
                     "x-ves-validation-rules": {
@@ -3827,6 +3861,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "node_interface": {
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
+                    "title": "Node Interface",
+                    "$ref": "#/definitions/schemaNodeInterfaceType",
+                    "x-displayname": "Node Interface"
                 }
             }
         },

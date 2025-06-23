@@ -420,6 +420,10 @@ func (m *CbipCluster) Redact(ctx context.Context) error {
 		}
 	}
 
+	if err := m.GetAdminCredentials().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CbipCluster.admin_credentials")
+	}
+
 	return nil
 }
 
@@ -455,7 +459,38 @@ func (m *CbipCluster) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetCbipDevicesDRefInfo()
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetCbipCertificateAuthorityDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCbipCertificateAuthorityDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetCbipDevicesDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetCbipDevicesDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *CbipCluster) GetCbipCertificateAuthorityDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetCbipCertificateAuthority() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetCbipCertificateAuthority().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetCbipCertificateAuthority().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "cbip_certificate_authority." + dri.DRField
+	}
+	return drInfos, err
 
 }
 
@@ -554,6 +589,90 @@ func (v *ValidateCbipCluster) CbipDevicesValidationRuleHandler(rules map[string]
 	return validatorFn, nil
 }
 
+func (v *ValidateCbipCluster) CbipMgmtIpsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for cbip_mgmt_ips")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for cbip_mgmt_ips")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated cbip_mgmt_ips")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items cbip_mgmt_ips")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCbipCluster) AdminCredentialsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for admin_credentials")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := CbipAdminCredentialsValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCbipCluster) CbipCertificateAuthorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cbip_certificate_authority")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := CbipCertificateAuthorityValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCbipCluster) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CbipCluster)
 	if !ok {
@@ -568,9 +687,35 @@ func (v *ValidateCbipCluster) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["admin_credentials"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_credentials"))
+		if err := fv(ctx, m.GetAdminCredentials(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cbip_certificate_authority"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cbip_certificate_authority"))
+		if err := fv(ctx, m.GetCbipCertificateAuthority(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["cbip_devices"]; exists {
 		vOpts := append(opts, db.WithValidateField("cbip_devices"))
 		if err := fv(ctx, m.GetCbipDevices(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cbip_mgmt_ips"]; exists {
+		vOpts := append(opts, db.WithValidateField("cbip_mgmt_ips"))
+		if err := fv(ctx, m.GetCbipMgmtIps(), vOpts...); err != nil {
 			return err
 		}
 
@@ -580,6 +725,50 @@ func (v *ValidateCbipCluster) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("metadata"))
 		if err := fv(ctx, m.GetMetadata(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mgmt_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mgmt_port"))
+		if err := fv(ctx, m.GetMgmtPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetNamespaceMappingChoice().(type) {
+	case *CbipCluster_DefaultAll:
+		if fv, exists := v.FldValidators["namespace_mapping_choice.default_all"]; exists {
+			val := m.GetNamespaceMappingChoice().(*CbipCluster_DefaultAll).DefaultAll
+			vOpts := append(opts,
+				db.WithValidateField("namespace_mapping_choice"),
+				db.WithValidateField("default_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CbipCluster_NamespaceMapping:
+		if fv, exists := v.FldValidators["namespace_mapping_choice.namespace_mapping"]; exists {
+			val := m.GetNamespaceMappingChoice().(*CbipCluster_NamespaceMapping).NamespaceMapping
+			vOpts := append(opts,
+				db.WithValidateField("namespace_mapping_choice"),
+				db.WithValidateField("namespace_mapping"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["virtual_server_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("virtual_server_filter"))
+		if err := fv(ctx, m.GetVirtualServerFilter(), vOpts...); err != nil {
 			return err
 		}
 
@@ -623,6 +812,49 @@ var DefaultCbipClusterValidator = func() *ValidateCbipCluster {
 		panic(errMsg)
 	}
 	v.FldValidators["cbip_devices"] = vFn
+
+	vrhCbipMgmtIps := v.CbipMgmtIpsValidationRuleHandler
+	rulesCbipMgmtIps := map[string]string{
+		"ves.io.schema.rules.message.required":           "true",
+		"ves.io.schema.rules.repeated.items.string.ipv4": "true",
+		"ves.io.schema.rules.repeated.max_items":         "8",
+		"ves.io.schema.rules.repeated.min_items":         "1",
+		"ves.io.schema.rules.repeated.unique":            "true",
+	}
+	vFn, err = vrhCbipMgmtIps(rulesCbipMgmtIps)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CbipCluster.cbip_mgmt_ips: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cbip_mgmt_ips"] = vFn
+
+	vrhAdminCredentials := v.AdminCredentialsValidationRuleHandler
+	rulesAdminCredentials := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhAdminCredentials(rulesAdminCredentials)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CbipCluster.admin_credentials: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["admin_credentials"] = vFn
+
+	vrhCbipCertificateAuthority := v.CbipCertificateAuthorityValidationRuleHandler
+	rulesCbipCertificateAuthority := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCbipCertificateAuthority(rulesCbipCertificateAuthority)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CbipCluster.cbip_certificate_authority: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cbip_certificate_authority"] = vFn
+
+	v.FldValidators["namespace_mapping_choice.namespace_mapping"] = NamespaceMappingValidator().Validate
+
+	v.FldValidators["virtual_server_filter"] = VirtualServerFilterValidator().Validate
+
+	v.FldValidators["mgmt_port"] = ManagementPortValidator().Validate
 
 	return v
 }()
@@ -1463,6 +1695,32 @@ func (v *ValidateConsulDiscoveryType) Validate(ctx context.Context, pm interface
 
 	}
 
+	switch m.GetNamespaceMappingChoice().(type) {
+	case *ConsulDiscoveryType_DefaultAll:
+		if fv, exists := v.FldValidators["namespace_mapping_choice.default_all"]; exists {
+			val := m.GetNamespaceMappingChoice().(*ConsulDiscoveryType_DefaultAll).DefaultAll
+			vOpts := append(opts,
+				db.WithValidateField("namespace_mapping_choice"),
+				db.WithValidateField("default_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ConsulDiscoveryType_NamespaceMapping:
+		if fv, exists := v.FldValidators["namespace_mapping_choice.namespace_mapping"]; exists {
+			val := m.GetNamespaceMappingChoice().(*ConsulDiscoveryType_NamespaceMapping).NamespaceMapping
+			vOpts := append(opts,
+				db.WithValidateField("namespace_mapping_choice"),
+				db.WithValidateField("namespace_mapping"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["publish_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("publish_info"))
@@ -1508,6 +1766,8 @@ var DefaultConsulDiscoveryTypeValidator = func() *ValidateConsulDiscoveryType {
 		panic(errMsg)
 	}
 	v.FldValidators["publish_info"] = vFn
+
+	v.FldValidators["namespace_mapping_choice.namespace_mapping"] = ConsulNamespaceMappingValidator().Validate
 
 	return v
 }()
@@ -1646,6 +1906,270 @@ var DefaultConsulHttpBasicAuthInfoTypeValidator = func() *ValidateConsulHttpBasi
 
 func ConsulHttpBasicAuthInfoTypeValidator() db.Validator {
 	return DefaultConsulHttpBasicAuthInfoTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ConsulNamespaceMapping) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ConsulNamespaceMapping) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ConsulNamespaceMapping) DeepCopy() *ConsulNamespaceMapping {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ConsulNamespaceMapping{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ConsulNamespaceMapping) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ConsulNamespaceMapping) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ConsulNamespaceMappingValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateConsulNamespaceMapping struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateConsulNamespaceMapping) ItemsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for items")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ConsulNamespaceMappingItem, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ConsulNamespaceMappingItemValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for items")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ConsulNamespaceMappingItem)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ConsulNamespaceMappingItem, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated items")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items items")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateConsulNamespaceMapping) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ConsulNamespaceMapping)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ConsulNamespaceMapping got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["items"]; exists {
+		vOpts := append(opts, db.WithValidateField("items"))
+		if err := fv(ctx, m.GetItems(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultConsulNamespaceMappingValidator = func() *ValidateConsulNamespaceMapping {
+	v := &ValidateConsulNamespaceMapping{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhItems := v.ItemsValidationRuleHandler
+	rulesItems := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhItems(rulesItems)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ConsulNamespaceMapping.items: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["items"] = vFn
+
+	return v
+}()
+
+func ConsulNamespaceMappingValidator() db.Validator {
+	return DefaultConsulNamespaceMappingValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ConsulNamespaceMappingItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ConsulNamespaceMappingItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ConsulNamespaceMappingItem) DeepCopy() *ConsulNamespaceMappingItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ConsulNamespaceMappingItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ConsulNamespaceMappingItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ConsulNamespaceMappingItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ConsulNamespaceMappingItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateConsulNamespaceMappingItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateConsulNamespaceMappingItem) NamespaceRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace_regex")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateConsulNamespaceMappingItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ConsulNamespaceMappingItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ConsulNamespaceMappingItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace_regex"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace_regex"))
+		if err := fv(ctx, m.GetNamespaceRegex(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultConsulNamespaceMappingItemValidator = func() *ValidateConsulNamespaceMappingItem {
+	v := &ValidateConsulNamespaceMappingItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespaceRegex := v.NamespaceRegexValidationRuleHandler
+	rulesNamespaceRegex := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.regex":   "true",
+	}
+	vFn, err = vrhNamespaceRegex(rulesNamespaceRegex)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ConsulNamespaceMappingItem.namespace_regex: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace_regex"] = vFn
+
+	return v
+}()
+
+func ConsulNamespaceMappingItemValidator() db.Validator {
+	return DefaultConsulNamespaceMappingItemValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1887,6 +2411,10 @@ func (m *CreateSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *CreateSpecType_DiscoveryThirdParty:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -2054,6 +2582,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_DiscoveryThirdParty:
+		if fv, exists := v.FldValidators["discovery_choice.discovery_third_party"]; exists {
+			val := m.GetDiscoveryChoice().(*CreateSpecType_DiscoveryThirdParty).DiscoveryThirdParty
+			vOpts := append(opts,
+				db.WithValidateField("discovery_choice"),
+				db.WithValidateField("discovery_third_party"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2129,6 +2668,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["discovery_choice.discovery_k8s"] = K8SDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_consul"] = ConsulDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_cbip"] = CbipDiscoveryTypeValidator().Validate
+	v.FldValidators["discovery_choice.discovery_third_party"] = ThirdPartyDiscoveryTypeValidator().Validate
 
 	return v
 }()
@@ -2308,6 +2848,16 @@ func (v *ValidateDiscoveredServiceType) PortMapValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateDiscoveredServiceType) ClusterIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_ipv6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateDiscoveredServiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DiscoveredServiceType)
 	if !ok {
@@ -2326,6 +2876,15 @@ func (v *ValidateDiscoveredServiceType) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("cluster_ip"))
 		if err := fv(ctx, m.GetClusterIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cluster_ipv6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cluster_ipv6"))
+		if err := fv(ctx, m.GetClusterIpv6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2483,6 +3042,17 @@ var DefaultDiscoveredServiceTypeValidator = func() *ValidateDiscoveredServiceTyp
 	}
 	v.FldValidators["port_map"] = vFn
 
+	vrhClusterIpv6 := v.ClusterIpv6ValidationRuleHandler
+	rulesClusterIpv6 := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFn, err = vrhClusterIpv6(rulesClusterIpv6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DiscoveredServiceType.cluster_ipv6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_ipv6"] = vFn
+
 	v.FldValidators["ports"] = PortInfoTypeValidator().Validate
 
 	return v
@@ -2598,6 +3168,10 @@ func (m *GetSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "discovery_cbip." + dri.DRField
 		}
 		return drInfos, err
+
+	case *GetSpecType_DiscoveryThirdParty:
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -2782,6 +3356,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_DiscoveryThirdParty:
+		if fv, exists := v.FldValidators["discovery_choice.discovery_third_party"]; exists {
+			val := m.GetDiscoveryChoice().(*GetSpecType_DiscoveryThirdParty).DiscoveryThirdParty
+			vOpts := append(opts,
+				db.WithValidateField("discovery_choice"),
+				db.WithValidateField("discovery_third_party"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2886,6 +3471,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["discovery_choice.discovery_k8s"] = K8SDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_consul"] = ConsulDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_cbip"] = CbipDiscoveryTypeValidator().Validate
+	v.FldValidators["discovery_choice.discovery_third_party"] = ThirdPartyDiscoveryTypeValidator().Validate
 
 	v.FldValidators["publish_vip"] = VipDiscoveryInfoTypeValidator().Validate
 
@@ -3016,6 +3602,10 @@ func (m *GlobalSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 			dri.DRField = "discovery_cbip." + dri.DRField
 		}
 		return drInfos, err
+
+	case *GlobalSpecType_DiscoveryThirdParty:
+
+		return nil, nil
 
 	default:
 		return nil, nil
@@ -3294,6 +3884,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_DiscoveryThirdParty:
+		if fv, exists := v.FldValidators["discovery_choice.discovery_third_party"]; exists {
+			val := m.GetDiscoveryChoice().(*GlobalSpecType_DiscoveryThirdParty).DiscoveryThirdParty
+			vOpts := append(opts,
+				db.WithValidateField("discovery_choice"),
+				db.WithValidateField("discovery_third_party"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -3421,6 +4022,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["discovery_choice.discovery_k8s"] = K8SDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_consul"] = ConsulDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_cbip"] = CbipDiscoveryTypeValidator().Validate
+	v.FldValidators["discovery_choice.discovery_third_party"] = ThirdPartyDiscoveryTypeValidator().Validate
 
 	v.FldValidators["publish_vip"] = VipDiscoveryInfoTypeValidator().Validate
 
@@ -3916,6 +4518,32 @@ func (v *ValidateK8SDiscoveryType) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	switch m.GetNamespaceMappingChoice().(type) {
+	case *K8SDiscoveryType_DefaultAll:
+		if fv, exists := v.FldValidators["namespace_mapping_choice.default_all"]; exists {
+			val := m.GetNamespaceMappingChoice().(*K8SDiscoveryType_DefaultAll).DefaultAll
+			vOpts := append(opts,
+				db.WithValidateField("namespace_mapping_choice"),
+				db.WithValidateField("default_all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *K8SDiscoveryType_NamespaceMapping:
+		if fv, exists := v.FldValidators["namespace_mapping_choice.namespace_mapping"]; exists {
+			val := m.GetNamespaceMappingChoice().(*K8SDiscoveryType_NamespaceMapping).NamespaceMapping
+			vOpts := append(opts,
+				db.WithValidateField("namespace_mapping_choice"),
+				db.WithValidateField("namespace_mapping"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["publish_info"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("publish_info"))
@@ -3962,11 +4590,277 @@ var DefaultK8SDiscoveryTypeValidator = func() *ValidateK8SDiscoveryType {
 	}
 	v.FldValidators["publish_info"] = vFn
 
+	v.FldValidators["namespace_mapping_choice.namespace_mapping"] = K8SNamespaceMappingValidator().Validate
+
 	return v
 }()
 
 func K8SDiscoveryTypeValidator() db.Validator {
 	return DefaultK8SDiscoveryTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *K8SNamespaceMapping) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *K8SNamespaceMapping) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *K8SNamespaceMapping) DeepCopy() *K8SNamespaceMapping {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &K8SNamespaceMapping{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *K8SNamespaceMapping) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *K8SNamespaceMapping) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return K8SNamespaceMappingValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateK8SNamespaceMapping struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateK8SNamespaceMapping) ItemsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for items")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*K8SNamespaceMappingItem, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := K8SNamespaceMappingItemValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for items")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*K8SNamespaceMappingItem)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*K8SNamespaceMappingItem, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated items")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items items")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateK8SNamespaceMapping) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*K8SNamespaceMapping)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *K8SNamespaceMapping got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["items"]; exists {
+		vOpts := append(opts, db.WithValidateField("items"))
+		if err := fv(ctx, m.GetItems(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultK8SNamespaceMappingValidator = func() *ValidateK8SNamespaceMapping {
+	v := &ValidateK8SNamespaceMapping{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhItems := v.ItemsValidationRuleHandler
+	rulesItems := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhItems(rulesItems)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for K8SNamespaceMapping.items: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["items"] = vFn
+
+	return v
+}()
+
+func K8SNamespaceMappingValidator() db.Validator {
+	return DefaultK8SNamespaceMappingValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *K8SNamespaceMappingItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *K8SNamespaceMappingItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *K8SNamespaceMappingItem) DeepCopy() *K8SNamespaceMappingItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &K8SNamespaceMappingItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *K8SNamespaceMappingItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *K8SNamespaceMappingItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return K8SNamespaceMappingItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateK8SNamespaceMappingItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateK8SNamespaceMappingItem) NamespaceRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for namespace_regex")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateK8SNamespaceMappingItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*K8SNamespaceMappingItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *K8SNamespaceMappingItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace_regex"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace_regex"))
+		if err := fv(ctx, m.GetNamespaceRegex(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultK8SNamespaceMappingItemValidator = func() *ValidateK8SNamespaceMappingItem {
+	v := &ValidateK8SNamespaceMappingItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNamespaceRegex := v.NamespaceRegexValidationRuleHandler
+	rulesNamespaceRegex := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+		"ves.io.schema.rules.string.regex":   "true",
+	}
+	vFn, err = vrhNamespaceRegex(rulesNamespaceRegex)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for K8SNamespaceMappingItem.namespace_regex: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["namespace_regex"] = vFn
+
+	return v
+}()
+
+func K8SNamespaceMappingItemValidator() db.Validator {
+	return DefaultK8SNamespaceMappingItemValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -4236,6 +5130,114 @@ func K8SVipDiscoveryInfoTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ManagementPort) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ManagementPort) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ManagementPort) DeepCopy() *ManagementPort {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ManagementPort{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ManagementPort) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ManagementPort) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ManagementPortValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateManagementPort struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateManagementPort) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateManagementPort) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ManagementPort)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ManagementPort got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultManagementPortValidator = func() *ValidateManagementPort {
+	v := &ValidateManagementPort{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "1",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ManagementPort.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
+
+	return v
+}()
+
+func ManagementPortValidator() db.Validator {
+	return DefaultManagementPortValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *NamespaceMapping) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -4362,7 +5364,9 @@ var DefaultNamespaceMappingValidator = func() *ValidateNamespaceMapping {
 
 	vrhItems := v.ItemsValidationRuleHandler
 	rulesItems := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.min_items": "1",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhItems(rulesItems)
@@ -4861,6 +5865,10 @@ func (m *ReplaceSpecType) GetDiscoveryChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *ReplaceSpecType_DiscoveryThirdParty:
+
+		return nil, nil
+
 	default:
 		return nil, nil
 	}
@@ -5028,6 +6036,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_DiscoveryThirdParty:
+		if fv, exists := v.FldValidators["discovery_choice.discovery_third_party"]; exists {
+			val := m.GetDiscoveryChoice().(*ReplaceSpecType_DiscoveryThirdParty).DiscoveryThirdParty
+			vOpts := append(opts,
+				db.WithValidateField("discovery_choice"),
+				db.WithValidateField("discovery_third_party"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -5103,6 +6122,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["discovery_choice.discovery_k8s"] = K8SDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_consul"] = ConsulDiscoveryTypeValidator().Validate
 	v.FldValidators["discovery_choice.discovery_cbip"] = CbipDiscoveryTypeValidator().Validate
+	v.FldValidators["discovery_choice.discovery_third_party"] = ThirdPartyDiscoveryTypeValidator().Validate
 
 	return v
 }()
@@ -5468,6 +6488,222 @@ var DefaultTLSClientConfigTypeValidator = func() *ValidateTLSClientConfigType {
 
 func TLSClientConfigTypeValidator() db.Validator {
 	return DefaultTLSClientConfigTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ThirdPartyDiscoveryType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ThirdPartyDiscoveryType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ThirdPartyDiscoveryType) DeepCopy() *ThirdPartyDiscoveryType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ThirdPartyDiscoveryType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ThirdPartyDiscoveryType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ThirdPartyDiscoveryType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ThirdPartyDiscoveryTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateThirdPartyDiscoveryType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateThirdPartyDiscoveryType) ApplicationsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for applications")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for applications")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated applications")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items applications")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateThirdPartyDiscoveryType) SourceCidrValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for source_cidr")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for source_cidr")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated source_cidr")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items source_cidr")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateThirdPartyDiscoveryType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ThirdPartyDiscoveryType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ThirdPartyDiscoveryType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["applications"]; exists {
+		vOpts := append(opts, db.WithValidateField("applications"))
+		if err := fv(ctx, m.GetApplications(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["expiration_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiration_timestamp"))
+		if err := fv(ctx, m.GetExpirationTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["source_cidr"]; exists {
+		vOpts := append(opts, db.WithValidateField("source_cidr"))
+		if err := fv(ctx, m.GetSourceCidr(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultThirdPartyDiscoveryTypeValidator = func() *ValidateThirdPartyDiscoveryType {
+	v := &ValidateThirdPartyDiscoveryType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhApplications := v.ApplicationsValidationRuleHandler
+	rulesApplications := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "320",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+		"ves.io.schema.rules.string.ip_prefix":   "true",
+	}
+	vFn, err = vrhApplications(rulesApplications)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ThirdPartyDiscoveryType.applications: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["applications"] = vFn
+
+	vrhSourceCidr := v.SourceCidrValidationRuleHandler
+	rulesSourceCidr := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "5",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+		"ves.io.schema.rules.string.ip_prefix":   "true",
+	}
+	vFn, err = vrhSourceCidr(rulesSourceCidr)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ThirdPartyDiscoveryType.source_cidr: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["source_cidr"] = vFn
+
+	return v
+}()
+
+func ThirdPartyDiscoveryTypeValidator() db.Validator {
+	return DefaultThirdPartyDiscoveryTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -5970,6 +7206,7 @@ var DefaultVirtualServerFilterValidator = func() *ValidateVirtualServerFilter {
 	rulesPortRanges := map[string]string{
 		"ves.io.schema.rules.string.max_len":                "512",
 		"ves.io.schema.rules.string.max_ports":              "1024",
+		"ves.io.schema.rules.string.port_range_list":        "true",
 		"ves.io.schema.rules.string.unique_port_range_list": "true",
 	}
 	vFn, err = vrhPortRanges(rulesPortRanges)
@@ -6036,6 +7273,9 @@ func (r *CreateSpecType) SetDiscoveryChoiceToGlobalSpecType(o *GlobalSpecType) e
 	case *CreateSpecType_DiscoveryK8S:
 		o.DiscoveryChoice = &GlobalSpecType_DiscoveryK8S{DiscoveryK8S: of.DiscoveryK8S}
 
+	case *CreateSpecType_DiscoveryThirdParty:
+		o.DiscoveryChoice = &GlobalSpecType_DiscoveryThirdParty{DiscoveryThirdParty: of.DiscoveryThirdParty}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -6055,6 +7295,9 @@ func (r *CreateSpecType) GetDiscoveryChoiceFromGlobalSpecType(o *GlobalSpecType)
 
 	case *GlobalSpecType_DiscoveryK8S:
 		r.DiscoveryChoice = &CreateSpecType_DiscoveryK8S{DiscoveryK8S: of.DiscoveryK8S}
+
+	case *GlobalSpecType_DiscoveryThirdParty:
+		r.DiscoveryChoice = &CreateSpecType_DiscoveryThirdParty{DiscoveryThirdParty: of.DiscoveryThirdParty}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6149,6 +7392,9 @@ func (r *GetSpecType) SetDiscoveryChoiceToGlobalSpecType(o *GlobalSpecType) erro
 	case *GetSpecType_DiscoveryK8S:
 		o.DiscoveryChoice = &GlobalSpecType_DiscoveryK8S{DiscoveryK8S: of.DiscoveryK8S}
 
+	case *GetSpecType_DiscoveryThirdParty:
+		o.DiscoveryChoice = &GlobalSpecType_DiscoveryThirdParty{DiscoveryThirdParty: of.DiscoveryThirdParty}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -6168,6 +7414,9 @@ func (r *GetSpecType) GetDiscoveryChoiceFromGlobalSpecType(o *GlobalSpecType) er
 
 	case *GlobalSpecType_DiscoveryK8S:
 		r.DiscoveryChoice = &GetSpecType_DiscoveryK8S{DiscoveryK8S: of.DiscoveryK8S}
+
+	case *GlobalSpecType_DiscoveryThirdParty:
+		r.DiscoveryChoice = &GetSpecType_DiscoveryThirdParty{DiscoveryThirdParty: of.DiscoveryThirdParty}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -6266,6 +7515,9 @@ func (r *ReplaceSpecType) SetDiscoveryChoiceToGlobalSpecType(o *GlobalSpecType) 
 	case *ReplaceSpecType_DiscoveryK8S:
 		o.DiscoveryChoice = &GlobalSpecType_DiscoveryK8S{DiscoveryK8S: of.DiscoveryK8S}
 
+	case *ReplaceSpecType_DiscoveryThirdParty:
+		o.DiscoveryChoice = &GlobalSpecType_DiscoveryThirdParty{DiscoveryThirdParty: of.DiscoveryThirdParty}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -6285,6 +7537,9 @@ func (r *ReplaceSpecType) GetDiscoveryChoiceFromGlobalSpecType(o *GlobalSpecType
 
 	case *GlobalSpecType_DiscoveryK8S:
 		r.DiscoveryChoice = &ReplaceSpecType_DiscoveryK8S{DiscoveryK8S: of.DiscoveryK8S}
+
+	case *GlobalSpecType_DiscoveryThirdParty:
+		r.DiscoveryChoice = &ReplaceSpecType_DiscoveryThirdParty{DiscoveryThirdParty: of.DiscoveryThirdParty}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)

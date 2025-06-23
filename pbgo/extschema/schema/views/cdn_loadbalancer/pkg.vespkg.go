@@ -48,19 +48,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNLogAggregationResponse"] = CDNLogAggregationResponseValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CDNLogResponse"] = CDNLogResponseValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.FieldAggregation"] = FieldAggregationValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.GetServiceOperationReq"] = GetServiceOperationReqValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.GetServiceOperationRsp"] = GetServiceOperationRspValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.LilacCDNAccessLogsResponseData"] = LilacCDNAccessLogsResponseDataValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeRequest"] = LilacCDNCachePurgeRequestValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.LilacCDNCachePurgeResponse"] = LilacCDNCachePurgeResponseValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsRequest"] = LilacCDNMetricsRequestValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.LilacCDNMetricsResponse"] = LilacCDNMetricsResponseValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsReq"] = ListServiceOperationsReqValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.ListServiceOperationsRsp"] = ListServiceOperationsRspValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.PurgeOperationItem"] = PurgeOperationItemValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.ServiceOperationItem"] = ServiceOperationItemValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.ServiceOperationsItem"] = ServiceOperationsItemValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.ServiceOperationsTimeRange"] = ServiceOperationsTimeRangeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.SubscribeRequest"] = SubscribeRequestValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.SubscribeResponse"] = SubscribeResponseValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.UnsubscribeRequest"] = UnsubscribeRequestValidator()
@@ -90,8 +80,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.cdn_loadbalancer.CdnOriginPoolType"] = CdnOriginPoolTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CommonSecurityControls"] = CommonSecurityControlsValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.CreateSpecType"] = CreateSpecTypeValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.DefaultCacheAction"] = DefaultCacheActionValidator()
-	vr["ves.io.schema.views.cdn_loadbalancer.DefaultCacheTTLProps"] = DefaultCacheTTLPropsValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.GeoFilteringOptions"] = GeoFilteringOptionsValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.views.cdn_loadbalancer.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -155,11 +143,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense",
-			AddonServices: []string{"shape-bot,f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense_advanced",
-			AddonServices: []string{"shape-bot,f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.challenge_type.policy_based_challenge.rule_list.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
@@ -167,7 +155,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.client_side_defense_choice.client_side_defense",
-			AddonServices: []string{"client-side-defense"},
+			AddonServices: []string{"f5xc-client-side-defense-standard"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.ddos_mitigation_rules.mitigation_choice.ip_prefix_list.ipv6_prefixes",
@@ -316,10 +304,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.api_discovery_on_cache_miss",
 		"spec.api_specification_on_cache_miss",
 		"spec.app_firewall_on_cache_miss",
-		"spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"spec.cache_rules.#",
 		"spec.challenge_on_cache_miss",
 		"spec.default_cache_action.eligible_for_cache",
 		"spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -336,10 +321,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.api_discovery_on_cache_miss",
 		"spec.api_specification_on_cache_miss",
 		"spec.app_firewall_on_cache_miss",
-		"spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"spec.cache_rules.#",
 		"spec.challenge_on_cache_miss",
 		"spec.default_cache_action.eligible_for_cache",
 		"spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -486,6 +468,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.policy_based_challenge.rule_list.rules.#.spec.client_name_matcher",
 		"spec.policy_based_challenge.rule_list.rules.#.spec.ja4_tls_fingerprint",
 		"spec.trusted_clients.#.metadata.disable",
+		"spec.waf_exclusion",
 		"spec.waf_exclusion_rules.#.metadata.disable",
 	}
 
@@ -758,10 +741,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"create_form.spec.api_discovery_on_cache_miss",
 		"create_form.spec.api_specification_on_cache_miss",
 		"create_form.spec.app_firewall_on_cache_miss",
-		"create_form.spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"create_form.spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"create_form.spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"create_form.spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"create_form.spec.cache_rules.#",
 		"create_form.spec.challenge_on_cache_miss",
 		"create_form.spec.default_cache_action.eligible_for_cache",
 		"create_form.spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -775,10 +755,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"replace_form.spec.api_discovery_on_cache_miss",
 		"replace_form.spec.api_specification_on_cache_miss",
 		"replace_form.spec.app_firewall_on_cache_miss",
-		"replace_form.spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"replace_form.spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"replace_form.spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"replace_form.spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"replace_form.spec.cache_rules.#",
 		"replace_form.spec.challenge_on_cache_miss",
 		"replace_form.spec.default_cache_action.eligible_for_cache",
 		"replace_form.spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -792,10 +769,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.api_discovery_on_cache_miss",
 		"spec.api_specification_on_cache_miss",
 		"spec.app_firewall_on_cache_miss",
-		"spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"spec.cache_rules.#",
 		"spec.challenge_on_cache_miss",
 		"spec.default_cache_action.eligible_for_cache",
 		"spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -805,6 +779,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.more_option",
 		"spec.other_settings.geo_filtering",
 		"spec.other_settings.ip_filtering",
+		"status.#.site_status",
+		"status.#.status",
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.cdn_loadbalancer.API.Get"] = []svcfw.EnvironmentField{
@@ -1199,10 +1175,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.get_spec.api_discovery_on_cache_miss",
 		"items.#.get_spec.api_specification_on_cache_miss",
 		"items.#.get_spec.app_firewall_on_cache_miss",
-		"items.#.get_spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"items.#.get_spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"items.#.get_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"items.#.get_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"items.#.get_spec.cache_rules.#",
 		"items.#.get_spec.challenge_on_cache_miss",
 		"items.#.get_spec.default_cache_action.eligible_for_cache",
 		"items.#.get_spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -1212,6 +1185,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.get_spec.more_option",
 		"items.#.get_spec.other_settings.geo_filtering",
 		"items.#.get_spec.other_settings.ip_filtering",
+		"items.#.status_set.#.site_status",
+		"items.#.status_set.#.status",
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.cdn_loadbalancer.API.List"] = []svcfw.EnvironmentField{
@@ -1372,11 +1347,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense",
-			AddonServices: []string{"shape-bot,f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense_advanced",
-			AddonServices: []string{"shape-bot,f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.challenge_type.policy_based_challenge.rule_list.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
@@ -1384,7 +1359,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.client_side_defense_choice.client_side_defense",
-			AddonServices: []string{"client-side-defense"},
+			AddonServices: []string{"f5xc-client-side-defense-standard"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.ddos_mitigation_rules.mitigation_choice.ip_prefix_list.ipv6_prefixes",
@@ -1533,10 +1508,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.api_discovery_on_cache_miss",
 		"spec.api_specification_on_cache_miss",
 		"spec.app_firewall_on_cache_miss",
-		"spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"spec.cache_rules.#",
 		"spec.challenge_on_cache_miss",
 		"spec.default_cache_action.eligible_for_cache",
 		"spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -1683,6 +1655,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.policy_based_challenge.rule_list.rules.#.spec.client_name_matcher",
 		"spec.policy_based_challenge.rule_list.rules.#.spec.ja4_tls_fingerprint",
 		"spec.trusted_clients.#.metadata.disable",
+		"spec.waf_exclusion",
 		"spec.waf_exclusion_rules.#.metadata.disable",
 	}
 

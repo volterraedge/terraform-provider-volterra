@@ -1945,6 +1945,7 @@ func (c *CustomAPIRestClient) doRPCUpdateIDMSettings(ctx context.Context, callOp
 		q.Add("basic_configuration", fmt.Sprintf("%v", req.BasicConfiguration))
 		q.Add("brute_force_detection_settings", fmt.Sprintf("%v", req.BruteForceDetectionSettings))
 		q.Add("password_policy", fmt.Sprintf("%v", req.PasswordPolicy))
+		q.Add("session_management", fmt.Sprintf("%v", req.SessionManagement))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -6195,6 +6196,42 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "tenant_configurationSessionManagement": {
+            "type": "object",
+            "title": "SessionManagement",
+            "x-displayname": "SessionManagement",
+            "x-ves-proto-message": "ves.io.schema.views.tenant_configuration.SessionManagement",
+            "properties": {
+                "cookie_expiry": {
+                    "type": "integer",
+                    "description": " Session cookie expiry in seconds.\n The user will be logged-out after these many seconds, if inactive on the console. \n\nExample: - \"900\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 60\n  ves.io.schema.rules.uint32.lte: 86400\n",
+                    "title": "Session Cookie Expiry",
+                    "format": "int64",
+                    "x-displayname": "Session Cookie Expiry",
+                    "x-ves-example": "900",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "60",
+                        "ves.io.schema.rules.uint32.lte": "86400"
+                    }
+                },
+                "session_expiry": {
+                    "type": "integer",
+                    "description": " Maximum session expiry in seconds.\n The user will be prompted for a re-login after this interval in spite of being active on the console\n\nExample: - \"86400\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 60\n  ves.io.schema.rules.uint32.lte: 86400\n",
+                    "title": "Maximum Session Expiry",
+                    "format": "int64",
+                    "x-displayname": "Maximum Session Expiry",
+                    "x-ves-example": "86400",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "60",
+                        "ves.io.schema.rules.uint32.lte": "86400"
+                    }
+                }
+            }
+        },
         "viewstenant_configurationGlobalSpecType": {
             "type": "object",
             "description": "Shape of the tenant configuration specification",
@@ -6219,6 +6256,12 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Password Policy",
                     "$ref": "#/definitions/tenant_configurationPasswordPolicy",
                     "x-displayname": "Password Policy"
+                },
+                "session_management": {
+                    "description": " Session management allows you to configure the session attributes such as cookie expiry, etc.",
+                    "title": "Session Managemement",
+                    "$ref": "#/definitions/tenant_configurationSessionManagement",
+                    "x-displayname": "Session Managemement"
                 }
             }
         }

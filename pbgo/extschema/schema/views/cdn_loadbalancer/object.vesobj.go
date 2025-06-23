@@ -77,6 +77,12 @@ func LocateObject(ctx context.Context, locator db.EntryLocator, uid, tenant, nam
 	return obj, nil
 }
 
+func (o *Object) SetRevision(r int64) {
+	if o.SystemMetadata != nil {
+		o.SystemMetadata.SetRevision(r)
+	}
+}
+
 func FindObject(ctx context.Context, finder db.EntryFinder, key string, opts ...db.FindEntryOpt) (*DBObject, bool, error) {
 	e, exist, err := finder.FindEntry(ctx, ObjectDefTblName, key, opts...)
 	if !exist || err != nil {
@@ -1298,6 +1304,24 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 	}
 	if e == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["cdn_site_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdn_site_status"))
+		if err := fv(ctx, e.GetCdnSiteStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cdn_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdn_status"))
+		if err := fv(ctx, e.GetCdnStatus(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["conditions"]; exists {

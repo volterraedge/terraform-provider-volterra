@@ -65,6 +65,54 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) RateLimitersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rate_limiters")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*RateLimitEntry, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := RateLimitEntryValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rate_limiters")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*RateLimitEntry)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*RateLimitEntry, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated rate_limiters")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items rate_limiters")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CreateSpecType)
 	if !ok {
@@ -106,6 +154,14 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["rate_limiters"]; exists {
+		vOpts := append(opts, db.WithValidateField("rate_limiters"))
+		if err := fv(ctx, m.GetRateLimiters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant_limit"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant_limit"))
@@ -122,6 +178,25 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v := &ValidateCreateSpecType{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRateLimiters := v.RateLimitersValidationRuleHandler
+	rulesRateLimiters := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "20",
+	}
+	vFn, err = vrhRateLimiters(rulesRateLimiters)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.rate_limiters: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rate_limiters"] = vFn
+
 	v.FldValidators["tenant_limit"] = PerCpuUtilizationLimitValidator().Validate
 
 	v.FldValidators["cos_limit"] = PerCpuUtilizationLimitValidator().Validate
@@ -135,6 +210,84 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *CustomKeyScopeType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CustomKeyScopeType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *CustomKeyScopeType) DeepCopy() *CustomKeyScopeType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CustomKeyScopeType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CustomKeyScopeType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CustomKeyScopeType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CustomKeyScopeTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCustomKeyScopeType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCustomKeyScopeType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CustomKeyScopeType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CustomKeyScopeType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("key"))
+		if err := fv(ctx, m.GetKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCustomKeyScopeTypeValidator = func() *ValidateCustomKeyScopeType {
+	v := &ValidateCustomKeyScopeType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func CustomKeyScopeTypeValidator() db.Validator {
+	return DefaultCustomKeyScopeTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -178,6 +331,54 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) RateLimitersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rate_limiters")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*RateLimitEntry, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := RateLimitEntryValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rate_limiters")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*RateLimitEntry)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*RateLimitEntry, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated rate_limiters")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items rate_limiters")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -219,6 +420,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["rate_limiters"]; exists {
+		vOpts := append(opts, db.WithValidateField("rate_limiters"))
+		if err := fv(ctx, m.GetRateLimiters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant_limit"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant_limit"))
@@ -234,6 +443,25 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 // Well-known symbol for default validator implementation
 var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v := &ValidateGetSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRateLimiters := v.RateLimitersValidationRuleHandler
+	rulesRateLimiters := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "20",
+	}
+	vFn, err = vrhRateLimiters(rulesRateLimiters)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.rate_limiters: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rate_limiters"] = vFn
 
 	v.FldValidators["tenant_limit"] = PerCpuUtilizationLimitValidator().Validate
 
@@ -291,6 +519,54 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) RateLimitersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rate_limiters")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*RateLimitEntry, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := RateLimitEntryValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rate_limiters")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*RateLimitEntry)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*RateLimitEntry, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated rate_limiters")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items rate_limiters")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -332,6 +608,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["rate_limiters"]; exists {
+		vOpts := append(opts, db.WithValidateField("rate_limiters"))
+		if err := fv(ctx, m.GetRateLimiters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant_limit"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant_limit"))
@@ -347,6 +631,25 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRateLimiters := v.RateLimitersValidationRuleHandler
+	rulesRateLimiters := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "20",
+	}
+	vFn, err = vrhRateLimiters(rulesRateLimiters)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.rate_limiters: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rate_limiters"] = vFn
 
 	v.FldValidators["tenant_limit"] = PerCpuUtilizationLimitValidator().Validate
 
@@ -710,6 +1013,113 @@ func PerCpuUtilizationLimitValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *RateLimitEntry) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *RateLimitEntry) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *RateLimitEntry) DeepCopy() *RateLimitEntry {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &RateLimitEntry{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *RateLimitEntry) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *RateLimitEntry) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return RateLimitEntryValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateRateLimitEntry struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateRateLimitEntry) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*RateLimitEntry)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *RateLimitEntry got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["sanction"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sanction"))
+		if err := fv(ctx, m.GetSanction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scope"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("scope"))
+		if err := fv(ctx, m.GetScope(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["site_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_type"))
+		if err := fv(ctx, m.GetSiteType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["threshold"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("threshold"))
+		if err := fv(ctx, m.GetThreshold(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultRateLimitEntryValidator = func() *ValidateRateLimitEntry {
+	v := &ValidateRateLimitEntry{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["threshold"] = ThresholdValidator().Validate
+
+	return v
+}()
+
+func RateLimitEntryValidator() db.Validator {
+	return DefaultRateLimitEntryValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ReplaceSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -747,6 +1157,54 @@ func (m *ReplaceSpecType) Validate(ctx context.Context, opts ...db.ValidateOpt) 
 
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateReplaceSpecType) RateLimitersValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rate_limiters")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*RateLimitEntry, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := RateLimitEntryValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rate_limiters")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*RateLimitEntry)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*RateLimitEntry, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated rate_limiters")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items rate_limiters")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -790,6 +1248,14 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["rate_limiters"]; exists {
+		vOpts := append(opts, db.WithValidateField("rate_limiters"))
+		if err := fv(ctx, m.GetRateLimiters(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tenant_limit"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tenant_limit"))
@@ -806,6 +1272,25 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v := &ValidateReplaceSpecType{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRateLimiters := v.RateLimitersValidationRuleHandler
+	rulesRateLimiters := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "20",
+	}
+	vFn, err = vrhRateLimiters(rulesRateLimiters)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.rate_limiters: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rate_limiters"] = vFn
+
 	v.FldValidators["tenant_limit"] = PerCpuUtilizationLimitValidator().Validate
 
 	v.FldValidators["cos_limit"] = PerCpuUtilizationLimitValidator().Validate
@@ -821,6 +1306,364 @@ func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
 }
 
+// augmented methods on protoc/std generated struct
+
+func (m *Sanction) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Sanction) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Sanction) DeepCopy() *Sanction {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Sanction{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Sanction) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Sanction) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SanctionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSanction struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSanction) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Sanction)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Sanction got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetSanctionTypeChoice().(type) {
+	case *Sanction_NoneLimit:
+		if fv, exists := v.FldValidators["sanction_type_choice.none_limit"]; exists {
+			val := m.GetSanctionTypeChoice().(*Sanction_NoneLimit).NoneLimit
+			vOpts := append(opts,
+				db.WithValidateField("sanction_type_choice"),
+				db.WithValidateField("none_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Sanction_SoftLimit:
+		if fv, exists := v.FldValidators["sanction_type_choice.soft_limit"]; exists {
+			val := m.GetSanctionTypeChoice().(*Sanction_SoftLimit).SoftLimit
+			vOpts := append(opts,
+				db.WithValidateField("sanction_type_choice"),
+				db.WithValidateField("soft_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Sanction_HardLimit:
+		if fv, exists := v.FldValidators["sanction_type_choice.hard_limit"]; exists {
+			val := m.GetSanctionTypeChoice().(*Sanction_HardLimit).HardLimit
+			vOpts := append(opts,
+				db.WithValidateField("sanction_type_choice"),
+				db.WithValidateField("hard_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Sanction_CloseLimit:
+		if fv, exists := v.FldValidators["sanction_type_choice.close_limit"]; exists {
+			val := m.GetSanctionTypeChoice().(*Sanction_CloseLimit).CloseLimit
+			vOpts := append(opts,
+				db.WithValidateField("sanction_type_choice"),
+				db.WithValidateField("close_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Sanction_HttpLimit:
+		if fv, exists := v.FldValidators["sanction_type_choice.http_limit"]; exists {
+			val := m.GetSanctionTypeChoice().(*Sanction_HttpLimit).HttpLimit
+			vOpts := append(opts,
+				db.WithValidateField("sanction_type_choice"),
+				db.WithValidateField("http_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Sanction_RoutePriorityLimit:
+		if fv, exists := v.FldValidators["sanction_type_choice.route_priority_limit"]; exists {
+			val := m.GetSanctionTypeChoice().(*Sanction_RoutePriorityLimit).RoutePriorityLimit
+			vOpts := append(opts,
+				db.WithValidateField("sanction_type_choice"),
+				db.WithValidateField("route_priority_limit"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSanctionValidator = func() *ValidateSanction {
+	v := &ValidateSanction{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SanctionValidator() db.Validator {
+	return DefaultSanctionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Scope) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Scope) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Scope) DeepCopy() *Scope {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Scope{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Scope) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Scope) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ScopeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateScope struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateScope) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Scope)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Scope got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetScopeTypeChoice().(type) {
+	case *Scope_NoneScope:
+		if fv, exists := v.FldValidators["scope_type_choice.none_scope"]; exists {
+			val := m.GetScopeTypeChoice().(*Scope_NoneScope).NoneScope
+			vOpts := append(opts,
+				db.WithValidateField("scope_type_choice"),
+				db.WithValidateField("none_scope"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Scope_ListenerScope:
+		if fv, exists := v.FldValidators["scope_type_choice.listener_scope"]; exists {
+			val := m.GetScopeTypeChoice().(*Scope_ListenerScope).ListenerScope
+			vOpts := append(opts,
+				db.WithValidateField("scope_type_choice"),
+				db.WithValidateField("listener_scope"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Scope_TenantScope:
+		if fv, exists := v.FldValidators["scope_type_choice.tenant_scope"]; exists {
+			val := m.GetScopeTypeChoice().(*Scope_TenantScope).TenantScope
+			vOpts := append(opts,
+				db.WithValidateField("scope_type_choice"),
+				db.WithValidateField("tenant_scope"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Scope_CosScope:
+		if fv, exists := v.FldValidators["scope_type_choice.cos_scope"]; exists {
+			val := m.GetScopeTypeChoice().(*Scope_CosScope).CosScope
+			vOpts := append(opts,
+				db.WithValidateField("scope_type_choice"),
+				db.WithValidateField("cos_scope"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Scope_SuspectScope:
+		if fv, exists := v.FldValidators["scope_type_choice.suspect_scope"]; exists {
+			val := m.GetScopeTypeChoice().(*Scope_SuspectScope).SuspectScope
+			vOpts := append(opts,
+				db.WithValidateField("scope_type_choice"),
+				db.WithValidateField("suspect_scope"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultScopeValidator = func() *ValidateScope {
+	v := &ValidateScope{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ScopeValidator() db.Validator {
+	return DefaultScopeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *Threshold) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *Threshold) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *Threshold) DeepCopy() *Threshold {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &Threshold{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *Threshold) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *Threshold) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ThresholdValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateThreshold struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateThreshold) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*Threshold)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *Threshold got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cpu_utilization"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cpu_utilization"))
+		if err := fv(ctx, m.GetCpuUtilization(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["upstream_failure_rate"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("upstream_failure_rate"))
+		if err := fv(ctx, m.GetUpstreamFailureRate(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultThresholdValidator = func() *ValidateThreshold {
+	v := &ValidateThreshold{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["cpu_utilization"] = ves_io_schema.FractionalPercentValidator().Validate
+
+	v.FldValidators["upstream_failure_rate"] = ves_io_schema.FractionalPercentValidator().Validate
+
+	return v
+}()
+
+func ThresholdValidator() db.Validator {
+	return DefaultThresholdValidator
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -828,6 +1671,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.CosLimit = f.GetCosLimit()
 	m.HttpLimitOptions = f.GetHttpLimitOptions()
 	m.ListenerLimit = f.GetListenerLimit()
+	m.RateLimiters = f.GetRateLimiters()
 	m.TenantLimit = f.GetTenantLimit()
 }
 
@@ -849,6 +1693,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.CosLimit = m1.CosLimit
 	f.HttpLimitOptions = m1.HttpLimitOptions
 	f.ListenerLimit = m1.ListenerLimit
+	f.RateLimiters = m1.RateLimiters
 	f.TenantLimit = m1.TenantLimit
 }
 
@@ -867,6 +1712,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.CosLimit = f.GetCosLimit()
 	m.HttpLimitOptions = f.GetHttpLimitOptions()
 	m.ListenerLimit = f.GetListenerLimit()
+	m.RateLimiters = f.GetRateLimiters()
 	m.TenantLimit = f.GetTenantLimit()
 }
 
@@ -888,6 +1734,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.CosLimit = m1.CosLimit
 	f.HttpLimitOptions = m1.HttpLimitOptions
 	f.ListenerLimit = m1.ListenerLimit
+	f.RateLimiters = m1.RateLimiters
 	f.TenantLimit = m1.TenantLimit
 }
 
@@ -906,6 +1753,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.CosLimit = f.GetCosLimit()
 	m.HttpLimitOptions = f.GetHttpLimitOptions()
 	m.ListenerLimit = f.GetListenerLimit()
+	m.RateLimiters = f.GetRateLimiters()
 	m.TenantLimit = f.GetTenantLimit()
 }
 
@@ -927,6 +1775,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.CosLimit = m1.CosLimit
 	f.HttpLimitOptions = m1.HttpLimitOptions
 	f.ListenerLimit = m1.ListenerLimit
+	f.RateLimiters = m1.RateLimiters
 	f.TenantLimit = m1.TenantLimit
 }
 

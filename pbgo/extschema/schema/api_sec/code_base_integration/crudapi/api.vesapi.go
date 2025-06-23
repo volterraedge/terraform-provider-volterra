@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.api_sec.code_base_integration.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.api_sec.code_base_integration.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2969,7 +2969,13 @@ var APISwaggerJSON string = `{
             "enum": [
                 "INITIALIZING",
                 "CONNECTED",
-                "DISCONNECTED"
+                "DISCONNECTED",
+                "AUTHENTICATION_ERROR",
+                "CODE_BASE_ERROR",
+                "REPO_NOT_FOUND",
+                "REPO_NO_API_FOUND",
+                "GENERAL_ERROR",
+                "SCAN_ERROR"
             ],
             "default": "INITIALIZING",
             "x-displayname": "Health Status",
@@ -3797,6 +3803,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

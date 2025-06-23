@@ -206,6 +206,28 @@ func (v *ValidateSubscribeRequest) Validate(ctx context.Context, pm interface{},
 				return err
 			}
 		}
+	case *SubscribeRequest_F5XcDelegatedAccessStandard:
+		if fv, exists := v.FldValidators["addon_choice.f5xc_delegated_access_standard"]; exists {
+			val := m.GetAddonChoice().(*SubscribeRequest_F5XcDelegatedAccessStandard).F5XcDelegatedAccessStandard
+			vOpts := append(opts,
+				db.WithValidateField("addon_choice"),
+				db.WithValidateField("f5xc_delegated_access_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SubscribeRequest_F5XcContentDeliveryNetworkAdvanced:
+		if fv, exists := v.FldValidators["addon_choice.f5xc_content_delivery_network_advanced"]; exists {
+			val := m.GetAddonChoice().(*SubscribeRequest_F5XcContentDeliveryNetworkAdvanced).F5XcContentDeliveryNetworkAdvanced
+			vOpts := append(opts,
+				db.WithValidateField("addon_choice"),
+				db.WithValidateField("f5xc_content_delivery_network_advanced"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -490,6 +512,28 @@ func (v *ValidateUnsubscribeRequest) Validate(ctx context.Context, pm interface{
 			vOpts := append(opts,
 				db.WithValidateField("addon_choice"),
 				db.WithValidateField("f5xc_bigip_utilities_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UnsubscribeRequest_F5XcDelegatedAccessStandard:
+		if fv, exists := v.FldValidators["addon_choice.f5xc_delegated_access_standard"]; exists {
+			val := m.GetAddonChoice().(*UnsubscribeRequest_F5XcDelegatedAccessStandard).F5XcDelegatedAccessStandard
+			vOpts := append(opts,
+				db.WithValidateField("addon_choice"),
+				db.WithValidateField("f5xc_delegated_access_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UnsubscribeRequest_F5XcContentDeliveryNetworkAdvanced:
+		if fv, exists := v.FldValidators["addon_choice.f5xc_content_delivery_network_advanced"]; exists {
+			val := m.GetAddonChoice().(*UnsubscribeRequest_F5XcContentDeliveryNetworkAdvanced).F5XcContentDeliveryNetworkAdvanced
+			vOpts := append(opts,
+				db.WithValidateField("addon_choice"),
+				db.WithValidateField("f5xc_content_delivery_network_advanced"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

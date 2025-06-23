@@ -176,6 +176,8 @@ var DefaultObjectCreateReqValidator = func() *ValidateObjectCreateReq {
 
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
 
+	v.FldValidators["spec"] = ves_io_schema_topology_topology_tunnel.SpecTypeValidator().Validate
+
 	return v
 }()
 
@@ -351,6 +353,8 @@ var DefaultObjectCreateRspValidator = func() *ValidateObjectCreateRsp {
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
 
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
+
+	v.FldValidators["spec"] = ves_io_schema_topology_topology_tunnel.SpecTypeValidator().Validate
 
 	return v
 }()
@@ -803,6 +807,8 @@ var DefaultObjectGetRspValidator = func() *ValidateObjectGetRsp {
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
 
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
+
+	v.FldValidators["spec"] = ves_io_schema_topology_topology_tunnel.SpecTypeValidator().Validate
 
 	return v
 }()
@@ -1313,6 +1319,8 @@ var DefaultObjectListRspItemValidator = func() *ValidateObjectListRspItem {
 
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
 
+	v.FldValidators["spec"] = ves_io_schema_topology_topology_tunnel.SpecTypeValidator().Validate
+
 	return v
 }()
 
@@ -1446,6 +1454,8 @@ var DefaultObjectReplaceReqValidator = func() *ValidateObjectReplaceReq {
 	v := &ValidateObjectReplaceReq{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
+
+	v.FldValidators["spec"] = ves_io_schema_topology_topology_tunnel.SpecTypeValidator().Validate
 
 	return v
 }()
@@ -1613,6 +1623,8 @@ var DefaultObjectReplaceRspValidator = func() *ValidateObjectReplaceRsp {
 	v.FldValidators["metadata"] = ves_io_schema.ObjectMetaTypeValidator().Validate
 
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
+
+	v.FldValidators["spec"] = ves_io_schema_topology_topology_tunnel.SpecTypeValidator().Validate
 
 	return v
 }()

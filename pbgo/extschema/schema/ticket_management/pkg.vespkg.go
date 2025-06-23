@@ -12,6 +12,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.ticket_management.JiraIssue"] = JiraIssueValidator()
 	vr["ves.io.schema.ticket_management.JiraIssueFields"] = JiraIssueFieldsValidator()
 	vr["ves.io.schema.ticket_management.JiraIssueStatus"] = JiraIssueStatusValidator()
+	vr["ves.io.schema.ticket_management.JiraIssueStatusCategory"] = JiraIssueStatusCategoryValidator()
 	vr["ves.io.schema.ticket_management.JiraIssueType"] = JiraIssueTypeValidator()
 	vr["ves.io.schema.ticket_management.JiraProject"] = JiraProjectValidator()
 
@@ -47,11 +48,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

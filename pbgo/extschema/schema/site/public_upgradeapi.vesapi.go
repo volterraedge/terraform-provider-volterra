@@ -138,6 +138,7 @@ func (c *UpgradeAPIRestClient) doRPCUpgradeOS(ctx context.Context, callOpts *ser
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("force", fmt.Sprintf("%v", req.Force))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("version", fmt.Sprintf("%v", req.Version))
@@ -223,6 +224,7 @@ func (c *UpgradeAPIRestClient) doRPCUpgradeSW(ctx context.Context, callOpts *ser
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("force", fmt.Sprintf("%v", req.Force))
 		q.Add("name", fmt.Sprintf("%v", req.Name))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("version", fmt.Sprintf("%v", req.Version))
@@ -670,6 +672,17 @@ var UpgradeAPISwaggerJSON string = `{
             "x-displayname": "Upgrade OS Request",
             "x-ves-proto-message": "ves.io.schema.site.UpgradeOSRequest",
             "properties": {
+                "force": {
+                    "type": "boolean",
+                    "description": " Force upgrade even when logic checks are put in place to not allow software upgrades (i.e. os upgrade in progress)\n\nExample: - true-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Force",
+                    "format": "boolean",
+                    "x-displayname": "force",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
                 "name": {
                     "type": "string",
                     "description": " Site name\n\nExample: - \"ce398\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -719,6 +732,17 @@ var UpgradeAPISwaggerJSON string = `{
             "x-displayname": "Upgrade SW Request",
             "x-ves-proto-message": "ves.io.schema.site.UpgradeSWRequest",
             "properties": {
+                "force": {
+                    "type": "boolean",
+                    "description": " Force upgrade even when logic checks are put in place to not allow software upgrades (i.e. os upgrade in progress)\n\nExample: - true-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Force",
+                    "format": "boolean",
+                    "x-displayname": "force",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
                 "name": {
                     "type": "string",
                     "description": " Site name\n\nExample: - \"ce398\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",

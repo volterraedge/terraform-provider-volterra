@@ -51,17 +51,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []svcfw.SubscriptionField{
-		{
-			FieldPath:     "ves.io.schema.ip_prefix_set.CreateRequest.spec.ipv6_prefix",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.ip_prefix_set.CreateRequest.spec.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.ip_prefix_set.API.Create"] = []string{
 		"spec.ipv6_prefix.#",
 		"spec.prefix.#",
@@ -151,17 +140,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 	}
 
-	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.ip_prefix_set.API.Replace"] = []svcfw.SubscriptionField{
-		{
-			FieldPath:     "ves.io.schema.ip_prefix_set.ReplaceRequest.spec.ipv6_prefix",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.ip_prefix_set.ReplaceRequest.spec.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-	}
-
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.ip_prefix_set.API.Replace"] = []string{
 		"spec.ipv6_prefix.#",
 		"spec.prefix.#",
@@ -231,11 +209,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

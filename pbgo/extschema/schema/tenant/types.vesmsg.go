@@ -879,6 +879,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["log_headers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("log_headers"))
+		if err := fv(ctx, m.GetLogHeaders(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["origin"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("origin"))
@@ -948,6 +957,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("site_network_stack"))
 		if err := fv(ctx, m.GetSiteNetworkStack(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["spoke_vpc_manual_attachment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("spoke_vpc_manual_attachment"))
+		if err := fv(ctx, m.GetSpokeVpcManualAttachment(), vOpts...); err != nil {
 			return err
 		}
 

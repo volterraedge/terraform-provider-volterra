@@ -250,7 +250,7 @@ func resourceVolterraK8SClusterRoleCreate(d *schema.ResourceData, meta interface
 
 	ruleChoiceTypeFound := false
 
-	if v, ok := d.GetOk("k8s_cluster_role_selector"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("k8s_cluster_role_selector"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_k8s_cluster_role.CreateSpecType_K8SClusterRoleSelector{}
@@ -266,7 +266,12 @@ func resourceVolterraK8SClusterRoleCreate(d *schema.ResourceData, meta interface
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field expressions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.K8SClusterRoleSelector.Expressions = ls
 
@@ -277,7 +282,7 @@ func resourceVolterraK8SClusterRoleCreate(d *schema.ResourceData, meta interface
 
 	}
 
-	if v, ok := d.GetOk("policy_rule_list"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("policy_rule_list"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_k8s_cluster_role.CreateSpecType_PolicyRuleList{}
@@ -317,7 +322,12 @@ func resourceVolterraK8SClusterRoleCreate(d *schema.ResourceData, meta interface
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field urls")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											resourceChoiceInt.NonResourceUrlList.Urls = ls
 
@@ -327,7 +337,12 @@ func resourceVolterraK8SClusterRoleCreate(d *schema.ResourceData, meta interface
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field verbs")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											resourceChoiceInt.NonResourceUrlList.Verbs = ls
 
@@ -354,7 +369,12 @@ func resourceVolterraK8SClusterRoleCreate(d *schema.ResourceData, meta interface
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field api_groups")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											resourceChoiceInt.ResourceList.ApiGroups = ls
 
@@ -364,7 +384,12 @@ func resourceVolterraK8SClusterRoleCreate(d *schema.ResourceData, meta interface
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field resource_instances")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											resourceChoiceInt.ResourceList.ResourceInstances = ls
 
@@ -374,7 +399,12 @@ func resourceVolterraK8SClusterRoleCreate(d *schema.ResourceData, meta interface
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field resource_types")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											resourceChoiceInt.ResourceList.ResourceTypes = ls
 
@@ -384,7 +414,12 @@ func resourceVolterraK8SClusterRoleCreate(d *schema.ResourceData, meta interface
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field verbs")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											resourceChoiceInt.ResourceList.Verbs = ls
 
@@ -405,7 +440,7 @@ func resourceVolterraK8SClusterRoleCreate(d *schema.ResourceData, meta interface
 
 	}
 
-	if v, ok := d.GetOk("yaml"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("yaml"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_k8s_cluster_role.CreateSpecType_Yaml{}
@@ -517,7 +552,7 @@ func resourceVolterraK8SClusterRoleUpdate(d *schema.ResourceData, meta interface
 
 	ruleChoiceTypeFound := false
 
-	if v, ok := d.GetOk("k8s_cluster_role_selector"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("k8s_cluster_role_selector"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_k8s_cluster_role.ReplaceSpecType_K8SClusterRoleSelector{}
@@ -533,7 +568,12 @@ func resourceVolterraK8SClusterRoleUpdate(d *schema.ResourceData, meta interface
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field expressions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					ruleChoiceInt.K8SClusterRoleSelector.Expressions = ls
 
@@ -544,7 +584,7 @@ func resourceVolterraK8SClusterRoleUpdate(d *schema.ResourceData, meta interface
 
 	}
 
-	if v, ok := d.GetOk("policy_rule_list"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("policy_rule_list"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_k8s_cluster_role.ReplaceSpecType_PolicyRuleList{}
@@ -584,7 +624,12 @@ func resourceVolterraK8SClusterRoleUpdate(d *schema.ResourceData, meta interface
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field urls")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											resourceChoiceInt.NonResourceUrlList.Urls = ls
 
@@ -594,7 +639,12 @@ func resourceVolterraK8SClusterRoleUpdate(d *schema.ResourceData, meta interface
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field verbs")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											resourceChoiceInt.NonResourceUrlList.Verbs = ls
 
@@ -621,7 +671,12 @@ func resourceVolterraK8SClusterRoleUpdate(d *schema.ResourceData, meta interface
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field api_groups")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											resourceChoiceInt.ResourceList.ApiGroups = ls
 
@@ -631,7 +686,12 @@ func resourceVolterraK8SClusterRoleUpdate(d *schema.ResourceData, meta interface
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field resource_instances")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											resourceChoiceInt.ResourceList.ResourceInstances = ls
 
@@ -641,7 +701,12 @@ func resourceVolterraK8SClusterRoleUpdate(d *schema.ResourceData, meta interface
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field resource_types")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											resourceChoiceInt.ResourceList.ResourceTypes = ls
 
@@ -651,7 +716,12 @@ func resourceVolterraK8SClusterRoleUpdate(d *schema.ResourceData, meta interface
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field verbs")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											resourceChoiceInt.ResourceList.Verbs = ls
 
@@ -672,7 +742,7 @@ func resourceVolterraK8SClusterRoleUpdate(d *schema.ResourceData, meta interface
 
 	}
 
-	if v, ok := d.GetOk("yaml"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("yaml"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_k8s_cluster_role.ReplaceSpecType_Yaml{}
@@ -709,5 +779,8 @@ func resourceVolterraK8SClusterRoleDelete(d *schema.ResourceData, meta interface
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra K8SClusterRole obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_k8s_cluster_role.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_k8s_cluster_role.ObjectType, namespace, name, opts...)
 }

@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.l7_acl.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.l7_acl.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2881,12 +2881,13 @@ var APISwaggerJSON string = `{
         },
         "l7_aclL7AclAction": {
             "type": "string",
-            "description": "L7 ACL action configures the action to be taken on rule match\n\n - DENY: DENY\n\nDeny the request\n - ALLOW: ALLOW\n\nAllow the request to proceed\n - JS_CHALLENGE: JS_CHALLENGE\n\nJavaScript challenge for the request to proceed",
+            "description": "L7 ACL action configures the action to be taken on rule match\n\n - DENY: DENY\n\nDeny the request\n - ALLOW: ALLOW\n\nAllow the request to proceed\n - JS_CHALLENGE: JS_CHALLENGE\n\nJavaScript challenge for the request to proceed\n - CAPTCHA: CAPTCHA\n\nCAPTCHA challenge for the request to proceed",
             "title": "L7AclAction",
             "enum": [
                 "DENY",
                 "ALLOW",
-                "JS_CHALLENGE"
+                "JS_CHALLENGE",
+                "CAPTCHA"
             ],
             "default": "DENY",
             "x-displayname": "L7AclAction",
@@ -3801,6 +3802,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

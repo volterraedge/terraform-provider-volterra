@@ -1,6 +1,6 @@
 ---
 
-page_title: "Volterra: volterra_namespace" 
+page_title: "Volterra: volterra_namespace"
 
 description: "The volterra_namespace allows CRD of namespace resource on Volterra SaaS"
 

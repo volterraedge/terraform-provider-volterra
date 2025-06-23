@@ -28,20 +28,10 @@ resource "volterra_discovery" "example" {
 
   discovery_k8s {
     access_info {
-      // One of the arguments from this list "connection_info in_cluster kubeconfig_url" must be set
+      // One of the arguments from this list "connection_info kubeconfig_url" must be set
 
       kubeconfig_url {
-        blindfold_secret_info_internal {
-          decryption_provider = "value"
-
-          location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-          store_provider = "value"
-        }
-
-        secret_encoding_type = "secret_encoding_type"
-
-        // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
+        // One of the arguments from this list "blindfold_secret_info clear_secret_info" must be set
 
         blindfold_secret_info {
           decryption_provider = "value"
@@ -60,13 +50,23 @@ resource "volterra_discovery" "example" {
     publish_info {
       // One of the arguments from this list "disable dns_delegation publish publish_fqdns" must be set
 
-      disable = true
+      dns_delegation {
+        dns_mode = "dns_mode"
+
+        subdomain = "value"
+      }
     }
   }
   where {
     // One of the arguments from this list "site virtual_network virtual_site" must be set
 
-    virtual_network {
+    virtual_site {
+      // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
+
+      enable_internet_vip = true
+
+      network_type = "network_type"
+
       ref {
         name      = "test1"
         namespace = "staging"
@@ -145,29 +145,11 @@ Username and password used for HTTP/HTTPS access.
 
 Password used to log into an admin account on the BIG-IP device.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
-
-### Ca Certificate Url Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Cbip Clusters Cbip Devices
 
@@ -192,8 +174,6 @@ List of Classic BIG-IP devices..
 Common attributes for the device configuration including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
-
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
@@ -227,18 +207,6 @@ Filters to discover only required BIG-IP Virtual Servers. The Virtual Server wil
 
 `port_ranges` - (Optional) Maximum number of ports allowed is 1024. (`String`).
 
-`protocols` - (Optional) Filter by protocol(s) (`String`).(Deprecated)
-
-### Certificate Url Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
 ### Config Type Connection Info
 
 Provide API server access details (endpoint and TLS parameters).
@@ -251,29 +219,17 @@ Provide API server access details (endpoint and TLS parameters).
 
 Provide kubeconfig file to connect to K8s cluster.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Kubeconfig Url Blindfold Secret Info Internal ](#kubeconfig-url-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
 
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
-
 ### Connection Info Tls Info
 
 TLS settings to enable transport layer security.
 
-`ca_certificate_url` - (Optional) F5XC Secret. URL to fetch the server CA certificate file. See [Tls Info Ca Certificate Url ](#tls-info-ca-certificate-url) below for details.(Deprecated)
-
 `certificate` - (Optional) Client certificate is PEM-encoded certificate or certificate-chain. (`String`).
-
-`certificate_url` - (Optional) F5XC Secret. URL to fetch the client certificate file. See [Tls Info Certificate Url ](#tls-info-certificate-url) below for details.(Deprecated)
 
 `key_url` - (Optional) The data may be optionally secured using BlindFold.. See [Tls Info Key Url ](#tls-info-key-url) below for details.
 
@@ -294,10 +250,6 @@ are in an Active-Active or Active-Standby setup or even a standalone BIG-IP devi
 Discovery configuration for Classic BIG-IP.
 
 `cbip_clusters` - (Required) are in an Active-Active or Active-Standby setup or even a standalone BIG-IP device.. See [Discovery Cbip Cbip Clusters ](#discovery-cbip-cbip-clusters) below for details.
-
-`internal_lb_domain` - (Optional) Domain name of the internal LB (`String`).(Deprecated)
-
-`server_ca` - (Optional) Server CA certificate to connect to LB. See [ref](#ref) below for details.(Deprecated)
 
 ### Discovery Choice Discovery Consul
 
@@ -323,8 +275,6 @@ Credentials to access Hashicorp Consul service discovery.
 
 `http_basic_auth_info` - (Optional) Username and password used for HTTP/HTTPS access. See [Access Info Http Basic Auth Info ](#access-info-http-basic-auth-info) below for details.
 
-`scheme` - (Optional) scheme (`String`).(Deprecated)
-
 ### Discovery Consul Publish Info
 
 Configuration to publish VIPs.
@@ -339,11 +289,9 @@ Configuration to publish VIPs.
 
 Credentials can be kubeconfig file or mTLS using PKI certificates.
 
-###### One of the arguments from this list "connection_info, in_cluster, kubeconfig_url" must be set
+###### One of the arguments from this list "connection_info, kubeconfig_url" must be set
 
 `connection_info` - (Optional) Provide API server access details (endpoint and TLS parameters). See [Config Type Connection Info ](#config-type-connection-info) below for details.
-
-`in_cluster` - (Optional) VER is POD running in the same K8s cluster. (`Bool`).(Deprecated)
 
 `kubeconfig_url` - (Optional) Provide kubeconfig file to connect to K8s cluster. See [Config Type Kubeconfig Url ](#config-type-kubeconfig-url) below for details.
 
@@ -371,19 +319,11 @@ Configuration to publish VIPs.
 
 F5XC Secret. URL for password, needs to be fetched from this path.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Passwd Url Blindfold Secret Info Internal ](#passwd-url-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Internet Vip Choice Disable Internet Vip
 
@@ -400,26 +340,6 @@ discovered when Kubernetes cluster is in InCluster mode..
 ### K8s Pod Network Choice Reachable
 
 always discovers POD IP Address for configured endpoints..
-
-### Key Url Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Kubeconfig Url Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Namespace Mapping Items
 
@@ -438,26 +358,6 @@ If configuring in an App Namespace, discovered services across all BIG-IP partit
 Select the BIG-IP partitions from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace..
 
 `items` - (Optional) Map BIG-IP partition(s) to App Namespaces. See [Namespace Mapping Items ](#namespace-mapping-items) below for details.
-
-### Passwd Url Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Password Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Publish Choice Disable
 
@@ -509,8 +409,6 @@ Direct reference to site object.
 
 `ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
-`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
-
 ### Ref Or Selector Virtual Network
 
 Direct reference to virtual network object.
@@ -531,8 +429,6 @@ Direct reference to virtual site object.
 
 `ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
-`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
-
 ### Secret Info Oneof Blindfold Secret Info
 
 Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
@@ -551,83 +447,19 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
-### Secret Info Oneof Vault Secret Info
-
-Vault Secret is used for the secrets managed by Hashicorp Vault.
-
-`key` - (Optional) If not provided entire secret will be returned. (`String`).
-
-`location` - (Required) Path to secret in Vault. (`String`).
-
-`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
-
-`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
-
-`version` - (Optional) If not provided latest version will be returned. (`Int`).
-
-### Secret Info Oneof Wingman Secret Info
-
-Secret is given as bootstrap secret in F5XC Security Sidecar.
-
-`name` - (Required) Name of the secret. (`String`).
-
 ### Server Validation Choice Skip Server Verification
 
 Skip origin server verification.
-
-### Tls Info Ca Certificate Url
-
-F5XC Secret. URL to fetch the server CA certificate file.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Ca Certificate Url Blindfold Secret Info Internal ](#ca-certificate-url-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
-
-### Tls Info Certificate Url
-
-F5XC Secret. URL to fetch the client certificate file.
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Certificate Url Blindfold Secret Info Internal ](#certificate-url-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Tls Info Key Url
 
 The data may be optionally secured using BlindFold..
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Key Url Blindfold Secret Info Internal ](#key-url-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 Attribute Reference
 -------------------

@@ -35,6 +35,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.tenant_configuration.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.views.tenant_configuration.PasswordPolicy"] = PasswordPolicyValidator()
 	vr["ves.io.schema.views.tenant_configuration.ReplaceSpecType"] = ReplaceSpecTypeValidator()
+	vr["ves.io.schema.views.tenant_configuration.SessionManagement"] = SessionManagementValidator()
 
 }
 
@@ -100,11 +101,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

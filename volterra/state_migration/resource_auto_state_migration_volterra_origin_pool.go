@@ -104,46 +104,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 							Optional: true,
 						},
 
-						"header_transformation_type": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"default_header_transformation": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"legacy_header_transformation": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"preserve_case_header_transformation": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"proper_case_header_transformation": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-								},
-							},
-						},
-
 						"http_idle_timeout": {
 							Type:     schema.TypeInt,
 							Optional: true,
@@ -530,6 +490,54 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 											},
 										},
 									},
+
+									"snat_pool": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"no_snat_pool": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"snat_pool": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -595,33 +603,15 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 										Optional: true,
 									},
 
-									"service_name": {
-
+									"protocol": {
 										Type:     schema.TypeString,
 										Optional: true,
 									},
 
-									"service_selector": {
+									"service_name": {
 
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"expressions": {
-
-													Type: schema.TypeList,
-
-													Required:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Schema{
-														Type: schema.TypeString,
-													},
-												},
-											},
-										},
+										Type:     schema.TypeString,
+										Optional: true,
 									},
 
 									"site_locator": {
@@ -692,6 +682,54 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 											},
 										},
 									},
+
+									"snat_pool": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"no_snat_pool": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"snat_pool": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -720,7 +758,7 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 
 										Type:     schema.TypeList,
 										MaxItems: 1,
-										Required: true,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -820,6 +858,54 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 											},
 										},
 									},
+
+									"snat_pool": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"no_snat_pool": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"snat_pool": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -853,7 +939,7 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 
 										Type:     schema.TypeList,
 										MaxItems: 1,
-										Required: true,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -939,6 +1025,54 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 															"tenant": {
 																Type:     schema.TypeString,
 																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"snat_pool": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"no_snat_pool": {
+
+													Type:     schema.TypeBool,
+													Optional: true,
+												},
+
+												"snat_pool": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ipv6_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional: true,
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
 															},
 														},
 													},
@@ -1219,42 +1353,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
-															"blindfold_secret_info_internal": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"decryption_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"store_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"secret_encoding_type": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -1297,66 +1395,6 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 																		"url": {
 																			Type:     schema.TypeString,
 																			Required: true,
-																		},
-																	},
-																},
-															},
-
-															"vault_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"key": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"provider": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"secret_encoding": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"version": {
-																			Type:       schema.TypeInt,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"wingman_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"name": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1524,6 +1562,29 @@ func ResourceOriginPoolInstanceResourceV1() *schema.Resource {
 									},
 								},
 							},
+						},
+					},
+				},
+			},
+
+			"upstream_conn_pool_reuse_type": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"disable_conn_pool_reuse": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"enable_conn_pool_reuse": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
 						},
 					},
 				},

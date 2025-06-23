@@ -2656,6 +2656,37 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bgpBgpPeerProtocolState": {
+            "type": "string",
+            "description": "Status of BGP connection to this Peer\n\nConnection state is not known\nConnection state is Idle\nConnection state is Connecting\nConnection state is Active\nConnection state is Open Sent\nConnection state is Open Confirm\nConnection state is Established\nConnection state is Clearing\nConnection state is Deleted",
+            "title": "BGP Protocol Status",
+            "enum": [
+                "Unknown",
+                "Idle",
+                "Connect",
+                "Active",
+                "OpenSent",
+                "OpenConfirm",
+                "Established",
+                "Clearing",
+                "Deleted"
+            ],
+            "default": "Unknown",
+            "x-displayname": "BGP Peer Status",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BgpPeerProtocolState"
+        },
+        "bgpBgpPeerUpDownType": {
+            "type": "string",
+            "description": "Indicates the state of BGP Peering session\n\nPeering session is Down (not in Established state)\nPeering session is Up (in Established state)",
+            "title": "BGP Peer States",
+            "enum": [
+                "BGP_PEER_DOWN",
+                "BGP_PEER_UP"
+            ],
+            "default": "BGP_PEER_DOWN",
+            "x-displayname": "BGP Peer States",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BgpPeerUpDownType"
+        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.tunnel.crudapi.ObjectCreateReq",
@@ -2835,6 +2866,50 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -2874,6 +2949,19 @@ var APISwaggerJSON string = `{
                     "type": "string"
                 }
             }
+        },
+        "schemaAuthenticationAlgorithm": {
+            "type": "string",
+            "description": "x-displayName: \"AuthenticationAlgorithm\"\nDefinitions for Authentication Algorithms\n\n - AUTH_ALG_DEFAULT: Default Authentication\n\nx-displayName: \"Default Authentication\"\nUse Default Authentication (SHA256)\n - SHA256_HMAC: SHA256_HMAC\n\nx-displayName: \"SHA256_HMAC\"\nUse SHA256_HMAC Authentication\n - SHA384_HMAC: SHA384_HMAC\n\nx-displayName: \"SHA384_HMAC\"\nUse SHA384_HMAC Authentication\n - SHA512_HMAC: SHA512_HMAC\n\nx-displayName: \"SHA512_HMAC\"\nUse SHA512_HMAC Authentication\n - AUTH_ALG_NONE: No Authentication\n\nx-displayName: \"No Authentication\"\nSelect No Authentication if AEAD encryption is selected",
+            "title": "AuthenticationAlgorithm",
+            "enum": [
+                "AUTH_ALG_DEFAULT",
+                "SHA256_HMAC",
+                "SHA384_HMAC",
+                "SHA512_HMAC",
+                "AUTH_ALG_NONE"
+            ],
+            "default": "AUTH_ALG_DEFAULT"
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
@@ -2997,12 +3085,46 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaDHGroup": {
+            "type": "string",
+            "description": "x-displayName: \"Diffie Hellman Group\"\nDefinitions for DH Groups\n\n - DH_GROUP_DEFAULT: Use Default DH Group\n\nx-displayName: \"Default DH Group(19)\"\nUse default DH group (DH Group 19)\n - DH_GROUP_14: DH_GROUP_14\n\nx-displayName: \"DH_GROUP_14\"\nUse DH_GROUP_14 Diffie Hellman Group\n - DH_GROUP_15: DH_GROUP_15\n\nx-displayName: \"DH_GROUP_15\"\nUse DH_GROUP_15 Diffie Hellman Group\n - DH_GROUP_16: DH_GROUP_16\n\nx-displayName: \"DH_GROUP_16\"\nUse DH_GROUP_16 Diffie Hellman Group\n - DH_GROUP_17: DH_GROUP_17\n\nx-displayName: \"DH_GROUP_17\"\nUse DH_GROUP_17 Diffie Hellman Group\n - DH_GROUP_18: DH_GROUP_18\n\nx-displayName: \"DH_GROUP_18\"\nUse DH_GROUP_18 Diffie Hellman Group\n - DH_GROUP_19: DH_GROUP_19\n\nx-displayName: \"DH_GROUP_19\"\nUse DH_GROUP_19 Diffie Hellman Group\n - DH_GROUP_20: DH_GROUP_20\n\nx-displayName: \"DH_GROUP_20\"\nUse DH_GROUP_20 Diffie Hellman Group\n - DH_GROUP_21: DH_GROUP_21\n\nx-displayName: \"DH_GROUP_21\"\nUse DH_GROUP_21 Diffie Hellman Group\n - DH_GROUP_26: DH_GROUP_26\n\nx-displayName: \"DH_GROUP_26\"\nUse DH_GROUP_26 Diffie Hellman Group",
+            "title": "DHGroup",
+            "enum": [
+                "DH_GROUP_DEFAULT",
+                "DH_GROUP_14",
+                "DH_GROUP_15",
+                "DH_GROUP_16",
+                "DH_GROUP_17",
+                "DH_GROUP_18",
+                "DH_GROUP_19",
+                "DH_GROUP_20",
+                "DH_GROUP_21",
+                "DH_GROUP_26"
+            ],
+            "default": "DH_GROUP_DEFAULT"
+        },
         "schemaEmpty": {
             "type": "object",
             "description": "This can be used for messages where no values are needed",
             "title": "Empty",
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
+        },
+        "schemaEncryptionAlgorithm": {
+            "type": "string",
+            "description": "x-displayName: \"Encryption Algorithm\"\nDefinitions for Encryption Algorithms\n\n - ENC_ALG_DEFAULT: Default Encryption\n\nx-displayName: \"Default Encryption(AES256_GCM)\"\nSelect default Encryption Algorithm\n - AES128_CBC: AES128_CBC\n\nx-displayName: \"AES128_CBC\"\nSelect AES128_CBC encryption algorithm\n - AES192_CBC: AES192_CBC\n\nx-displayName: \"AES192_CBC\"\nSelect AES192_CBC encryption algorithm\n - AES256_CBC: AES256_CBC\n\nx-displayName: \"AES256_CBC\"\nSelect AES256_CBC encryption algorithm\n - TRIPLE_DES_CBC: TRIPLE_DES_CBC\n\nx-displayName: \"TRIPLE_DES_CBC\"\nSelect TRIPLE_DES_CBC encryption algorithm\n - AES128_GCM: AES128_GCM\n\nx-displayName: \"AES128_GCM\"\nSelect AES128_GCM AEAD algorithm\n - AES192_GCM: AES192_GCM\n\nx-displayName: \"AES192_GCM\"\nSelect AES192_GCM AEAD algorithm\n - AES256_GCM: AES256_GCM\n\nx-displayName: \"AES256_GCM\"\nSelect AES256_GCM AEAD algorithm",
+            "title": "EncryptionAlgorithm",
+            "enum": [
+                "ENC_ALG_DEFAULT",
+                "AES128_CBC",
+                "AES192_CBC",
+                "AES256_CBC",
+                "TRIPLE_DES_CBC",
+                "AES128_GCM",
+                "AES192_GCM",
+                "AES256_GCM"
+            ],
+            "default": "ENC_ALG_DEFAULT"
         },
         "schemaInitializerType": {
             "type": "object",
@@ -3111,6 +3233,41 @@ var APISwaggerJSON string = `{
             "x-displayname": "List Metadata",
             "x-ves-proto-message": "ves.io.schema.ListMetaType"
         },
+        "schemaNodeInterfaceInfo": {
+            "type": "object",
+            "description": "x-displayName: \"Node Interface Info\"\nOn a multinode site, this list holds the nodes and corresponding tunnel transport interface",
+            "title": "NodeInterfaceInfo",
+            "properties": {
+                "interface": {
+                    "type": "array",
+                    "description": "x-displayName: \"Interface\"\nInterface reference on this node",
+                    "title": "Interface",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                },
+                "node": {
+                    "type": "string",
+                    "description": "x-displayName: \"Node\"\nx-example: \"master-0\"\nNode name on this site",
+                    "title": "Node"
+                }
+            }
+        },
+        "schemaNodeInterfaceType": {
+            "type": "object",
+            "description": "x-displayName: \"NodeInterfaceType\"\nOn multinode site, this type holds the information about per node interfaces",
+            "title": "NodeInterfaceType",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "description": "x-displayName: \"NodeInterfaceInfo\"\nOn a multinode site, this list holds the nodes and corresponding networking_interface",
+                    "title": "NodeInterfaceInfo",
+                    "items": {
+                        "$ref": "#/definitions/schemaNodeInterfaceInfo"
+                    }
+                }
+            }
+        },
         "schemaObjectMetaType": {
             "type": "object",
             "description": "ObjectMetaType is metadata(common attributes) of an object that all configuration objects will have.\nThe information in this type can be specified by user during create and replace APIs.",
@@ -3184,49 +3341,17 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "schemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
+        "schemaPseudoRandomFunction": {
+            "type": "string",
+            "description": "x-displayName: \"Pseudo-Random-Function\"\nDefinitions for PseudoRandomFunction(PRF)\n\n - PRF_DEFAULT: Default Pseudo Random Function\n\nx-displayName: \"Default Pseudo Random Function\"\nUse Default Pseudo Random Function (PRFSHA256)\n - PRFSHA256: PRFSHA256\n\nx-displayName: \"PRFSHA256\"\nUse PRFSHA256 Pseudo Random Function\n - PRFSHA384: PRFSHA384\n\nx-displayName: \"PRFSHA384\"\nUse PRFSHA384 Pseudo Random Function\n - PRFSHA512: PRFSHA512\n\nx-displayName: \"PRFSHA512\"\nUse PRFSHA512 Pseudo Random Function",
+            "title": "PseudoRandomFunction",
+            "enum": [
+                "PRF_DEFAULT",
+                "PRFSHA256",
+                "PRFSHA384",
+                "PRFSHA512"
+            ],
+            "default": "PRF_DEFAULT"
         },
         "schemaSecretEncodingType": {
             "type": "string",
@@ -3449,7 +3574,7 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Namespace Reference",
                     "x-ves-validation-rules": {
@@ -3513,6 +3638,20 @@ var APISwaggerJSON string = `{
                     "x-displayname": "VTRP Stale"
                 }
             }
+        },
+        "schemaTunnelEncapsulationType": {
+            "type": "string",
+            "description": "Type of tunnel encapsulation\n\nIPSEC using public key infrastructure\nIPSEC using pre shared key\nSSL encapsulation\nGRE encapsulation",
+            "title": "TunnelEncapsulationType",
+            "enum": [
+                "IPSEC_PKI",
+                "IPSEC_PSK",
+                "SSL",
+                "GRE"
+            ],
+            "default": "IPSEC_PKI",
+            "x-displayname": "Tunnel Encapsulation Type",
+            "x-ves-proto-enum": "ves.io.schema.TunnelEncapsulationType"
         },
         "schemaVaultSecretInfoType": {
             "type": "object",
@@ -3624,19 +3763,7 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "tunnelDeploymentVPNTunnelType": {
-            "type": "string",
-            "description": "This defines AWS TGW VPN Tunnel type for which the config exists\n\nVPN Tunnel Type - HUB\nVPN Tunnel Type - Services",
-            "title": "AWS TGW VPN Tunnel Type",
-            "enum": [
-                "HUB",
-                "SERVICES"
-            ],
-            "default": "HUB",
-            "x-displayname": "AWS TGW VPN Tunnel Type",
-            "x-ves-proto-enum": "ves.io.schema.tunnel.DeploymentVPNTunnelType"
-        },
-        "tunnelGlobalSpecType": {
+        "schematunnelGlobalSpecType": {
             "type": "object",
             "description": "Desired state of Tunnel",
             "title": "Tunnel specification",
@@ -3701,6 +3828,265 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteTunnelConnectionStatus": {
+            "type": "object",
+            "description": "Status of tunnel connection that a Ver has originated / terminated",
+            "title": "Tunnel Connection Status",
+            "x-displayname": "Tunnel Connection Status",
+            "x-ves-proto-message": "ves.io.schema.site.TunnelConnectionStatus",
+            "properties": {
+                "bgp": {
+                    "type": "array",
+                    "description": " Internal reference to BGP object corresponding to this tunnel\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "BGP Object",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "BGP Object",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "bgp_peer_protocol_state": {
+                    "description": " Protocol state for each BGP peer connection established over this tunnel",
+                    "title": "BGP Peer Protocol Status",
+                    "$ref": "#/definitions/bgpBgpPeerProtocolState",
+                    "x-displayname": "BGP Peer Protocol Status"
+                },
+                "bgp_status": {
+                    "description": " BGP peer connection status established over this tunnel",
+                    "title": "BGP Peer Status",
+                    "$ref": "#/definitions/bgpBgpPeerUpDownType",
+                    "x-displayname": "BGP Peer Status"
+                },
+                "encap": {
+                    "description": " Encapsulation type of tunnel",
+                    "title": "encap",
+                    "$ref": "#/definitions/schemaTunnelEncapsulationType",
+                    "x-displayname": "Encapsulation Type"
+                },
+                "ike_tunnel_flap_reason": {
+                    "description": " tunnel flap reason(ike)",
+                    "title": "ike_tunnel_flap_reason",
+                    "$ref": "#/definitions/siteTunnelFlapReason",
+                    "x-displayname": "Ike tunnel flap reason"
+                },
+                "isLocal": {
+                    "type": "boolean",
+                    "description": " Identifies if the ipsec connection is local to the ver node or not",
+                    "title": "isLocal",
+                    "format": "boolean",
+                    "x-displayname": "Local"
+                },
+                "remoteAddress": {
+                    "type": "string",
+                    "description": " IP address of the remote end",
+                    "title": "remoteAddress",
+                    "x-displayname": "Remote Address"
+                },
+                "role": {
+                    "description": " indicates whether the ver is client/Originator or server/responder in tunnel",
+                    "title": "role",
+                    "$ref": "#/definitions/siteTunnelRole",
+                    "x-displayname": "Role"
+                },
+                "ssl_tunnel_flap_reason": {
+                    "description": " tunnel flap reason(Ssl)",
+                    "title": "ssl_tunnel_flap_reason",
+                    "$ref": "#/definitions/siteTunnelFlapReason",
+                    "x-displayname": "Ssl tunnel flap reason"
+                },
+                "state": {
+                    "description": " connection state which identifies whether connection is UP/DOWN",
+                    "title": "state",
+                    "$ref": "#/definitions/siteTunnelState",
+                    "x-displayname": "Connection State"
+                },
+                "tunnel": {
+                    "type": "array",
+                    "description": " Internal reference to Tunnel object corresponding to this status\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Tunnel Object",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Tunnel Object",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "tunnelName": {
+                    "type": "string",
+                    "description": " Tunnel name",
+                    "title": "tunnelName",
+                    "x-displayname": "Tunnel Name"
+                },
+                "url": {
+                    "type": "string",
+                    "description": " url identifies the other end of the Ver for tunnel origination/termination",
+                    "title": "url",
+                    "x-displayname": "URL"
+                },
+                "verNodeIp": {
+                    "type": "string",
+                    "description": " The VER node IP in the local site from which the connection is setup",
+                    "title": "verNodeIP",
+                    "x-displayname": "VER Node IP"
+                },
+                "verNodeName": {
+                    "type": "string",
+                    "description": " The VER node in the local site from which the connection is setup",
+                    "title": "verNodeName",
+                    "x-displayname": "VER Node Name"
+                }
+            }
+        },
+        "siteTunnelFlapReason": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.site.TunnelFlapReason",
+            "properties": {
+                "flap_reason": {
+                    "type": "string",
+                    "description": " flap reason for tunnel",
+                    "title": "Flap Reason",
+                    "x-displayname": "Flap Reason"
+                },
+                "time": {
+                    "type": "string",
+                    "description": " flap time for tunnel",
+                    "title": "Flap time",
+                    "format": "date-time",
+                    "x-displayname": "Flap time"
+                }
+            }
+        },
+        "siteTunnelRole": {
+            "type": "string",
+            "description": "Role of VER in a tunnel connection\n\nInvalid role\nClient initiating the connection\nServer responding to the connection",
+            "title": "TunnelRole",
+            "enum": [
+                "UNKNOWN_TUNNEL_ROLE",
+                "TUNNEL_INITIATOR",
+                "TUNNEL_RESPONDER"
+            ],
+            "default": "UNKNOWN_TUNNEL_ROLE",
+            "x-displayname": "Tunnel Role",
+            "x-ves-proto-enum": "ves.io.schema.site.TunnelRole"
+        },
+        "siteTunnelState": {
+            "type": "string",
+            "description": "Tunnel state connecting the site to remote\n\nInvalid Tunnel state\nTunnel Connection is up\nTunnel Connection is down\nTunnel is disabled",
+            "title": "Tunnel State",
+            "enum": [
+                "UNKNOWN_TUNNEL_STATE",
+                "TUNNEL_UP",
+                "TUNNEL_DOWN",
+                "TUNNEL_DISABLED"
+            ],
+            "default": "UNKNOWN_TUNNEL_STATE",
+            "x-displayname": "Tunnel State",
+            "x-ves-proto-enum": "ves.io.schema.site.TunnelState"
+        },
+        "tunnelConfigureType": {
+            "type": "object",
+            "description": "x-displayName: \"Configure Type\"\nDefines the source of this tunnel configuration",
+            "title": "ConfigureType",
+            "properties": {
+                "ext_conn_gre": {
+                    "description": "x-displayName: \"GRE External Connector\"\nSpecifies that this is External Connector of type GRE",
+                    "title": "ExternalConnectorGRE",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "ext_conn_ipsec": {
+                    "description": "x-displayName: \"IPSec External Connector\"\nSpecifies that this is External Connector of type IPSec",
+                    "title": "ExternalConnectorIPSec",
+                    "$ref": "#/definitions/schemaEmpty"
+                }
+            }
+        },
+        "tunnelDeploymentVPNTunnelType": {
+            "type": "string",
+            "description": "This defines AWS TGW VPN Tunnel type for which the config exists\n\nVPN Tunnel Type - HUB\nVPN Tunnel Type - Services",
+            "title": "AWS TGW VPN Tunnel Type",
+            "enum": [
+                "HUB",
+                "SERVICES"
+            ],
+            "default": "HUB",
+            "x-displayname": "AWS TGW VPN Tunnel Type",
+            "x-ves-proto-enum": "ves.io.schema.tunnel.DeploymentVPNTunnelType"
+        },
+        "tunnelESPProposal": {
+            "type": "object",
+            "description": "x-displayName: \"ESP Proposal Selection\"\nSet of Encryption, Authentication and DH groups to be used for establishing IKE connection with peer",
+            "title": "ESP Proposal",
+            "properties": {
+                "authentication_algos": {
+                    "type": "array",
+                    "description": "x-displayName: \"Configure Authentication Algorithms\"\nSelect Authentication algorithms for IKE SA.",
+                    "title": "Authentication Algorithms",
+                    "items": {
+                        "$ref": "#/definitions/schemaAuthenticationAlgorithm"
+                    }
+                },
+                "dh_groups": {
+                    "type": "array",
+                    "description": "x-displayName: \"Diffie Hellman Groups\"\nSelect DH Groups",
+                    "title": "DH Groups",
+                    "items": {
+                        "$ref": "#/definitions/schemaDHGroup"
+                    }
+                },
+                "encryption_algos": {
+                    "type": "array",
+                    "description": "x-displayName: \"Configure Encryption Algorithms\"\nSelect Encrytion algorithms for IKE SA.",
+                    "title": "Encryption Algorithms",
+                    "items": {
+                        "$ref": "#/definitions/schemaEncryptionAlgorithm"
+                    }
+                }
+            }
+        },
+        "tunnelIKEProposal": {
+            "type": "object",
+            "description": "x-displayName: \"IKE Proposal Selection\"\nSet of Encryption, Authentication, PRF and DH groups to be used for establishing IKE connection with peer",
+            "title": "IKE proposal",
+            "properties": {
+                "authentication_algos": {
+                    "type": "array",
+                    "description": "x-displayName: \"Configure Authentication Algorithms\"\nSelect Authentication algorithms for IKE SA.",
+                    "title": "Authentication Algorithms",
+                    "items": {
+                        "$ref": "#/definitions/schemaAuthenticationAlgorithm"
+                    }
+                },
+                "dh_groups": {
+                    "type": "array",
+                    "description": "x-displayName: \"Configure DH group\"\nSelect DH Group for IKE SA.",
+                    "title": "DiffieHellman Group",
+                    "items": {
+                        "$ref": "#/definitions/schemaDHGroup"
+                    }
+                },
+                "encryption_algos": {
+                    "type": "array",
+                    "description": "x-displayName: \"Configure Encryption Algorithms\"\nSelect Encrytion algorithms for IKE SA.",
+                    "title": "Encryption Algorithms",
+                    "items": {
+                        "$ref": "#/definitions/schemaEncryptionAlgorithm"
+                    }
+                },
+                "prf": {
+                    "type": "array",
+                    "description": "x-displayName: \"Configure PseudoRandomFunction\"\nSelect PseudoRandomFunction for IKE SA.",
+                    "title": "PseudoRandomFunction",
+                    "items": {
+                        "$ref": "#/definitions/schemaPseudoRandomFunction"
+                    }
+                }
+            }
+        },
         "tunnelInterfaceType": {
             "type": "object",
             "description": "Provides the local interface to pick up source IP and network for transporting encapsulated packet",
@@ -3714,7 +4100,7 @@ var APISwaggerJSON string = `{
                     "title": "Local Interface",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Local Interface",
                     "x-ves-validation-rules": {
@@ -3855,7 +4241,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "gc_spec": {
                     "title": "gc_spec",
-                    "$ref": "#/definitions/tunnelGlobalSpecType",
+                    "$ref": "#/definitions/schematunnelGlobalSpecType",
                     "x-displayname": "GC Spec"
                 }
             }
@@ -3887,9 +4273,18 @@ var APISwaggerJSON string = `{
                     "description": " Refernce to object for current status",
                     "title": "object_refs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                },
+                "tunnel_status": {
+                    "type": "array",
+                    "description": " Status/details of every tunnel configured as external connector",
+                    "title": "tunnel status",
+                    "items": {
+                        "$ref": "#/definitions/siteTunnelConnectionStatus"
+                    },
+                    "x-displayname": "Tunnel Status"
                 }
             }
         },

@@ -83,7 +83,7 @@ func resourceVolterraDataType() *schema.Resource {
 			"rules": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -338,6 +338,9 @@ func resourceVolterraDataTypeCreate(d *schema.ResourceData, meta interface{}) er
 
 		compliancesList := []ves_io_schema_data_type.Compliance{}
 		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field compliances")
+			}
 			compliancesList = append(compliancesList, ves_io_schema_data_type.Compliance(ves_io_schema_data_type.Compliance_value[j.(string)]))
 		}
 		createSpec.Compliances = compliancesList
@@ -403,7 +406,12 @@ func resourceVolterraDataTypeCreate(d *schema.ResourceData, meta interface{}) er
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											typeChoiceInt.ExactValues.ExactValues = ls
 
@@ -480,7 +488,12 @@ func resourceVolterraDataTypeCreate(d *schema.ResourceData, meta interface{}) er
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														typeChoiceInt.ExactValues.ExactValues = ls
 
@@ -545,7 +558,12 @@ func resourceVolterraDataTypeCreate(d *schema.ResourceData, meta interface{}) er
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														typeChoiceInt.ExactValues.ExactValues = ls
 
@@ -618,7 +636,12 @@ func resourceVolterraDataTypeCreate(d *schema.ResourceData, meta interface{}) er
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											typeChoiceInt.ExactValues.ExactValues = ls
 
@@ -764,6 +787,9 @@ func resourceVolterraDataTypeUpdate(d *schema.ResourceData, meta interface{}) er
 
 		compliancesList := []ves_io_schema_data_type.Compliance{}
 		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field compliances")
+			}
 			compliancesList = append(compliancesList, ves_io_schema_data_type.Compliance(ves_io_schema_data_type.Compliance_value[j.(string)]))
 		}
 		updateSpec.Compliances = compliancesList
@@ -826,7 +852,12 @@ func resourceVolterraDataTypeUpdate(d *schema.ResourceData, meta interface{}) er
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											typeChoiceInt.ExactValues.ExactValues = ls
 
@@ -903,7 +934,12 @@ func resourceVolterraDataTypeUpdate(d *schema.ResourceData, meta interface{}) er
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														typeChoiceInt.ExactValues.ExactValues = ls
 
@@ -968,7 +1004,12 @@ func resourceVolterraDataTypeUpdate(d *schema.ResourceData, meta interface{}) er
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														typeChoiceInt.ExactValues.ExactValues = ls
 
@@ -1041,7 +1082,12 @@ func resourceVolterraDataTypeUpdate(d *schema.ResourceData, meta interface{}) er
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											typeChoiceInt.ExactValues.ExactValues = ls
 
@@ -1110,5 +1156,8 @@ func resourceVolterraDataTypeDelete(d *schema.ResourceData, meta interface{}) er
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra DataType obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_data_type.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_data_type.ObjectType, namespace, name, opts...)
 }

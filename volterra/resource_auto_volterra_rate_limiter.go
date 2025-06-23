@@ -67,7 +67,77 @@ func resourceVolterraRateLimiter() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
+						"action_block": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"hours": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"duration": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"minutes": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"duration": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+
+									"seconds": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"duration": {
+													Type:     schema.TypeInt,
+													Optional: true,
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
+						"disabled": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
 						"burst_multiplier": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
+						"period_multiplier": {
 							Type:     schema.TypeInt,
 							Optional: true,
 						},
@@ -180,8 +250,114 @@ func resourceVolterraRateLimiterCreate(d *schema.ResourceData, meta interface{})
 				limits[i] = &ves_io_schema_rate_limiter.RateLimitValue{}
 				limitsMapStrToI := set.(map[string]interface{})
 
+				actionChoiceTypeFound := false
+
+				if v, ok := limitsMapStrToI["action_block"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+
+					actionChoiceTypeFound = true
+					actionChoiceInt := &ves_io_schema_rate_limiter.RateLimitValue_ActionBlock{}
+					actionChoiceInt.ActionBlock = &ves_io_schema_rate_limiter.RateLimitBlockAction{}
+					limits[i].ActionChoice = actionChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							blockDurationChoiceTypeFound := false
+
+							if v, ok := cs["hours"]; ok && !isIntfNil(v) && !blockDurationChoiceTypeFound {
+
+								blockDurationChoiceTypeFound = true
+								blockDurationChoiceInt := &ves_io_schema_rate_limiter.RateLimitBlockAction_Hours{}
+								blockDurationChoiceInt.Hours = &ves_io_schema_rate_limiter.InputHours{}
+								actionChoiceInt.ActionBlock.BlockDurationChoice = blockDurationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+											blockDurationChoiceInt.Hours.Duration = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["minutes"]; ok && !isIntfNil(v) && !blockDurationChoiceTypeFound {
+
+								blockDurationChoiceTypeFound = true
+								blockDurationChoiceInt := &ves_io_schema_rate_limiter.RateLimitBlockAction_Minutes{}
+								blockDurationChoiceInt.Minutes = &ves_io_schema_rate_limiter.InputMinutes{}
+								actionChoiceInt.ActionBlock.BlockDurationChoice = blockDurationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+											blockDurationChoiceInt.Minutes.Duration = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["seconds"]; ok && !isIntfNil(v) && !blockDurationChoiceTypeFound {
+
+								blockDurationChoiceTypeFound = true
+								blockDurationChoiceInt := &ves_io_schema_rate_limiter.RateLimitBlockAction_Seconds{}
+								blockDurationChoiceInt.Seconds = &ves_io_schema_rate_limiter.InputSeconds{}
+								actionChoiceInt.ActionBlock.BlockDurationChoice = blockDurationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+											blockDurationChoiceInt.Seconds.Duration = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := limitsMapStrToI["disabled"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+
+					actionChoiceTypeFound = true
+
+					if v.(bool) {
+						actionChoiceInt := &ves_io_schema_rate_limiter.RateLimitValue_Disabled{}
+						actionChoiceInt.Disabled = &ves_io_schema.Empty{}
+						limits[i].ActionChoice = actionChoiceInt
+					}
+
+				}
+
 				if w, ok := limitsMapStrToI["burst_multiplier"]; ok && !isIntfNil(w) {
 					limits[i].BurstMultiplier = uint32(w.(int))
+				}
+
+				if w, ok := limitsMapStrToI["period_multiplier"]; ok && !isIntfNil(w) {
+					limits[i].PeriodMultiplier = uint32(w.(int))
 				}
 
 				if w, ok := limitsMapStrToI["total_number"]; ok && !isIntfNil(w) {
@@ -341,8 +517,114 @@ func resourceVolterraRateLimiterUpdate(d *schema.ResourceData, meta interface{})
 				limits[i] = &ves_io_schema_rate_limiter.RateLimitValue{}
 				limitsMapStrToI := set.(map[string]interface{})
 
+				actionChoiceTypeFound := false
+
+				if v, ok := limitsMapStrToI["action_block"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+
+					actionChoiceTypeFound = true
+					actionChoiceInt := &ves_io_schema_rate_limiter.RateLimitValue_ActionBlock{}
+					actionChoiceInt.ActionBlock = &ves_io_schema_rate_limiter.RateLimitBlockAction{}
+					limits[i].ActionChoice = actionChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							blockDurationChoiceTypeFound := false
+
+							if v, ok := cs["hours"]; ok && !isIntfNil(v) && !blockDurationChoiceTypeFound {
+
+								blockDurationChoiceTypeFound = true
+								blockDurationChoiceInt := &ves_io_schema_rate_limiter.RateLimitBlockAction_Hours{}
+								blockDurationChoiceInt.Hours = &ves_io_schema_rate_limiter.InputHours{}
+								actionChoiceInt.ActionBlock.BlockDurationChoice = blockDurationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+											blockDurationChoiceInt.Hours.Duration = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["minutes"]; ok && !isIntfNil(v) && !blockDurationChoiceTypeFound {
+
+								blockDurationChoiceTypeFound = true
+								blockDurationChoiceInt := &ves_io_schema_rate_limiter.RateLimitBlockAction_Minutes{}
+								blockDurationChoiceInt.Minutes = &ves_io_schema_rate_limiter.InputMinutes{}
+								actionChoiceInt.ActionBlock.BlockDurationChoice = blockDurationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+											blockDurationChoiceInt.Minutes.Duration = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["seconds"]; ok && !isIntfNil(v) && !blockDurationChoiceTypeFound {
+
+								blockDurationChoiceTypeFound = true
+								blockDurationChoiceInt := &ves_io_schema_rate_limiter.RateLimitBlockAction_Seconds{}
+								blockDurationChoiceInt.Seconds = &ves_io_schema_rate_limiter.InputSeconds{}
+								actionChoiceInt.ActionBlock.BlockDurationChoice = blockDurationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+											blockDurationChoiceInt.Seconds.Duration = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := limitsMapStrToI["disabled"]; ok && !isIntfNil(v) && !actionChoiceTypeFound {
+
+					actionChoiceTypeFound = true
+
+					if v.(bool) {
+						actionChoiceInt := &ves_io_schema_rate_limiter.RateLimitValue_Disabled{}
+						actionChoiceInt.Disabled = &ves_io_schema.Empty{}
+						limits[i].ActionChoice = actionChoiceInt
+					}
+
+				}
+
 				if w, ok := limitsMapStrToI["burst_multiplier"]; ok && !isIntfNil(w) {
 					limits[i].BurstMultiplier = uint32(w.(int))
+				}
+
+				if w, ok := limitsMapStrToI["period_multiplier"]; ok && !isIntfNil(w) {
+					limits[i].PeriodMultiplier = uint32(w.(int))
 				}
 
 				if w, ok := limitsMapStrToI["total_number"]; ok && !isIntfNil(w) {
@@ -418,5 +700,8 @@ func resourceVolterraRateLimiterDelete(d *schema.ResourceData, meta interface{})
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra RateLimiter obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_rate_limiter.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_rate_limiter.ObjectType, namespace, name, opts...)
 }

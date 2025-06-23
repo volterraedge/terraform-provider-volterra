@@ -34,10 +34,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.api_discovery_on_cache_miss",
 		"spec.gc_spec.api_specification_on_cache_miss",
 		"spec.gc_spec.app_firewall_on_cache_miss",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"spec.gc_spec.cache_rules.#",
 		"spec.gc_spec.challenge_on_cache_miss",
 		"spec.gc_spec.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -45,6 +42,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.ip_reputation_on_cache_miss",
 		"spec.gc_spec.jwt_validation.jwks",
 		"spec.gc_spec.more_option",
+		"spec.gc_spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.other_settings.geo_filtering",
 		"spec.gc_spec.other_settings.ip_filtering",
 	}
@@ -54,10 +52,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.api_discovery_on_cache_miss",
 		"spec.gc_spec.api_specification_on_cache_miss",
 		"spec.gc_spec.app_firewall_on_cache_miss",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"spec.gc_spec.cache_rules.#",
 		"spec.gc_spec.challenge_on_cache_miss",
 		"spec.gc_spec.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -65,6 +60,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.ip_reputation_on_cache_miss",
 		"spec.gc_spec.jwt_validation.jwks",
 		"spec.gc_spec.more_option",
+		"spec.gc_spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.other_settings.geo_filtering",
 		"spec.gc_spec.other_settings.ip_filtering",
 	}
@@ -76,10 +72,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.api_discovery_on_cache_miss",
 		"spec.gc_spec.api_specification_on_cache_miss",
 		"spec.gc_spec.app_firewall_on_cache_miss",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"spec.gc_spec.cache_rules.#",
 		"spec.gc_spec.challenge_on_cache_miss",
 		"spec.gc_spec.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -87,8 +80,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.ip_reputation_on_cache_miss",
 		"spec.gc_spec.jwt_validation.jwks",
 		"spec.gc_spec.more_option",
+		"spec.gc_spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.other_settings.geo_filtering",
 		"spec.gc_spec.other_settings.ip_filtering",
+		"status.#.site_status",
+		"status.#.status",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.List"] = []string{
@@ -96,10 +92,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.api_discovery_on_cache_miss",
 		"items.#.spec.gc_spec.api_specification_on_cache_miss",
 		"items.#.spec.gc_spec.app_firewall_on_cache_miss",
-		"items.#.spec.gc_spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"items.#.spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"items.#.spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"items.#.spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"items.#.spec.gc_spec.cache_rules.#",
 		"items.#.spec.gc_spec.challenge_on_cache_miss",
 		"items.#.spec.gc_spec.default_cache_action.eligible_for_cache",
 		"items.#.spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -107,8 +100,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.ip_reputation_on_cache_miss",
 		"items.#.spec.gc_spec.jwt_validation.jwks",
 		"items.#.spec.gc_spec.more_option",
+		"items.#.spec.gc_spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"items.#.spec.gc_spec.other_settings.geo_filtering",
 		"items.#.spec.gc_spec.other_settings.ip_filtering",
+		"items.#.status.#.site_status",
+		"items.#.status.#.status",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.ListStream"] = []string{
@@ -116,10 +112,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.api_discovery_on_cache_miss",
 		"items.#.spec.gc_spec.api_specification_on_cache_miss",
 		"items.#.spec.gc_spec.app_firewall_on_cache_miss",
-		"items.#.spec.gc_spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"items.#.spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"items.#.spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"items.#.spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"items.#.spec.gc_spec.cache_rules.#",
 		"items.#.spec.gc_spec.challenge_on_cache_miss",
 		"items.#.spec.gc_spec.default_cache_action.eligible_for_cache",
 		"items.#.spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -127,8 +120,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.ip_reputation_on_cache_miss",
 		"items.#.spec.gc_spec.jwt_validation.jwks",
 		"items.#.spec.gc_spec.more_option",
+		"items.#.spec.gc_spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"items.#.spec.gc_spec.other_settings.geo_filtering",
 		"items.#.spec.gc_spec.other_settings.ip_filtering",
+		"items.#.status.#.site_status",
+		"items.#.status.#.status",
 	}
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.views.cdn_loadbalancer.crudapi.API.Replace"] = []string{
@@ -136,10 +132,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.api_discovery_on_cache_miss",
 		"spec.gc_spec.api_specification_on_cache_miss",
 		"spec.gc_spec.app_firewall_on_cache_miss",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"spec.gc_spec.cache_rules.#",
 		"spec.gc_spec.challenge_on_cache_miss",
 		"spec.gc_spec.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -147,6 +140,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.ip_reputation_on_cache_miss",
 		"spec.gc_spec.jwt_validation.jwks",
 		"spec.gc_spec.more_option",
+		"spec.gc_spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.other_settings.geo_filtering",
 		"spec.gc_spec.other_settings.ip_filtering",
 	}
@@ -156,10 +150,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.api_discovery_on_cache_miss",
 		"spec.gc_spec.api_specification_on_cache_miss",
 		"spec.gc_spec.app_firewall_on_cache_miss",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.hostname_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_request_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri",
-		"spec.gc_spec.cache_rules.#.eligible_for_cache.scheme_hostname_uri_query",
+		"spec.gc_spec.cache_rules.#",
 		"spec.gc_spec.challenge_on_cache_miss",
 		"spec.gc_spec.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
@@ -167,6 +158,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.ip_reputation_on_cache_miss",
 		"spec.gc_spec.jwt_validation.jwks",
 		"spec.gc_spec.more_option",
+		"spec.gc_spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.other_settings.geo_filtering",
 		"spec.gc_spec.other_settings.ip_filtering",
 	}
@@ -214,11 +206,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

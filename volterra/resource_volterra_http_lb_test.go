@@ -8,6 +8,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
+	"gopkg.volterra.us/stdlib/client"
+	"gopkg.volterra.us/stdlib/server"
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
 	ves_io_schema_app_setting "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_setting"
@@ -24,8 +26,6 @@ import (
 	ves_io_schema_views_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	vh_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
-	"gopkg.volterra.us/stdlib/client"
-	"gopkg.volterra.us/stdlib/server"
 )
 
 // TestAccHTTPLB token creation test
@@ -50,7 +50,7 @@ func TestHTTPLB(t *testing.T) {
 		client.WithTenant(tenantName),
 		client.WithCreatorClass("test"),
 		client.WithCreatorID("test-"+t.Name()))
-	tenantObj := mkDBObjTenant(tenantName, uuid.New().String(), withAddonServices("f5xc-flow-collection", "f5xc-ipv6-standard", "f5xc-waap-standard"))
+	tenantObj := mkDBObjTenant(tenantName, uuid.New().String(), withAddonServices("f5xc-flow-collection", "f5xc-ipv6-standard", "f5xc-waap-standard", "f5xc-content-delivery-network-advanced"))
 	f.MustCreateEntry(tenantObj)
 
 	nsName := "default"
@@ -260,12 +260,6 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		    enable_threat_campaigns    = true
 		    default_violation_settings = true
 		  }
-
-		  bot_protection_setting {
-		    malicious_bot_action  = "BLOCK"
-		    suspicious_bot_action = "REPORT"
-		    good_bot_action       = "REPORT"
-		  }
 		}
 		resource "volterra_service_policy" "allow_ns" {
 		  name       = "allow-ns"
@@ -306,16 +300,28 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		  name = "%[1]s"
 		  default_sensitive_data_policy    = true
 		  disable_threat_mesh              = true
+		  disable_api_testing 			   = true
 		  disable_api_definition           = true
           disable_api_discovery            = true      
           disable_malicious_user_detection = true
           disable_trust_client_ip_headers  = true
 		  disable_malware_protection       = true
-		  l7_ddos_action_default           = true
 		  namespace = volterra_namespace.app.name
 		  labels = {
 			  "ves.io/app_type" = volterra_app_type.app_type.name
 			  "new-test"        = "true"
+		  }
+          caching_policy {
+			custom_cache_rule {
+			  cdn_cache_rules {
+				name = "rule1-test-1"
+				namespace = "%[2]s"
+				tenant    = "tenant1"
+			  }
+			}
+			default_cache_action {
+			  cache_ttl_default = "7h"
+			}
 		  }
 		  advertise_on_public_default_vip = true
 		  no_challenge = true
@@ -339,7 +345,6 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		  }
 		  round_robin = true
 		  domains = ["http.helloclouds.app"]
-		  multi_lb_app = true
 		  user_identification {
 		    name = volterra_user_identification.%[1]s.name
 		    namespace = "%[2]s"
@@ -362,9 +367,6 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 		  }
 		  more_option {
 			disable_default_error_pages         = true
-  			disable_path_normalize              = true
-  			enable_path_normalize               = false
-  			enable_strict_sni_host_header_check = true
   			idle_timeout                        = %[5]d
   			max_request_header_size             = 80
   			request_headers_to_remove           = []
@@ -430,7 +432,7 @@ func TestHTTPLBWithAutoCert(t *testing.T) {
 		client.WithTenant(tenantName),
 		client.WithCreatorClass("test"),
 		client.WithCreatorID("test-"+t.Name()))
-	tenantObj := mkDBObjTenant(tenantName, uuid.New().String())
+	tenantObj := mkDBObjTenant(tenantName, uuid.New().String(), withAddonServices("f5xc-flow-collection", "f5xc-ipv6-standard", "f5xc-waap-standard", "f5xc-content-delivery-network-advanced"))
 	f.MustCreateEntry(tenantObj)
 
 	nsName := "default"
@@ -522,11 +524,11 @@ func testConfigHTTPLBWithAutoCert(name, namespace, existLbName, existNsName stri
 		  default_sensitive_data_policy    = true
 		  disable_threat_mesh              = true
 		  disable_api_definition           = true
-          disable_api_discovery            = true       
+          disable_api_discovery            = true
+		  disable_api_testing              = true
 		  disable_malware_protection       = true       
           disable_malicious_user_detection = true
           disable_trust_client_ip_headers  = true
-		  l7_ddos_action_default           = true
 		  disable_waf                      = true 
 		  user_id_client_ip                = true
 		  namespace = volterra_namespace.app.name
@@ -540,7 +542,6 @@ func testConfigHTTPLBWithAutoCert(name, namespace, existLbName, existNsName stri
 			connection_idle_timeout  = 120000 
 			default_header           = false
 			default_loadbalancer     = false
-			disable_path_normalize   = false
 			enable_path_normalize    = true
 			http_redirect            = true
 			no_mtls                  = true
@@ -548,11 +549,22 @@ func testConfigHTTPLBWithAutoCert(name, namespace, existLbName, existNsName stri
 			pass_through             = false
 			port = "443"
 		  }
+          caching_policy {
+			custom_cache_rule {
+			  cdn_cache_rules {
+				name = "rule1-test-1"
+				namespace = volterra_namespace.app.name
+				tenant    = "tenant1"
+			  }
+			}
+			default_cache_action {
+			  cache_ttl_default = "7h"
+			}
+		  }
 		  disable_rate_limit = true
 		  no_service_policies = true
 		  round_robin = true
 		  domains = ["http.helloclouds.app", "http.test.com", "www.f5cert.com"]
-		  multi_lb_app = true
 		}
 		data "volterra_http_loadbalancer_state" "http_lb" {
 			name = "%[3]s"

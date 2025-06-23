@@ -22,7 +22,7 @@ resource "volterra_enhanced_firewall_policy" "example" {
 
   // One of the arguments from this list "allow_all allowed_destinations allowed_sources denied_destinations denied_sources deny_all rule_list" must be set
 
-  allowed_destinations {
+  allowed_sources {
     ipv6_prefix = ["[2001:db8::1::/112, 2001::db8::2::/112]"]
 
     prefix = ["[192.168.1.0/24, 192.168.2.0/24]\""]
@@ -111,12 +111,6 @@ Destination is virtual-ip of all loadbalancer on site-local-inside network.
 ### Destination Choice All Slo Vips
 
 Destination is virtual-ip of all loadbalancer on site-local-outside network.
-
-### Destination Choice Destination Aws Subnet Ids
-
-Destination is any address in list of AWS Subnets.
-
-`subnet_id` - (Required) List of Subnet Identifiers in AWS (`String`).
 
 ### Destination Choice Destination Aws Vpc Ids
 
@@ -228,7 +222,7 @@ Ordered List of Enhanced Firewall Policy Rules.
 
 `advanced_action` - (Optional) Log any connection matching the rule. See [Rules Advanced Action ](#rules-advanced-action) below for details.
 
-###### One of the arguments from this list "all_destinations, all_sli_vips, all_slo_vips, destination_aws_subnet_ids, destination_aws_vpc_ids, destination_ip_prefix_set, destination_label_selector, destination_namespace, destination_prefix_list, inside_destinations, outside_destinations" must be set
+###### One of the arguments from this list "all_destinations, all_sli_vips, all_slo_vips, destination_aws_vpc_ids, destination_ip_prefix_set, destination_label_selector, destination_prefix_list, inside_destinations, outside_destinations" must be set
 
 `all_destinations` - (Optional) Any address that matches 0/0 ip prefix (`Bool`).
 
@@ -236,15 +230,11 @@ Ordered List of Enhanced Firewall Policy Rules.
 
 `all_slo_vips` - (Optional) Destination is virtual-ip of all loadbalancer on site-local-outside network (`Bool`).
 
-`destination_aws_subnet_ids` - (Optional) Destination is any address in list of AWS Subnets. See [Destination Choice Destination Aws Subnet Ids ](#destination-choice-destination-aws-subnet-ids) below for details.
-
 `destination_aws_vpc_ids` - (Optional) Destination is any address in list of AWS VPCs. See [Destination Choice Destination Aws Vpc Ids ](#destination-choice-destination-aws-vpc-ids) below for details.
 
 `destination_ip_prefix_set` - (Optional) Addresses that match one of the prefix in the ip-prefix-set. See [Destination Choice Destination Ip Prefix Set ](#destination-choice-destination-ip-prefix-set) below for details.
 
 `destination_label_selector` - (Optional) These labels can be cloud tags defined on the vpc resource, labels on the global network or others.. See [Destination Choice Destination Label Selector ](#destination-choice-destination-label-selector) below for details.
-
-`destination_namespace` - (Optional) All addresses in a namespace (`String`).(Deprecated)
 
 `destination_prefix_list` - (Optional) Addresses that match one of the prefix in the list. See [Destination Choice Destination Prefix List ](#destination-choice-destination-prefix-list) below for details.
 
@@ -256,7 +246,7 @@ Ordered List of Enhanced Firewall Policy Rules.
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Rules Metadata ](#rules-metadata) below for details.
 
-###### One of the arguments from this list "all_sources, inside_sources, outside_sources, source_aws_subnet_ids, source_aws_vpc_ids, source_ip_prefix_set, source_label_selector, source_namespace, source_prefix_list" must be set
+###### One of the arguments from this list "all_sources, inside_sources, outside_sources, source_aws_vpc_ids, source_ip_prefix_set, source_label_selector, source_prefix_list" must be set
 
 `all_sources` - (Optional) Any address that matches 0/0 ip prefix (`Bool`).
 
@@ -264,15 +254,11 @@ Ordered List of Enhanced Firewall Policy Rules.
 
 `outside_sources` - (Optional) All addresses reachable in site-local outside interfaces (`Bool`).
 
-`source_aws_subnet_ids` - (Optional) Source is any address in list of AWS Subnets. See [Source Choice Source Aws Subnet Ids ](#source-choice-source-aws-subnet-ids) below for details.
-
 `source_aws_vpc_ids` - (Optional) Source is any address in list of AWS VPCs. See [Source Choice Source Aws Vpc Ids ](#source-choice-source-aws-vpc-ids) below for details.
 
 `source_ip_prefix_set` - (Optional) Addresses that match one of the prefix in the ip-prefix-set. See [Source Choice Source Ip Prefix Set ](#source-choice-source-ip-prefix-set) below for details.
 
 `source_label_selector` - (Optional) These labels can be cloud tags defined on the vpc resource, labels on the global network or others.. See [Source Choice Source Label Selector ](#source-choice-source-label-selector) below for details.
-
-`source_namespace` - (Optional) All addresses in a namespace (`String`).(Deprecated)
 
 `source_prefix_list` - (Optional) list contains sublist of both v4 and v6 prfix list. See [Source Choice Source Prefix List ](#source-choice-source-prefix-list) below for details.
 
@@ -306,8 +292,6 @@ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Source Choice All Sources
@@ -321,12 +305,6 @@ All addresses reachable in site-local inside interfaces.
 ### Source Choice Outside Sources
 
 All addresses reachable in site-local outside interfaces.
-
-### Source Choice Source Aws Subnet Ids
-
-Source is any address in list of AWS Subnets.
-
-`subnet_id` - (Required) List of Subnet Identifiers in AWS (`String`).
 
 ### Source Choice Source Aws Vpc Ids
 

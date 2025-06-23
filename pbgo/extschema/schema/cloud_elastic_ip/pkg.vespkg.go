@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/store"
 	"gopkg.volterra.us/stdlib/svcfw"
 )
@@ -27,6 +28,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.cloud_elastic_ip.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.cloud_elastic_ip.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.cloud_elastic_ip.ReplaceResponse"] = ReplaceResponseValidator()
+
+	vr["ves.io.schema.cloud_elastic_ip.ForceDeleteCloudElasticIPRequest"] = ForceDeleteCloudElasticIPRequestValidator()
+	vr["ves.io.schema.cloud_elastic_ip.ForceDeleteCloudElasticIPResponse"] = ForceDeleteCloudElasticIPResponseValidator()
 
 	vr["ves.io.schema.cloud_elastic_ip.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.cloud_elastic_ip.DeleteSpecType"] = DeleteSpecTypeValidator()
@@ -56,6 +60,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.cloud_elastic_ip.API"] = "config"
+	sm["ves.io.schema.cloud_elastic_ip.CustomAPI"] = "config"
 
 }
 
@@ -93,6 +98,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 
 	}()
 
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.cloud_elastic_ip.Object"] = CustomAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.cloud_elastic_ip.CustomAPI"] = NewCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.cloud_elastic_ip.CustomAPI"] = NewCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.cloud_elastic_ip.CustomAPI"] = RegisterCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.cloud_elastic_ip.CustomAPI"] = RegisterGwCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.cloud_elastic_ip.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomAPIServer(svc)
+		}
+
+	}()
+
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -100,11 +125,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

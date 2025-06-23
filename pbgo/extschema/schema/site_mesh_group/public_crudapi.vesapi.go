@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/site_mesh_groups/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -1122,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.site_mesh_group.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.site_mesh_group.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2944,8 +2957,19 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create Site Mesh Group",
             "x-ves-displayorder": "1,3,4",
             "x-ves-oneof-field-mesh_choice": "[\"full_mesh\",\"hub_mesh\",\"spoke_mesh\"]",
+            "x-ves-oneof-field-re_fallback": "[\"disable_re_fallback\",\"enable_re_fallback\"]",
             "x-ves-proto-message": "ves.io.schema.site_mesh_group.CreateSpecType",
             "properties": {
+                "disable_re_fallback": {
+                    "description": "Exclusive with [enable_re_fallback]\n Disable RE Fallback connectivity when SMG fails",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "enable_re_fallback": {
+                    "description": "Exclusive with [disable_re_fallback]\n Enable RE Fallback connectivity when SMG fails",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
                 "full_mesh": {
                     "description": "Exclusive with [hub_mesh spoke_mesh]\n  Full mesh of tunnels are created between all sites",
                     "$ref": "#/definitions/site_mesh_groupFullMeshGroupType",
@@ -2982,8 +3006,19 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get Site Mesh Group",
             "x-ves-displayorder": "1,3,4,2",
             "x-ves-oneof-field-mesh_choice": "[\"full_mesh\",\"hub_mesh\",\"spoke_mesh\"]",
+            "x-ves-oneof-field-re_fallback": "[\"disable_re_fallback\",\"enable_re_fallback\"]",
             "x-ves-proto-message": "ves.io.schema.site_mesh_group.GetSpecType",
             "properties": {
+                "disable_re_fallback": {
+                    "description": "Exclusive with [enable_re_fallback]\n Disable RE Fallback connectivity when SMG fails",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "enable_re_fallback": {
+                    "description": "Exclusive with [disable_re_fallback]\n Enable RE Fallback connectivity when SMG fails",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
                 "full_mesh": {
                     "description": "Exclusive with [hub_mesh spoke_mesh]\n  Full mesh of tunnels are created between all sites",
                     "$ref": "#/definitions/site_mesh_groupFullMeshGroupType",
@@ -3020,8 +3055,19 @@ var APISwaggerJSON string = `{
             "x-displayname": "Replace Site Mesh Group",
             "x-ves-displayorder": "1,3,4",
             "x-ves-oneof-field-mesh_choice": "[\"full_mesh\",\"hub_mesh\",\"spoke_mesh\"]",
+            "x-ves-oneof-field-re_fallback": "[\"disable_re_fallback\",\"enable_re_fallback\"]",
             "x-ves-proto-message": "ves.io.schema.site_mesh_group.ReplaceSpecType",
             "properties": {
+                "disable_re_fallback": {
+                    "description": "Exclusive with [enable_re_fallback]\n Disable RE Fallback connectivity when SMG fails",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "enable_re_fallback": {
+                    "description": "Exclusive with [disable_re_fallback]\n Enable RE Fallback connectivity when SMG fails",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
                 "full_mesh": {
                     "description": "Exclusive with [hub_mesh spoke_mesh]\n  Full mesh of tunnels are created between all sites",
                     "$ref": "#/definitions/site_mesh_groupFullMeshGroupType",

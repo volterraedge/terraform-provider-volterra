@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.stored_object.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.stored_object.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3310,6 +3310,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -3407,7 +3414,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of stored_object in the storage backend",
             "title": "GlobalSpecType",
             "x-displayname": "Specification",
-            "x-ves-oneof-field-object_attributes": "[\"mobile_integrator\",\"mobile_sdk\",\"no_attributes\"]",
+            "x-ves-oneof-field-object_attributes": "[\"mobile_app_shield\",\"mobile_integrator\",\"mobile_sdk\",\"no_attributes\"]",
             "x-ves-proto-message": "ves.io.schema.stored_object.GlobalSpecType",
             "properties": {
                 "content_format": {
@@ -3417,14 +3424,20 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Content Format",
                     "x-ves-example": "json, yaml, js, html"
                 },
+                "mobile_app_shield": {
+                    "description": "Exclusive with [mobile_integrator mobile_sdk no_attributes]\n Attributes of a object of a type mobile-app-shield",
+                    "title": "mobile_app_shield",
+                    "$ref": "#/definitions/stored_objectMobileAppShieldAttributes",
+                    "x-displayname": "Attributes of a object of a type mobile-app-shield"
+                },
                 "mobile_integrator": {
-                    "description": "Exclusive with [mobile_sdk no_attributes]\n Attributes of a object of a type mobile-integrator",
+                    "description": "Exclusive with [mobile_app_shield mobile_sdk no_attributes]\n Attributes of a object of a type mobile-integrator",
                     "title": "mobile_integrator",
                     "$ref": "#/definitions/stored_objectMobileIntegratorAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-integrator"
                 },
                 "mobile_sdk": {
-                    "description": "Exclusive with [mobile_integrator no_attributes]\n Attributes of a object of a type mobile-sdk",
+                    "description": "Exclusive with [mobile_app_shield mobile_integrator no_attributes]\n Attributes of a object of a type mobile-sdk",
                     "title": "mobile_sdk",
                     "$ref": "#/definitions/stored_objectMobileSDKAttributes",
                     "x-displayname": "Attributes of a object of a type mobile-sdk"
@@ -3440,7 +3453,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "no_attributes": {
-                    "description": "Exclusive with [mobile_integrator mobile_sdk]\n No special attributes specific to the object type",
+                    "description": "Exclusive with [mobile_app_shield mobile_integrator mobile_sdk]\n No special attributes specific to the object type",
                     "title": "no_attributes",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "No attributes"
@@ -3464,6 +3477,39 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "stored_objectMobileAppShieldAttributes": {
+            "type": "object",
+            "description": "Describes attributes specific to object type - mobile-app-shield",
+            "title": "MobileAppShieldAttributes",
+            "x-displayname": "mobile-app-shield attributes",
+            "x-ves-proto-message": "ves.io.schema.stored_object.MobileAppShieldAttributes",
+            "properties": {
+                "os_type": {
+                    "description": " Select the Operating System type for mobile app shield release.\n\nExample: - \"IOS\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "os_type",
+                    "$ref": "#/definitions/stored_objectOSType",
+                    "x-displayname": "Operating System type",
+                    "x-ves-example": "IOS",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "release_version": {
+                    "type": "string",
+                    "description": " Version of mobile app shield release\n\nExample: - \"v.4.2.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 32\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "release_version",
+                    "maxLength": 32,
+                    "x-displayname": "mobile app shield release version",
+                    "x-ves-example": "v.4.2.1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "32",
+                        "ves.io.schema.rules.string.not_empty": "true"
                     }
                 }
             }

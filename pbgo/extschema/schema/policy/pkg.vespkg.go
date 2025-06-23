@@ -20,6 +20,13 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.policy.AsnMatchList"] = AsnMatchListValidator()
 	vr["ves.io.schema.policy.AsnMatcherType"] = AsnMatcherTypeValidator()
 	vr["ves.io.schema.policy.BotAction"] = BotActionValidator()
+	vr["ves.io.schema.policy.BotAdvancedDomainMatcher"] = BotAdvancedDomainMatcherValidator()
+	vr["ves.io.schema.policy.BotAdvancedDomainMatcherType"] = BotAdvancedDomainMatcherTypeValidator()
+	vr["ves.io.schema.policy.BotAdvancedDomainOperator"] = BotAdvancedDomainOperatorValidator()
+	vr["ves.io.schema.policy.BotAdvancedEndpointMatcherType"] = BotAdvancedEndpointMatcherTypeValidator()
+	vr["ves.io.schema.policy.BotAdvancedPathMatcher"] = BotAdvancedPathMatcherValidator()
+	vr["ves.io.schema.policy.BotAdvancedPathMatcherType"] = BotAdvancedPathMatcherTypeValidator()
+	vr["ves.io.schema.policy.BotAdvancedPathOperator"] = BotAdvancedPathOperatorValidator()
 	vr["ves.io.schema.policy.BotNameContext"] = BotNameContextValidator()
 	vr["ves.io.schema.policy.ClientMatcher"] = ClientMatcherValidator()
 	vr["ves.io.schema.policy.ContentRewriteAction"] = ContentRewriteActionValidator()
@@ -45,6 +52,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.policy.MaskingConfig"] = MaskingConfigValidator()
 	vr["ves.io.schema.policy.MatcherType"] = MatcherTypeValidator()
 	vr["ves.io.schema.policy.MatcherTypeBasic"] = MatcherTypeBasicValidator()
+	vr["ves.io.schema.policy.MobileIdentifierMatcherAction"] = MobileIdentifierMatcherActionValidator()
 	vr["ves.io.schema.policy.ModifyAction"] = ModifyActionValidator()
 	vr["ves.io.schema.policy.OpenApiValidationAction"] = OpenApiValidationActionValidator()
 	vr["ves.io.schema.policy.OriginServerSubsetRule"] = OriginServerSubsetRuleValidator()
@@ -103,11 +111,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

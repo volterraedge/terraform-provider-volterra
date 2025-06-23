@@ -214,135 +214,6 @@ func resourceVolterraZtnaApplication() *schema.Resource {
 													},
 												},
 
-												"cloud_edge_segment": {
-
-													Type:     schema.TypeList,
-													MaxItems: 1,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"cloud_edge": {
-
-																Type:     schema.TypeList,
-																MaxItems: 1,
-																Required: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"kind": {
-																			Type:     schema.TypeString,
-																			Computed: true,
-																		},
-
-																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-
-															"ip": {
-																Type:     schema.TypeString,
-																Required: true,
-															},
-
-															"ipv6": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"segment": {
-
-																Type:     schema.TypeList,
-																MaxItems: 1,
-																Required: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"kind": {
-																			Type:     schema.TypeString,
-																			Computed: true,
-																		},
-
-																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-														},
-													},
-												},
-
-												"segment": {
-
-													Type:     schema.TypeList,
-													MaxItems: 1,
-													Optional: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"ipv4_vip": {
-																Type:     schema.TypeString,
-																Required: true,
-															},
-
-															"ipv6_vip": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-
-															"segment": {
-
-																Type:     schema.TypeList,
-																MaxItems: 1,
-																Required: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"kind": {
-																			Type:     schema.TypeString,
-																			Computed: true,
-																		},
-
-																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
-																		},
-																	},
-																},
-															},
-														},
-													},
-												},
-
 												"site": {
 
 													Type:     schema.TypeList,
@@ -1408,6 +1279,87 @@ func resourceVolterraZtnaApplicationCreate(d *schema.ResourceData, meta interfac
 
 										}
 
+										if v, ok := advertiseWhereMapStrToI["virtual_site_segment"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.WhereType_VirtualSiteSegment{}
+											choiceInt.VirtualSiteSegment = &ves_io_schema_views.WhereVirtualSiteSegment{}
+											advertiseWhere[i].Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+														choiceInt.VirtualSiteSegment.Ip = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceInt.VirtualSiteSegment.Ipv6 = v.(string)
+
+													}
+
+													if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														segment := &ves_io_schema_views.ObjectRefType{}
+														choiceInt.VirtualSiteSegment.Segment = segment
+														for _, set := range sl {
+															if set != nil {
+																segmentMapStrToI := set.(map[string]interface{})
+
+																if w, ok := segmentMapStrToI["name"]; ok && !isIntfNil(w) {
+																	segment.Name = w.(string)
+																}
+
+																if w, ok := segmentMapStrToI["namespace"]; ok && !isIntfNil(w) {
+																	segment.Namespace = w.(string)
+																}
+
+																if w, ok := segmentMapStrToI["tenant"]; ok && !isIntfNil(w) {
+																	segment.Tenant = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														virtualSite := &ves_io_schema_views.ObjectRefType{}
+														choiceInt.VirtualSiteSegment.VirtualSite = virtualSite
+														for _, set := range sl {
+															if set != nil {
+																virtualSiteMapStrToI := set.(map[string]interface{})
+
+																if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
+																	virtualSite.Name = w.(string)
+																}
+
+																if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+																	virtualSite.Namespace = w.(string)
+																}
+
+																if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+																	virtualSite.Tenant = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
 										if v, ok := advertiseWhereMapStrToI["virtual_site_with_vip"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 											choiceTypeFound = true
@@ -2257,6 +2209,87 @@ func resourceVolterraZtnaApplicationUpdate(d *schema.ResourceData, meta interfac
 
 										}
 
+										if v, ok := advertiseWhereMapStrToI["virtual_site_segment"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+											choiceTypeFound = true
+											choiceInt := &ves_io_schema_views.WhereType_VirtualSiteSegment{}
+											choiceInt.VirtualSiteSegment = &ves_io_schema_views.WhereVirtualSiteSegment{}
+											advertiseWhere[i].Choice = choiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+														choiceInt.VirtualSiteSegment.Ip = v.(string)
+
+													}
+
+													if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+														choiceInt.VirtualSiteSegment.Ipv6 = v.(string)
+
+													}
+
+													if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														segment := &ves_io_schema_views.ObjectRefType{}
+														choiceInt.VirtualSiteSegment.Segment = segment
+														for _, set := range sl {
+															if set != nil {
+																segmentMapStrToI := set.(map[string]interface{})
+
+																if w, ok := segmentMapStrToI["name"]; ok && !isIntfNil(w) {
+																	segment.Name = w.(string)
+																}
+
+																if w, ok := segmentMapStrToI["namespace"]; ok && !isIntfNil(w) {
+																	segment.Namespace = w.(string)
+																}
+
+																if w, ok := segmentMapStrToI["tenant"]; ok && !isIntfNil(w) {
+																	segment.Tenant = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														virtualSite := &ves_io_schema_views.ObjectRefType{}
+														choiceInt.VirtualSiteSegment.VirtualSite = virtualSite
+														for _, set := range sl {
+															if set != nil {
+																virtualSiteMapStrToI := set.(map[string]interface{})
+
+																if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
+																	virtualSite.Name = w.(string)
+																}
+
+																if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+																	virtualSite.Namespace = w.(string)
+																}
+
+																if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+																	virtualSite.Tenant = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
 										if v, ok := advertiseWhereMapStrToI["virtual_site_with_vip"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 											choiceTypeFound = true
@@ -2557,5 +2590,8 @@ func resourceVolterraZtnaApplicationDelete(d *schema.ResourceData, meta interfac
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra ZtnaApplication obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_ztna_application.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_ztna_application.ObjectType, namespace, name, opts...)
 }

@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.discovered_service.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.discovered_service.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2814,6 +2814,187 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "discovered_serviceConsulService": {
+            "type": "object",
+            "description": "Service details discovered from Consul.",
+            "title": "Consul Service",
+            "x-displayname": "Consul Service",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.ConsulService",
+            "properties": {
+                "discovery_object": {
+                    "description": " Reference to the Discovery Object",
+                    "title": "Discovery Object",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Reference to Discovery Object"
+                },
+                "pods": {
+                    "type": "array",
+                    "description": " List of pod-name to IP address mappings for the service\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
+                    "title": "Pod List",
+                    "maxItems": 50,
+                    "items": {
+                        "$ref": "#/definitions/discoveryPodInfoType"
+                    },
+                    "x-displayname": "PODs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "50"
+                    }
+                },
+                "ports": {
+                    "type": "array",
+                    "description": " List of ports along with protocol on which the service is exposed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
+                    "title": "Port List",
+                    "maxItems": 50,
+                    "items": {
+                        "$ref": "#/definitions/discoveryPortInfoType"
+                    },
+                    "x-displayname": "Ports",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "50"
+                    }
+                },
+                "service_name": {
+                    "type": "string",
+                    "description": " Name of the discovered service\n\nExample: - \"myservice\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Service Name",
+                    "x-displayname": "Service",
+                    "x-ves-example": "myservice",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "discovered_serviceK8sService": {
+            "type": "object",
+            "description": "Service details discovered from K8s.",
+            "title": "K8s Service",
+            "x-displayname": "K8s Service",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.K8sService",
+            "properties": {
+                "discovery_object": {
+                    "description": " Reference to the Discovery Object",
+                    "title": "Discovery Object",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Reference to Discovery Object"
+                },
+                "pods": {
+                    "type": "array",
+                    "description": " List of pod-name to IP address mappings for the service\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
+                    "title": "Pod List",
+                    "maxItems": 50,
+                    "items": {
+                        "$ref": "#/definitions/discoveryPodInfoType"
+                    },
+                    "x-displayname": "PODs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "50"
+                    }
+                },
+                "ports": {
+                    "type": "array",
+                    "description": " List of ports along with protocol on which the service is exposed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
+                    "title": "Port List",
+                    "maxItems": 50,
+                    "items": {
+                        "$ref": "#/definitions/discoveryPortInfoType"
+                    },
+                    "x-displayname": "Ports",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "50"
+                    }
+                },
+                "service_name": {
+                    "type": "string",
+                    "description": " Name of the discovered service\n\nExample: - \"myservice\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Service Name",
+                    "x-displayname": "Service",
+                    "x-ves-example": "myservice",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "discovered_serviceNginxOneDiscoveredServer": {
+            "type": "object",
+            "description": "Discovered Servers Info",
+            "title": "NginxOneDiscoveredServer",
+            "x-displayname": "NGINX One Discovered Server",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.NginxOneDiscoveredServer",
+            "properties": {
+                "domains": {
+                    "type": "array",
+                    "description": " Domains configured on the Server\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Domains",
+                    "maxItems": 32,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Domains",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "nginx_one_object_id": {
+                    "type": "string",
+                    "description": " ID of the NGINX Instance or Config Sync Group\n\nExample: - \"inst_awuzd-6yRb2zbUPRxLa0SQ\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "NGINX Instance or Config Sync Group ID",
+                    "maxLength": 256,
+                    "x-displayname": "Instance or Config Sync Group Object ID",
+                    "x-ves-example": "inst_awuzd-6yRb2zbUPRxLa0SQ",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
+                },
+                "nginx_one_object_name": {
+                    "type": "string",
+                    "description": " Hostname value set for Instance or Name for a Config Sync Group\n in NGINX One",
+                    "title": "NGINX Instance or Config Sync Group Name",
+                    "x-displayname": "Instance or Config Sync Group Name"
+                },
+                "nginx_service_discovery_ref": {
+                    "description": " Reference to the NGINX Service Discovery Object",
+                    "title": "NGINX Service Discovery Object Ref",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "BIG-IP Service Discovery"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Port number on which the Server is exposed\n\nExample: - \"8080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Port",
+                    "format": "int64",
+                    "x-displayname": "Port",
+                    "x-ves-example": "8080",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "server_block": {
+                    "type": "string",
+                    "description": " Server Block Name\n\nExample: - \"server-block-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "Server Block Name",
+                    "maxLength": 256,
+                    "x-displayname": "Server Block Name",
+                    "x-ves-example": "server-block-1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
+                }
+            }
+        },
         "discovered_serviceSpecType": {
             "type": "object",
             "description": "Shape of the Discovered Services Record specification",
@@ -2825,6 +3006,21 @@ var APISwaggerJSON string = `{
                     "title": "gc_spec",
                     "$ref": "#/definitions/schemadiscovered_serviceGlobalSpecType",
                     "x-displayname": "GC Spec"
+                }
+            }
+        },
+        "discovered_serviceThirdPartyApplicationDiscovery": {
+            "type": "object",
+            "description": "Configure third party log source applications to send logs to your XC environment. Define application names and allowed IP ranges using CIDR notation.\nSee Tech Docs for detailed setup instructions.",
+            "title": "third_party_application",
+            "x-displayname": "Discovery",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.ThirdPartyApplicationDiscovery",
+            "properties": {
+                "discovery_object": {
+                    "description": " Reference to the Discovery Object",
+                    "title": "Discovery Object",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Reference to Discovery Object"
                 }
             }
         },
@@ -2922,6 +3118,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
+                "server_name": {
+                    "type": "string",
+                    "description": " Virtual Server name\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "title": "Server Name",
+                    "maxLength": 1024,
+                    "x-displayname": "Server Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1024"
+                    }
+                },
                 "status": {
                     "description": " Availability Status of virtual server.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Availability Status of virtual server",
@@ -2930,6 +3136,16 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "sub_path": {
+                    "type": "string",
+                    "description": " BIG-IP Virtual Server sub path in relation to partition\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "title": "Sub Path",
+                    "maxLength": 1024,
+                    "x-displayname": "Sub Path",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1024"
                     }
                 }
             }
@@ -2974,6 +3190,77 @@ var APISwaggerJSON string = `{
             "default": "EOK",
             "x-displayname": "",
             "x-ves-proto-enum": "ves.io.schema.discovered_service.crudapi.ErrorCode"
+        },
+        "discoveryPodInfoType": {
+            "type": "object",
+            "description": "Information about POD providing the service",
+            "title": "Pod info",
+            "x-displayname": "POD",
+            "x-ves-proto-message": "ves.io.schema.discovery.PodInfoType",
+            "properties": {
+                "ip": {
+                    "type": "string",
+                    "description": " IP Address of the POD\n\nExample: - \"192.1.2.3\"-",
+                    "title": "IP Address",
+                    "x-displayname": "IP",
+                    "x-ves-example": "192.1.2.3"
+                },
+                "pod_name": {
+                    "type": "string",
+                    "description": " Name of the Pod\n\nExample: - \"mypod-nk8wr\"-",
+                    "title": "POD name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "mypod-nk8wr"
+                }
+            }
+        },
+        "discoveryPortInfoType": {
+            "type": "object",
+            "description": "Information about port and protocol on which the service is provided",
+            "title": "Port information",
+            "x-displayname": "Port details",
+            "x-ves-proto-message": "ves.io.schema.discovery.PortInfoType",
+            "properties": {
+                "port": {
+                    "type": "integer",
+                    "description": " Port number on which the service is exposed\n\nExample: - \"8080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Port",
+                    "format": "int64",
+                    "x-displayname": "Port number",
+                    "x-ves-example": "8080",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Protocol on which the service is exposed\n\nExample: - \"TCP\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Protocol",
+                    "x-displayname": "Protocol",
+                    "x-ves-example": "TCP",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "target_port": {
+                    "type": "integer",
+                    "description": " Port on which the pods targeted by the service can be reached.\n TargetPort of Kubernetes service when its type is ClusterIP.\n NodePort of Kubernetes service when its type is NodePort.\n\nExample: - \"8081\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Target Port",
+                    "format": "int64",
+                    "x-displayname": "Target Port number",
+                    "x-ves-example": "8081",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                }
+            }
         },
         "ioschemaObjectRefType": {
             "type": "object",
@@ -3321,6 +3608,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -3408,10 +3702,16 @@ var APISwaggerJSON string = `{
             "title": "Discovered Services Record",
             "x-displayname": "Discovered Services Record",
             "x-ves-displayorder": "6,1,3,2",
-            "x-ves-oneof-field-service_type": "[\"virtual_server\"]",
+            "x-ves-oneof-field-service_type": "[\"consul_service\",\"k8s_service\",\"n1_discovered_server\",\"third_party\",\"virtual_server\"]",
             "x-ves-oneof-field-visibility_action_choice": "[\"visibility_disabled\",\"visibility_enabled\"]",
             "x-ves-proto-message": "ves.io.schema.discovered_service.GlobalSpecType",
             "properties": {
+                "consul_service": {
+                    "description": "Exclusive with [k8s_service n1_discovered_server third_party virtual_server]\n Details of Consul Service discovered by Discovery Service",
+                    "title": "consul_service",
+                    "$ref": "#/definitions/discovered_serviceConsulService",
+                    "x-displayname": "Consul Service"
+                },
                 "http_load_balancers": {
                     "type": "array",
                     "description": " List of references to HTTP Load Balancers using this service",
@@ -3420,6 +3720,18 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "HTTP Load Balancers"
+                },
+                "k8s_service": {
+                    "description": "Exclusive with [consul_service n1_discovered_server third_party virtual_server]\n Details of K8s Service discovered by Discovery Service",
+                    "title": "k8s_service",
+                    "$ref": "#/definitions/discovered_serviceK8sService",
+                    "x-displayname": "K8s Service"
+                },
+                "n1_discovered_server": {
+                    "description": "Exclusive with [consul_service k8s_service third_party virtual_server]\n Details of NGINX Server discovered by NGINX Discovery Service",
+                    "title": "NGINX One Discovered Server",
+                    "$ref": "#/definitions/discovered_serviceNginxOneDiscoveredServer",
+                    "x-displayname": "NGINX One Discovered Server"
                 },
                 "tcp_load_balancers": {
                     "type": "array",
@@ -3430,8 +3742,14 @@ var APISwaggerJSON string = `{
                     },
                     "x-displayname": "TCP Load Balancers"
                 },
+                "third_party": {
+                    "description": "Exclusive with [consul_service k8s_service n1_discovered_server virtual_server]\n Configure third party log source applications to send logs to your XC environment. Define application names and allowed IP ranges using CIDR notation.\n See Tech Docs for details setup instractions.",
+                    "title": "third_party_appliation",
+                    "$ref": "#/definitions/discovered_serviceThirdPartyApplicationDiscovery",
+                    "x-displayname": "Discovery"
+                },
                 "virtual_server": {
-                    "description": "Exclusive with []\n Details of virtual server discovered by Discovered Services ",
+                    "description": "Exclusive with [consul_service k8s_service n1_discovered_server third_party]\n Details of virtual server discovered by Discovery Service",
                     "title": "virtual_server",
                     "$ref": "#/definitions/discovered_serviceVirtualServer",
                     "x-displayname": "Virtual Server"

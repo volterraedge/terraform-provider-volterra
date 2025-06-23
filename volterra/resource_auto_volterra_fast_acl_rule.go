@@ -339,28 +339,30 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 								actionInt.PolicerAction.Ref = refInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refInt[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refInt[i] = &ves_io_schema.ObjectRefType{}
 
-									refInt[i].Kind = "policer"
+										refInt[i].Kind = "policer"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refInt[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -388,28 +390,30 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 								actionInt.ProtocolPolicerAction.Ref = refInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refInt[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refInt[i] = &ves_io_schema.ObjectRefType{}
 
-									refInt[i].Kind = "protocol_policer"
+										refInt[i].Kind = "protocol_policer"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refInt[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -492,7 +496,7 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 
 	sourceTypeFound := false
 
-	if v, ok := d.GetOk("ip_prefix_set"); ok && !sourceTypeFound {
+	if v, ok := d.GetOk("ip_prefix_set"); ok && !isIntfNil(v) && !sourceTypeFound {
 
 		sourceTypeFound = true
 		sourceInt := &ves_io_schema_fast_acl_rule.CreateSpecType_IpPrefixSet{}
@@ -510,28 +514,30 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 					refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 					sourceInt.IpPrefixSet.Ref = refInt
 					for i, ps := range sl {
+						if ps != nil {
 
-						rMapToStrVal := ps.(map[string]interface{})
-						refInt[i] = &ves_io_schema.ObjectRefType{}
+							rMapToStrVal := ps.(map[string]interface{})
+							refInt[i] = &ves_io_schema.ObjectRefType{}
 
-						refInt[i].Kind = "ip_prefix_set"
+							refInt[i].Kind = "ip_prefix_set"
 
-						if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-							refInt[i].Name = v.(string)
+							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+								refInt[i].Name = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								refInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								refInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								refInt[i].Uid = v.(string)
+							}
+
 						}
-
-						if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							refInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							refInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							refInt[i].Uid = v.(string)
-						}
-
 					}
 
 				}
@@ -541,7 +547,7 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
-	if v, ok := d.GetOk("prefix"); ok && !sourceTypeFound {
+	if v, ok := d.GetOk("prefix"); ok && !isIntfNil(v) && !sourceTypeFound {
 
 		sourceTypeFound = true
 		sourceInt := &ves_io_schema_fast_acl_rule.CreateSpecType_Prefix{}
@@ -557,7 +563,12 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					sourceInt.Prefix.Ipv6Prefix = ls
 
@@ -567,7 +578,12 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					sourceInt.Prefix.Prefix = ls
 
@@ -706,28 +722,30 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 								actionInt.PolicerAction.Ref = refInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refInt[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refInt[i] = &ves_io_schema.ObjectRefType{}
 
-									refInt[i].Kind = "policer"
+										refInt[i].Kind = "policer"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refInt[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -755,28 +773,30 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 								actionInt.ProtocolPolicerAction.Ref = refInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refInt[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refInt[i] = &ves_io_schema.ObjectRefType{}
 
-									refInt[i].Kind = "protocol_policer"
+										refInt[i].Kind = "protocol_policer"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refInt[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -856,7 +876,7 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 
 	sourceTypeFound := false
 
-	if v, ok := d.GetOk("ip_prefix_set"); ok && !sourceTypeFound {
+	if v, ok := d.GetOk("ip_prefix_set"); ok && !isIntfNil(v) && !sourceTypeFound {
 
 		sourceTypeFound = true
 		sourceInt := &ves_io_schema_fast_acl_rule.ReplaceSpecType_IpPrefixSet{}
@@ -874,28 +894,30 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 					refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 					sourceInt.IpPrefixSet.Ref = refInt
 					for i, ps := range sl {
+						if ps != nil {
 
-						rMapToStrVal := ps.(map[string]interface{})
-						refInt[i] = &ves_io_schema.ObjectRefType{}
+							rMapToStrVal := ps.(map[string]interface{})
+							refInt[i] = &ves_io_schema.ObjectRefType{}
 
-						refInt[i].Kind = "ip_prefix_set"
+							refInt[i].Kind = "ip_prefix_set"
 
-						if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-							refInt[i].Name = v.(string)
+							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+								refInt[i].Name = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								refInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								refInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								refInt[i].Uid = v.(string)
+							}
+
 						}
-
-						if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							refInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							refInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							refInt[i].Uid = v.(string)
-						}
-
 					}
 
 				}
@@ -905,7 +927,7 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 
 	}
 
-	if v, ok := d.GetOk("prefix"); ok && !sourceTypeFound {
+	if v, ok := d.GetOk("prefix"); ok && !isIntfNil(v) && !sourceTypeFound {
 
 		sourceTypeFound = true
 		sourceInt := &ves_io_schema_fast_acl_rule.ReplaceSpecType_Prefix{}
@@ -921,7 +943,12 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					sourceInt.Prefix.Ipv6Prefix = ls
 
@@ -931,7 +958,12 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field prefix")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					sourceInt.Prefix.Prefix = ls
 
@@ -968,5 +1000,8 @@ func resourceVolterraFastAclRuleDelete(d *schema.ResourceData, meta interface{})
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra FastAclRule obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_fast_acl_rule.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_fast_acl_rule.ObjectType, namespace, name, opts...)
 }

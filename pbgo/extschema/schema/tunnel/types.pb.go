@@ -88,6 +88,160 @@ func (TunnelType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_6fc6059a22f3fcf5, []int{1}
 }
 
+// IKE proposal
+//
+// x-displayName: "IKE Proposal Selection"
+// Set of Encryption, Authentication, PRF and DH groups to be used for establishing IKE connection with peer
+type IKEProposal struct {
+	//Encryption Algorithms
+	//
+	// x-displayName: "Configure Encryption Algorithms"
+	// Select Encrytion algorithms for IKE SA.
+	EncryptionAlgos []schema.EncryptionAlgorithm `protobuf:"varint,1,rep,packed,name=encryption_algos,json=encryptionAlgos,proto3,enum=ves.io.schema.EncryptionAlgorithm" json:"encryption_algos,omitempty"`
+	// Authentication Algorithms
+	//
+	// x-displayName: "Configure Authentication Algorithms"
+	// Select Authentication algorithms for IKE SA.
+	AuthenticationAlgos []schema.AuthenticationAlgorithm `protobuf:"varint,2,rep,packed,name=authentication_algos,json=authenticationAlgos,proto3,enum=ves.io.schema.AuthenticationAlgorithm" json:"authentication_algos,omitempty"`
+	// PseudoRandomFunction
+	//
+	// x-displayName: "Configure PseudoRandomFunction"
+	// Select PseudoRandomFunction for IKE SA.
+	Prf []schema.PseudoRandomFunction `protobuf:"varint,3,rep,packed,name=prf,proto3,enum=ves.io.schema.PseudoRandomFunction" json:"prf,omitempty"`
+	// DiffieHellman Group
+	//
+	// x-displayName: "Configure DH group"
+	// Select DH Group for IKE SA.
+	DhGroups []schema.DHGroup `protobuf:"varint,4,rep,packed,name=dh_groups,json=dhGroups,proto3,enum=ves.io.schema.DHGroup" json:"dh_groups,omitempty"`
+}
+
+func (m *IKEProposal) Reset()      { *m = IKEProposal{} }
+func (*IKEProposal) ProtoMessage() {}
+func (*IKEProposal) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{0}
+}
+func (m *IKEProposal) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IKEProposal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *IKEProposal) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IKEProposal.Merge(m, src)
+}
+func (m *IKEProposal) XXX_Size() int {
+	return m.Size()
+}
+func (m *IKEProposal) XXX_DiscardUnknown() {
+	xxx_messageInfo_IKEProposal.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IKEProposal proto.InternalMessageInfo
+
+func (m *IKEProposal) GetEncryptionAlgos() []schema.EncryptionAlgorithm {
+	if m != nil {
+		return m.EncryptionAlgos
+	}
+	return nil
+}
+
+func (m *IKEProposal) GetAuthenticationAlgos() []schema.AuthenticationAlgorithm {
+	if m != nil {
+		return m.AuthenticationAlgos
+	}
+	return nil
+}
+
+func (m *IKEProposal) GetPrf() []schema.PseudoRandomFunction {
+	if m != nil {
+		return m.Prf
+	}
+	return nil
+}
+
+func (m *IKEProposal) GetDhGroups() []schema.DHGroup {
+	if m != nil {
+		return m.DhGroups
+	}
+	return nil
+}
+
+// ESP Proposal
+//
+// x-displayName: "ESP Proposal Selection"
+// Set of Encryption, Authentication and DH groups to be used for establishing IKE connection with peer
+type ESPProposal struct {
+	//Encryption Algorithms
+	//
+	// x-displayName: "Configure Encryption Algorithms"
+	// Select Encrytion algorithms for IKE SA.
+	EncryptionAlgos []schema.EncryptionAlgorithm `protobuf:"varint,1,rep,packed,name=encryption_algos,json=encryptionAlgos,proto3,enum=ves.io.schema.EncryptionAlgorithm" json:"encryption_algos,omitempty"`
+	// Authentication Algorithms
+	//
+	// x-displayName: "Configure Authentication Algorithms"
+	// Select Authentication algorithms for IKE SA.
+	AuthenticationAlgos []schema.AuthenticationAlgorithm `protobuf:"varint,2,rep,packed,name=authentication_algos,json=authenticationAlgos,proto3,enum=ves.io.schema.AuthenticationAlgorithm" json:"authentication_algos,omitempty"`
+	// DH Groups
+	//
+	// x-displayName: "Diffie Hellman Groups"
+	// Select DH Groups
+	DhGroups []schema.DHGroup `protobuf:"varint,3,rep,packed,name=dh_groups,json=dhGroups,proto3,enum=ves.io.schema.DHGroup" json:"dh_groups,omitempty"`
+}
+
+func (m *ESPProposal) Reset()      { *m = ESPProposal{} }
+func (*ESPProposal) ProtoMessage() {}
+func (*ESPProposal) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{1}
+}
+func (m *ESPProposal) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ESPProposal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ESPProposal) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ESPProposal.Merge(m, src)
+}
+func (m *ESPProposal) XXX_Size() int {
+	return m.Size()
+}
+func (m *ESPProposal) XXX_DiscardUnknown() {
+	xxx_messageInfo_ESPProposal.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ESPProposal proto.InternalMessageInfo
+
+func (m *ESPProposal) GetEncryptionAlgos() []schema.EncryptionAlgorithm {
+	if m != nil {
+		return m.EncryptionAlgos
+	}
+	return nil
+}
+
+func (m *ESPProposal) GetAuthenticationAlgos() []schema.AuthenticationAlgorithm {
+	if m != nil {
+		return m.AuthenticationAlgos
+	}
+	return nil
+}
+
+func (m *ESPProposal) GetDhGroups() []schema.DHGroup {
+	if m != nil {
+		return m.DhGroups
+	}
+	return nil
+}
+
 // IPSec tunnel configuration parameters
 //
 // x-displayName: "IPSEC tunnel parameters"
@@ -99,12 +253,67 @@ type IpsecTunnelParams struct {
 	// x-displayName: "Ipsec PSK"
 	// Pre shared key, valid for tunnel type IPSEC_PSK, SA are computed by IKE dynamically
 	IpsecPsk *schema.SecretType `protobuf:"bytes,1,opt,name=ipsec_psk,json=ipsecPsk,proto3" json:"ipsec_psk,omitempty"`
+	// Tunnel Initiator
+	//
+	// x-displayName: "Tunnel Initiator"
+	// Set this if the node has to act as IPSec Tunnel Initiator. If not set, this node will wait for remote to connect
+	TunnelInitiator *schema.Empty `protobuf:"bytes,2,opt,name=tunnel_initiator,json=tunnelInitiator,proto3" json:"tunnel_initiator,omitempty"`
+	// IKE Proposals
+	//
+	// x-displayName: "IKE Proposals"
+	// Set of Encryption, Authentication, PRF and DH groups to be used for establishing IKE connection with peer
+	IkeProposal *IKEProposal `protobuf:"bytes,3,opt,name=ike_proposal,json=ikeProposal,proto3" json:"ike_proposal,omitempty"`
+	// ESP Proposals
+	//
+	// x-displayName: "ESP Proposals"
+	// Set of Encryption, Authentication and DH groups to be used for establishing IKE connection with peer
+	EspProposal *ESPProposal `protobuf:"bytes,4,opt,name=esp_proposal,json=espProposal,proto3" json:"esp_proposal,omitempty"`
+	// Local IKE ID
+	//
+	// x-displayName: "Local IKE ID"
+	// Identifier that is used by IEE protocol to identify local end tunnel endpoint with the peer
+	LocalIkeId string `protobuf:"bytes,6,opt,name=local_ike_id,json=localIkeId,proto3" json:"local_ike_id,omitempty"`
+	// Remote IKE ID
+	//
+	// x-displayName: "Remote IKE ID"
+	// Identifier that is used by IEE protocol to identify Remote end tunnel endpoint
+	RemoteIkeId string `protobuf:"bytes,7,opt,name=remote_ike_id,json=remoteIkeId,proto3" json:"remote_ike_id,omitempty"`
+	// IKE Key Lifetime
+	//
+	// x-displayName: "IKE Key Lifetime"
+	// IKE Keys used for protection IKE session will be regenerated after this Lifetime. Value of 0 disables this feature.
+	IkePhase1KeyLifetime uint32 `protobuf:"varint,8,opt,name=ike_phase1_key_lifetime,json=ikePhase1KeyLifetime,proto3" json:"ike_phase1_key_lifetime,omitempty"`
+	// IKE Reauthentication Timeout
+	//
+	// x-displayName: "IKE Reauthentication Timeout"
+	// IKE session with the peer will be re-authenticated/re-established after this timeout. Value of 0 disables this feature.
+	IkeReauthTimeout uint32 `protobuf:"varint,9,opt,name=ike_reauth_timeout,json=ikeReauthTimeout,proto3" json:"ike_reauth_timeout,omitempty"`
+	// IKE Child SA Key Lifetime
+	//
+	// x-displayName: "IKE IKE Child SA Key Lifetime"
+	// IKE Keys used for protection Child SA session will be regenerated after this Lifetime. Value of 0 disables this feature.
+	IkePhase2KeyLifetime uint32 `protobuf:"varint,10,opt,name=ike_phase2_key_lifetime,json=ikePhase2KeyLifetime,proto3" json:"ike_phase2_key_lifetime,omitempty"`
+	// DPD Keep Alive timer
+	//
+	// x-displayName: "DPD Keep Alive Time(seconds)"
+	// Configure DPD keep alive timer value in seconds. 0 implies disabled
+	DpdKeepAliveTimer uint32 `protobuf:"varint,11,opt,name=dpd_keep_alive_timer,json=dpdKeepAliveTimer,proto3" json:"dpd_keep_alive_timer,omitempty"`
+	// IKE Phase1 Profile
+	//
+	// x-displayName: "IKE Phase1 Profile"
+	// Reference to IKE Phase1 Profile
+	IkePhase1Profile []*schema.ObjectRefType `protobuf:"bytes,14,rep,name=ike_phase1_profile,json=ikePhase1Profile,proto3" json:"ike_phase1_profile,omitempty"`
+	// IKE Phase2 Profile
+	//
+	// x-displayName: "IKE Phase2 Profile"
+	// Reference to IKE Phase2 Profile
+	IkePhase2Profile []*schema.ObjectRefType `protobuf:"bytes,15,rep,name=ike_phase2_profile,json=ikePhase2Profile,proto3" json:"ike_phase2_profile,omitempty"`
 }
 
 func (m *IpsecTunnelParams) Reset()      { *m = IpsecTunnelParams{} }
 func (*IpsecTunnelParams) ProtoMessage() {}
 func (*IpsecTunnelParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6fc6059a22f3fcf5, []int{0}
+	return fileDescriptor_6fc6059a22f3fcf5, []int{2}
 }
 func (m *IpsecTunnelParams) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -136,6 +345,83 @@ func (m *IpsecTunnelParams) GetIpsecPsk() *schema.SecretType {
 	return nil
 }
 
+func (m *IpsecTunnelParams) GetTunnelInitiator() *schema.Empty {
+	if m != nil {
+		return m.TunnelInitiator
+	}
+	return nil
+}
+
+func (m *IpsecTunnelParams) GetIkeProposal() *IKEProposal {
+	if m != nil {
+		return m.IkeProposal
+	}
+	return nil
+}
+
+func (m *IpsecTunnelParams) GetEspProposal() *ESPProposal {
+	if m != nil {
+		return m.EspProposal
+	}
+	return nil
+}
+
+func (m *IpsecTunnelParams) GetLocalIkeId() string {
+	if m != nil {
+		return m.LocalIkeId
+	}
+	return ""
+}
+
+func (m *IpsecTunnelParams) GetRemoteIkeId() string {
+	if m != nil {
+		return m.RemoteIkeId
+	}
+	return ""
+}
+
+func (m *IpsecTunnelParams) GetIkePhase1KeyLifetime() uint32 {
+	if m != nil {
+		return m.IkePhase1KeyLifetime
+	}
+	return 0
+}
+
+func (m *IpsecTunnelParams) GetIkeReauthTimeout() uint32 {
+	if m != nil {
+		return m.IkeReauthTimeout
+	}
+	return 0
+}
+
+func (m *IpsecTunnelParams) GetIkePhase2KeyLifetime() uint32 {
+	if m != nil {
+		return m.IkePhase2KeyLifetime
+	}
+	return 0
+}
+
+func (m *IpsecTunnelParams) GetDpdKeepAliveTimer() uint32 {
+	if m != nil {
+		return m.DpdKeepAliveTimer
+	}
+	return 0
+}
+
+func (m *IpsecTunnelParams) GetIkePhase1Profile() []*schema.ObjectRefType {
+	if m != nil {
+		return m.IkePhase1Profile
+	}
+	return nil
+}
+
+func (m *IpsecTunnelParams) GetIkePhase2Profile() []*schema.ObjectRefType {
+	if m != nil {
+		return m.IkePhase2Profile
+	}
+	return nil
+}
+
 // Tunnel Parameters
 //
 // x-displayName: "Tunnel Parameters"
@@ -155,7 +441,7 @@ type TunnelParams struct {
 func (m *TunnelParams) Reset()      { *m = TunnelParams{} }
 func (*TunnelParams) ProtoMessage() {}
 func (*TunnelParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6fc6059a22f3fcf5, []int{1}
+	return fileDescriptor_6fc6059a22f3fcf5, []int{3}
 }
 func (m *TunnelParams) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -229,7 +515,7 @@ type InterfaceType struct {
 func (m *InterfaceType) Reset()      { *m = InterfaceType{} }
 func (*InterfaceType) ProtoMessage() {}
 func (*InterfaceType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6fc6059a22f3fcf5, []int{2}
+	return fileDescriptor_6fc6059a22f3fcf5, []int{4}
 }
 func (m *InterfaceType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -287,7 +573,7 @@ type LocalIpAddressType struct {
 func (m *LocalIpAddressType) Reset()      { *m = LocalIpAddressType{} }
 func (*LocalIpAddressType) ProtoMessage() {}
 func (*LocalIpAddressType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6fc6059a22f3fcf5, []int{3}
+	return fileDescriptor_6fc6059a22f3fcf5, []int{5}
 }
 func (m *LocalIpAddressType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -381,13 +667,14 @@ type LocalIpAddressSelector struct {
 	// Types that are valid to be assigned to Type:
 	//	*LocalIpAddressSelector_Intf
 	//	*LocalIpAddressSelector_IpAddress
+	//	*LocalIpAddressSelector_NodeInterface
 	Type isLocalIpAddressSelector_Type `protobuf_oneof:"type"`
 }
 
 func (m *LocalIpAddressSelector) Reset()      { *m = LocalIpAddressSelector{} }
 func (*LocalIpAddressSelector) ProtoMessage() {}
 func (*LocalIpAddressSelector) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6fc6059a22f3fcf5, []int{4}
+	return fileDescriptor_6fc6059a22f3fcf5, []int{6}
 }
 func (m *LocalIpAddressSelector) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -425,9 +712,13 @@ type LocalIpAddressSelector_Intf struct {
 type LocalIpAddressSelector_IpAddress struct {
 	IpAddress *LocalIpAddressType `protobuf:"bytes,2,opt,name=ip_address,json=ipAddress,proto3,oneof" json:"ip_address,omitempty"`
 }
+type LocalIpAddressSelector_NodeInterface struct {
+	NodeInterface *schema.NodeInterfaceType `protobuf:"bytes,4,opt,name=node_interface,json=nodeInterface,proto3,oneof" json:"node_interface,omitempty"`
+}
 
-func (*LocalIpAddressSelector_Intf) isLocalIpAddressSelector_Type()      {}
-func (*LocalIpAddressSelector_IpAddress) isLocalIpAddressSelector_Type() {}
+func (*LocalIpAddressSelector_Intf) isLocalIpAddressSelector_Type()          {}
+func (*LocalIpAddressSelector_IpAddress) isLocalIpAddressSelector_Type()     {}
+func (*LocalIpAddressSelector_NodeInterface) isLocalIpAddressSelector_Type() {}
 
 func (m *LocalIpAddressSelector) GetType() isLocalIpAddressSelector_Type {
 	if m != nil {
@@ -450,11 +741,19 @@ func (m *LocalIpAddressSelector) GetIpAddress() *LocalIpAddressType {
 	return nil
 }
 
+func (m *LocalIpAddressSelector) GetNodeInterface() *schema.NodeInterfaceType {
+	if x, ok := m.GetType().(*LocalIpAddressSelector_NodeInterface); ok {
+		return x.NodeInterface
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*LocalIpAddressSelector) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*LocalIpAddressSelector_Intf)(nil),
 		(*LocalIpAddressSelector_IpAddress)(nil),
+		(*LocalIpAddressSelector_NodeInterface)(nil),
 	}
 }
 
@@ -473,7 +772,7 @@ type RemoteNodeAttributes struct {
 func (m *RemoteNodeAttributes) Reset()      { *m = RemoteNodeAttributes{} }
 func (*RemoteNodeAttributes) ProtoMessage() {}
 func (*RemoteNodeAttributes) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6fc6059a22f3fcf5, []int{5}
+	return fileDescriptor_6fc6059a22f3fcf5, []int{7}
 }
 func (m *RemoteNodeAttributes) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -523,7 +822,7 @@ type RemoteEndpointType struct {
 func (m *RemoteEndpointType) Reset()      { *m = RemoteEndpointType{} }
 func (*RemoteEndpointType) ProtoMessage() {}
 func (*RemoteEndpointType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6fc6059a22f3fcf5, []int{6}
+	return fileDescriptor_6fc6059a22f3fcf5, []int{8}
 }
 func (m *RemoteEndpointType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -577,7 +876,7 @@ type RemoteIpAddressSelector struct {
 func (m *RemoteIpAddressSelector) Reset()      { *m = RemoteIpAddressSelector{} }
 func (*RemoteIpAddressSelector) ProtoMessage() {}
 func (*RemoteIpAddressSelector) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6fc6059a22f3fcf5, []int{7}
+	return fileDescriptor_6fc6059a22f3fcf5, []int{9}
 }
 func (m *RemoteIpAddressSelector) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -691,12 +990,17 @@ type GlobalSpecType struct {
 	// x-displayName: "AWS TGW Tunnel Parameters"
 	// AWS TGW Hub/Services VPN Tunnel demarcation
 	DeploymentVpnTunnelType DeploymentVPNTunnelType `protobuf:"varint,12,opt,name=deployment_vpn_tunnel_type,json=deploymentVpnTunnelType,proto3,enum=ves.io.schema.tunnel.DeploymentVPNTunnelType" json:"deployment_vpn_tunnel_type,omitempty"`
+	// ConfigureType
+	//
+	// x-displayName: "Configure Type"
+	// Defines the source of this tunnel configuration
+	CfgType *ConfigureType `protobuf:"bytes,20,opt,name=cfg_type,json=cfgType,proto3" json:"cfg_type,omitempty"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6fc6059a22f3fcf5, []int{8}
+	return fileDescriptor_6fc6059a22f3fcf5, []int{10}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -794,11 +1098,108 @@ func (m *GlobalSpecType) GetDeploymentVpnTunnelType() DeploymentVPNTunnelType {
 	return HUB
 }
 
+func (m *GlobalSpecType) GetCfgType() *ConfigureType {
+	if m != nil {
+		return m.CfgType
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GlobalSpecType_DefaultTunnelAttribute)(nil),
 		(*GlobalSpecType_TunnelToAwsTgw)(nil),
+	}
+}
+
+// ConfigureType
+//
+// x-displayName: "Configure Type"
+// Defines the source of this tunnel configuration
+type ConfigureType struct {
+	// ConfigureType
+	//
+	// x-displayName: "ConfigureType"
+	// Defines the source of this tunnel configuration
+	//
+	// Types that are valid to be assigned to CfgType:
+	//	*ConfigureType_ExtConnIpsec
+	//	*ConfigureType_ExtConnGre
+	CfgType isConfigureType_CfgType `protobuf_oneof:"cfg_type"`
+}
+
+func (m *ConfigureType) Reset()      { *m = ConfigureType{} }
+func (*ConfigureType) ProtoMessage() {}
+func (*ConfigureType) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6fc6059a22f3fcf5, []int{11}
+}
+func (m *ConfigureType) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ConfigureType) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ConfigureType) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConfigureType.Merge(m, src)
+}
+func (m *ConfigureType) XXX_Size() int {
+	return m.Size()
+}
+func (m *ConfigureType) XXX_DiscardUnknown() {
+	xxx_messageInfo_ConfigureType.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ConfigureType proto.InternalMessageInfo
+
+type isConfigureType_CfgType interface {
+	isConfigureType_CfgType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type ConfigureType_ExtConnIpsec struct {
+	ExtConnIpsec *schema.Empty `protobuf:"bytes,2,opt,name=ext_conn_ipsec,json=extConnIpsec,proto3,oneof" json:"ext_conn_ipsec,omitempty"`
+}
+type ConfigureType_ExtConnGre struct {
+	ExtConnGre *schema.Empty `protobuf:"bytes,3,opt,name=ext_conn_gre,json=extConnGre,proto3,oneof" json:"ext_conn_gre,omitempty"`
+}
+
+func (*ConfigureType_ExtConnIpsec) isConfigureType_CfgType() {}
+func (*ConfigureType_ExtConnGre) isConfigureType_CfgType()   {}
+
+func (m *ConfigureType) GetCfgType() isConfigureType_CfgType {
+	if m != nil {
+		return m.CfgType
+	}
+	return nil
+}
+
+func (m *ConfigureType) GetExtConnIpsec() *schema.Empty {
+	if x, ok := m.GetCfgType().(*ConfigureType_ExtConnIpsec); ok {
+		return x.ExtConnIpsec
+	}
+	return nil
+}
+
+func (m *ConfigureType) GetExtConnGre() *schema.Empty {
+	if x, ok := m.GetCfgType().(*ConfigureType_ExtConnGre); ok {
+		return x.ExtConnGre
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*ConfigureType) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*ConfigureType_ExtConnIpsec)(nil),
+		(*ConfigureType_ExtConnGre)(nil),
 	}
 }
 
@@ -816,7 +1217,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6fc6059a22f3fcf5, []int{9}
+	return fileDescriptor_6fc6059a22f3fcf5, []int{12}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -883,7 +1284,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6fc6059a22f3fcf5, []int{10}
+	return fileDescriptor_6fc6059a22f3fcf5, []int{13}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -950,7 +1351,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6fc6059a22f3fcf5, []int{11}
+	return fileDescriptor_6fc6059a22f3fcf5, []int{14}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1008,6 +1409,10 @@ func init() {
 	golang_proto.RegisterEnum("ves.io.schema.tunnel.DeploymentVPNTunnelType", DeploymentVPNTunnelType_name, DeploymentVPNTunnelType_value)
 	proto.RegisterEnum("ves.io.schema.tunnel.TunnelType", TunnelType_name, TunnelType_value)
 	golang_proto.RegisterEnum("ves.io.schema.tunnel.TunnelType", TunnelType_name, TunnelType_value)
+	proto.RegisterType((*IKEProposal)(nil), "ves.io.schema.tunnel.IKEProposal")
+	golang_proto.RegisterType((*IKEProposal)(nil), "ves.io.schema.tunnel.IKEProposal")
+	proto.RegisterType((*ESPProposal)(nil), "ves.io.schema.tunnel.ESPProposal")
+	golang_proto.RegisterType((*ESPProposal)(nil), "ves.io.schema.tunnel.ESPProposal")
 	proto.RegisterType((*IpsecTunnelParams)(nil), "ves.io.schema.tunnel.IpsecTunnelParams")
 	golang_proto.RegisterType((*IpsecTunnelParams)(nil), "ves.io.schema.tunnel.IpsecTunnelParams")
 	proto.RegisterType((*TunnelParams)(nil), "ves.io.schema.tunnel.TunnelParams")
@@ -1028,6 +1433,8 @@ func init() {
 	golang_proto.RegisterType((*RemoteIpAddressSelector)(nil), "ves.io.schema.tunnel.RemoteIpAddressSelector")
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.tunnel.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.tunnel.GlobalSpecType")
+	proto.RegisterType((*ConfigureType)(nil), "ves.io.schema.tunnel.ConfigureType")
+	golang_proto.RegisterType((*ConfigureType)(nil), "ves.io.schema.tunnel.ConfigureType")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.tunnel.CreateSpecType")
 	golang_proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.tunnel.CreateSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.tunnel.ReplaceSpecType")
@@ -1042,89 +1449,125 @@ func init() {
 }
 
 var fileDescriptor_6fc6059a22f3fcf5 = []byte{
-	// 1301 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0xcf, 0x6f, 0x1b, 0x55,
-	0x10, 0xde, 0xb7, 0x5e, 0x3b, 0xeb, 0x49, 0x1a, 0x36, 0x4f, 0x51, 0xe3, 0x9a, 0x6a, 0xb5, 0x32,
-	0x42, 0x94, 0x28, 0xb1, 0x9b, 0x82, 0xf8, 0x61, 0x41, 0x69, 0xd2, 0x5a, 0x89, 0x0d, 0x6a, 0xcd,
-	0xba, 0xe4, 0x40, 0x0f, 0xd6, 0xda, 0x7e, 0x76, 0xb6, 0x59, 0xef, 0xae, 0x76, 0x9f, 0x1d, 0x72,
-	0x40, 0xaa, 0x38, 0xa1, 0x9c, 0x10, 0xc7, 0xfe, 0x05, 0x08, 0xae, 0x08, 0x10, 0xce, 0x21, 0x42,
-	0x42, 0xaa, 0x2a, 0x81, 0x72, 0xec, 0xb1, 0x75, 0x2e, 0xd0, 0x53, 0x0f, 0x20, 0x71, 0x44, 0xef,
-	0xed, 0xda, 0xc9, 0xda, 0x49, 0x94, 0x72, 0x44, 0xbd, 0xed, 0x7b, 0x33, 0xf3, 0xcd, 0xcc, 0x37,
-	0xdf, 0xce, 0x6a, 0x41, 0xeb, 0x12, 0x3f, 0x6b, 0x3a, 0x39, 0xbf, 0xbe, 0x41, 0xda, 0x46, 0x8e,
-	0x76, 0x6c, 0x9b, 0x58, 0x39, 0xba, 0xed, 0x12, 0x3f, 0xeb, 0x7a, 0x0e, 0x75, 0xf0, 0x6c, 0xe0,
-	0x91, 0x0d, 0x3c, 0xb2, 0x81, 0x47, 0x7a, 0xb1, 0x65, 0xd2, 0x8d, 0x4e, 0x2d, 0x5b, 0x77, 0xda,
-	0xb9, 0x96, 0xd3, 0x72, 0x72, 0xdc, 0xb9, 0xd6, 0x69, 0xf2, 0x13, 0x3f, 0xf0, 0xa7, 0x00, 0x24,
-	0x3d, 0x17, 0x4d, 0x63, 0x13, 0x1a, 0x1a, 0x5e, 0x8e, 0x1a, 0x1c, 0x97, 0x9a, 0x8e, 0x1d, 0xa6,
-	0x4e, 0x5f, 0x18, 0x29, 0xee, 0xb0, 0xaa, 0xf4, 0xc5, 0xa8, 0xa9, 0x6b, 0x58, 0x66, 0xc3, 0xa0,
-	0x24, 0xb4, 0x8e, 0x74, 0xd5, 0x35, 0xc9, 0x56, 0x35, 0x02, 0x9d, 0xf9, 0x18, 0x66, 0x8a, 0xae,
-	0x4f, 0xea, 0xb7, 0x79, 0x3b, 0x65, 0xc3, 0x33, 0xda, 0x3e, 0x7e, 0x0f, 0x92, 0x26, 0xbb, 0xac,
-	0xba, 0xfe, 0x66, 0x0a, 0x69, 0xe8, 0xd2, 0xe4, 0x95, 0x0b, 0xd9, 0x68, 0xfb, 0x15, 0x52, 0xf7,
-	0x08, 0xbd, 0xbd, 0xed, 0x92, 0x15, 0x69, 0xbf, 0x87, 0x90, 0x2e, 0xf3, 0x88, 0xb2, 0xbf, 0x99,
-	0x69, 0xc1, 0x54, 0x04, 0xed, 0x03, 0x88, 0x73, 0x5b, 0x88, 0xf4, 0x5a, 0xf6, 0x38, 0x22, 0xb3,
-	0x63, 0x55, 0xac, 0x09, 0x7a, 0x10, 0xb7, 0xa2, 0x80, 0xc4, 0x5a, 0xc6, 0xf2, 0x5e, 0x0f, 0xa1,
-	0xfd, 0x1e, 0x12, 0x4b, 0x92, 0x2c, 0x2a, 0xb1, 0x8c, 0x05, 0xe7, 0x8a, 0x36, 0x25, 0x5e, 0xd3,
-	0xa8, 0x13, 0x56, 0x09, 0xbe, 0x03, 0x60, 0x39, 0x75, 0xc3, 0xaa, 0x9a, 0x36, 0x6d, 0xa6, 0x90,
-	0x16, 0xbb, 0x34, 0x79, 0xe5, 0xe2, 0x48, 0xba, 0x5b, 0xb5, 0xbb, 0xa4, 0x4e, 0x75, 0xd2, 0xe4,
-	0xb5, 0xab, 0xdf, 0x7e, 0x3e, 0x63, 0x13, 0xba, 0xe5, 0x78, 0x9b, 0x2c, 0x28, 0xc0, 0xfa, 0xf9,
-	0xcf, 0xbd, 0x58, 0xfc, 0x6b, 0x24, 0x2a, 0x48, 0x4f, 0x72, 0xbc, 0xa2, 0x4d, 0x9b, 0x99, 0xbf,
-	0x10, 0xe0, 0x8f, 0xf8, 0xc9, 0x5d, 0x6e, 0x34, 0x3c, 0xe2, 0xfb, 0x3c, 0xe7, 0xfb, 0x00, 0xa6,
-	0x5b, 0x35, 0x82, 0x9b, 0xb0, 0xc5, 0xd1, 0x9c, 0x91, 0x88, 0x35, 0x41, 0x4f, 0x9a, 0x83, 0x0b,
-	0x3c, 0x0f, 0x92, 0xd1, 0xa1, 0x4e, 0x4a, 0xe4, 0x81, 0xb3, 0x23, 0x81, 0x85, 0xb6, 0x4b, 0xb7,
-	0xd7, 0x04, 0x9d, 0xfb, 0xe0, 0x3b, 0x30, 0xdb, 0x35, 0x3d, 0xda, 0x31, 0xac, 0xea, 0xa0, 0x66,
-	0xc6, 0x4b, 0x2a, 0xc6, 0x63, 0x5f, 0x1f, 0x89, 0x5d, 0x0f, 0x5c, 0x6f, 0x06, 0x9e, 0x15, 0x62,
-	0x91, 0x3a, 0x75, 0x3c, 0x56, 0x81, 0x8e, 0xbb, 0x11, 0x1b, 0x67, 0x62, 0x94, 0x64, 0xa9, 0x24,
-	0xc9, 0x92, 0x12, 0xcf, 0xfc, 0x80, 0xe0, 0x7c, 0xb4, 0xed, 0x01, 0x14, 0x7e, 0x17, 0xa4, 0x90,
-	0x68, 0x96, 0xff, 0x95, 0x13, 0xe6, 0x7a, 0x74, 0x42, 0xac, 0x15, 0x16, 0x82, 0x8b, 0x11, 0xd6,
-	0x82, 0xe6, 0x2f, 0x1d, 0x0f, 0x30, 0xce, 0x79, 0x84, 0xc1, 0xb1, 0xc2, 0x63, 0x25, 0x49, 0x8e,
-	0x29, 0x52, 0x86, 0xc2, 0xac, 0x4e, 0xda, 0x0e, 0x25, 0x37, 0x9d, 0x06, 0x59, 0xa6, 0xd4, 0x33,
-	0x6b, 0x1d, 0x4a, 0x7c, 0xbc, 0x00, 0xa2, 0xe9, 0x9e, 0x65, 0x50, 0xba, 0x68, 0xba, 0xf9, 0xec,
-	0x2f, 0x3d, 0x84, 0x41, 0x81, 0xc9, 0x00, 0x4b, 0x63, 0x60, 0x18, 0x2d, 0x3d, 0xec, 0xa1, 0x59,
-	0xc0, 0x00, 0xc5, 0xb2, 0x16, 0x46, 0xa4, 0x25, 0x86, 0x9b, 0xf9, 0x3d, 0x06, 0x38, 0x70, 0x2d,
-	0xd8, 0x0d, 0xd7, 0x31, 0x6d, 0xfe, 0x8e, 0xe0, 0xdf, 0x44, 0x48, 0x92, 0xf0, 0x82, 0xf5, 0xcb,
-	0x94, 0xf9, 0xf6, 0xf1, 0xfd, 0x8e, 0x47, 0x67, 0x07, 0x07, 0xbf, 0x60, 0x53, 0x6f, 0x7b, 0xe5,
-	0x6f, 0xc4, 0x14, 0x3a, 0x75, 0x1f, 0x25, 0x33, 0x13, 0x5e, 0x5c, 0x41, 0xa9, 0x7b, 0x22, 0xbb,
-	0x48, 0xdc, 0x47, 0x31, 0xe5, 0x1e, 0xea, 0x3f, 0xfe, 0x35, 0x76, 0x63, 0x67, 0x17, 0x5d, 0xc3,
-	0x57, 0x9f, 0xf6, 0x50, 0x9e, 0x15, 0xac, 0x35, 0x1d, 0x4f, 0x0b, 0xe1, 0xb5, 0x8a, 0x4b, 0xea,
-	0x66, 0xd3, 0x24, 0x0d, 0xcd, 0xf0, 0x35, 0xdf, 0xa4, 0x24, 0x6f, 0x3b, 0x0d, 0xb2, 0xc0, 0x1f,
-	0x35, 0xd3, 0xd7, 0x82, 0xfd, 0x60, 0x58, 0x1a, 0x03, 0x9a, 0xde, 0xd9, 0x45, 0x80, 0xe5, 0x7e,
-	0x0f, 0x49, 0x0c, 0x88, 0x5d, 0xc1, 0xce, 0x2e, 0x4a, 0x60, 0xe9, 0x41, 0x0f, 0x09, 0xec, 0x98,
-	0xd8, 0xd9, 0x45, 0xa2, 0xcc, 0xb3, 0xe6, 0x77, 0x76, 0xd1, 0x5b, 0xe9, 0x37, 0x9f, 0xf6, 0xd0,
-	0xe5, 0x90, 0x2d, 0x63, 0x48, 0x7b, 0x50, 0xc2, 0x06, 0x09, 0xcb, 0xd0, 0x1c, 0x5b, 0x33, 0xb4,
-	0x96, 0xd9, 0x25, 0xb6, 0x66, 0x87, 0xc0, 0xca, 0xce, 0x2e, 0x9a, 0x4a, 0x43, 0xbf, 0x87, 0x12,
-	0xc1, 0x76, 0x19, 0x66, 0x4b, 0x4b, 0x6c, 0xb6, 0xfa, 0x21, 0x83, 0xe9, 0x0d, 0x98, 0x8e, 0x92,
-	0x82, 0x15, 0x88, 0x6d, 0x92, 0x6d, 0x3e, 0xd7, 0xa4, 0xce, 0x1e, 0xf1, 0x35, 0x88, 0x77, 0x0d,
-	0xab, 0x43, 0x42, 0x79, 0xcd, 0x9f, 0x46, 0x77, 0x54, 0x23, 0x7a, 0x10, 0x98, 0x17, 0xdf, 0x41,
-	0x99, 0xef, 0x10, 0xcc, 0x05, 0x3e, 0xe3, 0x2f, 0x40, 0xf6, 0xac, 0x52, 0x5a, 0x13, 0x98, 0x98,
-	0xf0, 0x5a, 0x54, 0x04, 0xa7, 0x88, 0x7e, 0x5c, 0x04, 0x4c, 0xf4, 0xc3, 0xe0, 0x13, 0x45, 0xff,
-	0x8f, 0x04, 0xd3, 0xab, 0x96, 0x53, 0x33, 0x2c, 0x36, 0x66, 0x2e, 0xbd, 0x5b, 0x30, 0x19, 0x80,
-	0x06, 0xcb, 0x82, 0x55, 0x3b, 0x7d, 0x45, 0x3b, 0x3e, 0x6d, 0xb0, 0x7f, 0xf9, 0x3e, 0x98, 0x62,
-	0x92, 0x9a, 0xf8, 0x02, 0x49, 0x69, 0x51, 0x10, 0x75, 0xa0, 0x43, 0x0b, 0x5e, 0x05, 0x39, 0xdc,
-	0xb2, 0x6e, 0x6a, 0x82, 0x37, 0xb1, 0x70, 0x96, 0x37, 0x77, 0xc0, 0x9a, 0x3e, 0x11, 0xec, 0x54,
-	0x17, 0x97, 0x20, 0xe9, 0xf1, 0x3e, 0x19, 0x92, 0xcc, 0x91, 0x16, 0x4f, 0xa3, 0x63, 0x1c, 0x4a,
-	0xf6, 0x42, 0x03, 0xce, 0x43, 0xc2, 0xe5, 0x9f, 0x8d, 0x54, 0x82, 0x03, 0x65, 0x4e, 0x6b, 0x30,
-	0xf8, 0xc0, 0xe8, 0x61, 0x04, 0x2e, 0x43, 0xaa, 0x41, 0x9a, 0x46, 0xc7, 0xa2, 0xd5, 0x90, 0xa9,
-	0xa1, 0x6e, 0x53, 0x70, 0xea, 0x5e, 0x3e, 0x1f, 0xc6, 0x05, 0xb0, 0x43, 0x01, 0xe1, 0x65, 0x98,
-	0x19, 0x70, 0xee, 0x54, 0x8d, 0x2d, 0xbf, 0x4a, 0x5b, 0x5b, 0xa9, 0xc9, 0x53, 0xa1, 0xa6, 0x43,
-	0x86, 0x9d, 0xe5, 0x2d, 0xff, 0x76, 0x6b, 0x0b, 0xdf, 0x85, 0x74, 0x83, 0xb8, 0x96, 0xb3, 0xdd,
-	0x26, 0x36, 0xad, 0x76, 0x5d, 0xbb, 0x7a, 0x74, 0x8a, 0x53, 0x7c, 0x8a, 0x27, 0xb0, 0x75, 0x63,
-	0x18, 0xb7, 0x5e, 0xbe, 0x79, 0x38, 0x52, 0x7d, 0xee, 0x10, 0x70, 0xdd, 0xb5, 0x8f, 0xcc, 0xfa,
-	0x55, 0x50, 0x46, 0x1b, 0xc7, 0x33, 0x7b, 0x3d, 0x04, 0xfb, 0x3d, 0x94, 0xec, 0xf7, 0x50, 0x7c,
-	0xe9, 0xf2, 0xc2, 0xd2, 0x52, 0xf0, 0xd5, 0x0d, 0x84, 0x16, 0x7c, 0x1c, 0x4a, 0x92, 0x1c, 0x57,
-	0x12, 0x25, 0x49, 0x4e, 0x2a, 0x90, 0xf9, 0x51, 0x84, 0xe9, 0xeb, 0x1e, 0x31, 0x28, 0x19, 0x4a,
-	0x6f, 0xf9, 0x3f, 0x49, 0xef, 0x7f, 0x2d, 0xb6, 0xfc, 0xcc, 0xc3, 0xab, 0x23, 0x6f, 0x68, 0xe6,
-	0x27, 0x11, 0x5e, 0xd2, 0x89, 0x6b, 0x19, 0xf5, 0x17, 0xd4, 0x3d, 0x27, 0x75, 0xdf, 0x8b, 0x30,
-	0xb9, 0x4a, 0xe8, 0x0b, 0xda, 0x9e, 0x8b, 0xb6, 0xf9, 0xcb, 0x30, 0x77, 0xc2, 0x92, 0xc0, 0x13,
-	0x10, 0x5b, 0xfb, 0x64, 0x45, 0x11, 0xf0, 0x14, 0xc8, 0x95, 0x82, 0xbe, 0x5e, 0xbc, 0x5e, 0xa8,
-	0x28, 0x68, 0x7e, 0x1e, 0xe0, 0x88, 0xd3, 0x39, 0x48, 0x16, 0xcb, 0x95, 0xc2, 0xf5, 0x6a, 0xb9,
-	0xf2, 0xa1, 0x22, 0xb0, 0x98, 0x55, 0xbd, 0xa0, 0x88, 0x19, 0x49, 0x46, 0x0a, 0x5a, 0xf9, 0x12,
-	0xed, 0x3f, 0x51, 0x85, 0x47, 0x4f, 0x54, 0xe1, 0xd9, 0x13, 0x15, 0xdd, 0xeb, 0xab, 0xe8, 0x9b,
-	0xbe, 0x8a, 0x1e, 0xf4, 0x55, 0xb4, 0xdf, 0x57, 0xd1, 0xa3, 0xbe, 0x8a, 0x1e, 0xf7, 0x55, 0xf4,
-	0x47, 0x5f, 0x15, 0x9e, 0xf5, 0x55, 0xf4, 0xd5, 0x81, 0x2a, 0xec, 0x1d, 0xa8, 0x68, 0xff, 0x40,
-	0x15, 0x1e, 0x1d, 0xa8, 0xc2, 0xa7, 0xa5, 0x96, 0xe3, 0x6e, 0xb6, 0xb2, 0x5d, 0xc7, 0xa2, 0xc4,
-	0xf3, 0x8c, 0x6c, 0xc7, 0xcf, 0xf1, 0x87, 0xa6, 0xe3, 0xb5, 0x17, 0x5d, 0xcf, 0xe9, 0x9a, 0x0d,
-	0xe2, 0x2d, 0x0e, 0xcc, 0x39, 0xb7, 0xd6, 0x72, 0x72, 0xe4, 0x33, 0x1a, 0xfe, 0xe3, 0x44, 0x7e,
-	0xe0, 0x6a, 0x09, 0xfe, 0x97, 0xf3, 0xc6, 0xbf, 0x01, 0x00, 0x00, 0xff, 0xff, 0x5f, 0x30, 0xfb,
-	0x14, 0xdf, 0x0d, 0x00, 0x00,
+	// 1874 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0x4f, 0x6c, 0x23, 0x57,
+	0x19, 0xf7, 0x1b, 0x4f, 0x12, 0xfb, 0xb3, 0xe3, 0x9d, 0x3c, 0xa2, 0x5d, 0xd7, 0xad, 0xac, 0xc1,
+	0x15, 0x25, 0x44, 0x59, 0x67, 0xe3, 0x85, 0x52, 0xa2, 0xd2, 0x36, 0xc9, 0x9a, 0xc4, 0xde, 0xb2,
+	0x6b, 0x4d, 0x96, 0x45, 0xd0, 0xc3, 0x68, 0xe2, 0x79, 0x76, 0xa6, 0x1e, 0xcf, 0x7b, 0x9a, 0x79,
+	0x76, 0x36, 0x87, 0x4a, 0x2b, 0x2e, 0x54, 0x39, 0x21, 0x8e, 0xbd, 0x72, 0x41, 0xcb, 0x0d, 0x21,
+	0x81, 0x70, 0x84, 0x22, 0x24, 0xa4, 0xaa, 0x12, 0x28, 0xc7, 0x3d, 0x76, 0xbd, 0x97, 0x52, 0x71,
+	0xe8, 0x01, 0xee, 0xe8, 0xbd, 0x19, 0x3b, 0x1e, 0x67, 0x13, 0x52, 0x6e, 0xa0, 0xde, 0xe6, 0xbd,
+	0xef, 0xfb, 0x7e, 0xef, 0x7b, 0xbf, 0xef, 0xcf, 0xfb, 0x6c, 0xd0, 0xfb, 0x24, 0x28, 0x3b, 0x74,
+	0x35, 0x68, 0xee, 0x93, 0xae, 0xb5, 0xca, 0x7b, 0x9e, 0x47, 0xdc, 0x55, 0x7e, 0xc8, 0x48, 0x50,
+	0x66, 0x3e, 0xe5, 0x14, 0x2f, 0x86, 0x1a, 0xe5, 0x50, 0xa3, 0x1c, 0x6a, 0x14, 0x6e, 0xb6, 0x1d,
+	0xbe, 0xdf, 0xdb, 0x2b, 0x37, 0x69, 0x77, 0xb5, 0x4d, 0xdb, 0x74, 0x55, 0x2a, 0xef, 0xf5, 0x5a,
+	0x72, 0x25, 0x17, 0xf2, 0x2b, 0x04, 0x29, 0x14, 0xe2, 0xc7, 0x34, 0xfd, 0x43, 0xc6, 0x47, 0xb2,
+	0x1b, 0x71, 0x99, 0x47, 0x78, 0x24, 0x78, 0x39, 0x2e, 0xa0, 0x8c, 0x3b, 0xd4, 0x8b, 0xdc, 0x2a,
+	0xbc, 0x34, 0xe5, 0xf8, 0x99, 0xc7, 0x85, 0x57, 0xe2, 0xa2, 0xbe, 0xe5, 0x3a, 0xb6, 0xc5, 0x49,
+	0x24, 0x9d, 0xba, 0x71, 0xdf, 0x21, 0x07, 0x66, 0x0c, 0xba, 0xf4, 0x2b, 0x05, 0x32, 0xb5, 0xbb,
+	0xd5, 0x86, 0x4f, 0x19, 0x0d, 0x2c, 0x17, 0xff, 0x10, 0x34, 0xe2, 0x49, 0x97, 0x1d, 0xea, 0x99,
+	0x96, 0xdb, 0xa6, 0x41, 0x1e, 0xe9, 0xc9, 0xa5, 0x5c, 0xa5, 0x54, 0x8e, 0x93, 0x53, 0x1d, 0xab,
+	0x6d, 0xb8, 0x6d, 0xea, 0x3b, 0x7c, 0xbf, 0x6b, 0x5c, 0x23, 0xb1, 0xcd, 0x00, 0xff, 0x04, 0x16,
+	0xad, 0x1e, 0xdf, 0x27, 0x1e, 0x77, 0x9a, 0xd6, 0x04, 0xa4, 0x22, 0x21, 0x5f, 0x9b, 0x82, 0xdc,
+	0x88, 0xa9, 0x9e, 0xc1, 0x7e, 0xcd, 0x3a, 0x27, 0x08, 0xf0, 0x77, 0x20, 0xc9, 0xfc, 0x56, 0x3e,
+	0x29, 0x91, 0x5e, 0x9d, 0x42, 0x6a, 0x04, 0xa4, 0x67, 0x53, 0xc3, 0xf2, 0x6c, 0xda, 0xfd, 0x41,
+	0xcf, 0x6b, 0x0a, 0x33, 0x43, 0xe8, 0xe3, 0xdb, 0x90, 0xb6, 0xf7, 0xcd, 0xb6, 0x4f, 0x7b, 0x2c,
+	0xc8, 0xab, 0xd2, 0xf8, 0xfa, 0x94, 0xf1, 0x9d, 0x9d, 0x6d, 0x21, 0x36, 0x52, 0xf6, 0xbe, 0xfc,
+	0x08, 0x4a, 0xff, 0x40, 0x90, 0xa9, 0xee, 0x36, 0xfe, 0x07, 0x59, 0x8a, 0x5d, 0x37, 0x79, 0xc5,
+	0xeb, 0xfe, 0x76, 0x16, 0x16, 0x6a, 0x2c, 0x20, 0xcd, 0x07, 0xb2, 0x00, 0x1a, 0x96, 0x6f, 0x75,
+	0x03, 0xfc, 0x26, 0xa4, 0x1d, 0xb1, 0x69, 0xb2, 0xa0, 0x93, 0x47, 0x3a, 0x5a, 0xca, 0x54, 0x5e,
+	0x9a, 0x82, 0xda, 0x25, 0x4d, 0x9f, 0xf0, 0x07, 0x87, 0x8c, 0x6c, 0xaa, 0xa7, 0x03, 0x84, 0x8c,
+	0x94, 0xb4, 0x68, 0x04, 0x1d, 0x5c, 0x05, 0x2d, 0x2c, 0x27, 0xd3, 0xf1, 0x1c, 0xee, 0x58, 0x9c,
+	0xfa, 0x79, 0x45, 0x82, 0x2c, 0x4e, 0x53, 0xd6, 0x65, 0xfc, 0x70, 0x53, 0xfd, 0x4c, 0xd8, 0x5f,
+	0x0b, 0x6d, 0x6a, 0x23, 0x13, 0x5c, 0x87, 0xac, 0xd3, 0x21, 0x26, 0x8b, 0x22, 0x91, 0x4f, 0x4a,
+	0x88, 0xaf, 0x97, 0x5f, 0x54, 0xb8, 0xe5, 0x89, 0xc4, 0x8e, 0xf0, 0x32, 0x4e, 0x87, 0x8c, 0xa3,
+	0x58, 0x87, 0x2c, 0x09, 0xd8, 0x19, 0x96, 0x7a, 0x19, 0xd6, 0x44, 0xf8, 0x47, 0x58, 0x24, 0x60,
+	0x63, 0xac, 0xd7, 0x20, 0xeb, 0xd2, 0xa6, 0xe5, 0x9a, 0xc2, 0x3b, 0xc7, 0xce, 0xcf, 0xea, 0x68,
+	0x29, 0x1d, 0x29, 0x82, 0x94, 0xd4, 0x3a, 0xa4, 0x66, 0xe3, 0x25, 0x98, 0xf7, 0x49, 0x97, 0x72,
+	0x32, 0x52, 0x9c, 0x9b, 0x50, 0xcc, 0x84, 0xa2, 0x50, 0xf3, 0x6d, 0xb8, 0x21, 0x6f, 0xba, 0x6f,
+	0x05, 0x64, 0xcd, 0xec, 0x90, 0x43, 0xd3, 0x75, 0x5a, 0x84, 0x3b, 0x5d, 0x92, 0x4f, 0xe9, 0x68,
+	0x69, 0x7e, 0x33, 0x25, 0x6c, 0x3e, 0x3c, 0x46, 0x8a, 0xb1, 0x28, 0x6e, 0x25, 0xf5, 0xee, 0x92,
+	0xc3, 0x77, 0x23, 0x2d, 0xfc, 0x3a, 0x60, 0x01, 0xe0, 0x13, 0x91, 0x17, 0xa6, 0xd8, 0xa2, 0x3d,
+	0x9e, 0x4f, 0xc7, 0x6c, 0x93, 0x86, 0xe6, 0x74, 0x88, 0x21, 0x55, 0x1e, 0x84, 0x1a, 0xb1, 0x83,
+	0x2b, 0xf1, 0x83, 0xe1, 0xa2, 0x83, 0x2b, 0x93, 0x07, 0x6f, 0xc2, 0xa2, 0xcd, 0x6c, 0xb3, 0x43,
+	0x08, 0x33, 0x2d, 0xd7, 0xe9, 0x13, 0x79, 0xb8, 0x9f, 0xcf, 0x48, 0xeb, 0x85, 0xc8, 0x1a, 0xfd,
+	0xf1, 0xef, 0x27, 0x49, 0x75, 0x59, 0xc9, 0x27, 0x8d, 0x05, 0x9b, 0xd9, 0x77, 0x09, 0x61, 0x1b,
+	0x42, 0x59, 0xb8, 0xe1, 0xe3, 0x1f, 0x87, 0xce, 0x47, 0xb7, 0x67, 0x3e, 0x6d, 0x39, 0x2e, 0xc9,
+	0xe7, 0xf4, 0xe4, 0x52, 0xa6, 0xf2, 0xca, 0x54, 0x84, 0xee, 0xef, 0xbd, 0x4f, 0x9a, 0xdc, 0x20,
+	0x2d, 0x99, 0x78, 0x99, 0x27, 0x1f, 0xa8, 0x4e, 0x87, 0xac, 0x49, 0x46, 0xb5, 0x31, 0x33, 0x8d,
+	0x10, 0x22, 0x06, 0x5c, 0x19, 0x03, 0x5f, 0xbb, 0x3a, 0x70, 0x25, 0x0e, 0x5c, 0x89, 0x80, 0x4b,
+	0x6d, 0xc8, 0xc6, 0xca, 0xe5, 0x6d, 0x98, 0x91, 0xc9, 0x1f, 0x95, 0xca, 0x37, 0x2f, 0x48, 0xd1,
+	0xe9, 0x32, 0xdb, 0x49, 0x18, 0xa1, 0xdd, 0xa6, 0x06, 0xaa, 0xe8, 0xf4, 0x38, 0x75, 0x32, 0x40,
+	0xe8, 0x74, 0x80, 0x94, 0xba, 0x9a, 0x52, 0xb4, 0x64, 0xc9, 0x85, 0xf9, 0x9a, 0xc7, 0x89, 0xdf,
+	0xb2, 0x9a, 0x44, 0x38, 0x86, 0xdf, 0x03, 0x88, 0x72, 0xcf, 0xe3, 0x2d, 0xd9, 0x87, 0xfe, 0xd3,
+	0x55, 0x8a, 0x4f, 0x3e, 0x58, 0xf0, 0x08, 0x3f, 0xa0, 0x7e, 0x47, 0x18, 0x85, 0x58, 0x22, 0x1e,
+	0x33, 0xbf, 0x44, 0x8a, 0x86, 0x8c, 0x74, 0x98, 0xb1, 0x1e, 0x6f, 0x95, 0xfe, 0x89, 0x00, 0xbf,
+	0x2b, 0x57, 0x6c, 0xc3, 0xb6, 0x7d, 0x12, 0x04, 0xf2, 0xcc, 0xef, 0x03, 0x38, 0xcc, 0xb4, 0xc2,
+	0x9d, 0xe8, 0x8a, 0xd3, 0x67, 0xc6, 0x2c, 0x76, 0x12, 0x46, 0xda, 0x19, 0x6d, 0xe0, 0x65, 0x50,
+	0xad, 0x1e, 0xa7, 0x97, 0x75, 0x80, 0x9d, 0x84, 0x21, 0x75, 0xf0, 0x7b, 0xb0, 0xd8, 0x77, 0x7c,
+	0xde, 0xb3, 0x5c, 0x73, 0xe4, 0xb3, 0xe0, 0x25, 0x2a, 0xfd, 0x6f, 0x4d, 0xd9, 0x3e, 0x0c, 0x55,
+	0xef, 0x85, 0x9a, 0xbb, 0xc4, 0x25, 0x4d, 0x4e, 0x7d, 0xe1, 0x81, 0x81, 0xfb, 0x31, 0x99, 0x64,
+	0x62, 0x9a, 0x64, 0xb5, 0xae, 0xa6, 0x54, 0x6d, 0xa6, 0xf4, 0x73, 0x05, 0xae, 0xc7, 0xaf, 0x3d,
+	0x82, 0xc2, 0xdf, 0x03, 0x35, 0x22, 0x5a, 0x9c, 0xff, 0xea, 0x05, 0x71, 0x9d, 0x8c, 0x90, 0xb8,
+	0x8a, 0x30, 0xc1, 0xb5, 0x18, 0x6b, 0xe1, 0xe5, 0x97, 0x5e, 0x0c, 0x70, 0x9e, 0xf3, 0x38, 0x83,
+	0xf7, 0x21, 0xe7, 0x51, 0x9b, 0x9c, 0x85, 0x2f, 0x6a, 0x5f, 0xfa, 0x14, 0xdc, 0x3d, 0x6a, 0x93,
+	0x98, 0x33, 0x61, 0xaf, 0xd9, 0x49, 0x18, 0xf3, 0xde, 0xa4, 0xe8, 0x1c, 0x13, 0xc9, 0xba, 0x9a,
+	0x4a, 0x6a, 0x6a, 0x89, 0xc3, 0xa2, 0x21, 0xdb, 0x92, 0x40, 0xda, 0xe0, 0xdc, 0x77, 0xf6, 0x7a,
+	0x9c, 0x04, 0x78, 0x05, 0x14, 0x87, 0x5d, 0x25, 0xf2, 0x86, 0xe2, 0xb0, 0xf5, 0xf2, 0x9f, 0x07,
+	0x08, 0x83, 0x06, 0x99, 0x10, 0x4b, 0x17, 0x60, 0x18, 0xad, 0x7d, 0x32, 0x40, 0x8b, 0x80, 0x01,
+	0x6a, 0x0d, 0x3d, 0xb2, 0x28, 0xa8, 0x02, 0xb7, 0xf4, 0xb7, 0x24, 0xe0, 0x50, 0xb5, 0xea, 0xd9,
+	0x8c, 0x3a, 0x9e, 0x7c, 0x55, 0xf0, 0x5f, 0x15, 0x48, 0x93, 0x68, 0x23, 0x7c, 0x1f, 0x33, 0x95,
+	0xef, 0xbe, 0x98, 0xc0, 0xf3, 0xd6, 0xe5, 0xd1, 0x22, 0xa8, 0x7a, 0xdc, 0x3f, 0xdc, 0xfc, 0x97,
+	0x6c, 0x41, 0xd9, 0x8f, 0x50, 0xba, 0x34, 0xe7, 0xcf, 0x68, 0x28, 0xff, 0x58, 0x11, 0x1b, 0xb3,
+	0x1f, 0xa1, 0xa4, 0xf6, 0x18, 0x0d, 0x3f, 0xfd, 0x4b, 0xf2, 0xce, 0xd1, 0x31, 0x7a, 0x07, 0xbf,
+	0xf5, 0xf9, 0x00, 0xad, 0x0b, 0x87, 0xf5, 0x16, 0xf5, 0xf5, 0x08, 0x5e, 0xdf, 0x65, 0xa4, 0xe9,
+	0xb4, 0x1c, 0x62, 0xeb, 0x56, 0xa0, 0x07, 0x0e, 0x27, 0xeb, 0x82, 0xcf, 0x15, 0xf9, 0xa9, 0x3b,
+	0x81, 0x1e, 0xce, 0x59, 0x96, 0xab, 0x0b, 0xa0, 0xdc, 0xd1, 0x31, 0x02, 0x9c, 0x1a, 0x0e, 0x90,
+	0x2a, 0x80, 0xc4, 0x16, 0x1c, 0x1d, 0xa3, 0x59, 0xac, 0x7e, 0x3c, 0x40, 0x09, 0xb1, 0x9c, 0x3d,
+	0x3a, 0x46, 0x4a, 0x4a, 0x9e, 0xba, 0x7e, 0x74, 0x8c, 0x5e, 0x2f, 0x7c, 0xfb, 0xf3, 0x01, 0xba,
+	0x15, 0xb1, 0x65, 0x8d, 0x69, 0x0f, 0x5d, 0xd8, 0x27, 0x91, 0x1b, 0x3a, 0xf5, 0x74, 0x4b, 0x6f,
+	0x3b, 0x7d, 0xe2, 0xe9, 0x5e, 0x04, 0xac, 0x1d, 0x1d, 0xa3, 0x6c, 0x01, 0x86, 0x03, 0x34, 0x1b,
+	0xbe, 0xc7, 0xe3, 0xd3, 0x0a, 0xaa, 0x88, 0xad, 0x71, 0xc6, 0x60, 0x61, 0x1f, 0x72, 0x71, 0x52,
+	0xb0, 0x06, 0xc9, 0x0e, 0x39, 0x94, 0x71, 0x4d, 0x1b, 0xe2, 0x13, 0xbf, 0x03, 0x33, 0x7d, 0xcb,
+	0xed, 0x91, 0x28, 0x5f, 0x97, 0x2f, 0xa3, 0x3b, 0x9e, 0x23, 0x46, 0x68, 0xb8, 0xae, 0xbc, 0x81,
+	0x4a, 0xbf, 0x41, 0x70, 0x23, 0xd4, 0x39, 0x5f, 0x51, 0xe5, 0xab, 0xa6, 0xd2, 0x4e, 0x42, 0x24,
+	0x13, 0xde, 0x89, 0x27, 0xc1, 0x25, 0x55, 0x74, 0x3e, 0x09, 0x44, 0x15, 0x8d, 0x8d, 0x2f, 0x4c,
+	0xfa, 0x3f, 0xcd, 0x40, 0x6e, 0xdb, 0xa5, 0x7b, 0x96, 0x2b, 0xc2, 0x2c, 0x53, 0xef, 0x3e, 0x64,
+	0xa2, 0x01, 0x46, 0x76, 0x1f, 0xe1, 0x6d, 0xee, 0x5c, 0xb5, 0x45, 0xc7, 0x86, 0x0d, 0x5d, 0x56,
+	0x5b, 0x56, 0xa4, 0xd4, 0xdc, 0xcf, 0x90, 0x5a, 0x50, 0x12, 0x8a, 0x01, 0x7c, 0x2c, 0xc1, 0xdb,
+	0x90, 0x8a, 0xda, 0x36, 0x93, 0x53, 0x40, 0xa6, 0xb2, 0x72, 0x95, 0x56, 0x30, 0x62, 0xcd, 0x98,
+	0x0b, 0x9b, 0x34, 0xc3, 0x75, 0x48, 0x8f, 0x66, 0x0a, 0x26, 0x67, 0x83, 0x4c, 0xe5, 0xe6, 0x65,
+	0x74, 0x9c, 0x87, 0x4a, 0x45, 0x83, 0x07, 0xc3, 0xeb, 0x30, 0xcb, 0xe4, 0x3b, 0x24, 0x27, 0x98,
+	0xcc, 0xb9, 0x79, 0x36, 0x76, 0xc1, 0xf0, 0xc5, 0x32, 0x22, 0x0b, 0xdc, 0x80, 0xbc, 0x4d, 0x5a,
+	0x56, 0xcf, 0xe5, 0x66, 0xc4, 0xd4, 0x38, 0x6f, 0xe5, 0xe4, 0x70, 0x71, 0xa3, 0xbf, 0x1e, 0xd9,
+	0x85, 0xb0, 0xe3, 0x04, 0xc2, 0x1b, 0xb0, 0x30, 0xe2, 0x9c, 0x9a, 0xd6, 0x41, 0x60, 0xf2, 0xf6,
+	0x81, 0x1c, 0x23, 0x2e, 0x86, 0xca, 0x45, 0x0c, 0xd3, 0x8d, 0x83, 0xe0, 0x41, 0xfb, 0x00, 0xbf,
+	0x0f, 0x05, 0x9b, 0x30, 0x97, 0x1e, 0x76, 0x89, 0xc7, 0xcd, 0x3e, 0xf3, 0xcc, 0xc9, 0x28, 0x66,
+	0x65, 0x14, 0x2f, 0x60, 0xeb, 0xce, 0xd8, 0xee, 0x61, 0xe3, 0xde, 0x59, 0x48, 0x8d, 0x1b, 0x67,
+	0x80, 0x0f, 0x99, 0x77, 0x26, 0xc0, 0x77, 0x20, 0xd5, 0x6c, 0xb5, 0x43, 0xe4, 0xc5, 0xcb, 0x5e,
+	0x87, 0x2d, 0xea, 0xb5, 0x9c, 0x76, 0xcf, 0x9f, 0x68, 0xc8, 0xc6, 0x5c, 0xb3, 0xd5, 0x96, 0xcb,
+	0x6f, 0x8c, 0x27, 0xe5, 0x31, 0x7d, 0x78, 0xe1, 0x64, 0x80, 0xe0, 0x74, 0x80, 0xd2, 0xc3, 0x01,
+	0x9a, 0x59, 0xbb, 0xb5, 0xb2, 0xb6, 0x16, 0x0e, 0x03, 0x61, 0xba, 0x86, 0x6f, 0x56, 0x5d, 0x4d,
+	0xcd, 0x68, 0xb3, 0x75, 0x35, 0x95, 0xd6, 0xa0, 0xf4, 0x04, 0xc1, 0x7c, 0xec, 0x14, 0xfc, 0x26,
+	0xe4, 0xc8, 0x23, 0x6e, 0x36, 0xa9, 0xe7, 0x99, 0xe1, 0x60, 0x72, 0xf9, 0xe3, 0x9b, 0x25, 0x8f,
+	0xf8, 0x16, 0xf5, 0x3c, 0x39, 0xa1, 0xe0, 0x37, 0x20, 0x3b, 0xb6, 0x6e, 0xfb, 0xa3, 0xc7, 0xf7,
+	0x22, 0x5b, 0x88, 0x6c, 0xb7, 0x7d, 0xb2, 0xf9, 0xf2, 0x19, 0x29, 0xf8, 0xda, 0xc9, 0x00, 0x29,
+	0xe2, 0x87, 0xc1, 0x70, 0x80, 0x92, 0x95, 0x95, 0xdb, 0x75, 0x35, 0x85, 0x34, 0xa5, 0xf4, 0x7b,
+	0x05, 0x72, 0x5b, 0x3e, 0xb1, 0x38, 0x19, 0x57, 0xdb, 0xc6, 0x7f, 0x55, 0x6d, 0xff, 0xd7, 0xf5,
+	0xb5, 0xbe, 0xf0, 0xc9, 0x5b, 0x53, 0x4d, 0xa9, 0xf4, 0x07, 0x05, 0xae, 0x19, 0x84, 0xb9, 0x56,
+	0xf3, 0x2b, 0xea, 0xbe, 0x24, 0x75, 0xbf, 0x53, 0x20, 0xb3, 0x4d, 0xf8, 0x57, 0xb4, 0x7d, 0x29,
+	0xda, 0x96, 0x6f, 0xc1, 0x8d, 0x0b, 0xfa, 0x22, 0x9e, 0x83, 0xe4, 0xce, 0x8f, 0x36, 0xb5, 0x04,
+	0xce, 0x42, 0x6a, 0xb7, 0x6a, 0x3c, 0xac, 0x6d, 0x55, 0x77, 0x35, 0xb4, 0xbc, 0x0c, 0x30, 0xa1,
+	0x34, 0x0f, 0xe9, 0x5a, 0x63, 0xb7, 0xba, 0x65, 0x36, 0x76, 0xef, 0x6a, 0x09, 0x61, 0xb3, 0x6d,
+	0x54, 0x35, 0xa5, 0x24, 0x3a, 0x01, 0xda, 0xfc, 0x10, 0x9d, 0x3e, 0x2b, 0x26, 0x9e, 0x3e, 0x2b,
+	0x26, 0xbe, 0x78, 0x56, 0x44, 0x8f, 0x87, 0x45, 0xf4, 0xeb, 0x61, 0x11, 0x7d, 0x3c, 0x2c, 0xa2,
+	0xd3, 0x61, 0x11, 0x3d, 0x1d, 0x16, 0xd1, 0xa7, 0xc3, 0x22, 0xfa, 0x6c, 0x58, 0x4c, 0x7c, 0x31,
+	0x2c, 0xa2, 0x5f, 0x3c, 0x2f, 0x26, 0x4e, 0x9e, 0x17, 0xd1, 0xe9, 0xf3, 0x62, 0xe2, 0xe9, 0xf3,
+	0x62, 0xe2, 0xa7, 0xf5, 0x36, 0x65, 0x9d, 0x76, 0xb9, 0x4f, 0x5d, 0x4e, 0x7c, 0xdf, 0x2a, 0xf7,
+	0x82, 0x55, 0xf9, 0xd1, 0xa2, 0x7e, 0xf7, 0x26, 0xf3, 0x69, 0xdf, 0xb1, 0x89, 0x7f, 0x73, 0x24,
+	0x5e, 0x65, 0x7b, 0x6d, 0xba, 0x4a, 0x1e, 0xf1, 0xe8, 0xef, 0xb1, 0xd8, 0xff, 0x82, 0x7b, 0xb3,
+	0xf2, 0x0f, 0xb2, 0xdb, 0xff, 0x0e, 0x00, 0x00, 0xff, 0xff, 0xc3, 0xba, 0xab, 0xb7, 0x36, 0x14,
+	0x00, 0x00,
 }
 
 func (x DeploymentVPNTunnelType) String() string {
@@ -1140,6 +1583,104 @@ func (x TunnelType) String() string {
 		return s
 	}
 	return strconv.Itoa(int(x))
+}
+func (this *IKEProposal) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IKEProposal)
+	if !ok {
+		that2, ok := that.(IKEProposal)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.EncryptionAlgos) != len(that1.EncryptionAlgos) {
+		return false
+	}
+	for i := range this.EncryptionAlgos {
+		if this.EncryptionAlgos[i] != that1.EncryptionAlgos[i] {
+			return false
+		}
+	}
+	if len(this.AuthenticationAlgos) != len(that1.AuthenticationAlgos) {
+		return false
+	}
+	for i := range this.AuthenticationAlgos {
+		if this.AuthenticationAlgos[i] != that1.AuthenticationAlgos[i] {
+			return false
+		}
+	}
+	if len(this.Prf) != len(that1.Prf) {
+		return false
+	}
+	for i := range this.Prf {
+		if this.Prf[i] != that1.Prf[i] {
+			return false
+		}
+	}
+	if len(this.DhGroups) != len(that1.DhGroups) {
+		return false
+	}
+	for i := range this.DhGroups {
+		if this.DhGroups[i] != that1.DhGroups[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *ESPProposal) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ESPProposal)
+	if !ok {
+		that2, ok := that.(ESPProposal)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.EncryptionAlgos) != len(that1.EncryptionAlgos) {
+		return false
+	}
+	for i := range this.EncryptionAlgos {
+		if this.EncryptionAlgos[i] != that1.EncryptionAlgos[i] {
+			return false
+		}
+	}
+	if len(this.AuthenticationAlgos) != len(that1.AuthenticationAlgos) {
+		return false
+	}
+	for i := range this.AuthenticationAlgos {
+		if this.AuthenticationAlgos[i] != that1.AuthenticationAlgos[i] {
+			return false
+		}
+	}
+	if len(this.DhGroups) != len(that1.DhGroups) {
+		return false
+	}
+	for i := range this.DhGroups {
+		if this.DhGroups[i] != that1.DhGroups[i] {
+			return false
+		}
+	}
+	return true
 }
 func (this *IpsecTunnelParams) Equal(that interface{}) bool {
 	if that == nil {
@@ -1162,6 +1703,49 @@ func (this *IpsecTunnelParams) Equal(that interface{}) bool {
 	}
 	if !this.IpsecPsk.Equal(that1.IpsecPsk) {
 		return false
+	}
+	if !this.TunnelInitiator.Equal(that1.TunnelInitiator) {
+		return false
+	}
+	if !this.IkeProposal.Equal(that1.IkeProposal) {
+		return false
+	}
+	if !this.EspProposal.Equal(that1.EspProposal) {
+		return false
+	}
+	if this.LocalIkeId != that1.LocalIkeId {
+		return false
+	}
+	if this.RemoteIkeId != that1.RemoteIkeId {
+		return false
+	}
+	if this.IkePhase1KeyLifetime != that1.IkePhase1KeyLifetime {
+		return false
+	}
+	if this.IkeReauthTimeout != that1.IkeReauthTimeout {
+		return false
+	}
+	if this.IkePhase2KeyLifetime != that1.IkePhase2KeyLifetime {
+		return false
+	}
+	if this.DpdKeepAliveTimer != that1.DpdKeepAliveTimer {
+		return false
+	}
+	if len(this.IkePhase1Profile) != len(that1.IkePhase1Profile) {
+		return false
+	}
+	for i := range this.IkePhase1Profile {
+		if !this.IkePhase1Profile[i].Equal(that1.IkePhase1Profile[i]) {
+			return false
+		}
+	}
+	if len(this.IkePhase2Profile) != len(that1.IkePhase2Profile) {
+		return false
+	}
+	for i := range this.IkePhase2Profile {
+		if !this.IkePhase2Profile[i].Equal(that1.IkePhase2Profile[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -1407,6 +1991,30 @@ func (this *LocalIpAddressSelector_IpAddress) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *LocalIpAddressSelector_NodeInterface) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*LocalIpAddressSelector_NodeInterface)
+	if !ok {
+		that2, ok := that.(LocalIpAddressSelector_NodeInterface)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.NodeInterface.Equal(that1.NodeInterface) {
+		return false
+	}
+	return true
+}
 func (this *RemoteNodeAttributes) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1581,6 +2189,9 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if this.DeploymentVpnTunnelType != that1.DeploymentVpnTunnelType {
 		return false
 	}
+	if !this.CfgType.Equal(that1.CfgType) {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType_DefaultTunnelAttribute) Equal(that interface{}) bool {
@@ -1627,6 +2238,84 @@ func (this *GlobalSpecType_TunnelToAwsTgw) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.TunnelToAwsTgw.Equal(that1.TunnelToAwsTgw) {
+		return false
+	}
+	return true
+}
+func (this *ConfigureType) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ConfigureType)
+	if !ok {
+		that2, ok := that.(ConfigureType)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.CfgType == nil {
+		if this.CfgType != nil {
+			return false
+		}
+	} else if this.CfgType == nil {
+		return false
+	} else if !this.CfgType.Equal(that1.CfgType) {
+		return false
+	}
+	return true
+}
+func (this *ConfigureType_ExtConnIpsec) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ConfigureType_ExtConnIpsec)
+	if !ok {
+		that2, ok := that.(ConfigureType_ExtConnIpsec)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ExtConnIpsec.Equal(that1.ExtConnIpsec) {
+		return false
+	}
+	return true
+}
+func (this *ConfigureType_ExtConnGre) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ConfigureType_ExtConnGre)
+	if !ok {
+		that2, ok := that.(ConfigureType_ExtConnGre)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ExtConnGre.Equal(that1.ExtConnGre) {
 		return false
 	}
 	return true
@@ -1730,14 +2419,60 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *IKEProposal) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&tunnel.IKEProposal{")
+	s = append(s, "EncryptionAlgos: "+fmt.Sprintf("%#v", this.EncryptionAlgos)+",\n")
+	s = append(s, "AuthenticationAlgos: "+fmt.Sprintf("%#v", this.AuthenticationAlgos)+",\n")
+	s = append(s, "Prf: "+fmt.Sprintf("%#v", this.Prf)+",\n")
+	s = append(s, "DhGroups: "+fmt.Sprintf("%#v", this.DhGroups)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ESPProposal) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&tunnel.ESPProposal{")
+	s = append(s, "EncryptionAlgos: "+fmt.Sprintf("%#v", this.EncryptionAlgos)+",\n")
+	s = append(s, "AuthenticationAlgos: "+fmt.Sprintf("%#v", this.AuthenticationAlgos)+",\n")
+	s = append(s, "DhGroups: "+fmt.Sprintf("%#v", this.DhGroups)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *IpsecTunnelParams) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 5)
+	s := make([]string, 0, 16)
 	s = append(s, "&tunnel.IpsecTunnelParams{")
 	if this.IpsecPsk != nil {
 		s = append(s, "IpsecPsk: "+fmt.Sprintf("%#v", this.IpsecPsk)+",\n")
+	}
+	if this.TunnelInitiator != nil {
+		s = append(s, "TunnelInitiator: "+fmt.Sprintf("%#v", this.TunnelInitiator)+",\n")
+	}
+	if this.IkeProposal != nil {
+		s = append(s, "IkeProposal: "+fmt.Sprintf("%#v", this.IkeProposal)+",\n")
+	}
+	if this.EspProposal != nil {
+		s = append(s, "EspProposal: "+fmt.Sprintf("%#v", this.EspProposal)+",\n")
+	}
+	s = append(s, "LocalIkeId: "+fmt.Sprintf("%#v", this.LocalIkeId)+",\n")
+	s = append(s, "RemoteIkeId: "+fmt.Sprintf("%#v", this.RemoteIkeId)+",\n")
+	s = append(s, "IkePhase1KeyLifetime: "+fmt.Sprintf("%#v", this.IkePhase1KeyLifetime)+",\n")
+	s = append(s, "IkeReauthTimeout: "+fmt.Sprintf("%#v", this.IkeReauthTimeout)+",\n")
+	s = append(s, "IkePhase2KeyLifetime: "+fmt.Sprintf("%#v", this.IkePhase2KeyLifetime)+",\n")
+	s = append(s, "DpdKeepAliveTimer: "+fmt.Sprintf("%#v", this.DpdKeepAliveTimer)+",\n")
+	if this.IkePhase1Profile != nil {
+		s = append(s, "IkePhase1Profile: "+fmt.Sprintf("%#v", this.IkePhase1Profile)+",\n")
+	}
+	if this.IkePhase2Profile != nil {
+		s = append(s, "IkePhase2Profile: "+fmt.Sprintf("%#v", this.IkePhase2Profile)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1809,7 +2544,7 @@ func (this *LocalIpAddressSelector) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 7)
 	s = append(s, "&tunnel.LocalIpAddressSelector{")
 	if this.Type != nil {
 		s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
@@ -1831,6 +2566,14 @@ func (this *LocalIpAddressSelector_IpAddress) GoString() string {
 	}
 	s := strings.Join([]string{`&tunnel.LocalIpAddressSelector_IpAddress{` +
 		`IpAddress:` + fmt.Sprintf("%#v", this.IpAddress) + `}`}, ", ")
+	return s
+}
+func (this *LocalIpAddressSelector_NodeInterface) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tunnel.LocalIpAddressSelector_NodeInterface{` +
+		`NodeInterface:` + fmt.Sprintf("%#v", this.NodeInterface) + `}`}, ", ")
 	return s
 }
 func (this *RemoteNodeAttributes) GoString() string {
@@ -1899,7 +2642,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 12)
 	s = append(s, "&tunnel.GlobalSpecType{")
 	s = append(s, "TunnelType: "+fmt.Sprintf("%#v", this.TunnelType)+",\n")
 	if this.LocalIp != nil {
@@ -1915,6 +2658,9 @@ func (this *GlobalSpecType) GoString() string {
 		s = append(s, "TunnelAttribute: "+fmt.Sprintf("%#v", this.TunnelAttribute)+",\n")
 	}
 	s = append(s, "DeploymentVpnTunnelType: "+fmt.Sprintf("%#v", this.DeploymentVpnTunnelType)+",\n")
+	if this.CfgType != nil {
+		s = append(s, "CfgType: "+fmt.Sprintf("%#v", this.CfgType)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1932,6 +2678,34 @@ func (this *GlobalSpecType_TunnelToAwsTgw) GoString() string {
 	}
 	s := strings.Join([]string{`&tunnel.GlobalSpecType_TunnelToAwsTgw{` +
 		`TunnelToAwsTgw:` + fmt.Sprintf("%#v", this.TunnelToAwsTgw) + `}`}, ", ")
+	return s
+}
+func (this *ConfigureType) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&tunnel.ConfigureType{")
+	if this.CfgType != nil {
+		s = append(s, "CfgType: "+fmt.Sprintf("%#v", this.CfgType)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ConfigureType_ExtConnIpsec) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tunnel.ConfigureType_ExtConnIpsec{` +
+		`ExtConnIpsec:` + fmt.Sprintf("%#v", this.ExtConnIpsec) + `}`}, ", ")
+	return s
+}
+func (this *ConfigureType_ExtConnGre) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&tunnel.ConfigureType_ExtConnGre{` +
+		`ExtConnGre:` + fmt.Sprintf("%#v", this.ExtConnGre) + `}`}, ", ")
 	return s
 }
 func (this *CreateSpecType) GoString() string {
@@ -1999,6 +2773,178 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
 }
+func (m *IKEProposal) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IKEProposal) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IKEProposal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DhGroups) > 0 {
+		dAtA2 := make([]byte, len(m.DhGroups)*10)
+		var j1 int
+		for _, num := range m.DhGroups {
+			for num >= 1<<7 {
+				dAtA2[j1] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j1++
+			}
+			dAtA2[j1] = uint8(num)
+			j1++
+		}
+		i -= j1
+		copy(dAtA[i:], dAtA2[:j1])
+		i = encodeVarintTypes(dAtA, i, uint64(j1))
+		i--
+		dAtA[i] = 0x22
+	}
+	if len(m.Prf) > 0 {
+		dAtA4 := make([]byte, len(m.Prf)*10)
+		var j3 int
+		for _, num := range m.Prf {
+			for num >= 1<<7 {
+				dAtA4[j3] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j3++
+			}
+			dAtA4[j3] = uint8(num)
+			j3++
+		}
+		i -= j3
+		copy(dAtA[i:], dAtA4[:j3])
+		i = encodeVarintTypes(dAtA, i, uint64(j3))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.AuthenticationAlgos) > 0 {
+		dAtA6 := make([]byte, len(m.AuthenticationAlgos)*10)
+		var j5 int
+		for _, num := range m.AuthenticationAlgos {
+			for num >= 1<<7 {
+				dAtA6[j5] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j5++
+			}
+			dAtA6[j5] = uint8(num)
+			j5++
+		}
+		i -= j5
+		copy(dAtA[i:], dAtA6[:j5])
+		i = encodeVarintTypes(dAtA, i, uint64(j5))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.EncryptionAlgos) > 0 {
+		dAtA8 := make([]byte, len(m.EncryptionAlgos)*10)
+		var j7 int
+		for _, num := range m.EncryptionAlgos {
+			for num >= 1<<7 {
+				dAtA8[j7] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j7++
+			}
+			dAtA8[j7] = uint8(num)
+			j7++
+		}
+		i -= j7
+		copy(dAtA[i:], dAtA8[:j7])
+		i = encodeVarintTypes(dAtA, i, uint64(j7))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ESPProposal) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ESPProposal) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ESPProposal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DhGroups) > 0 {
+		dAtA10 := make([]byte, len(m.DhGroups)*10)
+		var j9 int
+		for _, num := range m.DhGroups {
+			for num >= 1<<7 {
+				dAtA10[j9] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j9++
+			}
+			dAtA10[j9] = uint8(num)
+			j9++
+		}
+		i -= j9
+		copy(dAtA[i:], dAtA10[:j9])
+		i = encodeVarintTypes(dAtA, i, uint64(j9))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.AuthenticationAlgos) > 0 {
+		dAtA12 := make([]byte, len(m.AuthenticationAlgos)*10)
+		var j11 int
+		for _, num := range m.AuthenticationAlgos {
+			for num >= 1<<7 {
+				dAtA12[j11] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j11++
+			}
+			dAtA12[j11] = uint8(num)
+			j11++
+		}
+		i -= j11
+		copy(dAtA[i:], dAtA12[:j11])
+		i = encodeVarintTypes(dAtA, i, uint64(j11))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.EncryptionAlgos) > 0 {
+		dAtA14 := make([]byte, len(m.EncryptionAlgos)*10)
+		var j13 int
+		for _, num := range m.EncryptionAlgos {
+			for num >= 1<<7 {
+				dAtA14[j13] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j13++
+			}
+			dAtA14[j13] = uint8(num)
+			j13++
+		}
+		i -= j13
+		copy(dAtA[i:], dAtA14[:j13])
+		i = encodeVarintTypes(dAtA, i, uint64(j13))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *IpsecTunnelParams) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2019,6 +2965,104 @@ func (m *IpsecTunnelParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.IkePhase2Profile) > 0 {
+		for iNdEx := len(m.IkePhase2Profile) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.IkePhase2Profile[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x7a
+		}
+	}
+	if len(m.IkePhase1Profile) > 0 {
+		for iNdEx := len(m.IkePhase1Profile) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.IkePhase1Profile[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x72
+		}
+	}
+	if m.DpdKeepAliveTimer != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.DpdKeepAliveTimer))
+		i--
+		dAtA[i] = 0x58
+	}
+	if m.IkePhase2KeyLifetime != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.IkePhase2KeyLifetime))
+		i--
+		dAtA[i] = 0x50
+	}
+	if m.IkeReauthTimeout != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.IkeReauthTimeout))
+		i--
+		dAtA[i] = 0x48
+	}
+	if m.IkePhase1KeyLifetime != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.IkePhase1KeyLifetime))
+		i--
+		dAtA[i] = 0x40
+	}
+	if len(m.RemoteIkeId) > 0 {
+		i -= len(m.RemoteIkeId)
+		copy(dAtA[i:], m.RemoteIkeId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.RemoteIkeId)))
+		i--
+		dAtA[i] = 0x3a
+	}
+	if len(m.LocalIkeId) > 0 {
+		i -= len(m.LocalIkeId)
+		copy(dAtA[i:], m.LocalIkeId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.LocalIkeId)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.EspProposal != nil {
+		{
+			size, err := m.EspProposal.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	if m.IkeProposal != nil {
+		{
+			size, err := m.IkeProposal.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.TunnelInitiator != nil {
+		{
+			size, err := m.TunnelInitiator.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
 	if m.IpsecPsk != nil {
 		{
 			size, err := m.IpsecPsk.MarshalToSizedBuffer(dAtA[:i])
@@ -2284,6 +3328,27 @@ func (m *LocalIpAddressSelector_IpAddress) MarshalToSizedBuffer(dAtA []byte) (in
 	}
 	return len(dAtA) - i, nil
 }
+func (m *LocalIpAddressSelector_NodeInterface) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *LocalIpAddressSelector_NodeInterface) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.NodeInterface != nil {
+		{
+			size, err := m.NodeInterface.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
 func (m *RemoteNodeAttributes) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2467,6 +3532,20 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.CfgType != nil {
+		{
+			size, err := m.CfgType.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0xa2
+	}
 	if m.DeploymentVpnTunnelType != 0 {
 		i = encodeVarintTypes(dAtA, i, uint64(m.DeploymentVpnTunnelType))
 		i--
@@ -2564,6 +3643,80 @@ func (m *GlobalSpecType_TunnelToAwsTgw) MarshalToSizedBuffer(dAtA []byte) (int, 
 		}
 		i--
 		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ConfigureType) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ConfigureType) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ConfigureType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.CfgType != nil {
+		{
+			size := m.CfgType.Size()
+			i -= size
+			if _, err := m.CfgType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ConfigureType_ExtConnIpsec) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ConfigureType_ExtConnIpsec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ExtConnIpsec != nil {
+		{
+			size, err := m.ExtConnIpsec.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ConfigureType_ExtConnGre) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ConfigureType_ExtConnGre) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ExtConnGre != nil {
+		{
+			size, err := m.ExtConnGre.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
 	}
 	return len(dAtA) - i, nil
 }
@@ -2770,6 +3923,73 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+func (m *IKEProposal) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.EncryptionAlgos) > 0 {
+		l = 0
+		for _, e := range m.EncryptionAlgos {
+			l += sovTypes(uint64(e))
+		}
+		n += 1 + sovTypes(uint64(l)) + l
+	}
+	if len(m.AuthenticationAlgos) > 0 {
+		l = 0
+		for _, e := range m.AuthenticationAlgos {
+			l += sovTypes(uint64(e))
+		}
+		n += 1 + sovTypes(uint64(l)) + l
+	}
+	if len(m.Prf) > 0 {
+		l = 0
+		for _, e := range m.Prf {
+			l += sovTypes(uint64(e))
+		}
+		n += 1 + sovTypes(uint64(l)) + l
+	}
+	if len(m.DhGroups) > 0 {
+		l = 0
+		for _, e := range m.DhGroups {
+			l += sovTypes(uint64(e))
+		}
+		n += 1 + sovTypes(uint64(l)) + l
+	}
+	return n
+}
+
+func (m *ESPProposal) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.EncryptionAlgos) > 0 {
+		l = 0
+		for _, e := range m.EncryptionAlgos {
+			l += sovTypes(uint64(e))
+		}
+		n += 1 + sovTypes(uint64(l)) + l
+	}
+	if len(m.AuthenticationAlgos) > 0 {
+		l = 0
+		for _, e := range m.AuthenticationAlgos {
+			l += sovTypes(uint64(e))
+		}
+		n += 1 + sovTypes(uint64(l)) + l
+	}
+	if len(m.DhGroups) > 0 {
+		l = 0
+		for _, e := range m.DhGroups {
+			l += sovTypes(uint64(e))
+		}
+		n += 1 + sovTypes(uint64(l)) + l
+	}
+	return n
+}
+
 func (m *IpsecTunnelParams) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2779,6 +3999,50 @@ func (m *IpsecTunnelParams) Size() (n int) {
 	if m.IpsecPsk != nil {
 		l = m.IpsecPsk.Size()
 		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.TunnelInitiator != nil {
+		l = m.TunnelInitiator.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.IkeProposal != nil {
+		l = m.IkeProposal.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.EspProposal != nil {
+		l = m.EspProposal.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.LocalIkeId)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.RemoteIkeId)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.IkePhase1KeyLifetime != 0 {
+		n += 1 + sovTypes(uint64(m.IkePhase1KeyLifetime))
+	}
+	if m.IkeReauthTimeout != 0 {
+		n += 1 + sovTypes(uint64(m.IkeReauthTimeout))
+	}
+	if m.IkePhase2KeyLifetime != 0 {
+		n += 1 + sovTypes(uint64(m.IkePhase2KeyLifetime))
+	}
+	if m.DpdKeepAliveTimer != 0 {
+		n += 1 + sovTypes(uint64(m.DpdKeepAliveTimer))
+	}
+	if len(m.IkePhase1Profile) > 0 {
+		for _, e := range m.IkePhase1Profile {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.IkePhase2Profile) > 0 {
+		for _, e := range m.IkePhase2Profile {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
 	}
 	return n
 }
@@ -2898,6 +4162,18 @@ func (m *LocalIpAddressSelector_IpAddress) Size() (n int) {
 	}
 	return n
 }
+func (m *LocalIpAddressSelector_NodeInterface) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.NodeInterface != nil {
+		l = m.NodeInterface.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *RemoteNodeAttributes) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2996,6 +4272,10 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.DeploymentVpnTunnelType != 0 {
 		n += 1 + sovTypes(uint64(m.DeploymentVpnTunnelType))
 	}
+	if m.CfgType != nil {
+		l = m.CfgType.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
 	return n
 }
 
@@ -3019,6 +4299,42 @@ func (m *GlobalSpecType_TunnelToAwsTgw) Size() (n int) {
 	_ = l
 	if m.TunnelToAwsTgw != nil {
 		l = m.TunnelToAwsTgw.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ConfigureType) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.CfgType != nil {
+		n += m.CfgType.Size()
+	}
+	return n
+}
+
+func (m *ConfigureType_ExtConnIpsec) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ExtConnIpsec != nil {
+		l = m.ExtConnIpsec.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ConfigureType_ExtConnGre) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ExtConnGre != nil {
+		l = m.ExtConnGre.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -3101,12 +4417,58 @@ func sovTypes(x uint64) (n int) {
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
+func (this *IKEProposal) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&IKEProposal{`,
+		`EncryptionAlgos:` + fmt.Sprintf("%v", this.EncryptionAlgos) + `,`,
+		`AuthenticationAlgos:` + fmt.Sprintf("%v", this.AuthenticationAlgos) + `,`,
+		`Prf:` + fmt.Sprintf("%v", this.Prf) + `,`,
+		`DhGroups:` + fmt.Sprintf("%v", this.DhGroups) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ESPProposal) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ESPProposal{`,
+		`EncryptionAlgos:` + fmt.Sprintf("%v", this.EncryptionAlgos) + `,`,
+		`AuthenticationAlgos:` + fmt.Sprintf("%v", this.AuthenticationAlgos) + `,`,
+		`DhGroups:` + fmt.Sprintf("%v", this.DhGroups) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *IpsecTunnelParams) String() string {
 	if this == nil {
 		return "nil"
 	}
+	repeatedStringForIkePhase1Profile := "[]*ObjectRefType{"
+	for _, f := range this.IkePhase1Profile {
+		repeatedStringForIkePhase1Profile += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForIkePhase1Profile += "}"
+	repeatedStringForIkePhase2Profile := "[]*ObjectRefType{"
+	for _, f := range this.IkePhase2Profile {
+		repeatedStringForIkePhase2Profile += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForIkePhase2Profile += "}"
 	s := strings.Join([]string{`&IpsecTunnelParams{`,
 		`IpsecPsk:` + strings.Replace(fmt.Sprintf("%v", this.IpsecPsk), "SecretType", "schema.SecretType", 1) + `,`,
+		`TunnelInitiator:` + strings.Replace(fmt.Sprintf("%v", this.TunnelInitiator), "Empty", "schema.Empty", 1) + `,`,
+		`IkeProposal:` + strings.Replace(this.IkeProposal.String(), "IKEProposal", "IKEProposal", 1) + `,`,
+		`EspProposal:` + strings.Replace(this.EspProposal.String(), "ESPProposal", "ESPProposal", 1) + `,`,
+		`LocalIkeId:` + fmt.Sprintf("%v", this.LocalIkeId) + `,`,
+		`RemoteIkeId:` + fmt.Sprintf("%v", this.RemoteIkeId) + `,`,
+		`IkePhase1KeyLifetime:` + fmt.Sprintf("%v", this.IkePhase1KeyLifetime) + `,`,
+		`IkeReauthTimeout:` + fmt.Sprintf("%v", this.IkeReauthTimeout) + `,`,
+		`IkePhase2KeyLifetime:` + fmt.Sprintf("%v", this.IkePhase2KeyLifetime) + `,`,
+		`DpdKeepAliveTimer:` + fmt.Sprintf("%v", this.DpdKeepAliveTimer) + `,`,
+		`IkePhase1Profile:` + repeatedStringForIkePhase1Profile + `,`,
+		`IkePhase2Profile:` + repeatedStringForIkePhase2Profile + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3207,6 +4569,16 @@ func (this *LocalIpAddressSelector_IpAddress) String() string {
 	}, "")
 	return s
 }
+func (this *LocalIpAddressSelector_NodeInterface) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&LocalIpAddressSelector_NodeInterface{`,
+		`NodeInterface:` + strings.Replace(fmt.Sprintf("%v", this.NodeInterface), "NodeInterfaceType", "schema.NodeInterfaceType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *RemoteNodeAttributes) String() string {
 	if this == nil {
 		return "nil"
@@ -3278,6 +4650,7 @@ func (this *GlobalSpecType) String() string {
 		`RemoteIp:` + strings.Replace(this.RemoteIp.String(), "RemoteIpAddressSelector", "RemoteIpAddressSelector", 1) + `,`,
 		`TunnelAttribute:` + fmt.Sprintf("%v", this.TunnelAttribute) + `,`,
 		`DeploymentVpnTunnelType:` + fmt.Sprintf("%v", this.DeploymentVpnTunnelType) + `,`,
+		`CfgType:` + strings.Replace(this.CfgType.String(), "ConfigureType", "ConfigureType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3298,6 +4671,36 @@ func (this *GlobalSpecType_TunnelToAwsTgw) String() string {
 	}
 	s := strings.Join([]string{`&GlobalSpecType_TunnelToAwsTgw{`,
 		`TunnelToAwsTgw:` + strings.Replace(fmt.Sprintf("%v", this.TunnelToAwsTgw), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ConfigureType) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ConfigureType{`,
+		`CfgType:` + fmt.Sprintf("%v", this.CfgType) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ConfigureType_ExtConnIpsec) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ConfigureType_ExtConnIpsec{`,
+		`ExtConnIpsec:` + strings.Replace(fmt.Sprintf("%v", this.ExtConnIpsec), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ConfigureType_ExtConnGre) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ConfigureType_ExtConnGre{`,
+		`ExtConnGre:` + strings.Replace(fmt.Sprintf("%v", this.ExtConnGre), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3348,6 +4751,595 @@ func valueToStringTypes(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
+}
+func (m *IKEProposal) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IKEProposal: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IKEProposal: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType == 0 {
+				var v schema.EncryptionAlgorithm
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= schema.EncryptionAlgorithm(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.EncryptionAlgos = append(m.EncryptionAlgos, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.EncryptionAlgos) == 0 {
+					m.EncryptionAlgos = make([]schema.EncryptionAlgorithm, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v schema.EncryptionAlgorithm
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= schema.EncryptionAlgorithm(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.EncryptionAlgos = append(m.EncryptionAlgos, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field EncryptionAlgos", wireType)
+			}
+		case 2:
+			if wireType == 0 {
+				var v schema.AuthenticationAlgorithm
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= schema.AuthenticationAlgorithm(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.AuthenticationAlgos = append(m.AuthenticationAlgos, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.AuthenticationAlgos) == 0 {
+					m.AuthenticationAlgos = make([]schema.AuthenticationAlgorithm, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v schema.AuthenticationAlgorithm
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= schema.AuthenticationAlgorithm(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.AuthenticationAlgos = append(m.AuthenticationAlgos, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuthenticationAlgos", wireType)
+			}
+		case 3:
+			if wireType == 0 {
+				var v schema.PseudoRandomFunction
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= schema.PseudoRandomFunction(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.Prf = append(m.Prf, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.Prf) == 0 {
+					m.Prf = make([]schema.PseudoRandomFunction, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v schema.PseudoRandomFunction
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= schema.PseudoRandomFunction(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.Prf = append(m.Prf, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field Prf", wireType)
+			}
+		case 4:
+			if wireType == 0 {
+				var v schema.DHGroup
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= schema.DHGroup(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.DhGroups = append(m.DhGroups, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.DhGroups) == 0 {
+					m.DhGroups = make([]schema.DHGroup, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v schema.DHGroup
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= schema.DHGroup(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.DhGroups = append(m.DhGroups, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field DhGroups", wireType)
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ESPProposal) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ESPProposal: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ESPProposal: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType == 0 {
+				var v schema.EncryptionAlgorithm
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= schema.EncryptionAlgorithm(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.EncryptionAlgos = append(m.EncryptionAlgos, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.EncryptionAlgos) == 0 {
+					m.EncryptionAlgos = make([]schema.EncryptionAlgorithm, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v schema.EncryptionAlgorithm
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= schema.EncryptionAlgorithm(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.EncryptionAlgos = append(m.EncryptionAlgos, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field EncryptionAlgos", wireType)
+			}
+		case 2:
+			if wireType == 0 {
+				var v schema.AuthenticationAlgorithm
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= schema.AuthenticationAlgorithm(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.AuthenticationAlgos = append(m.AuthenticationAlgos, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.AuthenticationAlgos) == 0 {
+					m.AuthenticationAlgos = make([]schema.AuthenticationAlgorithm, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v schema.AuthenticationAlgorithm
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= schema.AuthenticationAlgorithm(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.AuthenticationAlgos = append(m.AuthenticationAlgos, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field AuthenticationAlgos", wireType)
+			}
+		case 3:
+			if wireType == 0 {
+				var v schema.DHGroup
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= schema.DHGroup(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.DhGroups = append(m.DhGroups, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.DhGroups) == 0 {
+					m.DhGroups = make([]schema.DHGroup, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v schema.DHGroup
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= schema.DHGroup(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.DhGroups = append(m.DhGroups, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field DhGroups", wireType)
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
 }
 func (m *IpsecTunnelParams) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -3411,6 +5403,322 @@ func (m *IpsecTunnelParams) Unmarshal(dAtA []byte) error {
 				m.IpsecPsk = &schema.SecretType{}
 			}
 			if err := m.IpsecPsk.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TunnelInitiator", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TunnelInitiator == nil {
+				m.TunnelInitiator = &schema.Empty{}
+			}
+			if err := m.TunnelInitiator.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IkeProposal", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.IkeProposal == nil {
+				m.IkeProposal = &IKEProposal{}
+			}
+			if err := m.IkeProposal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EspProposal", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.EspProposal == nil {
+				m.EspProposal = &ESPProposal{}
+			}
+			if err := m.EspProposal.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LocalIkeId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.LocalIkeId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field RemoteIkeId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.RemoteIkeId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IkePhase1KeyLifetime", wireType)
+			}
+			m.IkePhase1KeyLifetime = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.IkePhase1KeyLifetime |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 9:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IkeReauthTimeout", wireType)
+			}
+			m.IkeReauthTimeout = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.IkeReauthTimeout |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 10:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IkePhase2KeyLifetime", wireType)
+			}
+			m.IkePhase2KeyLifetime = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.IkePhase2KeyLifetime |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 11:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DpdKeepAliveTimer", wireType)
+			}
+			m.DpdKeepAliveTimer = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.DpdKeepAliveTimer |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IkePhase1Profile", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IkePhase1Profile = append(m.IkePhase1Profile, &schema.ObjectRefType{})
+			if err := m.IkePhase1Profile[len(m.IkePhase1Profile)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field IkePhase2Profile", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.IkePhase2Profile = append(m.IkePhase2Profile, &schema.ObjectRefType{})
+			if err := m.IkePhase2Profile[len(m.IkePhase2Profile)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3870,6 +6178,41 @@ func (m *LocalIpAddressSelector) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.Type = &LocalIpAddressSelector_IpAddress{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NodeInterface", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.NodeInterfaceType{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.Type = &LocalIpAddressSelector_NodeInterface{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -4534,6 +6877,165 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 					break
 				}
 			}
+		case 20:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CfgType", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.CfgType == nil {
+				m.CfgType = &ConfigureType{}
+			}
+			if err := m.CfgType.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ConfigureType) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ConfigureType: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ConfigureType: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExtConnIpsec", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CfgType = &ConfigureType_ExtConnIpsec{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ExtConnGre", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.CfgType = &ConfigureType_ExtConnGre{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])

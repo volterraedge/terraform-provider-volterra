@@ -292,9 +292,11 @@ func (c *NamespaceCustomAPIRestClient) doRPCAllApplicationInventory(ctx context.
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("bigip_virtual_server_filter", fmt.Sprintf("%v", req.BigipVirtualServerFilter))
 		q.Add("cdn_load_balancer_filter", fmt.Sprintf("%v", req.CdnLoadBalancerFilter))
 		q.Add("http_load_balancer_filter", fmt.Sprintf("%v", req.HttpLoadBalancerFilter))
 		q.Add("tcp_load_balancer_filter", fmt.Sprintf("%v", req.TcpLoadBalancerFilter))
+		q.Add("udp_load_balancer_filter", fmt.Sprintf("%v", req.UdpLoadBalancerFilter))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -460,10 +462,12 @@ func (c *NamespaceCustomAPIRestClient) doRPCApplicationInventory(ctx context.Con
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("bigip_virtual_server_filter", fmt.Sprintf("%v", req.BigipVirtualServerFilter))
 		q.Add("cdn_load_balancer_filter", fmt.Sprintf("%v", req.CdnLoadBalancerFilter))
 		q.Add("http_load_balancer_filter", fmt.Sprintf("%v", req.HttpLoadBalancerFilter))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 		q.Add("tcp_load_balancer_filter", fmt.Sprintf("%v", req.TcpLoadBalancerFilter))
+		q.Add("udp_load_balancer_filter", fmt.Sprintf("%v", req.UdpLoadBalancerFilter))
 
 		hReq.URL.RawQuery += q.Encode()
 	case "delete":
@@ -4057,6 +4061,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "All Application related objects inventory request",
             "x-ves-proto-message": "ves.io.schema.namespace.AllApplicationInventoryRequest",
             "properties": {
+                "bigip_virtual_server_filter": {
+                    "description": " Filters for BIGIP Virtual Server",
+                    "title": "BIGIP Virtual Server Inventory Filter Type",
+                    "$ref": "#/definitions/namespaceBIGIPVirtualServerInventoryFilterType",
+                    "x-displayname": "BIG-IP Virtual Server Inventory Filter Type"
+                },
                 "cdn_load_balancer_filter": {
                     "description": " Filters for CDN LoadBalancer",
                     "title": "CDN Loadbalancer Inventory FilterType",
@@ -4074,6 +4084,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "TCPLoadbalancerInventoryFilterType",
                     "$ref": "#/definitions/namespaceTCPLoadbalancerInventoryFilterType",
                     "x-displayname": "TCP LoadBalancer Inventory Filter Type"
+                },
+                "udp_load_balancer_filter": {
+                    "description": " Filters for UDP LoadBalancer",
+                    "title": "UDPLoadbalancerInventoryFilterType",
+                    "$ref": "#/definitions/namespaceUDPLoadbalancerInventoryFilterType",
+                    "x-displayname": "UDP LoadBalancer Inventory Filter Type"
                 }
             }
         },
@@ -4134,6 +4150,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "Application related objects inventory request",
             "x-ves-proto-message": "ves.io.schema.namespace.ApplicationInventoryRequest",
             "properties": {
+                "bigip_virtual_server_filter": {
+                    "description": " Filters for BIGIP Virtual Server",
+                    "title": "BIGIP Virtual Server Inventory Filter Type",
+                    "$ref": "#/definitions/namespaceBIGIPVirtualServerInventoryFilterType",
+                    "x-displayname": "BIG-IP Virtual Server Inventory Filter Type"
+                },
                 "cdn_load_balancer_filter": {
                     "description": " Filters for CDN LoadBalancer",
                     "title": "CDN Loadbalancer Inventory Filter Type",
@@ -4158,6 +4180,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "TCPLoadbalancerInventoryFilterType",
                     "$ref": "#/definitions/namespaceTCPLoadbalancerInventoryFilterType",
                     "x-displayname": "TCP LoadBalancer Inventory Filter Type"
+                },
+                "udp_load_balancer_filter": {
+                    "description": " Filters for UDP LoadBalancer",
+                    "title": "UDPLoadbalancerInventoryFilterType",
+                    "$ref": "#/definitions/namespaceUDPLoadbalancerInventoryFilterType",
+                    "x-displayname": "UDP LoadBalancer Inventory Filter Type"
                 }
             }
         },
@@ -4168,6 +4196,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "Application related objects inventory response",
             "x-ves-proto-message": "ves.io.schema.namespace.ApplicationInventoryResponse",
             "properties": {
+                "bigip_virtual_servers": {
+                    "description": " Inventory of configured BIGIP Virtual Server",
+                    "title": "BIGIP Virtual Server",
+                    "$ref": "#/definitions/namespaceBIGIPVirtualServerInventoryType",
+                    "x-displayname": "BIG-IP Virtual Server"
+                },
                 "cdn_loadbalancers": {
                     "description": " Inventory of configured CDN Loadbalancers",
                     "title": "CDN Loadbalancer Inventory",
@@ -4206,6 +4240,124 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "TCP Loadbalancer Inventory",
                     "$ref": "#/definitions/namespaceTCPLoadbalancerInventoryType",
                     "x-displayname": "TCP Loadbalancers"
+                },
+                "udp_loadbalancers": {
+                    "description": " Inventory of configured UDP Loadbalancers",
+                    "title": "UDP Loadbalancer Inventory",
+                    "$ref": "#/definitions/namespaceUDPLoadbalancerInventoryType",
+                    "x-displayname": "UDP Loadbalancers"
+                }
+            }
+        },
+        "namespaceBIGIPVirtualServerInventoryFilterType": {
+            "type": "object",
+            "description": "BIGIP Virtual Server Inventory Filter",
+            "title": "BIGIPVirtualServerInventoryFilterType",
+            "x-displayname": "Filter for BIG-IP Virtual Server Inventory",
+            "x-ves-proto-message": "ves.io.schema.namespace.BIGIPVirtualServerInventoryFilterType",
+            "properties": {
+                "api_discovery": {
+                    "type": "boolean",
+                    "description": " Filter results with BIGIP Virtual Server with API Discovery",
+                    "title": "API Discovery",
+                    "format": "boolean",
+                    "x-displayname": "API Discovery"
+                },
+                "waf_configured": {
+                    "type": "boolean",
+                    "description": " Filter results with BIGIP Virtual Server with WAF configured",
+                    "title": "WAF",
+                    "format": "boolean",
+                    "x-displayname": "WAF"
+                }
+            }
+        },
+        "namespaceBIGIPVirtualServerInventoryType": {
+            "type": "object",
+            "description": "BIGIP Virtual Server inventory",
+            "title": "BIGIPVirtualServerInventoryType",
+            "x-displayname": "Inventory of BIG-IP Virtual Server",
+            "x-ves-proto-message": "ves.io.schema.namespace.BIGIPVirtualServerInventoryType",
+            "properties": {
+                "api_discovery": {
+                    "type": "integer",
+                    "description": " Number of BIGIP Virtual Servers with API Discovery enabled",
+                    "title": "API Discovery",
+                    "format": "int64",
+                    "x-displayname": "API Discovery"
+                },
+                "bigiplb_results": {
+                    "type": "array",
+                    "description": " List of BIGIP Virtual Server",
+                    "title": "BIGIP Virtual Server",
+                    "items": {
+                        "$ref": "#/definitions/namespaceBIGIPVirtualServerResultType"
+                    },
+                    "x-displayname": "List of BIG-IP Virtual Server"
+                },
+                "waf_configured": {
+                    "type": "integer",
+                    "description": " Number of BIGIP Virtual Servers with WAF configured",
+                    "title": "WAF",
+                    "format": "int64",
+                    "x-displayname": "WAF"
+                }
+            }
+        },
+        "namespaceBIGIPVirtualServerResultType": {
+            "type": "object",
+            "description": "BIGIP Virtual Server Inventory Results",
+            "title": "BIGIPVirtualServerResultType",
+            "x-displayname": "BIG-IP Virtual Server Inventory Results",
+            "x-ves-proto-message": "ves.io.schema.namespace.BIGIPVirtualServerResultType",
+            "properties": {
+                "api_discovery_enabled": {
+                    "description": " API Discovery configured ",
+                    "title": "API Discovery Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "API Discovery Enabled or Disabled"
+                },
+                "description": {
+                    "type": "string",
+                    "description": " VS Description of BIGIP",
+                    "title": "BIGIP VS Description",
+                    "x-displayname": "BIG-IP VS Description"
+                },
+                "host_name": {
+                    "type": "string",
+                    "description": " Name of BIGIP Host",
+                    "title": "BIGIP Host Name",
+                    "x-displayname": "BIG-IP Host Name"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of BIGIP Virtual Server",
+                    "title": "BIGIP Virtual Server Name",
+                    "x-displayname": "BIG-IP Virtual Server Name"
+                },
+                "server_name": {
+                    "type": "string",
+                    "description": " Display Name of BIGIP VS",
+                    "title": "BIGIP VS Display Name",
+                    "x-displayname": "BIG-IP VS Server Name"
+                },
+                "version": {
+                    "type": "string",
+                    "description": " Version of BIGIP",
+                    "title": "BIGIP Version",
+                    "x-displayname": "BIG-IP Version"
+                },
+                "waf_enforcement_mode": {
+                    "type": "string",
+                    "description": " WAF Enforcement Mode",
+                    "title": "WAF Enforcement Mode",
+                    "x-displayname": "WAF Enforcement Mode"
+                },
+                "waf_policy_name": {
+                    "type": "string",
+                    "description": " WAF Policy Name",
+                    "title": "WAF Policy Name",
+                    "x-displayname": "WAF Policy Name"
                 }
             }
         },
@@ -4509,6 +4661,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "format": "boolean",
                     "x-displayname": "Malicious User Mitigation"
                 },
+                "malware_protection": {
+                    "type": "boolean",
+                    "description": " Filter results with HTTP loadbalancers with Malware Protection",
+                    "title": "Malware Protection",
+                    "format": "boolean",
+                    "x-displayname": "Malware Protection"
+                },
                 "mutual_tls": {
                     "type": "boolean",
                     "description": " Filter results with HTTP loadbalancers with mTLS",
@@ -4675,6 +4834,13 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "Malicious User Detection",
                     "format": "int64",
                     "x-displayname": "Malicious User Detection"
+                },
+                "malware_protection": {
+                    "type": "integer",
+                    "description": " Number of HTTP loadbalancers with Malware Protection configured",
+                    "title": "Malware Protection",
+                    "format": "int64",
+                    "x-displayname": "Malware Protection"
                 },
                 "namespace_service_policy": {
                     "type": "integer",
@@ -4893,6 +5059,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "Malicious User Mitigation Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Malicious User Mitigation Enabled or Disabled"
+                },
+                "malware_protection_enabled": {
+                    "description": " Malware Protection configured",
+                    "title": "Malware Protection Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Malware Protection Enabled or Disabled"
                 },
                 "mutual_tls_enabled": {
                     "description": " mTLS configured",
@@ -5254,6 +5426,20 @@ var NamespaceCustomAPISwaggerJSON string = `{
             "x-displayname": "Response for SetFastACLsForInternetVIPs",
             "x-ves-proto-message": "ves.io.schema.namespace.SetFastACLsForInternetVIPsResponse"
         },
+        "namespaceSeverity": {
+            "type": "string",
+            "description": "List of all supported severities\n\nERROR\nINFO\nWARNING\nSUCCESS",
+            "title": "Severity",
+            "enum": [
+                "ERROR",
+                "INFO",
+                "WARNING",
+                "SUCCESS"
+            ],
+            "default": "ERROR",
+            "x-displayname": "Severity of message",
+            "x-ves-proto-enum": "ves.io.schema.namespace.Severity"
+        },
         "namespaceSuggestValuesReq": {
             "type": "object",
             "description": "Request body of SuggestValues request",
@@ -5452,6 +5638,94 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "namespaceUDPLoadbalancerInventoryFilterType": {
+            "type": "object",
+            "description": "UDP Loadbalancer inventory Filter",
+            "title": "UDPLoadbalancerInventoryFilterType",
+            "x-displayname": "Filter for Inventory of UDP Loadbalancers",
+            "x-ves-proto-message": "ves.io.schema.namespace.UDPLoadbalancerInventoryFilterType",
+            "properties": {
+                "private_advertisement": {
+                    "type": "boolean",
+                    "description": " Filter results with UDP loadbalancers advertised privately",
+                    "title": "Private Advertisement",
+                    "format": "boolean",
+                    "x-displayname": "Private Advertisement"
+                },
+                "public_advertisment": {
+                    "type": "boolean",
+                    "description": " Filter results with UDP loadbalancers advertised publicly",
+                    "title": "Public Advertisement",
+                    "format": "boolean",
+                    "x-displayname": "Public Advertisement"
+                }
+            }
+        },
+        "namespaceUDPLoadbalancerInventoryType": {
+            "type": "object",
+            "description": "UDP Loadbalancer inventory",
+            "title": "UDPLoadbalancerInventoryType",
+            "x-displayname": "Inventory of UDP Loadbalancers",
+            "x-ves-proto-message": "ves.io.schema.namespace.UDPLoadbalancerInventoryType",
+            "properties": {
+                "private_advertisement": {
+                    "type": "integer",
+                    "description": " Number of UDP loadbalancers advertised privately",
+                    "title": "Private Advertisement",
+                    "format": "int64",
+                    "x-displayname": "Private Advertisement"
+                },
+                "public_advertisment": {
+                    "type": "integer",
+                    "description": " Number of UDP loadbalancers advertised publicly",
+                    "title": "Public Advertisement",
+                    "format": "int64",
+                    "x-displayname": "Public Advertisement"
+                },
+                "udplb_results": {
+                    "type": "array",
+                    "description": " List of UDP loadbalancers",
+                    "title": "UDP Loadbalancers",
+                    "items": {
+                        "$ref": "#/definitions/namespaceUDPLoadbalancerResultType"
+                    },
+                    "x-displayname": "List of UDP Loadbalancers"
+                }
+            }
+        },
+        "namespaceUDPLoadbalancerResultType": {
+            "type": "object",
+            "description": "UDP Loadbalancer Inventory Results",
+            "title": "UDPLoadbalancerResultType",
+            "x-displayname": "UDP Loadbalancer Inventory Results",
+            "x-ves-proto-message": "ves.io.schema.namespace.UDPLoadbalancerResultType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of UDP LB",
+                    "title": "UDP LB Name",
+                    "x-displayname": "UDP LB Name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of UDP LB",
+                    "title": "UDP LB Namespace",
+                    "x-displayname": "UDP LB Namespace"
+                },
+                "private_advertisement": {
+                    "description": " advertised privately configured",
+                    "title": "Private Advertisement Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Private Advertisement Enabled or Disabled"
+                },
+                "public_advertisment": {
+                    "description": " advertised publicly configured",
+                    "title": "Public Advertisement Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Public Advertisement Enabled or Disabled"
+                }
+            }
+        },
         "namespaceUpdateAllowAdvertiseOnPublicReq": {
             "type": "object",
             "description": "Request body of UpdateAllowAdvertiseOnPublic request",
@@ -5538,6 +5812,33 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "success",
                     "format": "boolean",
                     "x-displayname": "Success"
+                },
+                "validation_results": {
+                    "type": "array",
+                    "description": " This will return a list of validation results based on validators passed as input.   ",
+                    "title": "Validation Results",
+                    "items": {
+                        "$ref": "#/definitions/namespaceValidationResult"
+                    },
+                    "x-displayname": "Validation Results"
+                }
+            }
+        },
+        "namespaceValidationResult": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.namespace.ValidationResult",
+            "properties": {
+                "message": {
+                    "type": "string",
+                    "description": " Information message will be returned for inline notification and error messages for validation rules.",
+                    "title": "Messsge",
+                    "x-displayname": "Message"
+                },
+                "severity": {
+                    "description": " Severity of message dispalyed, this field will be used by UI to determine the severity of an information message in case of inline notification.",
+                    "title": "Severity",
+                    "$ref": "#/definitions/namespaceSeverity",
+                    "x-displayname": "Severity of message"
                 }
             }
         },

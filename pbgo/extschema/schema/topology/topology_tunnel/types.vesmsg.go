@@ -13,6 +13,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema_topology "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology"
 )
 
 var (
@@ -159,6 +161,8 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 // Well-known symbol for default validator implementation
 var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v := &ValidateGlobalSpecType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["topology_spec"] = ves_io_schema_topology.TunnelSetTypeValidator().Validate
 
 	return v
 }()

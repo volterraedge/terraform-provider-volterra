@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/healthchecks/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -1122,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.healthcheck.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.healthcheck.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2274,7 +2287,7 @@ var APISwaggerJSON string = `{
             "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
             "title": "Create healthcheck",
             "x-displayname": "Create Health Check",
-            "x-ves-oneof-field-health_check": "[\"http_health_check\",\"tcp_health_check\"]",
+            "x-ves-oneof-field-health_check": "[\"http_health_check\",\"tcp_health_check\",\"udp_icmp_health_check\"]",
             "x-ves-proto-message": "ves.io.schema.healthcheck.CreateSpecType",
             "properties": {
                 "healthy_threshold": {
@@ -2291,7 +2304,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "http_health_check": {
-                    "description": "Exclusive with [tcp_health_check]\n Specifies the following details for HTTP health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
+                    "description": "Exclusive with [tcp_health_check udp_icmp_health_check]\n Specifies the following details for HTTP health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
                     "$ref": "#/definitions/healthcheckHttpHealthCheck",
                     "x-displayname": "HTTP HealthCheck"
                 },
@@ -2319,7 +2332,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tcp_health_check": {
-                    "description": "Exclusive with [http_health_check]\n Specifies send payload and expected response payload",
+                    "description": "Exclusive with [http_health_check udp_icmp_health_check]\n Specifies send payload and expected response payload",
                     "$ref": "#/definitions/healthcheckTcpHealthCheck",
                     "x-displayname": "TCP HealthCheck"
                 },
@@ -2335,6 +2348,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "600"
                     }
+                },
+                "udp_icmp_health_check": {
+                    "description": "Exclusive with [http_health_check tcp_health_check]\n Specifies ICMP HealthCheck for UDP Loadbalancer",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "ICMP HealthCheck for UDP Loadbalancer"
                 },
                 "unhealthy_threshold": {
                     "type": "integer",
@@ -2578,7 +2596,7 @@ var APISwaggerJSON string = `{
             "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
             "title": "Get healthcheck",
             "x-displayname": "Get Health Check",
-            "x-ves-oneof-field-health_check": "[\"http_health_check\",\"tcp_health_check\"]",
+            "x-ves-oneof-field-health_check": "[\"http_health_check\",\"tcp_health_check\",\"udp_icmp_health_check\"]",
             "x-ves-proto-message": "ves.io.schema.healthcheck.GetSpecType",
             "properties": {
                 "healthy_threshold": {
@@ -2595,7 +2613,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "http_health_check": {
-                    "description": "Exclusive with [tcp_health_check]\n Specifies the following details for HTTP health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
+                    "description": "Exclusive with [tcp_health_check udp_icmp_health_check]\n Specifies the following details for HTTP health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
                     "$ref": "#/definitions/healthcheckHttpHealthCheck",
                     "x-displayname": "HTTP HealthCheck"
                 },
@@ -2623,7 +2641,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tcp_health_check": {
-                    "description": "Exclusive with [http_health_check]\n Specifies send payload and expected response payload",
+                    "description": "Exclusive with [http_health_check udp_icmp_health_check]\n Specifies send payload and expected response payload",
                     "$ref": "#/definitions/healthcheckTcpHealthCheck",
                     "x-displayname": "TCP HealthCheck"
                 },
@@ -2639,6 +2657,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "600"
                     }
+                },
+                "udp_icmp_health_check": {
+                    "description": "Exclusive with [http_health_check tcp_health_check]\n Specifies ICMP HealthCheck for UDP Loadbalancer",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "ICMP HealthCheck for UDP Loadbalancer"
                 },
                 "unhealthy_threshold": {
                     "type": "integer",
@@ -2907,7 +2930,7 @@ var APISwaggerJSON string = `{
             "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
             "title": "replace healthcheck",
             "x-displayname": "Replace Health Check",
-            "x-ves-oneof-field-health_check": "[\"http_health_check\",\"tcp_health_check\"]",
+            "x-ves-oneof-field-health_check": "[\"http_health_check\",\"tcp_health_check\",\"udp_icmp_health_check\"]",
             "x-ves-proto-message": "ves.io.schema.healthcheck.ReplaceSpecType",
             "properties": {
                 "healthy_threshold": {
@@ -2924,7 +2947,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "http_health_check": {
-                    "description": "Exclusive with [tcp_health_check]\n Specifies the following details for HTTP health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
+                    "description": "Exclusive with [tcp_health_check udp_icmp_health_check]\n Specifies the following details for HTTP health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
                     "$ref": "#/definitions/healthcheckHttpHealthCheck",
                     "x-displayname": "HTTP HealthCheck"
                 },
@@ -2952,7 +2975,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tcp_health_check": {
-                    "description": "Exclusive with [http_health_check]\n Specifies send payload and expected response payload",
+                    "description": "Exclusive with [http_health_check udp_icmp_health_check]\n Specifies send payload and expected response payload",
                     "$ref": "#/definitions/healthcheckTcpHealthCheck",
                     "x-displayname": "TCP HealthCheck"
                 },
@@ -2968,6 +2991,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "600"
                     }
+                },
+                "udp_icmp_health_check": {
+                    "description": "Exclusive with [http_health_check tcp_health_check]\n Specifies ICMP HealthCheck for UDP Loadbalancer",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "ICMP HealthCheck for UDP Loadbalancer"
                 },
                 "unhealthy_threshold": {
                     "type": "integer",

@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.ticket_management.ticket.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.ticket_management.ticket.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3153,6 +3153,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -3240,11 +3247,31 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specification",
             "x-ves-proto-message": "ves.io.schema.ticket_management.ticket.GlobalSpecType",
             "properties": {
+                "author": {
+                    "type": "string",
+                    "description": " The user that initiated creation of this ticket\n\nExample: - \"user@email.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.email: true\n",
+                    "title": "author",
+                    "x-displayname": "Author",
+                    "x-ves-example": "user@email.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.email": "true"
+                    }
+                },
                 "external_id": {
                     "type": "string",
-                    "description": " The external ID of the ticket that is assigned by the ticket tracking system (not XC)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " The third-party non-changing primary ID of the ticket that is assigned by the ticket tracking system (not XC)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "external_id",
                     "x-displayname": "External ID",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "issue_key": {
+                    "type": "string",
+                    "description": " The third party public-facing key of the issue - this may or may not be equal to the external_id field depending on the third party.\n In JIRA's case, it is possible for an issue's key to change on the JIRA side when a project has been modified, imported, \n or migrated so this should not be relied on as a primary identifier.\n This key is cached here to allow easier creation of issue hyperlinks + to keep hyperlinks available in situations\n such as when the TTS credentials have expired and we cannot retrieve the up-to-date issue key\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "issue_key",
+                    "x-displayname": "Issue Key",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"

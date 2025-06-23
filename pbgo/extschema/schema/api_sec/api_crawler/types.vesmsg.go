@@ -26,6 +26,84 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *ApiCrawlingStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiCrawlingStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiCrawlingStatus) DeepCopy() *ApiCrawlingStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiCrawlingStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiCrawlingStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiCrawlingStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiCrawlingStatusValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateApiCrawlingStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiCrawlingStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiCrawlingStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiCrawlingStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["last_updated"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_updated"))
+		if err := fv(ctx, m.GetLastUpdated(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiCrawlingStatusValidator = func() *ValidateApiCrawlingStatus {
+	v := &ValidateApiCrawlingStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ApiCrawlingStatusValidator() db.Validator {
+	return DefaultApiCrawlingStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -250,27 +328,6 @@ func (v *ValidateDomainConfiguration) DomainValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateDomainConfiguration) SimpleLoginValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for simple_login")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := SimpleLoginValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateDomainConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DomainConfiguration)
 	if !ok {
@@ -331,16 +388,7 @@ var DefaultDomainConfigurationValidator = func() *ValidateDomainConfiguration {
 	}
 	v.FldValidators["domain"] = vFn
 
-	vrhSimpleLogin := v.SimpleLoginValidationRuleHandler
-	rulesSimpleLogin := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhSimpleLogin(rulesSimpleLogin)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DomainConfiguration.simple_login: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["simple_login"] = vFn
+	v.FldValidators["simple_login"] = SimpleLoginValidator().Validate
 
 	return v
 }()
@@ -834,6 +882,138 @@ func ReplaceSpecTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ScanInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ScanInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ScanInfo) DeepCopy() *ScanInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ScanInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ScanInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ScanInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ScanInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateScanInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateScanInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ScanInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ScanInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["added_to_queue"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("added_to_queue"))
+		if err := fv(ctx, m.GetAddedToQueue(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domain"))
+		if err := fv(ctx, m.GetDomain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["endpoint_count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("endpoint_count"))
+		if err := fv(ctx, m.GetEndpointCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["error"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error"))
+		if err := fv(ctx, m.GetError(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["kafka_message_created_at"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kafka_message_created_at"))
+		if err := fv(ctx, m.GetKafkaMessageCreatedAt(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["last_status_update"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_status_update"))
+		if err := fv(ctx, m.GetLastStatusUpdate(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultScanInfoValidator = func() *ValidateScanInfo {
+	v := &ValidateScanInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ScanInfoValidator() db.Validator {
+	return DefaultScanInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SimpleLogin) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -897,27 +1077,6 @@ func (v *ValidateSimpleLogin) UserValidationRuleHandler(rules map[string]string)
 	return validatorFn, nil
 }
 
-func (v *ValidateSimpleLogin) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateSimpleLogin) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*SimpleLogin)
 	if !ok {
@@ -967,8 +1126,7 @@ var DefaultSimpleLoginValidator = func() *ValidateSimpleLogin {
 
 	vrhUser := v.UserValidationRuleHandler
 	rulesUser := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.max_len": "64",
 	}
 	vFn, err = vrhUser(rulesUser)
 	if err != nil {
@@ -977,16 +1135,7 @@ var DefaultSimpleLoginValidator = func() *ValidateSimpleLogin {
 	}
 	v.FldValidators["user"] = vFn
 
-	vrhPassword := v.PasswordValidationRuleHandler
-	rulesPassword := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhPassword(rulesPassword)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for SimpleLogin.password: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["password"] = vFn
+	v.FldValidators["password"] = ves_io_schema.SecretTypeValidator().Validate
 
 	return v
 }()

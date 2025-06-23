@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/routes/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -3492,9 +3505,10 @@ var APISwaggerJSON string = `{
             "description": "Each RouteType is a rule which has match condition and action. When the condition is\nmatched for incoming request, the specified action is taken.",
             "title": "RouteType",
             "x-displayname": "Route",
-            "x-ves-displayorder": "1,14,13,12,11,7,9,8,10,5,16",
+            "x-ves-displayorder": "1,14,13,12,11,24,7,9,8,10,20,21,22,23,5,16",
             "x-ves-oneof-field-bot_defense_javascript_injection_choice": "[\"bot_defense_javascript_injection\",\"inherited_bot_defense_javascript_injection\"]",
             "x-ves-oneof-field-route_action": "[\"route_destination\",\"route_direct_response\",\"route_redirect\"]",
+            "x-ves-oneof-field-waf_exclusion_choice": "[\"inherited_waf_exclusion\",\"waf_exclusion_policy\"]",
             "x-ves-proto-message": "ves.io.schema.route.RouteType",
             "properties": {
                 "bot_defense_javascript_injection": {
@@ -3516,6 +3530,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Inherit Bot Defense Javascript Injection"
                 },
+                "inherited_waf_exclusion": {
+                    "description": "Exclusive with [waf_exclusion_policy]\n Any WAF Exclusion configuration that was configured on a higher level will be enforced",
+                    "title": "Inherit",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Inherit"
+                },
                 "match": {
                     "type": "array",
                     "description": " route match condition\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 16\n",
@@ -3527,6 +3547,38 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Match",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16"
+                    }
+                },
+                "request_cookies_to_add": {
+                    "type": "array",
+                    "description": " Cookies are key-value pairs to be added to HTTP request being routed towards upstream.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Cookies to add in request",
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/schemaCookieValueOption"
+                    },
+                    "x-displayname": "Add Cookies in Cookie Header",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "request_cookies_to_remove": {
+                    "type": "array",
+                    "description": " List of keys of Cookies to be removed from the HTTP request being sent towards upstream.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Cookies to be removed from request",
+                    "maxItems": 32,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Remove Cookies from Cookie Header",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "request_headers_to_add": {
@@ -3558,6 +3610,38 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
                         "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
                         "ves.io.schema.rules.repeated.max_items": "32"
+                    }
+                },
+                "response_cookies_to_add": {
+                    "type": "array",
+                    "description": " Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Cookies to add in set-cookie header in response",
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/schemaSetCookieValueOption"
+                    },
+                    "x-displayname": "Add Set-Cookie Headers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "response_cookies_to_remove": {
+                    "type": "array",
+                    "description": " List of name of Cookies to be removed from the HTTP response being sent towards downstream. Entire set-cookie header will be removed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Cookies to be removed from response",
+                    "maxItems": 32,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Remove Cookies from Set-Cookie Headers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "response_headers_to_add": {
@@ -3614,6 +3698,12 @@ var APISwaggerJSON string = `{
                     "title": "service_policy",
                     "$ref": "#/definitions/routeServicePolicyInfo",
                     "x-displayname": "Service Policy"
+                },
+                "waf_exclusion_policy": {
+                    "description": "Exclusive with [inherited_waf_exclusion]\n A direct reference to a WAF Exclusion Policy configuration object",
+                    "title": "Custom Policy",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Custom Policy"
                 },
                 "waf_type": {
                     "description": " WAF can be used to analyze inbound and outbound HTTP/HTTPS traffic.\n WAF can be configured either in BLOCKing Mode or ALERTing Mode.\n In BLOCKing mode if WAF detects suspicious inbound/outbound traffic it blocks the request or response.\n In ALERTing mode if suspicious traffic is detected, WAF generates ALERTs with details on the\n suspicious traffic (instead of blocking traffic).\n\n waf_type is the App Firewall profile to use.\n\n waf_type specified at route level overrides waf configuration at VirtualHost level",
@@ -3954,6 +4044,53 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "Operational",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
+                }
+            }
+        },
+        "schemaCookieValueOption": {
+            "type": "object",
+            "description": "Cookie name and value for cookie header",
+            "title": "CookieValueOption",
+            "x-displayname": "Cookie Value Option",
+            "x-ves-oneof-field-value_choice": "[\"secret_value\",\"value\"]",
+            "x-ves-proto-message": "ves.io.schema.CookieValueOption",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the cookie in Cookie header.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.cookie_name: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "name",
+                    "maxLength": 256,
+                    "x-displayname": "Name",
+                    "x-ves-example": "value",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.cookie_name": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "overwrite": {
+                    "type": "boolean",
+                    "description": " Should the value be overwritten? If true, the value is overwritten to existing values.\n Default value is do not overwrite",
+                    "title": "overwrite",
+                    "format": "boolean",
+                    "x-displayname": "Overwrite"
+                },
+                "secret_value": {
+                    "description": "Exclusive with [value]\n Secret Value of the Cookie header",
+                    "title": "Secret Value",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Secret Value"
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Exclusive with [secret_value]\n Value of the Cookie header.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",
+                    "title": "value",
+                    "maxLength": 8096,
+                    "x-displayname": "Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8096"
                     }
                 }
             }
@@ -4747,6 +4884,195 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaSetCookieValueOption": {
+            "type": "object",
+            "description": "Cookie name and its attribute values in set-cookie header",
+            "title": "SetCookieValueOption",
+            "x-displayname": "Set-Cookie Value Option",
+            "x-ves-oneof-field-domain_choice": "[\"add_domain\",\"ignore_domain\"]",
+            "x-ves-oneof-field-expiry_choice": "[\"add_expiry\",\"ignore_expiry\"]",
+            "x-ves-oneof-field-httponly_choice": "[\"add_httponly\",\"ignore_httponly\"]",
+            "x-ves-oneof-field-max_age_choice": "[\"ignore_max_age\",\"max_age_value\"]",
+            "x-ves-oneof-field-partitioned_choice": "[\"add_partitioned\",\"ignore_partitioned\"]",
+            "x-ves-oneof-field-path_choice": "[\"add_path\",\"ignore_path\"]",
+            "x-ves-oneof-field-samesite_choice": "[\"ignore_samesite\",\"samesite_lax\",\"samesite_none\",\"samesite_strict\"]",
+            "x-ves-oneof-field-secure_choice": "[\"add_secure\",\"ignore_secure\"]",
+            "x-ves-oneof-field-value_choice": "[\"ignore_value\",\"secret_value\",\"value\"]",
+            "x-ves-proto-message": "ves.io.schema.SetCookieValueOption",
+            "properties": {
+                "add_domain": {
+                    "type": "string",
+                    "description": "Exclusive with [ignore_domain]\n Add domain attribute\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "add_domain",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Add Domain",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "add_expiry": {
+                    "type": "string",
+                    "description": "Exclusive with [ignore_expiry]\n Add expiry attribute\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "add_expiry",
+                    "maxLength": 256,
+                    "x-displayname": "Add expiry",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "add_httponly": {
+                    "description": "Exclusive with [ignore_httponly]\n",
+                    "title": "add_httponly",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Add"
+                },
+                "add_partitioned": {
+                    "description": "Exclusive with [ignore_partitioned]\n",
+                    "title": "add_partitioned",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Add"
+                },
+                "add_path": {
+                    "type": "string",
+                    "description": "Exclusive with [ignore_path]\n Add path attribute\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "add_path",
+                    "maxLength": 256,
+                    "x-displayname": "Add path",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "add_secure": {
+                    "description": "Exclusive with [ignore_secure]\n",
+                    "title": "add_secure",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Add"
+                },
+                "ignore_domain": {
+                    "description": "Exclusive with [add_domain]\n Ignore max age attribute",
+                    "title": "ignore_domain",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore Domain"
+                },
+                "ignore_expiry": {
+                    "description": "Exclusive with [add_expiry]\n Ignore expiry attribute",
+                    "title": "ignore_expiry",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore Expiry"
+                },
+                "ignore_httponly": {
+                    "description": "Exclusive with [add_httponly]\n",
+                    "title": "ignore_httponly",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore"
+                },
+                "ignore_max_age": {
+                    "description": "Exclusive with [max_age_value]\n Ignore max age attribute",
+                    "title": "ignore_max_age",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore Max Age"
+                },
+                "ignore_partitioned": {
+                    "description": "Exclusive with [add_partitioned]\n",
+                    "title": "ignore_partitioned",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore"
+                },
+                "ignore_path": {
+                    "description": "Exclusive with [add_path]\n Ignore path attribute",
+                    "title": "ignore_domain",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore Path"
+                },
+                "ignore_samesite": {
+                    "description": "Exclusive with [samesite_lax samesite_none samesite_strict]\n Ignore Samesite attribute",
+                    "title": "ignore_samesite",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore"
+                },
+                "ignore_secure": {
+                    "description": "Exclusive with [add_secure]\n",
+                    "title": "ignore_secure",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore"
+                },
+                "ignore_value": {
+                    "description": "Exclusive with [secret_value value]\n Ignore value of cookie",
+                    "title": "ignore_value",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Ignore"
+                },
+                "max_age_value": {
+                    "type": "integer",
+                    "description": "Exclusive with [ignore_max_age]\n Add max age attribute\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 34560000\n",
+                    "title": "add_max_age",
+                    "format": "int32",
+                    "x-displayname": "Add Max Age",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "34560000"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the cookie in Cookie header.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.cookie_name: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "name",
+                    "maxLength": 256,
+                    "x-displayname": "Name",
+                    "x-ves-example": "value",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.cookie_name": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "overwrite": {
+                    "type": "boolean",
+                    "description": " Should the value be overwritten? If true, the value is overwritten to existing values.\n Default value is do not overwrite",
+                    "title": "overwrite",
+                    "format": "boolean",
+                    "x-displayname": "Overwrite"
+                },
+                "samesite_lax": {
+                    "description": "Exclusive with [ignore_samesite samesite_none samesite_strict]\n Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests",
+                    "title": "lax",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Lax"
+                },
+                "samesite_none": {
+                    "description": "Exclusive with [ignore_samesite samesite_lax samesite_strict]\n Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests",
+                    "title": "none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
+                },
+                "samesite_strict": {
+                    "description": "Exclusive with [ignore_samesite samesite_lax samesite_none]\n Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests",
+                    "title": "strict",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Strict"
+                },
+                "secret_value": {
+                    "description": "Exclusive with [ignore_value value]\n Secret Value of the Cookie header",
+                    "title": "Secret Value",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Secret Value"
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Exclusive with [ignore_value secret_value]\n Value of the Cookie header.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",
+                    "title": "value",
+                    "maxLength": 8096,
+                    "x-displayname": "Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8096"
+                    }
+                }
+            }
+        },
         "schemaStatusMetaType": {
             "type": "object",
             "description": "StatusMetaType is metadata that all status must have.",
@@ -5026,22 +5352,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.WafType",
             "properties": {
                 "app_firewall": {
-                    "description": "Exclusive with [disable_waf inherit_waf]\n A direct reference to an Application Firewall configuration object",
+                    "description": "Exclusive with [disable_waf inherit_waf]\n A direct reference to an App Firewall configuration object",
                     "title": "app_firewall",
                     "$ref": "#/definitions/schemaAppFirewallRefType",
-                    "x-displayname": "Application Firewall"
+                    "x-displayname": "App Firewall"
                 },
                 "disable_waf": {
-                    "description": "Exclusive with [app_firewall inherit_waf]\n Any Application Firewall configuration will not be enforced",
+                    "description": "Exclusive with [app_firewall inherit_waf]\n No App Firewall enforcement",
                     "title": "disable app firewall",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Disabled"
+                    "x-displayname": "Disable App Firewall"
                 },
                 "inherit_waf": {
-                    "description": "Exclusive with [app_firewall disable_waf]\n Any Application Firewall configuration that was configured on a higher level will be enforced",
+                    "description": "Exclusive with [app_firewall disable_waf]\n Any App Firewall configuration that was configured on a higher level will be enforced",
                     "title": "inherit app firewall",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Inherit"
+                    "x-displayname": "Inherit App Firewall"
                 }
             }
         },
@@ -5122,6 +5448,52 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "257"
+                    }
+                }
+            }
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "128",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
                     }
                 }
             }

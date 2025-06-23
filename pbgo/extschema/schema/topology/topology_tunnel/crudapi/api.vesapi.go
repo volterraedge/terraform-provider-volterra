@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.topology.topology_tunnel.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.topology.topology_tunnel.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2647,6 +2647,37 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bgpBgpPeerProtocolState": {
+            "type": "string",
+            "description": "Status of BGP connection to this Peer\n\nConnection state is not known\nConnection state is Idle\nConnection state is Connecting\nConnection state is Active\nConnection state is Open Sent\nConnection state is Open Confirm\nConnection state is Established\nConnection state is Clearing\nConnection state is Deleted",
+            "title": "BGP Protocol Status",
+            "enum": [
+                "Unknown",
+                "Idle",
+                "Connect",
+                "Active",
+                "OpenSent",
+                "OpenConfirm",
+                "Established",
+                "Clearing",
+                "Deleted"
+            ],
+            "default": "Unknown",
+            "x-displayname": "BGP Peer Status",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BgpPeerProtocolState"
+        },
+        "bgpBgpPeerUpDownType": {
+            "type": "string",
+            "description": "Indicates the state of BGP Peering session\n\nPeering session is Down (not in Established state)\nPeering session is Up (in Established state)",
+            "title": "BGP Peer States",
+            "enum": [
+                "BGP_PEER_DOWN",
+                "BGP_PEER_UP"
+            ],
+            "default": "BGP_PEER_DOWN",
+            "x-displayname": "BGP Peer States",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BgpPeerUpDownType"
+        },
         "crudapiObjectCreateReq": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.topology.topology_tunnel.crudapi.ObjectCreateReq",
@@ -3153,6 +3184,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -3255,6 +3293,31 @@ var APISwaggerJSON string = `{
             "x-displayname": "Tunnel Connection Status",
             "x-ves-proto-message": "ves.io.schema.site.TunnelConnectionStatus",
             "properties": {
+                "bgp": {
+                    "type": "array",
+                    "description": " Internal reference to BGP object corresponding to this tunnel\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "BGP Object",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "BGP Object",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "bgp_peer_protocol_state": {
+                    "description": " Protocol state for each BGP peer connection established over this tunnel",
+                    "title": "BGP Peer Protocol Status",
+                    "$ref": "#/definitions/bgpBgpPeerProtocolState",
+                    "x-displayname": "BGP Peer Protocol Status"
+                },
+                "bgp_status": {
+                    "description": " BGP peer connection status established over this tunnel",
+                    "title": "BGP Peer Status",
+                    "$ref": "#/definitions/bgpBgpPeerUpDownType",
+                    "x-displayname": "BGP Peer Status"
+                },
                 "encap": {
                     "description": " Encapsulation type of tunnel",
                     "title": "encap",
@@ -3297,6 +3360,19 @@ var APISwaggerJSON string = `{
                     "title": "state",
                     "$ref": "#/definitions/siteTunnelState",
                     "x-displayname": "Connection State"
+                },
+                "tunnel": {
+                    "type": "array",
+                    "description": " Internal reference to Tunnel object corresponding to this status\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Tunnel Object",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Tunnel Object",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 },
                 "tunnelName": {
                     "type": "string",
@@ -3433,7 +3509,7 @@ var APISwaggerJSON string = `{
         },
         "topologyProviderType": {
             "type": "string",
-            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
+            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend\nCE on k8s backend",
             "title": "ProviderType",
             "enum": [
                 "PROVIDER_TYPE_UNSPECIFIED",
@@ -3445,7 +3521,8 @@ var APISwaggerJSON string = `{
                 "PROVIDER_TYPE_KVM",
                 "PROVIDER_TYPE_OCI",
                 "PROVIDER_TYPE_BAREMETAL",
-                "PROVIDER_TYPE_F5RSERIES"
+                "PROVIDER_TYPE_F5RSERIES",
+                "PROVIDER_TYPE_K8S"
             ],
             "default": "PROVIDER_TYPE_UNSPECIFIED",
             "x-displayname": "Provider Type",

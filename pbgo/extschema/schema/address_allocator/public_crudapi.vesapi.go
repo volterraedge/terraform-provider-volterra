@@ -616,22 +616,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/address_allocators/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -938,7 +951,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.address_allocator.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.address_allocator.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2279,11 +2292,12 @@ var APISwaggerJSON string = `{
         },
         "address_allocatorLocalInterfaceAddressType": {
             "type": "string",
-            "description": "Dictates how local interface address is derived from the allocated subnet\n\n\nUse Nth address of the allocated subnet as the local interface address, N being the\nLocal Interface Address Offset. For example, if the allocated subnet is 169.254.0.0/30,\nLocal Interface Address Offset is set to 2 and Local Interface Address Type is set to\n\"Offset from beginning of Subnet\", local address of 169.254.0.2 is used.\n\nUse Nth last address of the allocated subnet as the local interface address, N being the\nLocal Interface Address Offset. For example, if the allocated subnet is 169.254.0.0/30,\nLocal Interface Address Offset is set to 1 and Local Interface Address Type is set to\n\"Offset from end of Subnet\", local address of 169.254.0.2 is used.",
+            "description": "Dictates how local interface address is derived from the allocated subnet\n\n\nUse Nth address of the allocated subnet as the local interface address, N being the\nLocal Interface Address Offset. For example, if the allocated subnet is 169.254.0.0/30,\nLocal Interface Address Offset is set to 2 and Local Interface Address Type is set to\n\"Offset from beginning of Subnet\", local address of 169.254.0.2 is used.\n\nUse Nth last address of the allocated subnet as the local interface address, N being the\nLocal Interface Address Offset. For example, if the allocated subnet is 169.254.0.0/30,\nLocal Interface Address Offset is set to 1 and Local Interface Address Type is set to\n\"Offset from end of Subnet\", local address of 169.254.0.2 is used.\n\nThis case is used for external_connector",
             "title": "Local Interface Address",
             "enum": [
                 "LOCAL_INTERFACE_ADDRESS_OFFSET_FROM_SUBNET_BEGIN",
-                "LOCAL_INTERFACE_ADDRESS_OFFSET_FROM_SUBNET_END"
+                "LOCAL_INTERFACE_ADDRESS_OFFSET_FROM_SUBNET_END",
+                "LOCAL_INTERFACE_ADDRESS_FROM_PREFIX"
             ],
             "default": "LOCAL_INTERFACE_ADDRESS_OFFSET_FROM_SUBNET_BEGIN",
             "x-displayname": "Local Interface Address Type",

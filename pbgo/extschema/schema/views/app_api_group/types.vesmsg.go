@@ -205,6 +205,358 @@ func ApiGroupScopeApiDefinitionValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ApiGroupScopeBIGIPVirtualServer) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiGroupScopeBIGIPVirtualServer) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiGroupScopeBIGIPVirtualServer) DeepCopy() *ApiGroupScopeBIGIPVirtualServer {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiGroupScopeBIGIPVirtualServer{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiGroupScopeBIGIPVirtualServer) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiGroupScopeBIGIPVirtualServer) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiGroupScopeBIGIPVirtualServerValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ApiGroupScopeBIGIPVirtualServer) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetBigipVirtualServerDRefInfo()
+
+}
+
+func (m *ApiGroupScopeBIGIPVirtualServer) GetBigipVirtualServerDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetBigipVirtualServer()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("bigip_virtual_server.Object")
+	dri := db.DRefInfo{
+		RefdType:   "bigip_virtual_server.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "bigip_virtual_server",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetBigipVirtualServerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ApiGroupScopeBIGIPVirtualServer) GetBigipVirtualServerDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "bigip_virtual_server.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_virtual_server")
+	}
+
+	vref := m.GetBigipVirtualServer()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "bigip_virtual_server.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateApiGroupScopeBIGIPVirtualServer struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiGroupScopeBIGIPVirtualServer) BigipVirtualServerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for bigip_virtual_server")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiGroupScopeBIGIPVirtualServer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiGroupScopeBIGIPVirtualServer)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiGroupScopeBIGIPVirtualServer got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["bigip_virtual_server"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bigip_virtual_server"))
+		if err := fv(ctx, m.GetBigipVirtualServer(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiGroupScopeBIGIPVirtualServerValidator = func() *ValidateApiGroupScopeBIGIPVirtualServer {
+	v := &ValidateApiGroupScopeBIGIPVirtualServer{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhBigipVirtualServer := v.BigipVirtualServerValidationRuleHandler
+	rulesBigipVirtualServer := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhBigipVirtualServer(rulesBigipVirtualServer)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiGroupScopeBIGIPVirtualServer.bigip_virtual_server: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bigip_virtual_server"] = vFn
+
+	return v
+}()
+
+func ApiGroupScopeBIGIPVirtualServerValidator() db.Validator {
+	return DefaultApiGroupScopeBIGIPVirtualServerValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ApiGroupScopeCDNLoadbalancer) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ApiGroupScopeCDNLoadbalancer) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ApiGroupScopeCDNLoadbalancer) DeepCopy() *ApiGroupScopeCDNLoadbalancer {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ApiGroupScopeCDNLoadbalancer{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ApiGroupScopeCDNLoadbalancer) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ApiGroupScopeCDNLoadbalancer) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ApiGroupScopeCDNLoadbalancerValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ApiGroupScopeCDNLoadbalancer) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetCdnLoadbalancerDRefInfo()
+
+}
+
+func (m *ApiGroupScopeCDNLoadbalancer) GetCdnLoadbalancerDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetCdnLoadbalancer()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("cdn_loadbalancer.Object")
+	dri := db.DRefInfo{
+		RefdType:   "cdn_loadbalancer.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "cdn_loadbalancer",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetCdnLoadbalancerDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ApiGroupScopeCDNLoadbalancer) GetCdnLoadbalancerDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "cdn_loadbalancer.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: cdn_loadbalancer")
+	}
+
+	vref := m.GetCdnLoadbalancer()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "cdn_loadbalancer.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateApiGroupScopeCDNLoadbalancer struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateApiGroupScopeCDNLoadbalancer) CdnLoadbalancerValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for cdn_loadbalancer")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := ves_io_schema_views.ObjectRefTypeValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateApiGroupScopeCDNLoadbalancer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ApiGroupScopeCDNLoadbalancer)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ApiGroupScopeCDNLoadbalancer got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["cdn_loadbalancer"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cdn_loadbalancer"))
+		if err := fv(ctx, m.GetCdnLoadbalancer(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultApiGroupScopeCDNLoadbalancerValidator = func() *ValidateApiGroupScopeCDNLoadbalancer {
+	v := &ValidateApiGroupScopeCDNLoadbalancer{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhCdnLoadbalancer := v.CdnLoadbalancerValidationRuleHandler
+	rulesCdnLoadbalancer := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhCdnLoadbalancer(rulesCdnLoadbalancer)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiGroupScopeCDNLoadbalancer.cdn_loadbalancer: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cdn_loadbalancer"] = vFn
+
+	return v
+}()
+
+func ApiGroupScopeCDNLoadbalancerValidator() db.Validator {
+	return DefaultApiGroupScopeCDNLoadbalancerValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *ApiGroupScopeHttpLoadbalancer) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -459,6 +811,30 @@ func (m *CreateSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *CreateSpecType_CdnLoadbalancer:
+
+		drInfos, err := m.GetCdnLoadbalancer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCdnLoadbalancer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cdn_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_BigipVirtualServer:
+
+		drInfos, err := m.GetBigipVirtualServer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bigip_virtual_server." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -600,6 +976,28 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_CdnLoadbalancer:
+		if fv, exists := v.FldValidators["scope_choice.cdn_loadbalancer"]; exists {
+			val := m.GetScopeChoice().(*CreateSpecType_CdnLoadbalancer).CdnLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("cdn_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_BigipVirtualServer:
+		if fv, exists := v.FldValidators["scope_choice.bigip_virtual_server"]; exists {
+			val := m.GetScopeChoice().(*CreateSpecType_BigipVirtualServer).BigipVirtualServer
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("bigip_virtual_server"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -632,7 +1030,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhElements := v.ElementsValidationRuleHandler
 	rulesElements := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 	}
 	vFn, err = vrhElements(rulesElements)
 	if err != nil {
@@ -643,6 +1041,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	v.FldValidators["scope_choice.http_loadbalancer"] = ApiGroupScopeHttpLoadbalancerValidator().Validate
 	v.FldValidators["scope_choice.api_definition"] = ApiGroupScopeApiDefinitionValidator().Validate
+	v.FldValidators["scope_choice.cdn_loadbalancer"] = ApiGroupScopeCDNLoadbalancerValidator().Validate
+	v.FldValidators["scope_choice.bigip_virtual_server"] = ApiGroupScopeBIGIPVirtualServerValidator().Validate
 
 	v.FldValidators["api_group_builder"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
 
@@ -730,6 +1130,30 @@ func (m *GetSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "api_definition." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_CdnLoadbalancer:
+
+		drInfos, err := m.GetCdnLoadbalancer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCdnLoadbalancer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cdn_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_BigipVirtualServer:
+
+		drInfos, err := m.GetBigipVirtualServer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bigip_virtual_server." + dri.DRField
 		}
 		return drInfos, err
 
@@ -883,6 +1307,28 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_CdnLoadbalancer:
+		if fv, exists := v.FldValidators["scope_choice.cdn_loadbalancer"]; exists {
+			val := m.GetScopeChoice().(*GetSpecType_CdnLoadbalancer).CdnLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("cdn_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_BigipVirtualServer:
+		if fv, exists := v.FldValidators["scope_choice.bigip_virtual_server"]; exists {
+			val := m.GetScopeChoice().(*GetSpecType_BigipVirtualServer).BigipVirtualServer
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("bigip_virtual_server"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -915,7 +1361,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhElements := v.ElementsValidationRuleHandler
 	rulesElements := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 	}
 	vFn, err = vrhElements(rulesElements)
 	if err != nil {
@@ -926,6 +1372,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["scope_choice.http_loadbalancer"] = ApiGroupScopeHttpLoadbalancerValidator().Validate
 	v.FldValidators["scope_choice.api_definition"] = ApiGroupScopeApiDefinitionValidator().Validate
+	v.FldValidators["scope_choice.cdn_loadbalancer"] = ApiGroupScopeCDNLoadbalancerValidator().Validate
+	v.FldValidators["scope_choice.bigip_virtual_server"] = ApiGroupScopeBIGIPVirtualServerValidator().Validate
 
 	v.FldValidators["api_group_builder"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
 
@@ -1026,6 +1474,30 @@ func (m *GlobalSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "api_definition." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_CdnLoadbalancer:
+
+		drInfos, err := m.GetCdnLoadbalancer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCdnLoadbalancer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cdn_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_BigipVirtualServer:
+
+		drInfos, err := m.GetBigipVirtualServer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bigip_virtual_server." + dri.DRField
 		}
 		return drInfos, err
 
@@ -1228,6 +1700,28 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_CdnLoadbalancer:
+		if fv, exists := v.FldValidators["scope_choice.cdn_loadbalancer"]; exists {
+			val := m.GetScopeChoice().(*GlobalSpecType_CdnLoadbalancer).CdnLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("cdn_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_BigipVirtualServer:
+		if fv, exists := v.FldValidators["scope_choice.bigip_virtual_server"]; exists {
+			val := m.GetScopeChoice().(*GlobalSpecType_BigipVirtualServer).BigipVirtualServer
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("bigip_virtual_server"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1269,7 +1763,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhElements := v.ElementsValidationRuleHandler
 	rulesElements := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 	}
 	vFn, err = vrhElements(rulesElements)
 	if err != nil {
@@ -1280,6 +1774,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	v.FldValidators["scope_choice.http_loadbalancer"] = ApiGroupScopeHttpLoadbalancerValidator().Validate
 	v.FldValidators["scope_choice.api_definition"] = ApiGroupScopeApiDefinitionValidator().Validate
+	v.FldValidators["scope_choice.cdn_loadbalancer"] = ApiGroupScopeCDNLoadbalancerValidator().Validate
+	v.FldValidators["scope_choice.bigip_virtual_server"] = ApiGroupScopeBIGIPVirtualServerValidator().Validate
 
 	v.FldValidators["api_group_builder"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
 
@@ -1369,6 +1865,30 @@ func (m *ReplaceSpecType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		for i := range drInfos {
 			dri := &drInfos[i]
 			dri.DRField = "api_definition." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_CdnLoadbalancer:
+
+		drInfos, err := m.GetCdnLoadbalancer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetCdnLoadbalancer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "cdn_loadbalancer." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_BigipVirtualServer:
+
+		drInfos, err := m.GetBigipVirtualServer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetBigipVirtualServer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "bigip_virtual_server." + dri.DRField
 		}
 		return drInfos, err
 
@@ -1513,6 +2033,28 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_CdnLoadbalancer:
+		if fv, exists := v.FldValidators["scope_choice.cdn_loadbalancer"]; exists {
+			val := m.GetScopeChoice().(*ReplaceSpecType_CdnLoadbalancer).CdnLoadbalancer
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("cdn_loadbalancer"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_BigipVirtualServer:
+		if fv, exists := v.FldValidators["scope_choice.bigip_virtual_server"]; exists {
+			val := m.GetScopeChoice().(*ReplaceSpecType_BigipVirtualServer).BigipVirtualServer
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("bigip_virtual_server"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1545,7 +2087,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhElements := v.ElementsValidationRuleHandler
 	rulesElements := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 	}
 	vFn, err = vrhElements(rulesElements)
 	if err != nil {
@@ -1556,6 +2098,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["scope_choice.http_loadbalancer"] = ApiGroupScopeHttpLoadbalancerValidator().Validate
 	v.FldValidators["scope_choice.api_definition"] = ApiGroupScopeApiDefinitionValidator().Validate
+	v.FldValidators["scope_choice.cdn_loadbalancer"] = ApiGroupScopeCDNLoadbalancerValidator().Validate
+	v.FldValidators["scope_choice.bigip_virtual_server"] = ApiGroupScopeBIGIPVirtualServerValidator().Validate
 
 	v.FldValidators["api_group_builder"] = ves_io_schema_views_api_definition.ApiGroupBuilderValidator().Validate
 
@@ -1574,6 +2118,12 @@ func (r *CreateSpecType) SetScopeChoiceToGlobalSpecType(o *GlobalSpecType) error
 
 	case *CreateSpecType_ApiDefinition:
 		o.ScopeChoice = &GlobalSpecType_ApiDefinition{ApiDefinition: of.ApiDefinition}
+
+	case *CreateSpecType_BigipVirtualServer:
+		o.ScopeChoice = &GlobalSpecType_BigipVirtualServer{BigipVirtualServer: of.BigipVirtualServer}
+
+	case *CreateSpecType_CdnLoadbalancer:
+		o.ScopeChoice = &GlobalSpecType_CdnLoadbalancer{CdnLoadbalancer: of.CdnLoadbalancer}
 
 	case *CreateSpecType_Generic:
 		o.ScopeChoice = &GlobalSpecType_Generic{Generic: of.Generic}
@@ -1594,6 +2144,12 @@ func (r *CreateSpecType) GetScopeChoiceFromGlobalSpecType(o *GlobalSpecType) err
 
 	case *GlobalSpecType_ApiDefinition:
 		r.ScopeChoice = &CreateSpecType_ApiDefinition{ApiDefinition: of.ApiDefinition}
+
+	case *GlobalSpecType_BigipVirtualServer:
+		r.ScopeChoice = &CreateSpecType_BigipVirtualServer{BigipVirtualServer: of.BigipVirtualServer}
+
+	case *GlobalSpecType_CdnLoadbalancer:
+		r.ScopeChoice = &CreateSpecType_CdnLoadbalancer{CdnLoadbalancer: of.CdnLoadbalancer}
 
 	case *GlobalSpecType_Generic:
 		r.ScopeChoice = &CreateSpecType_Generic{Generic: of.Generic}
@@ -1653,6 +2209,12 @@ func (r *GetSpecType) SetScopeChoiceToGlobalSpecType(o *GlobalSpecType) error {
 	case *GetSpecType_ApiDefinition:
 		o.ScopeChoice = &GlobalSpecType_ApiDefinition{ApiDefinition: of.ApiDefinition}
 
+	case *GetSpecType_BigipVirtualServer:
+		o.ScopeChoice = &GlobalSpecType_BigipVirtualServer{BigipVirtualServer: of.BigipVirtualServer}
+
+	case *GetSpecType_CdnLoadbalancer:
+		o.ScopeChoice = &GlobalSpecType_CdnLoadbalancer{CdnLoadbalancer: of.CdnLoadbalancer}
+
 	case *GetSpecType_Generic:
 		o.ScopeChoice = &GlobalSpecType_Generic{Generic: of.Generic}
 
@@ -1672,6 +2234,12 @@ func (r *GetSpecType) GetScopeChoiceFromGlobalSpecType(o *GlobalSpecType) error 
 
 	case *GlobalSpecType_ApiDefinition:
 		r.ScopeChoice = &GetSpecType_ApiDefinition{ApiDefinition: of.ApiDefinition}
+
+	case *GlobalSpecType_BigipVirtualServer:
+		r.ScopeChoice = &GetSpecType_BigipVirtualServer{BigipVirtualServer: of.BigipVirtualServer}
+
+	case *GlobalSpecType_CdnLoadbalancer:
+		r.ScopeChoice = &GetSpecType_CdnLoadbalancer{CdnLoadbalancer: of.CdnLoadbalancer}
 
 	case *GlobalSpecType_Generic:
 		r.ScopeChoice = &GetSpecType_Generic{Generic: of.Generic}
@@ -1733,6 +2301,12 @@ func (r *ReplaceSpecType) SetScopeChoiceToGlobalSpecType(o *GlobalSpecType) erro
 	case *ReplaceSpecType_ApiDefinition:
 		o.ScopeChoice = &GlobalSpecType_ApiDefinition{ApiDefinition: of.ApiDefinition}
 
+	case *ReplaceSpecType_BigipVirtualServer:
+		o.ScopeChoice = &GlobalSpecType_BigipVirtualServer{BigipVirtualServer: of.BigipVirtualServer}
+
+	case *ReplaceSpecType_CdnLoadbalancer:
+		o.ScopeChoice = &GlobalSpecType_CdnLoadbalancer{CdnLoadbalancer: of.CdnLoadbalancer}
+
 	case *ReplaceSpecType_Generic:
 		o.ScopeChoice = &GlobalSpecType_Generic{Generic: of.Generic}
 
@@ -1752,6 +2326,12 @@ func (r *ReplaceSpecType) GetScopeChoiceFromGlobalSpecType(o *GlobalSpecType) er
 
 	case *GlobalSpecType_ApiDefinition:
 		r.ScopeChoice = &ReplaceSpecType_ApiDefinition{ApiDefinition: of.ApiDefinition}
+
+	case *GlobalSpecType_BigipVirtualServer:
+		r.ScopeChoice = &ReplaceSpecType_BigipVirtualServer{BigipVirtualServer: of.BigipVirtualServer}
+
+	case *GlobalSpecType_CdnLoadbalancer:
+		r.ScopeChoice = &ReplaceSpecType_CdnLoadbalancer{CdnLoadbalancer: of.CdnLoadbalancer}
 
 	case *GlobalSpecType_Generic:
 		r.ScopeChoice = &ReplaceSpecType_Generic{Generic: of.Generic}

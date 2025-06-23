@@ -65,6 +65,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.UpgradeSWRequest"] = UpgradeSWRequestValidator()
 	vr["ves.io.schema.site.UpgradeSWResponse"] = UpgradeSWResponseValidator()
 
+	vr["ves.io.schema.site.CheckSiteExistRequest"] = CheckSiteExistRequestValidator()
+	vr["ves.io.schema.site.CheckSiteExistResponse"] = CheckSiteExistResponseValidator()
 	vr["ves.io.schema.site.SiteStatusMetricsRequest"] = SiteStatusMetricsRequestValidator()
 	vr["ves.io.schema.site.SiteStatusMetricsResponse"] = SiteStatusMetricsResponseValidator()
 
@@ -122,6 +124,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.RouteServerPeeringStatusType"] = RouteServerPeeringStatusTypeValidator()
 	vr["ves.io.schema.site.RouteServerStatusType"] = RouteServerStatusTypeValidator()
 	vr["ves.io.schema.site.ScalingStatus"] = ScalingStatusValidator()
+	vr["ves.io.schema.site.SiteReachabilityStatus"] = SiteReachabilityStatusValidator()
 	vr["ves.io.schema.site.SiteStatusMetricsData"] = SiteStatusMetricsDataValidator()
 	vr["ves.io.schema.site.SiteStatusMetricsFieldData"] = SiteStatusMetricsFieldDataValidator()
 	vr["ves.io.schema.site.SiteToSiteTunnelConnectivity"] = SiteToSiteTunnelConnectivityValidator()
@@ -132,6 +135,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.VerInstanceRunningStateStatusType"] = VerInstanceRunningStateStatusTypeValidator()
 	vr["ves.io.schema.site.VerMasterStatusType"] = VerMasterStatusTypeValidator()
 	vr["ves.io.schema.site.VerStatusType"] = VerStatusTypeValidator()
+	vr["ves.io.schema.site.VirtualNetworkDnsServerConfigurationType"] = VirtualNetworkDnsServerConfigurationTypeValidator()
 	vr["ves.io.schema.site.VnetGatewayStatusType"] = VnetGatewayStatusTypeValidator()
 	vr["ves.io.schema.site.VolterraSoftwareStatus"] = VolterraSoftwareStatusValidator()
 
@@ -494,11 +498,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

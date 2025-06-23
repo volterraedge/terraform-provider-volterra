@@ -17,17 +17,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.bigip_centralmanager_site.Object"] = ObjectValidator()
 	vr["ves.io.schema.views.bigip_centralmanager_site.StatusObject"] = StatusObjectValidator()
 
-	vr["ves.io.schema.views.bigip_centralmanager_site.CreateRequest"] = CreateRequestValidator()
-	vr["ves.io.schema.views.bigip_centralmanager_site.CreateResponse"] = CreateResponseValidator()
-	vr["ves.io.schema.views.bigip_centralmanager_site.DeleteRequest"] = DeleteRequestValidator()
-	vr["ves.io.schema.views.bigip_centralmanager_site.GetRequest"] = GetRequestValidator()
-	vr["ves.io.schema.views.bigip_centralmanager_site.GetResponse"] = GetResponseValidator()
-	vr["ves.io.schema.views.bigip_centralmanager_site.ListRequest"] = ListRequestValidator()
-	vr["ves.io.schema.views.bigip_centralmanager_site.ListResponse"] = ListResponseValidator()
-	vr["ves.io.schema.views.bigip_centralmanager_site.ListResponseItem"] = ListResponseItemValidator()
-	vr["ves.io.schema.views.bigip_centralmanager_site.ReplaceRequest"] = ReplaceRequestValidator()
-	vr["ves.io.schema.views.bigip_centralmanager_site.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.views.bigip_centralmanager_site.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.views.bigip_centralmanager_site.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.views.bigip_centralmanager_site.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -52,7 +41,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-	sm["ves.io.schema.views.bigip_centralmanager_site.API"] = "config"
 
 }
 
@@ -72,24 +60,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 
-	csr = mdr.PubCRUDServiceRegistry
-
-	func() {
-		// set swagger jsons for our and external schemas
-		csr.CRUDSwaggerRegistry["ves.io.schema.views.bigip_centralmanager_site.Object"] = APISwaggerJSON
-		csr.CRUDGrpcClientRegistry["ves.io.schema.views.bigip_centralmanager_site.Object"] = NewCRUDAPIGrpcClient
-		csr.CRUDRestClientRegistry["ves.io.schema.views.bigip_centralmanager_site.Object"] = NewCRUDAPIRestClient
-		csr.CRUDInprocClientRegistry["ves.io.schema.views.bigip_centralmanager_site.Object"] = NewCRUDAPIInprocClient
-		if isExternal {
-			return
-		}
-		// registration of api handlers if our own schema
-		mdr.SvcRegisterHandlers["ves.io.schema.views.bigip_centralmanager_site.API"] = RegisterAPIServer
-		mdr.SvcGwRegisterHandlers["ves.io.schema.views.bigip_centralmanager_site.API"] = RegisterGwAPIHandler
-		csr.CRUDServerRegistry["ves.io.schema.views.bigip_centralmanager_site.Object"] = NewCRUDAPIServer
-
-	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -97,11 +67,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

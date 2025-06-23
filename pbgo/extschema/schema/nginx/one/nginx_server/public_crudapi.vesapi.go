@@ -964,8 +964,8 @@ func RegisterGwAPIHandler(ctx context.Context, mux *runtime.ServeMux, svc interf
 var APISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
-        "title": "NGINX One Instance Server APIs",
-        "description": "\nNGINX One Instance Server Object configuration",
+        "title": "NGINX One Server APIs",
+        "description": "\nNGINX One Server Object configuration",
         "version": "version not set"
     },
     "schemes": [
@@ -982,7 +982,7 @@ var APISwaggerJSON string = `{
     "paths": {
         "/public/namespaces/{namespace}/nginx_servers": {
             "get": {
-                "summary": "List NGINX One Instance Server APIs",
+                "summary": "List NGINX One Server APIs",
                 "description": "List the set of nginx_server in a namespace",
                 "operationId": "ves.io.schema.nginx.one.nginx_server.API.List",
                 "responses": {
@@ -1092,7 +1092,7 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.nginx.one.nginx_server.API.List"
             },
-            "x-displayname": "NGINX One Instance Server APIs",
+            "x-displayname": "NGINX One Server APIs",
             "x-ves-proto-service": "ves.io.schema.nginx.one.nginx_server.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         },
@@ -1199,7 +1199,7 @@ var APISwaggerJSON string = `{
                 },
                 "x-ves-proto-rpc": "ves.io.schema.nginx.one.nginx_server.API.Get"
             },
-            "x-displayname": "NGINX One Instance Server APIs",
+            "x-displayname": "NGINX One Server APIs",
             "x-ves-proto-service": "ves.io.schema.nginx.one.nginx_server.API",
             "x-ves-proto-service-type": "AUTO_CRUD_PUBLIC"
         }
@@ -1275,13 +1275,40 @@ var APISwaggerJSON string = `{
         },
         "nginx_instanceWAFSpec": {
             "type": "object",
+            "x-ves-oneof-field-policy_management_platform": "[\"distributed_cloud_policy_management\",\"nginx_policy_management\"]",
+            "x-ves-oneof-field-waf_mode": "[\"blocking_waf_mode\",\"monitoring_waf_mode\",\"none_waf_mode\"]",
             "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_instance.WAFSpec",
             "properties": {
+                "blocking_waf_mode": {
+                    "description": "Exclusive with [monitoring_waf_mode none_waf_mode]\n",
+                    "title": "x-displayName: \"Blocking\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "distributed_cloud_policy_management": {
+                    "description": "Exclusive with [nginx_policy_management]\n",
+                    "title": "x-displayName: \"Distributed Cloud\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "monitoring_waf_mode": {
+                    "description": "Exclusive with [blocking_waf_mode none_waf_mode]\n",
+                    "title": "x-displayName: \"Monitoring\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "nginx_policy_management": {
+                    "description": "Exclusive with [distributed_cloud_policy_management]\n",
+                    "title": "x-displayName: \"NGINX\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "none_waf_mode": {
+                    "description": "Exclusive with [blocking_waf_mode monitoring_waf_mode]\n",
+                    "title": "x-displayName: \"None\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "policy_file_name": {
                     "type": "string",
                     "description": " Policy file name for WAF\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "policy_file_name",
-                    "x-displayname": "PolicyFileName",
+                    "x-displayname": "WAF Policy File Name",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -1292,7 +1319,7 @@ var APISwaggerJSON string = `{
                     "description": " Specifies if security logging is enabled",
                     "title": "security_log_enabled",
                     "format": "boolean",
-                    "x-displayname": "SecurityLogEnabled"
+                    "x-displayname": "WAF Log Enabled"
                 },
                 "security_log_file_names": {
                     "type": "array",
@@ -1301,7 +1328,28 @@ var APISwaggerJSON string = `{
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "SecurityLogFileNames"
+                    "x-displayname": "WAF Log File Names"
+                }
+            }
+        },
+        "nginx_serverDataplaneReference": {
+            "type": "object",
+            "title": "DataplaneReference",
+            "x-displayname": "DataplaneReference",
+            "x-ves-oneof-field-dataplane_ref": "[\"nginx_csg\",\"nginx_instance\"]",
+            "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_server.DataplaneReference",
+            "properties": {
+                "nginx_csg": {
+                    "description": "Exclusive with [nginx_instance]\n Reference to NGINX CSG",
+                    "title": "NGINX One Config Sync Group",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "NGINX One Config Sync Group"
+                },
+                "nginx_instance": {
+                    "description": "Exclusive with [nginx_csg]\n Reference to NGINX Instance",
+                    "title": "NGINX One Instance",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "NGINX One Instance"
                 }
             }
         },
@@ -1535,18 +1583,13 @@ var APISwaggerJSON string = `{
             "x-displayname": "Get Request",
             "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_server.GetSpecType",
             "properties": {
-                "nginx_instance": {
-                    "type": "array",
-                    "description": " This is reference to the NGINX instance that has this NGINX server configured\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "NGINX Instance",
+                "dataplane_ref": {
+                    "description": " This is reference to the NGINX dataplane type that has this NGINX server configured\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/nginx_serverDataplaneReference",
+                    "x-displayname": "Dataplane",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1"
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "server_spec": {
@@ -1929,8 +1972,54 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
                 }
             }
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "128",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                }
+            }
         }
     },
-    "x-displayname": "NGINX One Instance Server APIs",
+    "x-displayname": "NGINX One Server APIs",
     "x-ves-proto-file": "ves.io/schema/nginx/one/nginx_server/public_crudapi.proto"
 }`

@@ -540,6 +540,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["upstream_conn_pool_reuse_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("upstream_conn_pool_reuse_type"))
+		if err := fv(ctx, m.GetUpstreamConnPoolReuseType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -652,6 +661,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["tls_choice.use_tls"] = UpstreamTlsParametersValidator().Validate
 
 	v.FldValidators["advanced_options"] = OriginPoolAdvancedOptionsValidator().Validate
+
+	v.FldValidators["upstream_conn_pool_reuse_type"] = ves_io_schema.UpstreamConnPoolReuseTypeValidator().Validate
 
 	return v
 }()
@@ -1174,6 +1185,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["upstream_conn_pool_reuse_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("upstream_conn_pool_reuse_type"))
+		if err := fv(ctx, m.GetUpstreamConnPoolReuseType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -1286,6 +1306,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["tls_choice.use_tls"] = UpstreamTlsParametersValidator().Validate
 
 	v.FldValidators["advanced_options"] = OriginPoolAdvancedOptionsValidator().Validate
+
+	v.FldValidators["upstream_conn_pool_reuse_type"] = ves_io_schema.UpstreamConnPoolReuseTypeValidator().Validate
 
 	return v
 }()
@@ -1863,6 +1885,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["upstream_conn_pool_reuse_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("upstream_conn_pool_reuse_type"))
+		if err := fv(ctx, m.GetUpstreamConnPoolReuseType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["view_internal"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("view_internal"))
@@ -1984,6 +2015,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["tls_choice.use_tls"] = UpstreamTlsParametersValidator().Validate
 
 	v.FldValidators["advanced_options"] = OriginPoolAdvancedOptionsValidator().Validate
+
+	v.FldValidators["upstream_conn_pool_reuse_type"] = ves_io_schema.UpstreamConnPoolReuseTypeValidator().Validate
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -3166,6 +3199,15 @@ func (v *ValidateOriginServerConsulService) Validate(ctx context.Context, pm int
 
 	}
 
+	if fv, exists := v.FldValidators["snat_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("snat_pool"))
+		if err := fv(ctx, m.GetSnatPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -3213,6 +3255,8 @@ var DefaultOriginServerConsulServiceValidator = func() *ValidateOriginServerCons
 		panic(errMsg)
 	}
 	v.FldValidators["site_locator"] = vFn
+
+	v.FldValidators["snat_pool"] = ves_io_schema_views.SnatPoolConfigurationValidator().Validate
 
 	return v
 }()
@@ -3571,6 +3615,15 @@ func (v *ValidateOriginServerK8SService) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["protocol"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("protocol"))
+		if err := fv(ctx, m.GetProtocol(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["service_info"]; exists {
 		val := m.GetServiceInfo()
 		vOpts := append(opts,
@@ -3611,6 +3664,15 @@ func (v *ValidateOriginServerK8SService) Validate(ctx context.Context, pm interf
 
 		vOpts := append(opts, db.WithValidateField("site_locator"))
 		if err := fv(ctx, m.GetSiteLocator(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["snat_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("snat_pool"))
+		if err := fv(ctx, m.GetSnatPool(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3677,6 +3739,8 @@ var DefaultOriginServerK8SServiceValidator = func() *ValidateOriginServerK8SServ
 	v.FldValidators["site_locator"] = vFn
 
 	v.FldValidators["service_info.service_selector"] = ves_io_schema.LabelSelectorTypeValidator().Validate
+
+	v.FldValidators["snat_pool"] = ves_io_schema_views.SnatPoolConfigurationValidator().Validate
 
 	return v
 }()
@@ -3999,6 +4063,15 @@ func (v *ValidateOriginServerPrivateIP) Validate(ctx context.Context, pm interfa
 
 	}
 
+	if fv, exists := v.FldValidators["snat_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("snat_pool"))
+		if err := fv(ctx, m.GetSnatPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -4080,6 +4153,8 @@ var DefaultOriginServerPrivateIPValidator = func() *ValidateOriginServerPrivateI
 		panic(errMsg)
 	}
 	v.FldValidators["site_locator"] = vFn
+
+	v.FldValidators["snat_pool"] = ves_io_schema_views.SnatPoolConfigurationValidator().Validate
 
 	return v
 }()
@@ -4381,6 +4456,15 @@ func (v *ValidateOriginServerPrivateName) Validate(ctx context.Context, pm inter
 
 	}
 
+	if fv, exists := v.FldValidators["snat_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("snat_pool"))
+		if err := fv(ctx, m.GetSnatPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -4443,7 +4527,7 @@ var DefaultOriginServerPrivateNameValidator = func() *ValidateOriginServerPrivat
 
 	vrhRefreshInterval := v.RefreshIntervalValidationRuleHandler
 	rulesRefreshInterval := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "604800",
+		"ves.io.schema.rules.uint32.ranges": "0,10-604800",
 	}
 	vFn, err = vrhRefreshInterval(rulesRefreshInterval)
 	if err != nil {
@@ -4451,6 +4535,8 @@ var DefaultOriginServerPrivateNameValidator = func() *ValidateOriginServerPrivat
 		panic(errMsg)
 	}
 	v.FldValidators["refresh_interval"] = vFn
+
+	v.FldValidators["snat_pool"] = ves_io_schema_views.SnatPoolConfigurationValidator().Validate
 
 	return v
 }()
@@ -4752,7 +4838,7 @@ var DefaultOriginServerPublicNameValidator = func() *ValidateOriginServerPublicN
 
 	vrhRefreshInterval := v.RefreshIntervalValidationRuleHandler
 	rulesRefreshInterval := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "604800",
+		"ves.io.schema.rules.uint32.ranges": "0,10-604800",
 	}
 	vFn, err = vrhRefreshInterval(rulesRefreshInterval)
 	if err != nil {
@@ -6116,6 +6202,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["upstream_conn_pool_reuse_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("upstream_conn_pool_reuse_type"))
+		if err := fv(ctx, m.GetUpstreamConnPoolReuseType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -6228,6 +6323,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["tls_choice.use_tls"] = UpstreamTlsParametersValidator().Validate
 
 	v.FldValidators["advanced_options"] = OriginPoolAdvancedOptionsValidator().Validate
+
+	v.FldValidators["upstream_conn_pool_reuse_type"] = ves_io_schema.UpstreamConnPoolReuseTypeValidator().Validate
 
 	return v
 }()
@@ -7313,6 +7410,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.OriginServers = f.GetOriginServers()
 	m.GetPortChoiceFromGlobalSpecType(f)
 	m.GetTlsChoiceFromGlobalSpecType(f)
+	m.UpstreamConnPoolReuseType = f.GetUpstreamConnPoolReuseType()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -7338,6 +7436,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.OriginServers = m1.OriginServers
 	m1.SetPortChoiceToGlobalSpecType(f)
 	m1.SetTlsChoiceToGlobalSpecType(f)
+	f.UpstreamConnPoolReuseType = m1.UpstreamConnPoolReuseType
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -7471,6 +7570,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.OriginServers = f.GetOriginServers()
 	m.GetPortChoiceFromGlobalSpecType(f)
 	m.GetTlsChoiceFromGlobalSpecType(f)
+	m.UpstreamConnPoolReuseType = f.GetUpstreamConnPoolReuseType()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -7496,6 +7596,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.OriginServers = m1.OriginServers
 	m1.SetPortChoiceToGlobalSpecType(f)
 	m1.SetTlsChoiceToGlobalSpecType(f)
+	f.UpstreamConnPoolReuseType = m1.UpstreamConnPoolReuseType
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -7629,6 +7730,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.OriginServers = f.GetOriginServers()
 	m.GetPortChoiceFromGlobalSpecType(f)
 	m.GetTlsChoiceFromGlobalSpecType(f)
+	m.UpstreamConnPoolReuseType = f.GetUpstreamConnPoolReuseType()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -7654,6 +7756,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.OriginServers = m1.OriginServers
 	m1.SetPortChoiceToGlobalSpecType(f)
 	m1.SetTlsChoiceToGlobalSpecType(f)
+	f.UpstreamConnPoolReuseType = m1.UpstreamConnPoolReuseType
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

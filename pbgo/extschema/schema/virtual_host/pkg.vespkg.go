@@ -31,6 +31,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.APIEndpointsRsp"] = APIEndpointsRspValidator()
 	vr["ves.io.schema.virtual_host.ApiEndpointsStatsReq"] = ApiEndpointsStatsReqValidator()
 	vr["ves.io.schema.virtual_host.ApiEndpointsStatsRsp"] = ApiEndpointsStatsRspValidator()
+	vr["ves.io.schema.virtual_host.CreateJiraIssueRequest"] = CreateJiraIssueRequestValidator()
+	vr["ves.io.schema.virtual_host.CreateTicketRequest"] = CreateTicketRequestValidator()
+	vr["ves.io.schema.virtual_host.CreateTicketResponse"] = CreateTicketResponseValidator()
 	vr["ves.io.schema.virtual_host.GetAPICallSummaryReq"] = GetAPICallSummaryReqValidator()
 	vr["ves.io.schema.virtual_host.GetAPICallSummaryRsp"] = GetAPICallSummaryRspValidator()
 	vr["ves.io.schema.virtual_host.GetAPIEndpointsSchemaUpdatesReq"] = GetAPIEndpointsSchemaUpdatesReqValidator()
@@ -45,6 +48,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.SensitiveDataCount"] = SensitiveDataCountValidator()
 	vr["ves.io.schema.virtual_host.SwaggerSpecReq"] = SwaggerSpecReqValidator()
 	vr["ves.io.schema.virtual_host.SwaggerSpecRsp"] = SwaggerSpecRspValidator()
+	vr["ves.io.schema.virtual_host.TicketDetails"] = TicketDetailsValidator()
+	vr["ves.io.schema.virtual_host.UnlinkTicketsRequest"] = UnlinkTicketsRequestValidator()
+	vr["ves.io.schema.virtual_host.UnlinkTicketsResponse"] = UnlinkTicketsResponseValidator()
 	vr["ves.io.schema.virtual_host.UpdateAPIEndpointsSchemasReq"] = UpdateAPIEndpointsSchemasReqValidator()
 	vr["ves.io.schema.virtual_host.UpdateAPIEndpointsSchemasResp"] = UpdateAPIEndpointsSchemasRespValidator()
 	vr["ves.io.schema.virtual_host.UpdateVulnerabilitiesStateReq"] = UpdateVulnerabilitiesStateReqValidator()
@@ -73,7 +79,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.ApiSpec"] = ApiSpecValidator()
 	vr["ves.io.schema.virtual_host.AuthenticationDetails"] = AuthenticationDetailsValidator()
 	vr["ves.io.schema.virtual_host.AutoCertInfoType"] = AutoCertInfoTypeValidator()
+	vr["ves.io.schema.virtual_host.CDNOriginServerPublicIP"] = CDNOriginServerPublicIPValidator()
+	vr["ves.io.schema.virtual_host.CDNOriginServerPublicName"] = CDNOriginServerPublicNameValidator()
+	vr["ves.io.schema.virtual_host.CDNOriginServerType"] = CDNOriginServerTypeValidator()
+	vr["ves.io.schema.virtual_host.CDNUpstreamTlsParameters"] = CDNUpstreamTlsParametersValidator()
 	vr["ves.io.schema.virtual_host.CaptchaChallengeType"] = CaptchaChallengeTypeValidator()
+	vr["ves.io.schema.virtual_host.CdnOriginPoolType"] = CdnOriginPoolTypeValidator()
 	vr["ves.io.schema.virtual_host.CdnServiceType"] = CdnServiceTypeValidator()
 	vr["ves.io.schema.virtual_host.ClientIPHeaders"] = ClientIPHeadersValidator()
 	vr["ves.io.schema.virtual_host.CompressionType"] = CompressionTypeValidator()
@@ -83,17 +94,24 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.DNSProxyConfiguration"] = DNSProxyConfigurationValidator()
 	vr["ves.io.schema.virtual_host.DNSRecord"] = DNSRecordValidator()
 	vr["ves.io.schema.virtual_host.DNSVHostStatusType"] = DNSVHostStatusTypeValidator()
+	vr["ves.io.schema.virtual_host.DefaultCacheAction"] = DefaultCacheActionValidator()
+	vr["ves.io.schema.virtual_host.DelegationLocationSelection"] = DelegationLocationSelectionValidator()
 	vr["ves.io.schema.virtual_host.DomainCertificates"] = DomainCertificatesValidator()
 	vr["ves.io.schema.virtual_host.DynamicReverseProxyType"] = DynamicReverseProxyTypeValidator()
 	vr["ves.io.schema.virtual_host.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.virtual_host.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.virtual_host.HeaderControlType"] = HeaderControlTypeValidator()
 	vr["ves.io.schema.virtual_host.Http1ProtocolOptions"] = Http1ProtocolOptionsValidator()
 	vr["ves.io.schema.virtual_host.HttpProtocolOptions"] = HttpProtocolOptionsValidator()
 	vr["ves.io.schema.virtual_host.HttpRedirectOptions"] = HttpRedirectOptionsValidator()
 	vr["ves.io.schema.virtual_host.JavaScriptConfigType"] = JavaScriptConfigTypeValidator()
 	vr["ves.io.schema.virtual_host.JavascriptChallengeType"] = JavascriptChallengeTypeValidator()
+	vr["ves.io.schema.virtual_host.LogHeaderOptions"] = LogHeaderOptionsValidator()
+	vr["ves.io.schema.virtual_host.LoggingOptionsType"] = LoggingOptionsTypeValidator()
 	vr["ves.io.schema.virtual_host.MaskingConfiguration"] = MaskingConfigurationValidator()
 	vr["ves.io.schema.virtual_host.OpenApiValidationSettings"] = OpenApiValidationSettingsValidator()
+	vr["ves.io.schema.virtual_host.OriginAdvancedConfiguration"] = OriginAdvancedConfigurationValidator()
+	vr["ves.io.schema.virtual_host.OtherSettings"] = OtherSettingsValidator()
 	vr["ves.io.schema.virtual_host.PolicyBasedChallenge"] = PolicyBasedChallengeValidator()
 	vr["ves.io.schema.virtual_host.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.virtual_host.ServiceDomain"] = ServiceDomainValidator()
@@ -135,6 +153,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 	}
 
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.API.Create"] = []string{
+		"spec.cdn_service.cache_ttl",
+		"spec.cdn_service.service_domains.#",
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.virtual_host.API.Create"] = []string{
 		"spec.api_spec",
 		"spec.authentication.cookie_params.auth_hmac.prim_key.blindfold_secret_info_internal",
@@ -152,10 +175,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.domain_cert_map",
 		"spec.masking_config",
 		"spec.max_direct_response_body_size",
+		"spec.request_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.request_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.request_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.request_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.request_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.request_headers_to_add.#.secret_value.vault_secret_info",
 		"spec.request_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.response_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.response_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.response_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.response_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.response_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.response_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.response_headers_to_add.#.secret_value.vault_secret_info",
@@ -176,7 +207,50 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ztna_proxy_configurations",
 	}
 
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_host.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.cdn_service.cdn_origin_pool.origin_servers.#.public_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cdn_service.content_choice",
+			AllowedEnvironments: []string{"demo1"},
+		},
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.API.Create"] = "ves.io.schema.virtual_host.CreateRequest"
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.API.Get"] = []string{
+		"spec.cdn_service.cache_ttl",
+		"spec.cdn_service.service_domains.#",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_host.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.cdn_service.cdn_origin_pool.origin_servers.#.public_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.cdn_service.content_choice",
+			AllowedEnvironments: []string{"demo1"},
+		},
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.API.List"] = []string{
+		"items.#.get_spec.cdn_service.cache_ttl",
+		"items.#.get_spec.cdn_service.service_domains.#",
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.virtual_host.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.cdn_service.cdn_origin_pool.origin_servers.#.public_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.cdn_service.content_choice",
+			AllowedEnvironments: []string{"demo1"},
+		},
+	}
 
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.virtual_host.API.Replace"] = []svcfw.SubscriptionField{
 		{
@@ -206,10 +280,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.domain_cert_map",
 		"spec.masking_config",
 		"spec.max_direct_response_body_size",
+		"spec.request_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.request_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.request_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.request_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.request_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.request_headers_to_add.#.secret_value.vault_secret_info",
 		"spec.request_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.response_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.response_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.response_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.response_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.response_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.response_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.response_headers_to_add.#.secret_value.vault_secret_info",

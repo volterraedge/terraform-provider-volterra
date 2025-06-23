@@ -33,6 +33,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_credential.ListRequest"] = ListRequestValidator()
 	vr["ves.io.schema.api_credential.ListResponse"] = ListResponseValidator()
 	vr["ves.io.schema.api_credential.ListResponseItem"] = ListResponseItemValidator()
+	vr["ves.io.schema.api_credential.ListServiceCredentialsResponse"] = ListServiceCredentialsResponseValidator()
+	vr["ves.io.schema.api_credential.ListServiceCredentialsResponseItem"] = ListServiceCredentialsResponseItemValidator()
 	vr["ves.io.schema.api_credential.RecreateScimTokenRequest"] = RecreateScimTokenRequestValidator()
 	vr["ves.io.schema.api_credential.RenewRequest"] = RenewRequestValidator()
 	vr["ves.io.schema.api_credential.ReplaceServiceCredentialsRequest"] = ReplaceServiceCredentialsRequestValidator()

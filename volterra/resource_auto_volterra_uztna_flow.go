@@ -238,12 +238,6 @@ func resourceVolterraUztnaFlow() *schema.Resource {
 													Required: true,
 												},
 
-												"name": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
 												"post": {
 
 													Type:     schema.TypeBool,
@@ -284,32 +278,11 @@ func resourceVolterraUztnaFlow() *schema.Resource {
 
 																Type:     schema.TypeList,
 																MaxItems: 1,
-																Required: true,
+																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"url": {
-																			Type:     schema.TypeString,
-																			Required: true,
-																		},
-																	},
-																},
-															},
-
-															"uniform_resource_name": {
-
-																Type:     schema.TypeList,
-																MaxItems: 1,
-																Required: true,
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"host_name": {
-																			Type:     schema.TypeString,
-																			Required: true,
-																		},
-
-																		"urn": {
 																			Type:     schema.TypeString,
 																			Required: true,
 																		},
@@ -563,7 +536,12 @@ func resourceVolterraUztnaFlowCreate(d *schema.ResourceData, meta interface{}) e
 													if w, ok := customGeoLocationSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
 														ls := make([]string, len(w.([]interface{})))
 														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field expressions")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														customGeoLocationSelector.Expressions = ls
 													}
@@ -767,10 +745,6 @@ func resourceVolterraUztnaFlowCreate(d *schema.ResourceData, meta interface{}) e
 											idp.Issuer = w.(string)
 										}
 
-										if w, ok := idpMapStrToI["name"]; ok && !isIntfNil(w) {
-											idp.Name = w.(string)
-										}
-
 										ssoServiceBindingTypeFound := false
 
 										if v, ok := idpMapStrToI["post"]; ok && !isIntfNil(v) && !ssoServiceBindingTypeFound {
@@ -841,35 +815,6 @@ func resourceVolterraUztnaFlowCreate(d *schema.ResourceData, meta interface{}) e
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	audienceUriChoiceInt.UniformResourceLocator.Url = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := audienceUriMapStrToI["uniform_resource_name"]; ok && !isIntfNil(v) && !audienceUriChoiceTypeFound {
-
-														audienceUriChoiceTypeFound = true
-														audienceUriChoiceInt := &ves_io_schema_uztna_uztna_flow.AudienceUri_UniformResourceName{}
-														audienceUriChoiceInt.UniformResourceName = &ves_io_schema_uztna_uztna_flow.UniformResourceName{}
-														audienceUri.AudienceUriChoice = audienceUriChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["host_name"]; ok && !isIntfNil(v) {
-
-																	audienceUriChoiceInt.UniformResourceName.HostName = v.(string)
-
-																}
-
-																if v, ok := cs["urn"]; ok && !isIntfNil(v) {
-
-																	audienceUriChoiceInt.UniformResourceName.Urn = v.(string)
 
 																}
 
@@ -1214,7 +1159,12 @@ func resourceVolterraUztnaFlowUpdate(d *schema.ResourceData, meta interface{}) e
 													if w, ok := customGeoLocationSelectorMapStrToI["expressions"]; ok && !isIntfNil(w) {
 														ls := make([]string, len(w.([]interface{})))
 														for i, v := range w.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field expressions")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														customGeoLocationSelector.Expressions = ls
 													}
@@ -1418,10 +1368,6 @@ func resourceVolterraUztnaFlowUpdate(d *schema.ResourceData, meta interface{}) e
 											idp.Issuer = w.(string)
 										}
 
-										if w, ok := idpMapStrToI["name"]; ok && !isIntfNil(w) {
-											idp.Name = w.(string)
-										}
-
 										ssoServiceBindingTypeFound := false
 
 										if v, ok := idpMapStrToI["post"]; ok && !isIntfNil(v) && !ssoServiceBindingTypeFound {
@@ -1492,35 +1438,6 @@ func resourceVolterraUztnaFlowUpdate(d *schema.ResourceData, meta interface{}) e
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	audienceUriChoiceInt.UniformResourceLocator.Url = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := audienceUriMapStrToI["uniform_resource_name"]; ok && !isIntfNil(v) && !audienceUriChoiceTypeFound {
-
-														audienceUriChoiceTypeFound = true
-														audienceUriChoiceInt := &ves_io_schema_uztna_uztna_flow.AudienceUri_UniformResourceName{}
-														audienceUriChoiceInt.UniformResourceName = &ves_io_schema_uztna_uztna_flow.UniformResourceName{}
-														audienceUri.AudienceUriChoice = audienceUriChoiceInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["host_name"]; ok && !isIntfNil(v) {
-
-																	audienceUriChoiceInt.UniformResourceName.HostName = v.(string)
-
-																}
-
-																if v, ok := cs["urn"]; ok && !isIntfNil(v) {
-
-																	audienceUriChoiceInt.UniformResourceName.Urn = v.(string)
 
 																}
 
@@ -1747,5 +1664,8 @@ func resourceVolterraUztnaFlowDelete(d *schema.ResourceData, meta interface{}) e
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra UztnaFlow obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_uztna_uztna_flow.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_uztna_uztna_flow.ObjectType, namespace, name, opts...)
 }

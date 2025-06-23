@@ -40,7 +40,6 @@ func testDNSDomain(name string) string {
 			namespace = "system"
 			dnssec_mode = "DNSSEC_DISABLE"
 			volterra_managed = true
-			verification_only = false
 		}
 
 	`, name)

@@ -412,6 +412,25 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bgpBgpPeerProtocolState": {
+            "type": "string",
+            "description": "Status of BGP connection to this Peer\n\nConnection state is not known\nConnection state is Idle\nConnection state is Connecting\nConnection state is Active\nConnection state is Open Sent\nConnection state is Open Confirm\nConnection state is Established\nConnection state is Clearing\nConnection state is Deleted",
+            "title": "BGP Protocol Status",
+            "enum": [
+                "Unknown",
+                "Idle",
+                "Connect",
+                "Active",
+                "OpenSent",
+                "OpenConfirm",
+                "Established",
+                "Clearing",
+                "Deleted"
+            ],
+            "default": "Unknown",
+            "x-displayname": "BGP Peer Status",
+            "x-ves-proto-enum": "ves.io.schema.bgp.BgpPeerProtocolState"
+        },
         "bgpBgpPeerStatusType": {
             "type": "object",
             "description": "Most recently observed status of the BGP Peering session",
@@ -470,6 +489,12 @@ var CustomAPISwaggerJSON string = `{
                     "description": " Router ID of the peer",
                     "title": "Peer Router ID",
                     "x-displayname": "Peer Router ID"
+                },
+                "protocol_status": {
+                    "description": " Status of BGP connection to this Peer",
+                    "title": "Protocol Status",
+                    "$ref": "#/definitions/bgpBgpPeerProtocolState",
+                    "x-displayname": "Protocol Status"
                 },
                 "received_prefix_count": {
                     "type": "integer",
@@ -533,6 +558,19 @@ var CustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/bgpBgpPeerStatusType"
                     },
                     "x-displayname": "BGP Peer Status"
+                },
+                "tunnel": {
+                    "type": "array",
+                    "description": " Internal reference to tunnel object corresponding to this BGP\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "External Connector Object",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "External Connector Object",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
                 }
             }
         },

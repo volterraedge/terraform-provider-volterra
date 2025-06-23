@@ -111,12 +111,6 @@ func resourceVolterraUztnaGateway() *schema.Resource {
 							Type:     schema.TypeString,
 							Optional: true,
 						},
-
-						"ipv6": {
-
-							Type:     schema.TypeString,
-							Optional: true,
-						},
 					},
 				},
 			},
@@ -197,7 +191,7 @@ func resourceVolterraUztnaGatewayCreate(d *schema.ResourceData, meta interface{}
 						bsMapToStrVal := ps.(map[string]interface{})
 						bigipSiteInt[i] = &ves_io_schema.ObjectRefType{}
 
-						bigipSiteInt[i].Kind = "bigip_instance_site"
+						bigipSiteInt[i].Kind = "site"
 
 						if v, ok := bsMapToStrVal["name"]; ok && !isIntfNil(v) {
 							bigipSiteInt[i].Name = v.(string)
@@ -245,17 +239,6 @@ func resourceVolterraUztnaGatewayCreate(d *schema.ResourceData, meta interface{}
 					listeners[i].FlowType = flowTypeInt
 
 					flowTypeInt.Ipv4 = v.(string)
-
-				}
-
-				if v, ok := listenersMapStrToI["ipv6"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
-
-					flowTypeTypeFound = true
-					flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv6{}
-
-					listeners[i].FlowType = flowTypeInt
-
-					flowTypeInt.Ipv6 = v.(string)
 
 				}
 
@@ -382,7 +365,7 @@ func resourceVolterraUztnaGatewayUpdate(d *schema.ResourceData, meta interface{}
 						bsMapToStrVal := ps.(map[string]interface{})
 						bigipSiteInt[i] = &ves_io_schema.ObjectRefType{}
 
-						bigipSiteInt[i].Kind = "bigip_instance_site"
+						bigipSiteInt[i].Kind = "site"
 
 						if v, ok := bsMapToStrVal["name"]; ok && !isIntfNil(v) {
 							bigipSiteInt[i].Name = v.(string)
@@ -432,17 +415,6 @@ func resourceVolterraUztnaGatewayUpdate(d *schema.ResourceData, meta interface{}
 
 				}
 
-				if v, ok := listenersMapStrToI["ipv6"]; ok && !isIntfNil(v) && !flowTypeTypeFound {
-
-					flowTypeTypeFound = true
-					flowTypeInt := &ves_io_schema_uztna_uztna_gateway.Listeners_Ipv6{}
-
-					listeners[i].FlowType = flowTypeInt
-
-					flowTypeInt.Ipv6 = v.(string)
-
-				}
-
 			}
 		}
 
@@ -474,5 +446,8 @@ func resourceVolterraUztnaGatewayDelete(d *schema.ResourceData, meta interface{}
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra UztnaGateway obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_uztna_uztna_gateway.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_uztna_uztna_gateway.ObjectType, namespace, name, opts...)
 }

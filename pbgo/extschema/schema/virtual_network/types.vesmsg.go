@@ -5042,7 +5042,11 @@ func (m *StaticRouteViewType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
+// GetDRefInfo for the field's type
 func (m *StaticRouteViewType) GetNextHopChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetNextHopChoice() == nil {
+		return nil, nil
+	}
 	switch m.GetNextHopChoice().(type) {
 	case *StaticRouteViewType_Interface:
 
@@ -5066,45 +5070,22 @@ func (m *StaticRouteViewType) GetNextHopChoiceDRefInfo() ([]db.DRefInfo, error) 
 
 		return nil, nil
 
+	case *StaticRouteViewType_NodeInterface:
+
+		drInfos, err := m.GetNodeInterface().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodeInterface().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "node_interface." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
-}
 
-// GetNextHopChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *StaticRouteViewType) GetNextHopChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetNextHopChoice().(type) {
-	case *StaticRouteViewType_Interface:
-		refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
-		}
-
-		vref := m.GetInterface()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "network_interface.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	case *StaticRouteViewType_DefaultGateway:
-
-	}
-
-	return entries, nil
 }
 
 type ValidateStaticRouteViewType struct {
@@ -5291,6 +5272,17 @@ func (v *ValidateStaticRouteViewType) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
+	case *StaticRouteViewType_NodeInterface:
+		if fv, exists := v.FldValidators["next_hop_choice.node_interface"]; exists {
+			val := m.GetNextHopChoice().(*StaticRouteViewType_NodeInterface).NodeInterface
+			vOpts := append(opts,
+				db.WithValidateField("next_hop_choice"),
+				db.WithValidateField("node_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -5360,6 +5352,7 @@ var DefaultStaticRouteViewTypeValidator = func() *ValidateStaticRouteViewType {
 	v.FldValidators["attrs"] = vFn
 
 	v.FldValidators["next_hop_choice.interface"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["next_hop_choice.node_interface"] = ves_io_schema.NodeInterfaceTypeValidator().Validate
 
 	return v
 }()
@@ -5414,7 +5407,11 @@ func (m *StaticV6RouteViewType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
+// GetDRefInfo for the field's type
 func (m *StaticV6RouteViewType) GetNextHopChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetNextHopChoice() == nil {
+		return nil, nil
+	}
 	switch m.GetNextHopChoice().(type) {
 	case *StaticV6RouteViewType_Interface:
 
@@ -5438,45 +5435,22 @@ func (m *StaticV6RouteViewType) GetNextHopChoiceDRefInfo() ([]db.DRefInfo, error
 
 		return nil, nil
 
+	case *StaticV6RouteViewType_NodeInterface:
+
+		drInfos, err := m.GetNodeInterface().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodeInterface().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "node_interface." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
-}
 
-// GetNextHopChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *StaticV6RouteViewType) GetNextHopChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-
-	switch m.GetNextHopChoice().(type) {
-	case *StaticV6RouteViewType_Interface:
-		refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
-		if err != nil {
-			return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
-		}
-
-		vref := m.GetInterface()
-		if vref == nil {
-			return nil, nil
-		}
-		ref := &ves_io_schema.ObjectRefType{
-			Kind:      "network_interface.Object",
-			Tenant:    vref.Tenant,
-			Namespace: vref.Namespace,
-			Name:      vref.Name,
-		}
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
-
-	case *StaticV6RouteViewType_DefaultGateway:
-
-	}
-
-	return entries, nil
 }
 
 type ValidateStaticV6RouteViewType struct {
@@ -5663,6 +5637,17 @@ func (v *ValidateStaticV6RouteViewType) Validate(ctx context.Context, pm interfa
 				return err
 			}
 		}
+	case *StaticV6RouteViewType_NodeInterface:
+		if fv, exists := v.FldValidators["next_hop_choice.node_interface"]; exists {
+			val := m.GetNextHopChoice().(*StaticV6RouteViewType_NodeInterface).NodeInterface
+			vOpts := append(opts,
+				db.WithValidateField("next_hop_choice"),
+				db.WithValidateField("node_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -5732,6 +5717,7 @@ var DefaultStaticV6RouteViewTypeValidator = func() *ValidateStaticV6RouteViewTyp
 	v.FldValidators["attrs"] = vFn
 
 	v.FldValidators["next_hop_choice.interface"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["next_hop_choice.node_interface"] = ves_io_schema.NodeInterfaceTypeValidator().Validate
 
 	return v
 }()

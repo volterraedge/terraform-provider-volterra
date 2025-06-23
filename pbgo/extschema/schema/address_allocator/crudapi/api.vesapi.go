@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.address_allocator.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.address_allocator.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2759,11 +2759,12 @@ var APISwaggerJSON string = `{
         },
         "address_allocatorLocalInterfaceAddressType": {
             "type": "string",
-            "description": "Dictates how local interface address is derived from the allocated subnet\n\n\nUse Nth address of the allocated subnet as the local interface address, N being the\nLocal Interface Address Offset. For example, if the allocated subnet is 169.254.0.0/30,\nLocal Interface Address Offset is set to 2 and Local Interface Address Type is set to\n\"Offset from beginning of Subnet\", local address of 169.254.0.2 is used.\n\nUse Nth last address of the allocated subnet as the local interface address, N being the\nLocal Interface Address Offset. For example, if the allocated subnet is 169.254.0.0/30,\nLocal Interface Address Offset is set to 1 and Local Interface Address Type is set to\n\"Offset from end of Subnet\", local address of 169.254.0.2 is used.",
+            "description": "Dictates how local interface address is derived from the allocated subnet\n\n\nUse Nth address of the allocated subnet as the local interface address, N being the\nLocal Interface Address Offset. For example, if the allocated subnet is 169.254.0.0/30,\nLocal Interface Address Offset is set to 2 and Local Interface Address Type is set to\n\"Offset from beginning of Subnet\", local address of 169.254.0.2 is used.\n\nUse Nth last address of the allocated subnet as the local interface address, N being the\nLocal Interface Address Offset. For example, if the allocated subnet is 169.254.0.0/30,\nLocal Interface Address Offset is set to 1 and Local Interface Address Type is set to\n\"Offset from end of Subnet\", local address of 169.254.0.2 is used.\n\nThis case is used for external_connector",
             "title": "Local Interface Address",
             "enum": [
                 "LOCAL_INTERFACE_ADDRESS_OFFSET_FROM_SUBNET_BEGIN",
-                "LOCAL_INTERFACE_ADDRESS_OFFSET_FROM_SUBNET_END"
+                "LOCAL_INTERFACE_ADDRESS_OFFSET_FROM_SUBNET_END",
+                "LOCAL_INTERFACE_ADDRESS_FROM_PREFIX"
             ],
             "default": "LOCAL_INTERFACE_ADDRESS_OFFSET_FROM_SUBNET_BEGIN",
             "x-displayname": "Local Interface Address Type",
@@ -2790,6 +2791,11 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"IP Subnet\"\nAllocated IP subnet of the node",
                     "title": "IP Subnet"
+                },
+                "remote_prefix": {
+                    "type": "string",
+                    "description": "x-displayName: \"Remote IP Subnet\"\nRemote IP subnet of the node",
+                    "title": "Remote IP Subnet"
                 }
             }
         },
@@ -3498,6 +3504,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

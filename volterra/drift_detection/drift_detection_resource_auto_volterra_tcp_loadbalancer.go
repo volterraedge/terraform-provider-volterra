@@ -2,8 +2,8 @@ package driftdetection
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	ves_io_schema_views_tcp_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
 	"gopkg.volterra.us/stdlib/client/vesapi"
+	ves_io_schema_views_tcp_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
 )
 
 func FlattenTlsTcp(x *ves_io_schema_views_tcp_loadbalancer.ProxyTypeTLSTCP) []interface{} {

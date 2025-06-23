@@ -24,6 +24,174 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *GetUpgradableSWVersionsRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetUpgradableSWVersionsRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetUpgradableSWVersionsRequest) DeepCopy() *GetUpgradableSWVersionsRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetUpgradableSWVersionsRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetUpgradableSWVersionsRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetUpgradableSWVersionsRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetUpgradableSWVersionsRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetUpgradableSWVersionsRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetUpgradableSWVersionsRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetUpgradableSWVersionsRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetUpgradableSWVersionsRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["current_os_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("current_os_version"))
+		if err := fv(ctx, m.GetCurrentOsVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["current_sw_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("current_sw_version"))
+		if err := fv(ctx, m.GetCurrentSwVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetUpgradableSWVersionsRequestValidator = func() *ValidateGetUpgradableSWVersionsRequest {
+	v := &ValidateGetUpgradableSWVersionsRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetUpgradableSWVersionsRequestValidator() db.Validator {
+	return DefaultGetUpgradableSWVersionsRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetUpgradableSWVersionsResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetUpgradableSWVersionsResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetUpgradableSWVersionsResponse) DeepCopy() *GetUpgradableSWVersionsResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetUpgradableSWVersionsResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetUpgradableSWVersionsResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetUpgradableSWVersionsResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetUpgradableSWVersionsResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetUpgradableSWVersionsResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetUpgradableSWVersionsResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetUpgradableSWVersionsResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetUpgradableSWVersionsResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["sw_versions"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sw_versions"))
+		for idx, item := range m.GetSwVersions() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetUpgradableSWVersionsResponseValidator = func() *ValidateGetUpgradableSWVersionsResponse {
+	v := &ValidateGetUpgradableSWVersionsResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetUpgradableSWVersionsResponseValidator() db.Validator {
+	return DefaultGetUpgradableSWVersionsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetUpgradeStatusRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

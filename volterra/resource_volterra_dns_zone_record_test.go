@@ -44,7 +44,6 @@ func testConfigDNSZoneRecord(name string) string {
 		  rr_set_group {
 		    metadata {
 		      description = ""
-		      disable     = false
 		      name        = "vestest-services"
 		    }
 			}

@@ -2,12 +2,12 @@ package driftdetection
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"gopkg.volterra.us/stdlib/client/vesapi"
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_service_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-	"gopkg.volterra.us/stdlib/client/vesapi"
 )
 
 func FlattenPrefixList(f *ves_io_schema_views.PrefixStringListType) []interface{} {
@@ -126,7 +126,6 @@ func FlattenContentRewriteAction(f *ves_io_schema_policy.ContentRewriteAction) i
 			"element_selector": f.GetElementSelector(),
 			"insert_content":   f.GetInsertContent(),
 			"position":         f.GetPosition().String(),
-			// "inserted_types":   f.GetInsertedTypes(),
 		}
 		rslt = append(rslt, val)
 	}

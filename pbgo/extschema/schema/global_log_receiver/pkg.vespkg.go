@@ -29,6 +29,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.global_log_receiver.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.global_log_receiver.ReplaceResponse"] = ReplaceResponseValidator()
 
+	vr["ves.io.schema.global_log_receiver.GlobalLogReceiverStatusData"] = GlobalLogReceiverStatusDataValidator()
+	vr["ves.io.schema.global_log_receiver.GlobalLogReceiverStatusRequest"] = GlobalLogReceiverStatusRequestValidator()
+	vr["ves.io.schema.global_log_receiver.GlobalLogReceiverStatusResponse"] = GlobalLogReceiverStatusResponseValidator()
+	vr["ves.io.schema.global_log_receiver.LabelFilter"] = LabelFilterValidator()
+	vr["ves.io.schema.global_log_receiver.StatusValue"] = StatusValueValidator()
+
 	vr["ves.io.schema.global_log_receiver.TestGlobalLogReceiverRequest"] = TestGlobalLogReceiverRequestValidator()
 	vr["ves.io.schema.global_log_receiver.TestGlobalLogReceiverResponse"] = TestGlobalLogReceiverResponseValidator()
 
@@ -208,6 +214,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.global_log_receiver.API"] = "config"
+	sm["ves.io.schema.global_log_receiver.CustomDataAPI"] = "data"
 	sm["ves.io.schema.global_log_receiver.CustomAPI"] = "log_receiver"
 
 }
@@ -251,6 +258,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	func() {
 		// set swagger jsons for our and external schemas
 
+		customCSR.SwaggerRegistry["ves.io.schema.global_log_receiver.Object"] = CustomDataAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.global_log_receiver.CustomDataAPI"] = NewCustomDataAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.global_log_receiver.CustomDataAPI"] = NewCustomDataAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.global_log_receiver.CustomDataAPI"] = RegisterCustomDataAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.global_log_receiver.CustomDataAPI"] = RegisterGwCustomDataAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.global_log_receiver.CustomDataAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomDataAPIServer(svc)
+		}
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
 		customCSR.SwaggerRegistry["ves.io.schema.global_log_receiver.Object"] = CustomAPISwaggerJSON
 
 		customCSR.GrpcClientRegistry["ves.io.schema.global_log_receiver.CustomAPI"] = NewCustomAPIGrpcClient
@@ -273,11 +300,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

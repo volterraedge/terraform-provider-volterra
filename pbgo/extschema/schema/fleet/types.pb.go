@@ -5089,9 +5089,9 @@ type GlobalSpecType struct {
 	EtcdClusterNetwork EtcdClusterNetworkType `protobuf:"varint,33,opt,name=etcd_cluster_network,json=etcdClusterNetwork,proto3,enum=ves.io.schema.fleet.EtcdClusterNetworkType" json:"etcd_cluster_network,omitempty"`
 	// Storage Static Routes
 	//
-	// x-displayName: "Select Storage Storage Static Routes"
+	// x-displayName: "Select Storage Static Routes"
 	// x-required
-	// Select storage Storage Static Routes
+	// Select Storage Static Routes
 	//
 	// Types that are valid to be assigned to StorageStaticRoutesChoice:
 	//	*GlobalSpecType_NoStorageStaticRoutes

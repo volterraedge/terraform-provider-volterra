@@ -244,28 +244,30 @@ func resourceVolterraProtocolPolicerCreate(d *schema.ResourceData, meta interfac
 					policerInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 					protocolPolicer[i].Policer = policerInt
 					for i, ps := range sl {
+						if ps != nil {
 
-						pMapToStrVal := ps.(map[string]interface{})
-						policerInt[i] = &ves_io_schema.ObjectRefType{}
+							pMapToStrVal := ps.(map[string]interface{})
+							policerInt[i] = &ves_io_schema.ObjectRefType{}
 
-						policerInt[i].Kind = "policer"
+							policerInt[i].Kind = "policer"
 
-						if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
-							policerInt[i].Name = v.(string)
+							if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
+								policerInt[i].Name = v.(string)
+							}
+
+							if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								policerInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								policerInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := pMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								policerInt[i].Uid = v.(string)
+							}
+
 						}
-
-						if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							policerInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							policerInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := pMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							policerInt[i].Uid = v.(string)
-						}
-
 					}
 
 				}
@@ -281,7 +283,7 @@ func resourceVolterraProtocolPolicerCreate(d *schema.ResourceData, meta interfac
 
 							typeTypeFound := false
 
-							if _, ok := protocolMapStrToI["dns"]; ok && !typeTypeFound {
+							if v, ok := protocolMapStrToI["dns"]; ok && !isIntfNil(v) && !typeTypeFound {
 
 								typeTypeFound = true
 								typeInt := &ves_io_schema_protocol_policer.ProtocolType_Dns{}
@@ -306,6 +308,9 @@ func resourceVolterraProtocolPolicerCreate(d *schema.ResourceData, meta interfac
 
 											typeList := []ves_io_schema_protocol_policer.IcmpMsgType{}
 											for _, j := range v.([]interface{}) {
+												if j == nil {
+													return fmt.Errorf("please provide valid non-empty enum value of field type")
+												}
 												typeList = append(typeList, ves_io_schema_protocol_policer.IcmpMsgType(ves_io_schema_protocol_policer.IcmpMsgType_value[j.(string)]))
 											}
 											typeInt.Icmp.Type = typeList
@@ -333,6 +338,9 @@ func resourceVolterraProtocolPolicerCreate(d *schema.ResourceData, meta interfac
 
 											flagsList := []ves_io_schema_protocol_policer.TcpFlags{}
 											for _, j := range v.([]interface{}) {
+												if j == nil {
+													return fmt.Errorf("please provide valid non-empty enum value of field flags")
+												}
 												flagsList = append(flagsList, ves_io_schema_protocol_policer.TcpFlags(ves_io_schema_protocol_policer.TcpFlags_value[j.(string)]))
 											}
 											typeInt.Tcp.Flags = flagsList
@@ -344,7 +352,7 @@ func resourceVolterraProtocolPolicerCreate(d *schema.ResourceData, meta interfac
 
 							}
 
-							if _, ok := protocolMapStrToI["udp"]; ok && !typeTypeFound {
+							if v, ok := protocolMapStrToI["udp"]; ok && !isIntfNil(v) && !typeTypeFound {
 
 								typeTypeFound = true
 								typeInt := &ves_io_schema_protocol_policer.ProtocolType_Udp{}
@@ -478,28 +486,30 @@ func resourceVolterraProtocolPolicerUpdate(d *schema.ResourceData, meta interfac
 					policerInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 					protocolPolicer[i].Policer = policerInt
 					for i, ps := range sl {
+						if ps != nil {
 
-						pMapToStrVal := ps.(map[string]interface{})
-						policerInt[i] = &ves_io_schema.ObjectRefType{}
+							pMapToStrVal := ps.(map[string]interface{})
+							policerInt[i] = &ves_io_schema.ObjectRefType{}
 
-						policerInt[i].Kind = "policer"
+							policerInt[i].Kind = "policer"
 
-						if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
-							policerInt[i].Name = v.(string)
+							if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
+								policerInt[i].Name = v.(string)
+							}
+
+							if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								policerInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								policerInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := pMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								policerInt[i].Uid = v.(string)
+							}
+
 						}
-
-						if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							policerInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							policerInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := pMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							policerInt[i].Uid = v.(string)
-						}
-
 					}
 
 				}
@@ -515,7 +525,7 @@ func resourceVolterraProtocolPolicerUpdate(d *schema.ResourceData, meta interfac
 
 							typeTypeFound := false
 
-							if _, ok := protocolMapStrToI["dns"]; ok && !typeTypeFound {
+							if v, ok := protocolMapStrToI["dns"]; ok && !isIntfNil(v) && !typeTypeFound {
 
 								typeTypeFound = true
 								typeInt := &ves_io_schema_protocol_policer.ProtocolType_Dns{}
@@ -540,6 +550,9 @@ func resourceVolterraProtocolPolicerUpdate(d *schema.ResourceData, meta interfac
 
 											typeList := []ves_io_schema_protocol_policer.IcmpMsgType{}
 											for _, j := range v.([]interface{}) {
+												if j == nil {
+													return fmt.Errorf("please provide valid non-empty enum value of field type")
+												}
 												typeList = append(typeList, ves_io_schema_protocol_policer.IcmpMsgType(ves_io_schema_protocol_policer.IcmpMsgType_value[j.(string)]))
 											}
 											typeInt.Icmp.Type = typeList
@@ -567,6 +580,9 @@ func resourceVolterraProtocolPolicerUpdate(d *schema.ResourceData, meta interfac
 
 											flagsList := []ves_io_schema_protocol_policer.TcpFlags{}
 											for _, j := range v.([]interface{}) {
+												if j == nil {
+													return fmt.Errorf("please provide valid non-empty enum value of field flags")
+												}
 												flagsList = append(flagsList, ves_io_schema_protocol_policer.TcpFlags(ves_io_schema_protocol_policer.TcpFlags_value[j.(string)]))
 											}
 											typeInt.Tcp.Flags = flagsList
@@ -578,7 +594,7 @@ func resourceVolterraProtocolPolicerUpdate(d *schema.ResourceData, meta interfac
 
 							}
 
-							if _, ok := protocolMapStrToI["udp"]; ok && !typeTypeFound {
+							if v, ok := protocolMapStrToI["udp"]; ok && !isIntfNil(v) && !typeTypeFound {
 
 								typeTypeFound = true
 								typeInt := &ves_io_schema_protocol_policer.ProtocolType_Udp{}
@@ -623,5 +639,8 @@ func resourceVolterraProtocolPolicerDelete(d *schema.ResourceData, meta interfac
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra ProtocolPolicer obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_protocol_policer.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_protocol_policer.ObjectType, namespace, name, opts...)
 }

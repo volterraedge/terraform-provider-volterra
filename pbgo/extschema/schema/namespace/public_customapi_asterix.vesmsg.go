@@ -13,6 +13,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 )
 
 var (
@@ -141,6 +143,54 @@ type ValidateApiEndpointsStatsNSReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateApiEndpointsStatsNSReq) VhostsTypesFilterValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema_virtual_host.VirtualHostType)
+		return int32(i)
+	}
+	// ves_io_schema_virtual_host.VirtualHostType_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema_virtual_host.VirtualHostType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for vhosts_types_filter")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema_virtual_host.VirtualHostType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for vhosts_types_filter")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema_virtual_host.VirtualHostType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema_virtual_host.VirtualHostType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated vhosts_types_filter")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items vhosts_types_filter")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateApiEndpointsStatsNSReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ApiEndpointsStatsNSReq)
 	if !ok {
@@ -176,12 +226,40 @@ func (v *ValidateApiEndpointsStatsNSReq) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["vhosts_types_filter"]; exists {
+		vOpts := append(opts, db.WithValidateField("vhosts_types_filter"))
+		if err := fv(ctx, m.GetVhostsTypesFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultApiEndpointsStatsNSReqValidator = func() *ValidateApiEndpointsStatsNSReq {
 	v := &ValidateApiEndpointsStatsNSReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVhostsTypesFilter := v.VhostsTypesFilterValidationRuleHandler
+	rulesVhostsTypesFilter := map[string]string{
+		"ves.io.schema.rules.enum.in":         "[1,6,7,8]",
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhVhostsTypesFilter(rulesVhostsTypesFilter)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ApiEndpointsStatsNSReq.vhosts_types_filter: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["vhosts_types_filter"] = vFn
 
 	return v
 }()

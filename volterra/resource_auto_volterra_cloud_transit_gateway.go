@@ -148,12 +148,6 @@ func resourceVolterraCloudTransitGateway() *schema.Resource {
 							},
 						},
 
-						"tgw_asn": {
-							Type:       schema.TypeInt,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
 						"existing_tgw": {
 
 							Type:     schema.TypeList,
@@ -244,12 +238,6 @@ func resourceVolterraCloudTransitGateway() *schema.Resource {
 								},
 							},
 						},
-
-						"volterra_site_asn": {
-							Type:       schema.TypeInt,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
 					},
 				},
 			},
@@ -314,7 +302,7 @@ func resourceVolterraCloudTransitGatewayCreate(d *schema.ResourceData, meta inte
 
 	cloudChoiceTypeFound := false
 
-	if v, ok := d.GetOk("aws"); ok && !cloudChoiceTypeFound {
+	if v, ok := d.GetOk("aws"); ok && !isIntfNil(v) && !cloudChoiceTypeFound {
 
 		cloudChoiceTypeFound = true
 		cloudChoiceInt := &ves_io_schema_cloud_transit_gateway.CreateSpecType_Aws{}
@@ -392,7 +380,12 @@ func resourceVolterraCloudTransitGatewayCreate(d *schema.ResourceData, meta inte
 							if w, ok := serviceVpcMapStrToI["subnet_ids"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field subnet_ids")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								serviceVpc.SubnetIds = ls
 							}
@@ -403,12 +396,6 @@ func resourceVolterraCloudTransitGatewayCreate(d *schema.ResourceData, meta inte
 
 						}
 					}
-
-				}
-
-				if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
-
-					cloudChoiceInt.Aws.TgwAsn = uint32(v.(int))
 
 				}
 
@@ -549,12 +536,6 @@ func resourceVolterraCloudTransitGatewayCreate(d *schema.ResourceData, meta inte
 
 						}
 					}
-
-				}
-
-				if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
-
-					cloudChoiceInt.Aws.VolterraSiteAsn = uint32(v.(int))
 
 				}
 
@@ -664,7 +645,7 @@ func resourceVolterraCloudTransitGatewayUpdate(d *schema.ResourceData, meta inte
 
 	cloudChoiceTypeFound := false
 
-	if v, ok := d.GetOk("aws"); ok && !cloudChoiceTypeFound {
+	if v, ok := d.GetOk("aws"); ok && !isIntfNil(v) && !cloudChoiceTypeFound {
 
 		cloudChoiceTypeFound = true
 		cloudChoiceInt := &ves_io_schema_cloud_transit_gateway.ReplaceSpecType_Aws{}
@@ -742,7 +723,12 @@ func resourceVolterraCloudTransitGatewayUpdate(d *schema.ResourceData, meta inte
 							if w, ok := serviceVpcMapStrToI["subnet_ids"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field subnet_ids")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								serviceVpc.SubnetIds = ls
 							}
@@ -753,12 +739,6 @@ func resourceVolterraCloudTransitGatewayUpdate(d *schema.ResourceData, meta inte
 
 						}
 					}
-
-				}
-
-				if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
-
-					cloudChoiceInt.Aws.TgwAsn = uint32(v.(int))
 
 				}
 
@@ -902,12 +882,6 @@ func resourceVolterraCloudTransitGatewayUpdate(d *schema.ResourceData, meta inte
 
 				}
 
-				if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
-
-					cloudChoiceInt.Aws.VolterraSiteAsn = uint32(v.(int))
-
-				}
-
 			}
 		}
 
@@ -939,5 +913,8 @@ func resourceVolterraCloudTransitGatewayDelete(d *schema.ResourceData, meta inte
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra CloudTransitGateway obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_cloud_transit_gateway.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_cloud_transit_gateway.ObjectType, namespace, name, opts...)
 }

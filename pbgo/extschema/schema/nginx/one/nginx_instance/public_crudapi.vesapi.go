@@ -1273,25 +1273,6 @@ var APISwaggerJSON string = `{
                 }
             }
         },
-        "nginx_instanceDataplaneIdentifier": {
-            "type": "object",
-            "x-ves-oneof-field-dataplane_id": "[\"csg_object_id\",\"instance_object_id\"]",
-            "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_instance.DataplaneIdentifier",
-            "properties": {
-                "csg_object_id": {
-                    "type": "string",
-                    "description": "Exclusive with [instance_object_id]\n The unique identifier for NGINX instance config sync group in N1 backend",
-                    "title": "csgObjectID",
-                    "x-displayname": "Config Sync Group ObjectID"
-                },
-                "instance_object_id": {
-                    "type": "string",
-                    "description": "Exclusive with [csg_object_id]\n The unique identifier for NGINX instance in N1 backend.",
-                    "title": "instanceObjectID",
-                    "x-displayname": "InstanceObjectID"
-                }
-            }
-        },
         "nginx_instanceGetResponse": {
             "type": "object",
             "description": "This is the output message of the 'Get' RPC",
@@ -1370,10 +1351,10 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/nginx_instanceAPIDiscoverySpec",
                     "x-displayname": "APIDiscoverySpec"
                 },
-                "dataplane_id": {
-                    "description": " Dataplane identifier - individual instance or config sync group",
-                    "$ref": "#/definitions/nginx_instanceDataplaneIdentifier",
-                    "x-displayname": "DataplaneIdentifier"
+                "object_id": {
+                    "type": "string",
+                    "description": " Identifier for individual instance in NGINX One",
+                    "x-displayname": "ObjectId"
                 },
                 "waf_spec": {
                     "description": " If specified, the value signifies the WAF configuration in the global context",
@@ -1497,13 +1478,40 @@ var APISwaggerJSON string = `{
         },
         "nginx_instanceWAFSpec": {
             "type": "object",
+            "x-ves-oneof-field-policy_management_platform": "[\"distributed_cloud_policy_management\",\"nginx_policy_management\"]",
+            "x-ves-oneof-field-waf_mode": "[\"blocking_waf_mode\",\"monitoring_waf_mode\",\"none_waf_mode\"]",
             "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_instance.WAFSpec",
             "properties": {
+                "blocking_waf_mode": {
+                    "description": "Exclusive with [monitoring_waf_mode none_waf_mode]\n",
+                    "title": "x-displayName: \"Blocking\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "distributed_cloud_policy_management": {
+                    "description": "Exclusive with [nginx_policy_management]\n",
+                    "title": "x-displayName: \"Distributed Cloud\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "monitoring_waf_mode": {
+                    "description": "Exclusive with [blocking_waf_mode none_waf_mode]\n",
+                    "title": "x-displayName: \"Monitoring\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "nginx_policy_management": {
+                    "description": "Exclusive with [distributed_cloud_policy_management]\n",
+                    "title": "x-displayName: \"NGINX\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "none_waf_mode": {
+                    "description": "Exclusive with [blocking_waf_mode monitoring_waf_mode]\n",
+                    "title": "x-displayName: \"None\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "policy_file_name": {
                     "type": "string",
                     "description": " Policy file name for WAF\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "policy_file_name",
-                    "x-displayname": "PolicyFileName",
+                    "x-displayname": "WAF Policy File Name",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -1514,7 +1522,7 @@ var APISwaggerJSON string = `{
                     "description": " Specifies if security logging is enabled",
                     "title": "security_log_enabled",
                     "format": "boolean",
-                    "x-displayname": "SecurityLogEnabled"
+                    "x-displayname": "WAF Log Enabled"
                 },
                 "security_log_file_names": {
                     "type": "array",
@@ -1523,7 +1531,7 @@ var APISwaggerJSON string = `{
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "SecurityLogFileNames"
+                    "x-displayname": "WAF Log File Names"
                 }
             }
         },

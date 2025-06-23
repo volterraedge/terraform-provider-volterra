@@ -23,7 +23,7 @@ resource "volterra_fast_acl_rule" "example" {
   action {
     // One of the arguments from this list "policer_action protocol_policer_action simple_action" can be set
 
-    policer_action {
+    protocol_policer_action {
       ref {
         name      = "test1"
         namespace = "staging"

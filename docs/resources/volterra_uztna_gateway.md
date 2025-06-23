@@ -29,7 +29,7 @@ resource "volterra_uztna_gateway" "example" {
   }
 
   listeners {
-    // One of the arguments from this list "ipv4 ipv6" can be set
+    // One of the arguments from this list "ipv4" can be set
 
     ipv4 = "ipv4"
   }
@@ -58,23 +58,21 @@ Argument Reference
 
 `big_ip_instance` - (Required) BIG-IP Instance.. See [Big Ip Instance ](#big-ip-instance) below for details.
 
-`listeners` - (Required) BIG-IP Edge Gateway Listener.. See [Listeners ](#listeners) below for details.
+`listeners` - (Required) The IP address assigned to the Private Gateway when configured as an endpoint for the Access FQDN. See [Listeners ](#listeners) below for details.
 
 ### Big Ip Instance
 
 BIG-IP Instance..
 
-`bigip_site` - (Required) Selected BIG-IP Instance. See [ref](#ref) below for details.
+`bigip_site` - (Required) Select private gateway instance. See [ref](#ref) below for details.
 
 ### Listeners
 
-BIG-IP Edge Gateway Listener..
+The IP address assigned to the Private Gateway when configured as an endpoint for the Access FQDN.
 
-###### One of the arguments from this list "ipv4, ipv6" can be set
+###### One of the arguments from this list "ipv4" can be set
 
 `ipv4` - (Optional) IPv4 Address (`String`).
-
-`ipv6` - (Optional) IPv6 Address (`String`).
 
 ### Ref
 

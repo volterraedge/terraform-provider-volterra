@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.enhanced_firewall_policy.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.enhanced_firewall_policy.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2964,9 +2964,9 @@ var APISwaggerJSON string = `{
                 },
                 "destination_prefix_list": {
                     "description": "Exclusive with [all_destinations all_sli_vips all_slo_vips destination_aws_vpc_ids destination_ip_prefix_set destination_label_selector inside_destinations outside_destinations]\n Addresses that match one of the prefix in the list\n\nExample: - \"192.168.20.0/24\"-",
-                    "title": "ipv4 prefix list",
+                    "title": "IP Prefix List",
                     "$ref": "#/definitions/viewsPrefixStringListType",
-                    "x-displayname": "IPv4 Prefix List",
+                    "x-displayname": "IP Prefix List",
                     "x-ves-example": "192.168.20.0/24"
                 },
                 "insert_service": {
@@ -3973,6 +3973,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

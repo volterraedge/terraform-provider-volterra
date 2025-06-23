@@ -1434,6 +1434,16 @@ var CustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/cloud_connectCloudConnectData"
                     },
                     "x-displayname": "Cloud Connect"
+                },
+                "step": {
+                    "type": "string",
+                    "description": " Actual step size used in the response. It could be higher than the requested step due to metric rollups and the query duration.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n\nExample: - \"30m\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
+                    "title": "step",
+                    "x-displayname": "Step",
+                    "x-ves-example": "30m",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.time_interval": "true"
+                    }
                 }
             }
         },
@@ -1674,12 +1684,14 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "limit": {
                     "type": "integer",
-                    "description": " Limits the number of results\n Default 20000\n\nExample: - \"5\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 100\n",
+                    "description": " Limits the number of results\n Default 20000\n\nExample: - \"5\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 100\n",
                     "title": "Limit",
                     "format": "int64",
                     "x-displayname": "Limit",
                     "x-ves-example": "5",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "0",
                         "ves.io.schema.rules.uint32.lte": "100"
                     }
@@ -1710,6 +1722,16 @@ var CustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/cloud_connectTopCloudConnectData"
                     },
                     "x-displayname": "CloudConnectData"
+                },
+                "step": {
+                    "type": "string",
+                    "description": " Actual step size used in the response. It could be higher than the requested step due to metric rollups and the query duration.\n Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days\n\nExample: - \"30m\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.time_interval: true\n",
+                    "title": "step",
+                    "x-displayname": "Step",
+                    "x-ves-example": "30m",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.time_interval": "true"
+                    }
                 }
             }
         },

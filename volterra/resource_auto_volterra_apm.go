@@ -309,42 +309,6 @@ func resourceVolterraApm() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
-															"blindfold_secret_info_internal": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"decryption_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"store_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"secret_encoding_type": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -387,66 +351,6 @@ func resourceVolterraApm() *schema.Resource {
 																		"url": {
 																			Type:     schema.TypeString,
 																			Required: true,
-																		},
-																	},
-																},
-															},
-
-															"vault_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"key": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"provider": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"secret_encoding": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"version": {
-																			Type:       schema.TypeInt,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"wingman_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"name": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -714,42 +618,6 @@ func resourceVolterraApm() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
-															"blindfold_secret_info_internal": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"decryption_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"store_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"secret_encoding_type": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -792,66 +660,6 @@ func resourceVolterraApm() *schema.Resource {
 																		"url": {
 																			Type:     schema.TypeString,
 																			Required: true,
-																		},
-																	},
-																},
-															},
-
-															"vault_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"key": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"provider": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"secret_encoding": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"version": {
-																			Type:       schema.TypeInt,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"wingman_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"name": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1119,42 +927,6 @@ func resourceVolterraApm() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
-															"blindfold_secret_info_internal": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"decryption_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"store_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"secret_encoding_type": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -1197,66 +969,6 @@ func resourceVolterraApm() *schema.Resource {
 																		"url": {
 																			Type:     schema.TypeString,
 																			Required: true,
-																		},
-																	},
-																},
-															},
-
-															"vault_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"key": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"provider": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"secret_encoding": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"version": {
-																			Type:       schema.TypeInt,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"wingman_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"name": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1524,42 +1236,6 @@ func resourceVolterraApm() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
-															"blindfold_secret_info_internal": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"decryption_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"store_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"secret_encoding_type": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -1602,66 +1278,6 @@ func resourceVolterraApm() *schema.Resource {
 																		"url": {
 																			Type:     schema.TypeString,
 																			Required: true,
-																		},
-																	},
-																},
-															},
-
-															"vault_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"key": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"provider": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"secret_encoding": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"version": {
-																			Type:       schema.TypeInt,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"wingman_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"name": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1736,83 +1352,9 @@ func resourceVolterraApm() *schema.Resource {
 							},
 						},
 
-						"disable_local": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"do_not_advertise_on_internet": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
 						"domain_suffix": {
 							Type:     schema.TypeString,
 							Required: true,
-						},
-
-						"advertise_on_public": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"public_ip": {
-
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"kind": {
-													Type:       schema.TypeString,
-													Computed:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"name": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-												"namespace": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-												"tenant": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
-								},
-							},
-						},
-
-						"advertise_on_public_default_vip": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"do_not_advertise": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"default_https_port": {
@@ -1853,42 +1395,6 @@ func resourceVolterraApm() *schema.Resource {
 										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
-
-												"blindfold_secret_info_internal": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"decryption_provider": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"location": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"store_provider": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-														},
-													},
-												},
-
-												"secret_encoding_type": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
 
 												"blindfold_secret_info": {
 
@@ -1932,66 +1438,6 @@ func resourceVolterraApm() *schema.Resource {
 															"url": {
 																Type:     schema.TypeString,
 																Required: true,
-															},
-														},
-													},
-												},
-
-												"vault_secret_info": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"key": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"location": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"provider": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"secret_encoding": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"version": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-														},
-													},
-												},
-
-												"wingman_secret_info": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"name": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -2292,42 +1738,6 @@ func resourceVolterraApm() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"blindfold_secret_info_internal": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"decryption_provider": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"location": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"store_provider": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-														},
-													},
-												},
-
-												"secret_encoding_type": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
 												"blindfold_secret_info": {
 
 													Type:     schema.TypeList,
@@ -2370,66 +1780,6 @@ func resourceVolterraApm() *schema.Resource {
 															"url": {
 																Type:     schema.TypeString,
 																Required: true,
-															},
-														},
-													},
-												},
-
-												"vault_secret_info": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"key": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"location": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"provider": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"secret_encoding": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"version": {
-																Type:       schema.TypeInt,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-														},
-													},
-												},
-
-												"wingman_secret_info": {
-
-													Type:       schema.TypeList,
-													MaxItems:   1,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"name": {
-																Type:       schema.TypeString,
-																Required:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -2493,42 +1843,6 @@ func resourceVolterraApm() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
-															"blindfold_secret_info_internal": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"decryption_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"store_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"secret_encoding_type": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -2571,66 +1885,6 @@ func resourceVolterraApm() *schema.Resource {
 																		"url": {
 																			Type:     schema.TypeString,
 																			Required: true,
-																		},
-																	},
-																},
-															},
-
-															"vault_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"key": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"provider": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"secret_encoding": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"version": {
-																			Type:       schema.TypeInt,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"wingman_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"name": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2843,7 +2097,7 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 	httpManagementChoiceTypeFound := false
 
-	if v, ok := d.GetOk("https_management"); ok && !httpManagementChoiceTypeFound {
+	if v, ok := d.GetOk("https_management"); ok && !isIntfNil(v) && !httpManagementChoiceTypeFound {
 
 		httpManagementChoiceTypeFound = true
 		httpManagementChoiceInt := &ves_io_schema_bigip_apm.CreateSpecType_HttpsManagement{}
@@ -3083,6 +2337,9 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+															}
 															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 														}
 														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -3135,6 +2392,9 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+															}
 															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
 														}
 														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
@@ -3146,7 +2406,7 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
@@ -3155,7 +2415,7 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
@@ -3172,38 +2432,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 											for _, set := range sl {
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
-
-													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															if set != nil {
-																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.Location = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
 
 													secretInfoOneofTypeFound := false
 
@@ -3271,76 +2499,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 													}
 
-													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																}
-
-																if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																}
-
-																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																}
-
-																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																}
-
-																if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
 												}
 											}
 
@@ -3378,7 +2536,12 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -3618,6 +2781,9 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+															}
 															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 														}
 														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -3670,6 +2836,9 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+															}
 															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
 														}
 														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
@@ -3681,7 +2850,7 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
@@ -3690,7 +2859,7 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
@@ -3707,38 +2876,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 											for _, set := range sl {
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
-
-													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															if set != nil {
-																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.Location = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
 
 													secretInfoOneofTypeFound := false
 
@@ -3806,76 +2943,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 													}
 
-													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																}
-
-																if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																}
-
-																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																}
-
-																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																}
-
-																if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
 												}
 											}
 
@@ -3913,7 +2980,12 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -4153,6 +3225,9 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+															}
 															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 														}
 														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -4205,6 +3280,9 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+															}
 															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
 														}
 														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
@@ -4216,7 +3294,7 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
@@ -4225,7 +3303,7 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
@@ -4242,38 +3320,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 											for _, set := range sl {
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
-
-													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															if set != nil {
-																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.Location = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
 
 													secretInfoOneofTypeFound := false
 
@@ -4341,76 +3387,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 													}
 
-													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																}
-
-																if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																}
-
-																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																}
-
-																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																}
-
-																if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
 												}
 											}
 
@@ -4448,7 +3424,12 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -4688,6 +3669,9 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+															}
 															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 														}
 														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -4740,6 +3724,9 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+															}
 															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
 														}
 														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
@@ -4751,7 +3738,7 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
@@ -4760,7 +3747,7 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
@@ -4777,38 +3764,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 											for _, set := range sl {
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
-
-													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															if set != nil {
-																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.Location = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
 
 													secretInfoOneofTypeFound := false
 
@@ -4876,76 +3831,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 													}
 
-													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																}
-
-																if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																}
-
-																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																}
-
-																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																}
-
-																if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
 												}
 											}
 
@@ -4983,7 +3868,12 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -5052,102 +3942,9 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 				}
 
-				if v, ok := cs["disable_local"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
-
-					advertiseChoiceTypeFound = true
-
-					if v.(bool) {
-						advertiseChoiceInt := &ves_io_schema_nfv_service.ServiceHttpsManagementType_DisableLocal{}
-						advertiseChoiceInt.DisableLocal = &ves_io_schema.Empty{}
-						httpManagementChoiceInt.HttpsManagement.AdvertiseChoice = advertiseChoiceInt
-					}
-
-				}
-
-				if v, ok := cs["do_not_advertise_on_internet"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
-
-					advertiseChoiceTypeFound = true
-
-					if v.(bool) {
-						advertiseChoiceInt := &ves_io_schema_nfv_service.ServiceHttpsManagementType_DoNotAdvertiseOnInternet{}
-						advertiseChoiceInt.DoNotAdvertiseOnInternet = &ves_io_schema.Empty{}
-						httpManagementChoiceInt.HttpsManagement.AdvertiseChoice = advertiseChoiceInt
-					}
-
-				}
-
 				if v, ok := cs["domain_suffix"]; ok && !isIntfNil(v) {
 
 					httpManagementChoiceInt.HttpsManagement.DomainSuffix = v.(string)
-
-				}
-
-				internetChoiceTypeFound := false
-
-				if v, ok := cs["advertise_on_public"]; ok && !isIntfNil(v) && !internetChoiceTypeFound {
-
-					internetChoiceTypeFound = true
-					internetChoiceInt := &ves_io_schema_nfv_service.ServiceHttpsManagementType_AdvertiseOnPublic{}
-					internetChoiceInt.AdvertiseOnPublic = &ves_io_schema_views.AdvertisePublic{}
-					httpManagementChoiceInt.HttpsManagement.InternetChoice = internetChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								publicIp := &ves_io_schema_views.ObjectRefType{}
-								internetChoiceInt.AdvertiseOnPublic.PublicIp = publicIp
-								for _, set := range sl {
-									if set != nil {
-										publicIpMapStrToI := set.(map[string]interface{})
-
-										if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
-											publicIp.Name = w.(string)
-										}
-
-										if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
-											publicIp.Namespace = w.(string)
-										}
-
-										if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
-											publicIp.Tenant = w.(string)
-										}
-
-									}
-								}
-
-							}
-
-						}
-					}
-
-				}
-
-				if v, ok := cs["advertise_on_public_default_vip"]; ok && !isIntfNil(v) && !internetChoiceTypeFound {
-
-					internetChoiceTypeFound = true
-
-					if v.(bool) {
-						internetChoiceInt := &ves_io_schema_nfv_service.ServiceHttpsManagementType_AdvertiseOnPublicDefaultVip{}
-						internetChoiceInt.AdvertiseOnPublicDefaultVip = &ves_io_schema.Empty{}
-						httpManagementChoiceInt.HttpsManagement.InternetChoice = internetChoiceInt
-					}
-
-				}
-
-				if v, ok := cs["do_not_advertise"]; ok && !isIntfNil(v) && !internetChoiceTypeFound {
-
-					internetChoiceTypeFound = true
-
-					if v.(bool) {
-						internetChoiceInt := &ves_io_schema_nfv_service.ServiceHttpsManagementType_DoNotAdvertise{}
-						internetChoiceInt.DoNotAdvertise = &ves_io_schema.Empty{}
-						httpManagementChoiceInt.HttpsManagement.InternetChoice = internetChoiceInt
-					}
 
 				}
 
@@ -5185,7 +3982,7 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 	siteTypeChoiceTypeFound := false
 
-	if v, ok := d.GetOk("aws_site_type_choice"); ok && !siteTypeChoiceTypeFound {
+	if v, ok := d.GetOk("aws_site_type_choice"); ok && !isIntfNil(v) && !siteTypeChoiceTypeFound {
 
 		siteTypeChoiceTypeFound = true
 		siteTypeChoiceInt := &ves_io_schema_bigip_apm.CreateSpecType_AwsSiteTypeChoice{}
@@ -5214,38 +4011,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 								for _, set := range sl {
 									if set != nil {
 										adminPasswordMapStrToI := set.(map[string]interface{})
-
-										if v, ok := adminPasswordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-											adminPassword.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-											for _, set := range sl {
-												if set != nil {
-													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.Location = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.StoreProvider = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := adminPasswordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-											adminPassword.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-										}
 
 										secretInfoOneofTypeFound := false
 
@@ -5305,76 +4070,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := adminPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-											secretInfoOneofTypeFound = true
-											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-											adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-													}
-
-													if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-													}
-
-													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-													}
-
-													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
-
-													if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := adminPasswordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-											secretInfoOneofTypeFound = true
-											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-											adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 													}
 
@@ -5520,7 +4215,12 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ports")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														tcpPortChoiceInt.CustomTcpPorts.Ports = ls
 
@@ -5597,7 +4297,12 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ports")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														udpPortChoiceInt.CustomUdpPorts.Ports = ls
 
@@ -5813,7 +4518,7 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 	}
 
-	if v, ok := d.GetOk("baremetal_site_type_choice"); ok && !siteTypeChoiceTypeFound {
+	if v, ok := d.GetOk("baremetal_site_type_choice"); ok && !isIntfNil(v) && !siteTypeChoiceTypeFound {
 
 		siteTypeChoiceTypeFound = true
 		siteTypeChoiceInt := &ves_io_schema_bigip_apm.CreateSpecType_BaremetalSiteTypeChoice{}
@@ -5842,38 +4547,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 								for _, set := range sl {
 									if set != nil {
 										adminPasswordMapStrToI := set.(map[string]interface{})
-
-										if v, ok := adminPasswordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-											adminPassword.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-											for _, set := range sl {
-												if set != nil {
-													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.Location = w.(string)
-													}
-
-													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-														blindfoldSecretInfoInternal.StoreProvider = w.(string)
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := adminPasswordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-											adminPassword.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-										}
 
 										secretInfoOneofTypeFound := false
 
@@ -5941,76 +4614,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if v, ok := adminPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-											secretInfoOneofTypeFound = true
-											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-											adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-													}
-
-													if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-													}
-
-													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-													}
-
-													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
-
-													if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-													}
-
-												}
-											}
-
-										}
-
-										if v, ok := adminPasswordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-											secretInfoOneofTypeFound = true
-											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-											adminPassword.SecretInfoOneof = secretInfoOneofInt
-
-											sl := v.([]interface{})
-											for _, set := range sl {
-												if set != nil {
-													cs := set.(map[string]interface{})
-
-													if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-													}
-
-												}
-											}
-
-										}
-
 									}
 								}
 
@@ -6070,38 +4673,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 												if set != nil {
 													passwordMapStrToI := set.(map[string]interface{})
 
-													if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															if set != nil {
-																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.Location = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
-
 													secretInfoOneofTypeFound := false
 
 													if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -6160,76 +4731,6 @@ func resourceVolterraApmCreate(d *schema.ResourceData, meta interface{}) error {
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														password.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																}
-
-																if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																}
-
-																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																}
-
-																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																}
-
-																if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														password.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -6498,7 +4999,7 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	httpManagementChoiceTypeFound := false
 
-	if v, ok := d.GetOk("https_management"); ok && !httpManagementChoiceTypeFound {
+	if v, ok := d.GetOk("https_management"); ok && !isIntfNil(v) && !httpManagementChoiceTypeFound {
 
 		httpManagementChoiceTypeFound = true
 		httpManagementChoiceInt := &ves_io_schema_bigip_apm.ReplaceSpecType_HttpsManagement{}
@@ -6738,6 +5239,9 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+															}
 															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 														}
 														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -6790,6 +5294,9 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+															}
 															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
 														}
 														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
@@ -6801,7 +5308,7 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
@@ -6810,7 +5317,7 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
@@ -6827,38 +5334,6 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 											for _, set := range sl {
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
-
-													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															if set != nil {
-																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.Location = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
 
 													secretInfoOneofTypeFound := false
 
@@ -6926,76 +5401,6 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 													}
 
-													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																}
-
-																if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																}
-
-																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																}
-
-																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																}
-
-																if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
 												}
 											}
 
@@ -7033,7 +5438,12 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -7273,6 +5683,9 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+															}
 															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 														}
 														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -7325,6 +5738,9 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+															}
 															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
 														}
 														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
@@ -7336,7 +5752,7 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
@@ -7345,7 +5761,7 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
@@ -7362,38 +5778,6 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 											for _, set := range sl {
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
-
-													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															if set != nil {
-																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.Location = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
 
 													secretInfoOneofTypeFound := false
 
@@ -7461,76 +5845,6 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 													}
 
-													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																}
-
-																if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																}
-
-																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																}
-
-																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																}
-
-																if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
 												}
 											}
 
@@ -7568,7 +5882,12 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -7808,6 +6127,9 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+															}
 															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 														}
 														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -7860,6 +6182,9 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+															}
 															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
 														}
 														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
@@ -7871,7 +6196,7 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
@@ -7880,7 +6205,7 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
@@ -7897,38 +6222,6 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 											for _, set := range sl {
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
-
-													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															if set != nil {
-																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.Location = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
 
 													secretInfoOneofTypeFound := false
 
@@ -7996,76 +6289,6 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 													}
 
-													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																}
-
-																if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																}
-
-																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																}
-
-																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																}
-
-																if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
 												}
 											}
 
@@ -8103,7 +6326,12 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -8343,6 +6571,9 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+															}
 															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 														}
 														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -8395,6 +6626,9 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+															}
 															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
 														}
 														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
@@ -8406,7 +6640,7 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
@@ -8415,7 +6649,7 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
@@ -8432,38 +6666,6 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 											for _, set := range sl {
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
-
-													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															if set != nil {
-																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.Location = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
 
 													secretInfoOneofTypeFound := false
 
@@ -8531,76 +6733,6 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 													}
 
-													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																}
-
-																if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																}
-
-																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																}
-
-																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																}
-
-																if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
 												}
 											}
 
@@ -8638,7 +6770,12 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -8707,102 +6844,9 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 				}
 
-				if v, ok := cs["disable_local"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
-
-					advertiseChoiceTypeFound = true
-
-					if v.(bool) {
-						advertiseChoiceInt := &ves_io_schema_nfv_service.ServiceHttpsManagementType_DisableLocal{}
-						advertiseChoiceInt.DisableLocal = &ves_io_schema.Empty{}
-						httpManagementChoiceInt.HttpsManagement.AdvertiseChoice = advertiseChoiceInt
-					}
-
-				}
-
-				if v, ok := cs["do_not_advertise_on_internet"]; ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
-
-					advertiseChoiceTypeFound = true
-
-					if v.(bool) {
-						advertiseChoiceInt := &ves_io_schema_nfv_service.ServiceHttpsManagementType_DoNotAdvertiseOnInternet{}
-						advertiseChoiceInt.DoNotAdvertiseOnInternet = &ves_io_schema.Empty{}
-						httpManagementChoiceInt.HttpsManagement.AdvertiseChoice = advertiseChoiceInt
-					}
-
-				}
-
 				if v, ok := cs["domain_suffix"]; ok && !isIntfNil(v) {
 
 					httpManagementChoiceInt.HttpsManagement.DomainSuffix = v.(string)
-
-				}
-
-				internetChoiceTypeFound := false
-
-				if v, ok := cs["advertise_on_public"]; ok && !isIntfNil(v) && !internetChoiceTypeFound {
-
-					internetChoiceTypeFound = true
-					internetChoiceInt := &ves_io_schema_nfv_service.ServiceHttpsManagementType_AdvertiseOnPublic{}
-					internetChoiceInt.AdvertiseOnPublic = &ves_io_schema_views.AdvertisePublic{}
-					httpManagementChoiceInt.HttpsManagement.InternetChoice = internetChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["public_ip"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								publicIp := &ves_io_schema_views.ObjectRefType{}
-								internetChoiceInt.AdvertiseOnPublic.PublicIp = publicIp
-								for _, set := range sl {
-									if set != nil {
-										publicIpMapStrToI := set.(map[string]interface{})
-
-										if w, ok := publicIpMapStrToI["name"]; ok && !isIntfNil(w) {
-											publicIp.Name = w.(string)
-										}
-
-										if w, ok := publicIpMapStrToI["namespace"]; ok && !isIntfNil(w) {
-											publicIp.Namespace = w.(string)
-										}
-
-										if w, ok := publicIpMapStrToI["tenant"]; ok && !isIntfNil(w) {
-											publicIp.Tenant = w.(string)
-										}
-
-									}
-								}
-
-							}
-
-						}
-					}
-
-				}
-
-				if v, ok := cs["advertise_on_public_default_vip"]; ok && !isIntfNil(v) && !internetChoiceTypeFound {
-
-					internetChoiceTypeFound = true
-
-					if v.(bool) {
-						internetChoiceInt := &ves_io_schema_nfv_service.ServiceHttpsManagementType_AdvertiseOnPublicDefaultVip{}
-						internetChoiceInt.AdvertiseOnPublicDefaultVip = &ves_io_schema.Empty{}
-						httpManagementChoiceInt.HttpsManagement.InternetChoice = internetChoiceInt
-					}
-
-				}
-
-				if v, ok := cs["do_not_advertise"]; ok && !isIntfNil(v) && !internetChoiceTypeFound {
-
-					internetChoiceTypeFound = true
-
-					if v.(bool) {
-						internetChoiceInt := &ves_io_schema_nfv_service.ServiceHttpsManagementType_DoNotAdvertise{}
-						internetChoiceInt.DoNotAdvertise = &ves_io_schema.Empty{}
-						httpManagementChoiceInt.HttpsManagement.InternetChoice = internetChoiceInt
-					}
 
 				}
 
@@ -8838,7 +6882,7 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 	siteTypeChoiceTypeFound := false
 
-	if v, ok := d.GetOk("aws_site_type_choice"); ok && !siteTypeChoiceTypeFound {
+	if v, ok := d.GetOk("aws_site_type_choice"); ok && !isIntfNil(v) && !siteTypeChoiceTypeFound {
 
 		siteTypeChoiceTypeFound = true
 		siteTypeChoiceInt := &ves_io_schema_bigip_apm.ReplaceSpecType_AwsSiteTypeChoice{}
@@ -8924,7 +6968,12 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ports")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														tcpPortChoiceInt.CustomTcpPorts.Ports = ls
 
@@ -9001,7 +7050,12 @@ func resourceVolterraApmUpdate(d *schema.ResourceData, meta interface{}) error {
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ports")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														udpPortChoiceInt.CustomUdpPorts.Ports = ls
 
@@ -9082,5 +7136,8 @@ func resourceVolterraApmDelete(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra Apm obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_bigip_apm.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_bigip_apm.ObjectType, namespace, name, opts...)
 }

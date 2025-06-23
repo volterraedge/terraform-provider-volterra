@@ -28,9 +28,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.tunnel.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.tunnel.ReplaceResponse"] = ReplaceResponseValidator()
 
+	vr["ves.io.schema.tunnel.ConfigureType"] = ConfigureTypeValidator()
 	vr["ves.io.schema.tunnel.CreateSpecType"] = CreateSpecTypeValidator()
+	vr["ves.io.schema.tunnel.ESPProposal"] = ESPProposalValidator()
 	vr["ves.io.schema.tunnel.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.tunnel.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.tunnel.IKEProposal"] = IKEProposalValidator()
 	vr["ves.io.schema.tunnel.InterfaceType"] = InterfaceTypeValidator()
 	vr["ves.io.schema.tunnel.IpsecTunnelParams"] = IpsecTunnelParamsValidator()
 	vr["ves.io.schema.tunnel.LocalIpAddressSelector"] = LocalIpAddressSelectorValidator()
@@ -123,11 +126,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

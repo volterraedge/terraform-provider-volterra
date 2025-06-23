@@ -31,6 +31,10 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.rate_limiter.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.rate_limiter.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.rate_limiter.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.rate_limiter.InputHours"] = InputHoursValidator()
+	vr["ves.io.schema.rate_limiter.InputMinutes"] = InputMinutesValidator()
+	vr["ves.io.schema.rate_limiter.InputSeconds"] = InputSecondsValidator()
+	vr["ves.io.schema.rate_limiter.RateLimitBlockAction"] = RateLimitBlockActionValidator()
 	vr["ves.io.schema.rate_limiter.RateLimitValue"] = RateLimitValueValidator()
 	vr["ves.io.schema.rate_limiter.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 

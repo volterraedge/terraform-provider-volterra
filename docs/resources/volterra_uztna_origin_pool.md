@@ -27,10 +27,10 @@ resource "volterra_uztna_origin_pool" "example" {
   }
 
   origin_servers {
-    // One of the arguments from this list "private_ip private_name" must be set
+    // One of the arguments from this list "private_ip" must be set
 
     private_ip {
-      // One of the arguments from this list "ip ipv6" must be set
+      // One of the arguments from this list "ip" must be set
 
       ip = "8.8.8.8"
     }
@@ -84,11 +84,9 @@ loadbalancer_algorithm to determine which host is selected..
 
 List of origin servers in this pool.
 
-###### One of the arguments from this list "private_ip, private_name" must be set
+###### One of the arguments from this list "private_ip" must be set
 
 `private_ip` - (Optional) Specify origin server with private or public IP address and site information. See [Choice Private Ip ](#choice-private-ip) below for details.
-
-`private_name` - (Optional) Specify origin server with private or public DNS name and site information. See [Choice Private Name ](#choice-private-name) below for details.(Deprecated)
 
 `labels` - (Optional) Add Labels for this origin server, these labels can be used to form subset. (`String`).
 
@@ -106,19 +104,9 @@ Policy/Algorithm which each healthy/available upstream endpoint is selected in r
 
 Specify origin server with private or public IP address and site information.
 
-###### One of the arguments from this list "ip, ipv6" must be set
+###### One of the arguments from this list "ip" must be set
 
 `ip` - (Optional) Private IPV4 address (`String`).
-
-`ipv6` - (Optional) Private IPV6 address (`String`).
-
-### Choice Private Name
-
-Specify origin server with private or public DNS name and site information.
-
-`hostname` - (Required) DNS Name (`String`).
-
-`refresh_interval` - (Optional) Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767 (`Int`).
 
 ### Ref
 

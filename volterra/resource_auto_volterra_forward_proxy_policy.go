@@ -728,12 +728,6 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 													Optional: true,
 												},
 
-												"disable": {
-													Type:       schema.TypeBool,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
 												"name": {
 													Type:     schema.TypeString,
 													Required: true,
@@ -742,57 +736,10 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 										},
 									},
 
-									"rule_description": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"rule_name": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
 									"all_sources": {
 
 										Type:     schema.TypeBool,
 										Optional: true,
-									},
-
-									"inside_sources": {
-
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"interface": {
-
-										Type:       schema.TypeList,
-										MaxItems:   1,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"name": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-												"namespace": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-												"tenant": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
 									},
 
 									"ip_prefix_set": {
@@ -838,13 +785,6 @@ func resourceVolterraForwardProxyPolicy() *schema.Resource {
 												},
 											},
 										},
-									},
-
-									"namespace": {
-
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"prefix_list": {
@@ -1075,7 +1015,7 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 	}
 
-	if v, ok := d.GetOk("network_connector"); ok && !proxyChoiceTypeFound {
+	if v, ok := d.GetOk("network_connector"); ok && !isIntfNil(v) && !proxyChoiceTypeFound {
 
 		proxyChoiceTypeFound = true
 		proxyChoiceInt := &ves_io_schema_views_forward_proxy_policy.CreateSpecType_NetworkConnector{}
@@ -1110,7 +1050,7 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 	}
 
-	if v, ok := d.GetOk("proxy_label_selector"); ok && !proxyChoiceTypeFound {
+	if v, ok := d.GetOk("proxy_label_selector"); ok && !isIntfNil(v) && !proxyChoiceTypeFound {
 
 		proxyChoiceTypeFound = true
 		proxyChoiceInt := &ves_io_schema_views_forward_proxy_policy.CreateSpecType_ProxyLabelSelector{}
@@ -1126,7 +1066,12 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field expressions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					proxyChoiceInt.ProxyLabelSelector.Expressions = ls
 
@@ -1153,7 +1098,7 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 	}
 
-	if v, ok := d.GetOk("allow_list"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("allow_list"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_views_forward_proxy_policy.CreateSpecType_AllowList{}
@@ -1216,7 +1161,12 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 							if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								destList[i].Ipv6Prefixes = ls
 							}
@@ -1228,7 +1178,12 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 							if w, ok := destListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								destList[i].Prefixes = ls
 							}
@@ -1390,7 +1345,7 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 	}
 
-	if v, ok := d.GetOk("deny_list"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("deny_list"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_views_forward_proxy_policy.CreateSpecType_DenyList{}
@@ -1453,7 +1408,12 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 							if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								destList[i].Ipv6Prefixes = ls
 							}
@@ -1465,7 +1425,12 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 							if w, ok := destListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								destList[i].Prefixes = ls
 							}
@@ -1627,7 +1592,7 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 	}
 
-	if v, ok := d.GetOk("rule_list"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("rule_list"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_views_forward_proxy_policy.CreateSpecType_RuleList{}
@@ -1782,7 +1747,12 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field expressions")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DstLabelSelector.Expressions = ls
 
@@ -1809,7 +1779,12 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DstPrefixList.Ipv6Prefixes = ls
 
@@ -1819,7 +1794,12 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DstPrefixList.Prefixes = ls
 
@@ -2027,6 +2007,9 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 											url_categoriesList := []ves_io_schema_policy.URLCategory{}
 											for _, j := range v.([]interface{}) {
+												if j == nil {
+													return fmt.Errorf("please provide valid non-empty enum value of field url_categories")
+												}
 												url_categoriesList = append(url_categoriesList, ves_io_schema_policy.URLCategory(ves_io_schema_policy.URLCategory_value[j.(string)]))
 											}
 											destinationChoiceInt.UrlCategoryList.UrlCategories = url_categoriesList
@@ -2074,7 +2057,12 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ports")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											httpConnectChoiceInt.PortMatcher.Ports = ls
 
@@ -2098,10 +2086,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 											metadata.Description = w.(string)
 										}
 
-										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-											metadata.Disable = w.(bool)
-										}
-
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 											metadata.Name = w.(string)
 										}
@@ -2109,14 +2093,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 									}
 								}
 
-							}
-
-							if w, ok := rulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
-								rules[i].RuleDescription = w.(string)
-							}
-
-							if w, ok := rulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
-								rules[i].RuleName = w.(string)
 							}
 
 							sourceChoiceTypeFound := false
@@ -2129,53 +2105,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 									sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_AllSources{}
 									sourceChoiceInt.AllSources = &ves_io_schema.Empty{}
 									rules[i].SourceChoice = sourceChoiceInt
-								}
-
-							}
-
-							if v, ok := rulesMapStrToI["inside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-								sourceChoiceTypeFound = true
-
-								if v.(bool) {
-									sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_InsideSources{}
-									sourceChoiceInt.InsideSources = &ves_io_schema.Empty{}
-									rules[i].SourceChoice = sourceChoiceInt
-								}
-
-							}
-
-							if v, ok := rulesMapStrToI["interface"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-								sourceChoiceTypeFound = true
-								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_Interface{}
-								sourceChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
-								rules[i].SourceChoice = sourceChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-											sourceChoiceInt.Interface.Name = v.(string)
-
-										}
-
-										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-											sourceChoiceInt.Interface.Namespace = v.(string)
-
-										}
-
-										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-											sourceChoiceInt.Interface.Tenant = v.(string)
-
-										}
-
-									}
 								}
 
 							}
@@ -2231,7 +2160,12 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field expressions")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.LabelSelector.Expressions = ls
 
@@ -2239,17 +2173,6 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 									}
 								}
-
-							}
-
-							if v, ok := rulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-								sourceChoiceTypeFound = true
-								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_Namespace{}
-
-								rules[i].SourceChoice = sourceChoiceInt
-
-								sourceChoiceInt.Namespace = v.(string)
 
 							}
 
@@ -2269,7 +2192,12 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.PrefixList.Ipv6Prefixes = ls
 
@@ -2279,7 +2207,12 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.PrefixList.Prefixes = ls
 
@@ -2342,22 +2275,24 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									sMapToStrVal := ps.(map[string]interface{})
-									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+										sMapToStrVal := ps.(map[string]interface{})
+										segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Name = v.(string)
+										if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Name = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -2411,22 +2346,24 @@ func resourceVolterraForwardProxyPolicyCreate(d *schema.ResourceData, meta inter
 								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									sMapToStrVal := ps.(map[string]interface{})
-									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+										sMapToStrVal := ps.(map[string]interface{})
+										segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Name = v.(string)
+										if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Name = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -2566,7 +2503,7 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 	}
 
-	if v, ok := d.GetOk("network_connector"); ok && !proxyChoiceTypeFound {
+	if v, ok := d.GetOk("network_connector"); ok && !isIntfNil(v) && !proxyChoiceTypeFound {
 
 		proxyChoiceTypeFound = true
 		proxyChoiceInt := &ves_io_schema_views_forward_proxy_policy.ReplaceSpecType_NetworkConnector{}
@@ -2601,7 +2538,7 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 	}
 
-	if v, ok := d.GetOk("proxy_label_selector"); ok && !proxyChoiceTypeFound {
+	if v, ok := d.GetOk("proxy_label_selector"); ok && !isIntfNil(v) && !proxyChoiceTypeFound {
 
 		proxyChoiceTypeFound = true
 		proxyChoiceInt := &ves_io_schema_views_forward_proxy_policy.ReplaceSpecType_ProxyLabelSelector{}
@@ -2617,7 +2554,12 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field expressions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					proxyChoiceInt.ProxyLabelSelector.Expressions = ls
 
@@ -2642,7 +2584,7 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 	}
 
-	if v, ok := d.GetOk("allow_list"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("allow_list"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_views_forward_proxy_policy.ReplaceSpecType_AllowList{}
@@ -2705,7 +2647,12 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 							if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								destList[i].Ipv6Prefixes = ls
 							}
@@ -2717,7 +2664,12 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 							if w, ok := destListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								destList[i].Prefixes = ls
 							}
@@ -2879,7 +2831,7 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 	}
 
-	if v, ok := d.GetOk("deny_list"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("deny_list"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_views_forward_proxy_policy.ReplaceSpecType_DenyList{}
@@ -2942,7 +2894,12 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 							if w, ok := destListMapStrToI["ipv6_prefixes"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								destList[i].Ipv6Prefixes = ls
 							}
@@ -2954,7 +2911,12 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 							if w, ok := destListMapStrToI["prefixes"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								destList[i].Prefixes = ls
 							}
@@ -3116,7 +3078,7 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 	}
 
-	if v, ok := d.GetOk("rule_list"); ok && !ruleChoiceTypeFound {
+	if v, ok := d.GetOk("rule_list"); ok && !isIntfNil(v) && !ruleChoiceTypeFound {
 
 		ruleChoiceTypeFound = true
 		ruleChoiceInt := &ves_io_schema_views_forward_proxy_policy.ReplaceSpecType_RuleList{}
@@ -3271,7 +3233,12 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field expressions")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DstLabelSelector.Expressions = ls
 
@@ -3298,7 +3265,12 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DstPrefixList.Ipv6Prefixes = ls
 
@@ -3308,7 +3280,12 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											destinationChoiceInt.DstPrefixList.Prefixes = ls
 
@@ -3516,6 +3493,9 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 											url_categoriesList := []ves_io_schema_policy.URLCategory{}
 											for _, j := range v.([]interface{}) {
+												if j == nil {
+													return fmt.Errorf("please provide valid non-empty enum value of field url_categories")
+												}
 												url_categoriesList = append(url_categoriesList, ves_io_schema_policy.URLCategory(ves_io_schema_policy.URLCategory_value[j.(string)]))
 											}
 											destinationChoiceInt.UrlCategoryList.UrlCategories = url_categoriesList
@@ -3563,7 +3543,12 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ports")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											httpConnectChoiceInt.PortMatcher.Ports = ls
 
@@ -3587,10 +3572,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 											metadata.Description = w.(string)
 										}
 
-										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-											metadata.Disable = w.(bool)
-										}
-
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 											metadata.Name = w.(string)
 										}
@@ -3598,14 +3579,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 									}
 								}
 
-							}
-
-							if w, ok := rulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
-								rules[i].RuleDescription = w.(string)
-							}
-
-							if w, ok := rulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
-								rules[i].RuleName = w.(string)
 							}
 
 							sourceChoiceTypeFound := false
@@ -3618,53 +3591,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 									sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_AllSources{}
 									sourceChoiceInt.AllSources = &ves_io_schema.Empty{}
 									rules[i].SourceChoice = sourceChoiceInt
-								}
-
-							}
-
-							if v, ok := rulesMapStrToI["inside_sources"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-								sourceChoiceTypeFound = true
-
-								if v.(bool) {
-									sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_InsideSources{}
-									sourceChoiceInt.InsideSources = &ves_io_schema.Empty{}
-									rules[i].SourceChoice = sourceChoiceInt
-								}
-
-							}
-
-							if v, ok := rulesMapStrToI["interface"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-								sourceChoiceTypeFound = true
-								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_Interface{}
-								sourceChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
-								rules[i].SourceChoice = sourceChoiceInt
-
-								sl := v.([]interface{})
-								for _, set := range sl {
-									if set != nil {
-										cs := set.(map[string]interface{})
-
-										if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-											sourceChoiceInt.Interface.Name = v.(string)
-
-										}
-
-										if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-											sourceChoiceInt.Interface.Namespace = v.(string)
-
-										}
-
-										if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-											sourceChoiceInt.Interface.Tenant = v.(string)
-
-										}
-
-									}
 								}
 
 							}
@@ -3720,7 +3646,12 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field expressions")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.LabelSelector.Expressions = ls
 
@@ -3728,17 +3659,6 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 									}
 								}
-
-							}
-
-							if v, ok := rulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
-
-								sourceChoiceTypeFound = true
-								sourceChoiceInt := &ves_io_schema_views_forward_proxy_policy.ForwardProxyAdvancedRuleType_Namespace{}
-
-								rules[i].SourceChoice = sourceChoiceInt
-
-								sourceChoiceInt.Namespace = v.(string)
 
 							}
 
@@ -3758,7 +3678,12 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.PrefixList.Ipv6Prefixes = ls
 
@@ -3768,7 +3693,12 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											sourceChoiceInt.PrefixList.Prefixes = ls
 
@@ -3830,22 +3760,24 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									sMapToStrVal := ps.(map[string]interface{})
-									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+										sMapToStrVal := ps.(map[string]interface{})
+										segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Name = v.(string)
+										if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Name = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -3899,22 +3831,24 @@ func resourceVolterraForwardProxyPolicyUpdate(d *schema.ResourceData, meta inter
 								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									sMapToStrVal := ps.(map[string]interface{})
-									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+										sMapToStrVal := ps.(map[string]interface{})
+										segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Name = v.(string)
+										if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Name = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -3955,5 +3889,8 @@ func resourceVolterraForwardProxyPolicyDelete(d *schema.ResourceData, meta inter
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra ForwardProxyPolicy obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_views_forward_proxy_policy.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_views_forward_proxy_policy.ObjectType, namespace, name, opts...)
 }

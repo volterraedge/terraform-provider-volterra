@@ -865,6 +865,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["upstream_conn_pool_reuse_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("upstream_conn_pool_reuse_type"))
+		if err := fv(ctx, m.GetUpstreamConnPoolReuseType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -967,6 +976,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["outlier_detection"] = OutlierDetectionTypeValidator().Validate
 
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
+
+	v.FldValidators["upstream_conn_pool_reuse_type"] = ves_io_schema.UpstreamConnPoolReuseTypeValidator().Validate
 
 	return v
 }()
@@ -1776,6 +1787,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["upstream_conn_pool_reuse_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("upstream_conn_pool_reuse_type"))
+		if err := fv(ctx, m.GetUpstreamConnPoolReuseType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -1878,6 +1898,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["outlier_detection"] = OutlierDetectionTypeValidator().Validate
 
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
+
+	v.FldValidators["upstream_conn_pool_reuse_type"] = ves_io_schema.UpstreamConnPoolReuseTypeValidator().Validate
 
 	return v
 }()
@@ -2565,6 +2587,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["upstream_conn_pool_reuse_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("upstream_conn_pool_reuse_type"))
+		if err := fv(ctx, m.GetUpstreamConnPoolReuseType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -2667,6 +2698,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["outlier_detection"] = OutlierDetectionTypeValidator().Validate
 
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
+
+	v.FldValidators["upstream_conn_pool_reuse_type"] = ves_io_schema.UpstreamConnPoolReuseTypeValidator().Validate
 
 	return v
 }()
@@ -3695,6 +3728,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["upstream_conn_pool_reuse_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("upstream_conn_pool_reuse_type"))
+		if err := fv(ctx, m.GetUpstreamConnPoolReuseType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
@@ -3797,6 +3839,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["outlier_detection"] = OutlierDetectionTypeValidator().Validate
 
 	v.FldValidators["header_transformation_type"] = ves_io_schema.HeaderTransformationTypeValidator().Validate
+
+	v.FldValidators["upstream_conn_pool_reuse_type"] = ves_io_schema.UpstreamConnPoolReuseTypeValidator().Validate
 
 	return v
 }()
@@ -3942,6 +3986,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.GetPanicThresholdTypeFromGlobalSpecType(f)
 	m.GetProxyProtocolTypeFromGlobalSpecType(f)
 	m.TlsParameters = f.GetTlsParameters()
+	m.UpstreamConnPoolReuseType = f.GetUpstreamConnPoolReuseType()
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -3975,6 +4020,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	m1.SetPanicThresholdTypeToGlobalSpecType(f)
 	m1.SetProxyProtocolTypeToGlobalSpecType(f)
 	f.TlsParameters = m1.TlsParameters
+	f.UpstreamConnPoolReuseType = m1.UpstreamConnPoolReuseType
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -4158,6 +4204,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.GetPanicThresholdTypeFromGlobalSpecType(f)
 	m.GetProxyProtocolTypeFromGlobalSpecType(f)
 	m.TlsParameters = f.GetTlsParameters()
+	m.UpstreamConnPoolReuseType = f.GetUpstreamConnPoolReuseType()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -4192,6 +4239,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m1.SetPanicThresholdTypeToGlobalSpecType(f)
 	m1.SetProxyProtocolTypeToGlobalSpecType(f)
 	f.TlsParameters = m1.TlsParameters
+	f.UpstreamConnPoolReuseType = m1.UpstreamConnPoolReuseType
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -4339,6 +4387,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.GetPanicThresholdTypeFromGlobalSpecType(f)
 	m.GetProxyProtocolTypeFromGlobalSpecType(f)
 	m.TlsParameters = f.GetTlsParameters()
+	m.UpstreamConnPoolReuseType = f.GetUpstreamConnPoolReuseType()
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -4372,6 +4421,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	m1.SetPanicThresholdTypeToGlobalSpecType(f)
 	m1.SetProxyProtocolTypeToGlobalSpecType(f)
 	f.TlsParameters = m1.TlsParameters
+	f.UpstreamConnPoolReuseType = m1.UpstreamConnPoolReuseType
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

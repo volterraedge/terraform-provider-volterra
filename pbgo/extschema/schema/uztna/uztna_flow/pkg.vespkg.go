@@ -20,17 +20,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_flow.Object"] = ObjectValidator()
 	vr["ves.io.schema.uztna.uztna_flow.StatusObject"] = StatusObjectValidator()
 
-	vr["ves.io.schema.uztna.uztna_flow.CreateRequest"] = CreateRequestValidator()
-	vr["ves.io.schema.uztna.uztna_flow.CreateResponse"] = CreateResponseValidator()
-	vr["ves.io.schema.uztna.uztna_flow.DeleteRequest"] = DeleteRequestValidator()
-	vr["ves.io.schema.uztna.uztna_flow.GetRequest"] = GetRequestValidator()
-	vr["ves.io.schema.uztna.uztna_flow.GetResponse"] = GetResponseValidator()
-	vr["ves.io.schema.uztna.uztna_flow.ListRequest"] = ListRequestValidator()
-	vr["ves.io.schema.uztna.uztna_flow.ListResponse"] = ListResponseValidator()
-	vr["ves.io.schema.uztna.uztna_flow.ListResponseItem"] = ListResponseItemValidator()
-	vr["ves.io.schema.uztna.uztna_flow.ReplaceRequest"] = ReplaceRequestValidator()
-	vr["ves.io.schema.uztna.uztna_flow.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.uztna.uztna_flow.ApplicationTagging"] = ApplicationTaggingValidator()
 	vr["ves.io.schema.uztna.uztna_flow.AudienceUri"] = AudienceUriValidator()
 	vr["ves.io.schema.uztna.uztna_flow.Certificate"] = CertificateValidator()
@@ -67,18 +56,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_flow.API.Create"] = []string{
-		"spec.flow_type.saml_message.idp.name",
-	}
-
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_flow.API.Replace"] = []string{
-		"spec.flow_type.saml_message.idp.name",
-	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-	sm["ves.io.schema.uztna.uztna_flow.API"] = "config"
 
 }
 
@@ -98,24 +78,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 
-	csr = mdr.PubCRUDServiceRegistry
-
-	func() {
-		// set swagger jsons for our and external schemas
-		csr.CRUDSwaggerRegistry["ves.io.schema.uztna.uztna_flow.Object"] = APISwaggerJSON
-		csr.CRUDGrpcClientRegistry["ves.io.schema.uztna.uztna_flow.Object"] = NewCRUDAPIGrpcClient
-		csr.CRUDRestClientRegistry["ves.io.schema.uztna.uztna_flow.Object"] = NewCRUDAPIRestClient
-		csr.CRUDInprocClientRegistry["ves.io.schema.uztna.uztna_flow.Object"] = NewCRUDAPIInprocClient
-		if isExternal {
-			return
-		}
-		// registration of api handlers if our own schema
-		mdr.SvcRegisterHandlers["ves.io.schema.uztna.uztna_flow.API"] = RegisterAPIServer
-		mdr.SvcGwRegisterHandlers["ves.io.schema.uztna.uztna_flow.API"] = RegisterGwAPIHandler
-		csr.CRUDServerRegistry["ves.io.schema.uztna.uztna_flow.Object"] = NewCRUDAPIServer
-
-	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -123,11 +85,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

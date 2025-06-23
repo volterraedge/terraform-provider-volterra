@@ -1025,6 +1025,16 @@ func (v *ValidateNodePrefixType) PrefixValidationRuleHandler(rules map[string]st
 	return validatorFn, nil
 }
 
+func (v *ValidateNodePrefixType) RemotePrefixValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for remote_prefix")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateNodePrefixType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*NodePrefixType)
 	if !ok {
@@ -1043,6 +1053,15 @@ func (v *ValidateNodePrefixType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("prefix"))
 		if err := fv(ctx, m.GetPrefix(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["remote_prefix"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("remote_prefix"))
+		if err := fv(ctx, m.GetRemotePrefix(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1073,6 +1092,17 @@ var DefaultNodePrefixTypeValidator = func() *ValidateNodePrefixType {
 		panic(errMsg)
 	}
 	v.FldValidators["prefix"] = vFn
+
+	vrhRemotePrefix := v.RemotePrefixValidationRuleHandler
+	rulesRemotePrefix := map[string]string{
+		"ves.io.schema.rules.string.ipv4_prefix": "true",
+	}
+	vFn, err = vrhRemotePrefix(rulesRemotePrefix)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NodePrefixType.remote_prefix: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["remote_prefix"] = vFn
 
 	return v
 }()

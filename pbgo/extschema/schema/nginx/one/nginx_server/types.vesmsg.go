@@ -28,6 +28,251 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *DataplaneReference) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DataplaneReference) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DataplaneReference) DeepCopy() *DataplaneReference {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DataplaneReference{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DataplaneReference) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DataplaneReference) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DataplaneReferenceValidator().Validate(ctx, m, opts...)
+}
+
+func (m *DataplaneReference) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDataplaneRefDRefInfo()
+
+}
+
+func (m *DataplaneReference) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetDataplaneRef().(type) {
+	case *DataplaneReference_NginxInstance:
+
+		vref := m.GetNginxInstance()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("nginx_instance.Object")
+		dri := db.DRefInfo{
+			RefdType:   "nginx_instance.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "nginx_instance",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	case *DataplaneReference_NginxCsg:
+
+		vref := m.GetNginxCsg()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("nginx_csg.Object")
+		dri := db.DRefInfo{
+			RefdType:   "nginx_csg.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "nginx_csg",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetDataplaneRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *DataplaneReference) GetDataplaneRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetDataplaneRef().(type) {
+	case *DataplaneReference_NginxInstance:
+		refdType, err := d.TypeForEntryKind("", "", "nginx_instance.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: nginx_instance")
+		}
+
+		vref := m.GetNginxInstance()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "nginx_instance.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	case *DataplaneReference_NginxCsg:
+		refdType, err := d.TypeForEntryKind("", "", "nginx_csg.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: nginx_csg")
+		}
+
+		vref := m.GetNginxCsg()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "nginx_csg.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+type ValidateDataplaneReference struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDataplaneReference) DataplaneRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dataplane_ref")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateDataplaneReference) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DataplaneReference)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DataplaneReference got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["dataplane_ref"]; exists {
+		val := m.GetDataplaneRef()
+		vOpts := append(opts,
+			db.WithValidateField("dataplane_ref"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetDataplaneRef().(type) {
+	case *DataplaneReference_NginxInstance:
+		if fv, exists := v.FldValidators["dataplane_ref.nginx_instance"]; exists {
+			val := m.GetDataplaneRef().(*DataplaneReference_NginxInstance).NginxInstance
+			vOpts := append(opts,
+				db.WithValidateField("dataplane_ref"),
+				db.WithValidateField("nginx_instance"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *DataplaneReference_NginxCsg:
+		if fv, exists := v.FldValidators["dataplane_ref.nginx_csg"]; exists {
+			val := m.GetDataplaneRef().(*DataplaneReference_NginxCsg).NginxCsg
+			vOpts := append(opts,
+				db.WithValidateField("dataplane_ref"),
+				db.WithValidateField("nginx_csg"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDataplaneReferenceValidator = func() *ValidateDataplaneReference {
+	v := &ValidateDataplaneReference{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDataplaneRef := v.DataplaneRefValidationRuleHandler
+	rulesDataplaneRef := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhDataplaneRef(rulesDataplaneRef)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DataplaneReference.dataplane_ref: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dataplane_ref"] = vFn
+
+	v.FldValidators["dataplane_ref.nginx_instance"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+	v.FldValidators["dataplane_ref.nginx_csg"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func DataplaneReferenceValidator() db.Validator {
+	return DefaultDataplaneReferenceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetSpecType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -68,105 +313,30 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetNginxInstanceDRefInfo()
+	return m.GetDataplaneRefDRefInfo()
 
 }
 
-func (m *GetSpecType) GetNginxInstanceDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetNginxInstance()
-	if len(refs) == 0 {
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDataplaneRef() == nil {
 		return nil, nil
 	}
-	drInfos := make([]db.DRefInfo, 0, len(refs))
-	for i, ref := range refs {
-		if ref == nil {
-			return nil, fmt.Errorf("GetSpecType.nginx_instance[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "nginx_instance.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "nginx_instance",
-			Ref:        ref,
-		})
-	}
-	return drInfos, nil
 
-}
-
-// GetNginxInstanceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GetSpecType) GetNginxInstanceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "nginx_instance.Object")
+	drInfos, err := m.GetDataplaneRef().GetDRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: nginx_instance")
+		return nil, errors.Wrap(err, "GetDataplaneRef().GetDRefInfo() FAILED")
 	}
-	for _, ref := range m.GetNginxInstance() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "dataplane_ref." + dri.DRField
 	}
+	return drInfos, err
 
-	return entries, nil
 }
 
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
-}
-
-func (v *ValidateGetSpecType) NginxInstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for nginx_instance")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for nginx_instance")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated nginx_instance")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items nginx_instance")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
 }
 
 func (v *ValidateGetSpecType) ServerSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -190,6 +360,27 @@ func (v *ValidateGetSpecType) ServerSpecValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateGetSpecType) DataplaneRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for dataplane_ref")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := DataplaneReferenceValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GetSpecType)
 	if !ok {
@@ -204,9 +395,10 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["nginx_instance"]; exists {
-		vOpts := append(opts, db.WithValidateField("nginx_instance"))
-		if err := fv(ctx, m.GetNginxInstance(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["dataplane_ref"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dataplane_ref"))
+		if err := fv(ctx, m.GetDataplaneRef(), vOpts...); err != nil {
 			return err
 		}
 
@@ -236,18 +428,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhNginxInstance := v.NginxInstanceValidationRuleHandler
-	rulesNginxInstance := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhNginxInstance(rulesNginxInstance)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.nginx_instance: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["nginx_instance"] = vFn
-
 	vrhServerSpec := v.ServerSpecValidationRuleHandler
 	rulesServerSpec := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -258,6 +438,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["server_spec"] = vFn
+
+	vrhDataplaneRef := v.DataplaneRefValidationRuleHandler
+	rulesDataplaneRef := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDataplaneRef(rulesDataplaneRef)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.dataplane_ref: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dataplane_ref"] = vFn
 
 	return v
 }()
@@ -309,8 +500,8 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 	}
 
 	var drInfos []db.DRefInfo
-	if fdrInfos, err := m.GetNginxInstanceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetNginxInstanceDRefInfo() FAILED")
+	if fdrInfos, err := m.GetDataplaneRefDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetDataplaneRefDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -325,49 +516,22 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 }
 
-func (m *GlobalSpecType) GetNginxInstanceDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetNginxInstance()
-	if len(refs) == 0 {
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetDataplaneRefDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetDataplaneRef() == nil {
 		return nil, nil
 	}
-	drInfos := make([]db.DRefInfo, 0, len(refs))
-	for i, ref := range refs {
-		if ref == nil {
-			return nil, fmt.Errorf("GlobalSpecType.nginx_instance[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "nginx_instance.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "nginx_instance",
-			Ref:        ref,
-		})
-	}
-	return drInfos, nil
 
-}
-
-// GetNginxInstanceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *GlobalSpecType) GetNginxInstanceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "nginx_instance.Object")
+	drInfos, err := m.GetDataplaneRef().GetDRefInfo()
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: nginx_instance")
+		return nil, errors.Wrap(err, "GetDataplaneRef().GetDRefInfo() FAILED")
 	}
-	for _, ref := range m.GetNginxInstance() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
-		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
-		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
-		}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "dataplane_ref." + dri.DRField
 	}
+	return drInfos, err
 
-	return entries, nil
 }
 
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
@@ -423,54 +587,6 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGlobalSpecType) NginxInstanceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for nginx_instance")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for nginx_instance")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated nginx_instance")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items nginx_instance")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateGlobalSpecType) ServerSpecValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
@@ -483,6 +599,27 @@ func (v *ValidateGlobalSpecType) ServerSpecValidationRuleHandler(rules map[strin
 		}
 
 		if err := ServerValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGlobalSpecType) DataplaneRefValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for dataplane_ref")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := DataplaneReferenceValidator().Validate(ctx, val, opts...); err != nil {
 			return err
 		}
 
@@ -506,9 +643,10 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["nginx_instance"]; exists {
-		vOpts := append(opts, db.WithValidateField("nginx_instance"))
-		if err := fv(ctx, m.GetNginxInstance(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["dataplane_ref"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("dataplane_ref"))
+		if err := fv(ctx, m.GetDataplaneRef(), vOpts...); err != nil {
 			return err
 		}
 
@@ -547,18 +685,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhNginxInstance := v.NginxInstanceValidationRuleHandler
-	rulesNginxInstance := map[string]string{
-		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1",
-	}
-	vFn, err = vrhNginxInstance(rulesNginxInstance)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.nginx_instance: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["nginx_instance"] = vFn
-
 	vrhServerSpec := v.ServerSpecValidationRuleHandler
 	rulesServerSpec := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -569,6 +695,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["server_spec"] = vFn
+
+	vrhDataplaneRef := v.DataplaneRefValidationRuleHandler
+	rulesDataplaneRef := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDataplaneRef(rulesDataplaneRef)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.dataplane_ref: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dataplane_ref"] = vFn
 
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -869,6 +1006,16 @@ func (v *ValidateServer) LocationsValidationRuleHandler(rules map[string]string)
 	return validatorFn, nil
 }
 
+func (v *ValidateServer) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateServer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*Server)
 	if !ok {
@@ -903,6 +1050,51 @@ func (v *ValidateServer) Validate(ctx context.Context, pm interface{}, opts ...d
 	if fv, exists := v.FldValidators["locations"]; exists {
 		vOpts := append(opts, db.WithValidateField("locations"))
 		if err := fv(ctx, m.GetLocations(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nginx_one_object_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_one_object_id"))
+		if err := fv(ctx, m.GetNginxOneObjectId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nginx_one_object_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_one_object_name"))
+		if err := fv(ctx, m.GetNginxOneObjectName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["server_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("server_name"))
+		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["total_routes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("total_routes"))
+		if err := fv(ctx, m.GetTotalRoutes(), vOpts...); err != nil {
 			return err
 		}
 
@@ -954,6 +1146,18 @@ var DefaultServerValidator = func() *ValidateServer {
 	}
 	v.FldValidators["locations"] = vFn
 
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Server.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
+
 	v.FldValidators["waf_spec"] = ves_io_schema_nginx_one_nginx_instance.WAFSpecValidator().Validate
 
 	v.FldValidators["api_discovery_spec"] = ves_io_schema_nginx_one_nginx_instance.APIDiscoverySpecValidator().Validate
@@ -969,7 +1173,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
-	m.NginxInstance = f.GetNginxInstance()
+	m.DataplaneRef = f.GetDataplaneRef()
 	m.ServerSpec = f.GetServerSpec()
 }
 
@@ -988,7 +1192,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	}
 	_ = m1
 
-	f.NginxInstance = m1.NginxInstance
+	f.DataplaneRef = m1.DataplaneRef
 	f.ServerSpec = m1.ServerSpec
 }
 

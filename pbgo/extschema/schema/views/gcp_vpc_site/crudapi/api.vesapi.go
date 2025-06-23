@@ -5187,8 +5187,21 @@ var APISwaggerJSON string = `{
             "description": "Name of existing VPC network",
             "title": "GCP existing VPC network Type",
             "x-displayname": "GCP existing VPC network Type",
+            "x-ves-oneof-field-routing_type": "[\"f5_orchestrated_routing\",\"manual_routing\"]",
             "x-ves-proto-message": "ves.io.schema.views.GCPVPCNetworkType",
             "properties": {
+                "f5_orchestrated_routing": {
+                    "description": "Exclusive with [manual_routing]\n F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE.",
+                    "title": "F5 Orchestrated Routing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "F5 Orchestrated Routing"
+                },
+                "manual_routing": {
+                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. ",
+                    "title": "Manual Routing",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Manual Routing"
+                },
                 "name": {
                     "type": "string",
                     "description": " Name for your GCP VPC Network\n\nExample: - \"network1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",

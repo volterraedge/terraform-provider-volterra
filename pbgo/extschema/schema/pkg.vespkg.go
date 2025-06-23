@@ -97,6 +97,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.CloudElasticIpRefListType"] = CloudElasticIpRefListTypeValidator()
 	vr["ves.io.schema.ConditionType"] = ConditionTypeValidator()
 	vr["ves.io.schema.CookieManipulationOptionType"] = CookieManipulationOptionTypeValidator()
+	vr["ves.io.schema.CookieValueOption"] = CookieValueOptionValidator()
 	vr["ves.io.schema.CorsPolicy"] = CorsPolicyValidator()
 	vr["ves.io.schema.CsrfPolicy"] = CsrfPolicyValidator()
 	vr["ves.io.schema.DateRange"] = DateRangeValidator()
@@ -112,6 +113,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.HeaderMatcherType"] = HeaderMatcherTypeValidator()
 	vr["ves.io.schema.HeaderTransformationType"] = HeaderTransformationTypeValidator()
 	vr["ves.io.schema.HostIdentifier"] = HostIdentifierValidator()
+	vr["ves.io.schema.IPv4AddressRange"] = IPv4AddressRangeValidator()
+	vr["ves.io.schema.IPv6AddressRange"] = IPv6AddressRangeValidator()
 	vr["ves.io.schema.InitializerType"] = InitializerTypeValidator()
 	vr["ves.io.schema.InitializersType"] = InitializersTypeValidator()
 	vr["ves.io.schema.InterfaceIdentifier"] = InterfaceIdentifierValidator()
@@ -132,6 +135,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.NetworkSiteRefSelector"] = NetworkSiteRefSelectorValidator()
 	vr["ves.io.schema.NetworkingStackType"] = NetworkingStackTypeValidator()
 	vr["ves.io.schema.NextHopType"] = NextHopTypeValidator()
+	vr["ves.io.schema.NodeInterfaceInfo"] = NodeInterfaceInfoValidator()
+	vr["ves.io.schema.NodeInterfaceType"] = NodeInterfaceTypeValidator()
 	vr["ves.io.schema.ObjectCreateMetaType"] = ObjectCreateMetaTypeValidator()
 	vr["ves.io.schema.ObjectGetMetaType"] = ObjectGetMetaTypeValidator()
 	vr["ves.io.schema.ObjectMetaType"] = ObjectMetaTypeValidator()
@@ -157,6 +162,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.RouteTargetIPv4Addr"] = RouteTargetIPv4AddrValidator()
 	vr["ves.io.schema.SecretType"] = SecretTypeValidator()
 	vr["ves.io.schema.SegmentRefType"] = SegmentRefTypeValidator()
+	vr["ves.io.schema.SetCookieValueOption"] = SetCookieValueOptionValidator()
 	vr["ves.io.schema.SiteInfo"] = SiteInfoValidator()
 	vr["ves.io.schema.SiteRefType"] = SiteRefTypeValidator()
 	vr["ves.io.schema.SiteReferenceListType"] = SiteReferenceListTypeValidator()
@@ -174,6 +180,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.TlsValidationParamsType"] = TlsValidationParamsTypeValidator()
 	vr["ves.io.schema.TrendValue"] = TrendValueValidator()
 	vr["ves.io.schema.TrustedCAList"] = TrustedCAListValidator()
+	vr["ves.io.schema.UpstreamConnPoolReuseType"] = UpstreamConnPoolReuseTypeValidator()
 	vr["ves.io.schema.VSiteRefType"] = VSiteRefTypeValidator()
 	vr["ves.io.schema.VaultAccessInfoType"] = VaultAccessInfoTypeValidator()
 	vr["ves.io.schema.VaultAuthInfoType"] = VaultAuthInfoTypeValidator()
@@ -236,11 +243,14 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.LabelKeyClassList"] = LabelKeyClassListValidator()
 	vr["ves.io.schema.LabelSelectorOperatorList"] = LabelSelectorOperatorListValidator()
 	vr["ves.io.schema.MapOptions"] = MapOptionsValidator()
+	vr["ves.io.schema.MatchPath"] = MatchPathValidator()
 	vr["ves.io.schema.RepeatedOptions"] = RepeatedOptionsValidator()
 	vr["ves.io.schema.StoredObjectURL"] = StoredObjectURLValidator()
+	vr["ves.io.schema.SuffixText"] = SuffixTextValidator()
 	vr["ves.io.schema.SuggestedValues"] = SuggestedValuesValidator()
 	vr["ves.io.schema.Tile"] = TileValidator()
 	vr["ves.io.schema.Tiles"] = TilesValidator()
+	vr["ves.io.schema.ValueAtPath"] = ValueAtPathValidator()
 
 }
 
@@ -274,11 +284,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

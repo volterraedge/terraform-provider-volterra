@@ -216,6 +216,14 @@ type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateCreateSpecType) ReFallbackValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for re_fallback")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateCreateSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	var conv db.EnumConvFn
@@ -387,6 +395,42 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["re_fallback"]; exists {
+		val := m.GetReFallback()
+		vOpts := append(opts,
+			db.WithValidateField("re_fallback"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetReFallback().(type) {
+	case *CreateSpecType_EnableReFallback:
+		if fv, exists := v.FldValidators["re_fallback.enable_re_fallback"]; exists {
+			val := m.GetReFallback().(*CreateSpecType_EnableReFallback).EnableReFallback
+			vOpts := append(opts,
+				db.WithValidateField("re_fallback"),
+				db.WithValidateField("enable_re_fallback"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_DisableReFallback:
+		if fv, exists := v.FldValidators["re_fallback.disable_re_fallback"]; exists {
+			val := m.GetReFallback().(*CreateSpecType_DisableReFallback).DisableReFallback
+			vOpts := append(opts,
+				db.WithValidateField("re_fallback"),
+				db.WithValidateField("disable_re_fallback"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("type"))
@@ -418,6 +462,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhReFallback := v.ReFallbackValidationRuleHandler
+	rulesReFallback := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhReFallback(rulesReFallback)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.re_fallback: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["re_fallback"] = vFn
 
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
@@ -747,6 +802,14 @@ type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGetSpecType) ReFallbackValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for re_fallback")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGetSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	var conv db.EnumConvFn
@@ -918,6 +981,42 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["re_fallback"]; exists {
+		val := m.GetReFallback()
+		vOpts := append(opts,
+			db.WithValidateField("re_fallback"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetReFallback().(type) {
+	case *GetSpecType_EnableReFallback:
+		if fv, exists := v.FldValidators["re_fallback.enable_re_fallback"]; exists {
+			val := m.GetReFallback().(*GetSpecType_EnableReFallback).EnableReFallback
+			vOpts := append(opts,
+				db.WithValidateField("re_fallback"),
+				db.WithValidateField("enable_re_fallback"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_DisableReFallback:
+		if fv, exists := v.FldValidators["re_fallback.disable_re_fallback"]; exists {
+			val := m.GetReFallback().(*GetSpecType_DisableReFallback).DisableReFallback
+			vOpts := append(opts,
+				db.WithValidateField("re_fallback"),
+				db.WithValidateField("disable_re_fallback"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
@@ -958,6 +1057,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhReFallback := v.ReFallbackValidationRuleHandler
+	rulesReFallback := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhReFallback(rulesReFallback)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.re_fallback: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["re_fallback"] = vFn
 
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
@@ -1192,6 +1302,14 @@ type ValidateGlobalSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateGlobalSpecType) ReFallbackValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for re_fallback")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	var conv db.EnumConvFn
@@ -1363,6 +1481,42 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["re_fallback"]; exists {
+		val := m.GetReFallback()
+		vOpts := append(opts,
+			db.WithValidateField("re_fallback"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetReFallback().(type) {
+	case *GlobalSpecType_EnableReFallback:
+		if fv, exists := v.FldValidators["re_fallback.enable_re_fallback"]; exists {
+			val := m.GetReFallback().(*GlobalSpecType_EnableReFallback).EnableReFallback
+			vOpts := append(opts,
+				db.WithValidateField("re_fallback"),
+				db.WithValidateField("enable_re_fallback"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_DisableReFallback:
+		if fv, exists := v.FldValidators["re_fallback.disable_re_fallback"]; exists {
+			val := m.GetReFallback().(*GlobalSpecType_DisableReFallback).DisableReFallback
+			vOpts := append(opts,
+				db.WithValidateField("re_fallback"),
+				db.WithValidateField("disable_re_fallback"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tunnel_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tunnel_type"))
@@ -1403,6 +1557,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhReFallback := v.ReFallbackValidationRuleHandler
+	rulesReFallback := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhReFallback(rulesReFallback)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.re_fallback: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["re_fallback"] = vFn
 
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
@@ -1732,6 +1897,14 @@ type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateReplaceSpecType) ReFallbackValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for re_fallback")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateReplaceSpecType) TypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	var conv db.EnumConvFn
@@ -1903,6 +2076,42 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["re_fallback"]; exists {
+		val := m.GetReFallback()
+		vOpts := append(opts,
+			db.WithValidateField("re_fallback"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetReFallback().(type) {
+	case *ReplaceSpecType_EnableReFallback:
+		if fv, exists := v.FldValidators["re_fallback.enable_re_fallback"]; exists {
+			val := m.GetReFallback().(*ReplaceSpecType_EnableReFallback).EnableReFallback
+			vOpts := append(opts,
+				db.WithValidateField("re_fallback"),
+				db.WithValidateField("enable_re_fallback"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_DisableReFallback:
+		if fv, exists := v.FldValidators["re_fallback.disable_re_fallback"]; exists {
+			val := m.GetReFallback().(*ReplaceSpecType_DisableReFallback).DisableReFallback
+			vOpts := append(opts,
+				db.WithValidateField("re_fallback"),
+				db.WithValidateField("disable_re_fallback"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("type"))
@@ -1934,6 +2143,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
+
+	vrhReFallback := v.ReFallbackValidationRuleHandler
+	rulesReFallback := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhReFallback(rulesReFallback)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.re_fallback: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["re_fallback"] = vFn
 
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
@@ -2220,12 +2440,48 @@ func (r *CreateSpecType) GetMeshChoiceFromGlobalSpecType(o *GlobalSpecType) erro
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetReFallbackToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ReFallback.(type) {
+	case nil:
+		o.ReFallback = nil
+
+	case *CreateSpecType_DisableReFallback:
+		o.ReFallback = &GlobalSpecType_DisableReFallback{DisableReFallback: of.DisableReFallback}
+
+	case *CreateSpecType_EnableReFallback:
+		o.ReFallback = &GlobalSpecType_EnableReFallback{EnableReFallback: of.EnableReFallback}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetReFallbackFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ReFallback.(type) {
+	case nil:
+		r.ReFallback = nil
+
+	case *GlobalSpecType_DisableReFallback:
+		r.ReFallback = &CreateSpecType_DisableReFallback{DisableReFallback: of.DisableReFallback}
+
+	case *GlobalSpecType_EnableReFallback:
+		r.ReFallback = &CreateSpecType_EnableReFallback{EnableReFallback: of.EnableReFallback}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Hub = f.GetHub()
 	m.GetMeshChoiceFromGlobalSpecType(f)
+	m.GetReFallbackFromGlobalSpecType(f)
 	m.Type = f.GetType()
 	m.VirtualSite = f.GetVirtualSite()
 }
@@ -2247,6 +2503,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 
 	f.Hub = m1.Hub
 	m1.SetMeshChoiceToGlobalSpecType(f)
+	m1.SetReFallbackToGlobalSpecType(f)
 	f.Type = m1.Type
 	f.VirtualSite = m1.VirtualSite
 }
@@ -2300,12 +2557,48 @@ func (r *GetSpecType) GetMeshChoiceFromGlobalSpecType(o *GlobalSpecType) error {
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetReFallbackToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ReFallback.(type) {
+	case nil:
+		o.ReFallback = nil
+
+	case *GetSpecType_DisableReFallback:
+		o.ReFallback = &GlobalSpecType_DisableReFallback{DisableReFallback: of.DisableReFallback}
+
+	case *GetSpecType_EnableReFallback:
+		o.ReFallback = &GlobalSpecType_EnableReFallback{EnableReFallback: of.EnableReFallback}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetReFallbackFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ReFallback.(type) {
+	case nil:
+		r.ReFallback = nil
+
+	case *GlobalSpecType_DisableReFallback:
+		r.ReFallback = &GetSpecType_DisableReFallback{DisableReFallback: of.DisableReFallback}
+
+	case *GlobalSpecType_EnableReFallback:
+		r.ReFallback = &GetSpecType_EnableReFallback{EnableReFallback: of.EnableReFallback}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Hub = f.GetHub()
 	m.GetMeshChoiceFromGlobalSpecType(f)
+	m.GetReFallbackFromGlobalSpecType(f)
 	m.TunnelType = f.GetTunnelType()
 	m.Type = f.GetType()
 	m.VirtualSite = f.GetVirtualSite()
@@ -2328,6 +2621,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 
 	f.Hub = m1.Hub
 	m1.SetMeshChoiceToGlobalSpecType(f)
+	m1.SetReFallbackToGlobalSpecType(f)
 	f.TunnelType = m1.TunnelType
 	f.Type = m1.Type
 	f.VirtualSite = m1.VirtualSite
@@ -2382,12 +2676,48 @@ func (r *ReplaceSpecType) GetMeshChoiceFromGlobalSpecType(o *GlobalSpecType) err
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetReFallbackToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.ReFallback.(type) {
+	case nil:
+		o.ReFallback = nil
+
+	case *ReplaceSpecType_DisableReFallback:
+		o.ReFallback = &GlobalSpecType_DisableReFallback{DisableReFallback: of.DisableReFallback}
+
+	case *ReplaceSpecType_EnableReFallback:
+		o.ReFallback = &GlobalSpecType_EnableReFallback{EnableReFallback: of.EnableReFallback}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetReFallbackFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.ReFallback.(type) {
+	case nil:
+		r.ReFallback = nil
+
+	case *GlobalSpecType_DisableReFallback:
+		r.ReFallback = &ReplaceSpecType_DisableReFallback{DisableReFallback: of.DisableReFallback}
+
+	case *GlobalSpecType_EnableReFallback:
+		r.ReFallback = &ReplaceSpecType_EnableReFallback{EnableReFallback: of.EnableReFallback}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
 	}
 	m.Hub = f.GetHub()
 	m.GetMeshChoiceFromGlobalSpecType(f)
+	m.GetReFallbackFromGlobalSpecType(f)
 	m.Type = f.GetType()
 	m.VirtualSite = f.GetVirtualSite()
 }
@@ -2409,6 +2739,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 
 	f.Hub = m1.Hub
 	m1.SetMeshChoiceToGlobalSpecType(f)
+	m1.SetReFallbackToGlobalSpecType(f)
 	f.Type = m1.Type
 	f.VirtualSite = m1.VirtualSite
 }

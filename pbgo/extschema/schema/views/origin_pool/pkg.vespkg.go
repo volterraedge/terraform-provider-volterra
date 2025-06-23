@@ -63,7 +63,23 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.origin_pool.API.Create"] = []svcfw.SubscriptionField{
 		{
+			FieldPath:     "ves.io.schema.views.origin_pool.CreateRequest.spec.origin_servers.choice.consul_service.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.origin_pool.CreateRequest.spec.origin_servers.choice.k8s_service.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
 			FieldPath:     "ves.io.schema.views.origin_pool.CreateRequest.spec.origin_servers.choice.private_ip.private_ip_choice.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.origin_pool.CreateRequest.spec.origin_servers.choice.private_ip.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.origin_pool.CreateRequest.spec.origin_servers.choice.private_name.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -87,7 +103,23 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.origin_pool.API.Create"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "spec.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -102,7 +134,23 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.origin_pool.API.Create"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "spec.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -119,7 +167,23 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.origin_pool.API.Get"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "create_form.spec.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "create_form.spec.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -131,7 +195,23 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "replace_form.spec.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "replace_form.spec.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -143,7 +223,23 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
+			FieldPath:           "spec.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -158,7 +254,23 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.views.origin_pool.API.List"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "items.#.get_spec.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "items.#.get_spec.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -173,7 +285,23 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.views.origin_pool.API.Replace"] = []svcfw.SubscriptionField{
 		{
+			FieldPath:     "ves.io.schema.views.origin_pool.ReplaceRequest.spec.origin_servers.choice.consul_service.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.origin_pool.ReplaceRequest.spec.origin_servers.choice.k8s_service.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
 			FieldPath:     "ves.io.schema.views.origin_pool.ReplaceRequest.spec.origin_servers.choice.private_ip.private_ip_choice.ipv6",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.origin_pool.ReplaceRequest.spec.origin_servers.choice.private_ip.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+		{
+			FieldPath:     "ves.io.schema.views.origin_pool.ReplaceRequest.spec.origin_servers.choice.private_name.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -197,7 +325,23 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.views.origin_pool.API.Replace"] = []svcfw.EnvironmentField{
 		{
+			FieldPath:           "spec.origin_servers.#.consul_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.origin_servers.#.k8s_service.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
 			FieldPath:           "spec.origin_servers.#.private_ip.ipv6",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.origin_servers.#.private_ip.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.origin_servers.#.private_name.snat_pool.snat_pool.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
 		},
 		{
@@ -260,11 +404,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

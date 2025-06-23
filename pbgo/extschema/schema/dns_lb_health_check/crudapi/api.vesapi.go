@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.dns_lb_health_check.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.dns_lb_health_check.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2895,7 +2895,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "HTTP Health Check",
             "x-displayname": "HTTP Health Check",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "1,2,3,4",
             "x-ves-proto-message": "ves.io.schema.dns_lb_health_check.HttpHealthCheck",
             "properties": {
                 "health_check_port": {
@@ -2909,6 +2909,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "health_check_secondary_port": {
+                    "type": "integer",
+                    "description": " Secondary port used for performing health check. If included, both ports must be healthy for the health check to pass\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Health check secondary port",
+                    "format": "int64",
+                    "x-displayname": "Health Check Secondary Port",
+                    "x-ves-example": "443",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
@@ -2988,7 +3000,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "TCP Health Check",
             "x-displayname": "TCP Health Check",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "1,2,3,4",
             "x-ves-proto-message": "ves.io.schema.dns_lb_health_check.TcpHealthCheck",
             "properties": {
                 "health_check_port": {
@@ -3002,6 +3014,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "health_check_secondary_port": {
+                    "type": "integer",
+                    "description": " Secondary port used for performing health check. If included, both ports must be healthy for the health check to pass\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Health check secondary port",
+                    "format": "int64",
+                    "x-displayname": "Health Check Secondary Port",
+                    "x-ves-example": "443",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
@@ -3032,7 +3056,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "TCP Hex Health Check",
             "x-displayname": "TCP Hex Health Check",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "1,2,3,4",
             "x-ves-proto-message": "ves.io.schema.dns_lb_health_check.TcpHexHealthCheck",
             "properties": {
                 "health_check_port": {
@@ -3046,6 +3070,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "health_check_secondary_port": {
+                    "type": "integer",
+                    "description": " Secondary port used for performing health check. If included, both ports must be healthy for the health check to pass\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Health check secondary port",
+                    "format": "int64",
+                    "x-displayname": "Health Check Secondary Port",
+                    "x-ves-example": "443",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
@@ -3079,7 +3115,7 @@ var APISwaggerJSON string = `{
             "type": "object",
             "title": "UDP Health Check",
             "x-displayname": "UDP Health Check",
-            "x-ves-displayorder": "1,2,3",
+            "x-ves-displayorder": "1,2,3,4",
             "x-ves-proto-message": "ves.io.schema.dns_lb_health_check.UdpHealthCheck",
             "properties": {
                 "health_check_port": {
@@ -3093,6 +3129,18 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "health_check_secondary_port": {
+                    "type": "integer",
+                    "description": " Secondary port used for performing health check. If included, both ports must be healthy for the health check to pass\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Health check secondary port",
+                    "format": "int64",
+                    "x-displayname": "Health Check Secondary Port",
+                    "x-ves-example": "443",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
@@ -3613,6 +3661,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

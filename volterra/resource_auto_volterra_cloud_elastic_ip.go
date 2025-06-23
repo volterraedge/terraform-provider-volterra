@@ -152,8 +152,7 @@ func resourceVolterraCloudElasticIpCreate(d *schema.ResourceData, meta interface
 	//count_cloud_elastic_ip
 	if v, ok := d.GetOk("count_cloud_elastic_ip"); ok && !isIntfNil(v) {
 
-		createSpec.Count =
-			uint32(v.(int))
+		createSpec.Count = uint32(v.(int))
 
 	}
 
@@ -164,28 +163,30 @@ func resourceVolterraCloudElasticIpCreate(d *schema.ResourceData, meta interface
 		siteRefInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		createSpec.SiteRef = siteRefInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			srMapToStrVal := ps.(map[string]interface{})
-			siteRefInt[i] = &ves_io_schema.ObjectRefType{}
+				srMapToStrVal := ps.(map[string]interface{})
+				siteRefInt[i] = &ves_io_schema.ObjectRefType{}
 
-			siteRefInt[i].Kind = "site"
+				siteRefInt[i].Kind = "site"
 
-			if v, ok := srMapToStrVal["name"]; ok && !isIntfNil(v) {
-				siteRefInt[i].Name = v.(string)
+				if v, ok := srMapToStrVal["name"]; ok && !isIntfNil(v) {
+					siteRefInt[i].Name = v.(string)
+				}
+
+				if v, ok := srMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					siteRefInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := srMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					siteRefInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := srMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					siteRefInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := srMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				siteRefInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := srMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				siteRefInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := srMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				siteRefInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -291,8 +292,7 @@ func resourceVolterraCloudElasticIpUpdate(d *schema.ResourceData, meta interface
 
 	if v, ok := d.GetOk("count_cloud_elastic_ip"); ok && !isIntfNil(v) {
 
-		updateSpec.Count =
-			uint32(v.(int))
+		updateSpec.Count = uint32(v.(int))
 
 	}
 
@@ -302,28 +302,30 @@ func resourceVolterraCloudElasticIpUpdate(d *schema.ResourceData, meta interface
 		siteRefInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		updateSpec.SiteRef = siteRefInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			srMapToStrVal := ps.(map[string]interface{})
-			siteRefInt[i] = &ves_io_schema.ObjectRefType{}
+				srMapToStrVal := ps.(map[string]interface{})
+				siteRefInt[i] = &ves_io_schema.ObjectRefType{}
 
-			siteRefInt[i].Kind = "site"
+				siteRefInt[i].Kind = "site"
 
-			if v, ok := srMapToStrVal["name"]; ok && !isIntfNil(v) {
-				siteRefInt[i].Name = v.(string)
+				if v, ok := srMapToStrVal["name"]; ok && !isIntfNil(v) {
+					siteRefInt[i].Name = v.(string)
+				}
+
+				if v, ok := srMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					siteRefInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := srMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					siteRefInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := srMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					siteRefInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := srMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				siteRefInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := srMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				siteRefInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := srMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				siteRefInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -354,5 +356,8 @@ func resourceVolterraCloudElasticIpDelete(d *schema.ResourceData, meta interface
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra CloudElasticIp obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_cloud_elastic_ip.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_cloud_elastic_ip.ObjectType, namespace, name, opts...)
 }

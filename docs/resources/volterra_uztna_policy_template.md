@@ -21,9 +21,21 @@ resource "volterra_uztna_policy_template" "example" {
   namespace = "staging"
 
   on_start_flow {
-    // One of the arguments from this list "deny_all simple" must be set
+    // One of the arguments from this list "simple" must be set
 
-    deny_all = true
+    simple {
+      flows {
+        // One of the arguments from this list "geolocation_match saml_federation" can be set
+
+        saml_federation {
+          saml {
+            name      = "test1"
+            namespace = "staging"
+            tenant    = "acmecorp"
+          }
+        }
+      }
+    }
   }
 }
 
@@ -48,33 +60,15 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`continuous_flow` - (Optional) and continuously validates the relevant flows assigned in on start. See [Continuous Flow ](#continuous-flow) below for details.(Deprecated)
-
 `on_start_flow` - (Required) throughout the entirety of the session. See [On Start Flow ](#on-start-flow) below for details.
-
-### Continuous Flow
-
-and continuously validates the relevant flows assigned in on start.
-
-###### One of the arguments from this list "deny_all, simple" must be set
-
-`deny_all` - (Optional) Deny All will deny all the requests (`Bool`).(Deprecated)
-
-`simple` - (Optional) This template . See [Template Type Simple ](#template-type-simple) below for details.
 
 ### On Start Flow
 
 throughout the entirety of the session.
 
-###### One of the arguments from this list "deny_all, simple" must be set
-
-`deny_all` - (Optional) Deny All will deny all the requests (`Bool`).(Deprecated)
+###### One of the arguments from this list "simple" must be set
 
 `simple` - (Optional) This template . See [Template Type Simple ](#template-type-simple) below for details.
-
-### Flow Type Allow All
-
-Allow All.
 
 ### Flow Type Geolocation Match
 
@@ -102,17 +96,11 @@ tenant - (Optional) then tenant will hold the referred object's(e.g. route's) te
 
 Or you can also Empty Flow.
 
-###### One of the arguments from this list "allow_all, geolocation_match, saml_federation" can be set
+###### One of the arguments from this list "geolocation_match, saml_federation" can be set
 
-`allow_all` - (Optional) Allow All (`Bool`).(Deprecated)
+`geolocation_match` - (Optional) flows of type Geolocation Match. See [Flow Type Geolocation Match ](#flow-type-geolocation-match) below for details.
 
-`geolocation_match` - (Required) flows of type Geolocation Match. See [Flow Type Geolocation Match ](#flow-type-geolocation-match) below for details.
-
-`saml_federation` - (Required) flows of type SAML Federation. See [Flow Type Saml Federation ](#flow-type-saml-federation) below for details.
-
-### Template Type Deny All
-
-Deny All will deny all the requests.
+`saml_federation` - (Optional) flows of type SAML Federation. See [Flow Type Saml Federation ](#flow-type-saml-federation) below for details.
 
 ### Template Type Simple
 

@@ -643,7 +643,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.registration.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.registration.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -1207,6 +1207,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/registrationProvider",
                     "x-displayname": "Provider"
                 },
+                "sw_info": {
+                    "description": " SW information about node in the site",
+                    "title": "Software information",
+                    "$ref": "#/definitions/registrationSWInfo",
+                    "x-displayname": "Software Information"
+                },
                 "timestamp": {
                     "type": "string",
                     "description": " It's used to verify machine have acceptable time difference from server",
@@ -1403,7 +1409,7 @@ var APISwaggerJSON string = `{
         },
         "registrationProvider": {
             "type": "string",
-            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.\nRSeries Device\nOCI Cloud Instance\nNutanix instance\nOpenstack Instance",
+            "description": "Infrastructure provider enum for registration. It describes where is instance running.\n\nProvider was not detected\nAWS cloud instance\nGoogle cloud instance\nAzure cloud instance\nVMWare VM\nKVM VM\nOther provider, which was not identified by system.\nF5XC HW device.\nIBM Cloud instance.\nKubernetes cluster in AWS\nKubernetes cluster in GCP\nKubernetes cluster in Azure\nKubernetes cluster in Vmware\nKubernetes cluster in VMware\nKubernetes cluster in Other provider\nKubernetes cluster in Volterra\nKubernetes cluster in IBM Cloud\nF5OS HW device.\nRSeries Device\nOCI Cloud Instance\nNutanix instance\nOpenstack Instance\nEquinix Instance",
             "title": "Infrastructure provider",
             "enum": [
                 "UNKNOWN",
@@ -1428,7 +1434,8 @@ var APISwaggerJSON string = `{
                 "RSERIES",
                 "OCI",
                 "NUTANIX",
-                "OPENSTACK"
+                "OPENSTACK",
+                "EQUINIX"
             ],
             "default": "UNKNOWN",
             "x-displayname": "Infrastructure Provider",
@@ -1458,6 +1465,21 @@ var APISwaggerJSON string = `{
         "registrationReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.registration.ReplaceResponse"
+        },
+        "registrationSWInfo": {
+            "type": "object",
+            "description": "SWInfo holds information about sw version",
+            "title": "SWInfo",
+            "x-displayname": "SW Info",
+            "x-ves-proto-message": "ves.io.schema.registration.SWInfo",
+            "properties": {
+                "sw_version": {
+                    "type": "string",
+                    "description": " SW Version in the site",
+                    "title": "sw version",
+                    "x-displayname": "SW Version"
+                }
+            }
         },
         "schemaInitializerType": {
             "type": "object",

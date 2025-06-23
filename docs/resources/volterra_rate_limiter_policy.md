@@ -44,16 +44,6 @@ Argument Reference
 
 `rules` - (Optional) A list of RateLimiterRules that are evaluated sequentially till a matching rule is identified.. See [Rules ](#rules) below for details.
 
-###### One of the arguments from this list "any_server, server_name, server_name_matcher, server_selector" can be set
-
-`any_server` - (Optional) Any Server (`Bool`).(Deprecated)
-
-`server_name` - (Optional) The expected name of the server. The actual names for the server are extracted from the HTTP Host header and the name of the virtual_host for the request. (`String`).(Deprecated)
-
-`server_name_matcher` - (Optional) regular expressions.. See [Server Choice Server Name Matcher ](#server-choice-server-name-matcher) below for details.(Deprecated)
-
-`server_selector` - (Optional) true if the expressions in the label selector are true for the server labels.. See [Server Choice Server Selector ](#server-choice-server-selector) below for details.(Deprecated)
-
 ### Rules
 
 A list of RateLimiterRules that are evaluated sequentially till a matching rule is identified..
@@ -154,8 +144,6 @@ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Rules Spec
@@ -200,20 +188,6 @@ Specification for the rule including match preicates and actions..
 
 `path` - (Optional)path. See [Spec Path ](#spec-path) below for details.
 
-### Server Choice Server Name Matcher
-
-regular expressions..
-
-`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
-
-`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
-
-### Server Choice Server Selector
-
-true if the expressions in the label selector are true for the server labels..
-
-`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
-
 ### Spec Domain Matcher
 
 domain_matcher.
@@ -228,15 +202,13 @@ headers.
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
-###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+###### One of the arguments from this list "check_not_present, check_present, item" must be set
 
 `check_not_present` - (Optional) Check that the header is not present. (`Bool`).
 
 `check_present` - (Optional) Check that the header is present. (`Bool`).
 
 `item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`presence` - (Optional) Check if the header is present or absent. (`Bool`).(Deprecated)
 
 `name` - (Required) A case-insensitive HTTP header name. (`String`).
 

@@ -68,13 +68,29 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.route.API.Create"] = []string{
+		"spec.routes.#.route_direct_response.response_body",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.route.API.Create"] = []string{
+		"spec.routes.#.route_direct_response.response_body",
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.route.API.Create"] = []string{
 		"spec.routes.#.bot_defense_javascript_injection_inline_mode",
 		"spec.routes.#.disable_custom_script",
+		"spec.routes.#.request_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.routes.#.request_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.routes.#.request_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.routes.#.request_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.routes.#.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.routes.#.request_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.routes.#.request_headers_to_add.#.secret_value.vault_secret_info",
 		"spec.routes.#.request_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.routes.#.response_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.routes.#.response_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.routes.#.response_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.routes.#.response_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.routes.#.response_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.routes.#.response_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.routes.#.response_headers_to_add.#.secret_value.vault_secret_info",
@@ -86,17 +102,40 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.routes.#.route_redirect.port_redirect",
 		"spec.routes.#.route_redirect.strip_query_params",
 		"spec.routes.#.skip_lb_override",
+		"spec.routes.#.waf_exclusion_service_policy.#",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.route.API.Create"] = "ves.io.schema.route.CreateRequest"
 
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.route.API.Get"] = []string{
+		"create_form.spec.routes.#.route_direct_response.response_body",
+		"replace_form.spec.routes.#.route_direct_response.response_body",
+		"spec.routes.#.route_direct_response.response_body",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.route.API.List"] = []string{
+		"items.#.get_spec.routes.#.route_direct_response.response_body",
+	}
+
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.route.API.Replace"] = []string{
+		"spec.routes.#.route_direct_response.response_body",
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.route.API.Replace"] = []string{
 		"spec.routes.#.bot_defense_javascript_injection_inline_mode",
 		"spec.routes.#.disable_custom_script",
+		"spec.routes.#.request_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.routes.#.request_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.routes.#.request_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.routes.#.request_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.routes.#.request_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.routes.#.request_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.routes.#.request_headers_to_add.#.secret_value.vault_secret_info",
 		"spec.routes.#.request_headers_to_add.#.secret_value.wingman_secret_info",
+		"spec.routes.#.response_cookies_to_add.#.secret_value.blindfold_secret_info_internal",
+		"spec.routes.#.response_cookies_to_add.#.secret_value.secret_encoding_type",
+		"spec.routes.#.response_cookies_to_add.#.secret_value.vault_secret_info",
+		"spec.routes.#.response_cookies_to_add.#.secret_value.wingman_secret_info",
 		"spec.routes.#.response_headers_to_add.#.secret_value.blindfold_secret_info_internal",
 		"spec.routes.#.response_headers_to_add.#.secret_value.secret_encoding_type",
 		"spec.routes.#.response_headers_to_add.#.secret_value.vault_secret_info",
@@ -108,6 +147,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.routes.#.route_redirect.port_redirect",
 		"spec.routes.#.route_redirect.strip_query_params",
 		"spec.routes.#.skip_lb_override",
+		"spec.routes.#.waf_exclusion_service_policy.#",
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.route.API.Replace"] = "ves.io.schema.route.ReplaceRequest"
@@ -160,11 +200,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

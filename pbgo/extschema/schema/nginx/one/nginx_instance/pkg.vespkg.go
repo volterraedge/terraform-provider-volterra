@@ -23,7 +23,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nginx.one.nginx_instance.ListResponseItem"] = ListResponseItemValidator()
 
 	vr["ves.io.schema.nginx.one.nginx_instance.APIDiscoverySpec"] = APIDiscoverySpecValidator()
-	vr["ves.io.schema.nginx.one.nginx_instance.DataplaneIdentifier"] = DataplaneIdentifierValidator()
 	vr["ves.io.schema.nginx.one.nginx_instance.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.nginx.one.nginx_instance.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.nginx.one.nginx_instance.WAFSpec"] = WAFSpecValidator()
@@ -88,11 +87,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

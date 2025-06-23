@@ -25,17 +25,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.views.uztna_application_view.UpdateExtendedTagsRequest"] = UpdateExtendedTagsRequestValidator()
 	vr["ves.io.schema.uztna.views.uztna_application_view.UpdateExtendedTagsResponse"] = UpdateExtendedTagsResponseValidator()
 
-	vr["ves.io.schema.uztna.views.uztna_application_view.CreateRequest"] = CreateRequestValidator()
-	vr["ves.io.schema.uztna.views.uztna_application_view.CreateResponse"] = CreateResponseValidator()
-	vr["ves.io.schema.uztna.views.uztna_application_view.DeleteRequest"] = DeleteRequestValidator()
-	vr["ves.io.schema.uztna.views.uztna_application_view.GetRequest"] = GetRequestValidator()
-	vr["ves.io.schema.uztna.views.uztna_application_view.GetResponse"] = GetResponseValidator()
-	vr["ves.io.schema.uztna.views.uztna_application_view.ListRequest"] = ListRequestValidator()
-	vr["ves.io.schema.uztna.views.uztna_application_view.ListResponse"] = ListResponseValidator()
-	vr["ves.io.schema.uztna.views.uztna_application_view.ListResponseItem"] = ListResponseItemValidator()
-	vr["ves.io.schema.uztna.views.uztna_application_view.ReplaceRequest"] = ReplaceRequestValidator()
-	vr["ves.io.schema.uztna.views.uztna_application_view.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.uztna.views.uztna_application_view.AppCertificate"] = AppCertificateValidator()
 	vr["ves.io.schema.uztna.views.uztna_application_view.ApplicationTags"] = ApplicationTagsValidator()
 	vr["ves.io.schema.uztna.views.uztna_application_view.CreateSpecType"] = CreateSpecTypeValidator()
@@ -64,7 +53,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-	sm["ves.io.schema.uztna.views.uztna_application_view.API"] = "config"
 
 }
 
@@ -104,24 +92,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 
 	}()
 
-	csr = mdr.PubCRUDServiceRegistry
-
-	func() {
-		// set swagger jsons for our and external schemas
-		csr.CRUDSwaggerRegistry["ves.io.schema.uztna.views.uztna_application_view.Object"] = APISwaggerJSON
-		csr.CRUDGrpcClientRegistry["ves.io.schema.uztna.views.uztna_application_view.Object"] = NewCRUDAPIGrpcClient
-		csr.CRUDRestClientRegistry["ves.io.schema.uztna.views.uztna_application_view.Object"] = NewCRUDAPIRestClient
-		csr.CRUDInprocClientRegistry["ves.io.schema.uztna.views.uztna_application_view.Object"] = NewCRUDAPIInprocClient
-		if isExternal {
-			return
-		}
-		// registration of api handlers if our own schema
-		mdr.SvcRegisterHandlers["ves.io.schema.uztna.views.uztna_application_view.API"] = RegisterAPIServer
-		mdr.SvcGwRegisterHandlers["ves.io.schema.uztna.views.uztna_application_view.API"] = RegisterGwAPIHandler
-		csr.CRUDServerRegistry["ves.io.schema.uztna.views.uztna_application_view.Object"] = NewCRUDAPIServer
-
-	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -129,11 +99,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

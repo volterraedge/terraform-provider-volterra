@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.topology.topology_network_peer.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.topology.topology_network_peer.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3153,6 +3153,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -3337,7 +3344,7 @@ var APISwaggerJSON string = `{
         },
         "topologyPeeringStateEnum": {
             "type": "string",
-            "description": "x-displayName: PeeringState\nNetwork Peering Status\n\n - CONNECTED: Connected\n\nx-displayName: CONNECTED\nCONNECTED Peering Status\n - DISCONNECTED: DISCONNECTED\n\nx-displayName: DISCONNECTED\nDISCONNECTED Peering Status\n - PEERING_INITIATED: PEERING_INITIATED\n\nx-displayName: PEERING_INITIATED\nPEERING_INITIATED\n - PEERING_STATE_NOT_APPLICABLE: PEERING_STATE_NOT_APPLICABLE\n\nx-displayName: PEERING_STATE_NOT_APPLICABLE\nPEERING_STATE_NOT_APPLICABLE should be used when a cloud provider does not supports it.",
+            "description": "Network Peering Status\n\n - CONNECTED: Connected\n\nCONNECTED Peering Status\n - DISCONNECTED: DISCONNECTED\n\nDISCONNECTED Peering Status\n - PEERING_INITIATED: PEERING_INITIATED\n\nPEERING_INITIATED\n - PEERING_STATE_NOT_APPLICABLE: PEERING_STATE_NOT_APPLICABLE\n\nPEERING_STATE_NOT_APPLICABLE should be used when a cloud provider does not supports it.",
             "title": "PeeringState",
             "enum": [
                 "CONNECTED",
@@ -3346,12 +3353,12 @@ var APISwaggerJSON string = `{
                 "PEERING_STATE_NOT_APPLICABLE"
             ],
             "default": "CONNECTED",
-            "x-displayname": "",
+            "x-displayname": "PeeringState",
             "x-ves-proto-enum": "ves.io.schema.topology.PeeringStateEnum"
         },
         "topologyProviderType": {
             "type": "string",
-            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend",
+            "description": "provider type\n\nProviderType unspecified\nAWS backend\nGCP backend\nAzure backend\nF5XC backend\nVMware backend\nKVM backend\nOCI backend\nBaremetal backend\nF5 rSeries backend\nCE on k8s backend",
             "title": "ProviderType",
             "enum": [
                 "PROVIDER_TYPE_UNSPECIFIED",
@@ -3363,7 +3370,8 @@ var APISwaggerJSON string = `{
                 "PROVIDER_TYPE_KVM",
                 "PROVIDER_TYPE_OCI",
                 "PROVIDER_TYPE_BAREMETAL",
-                "PROVIDER_TYPE_F5RSERIES"
+                "PROVIDER_TYPE_F5RSERIES",
+                "PROVIDER_TYPE_K8S"
             ],
             "default": "PROVIDER_TYPE_UNSPECIFIED",
             "x-displayname": "Provider Type",

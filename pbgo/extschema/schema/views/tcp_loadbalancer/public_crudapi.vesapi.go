@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/tcp_loadbalancers/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -1122,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.tcp_loadbalancer.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.tcp_loadbalancer.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -4337,10 +4350,10 @@ var APISwaggerJSON string = `{
                 },
                 "port": {
                     "type": "integer",
-                    "description": "Exclusive with [port_ranges use_default_port]\n TCP port to Listen.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
-                    "title": "TCP port to listen",
+                    "description": "Exclusive with [port_ranges use_default_port]\n Port to Listen.\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Port to listen",
                     "format": "int64",
-                    "x-displayname": "TCP Listen Port",
+                    "x-displayname": "Listen Port",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "65535"
@@ -4349,10 +4362,10 @@ var APISwaggerJSON string = `{
                 "port_ranges": {
                     "type": "string",
                     "description": "Exclusive with [port use_default_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
-                    "title": "TCP port ranges to listen",
+                    "title": "Port ranges to listen",
                     "minLength": 1,
                     "maxLength": 512,
-                    "x-displayname": "TCP Listen Port Ranges",
+                    "x-displayname": "Listen Port Ranges",
                     "x-ves-example": "80,443,8080-8191,9080",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "512",
@@ -4380,10 +4393,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Segment on Site"
                 },
                 "use_default_port": {
-                    "description": "Exclusive with [port port_ranges]\n For HTTP, default is 80. For HTTPS/SNI, default is 443.",
+                    "description": "Exclusive with [port port_ranges]\n Inherit the Load Balancer's Listen Port.",
                     "title": "Use Default port",
                     "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Use Default TCP Listen Port"
+                    "x-displayname": "Use Default Listen Port"
                 },
                 "virtual_network": {
                     "description": "Exclusive with [advertise_on_public cloud_edge_segment segment site site_segment virtual_site virtual_site_segment virtual_site_with_vip vk8s_service]\n Advertise on a virtual network",
@@ -4704,7 +4717,7 @@ var APISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to this load balancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of Domains (host/authority header) that will be matched to this Load Balancer.\n\n Supported Domains and search order:\n  1. Exact Domain names: www.foo.com.\n  2. Domains starting with a Wildcard: *.foo.com.\n\n Not supported Domains:\n - Just a Wildcard: *\n - A Wildcard and TLD with no root Domain: *.com.\n - A Wildcard not matching a whole DNS label.\n e.g. *.foo.com and *.bar.foo.com are valid Wildcards however *bar.foo.com, *-bar.foo.com, and bar*.foo.com are all invalid.\n\n Additional notes:\n A Wildcard will not match empty string.\n e.g. *.foo.com will match bar.foo.com and baz-bar.foo.com but not .foo.com.\n The longest Wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a Domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if SNI is activated on the given TCP Load Balancer.\n Domains also indicate the list of names for which DNS resolution will be automatically resolved to IP addresses by the system.\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 32,
                     "items": {
                         "type": "string"
@@ -4712,7 +4725,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Domains",
                     "x-ves-example": "www.foo.com",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.hostname": "true",
+                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
                         "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -4901,7 +4914,7 @@ var APISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to this load balancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of Domains (host/authority header) that will be matched to this Load Balancer.\n\n Supported Domains and search order:\n  1. Exact Domain names: www.foo.com.\n  2. Domains starting with a Wildcard: *.foo.com.\n\n Not supported Domains:\n - Just a Wildcard: *\n - A Wildcard and TLD with no root Domain: *.com.\n - A Wildcard not matching a whole DNS label.\n e.g. *.foo.com and *.bar.foo.com are valid Wildcards however *bar.foo.com, *-bar.foo.com, and bar*.foo.com are all invalid.\n\n Additional notes:\n A Wildcard will not match empty string.\n e.g. *.foo.com will match bar.foo.com and baz-bar.foo.com but not .foo.com.\n The longest Wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a Domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if SNI is activated on the given TCP Load Balancer.\n Domains also indicate the list of names for which DNS resolution will be automatically resolved to IP addresses by the system.\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 32,
                     "items": {
                         "type": "string"
@@ -4909,7 +4922,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Domains",
                     "x-ves-example": "www.foo.com",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.hostname": "true",
+                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
                         "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -5094,7 +5107,7 @@ var APISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to this load balancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of Domains (host/authority header) that will be matched to this Load Balancer.\n\n Supported Domains and search order:\n  1. Exact Domain names: www.foo.com.\n  2. Domains starting with a Wildcard: *.foo.com.\n\n Not supported Domains:\n - Just a Wildcard: *\n - A Wildcard and TLD with no root Domain: *.com.\n - A Wildcard not matching a whole DNS label.\n e.g. *.foo.com and *.bar.foo.com are valid Wildcards however *bar.foo.com, *-bar.foo.com, and bar*.foo.com are all invalid.\n\n Additional notes:\n A Wildcard will not match empty string.\n e.g. *.foo.com will match bar.foo.com and baz-bar.foo.com but not .foo.com.\n The longest Wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a Domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if SNI is activated on the given TCP Load Balancer.\n Domains also indicate the list of names for which DNS resolution will be automatically resolved to IP addresses by the system.\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "maxItems": 32,
                     "items": {
                         "type": "string"
@@ -5102,7 +5115,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Domains",
                     "x-ves-example": "www.foo.com",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.hostname": "true",
+                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
                         "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }

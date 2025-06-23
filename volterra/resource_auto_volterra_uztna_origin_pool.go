@@ -104,36 +104,6 @@ func resourceVolterraUztnaOriginPool() *schema.Resource {
 										Type:     schema.TypeString,
 										Optional: true,
 									},
-
-									"ipv6": {
-
-										Type:     schema.TypeString,
-										Optional: true,
-									},
-								},
-							},
-						},
-
-						"private_name": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"hostname": {
-										Type:       schema.TypeString,
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-
-									"refresh_interval": {
-										Type:       schema.TypeInt,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
 								},
 							},
 						},
@@ -306,46 +276,6 @@ func resourceVolterraUztnaOriginPoolCreate(d *schema.ResourceData, meta interfac
 								choiceInt.PrivateIp.PrivateIpChoice = privateIpChoiceInt
 
 								privateIpChoiceInt.Ip = v.(string)
-
-							}
-
-							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !privateIpChoiceTypeFound {
-
-								privateIpChoiceTypeFound = true
-								privateIpChoiceInt := &ves_io_schema_uztna_uztna_origin_pool.OriginServerPrivateIP_Ipv6{}
-
-								choiceInt.PrivateIp.PrivateIpChoice = privateIpChoiceInt
-
-								privateIpChoiceInt.Ipv6 = v.(string)
-
-							}
-
-						}
-					}
-
-				}
-
-				if v, ok := originServersMapStrToI["private_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-					choiceTypeFound = true
-					choiceInt := &ves_io_schema_uztna_uztna_origin_pool.OriginServerType_PrivateName{}
-					choiceInt.PrivateName = &ves_io_schema_uztna_uztna_origin_pool.OriginServerPrivateName{}
-					originServers[i].Choice = choiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["hostname"]; ok && !isIntfNil(v) {
-
-								choiceInt.PrivateName.Hostname = v.(string)
-
-							}
-
-							if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
-
-								choiceInt.PrivateName.RefreshInterval = uint32(v.(int))
 
 							}
 
@@ -574,46 +504,6 @@ func resourceVolterraUztnaOriginPoolUpdate(d *schema.ResourceData, meta interfac
 
 							}
 
-							if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !privateIpChoiceTypeFound {
-
-								privateIpChoiceTypeFound = true
-								privateIpChoiceInt := &ves_io_schema_uztna_uztna_origin_pool.OriginServerPrivateIP_Ipv6{}
-
-								choiceInt.PrivateIp.PrivateIpChoice = privateIpChoiceInt
-
-								privateIpChoiceInt.Ipv6 = v.(string)
-
-							}
-
-						}
-					}
-
-				}
-
-				if v, ok := originServersMapStrToI["private_name"]; ok && !isIntfNil(v) && !choiceTypeFound {
-
-					choiceTypeFound = true
-					choiceInt := &ves_io_schema_uztna_uztna_origin_pool.OriginServerType_PrivateName{}
-					choiceInt.PrivateName = &ves_io_schema_uztna_uztna_origin_pool.OriginServerPrivateName{}
-					originServers[i].Choice = choiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["hostname"]; ok && !isIntfNil(v) {
-
-								choiceInt.PrivateName.Hostname = v.(string)
-
-							}
-
-							if v, ok := cs["refresh_interval"]; ok && !isIntfNil(v) {
-
-								choiceInt.PrivateName.RefreshInterval = uint32(v.(int))
-
-							}
-
 						}
 					}
 
@@ -688,5 +578,8 @@ func resourceVolterraUztnaOriginPoolDelete(d *schema.ResourceData, meta interfac
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra UztnaOriginPool obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_uztna_uztna_origin_pool.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_uztna_uztna_origin_pool.ObjectType, namespace, name, opts...)
 }

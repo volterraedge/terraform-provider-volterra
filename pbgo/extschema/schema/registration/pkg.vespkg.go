@@ -29,6 +29,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.registration.DeleteRequest"] = DeleteRequestValidator()
 	vr["ves.io.schema.registration.GetImageDownloadUrlReq"] = GetImageDownloadUrlReqValidator()
 	vr["ves.io.schema.registration.GetImageDownloadUrlResp"] = GetImageDownloadUrlRespValidator()
+	vr["ves.io.schema.registration.GetRegistrationsBySiteTokenReq"] = GetRegistrationsBySiteTokenReqValidator()
+	vr["ves.io.schema.registration.GetRegistrationsBySiteTokenResp"] = GetRegistrationsBySiteTokenRespValidator()
 	vr["ves.io.schema.registration.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.registration.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.registration.ListBySiteReq"] = ListBySiteReqValidator()
@@ -50,6 +52,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.registration.InternetProxy"] = InternetProxyValidator()
 	vr["ves.io.schema.registration.Passport"] = PassportValidator()
 	vr["ves.io.schema.registration.ReplaceSpecType"] = ReplaceSpecTypeValidator()
+	vr["ves.io.schema.registration.SWInfo"] = SWInfoValidator()
 	vr["ves.io.schema.registration.WorkloadContext"] = WorkloadContextValidator()
 
 }
@@ -132,11 +135,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

@@ -13,6 +13,8 @@ import (
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
+
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var (
@@ -780,6 +782,8 @@ func (v *ValidateDNSLBPoolHealthStatusResponse) Validate(ctx context.Context, pm
 var DefaultDNSLBPoolHealthStatusResponseValidator = func() *ValidateDNSLBPoolHealthStatusResponse {
 	v := &ValidateDNSLBPoolHealthStatusResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
+	v.FldValidators["dns_lb_pool_member_items"] = DNSLBPoolMemberHealthStatusListResponseItemValidator().Validate
+
 	return v
 }()
 
@@ -1047,6 +1051,8 @@ func (v *ValidateDNSLBPoolMemberHealthStatusListResponse) Validate(ctx context.C
 var DefaultDNSLBPoolMemberHealthStatusListResponseValidator = func() *ValidateDNSLBPoolMemberHealthStatusListResponse {
 	v := &ValidateDNSLBPoolMemberHealthStatusListResponse{FldValidators: map[string]db.ValidatorFunc{}}
 
+	v.FldValidators["items"] = DNSLBPoolMemberHealthStatusListResponseItemValidator().Validate
+
 	return v
 }()
 
@@ -1093,6 +1099,106 @@ func (m *DNSLBPoolMemberHealthStatusListResponseItem) Validate(ctx context.Conte
 
 type ValidateDNSLBPoolMemberHealthStatusListResponseItem struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) HttpStatusCodeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.HttpStatusCode)
+		return int32(i)
+	}
+	// ves_io_schema.HttpStatusCode_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.HttpStatusCode_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for http_status_code")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) PortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepUint32ItemRules(rules)
+	itemValFn, err := db.NewUint32ValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for ports")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []uint32, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ports")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]uint32)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []uint32, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ports")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ports")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) UnhealthyPortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepUint32ItemRules(rules)
+	itemValFn, err := db.NewUint32ValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for unhealthy_ports")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []uint32, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for unhealthy_ports")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]uint32)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []uint32, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated unhealthy_ports")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items unhealthy_ports")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -1154,10 +1260,27 @@ func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) Validate(ctx conte
 
 	}
 
+	if fv, exists := v.FldValidators["http_status_code"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("http_status_code"))
+		if err := fv(ctx, m.GetHttpStatusCode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["name"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("name"))
 		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ports"]; exists {
+		vOpts := append(opts, db.WithValidateField("ports"))
+		if err := fv(ctx, m.GetPorts(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1175,12 +1298,62 @@ func (v *ValidateDNSLBPoolMemberHealthStatusListResponseItem) Validate(ctx conte
 
 	}
 
+	if fv, exists := v.FldValidators["unhealthy_ports"]; exists {
+		vOpts := append(opts, db.WithValidateField("unhealthy_ports"))
+		if err := fv(ctx, m.GetUnhealthyPorts(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultDNSLBPoolMemberHealthStatusListResponseItemValidator = func() *ValidateDNSLBPoolMemberHealthStatusListResponseItem {
 	v := &ValidateDNSLBPoolMemberHealthStatusListResponseItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhHttpStatusCode := v.HttpStatusCodeValidationRuleHandler
+	rulesHttpStatusCode := map[string]string{
+		"ves.io.schema.rules.enum.defined_only": "true",
+		"ves.io.schema.rules.enum.not_in":       "[0]",
+	}
+	vFn, err = vrhHttpStatusCode(rulesHttpStatusCode)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSLBPoolMemberHealthStatusListResponseItem.http_status_code: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["http_status_code"] = vFn
+
+	vrhPorts := v.PortsValidationRuleHandler
+	rulesPorts := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "2",
+	}
+	vFn, err = vrhPorts(rulesPorts)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSLBPoolMemberHealthStatusListResponseItem.ports: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ports"] = vFn
+
+	vrhUnhealthyPorts := v.UnhealthyPortsValidationRuleHandler
+	rulesUnhealthyPorts := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "2",
+	}
+	vFn, err = vrhUnhealthyPorts(rulesUnhealthyPorts)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DNSLBPoolMemberHealthStatusListResponseItem.unhealthy_ports: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["unhealthy_ports"] = vFn
 
 	return v
 }()

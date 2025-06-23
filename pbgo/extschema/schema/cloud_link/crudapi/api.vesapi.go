@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.cloud_link.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.cloud_link.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2975,14 +2975,15 @@ var APISwaggerJSON string = `{
         },
         "cloud_linkCloudLinkDeploymentStatus": {
             "type": "string",
-            "description": "Status of the CloudLink deployment\n\n - IN_PROGRESS: In-Progress\n\nCloudLink provisioning is in-progress\n - ERROR: Error\n\nAn error occurred while deploying CloudLink. Check the error description and suggested action\n - READY: Ready\n\nCloudLink is ready for use\n - DELETING: Deleting\n\nCloudLink deleting in progress\n - CUSTOMER_DEPLOYED: Customer Deployed\n\nCustomer deploys the CloudLink",
+            "description": "Status of the CloudLink deployment\n\n - IN_PROGRESS: In-Progress\n\nCloudLink provisioning is in-progress\n - ERROR: Error\n\nAn error occurred while deploying CloudLink. Check the error description and suggested action\n - READY: Ready\n\nCloudLink is ready for use\n - DELETING: Deleting\n\nCloudLink deleting in progress\n - CUSTOMER_DEPLOYED: Customer Deployed\n\nCustomer deploys the CloudLink\n - NOT_APPLICABLE: NotApplicable\n\nDeployment status not applicable",
             "title": "CloudLink Status",
             "enum": [
                 "IN_PROGRESS",
                 "ERROR",
                 "READY",
                 "DELETING",
-                "CUSTOMER_DEPLOYED"
+                "CUSTOMER_DEPLOYED",
+                "NOT_APPLICABLE"
             ],
             "default": "IN_PROGRESS",
             "x-displayname": "Status",
@@ -4131,12 +4132,13 @@ var APISwaggerJSON string = `{
         },
         "schemaCloudLinkState": {
             "type": "string",
-            "description": "State of the CloudLink connections\n\n - UP: Up\n\nCloudLink and their corresponding Direct Connect connections are up and healthy\n - DOWN: Down\n\nCloudLink and their corresponding Direct Connect connections are down\n - DEGRADED: Degraded\n\nSome of Direct Connect connections with the CloudLink are down",
+            "description": "State of the CloudLink connections\n\n - UP: Up\n\nCloudLink and their corresponding Direct Connect connections are up and healthy\n - DOWN: Down\n\nCloudLink and their corresponding Direct Connect connections are down\n - DEGRADED: Degraded\n\nSome of Direct Connect connections with the CloudLink are down\n - NOT_APPLICABLE: NotApplicable\n\nCloudLinkState not applicable",
             "title": "CloudLink State",
             "enum": [
                 "UP",
                 "DOWN",
-                "DEGRADED"
+                "DEGRADED",
+                "NOT_APPLICABLE"
             ],
             "default": "UP",
             "x-displayname": "CloudLink State",
@@ -4598,6 +4600,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

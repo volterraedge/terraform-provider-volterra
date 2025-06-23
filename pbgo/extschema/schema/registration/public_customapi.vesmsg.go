@@ -809,6 +809,194 @@ func GetImageDownloadUrlRespValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *GetRegistrationsBySiteTokenReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetRegistrationsBySiteTokenReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetRegistrationsBySiteTokenReq) DeepCopy() *GetRegistrationsBySiteTokenReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetRegistrationsBySiteTokenReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetRegistrationsBySiteTokenReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetRegistrationsBySiteTokenReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetRegistrationsBySiteTokenReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetRegistrationsBySiteTokenReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetRegistrationsBySiteTokenReq) SiteTokenValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_token")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetRegistrationsBySiteTokenReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetRegistrationsBySiteTokenReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetRegistrationsBySiteTokenReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["site_token"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("site_token"))
+		if err := fv(ctx, m.GetSiteToken(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetRegistrationsBySiteTokenReqValidator = func() *ValidateGetRegistrationsBySiteTokenReq {
+	v := &ValidateGetRegistrationsBySiteTokenReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhSiteToken := v.SiteTokenValidationRuleHandler
+	rulesSiteToken := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhSiteToken(rulesSiteToken)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetRegistrationsBySiteTokenReq.site_token: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_token"] = vFn
+
+	return v
+}()
+
+func GetRegistrationsBySiteTokenReqValidator() db.Validator {
+	return DefaultGetRegistrationsBySiteTokenReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *GetRegistrationsBySiteTokenResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *GetRegistrationsBySiteTokenResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *GetRegistrationsBySiteTokenResp) DeepCopy() *GetRegistrationsBySiteTokenResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &GetRegistrationsBySiteTokenResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *GetRegistrationsBySiteTokenResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *GetRegistrationsBySiteTokenResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return GetRegistrationsBySiteTokenRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateGetRegistrationsBySiteTokenResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateGetRegistrationsBySiteTokenResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*GetRegistrationsBySiteTokenResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *GetRegistrationsBySiteTokenResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["registration_uuids"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("registration_uuids"))
+		for idx, item := range m.GetRegistrationUuids() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultGetRegistrationsBySiteTokenRespValidator = func() *ValidateGetRegistrationsBySiteTokenResp {
+	v := &ValidateGetRegistrationsBySiteTokenResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func GetRegistrationsBySiteTokenRespValidator() db.Validator {
+	return DefaultGetRegistrationsBySiteTokenRespValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *GetRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

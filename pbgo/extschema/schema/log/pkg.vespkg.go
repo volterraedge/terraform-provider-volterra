@@ -14,15 +14,19 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.log.AccessLogRequestV2"] = AccessLogRequestV2Validator()
 	vr["ves.io.schema.log.AuditLogAggregationRequest"] = AuditLogAggregationRequestValidator()
 	vr["ves.io.schema.log.AuditLogRequestV2"] = AuditLogRequestV2Validator()
+	vr["ves.io.schema.log.ExternalConnectorRequest"] = ExternalConnectorRequestValidator()
 	vr["ves.io.schema.log.FirewallLogAggregationRequest"] = FirewallLogAggregationRequestValidator()
 	vr["ves.io.schema.log.FirewallLogRequest"] = FirewallLogRequestValidator()
 	vr["ves.io.schema.log.K8SAuditLogAggregationRequest"] = K8SAuditLogAggregationRequestValidator()
 	vr["ves.io.schema.log.K8SAuditLogRequest"] = K8SAuditLogRequestValidator()
 	vr["ves.io.schema.log.K8SEventsAggregationRequest"] = K8SEventsAggregationRequestValidator()
 	vr["ves.io.schema.log.K8SEventsRequest"] = K8SEventsRequestValidator()
+	vr["ves.io.schema.log.LabelFilter"] = LabelFilterValidator()
 	vr["ves.io.schema.log.LogAggregationResponse"] = LogAggregationResponseValidator()
 	vr["ves.io.schema.log.LogResponse"] = LogResponseValidator()
 	vr["ves.io.schema.log.LogScrollRequest"] = LogScrollRequestValidator()
+	vr["ves.io.schema.log.PlatformEventAggregationRequest"] = PlatformEventAggregationRequestValidator()
+	vr["ves.io.schema.log.PlatformEventRequest"] = PlatformEventRequestValidator()
 	vr["ves.io.schema.log.VK8SAuditLogAggregationRequest"] = VK8SAuditLogAggregationRequestValidator()
 	vr["ves.io.schema.log.VK8SAuditLogRequest"] = VK8SAuditLogRequestValidator()
 	vr["ves.io.schema.log.VK8SEventsAggregationRequest"] = VK8SEventsAggregationRequestValidator()
@@ -107,11 +111,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

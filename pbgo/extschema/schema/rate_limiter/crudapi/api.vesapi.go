@@ -2887,9 +2887,97 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "rate_limiterInputHours": {
+            "type": "object",
+            "description": "Input Duration Hours",
+            "title": "Hours",
+            "x-displayname": "Hours",
+            "x-ves-proto-message": "ves.io.schema.rate_limiter.InputHours",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 48\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "48"
+                    }
+                }
+            }
+        },
+        "rate_limiterInputMinutes": {
+            "type": "object",
+            "description": "Input Duration Minutes",
+            "title": "Minutes",
+            "x-displayname": "Minutes",
+            "x-ves-proto-message": "ves.io.schema.rate_limiter.InputMinutes",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 60\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "60"
+                    }
+                }
+            }
+        },
+        "rate_limiterInputSeconds": {
+            "type": "object",
+            "description": "Input Duration Seconds",
+            "title": "Seconds",
+            "x-displayname": "Seconds",
+            "x-ves-proto-message": "ves.io.schema.rate_limiter.InputSeconds",
+            "properties": {
+                "duration": {
+                    "type": "integer",
+                    "description": "\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 300\n",
+                    "title": "Duration",
+                    "format": "int64",
+                    "x-displayname": "Duration",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "300"
+                    }
+                }
+            }
+        },
+        "rate_limiterRateLimitBlockAction": {
+            "type": "object",
+            "description": "Action where a user is blocked from making further requests after exceeding rate limit threshold.",
+            "title": "RateLimitBlockAction",
+            "x-displayname": "Rate Limit Block Action",
+            "x-ves-oneof-field-block_duration_choice": "[\"hours\",\"minutes\",\"seconds\"]",
+            "x-ves-proto-message": "ves.io.schema.rate_limiter.RateLimitBlockAction",
+            "properties": {
+                "hours": {
+                    "description": "Exclusive with [minutes seconds]\n User block mitigation time in Hours",
+                    "title": "Hours",
+                    "$ref": "#/definitions/rate_limiterInputHours",
+                    "x-displayname": "Hours"
+                },
+                "minutes": {
+                    "description": "Exclusive with [hours seconds]\n User block mitigation time in Minutes",
+                    "title": "Minutes",
+                    "$ref": "#/definitions/rate_limiterInputMinutes",
+                    "x-displayname": "Minutes"
+                },
+                "seconds": {
+                    "description": "Exclusive with [hours minutes]\n User block mitigation time in Seconds",
+                    "title": "Seconds",
+                    "$ref": "#/definitions/rate_limiterInputSeconds",
+                    "x-displayname": "Seconds"
+                }
+            }
+        },
         "rate_limiterRateLimitPeriodUnit": {
             "type": "string",
-            "description": "Unit for the period per which the rate limit is applied.\n\n - SECOND: Second\n\nRate limit period is 1 second\n - MINUTE: Minute\n\nRate limit period is 1 minute\n - HOUR: Hour\n\nRate limit period is 1 hour\n - DAY: Day\n\nRate limit period is 1 day",
+            "description": "Unit for the period per which the rate limit is applied.\n\n - SECOND: Second\n\nRate limit period unit is seconds\n - MINUTE: Minute\n\nRate limit period unit is minutes\n - HOUR: Hour\n\nRate limit period unit is hours\n - DAY: Day\n\nRate limit period unit is days",
             "title": "RateLimitPeriodUnit",
             "enum": [
                 "SECOND",
@@ -2905,9 +2993,15 @@ var APISwaggerJSON string = `{
             "description": "A tuple consisting of a rate limit period unit and the total number of allowed requests for that period.",
             "title": "RateLimitValue",
             "x-displayname": "Rate Limit Value",
-            "x-ves-displayorder": "2,1,3",
+            "x-ves-oneof-field-action_choice": "[\"action_block\",\"disabled\"]",
             "x-ves-proto-message": "ves.io.schema.rate_limiter.RateLimitValue",
             "properties": {
+                "action_block": {
+                    "description": "Exclusive with [disabled]\n Blocks the user for a specified duration of time",
+                    "title": "Block Action",
+                    "$ref": "#/definitions/rate_limiterRateLimitBlockAction",
+                    "x-displayname": "Block"
+                },
                 "burst_multiplier": {
                     "type": "integer",
                     "description": " The maximum burst of requests to accommodate, expressed as a multiple of the rate.\n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 100\n",
@@ -2920,12 +3014,29 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "100"
                     }
                 },
+                "disabled": {
+                    "description": "Exclusive with [action_block]\n",
+                    "title": "Disabled",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "period_multiplier": {
+                    "type": "integer",
+                    "description": " This setting, combined with Per Period units, provides a duration \n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
+                    "title": "period_multiplier",
+                    "format": "int64",
+                    "x-displayname": "Periods",
+                    "x-ves-example": "1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0"
+                    }
+                },
                 "total_number": {
                     "type": "integer",
-                    "description": " The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 8192\n",
+                    "description": " The total number of allowed requests per rate-limiting period.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 8192\n",
                     "title": "total_number",
                     "format": "int64",
-                    "x-displayname": "Number",
+                    "x-displayname": "Number Of Requests",
                     "x-ves-example": "1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -3094,6 +3205,13 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "schemaEmpty": {
+            "type": "object",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
         },
         "schemaInitializerType": {
             "type": "object",

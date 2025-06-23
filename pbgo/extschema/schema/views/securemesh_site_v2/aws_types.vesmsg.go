@@ -261,14 +261,14 @@ func (m *AWSManagedMode) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetNodeListDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetNodeListDRefInfo() FAILED")
+	if fdrInfos, err := m.GetPrivateConnectivityChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetPrivateConnectivityChoiceDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
-	if fdrInfos, err := m.GetPrivateConnectivityChoiceDRefInfo(); err != nil {
-		return nil, errors.Wrap(err, "GetPrivateConnectivityChoiceDRefInfo() FAILED")
+	if fdrInfos, err := m.GetSiteTypeDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSiteTypeDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -327,24 +327,6 @@ func (m *AWSManagedMode) GetAwsCredDBEntries(ctx context.Context, d db.Interface
 }
 
 // GetDRefInfo for the field's type
-func (m *AWSManagedMode) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
-	if m.GetNodeList() == nil {
-		return nil, nil
-	}
-
-	drInfos, err := m.GetNodeList().GetDRefInfo()
-	if err != nil {
-		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfo() FAILED")
-	}
-	for i := range drInfos {
-		dri := &drInfos[i]
-		dri.DRField = "node_list." + dri.DRField
-	}
-	return drInfos, err
-
-}
-
-// GetDRefInfo for the field's type
 func (m *AWSManagedMode) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetPrivateConnectivityChoice() == nil {
 		return nil, nil
@@ -372,6 +354,42 @@ func (m *AWSManagedMode) GetPrivateConnectivityChoiceDRefInfo() ([]db.DRefInfo, 
 
 }
 
+// GetDRefInfo for the field's type
+func (m *AWSManagedMode) GetSiteTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSiteType() == nil {
+		return nil, nil
+	}
+	switch m.GetSiteType().(type) {
+	case *AWSManagedMode_SingleInterface:
+
+		drInfos, err := m.GetSingleInterface().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSingleInterface().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "single_interface." + dri.DRField
+		}
+		return drInfos, err
+
+	case *AWSManagedMode_MultipleInterface:
+
+		drInfos, err := m.GetMultipleInterface().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetMultipleInterface().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "multiple_interface." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
 type ValidateAWSManagedMode struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -390,6 +408,14 @@ func (v *ValidateAWSManagedMode) ServiceVpcChoiceVpcIdValidationRuleHandler(rule
 		return nil, errors.Wrap(err, "ValidationRuleHandler for vpc_id")
 	}
 	return oValidatorFn_VpcId, nil
+}
+
+func (v *ValidateAWSManagedMode) SiteTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for site_type")
+	}
+	return validatorFn, nil
 }
 
 func (v *ValidateAWSManagedMode) AwsRegionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -473,16 +499,6 @@ func (v *ValidateAWSManagedMode) InstanceTypeValidationRuleHandler(rules map[str
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for instance_type")
-	}
-
-	return validatorFn, nil
-}
-
-func (v *ValidateAWSManagedMode) SshKeyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewStringValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for ssh_key")
 	}
 
 	return validatorFn, nil
@@ -585,15 +601,6 @@ func (v *ValidateAWSManagedMode) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["node_list"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("node_list"))
-		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	switch m.GetPrivateConnectivityChoice().(type) {
 	case *AWSManagedMode_PrivateConnectivityDisabled:
 		if fv, exists := v.FldValidators["private_connectivity_choice.private_connectivity_disabled"]; exists {
@@ -682,11 +689,38 @@ func (v *ValidateAWSManagedMode) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["ssh_key"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("ssh_key"))
-		if err := fv(ctx, m.GetSshKey(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["site_type"]; exists {
+		val := m.GetSiteType()
+		vOpts := append(opts,
+			db.WithValidateField("site_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetSiteType().(type) {
+	case *AWSManagedMode_SingleInterface:
+		if fv, exists := v.FldValidators["site_type.single_interface"]; exists {
+			val := m.GetSiteType().(*AWSManagedMode_SingleInterface).SingleInterface
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("single_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSManagedMode_MultipleInterface:
+		if fv, exists := v.FldValidators["site_type.multiple_interface"]; exists {
+			val := m.GetSiteType().(*AWSManagedMode_MultipleInterface).MultipleInterface
+			vOpts := append(opts,
+				db.WithValidateField("site_type"),
+				db.WithValidateField("multiple_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -738,6 +772,17 @@ var DefaultAWSManagedModeValidator = func() *ValidateAWSManagedMode {
 
 	v.FldValidators["service_vpc_choice.vpc_id"] = vFnMap["service_vpc_choice.vpc_id"]
 
+	vrhSiteType := v.SiteTypeValidationRuleHandler
+	rulesSiteType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhSiteType(rulesSiteType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSManagedMode.site_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["site_type"] = vFn
+
 	vrhAwsRegion := v.AwsRegionValidationRuleHandler
 	rulesAwsRegion := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
@@ -785,17 +830,6 @@ var DefaultAWSManagedModeValidator = func() *ValidateAWSManagedMode {
 	}
 	v.FldValidators["instance_type"] = vFn
 
-	vrhSshKey := v.SshKeyValidationRuleHandler
-	rulesSshKey := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhSshKey(rulesSshKey)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSManagedMode.ssh_key: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["ssh_key"] = vFn
-
 	vrhDiskSize := v.DiskSizeValidationRuleHandler
 	rulesDiskSize := map[string]string{
 		"ves.io.schema.rules.uint32.lte": "64000",
@@ -816,7 +850,8 @@ var DefaultAWSManagedModeValidator = func() *ValidateAWSManagedMode {
 
 	v.FldValidators["service_vpc_choice.new_vpc"] = ves_io_schema_views.AWSVPCParamsTypeValidator().Validate
 
-	v.FldValidators["node_list"] = AWSManagedNodeListValidator().Validate
+	v.FldValidators["site_type.single_interface"] = SingleInterfaceValidator().Validate
+	v.FldValidators["site_type.multiple_interface"] = MultipleInterfaceValidator().Validate
 
 	return v
 }()
@@ -1041,7 +1076,8 @@ var DefaultAWSManagedNodeValidator = func() *ValidateAWSManagedNode {
 
 	vrhType := v.TypeValidationRuleHandler
 	rulesType := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"Control\",\"Worker\"]",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.in":        "[\"Control\"]",
 	}
 	vFn, err = vrhType(rulesType)
 	if err != nil {
@@ -1252,6 +1288,7 @@ var DefaultAWSManagedNodeListValidator = func() *ValidateAWSManagedNodeList {
 
 	vrhNodeList := v.NodeListValidationRuleHandler
 	rulesNodeList := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "128",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
@@ -1364,16 +1401,6 @@ func (v *ValidateAWSOrchestratedInterface) MtuValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateAWSOrchestratedInterface) PriorityValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for priority")
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateAWSOrchestratedInterface) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AWSOrchestratedInterface)
 	if !ok {
@@ -1386,32 +1413,6 @@ func (v *ValidateAWSOrchestratedInterface) Validate(ctx context.Context, pm inte
 	}
 	if m == nil {
 		return nil
-	}
-
-	switch m.GetMonitoringChoice().(type) {
-	case *AWSOrchestratedInterface_MonitorDisabled:
-		if fv, exists := v.FldValidators["monitoring_choice.monitor_disabled"]; exists {
-			val := m.GetMonitoringChoice().(*AWSOrchestratedInterface_MonitorDisabled).MonitorDisabled
-			vOpts := append(opts,
-				db.WithValidateField("monitoring_choice"),
-				db.WithValidateField("monitor_disabled"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AWSOrchestratedInterface_Monitor:
-		if fv, exists := v.FldValidators["monitoring_choice.monitor"]; exists {
-			val := m.GetMonitoringChoice().(*AWSOrchestratedInterface_Monitor).Monitor
-			vOpts := append(opts,
-				db.WithValidateField("monitoring_choice"),
-				db.WithValidateField("monitor"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-
 	}
 
 	if fv, exists := v.FldValidators["mtu"]; exists {
@@ -1427,15 +1428,6 @@ func (v *ValidateAWSOrchestratedInterface) Validate(ctx context.Context, pm inte
 
 		vOpts := append(opts, db.WithValidateField("network_option"))
 		if err := fv(ctx, m.GetNetworkOption(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["priority"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("priority"))
-		if err := fv(ctx, m.GetPriority(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1512,18 +1504,6 @@ var DefaultAWSOrchestratedInterfaceValidator = func() *ValidateAWSOrchestratedIn
 		panic(errMsg)
 	}
 	v.FldValidators["mtu"] = vFn
-
-	vrhPriority := v.PriorityValidationRuleHandler
-	rulesPriority := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "255",
-	}
-	vFn, err = vrhPriority(rulesPriority)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSOrchestratedInterface.priority: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["priority"] = vFn
 
 	v.FldValidators["subnet"] = AWSSubnetChoiceTypeValidator().Validate
 
@@ -1687,4 +1667,218 @@ var DefaultAWSSubnetChoiceTypeValidator = func() *ValidateAWSSubnetChoiceType {
 
 func AWSSubnetChoiceTypeValidator() db.Validator {
 	return DefaultAWSSubnetChoiceTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MultipleInterface) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MultipleInterface) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MultipleInterface) DeepCopy() *MultipleInterface {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MultipleInterface{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MultipleInterface) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MultipleInterface) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MultipleInterfaceValidator().Validate(ctx, m, opts...)
+}
+
+func (m *MultipleInterface) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNodeListDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *MultipleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetNodeList() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetNodeList().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "node_list." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateMultipleInterface struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMultipleInterface) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MultipleInterface)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MultipleInterface got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["node_list"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_list"))
+		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMultipleInterfaceValidator = func() *ValidateMultipleInterface {
+	v := &ValidateMultipleInterface{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["node_list"] = AWSManagedNodeListValidator().Validate
+
+	return v
+}()
+
+func MultipleInterfaceValidator() db.Validator {
+	return DefaultMultipleInterfaceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SingleInterface) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SingleInterface) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SingleInterface) DeepCopy() *SingleInterface {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SingleInterface{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SingleInterface) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SingleInterface) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SingleInterfaceValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SingleInterface) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNodeListDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SingleInterface) GetNodeListDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetNodeList() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetNodeList().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetNodeList().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "node_list." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateSingleInterface struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSingleInterface) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SingleInterface)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SingleInterface got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["node_list"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_list"))
+		if err := fv(ctx, m.GetNodeList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSingleInterfaceValidator = func() *ValidateSingleInterface {
+	v := &ValidateSingleInterface{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["node_list"] = AWSManagedNodeListValidator().Validate
+
+	return v
+}()
+
+func SingleInterfaceValidator() db.Validator {
+	return DefaultSingleInterfaceValidator
 }

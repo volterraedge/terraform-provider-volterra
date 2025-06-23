@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/store"
 	"gopkg.volterra.us/stdlib/svcfw"
 )
@@ -16,6 +17,16 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.api_sec.api_crawler.Object"] = ObjectValidator()
 	vr["ves.io.schema.api_sec.api_crawler.StatusObject"] = StatusObjectValidator()
+
+	vr["ves.io.schema.api_sec.api_crawler.RemoveScanStatusReq"] = RemoveScanStatusReqValidator()
+	vr["ves.io.schema.api_sec.api_crawler.RemoveScanStatusResp"] = RemoveScanStatusRespValidator()
+	vr["ves.io.schema.api_sec.api_crawler.StatusCompleted"] = StatusCompletedValidator()
+	vr["ves.io.schema.api_sec.api_crawler.StatusError"] = StatusErrorValidator()
+	vr["ves.io.schema.api_sec.api_crawler.StatusPending"] = StatusPendingValidator()
+	vr["ves.io.schema.api_sec.api_crawler.StatusRunning"] = StatusRunningValidator()
+	vr["ves.io.schema.api_sec.api_crawler.StatusStarted"] = StatusStartedValidator()
+	vr["ves.io.schema.api_sec.api_crawler.UpdateScanStatusReq"] = UpdateScanStatusReqValidator()
+	vr["ves.io.schema.api_sec.api_crawler.UpdateScanStatusResp"] = UpdateScanStatusRespValidator()
 
 	vr["ves.io.schema.api_sec.api_crawler.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.api_sec.api_crawler.CreateResponse"] = CreateResponseValidator()
@@ -28,11 +39,13 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_sec.api_crawler.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.api_sec.api_crawler.ReplaceResponse"] = ReplaceResponseValidator()
 
+	vr["ves.io.schema.api_sec.api_crawler.ApiCrawlingStatus"] = ApiCrawlingStatusValidator()
 	vr["ves.io.schema.api_sec.api_crawler.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.api_sec.api_crawler.DomainConfiguration"] = DomainConfigurationValidator()
 	vr["ves.io.schema.api_sec.api_crawler.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.api_sec.api_crawler.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.api_sec.api_crawler.ReplaceSpecType"] = ReplaceSpecTypeValidator()
+	vr["ves.io.schema.api_sec.api_crawler.ScanInfo"] = ScanInfoValidator()
 	vr["ves.io.schema.api_sec.api_crawler.SimpleLogin"] = SimpleLoginValidator()
 
 }
@@ -59,6 +72,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_sec.api_crawler.API.Create"] = "ves.io.schema.api_sec.api_crawler.CreateRequest"
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.api_crawler.API.Get"] = []string{
+		"status.#.conditions.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.api_crawler.API.List"] = []string{
+		"items.#.status_set.#.conditions.#",
+	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.api_sec.api_crawler.API.Replace"] = []string{
 		"spec.domains.#.simple_login.password.blindfold_secret_info_internal",
@@ -92,6 +113,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 
+	customCSR = mdr.PvtCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.api_sec.api_crawler.Object"] = PrivateCustomAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.api_sec.api_crawler.PrivateCustomAPI"] = NewPrivateCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.api_sec.api_crawler.PrivateCustomAPI"] = NewPrivateCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.api_sec.api_crawler.PrivateCustomAPI"] = RegisterPrivateCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.api_sec.api_crawler.PrivateCustomAPI"] = RegisterGwPrivateCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.api_sec.api_crawler.PrivateCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewPrivateCustomAPIServer(svc)
+		}
+
+	}()
+
 	csr = mdr.PubCRUDServiceRegistry
 
 	func() {
@@ -117,11 +158,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

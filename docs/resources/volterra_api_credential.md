@@ -1,6 +1,6 @@
 ---
 
-page_title: "Volterra: volterra_api_credential" 
+page_title: "Volterra: volterra_api_credential"
 
 description: "The volterra_api_credential allows creation of api_credential object on Volterra SaaS"
 

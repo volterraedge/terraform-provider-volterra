@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/dns_zones/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -1122,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.dns_zone.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.dns_zone.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3974,7 +3987,7 @@ var APISwaggerJSON string = `{
                 },
                 "default_rr_set_group": {
                     "type": "array",
-                    "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
+                    "description": " Add and manage DNS resource record sets part of Default set group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
                     "maxItems": 50000,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSet"
@@ -3992,7 +4005,7 @@ var APISwaggerJSON string = `{
                 },
                 "rr_set_group": {
                     "type": "array",
-                    "description": " Collection of additional DNS resource record sets\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Create and manage set groups, and resource record sets within them, x-ves-io-managed set is managed by F5.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 50,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSetGroup"
@@ -4026,7 +4039,7 @@ var APISwaggerJSON string = `{
                 },
                 "default_rr_set_group": {
                     "type": "array",
-                    "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
+                    "description": " Add and manage DNS resource record sets part of Default set group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
                     "maxItems": 50000,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSet"
@@ -4044,7 +4057,7 @@ var APISwaggerJSON string = `{
                 },
                 "rr_set_group": {
                     "type": "array",
-                    "description": " Collection of additional DNS resource record sets\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Create and manage set groups, and resource record sets within them, x-ves-io-managed set is managed by F5.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 50,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSetGroup"
@@ -4898,8 +4911,8 @@ var APISwaggerJSON string = `{
             "description": "TSIG key value must be compatible with the specified algorithm\n\n - UNDEFINED: UNDEFINED\n\n - HMAC_MD5: HMAC_MD5\n\n - HMAC_SHA1: HMAC_SHA1\n\n - HMAC_SHA224: HMAC_SHA224\n\n - HMAC_SHA256: HMAC_SHA256\n\n - HMAC_SHA384: HMAC_SHA384\n\n - HMAC_SHA512: HMAC_SHA512\n",
             "title": "TSIG Key Algorithm",
             "enum": [
-                "UNDEFINED",
                 "HMAC_MD5",
+                "UNDEFINED",
                 "HMAC_SHA1",
                 "HMAC_SHA224",
                 "HMAC_SHA256",

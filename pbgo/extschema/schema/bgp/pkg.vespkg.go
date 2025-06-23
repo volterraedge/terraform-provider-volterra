@@ -32,9 +32,12 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.bgp.GetStatusRequest"] = GetStatusRequestValidator()
 	vr["ves.io.schema.bgp.GetStatusResponse"] = GetStatusResponseValidator()
 
+	vr["ves.io.schema.bgp.BFD"] = BFDValidator()
 	vr["ves.io.schema.bgp.BgpParameters"] = BgpParametersValidator()
 	vr["ves.io.schema.bgp.BgpPeer"] = BgpPeerValidator()
 	vr["ves.io.schema.bgp.BgpPeerStatusType"] = BgpPeerStatusTypeValidator()
+	vr["ves.io.schema.bgp.BgpRoutePolicies"] = BgpRoutePoliciesValidator()
+	vr["ves.io.schema.bgp.BgpRoutePolicy"] = BgpRoutePolicyValidator()
 	vr["ves.io.schema.bgp.BgpStatusType"] = BgpStatusTypeValidator()
 	vr["ves.io.schema.bgp.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.bgp.FamilyInet"] = FamilyInetValidator()
@@ -47,6 +50,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.bgp.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.bgp.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.bgp.InterfaceList"] = InterfaceListValidator()
+	vr["ves.io.schema.bgp.Nodes"] = NodesValidator()
 	vr["ves.io.schema.bgp.Peer"] = PeerValidator()
 	vr["ves.io.schema.bgp.PeerExternal"] = PeerExternalValidator()
 	vr["ves.io.schema.bgp.PeerFamilyParameters"] = PeerFamilyParametersValidator()
@@ -104,6 +108,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.peers.#.external.outside_interfaces",
 		"spec.peers.#.internal",
 		"spec.peers.#.metadata.disable",
+		"spec.peers.#.routing_policies",
 		"spec.peers.#.target_service",
 		"spec.where.site.refs.#",
 		"spec.where.virtual_site.refs.#",
@@ -206,6 +211,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.peers.#.external.outside_interfaces",
 		"spec.peers.#.internal",
 		"spec.peers.#.metadata.disable",
+		"spec.peers.#.routing_policies",
 		"spec.peers.#.target_service",
 		"spec.where.site.refs.#",
 		"spec.where.virtual_site.refs.#",
@@ -293,11 +299,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 
