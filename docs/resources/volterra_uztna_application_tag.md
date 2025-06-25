@@ -19,7 +19,8 @@ Example Usage
 resource "volterra_uztna_application_tag" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
-  tag       = ["APPGRP-MKTG"]
+
+  tag = ["APPGRP-MKTG"]
 }
 
 ```

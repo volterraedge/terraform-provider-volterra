@@ -17,13 +17,22 @@ Example Usage
 
 ```hcl
 resource "volterra_aws_vpc_site" "example" {
-  name       = "acmecorp-web"
-  namespace  = "staging"
+  name      = "acmecorp-web"
+  namespace = "staging"
+
   aws_region = ["us-east-1"]
 
   // One of the arguments from this list "block_all_services blocked_services default_blocked_services" must be set
 
-  block_all_services = true
+  blocked_services {
+    blocked_sevice {
+      // One of the arguments from this list "dns ssh web_user_interface" can be set
+
+      dns = true
+
+      network_type = "network_type"
+    }
+  }
 
   // One of the arguments from this list "aws_cred" must be set
 
@@ -35,16 +44,26 @@ resource "volterra_aws_vpc_site" "example" {
 
   // One of the arguments from this list "direct_connect_disabled direct_connect_enabled private_connectivity" must be set
 
-  direct_connect_disabled = true
+  private_connectivity {
+    cloud_link {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    // One of the arguments from this list "inside outside" can be set
+
+    outside = true
+  }
 
   // One of the arguments from this list "egress_gateway_default egress_nat_gw egress_virtual_private_gateway" must be set
 
   egress_gateway_default = true
-  instance_type          = ["a1.xlarge"]
+  instance_type = ["a1.xlarge"]
 
   // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
 
-  disable_internet_vip = true
+  enable_internet_vip = true
 
   // One of the arguments from this list "log_receiver logs_streaming_disabled" must be set
 
@@ -52,7 +71,7 @@ resource "volterra_aws_vpc_site" "example" {
 
   // One of the arguments from this list "f5_orchestrated_routing manual_routing" must be set
 
-  manual_routing = true
+  f5_orchestrated_routing = true
 
   // One of the arguments from this list "custom_security_group f5xc_security_group" must be set
 
@@ -72,8 +91,6 @@ resource "volterra_aws_vpc_site" "example" {
     az_nodes {
       aws_az_name = "us-west-2a"
 
-      disk_size = "80"
-
       local_subnet {
         // One of the arguments from this list "existing_subnet_id subnet_param" must be set
 
@@ -91,7 +108,7 @@ resource "volterra_aws_vpc_site" "example" {
 
   // One of the arguments from this list "no_worker_nodes nodes_per_az total_nodes" must be set
 
-  nodes_per_az = "2"
+  no_worker_nodes = true
 }
 
 ```
@@ -215,19 +232,11 @@ Argument Reference
 
 Admin password user for accessing site through serial console ..
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Admin Password Blindfold Secret Info Internal ](#admin-password-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Coordinates
 
@@ -298,16 +307,6 @@ Choice of using existing VPC or create new VPC.
 `new_vpc` - (Optional) Parameters for creating new VPC. See [Choice New Vpc ](#choice-new-vpc) below for details.
 
 `vpc_id` - (Optional) Information about existing VPC ID (`String`).
-
-### Admin Password Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Asn Choice Auto Asn
 
@@ -389,8 +388,6 @@ Select Existing Subnet or Create New.
 
 Parameters for creating new VPC.
 
-`allocate_ipv6` - (Optional) Allocate IPv6 CIDR block from AWS (`Bool`).(Deprecated)
-
 ###### One of the arguments from this list "autogenerate, name_tag" must be set
 
 `autogenerate` - (Optional) Autogenerate the VPC Name (`Bool`).
@@ -445,24 +442,6 @@ Site Registration and Site to RE tunnels go over the AWS Direct Connect Connecti
 
 Site Registration and Site to RE tunnels go over the internet gateway.
 
-### Custom Certificate Private Key
-
-TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Private Key Blindfold Secret Info Internal ](#private-key-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
-
 ### Custom Static Route Nexthop
 
 Nexthop for the route.
@@ -497,11 +476,9 @@ Direct Connect feature is enabled(Legacy).
 
 `custom_asn` - (Optional) Custom Autonomous System Number (`Int`).
 
-###### One of the arguments from this list "hosted_vifs, manual_gw, standard_vifs" must be set
+###### One of the arguments from this list "hosted_vifs, standard_vifs" must be set
 
 `hosted_vifs` - (Optional) and automatically associate provided hosted VIF and also setup BGP Peering.. See [Vif Choice Hosted Vifs ](#vif-choice-hosted-vifs) below for details.
-
-`manual_gw` - (Optional) and a user associate AWS DirectConnect Gateway with it. (`Bool`).(Deprecated)
 
 `standard_vifs` - (Optional) and a user associate VIF to the DirectConnect gateway and setup BGP Peering. (`Bool`).
 
@@ -533,41 +510,11 @@ With this option, egress site traffic will be routed through an Virtual Private 
 
 `vgw_id` - (Optional) x-displayName: "Existing Virtual Private Gateway ID" (`String`).
 
-### Enable Disable Choice Disable Interception
-
-Disable Interception.
-
-### Enable Disable Choice Enable Interception
-
-Enable Interception.
-
 ### Forward Proxy Choice Active Forward Proxy Policies
 
 Enable Forward Proxy for this site and manage policies.
 
 `forward_proxy_policies` - (Required) Ordered List of Forward Proxy Policies active. See [ref](#ref) below for details.
-
-### Forward Proxy Choice Disable Forward Proxy
-
-Forward Proxy is disabled for this connector.
-
-### Forward Proxy Choice Enable Forward Proxy
-
-Forward Proxy is enabled for this connector.
-
-`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2000 (2 seconds) (`Int`).
-
-`max_connect_attempts` - (Optional) Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1. (`Int`).
-
-###### One of the arguments from this list "no_interception, tls_intercept" can be set
-
-`no_interception` - (Optional) No TLS interception is enabled for this network connector (`Bool`).(Deprecated)
-
-`tls_intercept` - (Optional) Specify TLS interception configuration for the network connector. See [Tls Interception Choice Tls Intercept ](#tls-interception-choice-tls-intercept) below for details.(Deprecated)
-
-`white_listed_ports` - (Optional) Example "tmate" server port (`Int`).
-
-`white_listed_prefixes` - (Optional) Example "tmate" server ip (`String`).
 
 ### Forward Proxy Choice Forward Proxy Allow All
 
@@ -596,12 +543,6 @@ Global network connections.
 `sli_to_global_dr` - (Optional) Site local inside is connected directly to a given global network. See [Connection Choice Sli To Global Dr ](#connection-choice-sli-to-global-dr) below for details.
 
 `slo_to_global_dr` - (Optional) Site local outside is connected directly to a given global network. See [Connection Choice Slo To Global Dr ](#connection-choice-slo-to-global-dr) below for details.
-
-###### One of the arguments from this list "disable_forward_proxy, enable_forward_proxy" can be set
-
-`disable_forward_proxy` - (Optional) Forward Proxy is disabled for this connector (`Bool`).(Deprecated)
-
-`enable_forward_proxy` - (Optional) Forward Proxy is enabled for this connector. See [Forward Proxy Choice Enable Forward Proxy ](#forward-proxy-choice-enable-forward-proxy) below for details.(Deprecated)
 
 ### Hosted Vifs Vif List
 
@@ -659,8 +600,6 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 `reserved_inside_subnet` - (Optional) Autogenerate and reserve a subnet from the Primary CIDR (`Bool`).
 
-`disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).(Deprecated)
-
 `outside_subnet` - (Required) Subnet for the outside interface of the node. See [Az Nodes Outside Subnet ](#az-nodes-outside-subnet) below for details.
 
 `workload_subnet` - (Optional) Subnet in which workloads are launched. See [Az Nodes Workload Subnet ](#az-nodes-workload-subnet) below for details.
@@ -697,8 +636,6 @@ Only Single AZ or Three AZ(s) nodes are supported currently..
 
 `aws_az_name` - (Required) AWS availability zone, must be consistent with the selected AWS region. (`String`).
 
-`disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).(Deprecated)
-
 `local_subnet` - (Optional) Subnets for the site local interface of the node. See [Az Nodes Local Subnet ](#az-nodes-local-subnet) below for details.
 
 ### Ingress Gw Performance Enhancement Mode
@@ -731,28 +668,6 @@ List of Static routes.
 
 `simple_static_route` - (Optional) Use simple static route for prefix pointing to single interface in the network (`String`).
 
-### Interception Policy Choice Enable For All Domains
-
-Enable interception for all domains.
-
-### Interception Policy Choice Policy
-
-Policy to enable/disable specific domains, with implicit enable all domains.
-
-`interception_rules` - (Required) List of ordered rules to enable or disable for TLS interception. See [Policy Interception Rules ](#policy-interception-rules) below for details.
-
-### Interception Rules Domain Match
-
-Domain value or regular expression to match.
-
-###### One of the arguments from this list "exact_value, regex_value, suffix_value" must be set
-
-`exact_value` - (Optional) Exact domain name. (`String`).
-
-`regex_value` - (Optional) Regular Expression value for the domain name (`String`).
-
-`suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
-
 ### K8s Cluster Choice No K8s Cluster
 
 Site Local K8s API access is disabled.
@@ -765,19 +680,11 @@ x-displayName: "Disable".
 
 x-displayName: "Enable".
 
-###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
+###### One of the arguments from this list "drain_max_unavailable_node_count" must be set
 
 `drain_max_unavailable_node_count` - (Optional) x-example: "1" (`Int`).
 
-`drain_max_unavailable_node_percentage` - (Optional) Max number of worker nodes to be upgraded in parallel by percentage. Note: 1% would mean batch size of 1 worker node. (`Int`).(Deprecated)
-
 `drain_node_timeout` - (Required) (Warning: It may block upgrade if services on a node cannot be gracefully upgraded. It is recommended to use the default value). (`Int`).
-
-###### One of the arguments from this list "disable_vega_upgrade_mode, enable_vega_upgrade_mode" must be set
-
-`disable_vega_upgrade_mode` - (Optional) Disable Vega Upgrade Mode (`Bool`).(Deprecated)
-
-`enable_vega_upgrade_mode` - (Optional) When enabled, vega will inform RE to stop traffic to the specific node. (`Bool`).(Deprecated)
 
 ### Name Choice Autogenerate
 
@@ -816,20 +723,6 @@ Nexthop address when type is "Use-Configured".
 `ipv4` - (Optional) IPv4 Address. See [Ver Ipv4 ](#ver-ipv4) below for details.
 
 `ipv6` - (Optional) IPv6 Address. See [Ver Ipv6 ](#ver-ipv6) below for details.
-
-### Ocsp Stapling Choice Custom Hash Algorithms
-
-Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
-
-`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
-
-### Ocsp Stapling Choice Disable Ocsp Stapling
-
-This is the default behavior if no choice is selected..
-
-### Ocsp Stapling Choice Use System Defaults
-
-F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Offline Survivability Mode Choice Enable Offline Survivability Mode
 
@@ -885,18 +778,6 @@ Site optimized for L3 traffic processing.
 
 Site optimized for L7 traffic processing.
 
-### Policy Interception Rules
-
-List of ordered rules to enable or disable for TLS interception.
-
-`domain_match` - (Required) Domain value or regular expression to match. See [Interception Rules Domain Match ](#interception-rules-domain-match) below for details.
-
-###### One of the arguments from this list "disable_interception, enable_interception" must be set
-
-`disable_interception` - (Optional) Disable Interception (`Bool`).
-
-`enable_interception` - (Optional) Enable Interception (`Bool`).
-
 ### Port Choice Custom Ports
 
 Custom list of ports to be allowed.
@@ -918,16 +799,6 @@ Only HTTP Port (80) will be allowed..
 ### Port Choice Use Https Port
 
 Only HTTPS Port (443) will be allowed..
-
-### Private Key Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Ref
 
@@ -957,26 +828,6 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
-### Secret Info Oneof Vault Secret Info
-
-Vault Secret is used for the secrets managed by Hashicorp Vault.
-
-`key` - (Optional) If not provided entire secret will be returned. (`String`).
-
-`location` - (Required) Path to secret in Vault. (`String`).
-
-`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
-
-`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
-
-`version` - (Optional) If not provided latest version will be returned. (`Int`).
-
-### Secret Info Oneof Wingman Secret Info
-
-Secret is given as bootstrap secret in F5XC Security Sidecar.
-
-`name` - (Required) Name of the secret. (`String`).
-
 ### Security Group Choice Custom Security Group
 
 With this option, ingress and egress traffic will be controlled via security group ids..
@@ -984,28 +835,6 @@ With this option, ingress and egress traffic will be controlled via security gro
 `inside_security_group_id` - (Optional) Security Group ID to be attached to SLI(Site Local Inside) Interface (`String`).
 
 `outside_security_group_id` - (Optional) Security Group ID to be attached to SLO(Site Local Outside) Interface (`String`).
-
-### Signing Cert Choice Custom Certificate
-
-Certificates for generating intermediate certificate for TLS interception..
-
-`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
-
-`description` - (Optional) Description for the certificate (`String`).
-
-###### One of the arguments from this list "custom_hash_algorithms, disable_ocsp_stapling, use_system_defaults" can be set
-
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
-
-`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Ocsp Stapling Choice Disable Ocsp Stapling ](#ocsp-stapling-choice-disable-ocsp-stapling) below for details.
-
-`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Ocsp Stapling Choice Use System Defaults ](#ocsp-stapling-choice-use-system-defaults) below for details.
-
-`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Custom Certificate Private Key ](#custom-certificate-private-key) below for details.
-
-### Signing Cert Choice Volterra Certificate
-
-F5XC certificates for generating intermediate certificate for TLS interception..
 
 ### Site Mesh Group Choice Sm Connection Public Ip
 
@@ -1169,44 +998,6 @@ List of custom storage classes.
 
 `storage_class_name` - (Required) Name of the storage class as it will appear in K8s. (`String`).
 
-### Tls Interception Choice No Interception
-
-No TLS interception is enabled for this network connector.
-
-### Tls Interception Choice Tls Intercept
-
-Specify TLS interception configuration for the network connector.
-
-###### One of the arguments from this list "enable_for_all_domains, policy" must be set
-
-`enable_for_all_domains` - (Optional) Enable interception for all domains (`Bool`).
-
-`policy` - (Optional) Policy to enable/disable specific domains, with implicit enable all domains. See [Interception Policy Choice Policy ](#interception-policy-choice-policy) below for details.
-
-###### One of the arguments from this list "custom_certificate, volterra_certificate" must be set
-
-`custom_certificate` - (Optional) Certificates for generating intermediate certificate for TLS interception.. See [Signing Cert Choice Custom Certificate ](#signing-cert-choice-custom-certificate) below for details.
-
-`volterra_certificate` - (Optional) F5XC certificates for generating intermediate certificate for TLS interception. (`Bool`).
-
-###### One of the arguments from this list "trusted_ca_url, volterra_trusted_ca" must be set
-
-`trusted_ca_url` - (Optional) Custom Root CA Certificate for validating upstream server certificate (`String`).
-
-`volterra_trusted_ca` - (Optional) F5XC Root CA Certificate for validating upstream server certificate (`Bool`).
-
-### Trusted Ca Choice Volterra Trusted Ca
-
-F5XC Root CA Certificate for validating upstream server certificate.
-
-### Vega Upgrade Mode Toggle Choice Disable Vega Upgrade Mode
-
-Disable Vega Upgrade Mode.
-
-### Vega Upgrade Mode Toggle Choice Enable Vega Upgrade Mode
-
-When enabled, vega will inform RE to stop traffic to the specific node..
-
 ### Ver Ipv4
 
 IPv4 Address.
@@ -1247,12 +1038,6 @@ and automatically associate provided hosted VIF and also setup BGP Peering..
 
 `vif_list` - (Optional) List of Hosted VIF Config. See [Hosted Vifs Vif List ](#hosted-vifs-vif-list) below for details.
 
-`vifs` - (Optional) VIFs (`String`).(Deprecated)
-
-### Vif Choice Manual Gw
-
-and a user associate AWS DirectConnect Gateway with it..
-
 ### Vif Choice Standard Vifs
 
 and a user associate VIF to the DirectConnect gateway and setup BGP Peering..
@@ -1286,8 +1071,6 @@ Allowed VIP Port Configuration.
 Only Single AZ or Three AZ(s) nodes are supported currently..
 
 `aws_az_name` - (Required) AWS availability zone, must be consistent with the selected AWS region. (`String`).
-
-`disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).(Deprecated)
 
 `local_subnet` - (Optional) Subnets for the site local interface of the node. See [Az Nodes Local Subnet ](#az-nodes-local-subnet) below for details.
 

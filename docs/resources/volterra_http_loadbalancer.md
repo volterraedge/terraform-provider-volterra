@@ -22,14 +22,41 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "advertise_custom advertise_on_public advertise_on_public_default_vip do_not_advertise" must be set
 
-  do_not_advertise = true
+  advertise_custom {
+    advertise_where {
+      site {
+        site {
+          name   = "site1"
+          namespace = "system"
+          tenant    = "acmecorp"
+        }
+         network = "SITE_NETWORK_INSIDE_AND_OUTSIDE"
+      }
+    }
+    advertise_where {
+      site {
+        site {
+          name   = "site2"
+          namespace = "system"
+          tenant    = "acmecorp"
+        }
+        network = "SITE_NETWORK_INSIDE_AND_OUTSIDE"
+      }
+    }
+  }
 
-  // One of the arguments from this list "api_definition api_definitions api_specification disable_api_definition" must be set
+  // One of the arguments from this list "api_specification disable_api_definition" must be set
 
-  api_definition {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
+  api_specification {
+    api_definition {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
+    }
+
+    // One of the arguments from this list "validation_all_spec_endpoints validation_custom_list validation_disabled" must be set
+
+    validation_disabled = true
   }
 
   // One of the arguments from this list "disable_api_discovery enable_api_discovery" must be set
@@ -45,9 +72,7 @@ resource "volterra_http_loadbalancer" "example" {
       code_base_integrations {
         // One of the arguments from this list "all_repos selected_repos" must be set
 
-        selected_repos {
-          api_code_repo = ["api_code_repo"]
-        }
+        all_repos = true
 
         code_base_integration {
           name      = "test1"
@@ -59,13 +84,7 @@ resource "volterra_http_loadbalancer" "example" {
 
     // One of the arguments from this list "custom_api_auth_discovery default_api_auth_discovery" must be set
 
-    custom_api_auth_discovery {
-      api_discovery_ref {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-    }
+    default_api_auth_discovery = true
     discovered_api_settings {
       purge_duration_for_inactive_discovered_apis = "2"
     }
@@ -73,71 +92,28 @@ resource "volterra_http_loadbalancer" "example" {
     // One of the arguments from this list "disable_learn_from_redirect_traffic enable_learn_from_redirect_traffic" must be set
 
     disable_learn_from_redirect_traffic = true
-    sensitive_data_detection_rules {
-      custom_sensitive_data_detection_rules {
-        metadata {
-          description = "Virtual Host for acmecorp website"
-
-          disable = true
-
-          name = "acmecorp-web"
-        }
-
-        sensitive_data_detection_config {
-          // One of the arguments from this list "any_domain specific_domain" must be set
-
-          any_domain = true
-
-          // One of the arguments from this list "key_pattern key_value_pattern value_pattern" must be set
-
-          key_pattern {
-            // One of the arguments from this list "exact_value regex_value" must be set
-
-            exact_value = "x-volt-header"
-          }
-
-          // One of the arguments from this list "all_request_sections all_response_sections all_sections custom_sections" must be set
-
-          all_sections = true
-
-          // One of the arguments from this list "any_target api_endpoint_target api_group base_path" must be set
-
-          any_target = true
-        }
-
-        sensitive_data_type {
-          type = "EMAIL"
-        }
-      }
-
-      disabled_built_in_rules {
-        name = "[EMAIL, CC]"
-      }
-    }
   }
+
+  // One of the arguments from this list "api_testing disable_api_testing" must be set
+
+  disable_api_testing = true
 
   // One of the arguments from this list "captcha_challenge enable_challenge js_challenge no_challenge policy_based_challenge" must be set
 
-  js_challenge {
+  captcha_challenge {
     cookie_expiry = "1000"
 
     custom_page = "string:///PHA+IFBsZWFzZSBXYWl0IDwvcD4="
-
-    js_script_delay = "1000"
   }
   domains = ["www.foo.com"]
 
   // One of the arguments from this list "cookie_stickiness least_active random ring_hash round_robin source_ip_stickiness" must be set
 
-  round_robin = true
-
-  // One of the arguments from this list "l7_ddos_action_block l7_ddos_action_default l7_ddos_action_js_challenge l7_ddos_action_none" must be set
-
-  l7_ddos_action_default = true
+  random = true
 
   // One of the arguments from this list "http https https_auto_cert" must be set
 
-  https {
+  https_auto_cert {
     add_hsts = true
 
     coalescing_options {
@@ -150,12 +126,7 @@ resource "volterra_http_loadbalancer" "example" {
 
     // One of the arguments from this list "default_loadbalancer non_default_loadbalancer" can be set
 
-    default_loadbalancer = true
-    header_transformation_type {
-      // One of the arguments from this list "default_header_transformation legacy_header_transformation preserve_case_header_transformation proper_case_header_transformation" must be set
-
-      legacy_header_transformation = true
-    }
+    non_default_loadbalancer = true
     http_protocol_options {
       // One of the arguments from this list "http_protocol_enable_v1_only http_protocol_enable_v1_v2 http_protocol_enable_v2_only" must be set
 
@@ -169,77 +140,25 @@ resource "volterra_http_loadbalancer" "example" {
     }
     http_redirect = true
 
+    // One of the arguments from this list "no_mtls use_mtls" must be set
+
+    no_mtls = true
+
     // One of the arguments from this list "disable_path_normalize enable_path_normalize" must be set
 
-    disable_path_normalize = true
+    enable_path_normalize = true
 
-    // One of the arguments from this list "port port_ranges" must be set
+    // One of the arguments from this list "port port_ranges" can be set
 
     port = "443"
 
     // One of the arguments from this list "append_server_name default_header pass_through server_name" can be set
 
-    default_header = true
-
-    // One of the arguments from this list "tls_cert_params tls_parameters" must be set
-
-    tls_parameters {
-      // One of the arguments from this list "no_mtls use_mtls" must be set
-
-      use_mtls {
-        client_certificate_optional = true
-
-        // One of the arguments from this list "crl no_crl" can be set
-
-        crl {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        // One of the arguments from this list "trusted_ca trusted_ca_url" must be set
-
-        trusted_ca_url = "trusted_ca_url"
-
-        // One of the arguments from this list "xfcc_disabled xfcc_options" can be set
-
-        xfcc_disabled = true
-      }
-
-      tls_certificates {
-        certificate_url = "value"
-
-        description = "Certificate used in production environment"
-
-        // One of the arguments from this list "custom_hash_algorithms disable_ocsp_stapling use_system_defaults" can be set
-
-        custom_hash_algorithms {
-          hash_algorithms = ["hash_algorithms"]
-        }
-        private_key {
-          blindfold_secret_info_internal {
-            decryption_provider = "value"
-
-            location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
-
-            store_provider = "value"
-          }
-
-          secret_encoding_type = "secret_encoding_type"
-
-          // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
-
-          wingman_secret_info {
-            name = "ChargeBack-API-Key"
-          }
-        }
-      }
-
-      tls_config {
-        // One of the arguments from this list "custom_security default_security low_security medium_security" must be set
+    server_name = "server_name"
+    tls_config {
+      // One of the arguments from this list "custom_security default_security low_security medium_security" must be set
 
         default_security = true
-      }
     }
   }
 
@@ -261,13 +180,7 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "active_service_policies no_service_policies service_policies_from_namespace" must be set
 
-  active_service_policies {
-    policies {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  service_policies_from_namespace = true
 
   // One of the arguments from this list "disable_threat_mesh enable_threat_mesh" must be set
 
@@ -283,11 +196,7 @@ resource "volterra_http_loadbalancer" "example" {
 
   // One of the arguments from this list "app_firewall disable_waf" must be set
 
-  app_firewall {
-    name      = "test1"
-    namespace = "staging"
-    tenant    = "acmecorp"
-  }
+  disable_waf = true
 }
 
 ```
@@ -323,11 +232,7 @@ Argument Reference
 
 `do_not_advertise` - (Optional) Do not advertise this load balancer (`Bool`).
 
-###### One of the arguments from this list "api_definition, api_definitions, api_specification, disable_api_definition" must be set
-
-`api_definition` - (Optional) DEPRECATED by 'api_specification'. See [ref](#ref) below for details.(Deprecated)
-
-`api_definitions` - (Optional) DEPRECATED by 'api_definition'. See [Api Definition Choice Api Definitions ](#api-definition-choice-api-definitions) below for details.(Deprecated)
+###### One of the arguments from this list "api_specification, disable_api_definition" must be set
 
 `api_specification` - (Optional) Specify API definition and OpenAPI Validation. See [Api Definition Choice Api Specification ](#api-definition-choice-api-specification) below for details.
 
@@ -341,15 +246,17 @@ Argument Reference
 
 `api_protection_rules` - (Optional) Rules can also include additional conditions, for example specific clients can access certain API endpoint or API group.. See [Api Protection Rules ](#api-protection-rules) below for details.
 
-`api_rate_limit_legacy` - (Optional) Legacy value only temporary pre-migration. This value will be copied over to api_rate_limit and removed later.. See [Api Rate Limit Legacy ](#api-rate-limit-legacy) below for details.(Deprecated)
+###### One of the arguments from this list "api_testing, disable_api_testing" must be set
+
+`api_testing` - (Optional) x-displayName: "Enable". See [Api Testing Choice Api Testing ](#api-testing-choice-api-testing) below for details.
+
+`disable_api_testing` - (Optional) x-displayName: "Disable" (`Bool`).
 
 `blocked_clients` - (Optional) Define rules to block IP Prefixes or AS numbers.. See [Blocked Clients ](#blocked-clients) below for details.
 
-###### One of the arguments from this list "bot_defense, bot_defense_advanced, disable_bot_defense" can be set
+###### One of the arguments from this list "bot_defense, disable_bot_defense" can be set
 
 `bot_defense` - (Optional) Select Bot Defense Standard. See [Bot Defense Choice Bot Defense ](#bot-defense-choice-bot-defense) below for details.
-
-`bot_defense_advanced` - (Optional) Select Bot Defense Advanced. See [Bot Defense Choice Bot Defense Advanced ](#bot-defense-choice-bot-defense-advanced) below for details.(Deprecated)
 
 `disable_bot_defense` - (Optional) No Bot Defense configuration for this load balancer (`Bool`).
 
@@ -407,15 +314,7 @@ Argument Reference
 
 `jwt_validation` - (Optional) tokens or tokens that are not yet valid.. See [Jwt Validation ](#jwt-validation) below for details.
 
-###### One of the arguments from this list "l7_ddos_action_block, l7_ddos_action_default, l7_ddos_action_js_challenge, l7_ddos_action_none" must be set
-
-`l7_ddos_action_block` - (Optional) Block suspicious sources (`Bool`).
-
-`l7_ddos_action_default` - (Optional) Block suspicious sources (`Bool`).
-
-`l7_ddos_action_js_challenge` - (Optional) Serve JavaScript challenge to suspicious sources. See [L7 Ddos Auto Mitigation Action L7 Ddos Action Js Challenge ](#l7-ddos-auto-mitigation-action-l7-ddos-action-js-challenge) below for details.
-
-`l7_ddos_action_none` - (Optional) Disable auto mitigation (`Bool`).(Deprecated)
+`l7_ddos_protection` - (Optional) L7 DDoS attack. See [L7 Ddos Protection ](#l7-ddos-protection) below for details.
 
 ###### One of the arguments from this list "http, https, https_auto_cert" must be set
 
@@ -431,27 +330,13 @@ Argument Reference
 
 `enable_malicious_user_detection` - (Optional) x-displayName: "Enable" (`Bool`).
 
-`malicious_user_mitigation` - (Optional) The settings defined in malicious user mitigation specify what mitigation actions to take for users determined to be at different threat levels.. See [ref](#ref) below for details.(Deprecated)
-
 ###### One of the arguments from this list "disable_malware_protection, malware_protection_settings" must be set
 
-`disable_malware_protection` - (Optional) x-displayName: "Disable" (`Bool`).(Deprecated)
+`disable_malware_protection` - (Optional) x-displayName: "Disable" (`Bool`).
 
-`malware_protection_settings` - (Optional) x-displayName: "Enable". See [Malware Protection Malware Protection Settings ](#malware-protection-malware-protection-settings) below for details.(Deprecated)
-
-###### One of the arguments from this list "multi_lb_app, single_lb_app" can be set
-
-`multi_lb_app` - (Optional) It should be configured externally using app type feature and label should be added to the HTTP load balancer. (`Bool`).(Deprecated)
-
-`single_lb_app` - (Optional) ML Config applied on this load balancer. See [Ml Config Choice Single Lb App ](#ml-config-choice-single-lb-app) below for details.(Deprecated)
+`malware_protection_settings` - (Optional) x-displayName: "Enable". See [Malware Protection Malware Protection Settings ](#malware-protection-malware-protection-settings) below for details.
 
 `more_option` - (Optional) More options like header manipulation, compression etc.. See [More Option ](#more-option) below for details.
-
-###### One of the arguments from this list "default_pool, default_pool_list" can be set
-
-`default_pool` - (Optional) Single Origin Pool. See [Origin Pool Choice Default Pool ](#origin-pool-choice-default-pool) below for details.(Deprecated)
-
-`default_pool_list` - (Optional) Multiple Origin Pools with weights and priorities. See [Origin Pool Choice Default Pool List ](#origin-pool-choice-default-pool-list) below for details.(Deprecated)
 
 `origin_server_subset_rule_list` - (Optional) When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated.. See [Origin Server Subset Rule List ](#origin-server-subset-rule-list) below for details.
 
@@ -525,35 +410,9 @@ Rules can also include additional conditions, for example specific clients can a
 
 `api_groups_rules` - (Optional) For API groups, refer to API Definition which includes API groups derived from uploaded swaggers.. See [Api Protection Rules Api Groups Rules ](#api-protection-rules-api-groups-rules) below for details.
 
-### Api Rate Limit Legacy
-
-Legacy value only temporary pre-migration. This value will be copied over to api_rate_limit and removed later..
-
-`api_endpoint_rules` - (Optional) For creating rule that contain a whole domain or group of endpoints, please use the server URL rules above.. See [Api Rate Limit Legacy Api Endpoint Rules ](#api-rate-limit-legacy-api-endpoint-rules) below for details.
-
-###### One of the arguments from this list "bypass_rate_limiting_rules, custom_ip_allowed_list, ip_allowed_list, no_ip_allowed_list" must be set
-
-`bypass_rate_limiting_rules` - (Optional) This category defines rules per URL or API group. If request matches any of these rules, skip Rate Limiting.. See [Ip Allowed List Choice Bypass Rate Limiting Rules ](#ip-allowed-list-choice-bypass-rate-limiting-rules) below for details.
-
-`custom_ip_allowed_list` - (Optional) IP Allowed list using existing ip_prefix_set objects.. See [Ip Allowed List Choice Custom Ip Allowed List ](#ip-allowed-list-choice-custom-ip-allowed-list) below for details.
-
-`ip_allowed_list` - (Optional) List of IP(s) for which rate limiting will be disabled.. See [Ip Allowed List Choice Ip Allowed List ](#ip-allowed-list-choice-ip-allowed-list) below for details.
-
-`no_ip_allowed_list` - (Optional) There is no ip allowed list for rate limiting, all clients go through rate limiting. (`Bool`).
-
-`server_url_rules` - (Optional) For matching also specific endpoints you can use the API endpoint rules set bellow.. See [Api Rate Limit Legacy Server Url Rules ](#api-rate-limit-legacy-server-url-rules) below for details.
-
 ### Blocked Clients
 
 Define rules to block IP Prefixes or AS numbers..
-
-###### One of the arguments from this list "bot_skip_processing, skip_processing, waf_skip_processing" can be set
-
-`bot_skip_processing` - (Optional) Skip Bot Defense processing for clients matching this rule. (`Bool`).(Deprecated)
-
-`skip_processing` - (Optional) Skip both WAF and Bot Defense processing for clients matching this rule. (`Bool`).(Deprecated)
-
-`waf_skip_processing` - (Optional) Skip WAF processing for clients matching this rule. (`Bool`).(Deprecated)
 
 `actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
@@ -590,8 +449,6 @@ resources from a server at a different origin.
 `disabled` - (Optional) The value of this field is ignored for virtual-host (`Bool`).
 
 `expose_headers` - (Optional) Specifies the content for the access-control-expose-headers header (`String`).
-
-`max_age` - (Optional) Specifies the content for the access-control-max-age header (`String`).(Deprecated)
 
 `maximum_age` - (Optional) Maximum permitted value is 86400 seconds (24 hours) (`Int`).
 
@@ -693,11 +550,7 @@ tokens or tokens that are not yet valid..
 
 `action` - (Required) x-required. See [Jwt Validation Action ](#jwt-validation-action) below for details.
 
-###### One of the arguments from this list "auth_server_uri, jwks, jwks_config" must be set
-
-`auth_server_uri` - (Optional) JWKS URI will be will be retrieved from this URI (`String`).(Deprecated)
-
-`jwks` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details. (`String`).(Deprecated)
+###### One of the arguments from this list "jwks_config" must be set
 
 `jwks_config` - (Optional) The JSON Web Key Set (JWKS) is a set of keys used to verify JSON Web Token (JWT) issued by the Authorization Server. See RFC 7517 for more details.. See [Jwks Configuration Jwks Config ](#jwks-configuration-jwks-config) below for details.
 
@@ -709,6 +562,22 @@ tokens or tokens that are not yet valid..
 
 `token_location` - (Required) Define where in the HTTP request the JWT token will be extracted. See [Jwt Validation Token Location ](#jwt-validation-token-location) below for details.
 
+### L7 Ddos Protection
+
+L7 DDoS attack.
+
+###### One of the arguments from this list "ddos_policy_custom, ddos_policy_none" must be set
+
+`ddos_policy_custom` - (Optional) Apply a custom service policy during an ongoing DDoS attack. See [ref](#ref) below for details.
+
+`ddos_policy_none` - (Optional) Do not apply additional service policy during an ongoing DDoS attack (`Bool`).
+
+###### One of the arguments from this list "mitigation_block, mitigation_js_challenge" must be set
+
+`mitigation_block` - (Optional) Block suspicious sources (`Bool`).
+
+`mitigation_js_challenge` - (Optional) Serve JavaScript challenge to suspicious sources. See [Mitigation Action Choice Mitigation Js Challenge ](#mitigation-action-choice-mitigation-js-challenge) below for details.
+
 ### More Option
 
 More options like header manipulation, compression etc..
@@ -719,37 +588,29 @@ More options like header manipulation, compression etc..
 
 `cookies_to_modify` - (Optional) List of cookies to be modified from the HTTP response being sent towards downstream.. See [More Option Cookies To Modify ](#more-option-cookies-to-modify) below for details.(Deprecated)
 
-`custom_errors` - (Optional) Map of integer error codes as keys and string values that can be used to provide custom http pages for each error code. Key of the map can be either response code class or HTTP Error code. Response code classes for key is configured as follows 3 -- for 3xx response code class, 4 -- for 4xx response code class, 5 -- for 5xx response code class. Value of the map is string which represents custom HTTP responses. Specific response code takes preference when both response code and response code class matches for a request. (`map(string)`)
+`custom_errors` - (Optional) Map of integer error codes as keys and string values that can be used to provide custom http pages for each error code. Key of the map can be either response code class or HTTP Error code. Response code classes for key is configured as follows 3 -- for 3xx response code class, 4 -- for 4xx response code class, 5 -- for 5xx response code class. Value of the map is string which represents custom HTTP responses. Specific response code takes preference when both response code and response code class matches for a request. (`map(string)`).
 
 `disable_default_error_pages` - (Optional) Disable the use of default F5XC error pages. (`Bool`).
 
 `idle_timeout` - (Optional) received, otherwise the stream is reset. (`Int`).
 
-`javascript_info` - (Optional) Custom JavaScript Configuration. Custom JavaScript code can be executed at various stages of request processing.. See [More Option Javascript Info ](#more-option-javascript-info) below for details.(Deprecated)
-
-`jwt` - (Optional) audiences and issuer. See [ref](#ref) below for details.(Deprecated)
-
 `max_request_header_size` - (Optional) such load balancers is used for all the load balancers in question. (`Int`).
 
-###### One of the arguments from this list "disable_path_normalize, enable_path_normalize" can be set
+`request_cookies_to_add` - (Optional) Cookies specified at this level are applied after cookies from matched Route are applied. See [More Option Request Cookies To Add ](#more-option-request-cookies-to-add) below for details.
 
-`disable_path_normalize` - (Optional) x-displayName: "Disable" (`Bool`).(Deprecated)
-
-`enable_path_normalize` - (Optional) x-displayName: "Enable" (`Bool`).(Deprecated)
+`request_cookies_to_remove` - (Optional) List of keys of Cookies to be removed from the HTTP request being sent towards upstream. (`String`).
 
 `request_headers_to_add` - (Optional) Headers specified at this level are applied after headers from matched Route are applied. See [More Option Request Headers To Add ](#more-option-request-headers-to-add) below for details.
 
 `request_headers_to_remove` - (Optional) List of keys of Headers to be removed from the HTTP request being sent towards upstream. (`String`).
 
+`response_cookies_to_add` - (Optional) Cookies specified at this level are applied after cookies from matched Route are applied. See [More Option Response Cookies To Add ](#more-option-response-cookies-to-add) below for details.
+
+`response_cookies_to_remove` - (Optional) List of name of Cookies to be removed from the HTTP response being sent towards downstream. Entire set-cookie header will be removed (`String`).
+
 `response_headers_to_add` - (Optional) Headers specified at this level are applied after headers from matched Route are applied. See [More Option Response Headers To Add ](#more-option-response-headers-to-add) below for details.
 
 `response_headers_to_remove` - (Optional) List of keys of Headers to be removed from the HTTP response being sent towards downstream. (`String`).
-
-###### One of the arguments from this list "additional_domains, enable_strict_sni_host_header_check" can be set
-
-`additional_domains` - (Optional) Wildcard names are supported in the suffix or prefix form. See [Strict Sni Host Header Check Choice Additional Domains ](#strict-sni-host-header-check-choice-additional-domains) below for details.(Deprecated)
-
-`enable_strict_sni_host_header_check` - (Optional) Enable strict SNI and Host header check (`Bool`).(Deprecated)
 
 ### Origin Server Subset Rule List
 
@@ -772,12 +633,6 @@ Note: We recommend enabling Secure and HttpOnly attributes along with cookie tam
 `add_httponly` - (Optional) x-displayName: "Add" (`Bool`).
 
 `ignore_httponly` - (Optional) x-displayName: "Ignore" (`Bool`).
-
-###### One of the arguments from this list "ignore_max_age, max_age_value" can be set
-
-`ignore_max_age` - (Optional) Ignore max age attribute (`Bool`).(Deprecated)
-
-`max_age_value` - (Optional) Add max age attribute (`Int`).(Deprecated)
 
 `name` - (Required) Name of the Cookie (`String`).
 
@@ -815,19 +670,11 @@ to origin pool or redirect matching traffic to a different URL or respond direct
 
 Sensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses.
 
-`sensitive_data_types_in_response` - (Optional) Sensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses . See [Sensitive Data Disclosure Rules Sensitive Data Types In Response ](#sensitive-data-disclosure-rules-sensitive-data-types-in-response) below for details.
+`sensitive_data_types_in_response` - (Optional) Sensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses. See [Sensitive Data Disclosure Rules Sensitive Data Types In Response ](#sensitive-data-disclosure-rules-sensitive-data-types-in-response) below for details.
 
 ### Trusted Clients
 
 Define rules to skip processing of one or more features such as WAF, Bot Defense etc. for clients..
-
-###### One of the arguments from this list "bot_skip_processing, skip_processing, waf_skip_processing" can be set
-
-`bot_skip_processing` - (Optional) Skip Bot Defense processing for clients matching this rule. (`Bool`).(Deprecated)
-
-`skip_processing` - (Optional) Skip both WAF and Bot Defense processing for clients matching this rule. (`Bool`).(Deprecated)
-
-`waf_skip_processing` - (Optional) Skip WAF processing for clients matching this rule. (`Bool`).(Deprecated)
 
 `actions` - (Optional) Actions that should be taken when client identifier matches the rule (`List of Strings`).
 
@@ -891,6 +738,18 @@ Deny the request..
 
 Block the request and issue an API security event.
 
+### Action Choice Action Block
+
+Blocks the user for a specified duration of time.
+
+###### One of the arguments from this list "hours, minutes, seconds" can be set
+
+`hours` - (Optional) User block mitigation time in Hours. See [Block Duration Choice Hours ](#block-duration-choice-hours) below for details.
+
+`minutes` - (Optional) User block mitigation time in Minutes. See [Block Duration Choice Minutes ](#block-duration-choice-minutes) below for details.
+
+`seconds` - (Optional) User block mitigation time in Seconds. See [Block Duration Choice Seconds ](#block-duration-choice-seconds) below for details.
+
 ### Action Choice Action Report
 
 Continue processing the request and issue an API security event.
@@ -907,9 +766,9 @@ x-displayName: "Apply".
 
 Block the request and report the issue.
 
-### Action Choice Bot Skip Processing
+### Action Choice Disabled
 
-Skip Bot Defense processing for clients matching this rule..
+x-displayName: "Disabled".
 
 ### Action Choice Report
 
@@ -919,21 +778,11 @@ Allow the request and report the issue.
 
 x-displayName: "Skip".
 
-### Action Choice Skip Processing
-
-Skip both WAF and Bot Defense processing for clients matching this rule..
-
-### Action Choice Waf Skip Processing
-
-Skip WAF processing for clients matching this rule..
-
 ### Action Type Block
 
 Block bot request and send response with custom content..
 
 `body` - (Optional) E.g. "<p> Your request was blocked </p>". Base64 encoded string for this html is "LzxwPiBZb3VyIHJlcXVlc3Qgd2FzIGJsb2NrZWQgPC9wPg==" (`String`).
-
-`body_hash` - (Optional) Represents the corresponding MD5 Hash for the body message. (`String`).(Deprecated)
 
 `status` - (Optional) HTTP Status code to respond with (`String`).
 
@@ -947,23 +796,11 @@ Flag the request while not taking any invasive actions..
 
 `no_headers` - (Optional) No mitigation headers. (`Bool`).
 
-### Action Type None
-
-No mitigation actions..
-
 ### Action Type Redirect
 
 Redirect bot request to a custom URI..
 
 `uri` - (Required) URI location for redirect may be relative or absolute. (`String`).
-
-### Additional Headers Choice Allow Additional Headers
-
-Allow extra headers (on top of what specified in the OAS documentation).
-
-### Additional Headers Choice Disallow Additional Headers
-
-Disallow extra headers (on top of what specified in the OAS documentation).
 
 ### Additional Parameters Choice Allow Additional Parameters
 
@@ -991,8 +828,6 @@ resources from a server at a different origin.
 
 `expose_headers` - (Optional) Specifies the content for the access-control-expose-headers header (`String`).
 
-`max_age` - (Optional) Specifies the content for the access-control-max-age header (`String`).(Deprecated)
-
 `maximum_age` - (Optional) Maximum permitted value is 86400 seconds (24 hours) (`Int`).
 
 ### Advanced Options Csrf Policy
@@ -1007,19 +842,19 @@ Because CSRF attacks specifically target state-changing requests, the policy onl
 
 `disabled` - (Optional) Allow all source origin domains. (`Bool`).
 
-### Advanced Options Header Transformation Type
+### Advanced Options Request Cookies To Add
 
-Settings to normalize the headers of upstream requests..
+Cookies specified at this level are applied after cookies from matched Route are applied.
 
-###### One of the arguments from this list "default_header_transformation, legacy_header_transformation, preserve_case_header_transformation, proper_case_header_transformation" must be set
+`name` - (Required) Name of the cookie in Cookie header. (`String`).
 
-`default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+`overwrite` - (Optional) Default value is do not overwrite (`Bool`).
 
-`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
+###### One of the arguments from this list "secret_value, value" must be set
 
-`preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
+`secret_value` - (Optional) Secret Value of the Cookie header. See [Value Choice Secret Value ](#value-choice-secret-value) below for details.
 
-`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
+`value` - (Optional) Value of the Cookie header. (`String`).
 
 ### Advanced Options Request Headers To Add
 
@@ -1034,6 +869,74 @@ Headers are key-value pairs to be added to HTTP request being routed towards ups
 `secret_value` - (Optional) Secret Value of the HTTP header.. See [Value Choice Secret Value ](#value-choice-secret-value) below for details.
 
 `value` - (Optional) Value of the HTTP header. (`String`).
+
+### Advanced Options Response Cookies To Add
+
+Cookies specified at this level are applied after cookies from matched Route are applied.
+
+###### One of the arguments from this list "add_domain, ignore_domain" can be set
+
+`add_domain` - (Optional) Add domain attribute (`String`).
+
+`ignore_domain` - (Optional) Ignore max age attribute (`Bool`).
+
+###### One of the arguments from this list "add_expiry, ignore_expiry" can be set
+
+`add_expiry` - (Optional) Add expiry attribute (`String`).
+
+`ignore_expiry` - (Optional) Ignore expiry attribute (`Bool`).
+
+###### One of the arguments from this list "add_httponly, ignore_httponly" can be set
+
+`add_httponly` - (Optional) x-displayName: "Add" (`Bool`).
+
+`ignore_httponly` - (Optional) x-displayName: "Ignore" (`Bool`).
+
+###### One of the arguments from this list "ignore_max_age, max_age_value" can be set
+
+`ignore_max_age` - (Optional) Ignore max age attribute (`Bool`).
+
+`max_age_value` - (Optional) Add max age attribute (`Int`).
+
+`name` - (Required) Name of the cookie in Cookie header. (`String`).
+
+`overwrite` - (Optional) Default value is do not overwrite (`Bool`).
+
+###### One of the arguments from this list "add_partitioned, ignore_partitioned" can be set
+
+`add_partitioned` - (Optional) x-displayName: "Add" (`Bool`).
+
+`ignore_partitioned` - (Optional) x-displayName: "Ignore" (`Bool`).
+
+###### One of the arguments from this list "add_path, ignore_path" can be set
+
+`add_path` - (Optional) Add path attribute (`String`).
+
+`ignore_path` - (Optional) Ignore path attribute (`Bool`).
+
+###### One of the arguments from this list "ignore_samesite, samesite_lax, samesite_none, samesite_strict" can be set
+
+`ignore_samesite` - (Optional) Ignore Samesite attribute (`Bool`).
+
+`samesite_lax` - (Optional) Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests (`Bool`).
+
+`samesite_none` - (Optional) Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests (`Bool`).
+
+`samesite_strict` - (Optional) Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests (`Bool`).
+
+###### One of the arguments from this list "add_secure, ignore_secure" can be set
+
+`add_secure` - (Optional) x-displayName: "Add" (`Bool`).
+
+`ignore_secure` - (Optional) x-displayName: "Ignore" (`Bool`).
+
+###### One of the arguments from this list "ignore_value, secret_value, value" can be set
+
+`ignore_value` - (Optional) Ignore value of cookie (`Bool`).
+
+`secret_value` - (Optional) Secret Value of the Cookie header. See [Value Choice Secret Value ](#value-choice-secret-value) below for details.
+
+`value` - (Optional) Value of the Cookie header. (`String`).
 
 ### Advanced Options Response Headers To Add
 
@@ -1065,7 +968,7 @@ Advertise this load balancer on public network.
 
 Where should this load balancer be available.
 
-###### One of the arguments from this list "advertise_on_public, cloud_edge_segment, segment, site, site_segment, virtual_network, virtual_site, virtual_site_segment, virtual_site_with_vip, vk8s_service" must be set
+###### One of the arguments from this list "advertise_on_public, site, site_segment, virtual_network, virtual_site, virtual_site_segment, virtual_site_with_vip, vk8s_service" must be set
 
 `advertise_on_public` - (Optional) Advertise this load balancer on public network. See [Choice Advertise On Public ](#choice-advertise-on-public) below for details.
 
@@ -1077,17 +980,19 @@ Where should this load balancer be available.
 
 `virtual_site` - (Optional) Advertise on a customer virtual site and a given network.. See [Choice Virtual Site ](#choice-virtual-site) below for details.
 
+`virtual_site_segment` - (Optional) Advertise on a segment on a virtual site. See [Choice Virtual Site Segment ](#choice-virtual-site-segment) below for details.
+
 `virtual_site_with_vip` - (Optional) Advertise on a customer virtual site and a given network and IP.. See [Choice Virtual Site With Vip ](#choice-virtual-site-with-vip) below for details.
 
 `vk8s_service` - (Optional) Advertise on vK8s Service Network on RE.. See [Choice Vk8s Service ](#choice-vk8s-service) below for details.
 
 ###### One of the arguments from this list "port, port_ranges, use_default_port" must be set
 
-`port` - (Optional) TCP port to Listen. (`Int`).
+`port` - (Optional) Port to Listen. (`Int`).
 
 `port_ranges` - (Optional) Each port range consists of a single port or two ports separated by "-". (`String`).
 
-`use_default_port` - (Optional) For HTTP, default is 80. For HTTPS/SNI, default is 443. (`Bool`).
+`use_default_port` - (Optional) Inherit the Load Balancer's Listen Port. (`Bool`).
 
 ### Allow Introspection Queries Choice Disable Introspection
 
@@ -1127,13 +1032,7 @@ Enter domains and their credentials to allow authenticated API crawling. You can
 
 `domain` - (Required) Select the domain to execute API Crawling with given credentials. (`String`).
 
-`simple_login` - (Required) Enter the username and password to assign credentials for the selected domain to crawl. See [Domains Simple Login ](#domains-simple-login) below for details.
-
-### Api Definition Choice Api Definitions
-
-DEPRECATED by 'api_definition'.
-
-`api_definitions` - (Optional) API Definitions using OpenAPI specification files. See [ref](#ref) below for details.
+`simple_login` - (Optional) Enter the username and password to assign credentials for the selected domain to crawl. See [Domains Simple Login ](#domains-simple-login) below for details.
 
 ### Api Definition Choice Api Specification
 
@@ -1149,10 +1048,6 @@ Specify API definition and OpenAPI Validation.
 
 `validation_disabled` - (Optional) Don't run OpenAPI validation (`Bool`).
 
-### Api Discovery Choice Disable Discovery
-
-x-displayName: "Disable".
-
 ### Api Discovery Choice Enable Api Discovery
 
 x-displayName: "Enable".
@@ -1163,9 +1058,9 @@ x-displayName: "Enable".
 
 ###### One of the arguments from this list "custom_api_auth_discovery, default_api_auth_discovery" must be set
 
-`custom_api_auth_discovery` - (Optional) Apply custom API discovery settings. See [Api Discovery Settings Choice Custom Api Auth Discovery ](#api-discovery-settings-choice-custom-api-auth-discovery) below for details.(Deprecated)
+`custom_api_auth_discovery` - (Optional) Apply custom API discovery settings. See [Api Discovery Settings Choice Custom Api Auth Discovery ](#api-discovery-settings-choice-custom-api-auth-discovery) below for details.
 
-`default_api_auth_discovery` - (Optional) Apply system default API discovery settings (`Bool`).(Deprecated)
+`default_api_auth_discovery` - (Optional) Apply system default API discovery settings (`Bool`).
 
 `discovered_api_settings` - (Optional) Configure Discovered API Settings.. See [Enable Api Discovery Discovered Api Settings ](#enable-api-discovery-discovered-api-settings) below for details.
 
@@ -1174,32 +1069,6 @@ x-displayName: "Enable".
 `disable_learn_from_redirect_traffic` - (Optional) Disable learning API patterns from traffic with redirect response codes 3xx (`Bool`).
 
 `enable_learn_from_redirect_traffic` - (Optional) Enable learning API patterns from traffic with redirect response codes 3xx (`Bool`).
-
-`sensitive_data_detection_rules` - (Optional) Manage rules to detect sensitive data in requests and/or response sections.. See [Enable Api Discovery Sensitive Data Detection Rules ](#enable-api-discovery-sensitive-data-detection-rules) below for details.(Deprecated)
-
-### Api Discovery Choice Enable Discovery
-
-x-displayName: "Enable".
-
-`api_crawler` - (Optional) Configure Discovered API Settings.. See [Enable Discovery Api Crawler ](#enable-discovery-api-crawler) below for details.
-
-`api_discovery_from_code_scan` - (Optional) Select API code repositories to the load balancer to use them as a source for API endpoint discovery.. See [Enable Discovery Api Discovery From Code Scan ](#enable-discovery-api-discovery-from-code-scan) below for details.
-
-###### One of the arguments from this list "custom_api_auth_discovery, default_api_auth_discovery" must be set
-
-`custom_api_auth_discovery` - (Optional) Apply custom API discovery settings. See [Api Discovery Settings Choice Custom Api Auth Discovery ](#api-discovery-settings-choice-custom-api-auth-discovery) below for details.(Deprecated)
-
-`default_api_auth_discovery` - (Optional) Apply system default API discovery settings (`Bool`).(Deprecated)
-
-`discovered_api_settings` - (Optional) Configure Discovered API Settings.. See [Enable Discovery Discovered Api Settings ](#enable-discovery-discovered-api-settings) below for details.
-
-###### One of the arguments from this list "disable_learn_from_redirect_traffic, enable_learn_from_redirect_traffic" must be set
-
-`disable_learn_from_redirect_traffic` - (Optional) Disable learning API patterns from traffic with redirect response codes 3xx (`Bool`).
-
-`enable_learn_from_redirect_traffic` - (Optional) Enable learning API patterns from traffic with redirect response codes 3xx (`Bool`).
-
-`sensitive_data_detection_rules` - (Optional) Manage rules to detect sensitive data in requests and/or response sections.. See [Enable Discovery Sensitive Data Detection Rules ](#enable-discovery-sensitive-data-detection-rules) below for details.(Deprecated)
 
 ### Api Discovery From Code Scan Code Base Integrations
 
@@ -1273,8 +1142,6 @@ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Api Endpoint Rules Request Matcher
@@ -1331,8 +1198,6 @@ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Api Groups Rules Request Matcher
@@ -1346,6 +1211,16 @@ Conditions related to the request, such as query parameters, headers, etc..
 `jwt_claims` - (Optional) Note that this feature only works on LBs with JWT Validation feature enabled.. See [Request Matcher Jwt Claims ](#request-matcher-jwt-claims) below for details.
 
 `query_params` - (Optional) Note that all specified query parameter predicates must evaluate to true.. See [Request Matcher Query Params ](#request-matcher-query-params) below for details.
+
+### Api Key Value
+
+x-displayName: "Value".
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
 
 ### Api Protection Rules Api Endpoint Rules
 
@@ -1399,8 +1274,6 @@ For creating rule that contain a whole domain or group of endpoints, please use 
 
 `api_endpoint_path` - (Required) The endpoint (path) of the request. (`String`).
 
-`base_path` - (Optional) The request base path. (`String`).(Deprecated)
-
 `client_matcher` - (Optional) Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc.. See [Api Endpoint Rules Client Matcher ](#api-endpoint-rules-client-matcher) below for details.
 
 ###### One of the arguments from this list "any_domain, specific_domain" must be set
@@ -1441,56 +1314,6 @@ For matching also specific endpoints you can use the API endpoint rules set bell
 
 `request_matcher` - (Optional) Conditions related to the request, such as query parameters, headers, etc.. See [Server Url Rules Request Matcher ](#server-url-rules-request-matcher) below for details.
 
-### Api Rate Limit Legacy Api Endpoint Rules
-
-For creating rule that contain a whole domain or group of endpoints, please use the server URL rules above..
-
-`api_endpoint_method` - (Optional) The predicate evaluates to true if the actual HTTP method belongs is present in the list of expected values.. See [Api Endpoint Rules Api Endpoint Method ](#api-endpoint-rules-api-endpoint-method) below for details.
-
-`api_endpoint_path` - (Required) The endpoint (path) of the request. (`String`).
-
-`base_path` - (Optional) The request base path. (`String`).(Deprecated)
-
-`client_matcher` - (Optional) Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc.. See [Api Endpoint Rules Client Matcher ](#api-endpoint-rules-client-matcher) below for details.
-
-###### One of the arguments from this list "any_domain, specific_domain" must be set
-
-`any_domain` - (Optional) The rule will apply for all domains. (`Bool`).
-
-`specific_domain` - (Optional) The rule will apply for a specific domain. (`String`).
-
-###### One of the arguments from this list "inline_rate_limiter, ref_rate_limiter" must be set
-
-`inline_rate_limiter` - (Optional) Specify rate values for the rule.. See [Rate Limiter Choice Inline Rate Limiter ](#rate-limiter-choice-inline-rate-limiter) below for details.
-
-`ref_rate_limiter` - (Optional) Select external rate limiter.. See [ref](#ref) below for details.
-
-`request_matcher` - (Optional) Conditions related to the request, such as query parameters, headers, etc.. See [Api Endpoint Rules Request Matcher ](#api-endpoint-rules-request-matcher) below for details.
-
-### Api Rate Limit Legacy Server Url Rules
-
-For matching also specific endpoints you can use the API endpoint rules set bellow..
-
-`api_group` - (Optional) Custom groups can be created if user tags paths or operations with "x-volterra-api-group" extensions inside swaggers. (`String`).
-
-`base_path` - (Required) Prefix of the request path. (`String`).
-
-`client_matcher` - (Optional) Conditions related to the origin of the request, such as client IP, TLS fingerprint, etc.. See [Server Url Rules Client Matcher ](#server-url-rules-client-matcher) below for details.
-
-###### One of the arguments from this list "any_domain, specific_domain" must be set
-
-`any_domain` - (Optional) The rule will apply for all domains. (`Bool`).
-
-`specific_domain` - (Optional) The rule will apply for a specific domain. (`String`).
-
-###### One of the arguments from this list "inline_rate_limiter, ref_rate_limiter" must be set
-
-`inline_rate_limiter` - (Optional) Specify rate values for the rule.. See [Rate Limiter Choice Inline Rate Limiter ](#rate-limiter-choice-inline-rate-limiter) below for details.
-
-`ref_rate_limiter` - (Optional) Use external rate limiter.. See [ref](#ref) below for details.
-
-`request_matcher` - (Optional) Conditions related to the request, such as query parameters, headers, etc.. See [Server Url Rules Request Matcher ](#server-url-rules-request-matcher) below for details.
-
 ### Api Repos Choice All Repos
 
 x-displayName: "All API Repositories".
@@ -1500,6 +1323,32 @@ x-displayName: "All API Repositories".
 x-displayName: "Selected API Repositories".
 
 `api_code_repo` - (Required) Code repository which contain API endpoints (`String`).
+
+### Api Testing Domains
+
+Add and configure testing domains and credentials.
+
+`allow_destructive_methods` - (Optional) Enable to allow API test to execute destructive methods. Be cautious as these can alter or delete data. (`Bool`).
+
+`credentials` - (Required) Add credentials for API testing to use in the selected environment.. See [Domains Credentials ](#domains-credentials) below for details.
+
+`domain` - (Required) Add your testing environment domain. Be aware that running tests on a production domain can impact live applications, as API testing cannot distinguish between production and testing environments. (`String`).
+
+### Api Testing Choice Api Testing
+
+x-displayName: "Enable".
+
+`custom_header_value` - (Optional) Add x-f5-api-testing-identifier header value to prevent security flags on API testing traffic (`String`).
+
+`domains` - (Required) Add and configure testing domains and credentials. See [Api Testing Domains ](#api-testing-domains) below for details.
+
+###### One of the arguments from this list "every_day, every_month, every_week" must be set
+
+`every_day` - (Optional) x-displayName: "Every Day" (`Bool`).
+
+`every_month` - (Optional) x-displayName: "Every Month" (`Bool`).
+
+`every_week` - (Optional) x-displayName: "Every Week" (`Bool`).
 
 ### App Firewall Detection Control Exclude Attack Type Contexts
 
@@ -1541,35 +1390,13 @@ Violations to be excluded for the defined match criteria.
 
 Mobile traffic channel..
 
-### App Traffic Type Choice Mobile Client
-
-Mobile traffic channel..
-
 ### App Traffic Type Choice Web
-
-Web traffic channel..
-
-### App Traffic Type Choice Web Client
 
 Web traffic channel..
 
 ### App Traffic Type Choice Web Mobile
 
 Web and mobile traffic channel..
-
-`header` - (Optional) Header that is used by mobile traffic.. See [Web Mobile Header ](#web-mobile-header) below for details.(Deprecated)
-
-`headers` - (Optional) Headers that can be used to identify mobile traffic.. See [Web Mobile Headers ](#web-mobile-headers) below for details.(Deprecated)
-
-`mobile_identifier` - (Optional) Mobile identifier type (`String`).
-
-### App Traffic Type Choice Web Mobile Client
-
-Web and mobile traffic channel..
-
-`header` - (Optional) Header that is used by mobile traffic.. See [Web Mobile Client Header ](#web-mobile-client-header) below for details.(Deprecated)
-
-`headers` - (Optional) Headers that can be used to identify mobile traffic.. See [Web Mobile Client Headers ](#web-mobile-client-headers) below for details.(Deprecated)
 
 `mobile_identifier` - (Optional) Mobile identifier type (`String`).
 
@@ -1599,13 +1426,49 @@ x-displayName: "Exact Match".
 
 x-displayName: "Disable".
 
+### Basic Auth Password
+
+x-displayName: "Password".
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+### Bearer Token Token
+
+x-displayName: "Token".
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+### Block Duration Choice Hours
+
+User block mitigation time in Hours.
+
+`duration` - (Optional) x-displayName: "Duration" (`Int`).
+
+### Block Duration Choice Minutes
+
+User block mitigation time in Minutes.
+
+`duration` - (Optional) x-displayName: "Duration" (`Int`).
+
+### Block Duration Choice Seconds
+
+User block mitigation time in Seconds.
+
+`duration` - (Optional) x-displayName: "Duration" (`Int`).
+
 ### Blocked Clients Metadata
 
 Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
-
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
@@ -1633,47 +1496,17 @@ Bot Defense Policy..
 
 `mobile_sdk_config` - (Optional) Mobile SDK configuration. See [Mobile Sdk Choice Mobile Sdk Config ](#mobile-sdk-choice-mobile-sdk-config) below for details.
 
-`protected_app_endpoints` - (Required) List of protected application endpoints (max 128 items).. See [Policy Protected App Endpoints ](#policy-protected-app-endpoints) below for details.
-
-### Bot Defense Advanced Policy
-
-Bot Defense Advanced Policy..
-
-`js_download_path` - (Required) Customize Bot Defense Web Client JavaScript path (`String`).
-
-###### One of the arguments from this list "disable_mobile_sdk, mobile_sdk_config" must be set
-
-`disable_mobile_sdk` - (Optional) Disable Mobile SDK. (`Bool`).
-
-`mobile_sdk_config` - (Optional) Enable Mobile SDK Configuration. See [Mobile Sdk Choice Mobile Sdk Config ](#mobile-sdk-choice-mobile-sdk-config) below for details.
-
-`protected_app_endpoints` - (Required) List of protected endpoints (max 128 items). See [Policy Protected App Endpoints ](#policy-protected-app-endpoints) below for details.
+`protected_app_endpoints` - (Required) List of protected endpoints. Limit: Approx '128 endpoints per Load Balancer (LB)' upto 4 LBs, '32 endpoints per LB' after 4 LBs.. See [Policy Protected App Endpoints ](#policy-protected-app-endpoints) below for details.
 
 ### Bot Defense Choice Bot Defense
 
 Select Bot Defense Standard.
-
-###### One of the arguments from this list "disable_cors_support, enable_cors_support" must be set
-
-`disable_cors_support` - (Optional) protect against Bot Attacks. (`Bool`).(Deprecated)
-
-`enable_cors_support` - (Optional) Allows Bot Defense to work with your existing CORS policies. (`Bool`).(Deprecated)
 
 `policy` - (Required) Bot Defense Policy.. See [Bot Defense Policy ](#bot-defense-policy) below for details.
 
 `regional_endpoint` - (Required) x-required (`String`).
 
 `timeout` - (Optional) The timeout for the inference check, in milliseconds. (`Int`).
-
-### Bot Defense Choice Bot Defense Advanced
-
-Select Bot Defense Advanced.
-
-`mobile` - (Optional) Select infrastructure for mobile.. See [ref](#ref) below for details.
-
-`policy` - (Required) Bot Defense Advanced Policy.. See [Bot Defense Advanced Policy ](#bot-defense-advanced-policy) below for details.
-
-`web` - (Optional) Select infrastructure for web.. See [ref](#ref) below for details.
 
 ### Bot Defense Javascript Injection Javascript Tags
 
@@ -1703,8 +1536,6 @@ Route level buffer configuration overrides any configuration at VirtualHost leve
 
 `max_request_bytes` - (Optional) manager will stop buffering and return a RequestEntityTooLarge (413) response. (`Int`).
 
-`max_request_time` - (Optional) request before returning a RequestTimeout (408) response (`Int`).(Deprecated)
-
 ### Buffer Choice Common Buffering
 
 Use common buffering configuration.
@@ -1719,7 +1550,7 @@ This category defines rules per URL or API group. If request matches any of thes
 
 `any_url` - (Optional) Any URL (`Bool`).
 
-`api_endpoint` - (Required) The endpoint (path) of the request.. See [Destination Type Api Endpoint ](#destination-type-api-endpoint) below for details.
+`api_endpoint` - (Optional) The endpoint (path) of the request.. See [Destination Type Api Endpoint ](#destination-type-api-endpoint) below for details.
 
 `api_groups` - (Optional) Validation will be performed for the endpoints mentioned in the API Groups. See [Destination Type Api Groups ](#destination-type-api-groups) below for details.
 
@@ -1879,43 +1710,11 @@ Specifies the settings for policy rule based challenge.
 
 `rule_list` - (Optional) list challenge rules to be used in policy based challenge. See [Policy Based Challenge Rule List ](#policy-based-challenge-rule-list) below for details.
 
-###### One of the arguments from this list "default_temporary_blocking_parameters, temporary_user_blocking" can be set
-
-`default_temporary_blocking_parameters` - (Optional) Use default parameters (`Bool`).(Deprecated)
-
-`temporary_user_blocking` - (Optional) Specifies configuration for temporary user blocking resulting from malicious user detection. See [Temporary Blocking Parameters Choice Temporary User Blocking ](#temporary-blocking-parameters-choice-temporary-user-blocking) below for details.(Deprecated)
-
 ### Choice Advertise On Public
 
 Advertise this load balancer on public network.
 
 `public_ip` - (Required) Dedicated Public IP, which is allocated by F5 Distributed Cloud on request, is used as a VIP.. See [ref](#ref) below for details.
-
-### Choice Cbip Service
-
-Specify origin server with cBIP service name.
-
-`service_name` - (Required) Name of the discovered Classic BIG-IP virtual server to be used as origin. (`String`).
-
-### Choice Consul Service
-
-Specify origin server with Hashi Corp Consul service name and site information.
-
-###### One of the arguments from this list "inside_network, outside_network" must be set
-
-`inside_network` - (Optional) Inside network on the site (`Bool`).
-
-`outside_network` - (Optional) Outside network on the site (`Bool`).
-
-`service_name` - (Required) cluster-id is optional. (`String`).
-
-`site_locator` - (Required) Site or Virtual site where this origin server is located. See [Consul Service Site Locator ](#consul-service-site-locator) below for details.
-
-### Choice Custom Endpoint Object
-
-Specify origin server with a reference to endpoint object.
-
-`endpoint` - (Required) Reference to an endpoint object. See [ref](#ref) below for details.
 
 ### Choice Custom Route Object
 
@@ -1951,26 +1750,6 @@ A direct response route matches on path and/or HTTP method and responds directly
 
 `route_direct_response` - (Optional) Send direct response. See [Direct Response Route Route Direct Response ](#direct-response-route-route-direct-response) below for details.
 
-### Choice K8s Service
-
-Specify origin server with K8s service name and site information.
-
-###### One of the arguments from this list "inside_network, outside_network, vk8s_networks" must be set
-
-`inside_network` - (Optional) Inside network on the site (`Bool`).
-
-`outside_network` - (Optional) Outside network on the site (`Bool`).
-
-`vk8s_networks` - (Optional) origin server are on vK8s network on the site (`Bool`).
-
-###### One of the arguments from this list "service_name, service_selector" must be set
-
-`service_name` - (Optional) Both namespace and cluster-id are optional. (`String`).
-
-`service_selector` - (Optional) discovery has to happen. This implicit label is added to service_selector. See [Service Info Service Selector ](#service-info-service-selector) below for details.(Deprecated)
-
-`site_locator` - (Required) Site or Virtual site where this origin server is located. See [K8s Service Site Locator ](#k8s-service-site-locator) below for details.
-
 ### Choice Low Security
 
 TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
@@ -1978,62 +1757,6 @@ TLS v1.0+ including non-PFS ciphers and weak crypto algorithms..
 ### Choice Medium Security
 
 TLS v1.0+ with PFS ciphers and medium strength crypto algorithms..
-
-### Choice Private Ip
-
-Specify origin server with private or public IP address and site information.
-
-###### One of the arguments from this list "inside_network, outside_network, segment" must be set
-
-`inside_network` - (Optional) Inside network on the site (`Bool`).
-
-`outside_network` - (Optional) Outside network on the site (`Bool`).
-
-`segment` - (Optional) Segment where this origin server is located. See [ref](#ref) below for details.
-
-###### One of the arguments from this list "ip, ipv6" must be set
-
-`ip` - (Optional) Private IPV4 address (`String`).
-
-`ipv6` - (Optional) Private IPV6 address (`String`).
-
-`site_locator` - (Required) Site or Virtual site where this origin server is located. See [Private Ip Site Locator ](#private-ip-site-locator) below for details.
-
-### Choice Private Name
-
-Specify origin server with private or public DNS name and site information.
-
-`dns_name` - (Required) DNS Name (`String`).
-
-###### One of the arguments from this list "inside_network, outside_network, segment" must be set
-
-`inside_network` - (Optional) Inside network on the site (`Bool`).
-
-`outside_network` - (Optional) Outside network on the site (`Bool`).
-
-`segment` - (Optional) Segment where this origin server is located. See [ref](#ref) below for details.
-
-`refresh_interval` - (Optional) Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767 (`Int`).
-
-`site_locator` - (Required) Site or Virtual site where this origin server is located. See [Private Name Site Locator ](#private-name-site-locator) below for details.
-
-### Choice Public Ip
-
-Specify origin server with public IP.
-
-###### One of the arguments from this list "ip, ipv6" must be set
-
-`ip` - (Optional) Public IPV4 address (`String`).
-
-`ipv6` - (Optional) Public IPV6 address (`String`).
-
-### Choice Public Name
-
-Specify origin server with public DNS name.
-
-`dns_name` - (Required) DNS Name (`String`).
-
-`refresh_interval` - (Optional) Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767 (`Int`).
 
 ### Choice Redirect Route
 
@@ -2125,6 +1848,18 @@ Advertise on a customer virtual site and a given network..
 
 `virtual_site` - (Required) Reference to virtual site object. See [ref](#ref) below for details.
 
+### Choice Virtual Site Segment
+
+Advertise on a segment on a virtual site.
+
+`ip` - (Required) Use given IP address as VIP on the site (`String`).
+
+`ipv6` - (Optional) Use given IPv6 address as VIP on the site (`String`).
+
+`segment` - (Required) x-required. See [ref](#ref) below for details.
+
+`virtual_site` - (Required) Reference to virtual site object. See [ref](#ref) below for details.
+
 ### Choice Virtual Site With Vip
 
 Advertise on a customer virtual site and a given network and IP..
@@ -2147,61 +1882,9 @@ Advertise on vK8s Service Network on RE..
 
 `virtual_site` - (Optional) Reference to virtual site object. See [ref](#ref) below for details.
 
-### Choice Vn Private Ip
-
-Specify origin server IP address on virtual network other than inside or outside network.
-
-`virtual_network` - (Required) Virtual Network where this IP will be present. See [ref](#ref) below for details.
-
-###### One of the arguments from this list "ip, ipv6" must be set
-
-`ip` - (Optional) IPV4 address (`String`).
-
-`ipv6` - (Optional) IPV6 address (`String`).
-
-### Choice Vn Private Name
-
-Specify origin server name on virtual network other than inside or outside network.
-
-`dns_name` - (Required) DNS Name (`String`).
-
-`private_network` - (Required) Virtual Network where this Name will be present. See [ref](#ref) below for details.
-
-### Circuit Breaker Choice Circuit Breaker
-
-allows to apply back pressure on downstream quickly..
-
-`connection_limit` - (Optional) Remove endpoint out of load balancing decision, if number of connections reach connection limit. (`Int`).
-
-`max_requests` - (Optional) Remove endpoint out of load balancing decision, if requests exceed this count. (`Int`).
-
-`pending_requests` - (Optional) Remove endpoint out of load balancing decision, if pending request reach pending_request. (`Int`).
-
-`priority` - (Optional) matched with priority of CircuitBreaker to select the CircuitBreaker (`String`).
-
-`retries` - (Optional) Remove endpoint out of load balancing decision, if retries for request exceed this count. (`Int`).
-
-### Circuit Breaker Choice Default Circuit Breaker
-
-requests are 1024 and the default value for retries is 3.
-
-### Circuit Breaker Choice Disable Circuit Breaker
-
-Circuit Breaker is disabled.
-
 ### Client Choice Any Client
 
 Any Client.
-
-### Client Choice Client Name Matcher
-
-client_name_matcher.
-
-`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
-
-`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
-
-`transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
 
 ### Client Choice Client Selector
 
@@ -2275,16 +1958,6 @@ The API endpoint (Path + Method) which this validation applies to.
 
 `path` - (Required) Path to be matched (`String`).
 
-### Consul Service Site Locator
-
-Site or Virtual site where this origin server is located.
-
-###### One of the arguments from this list "site, virtual_site" must be set
-
-`site` - (Optional) Reference to site object. See [ref](#ref) below for details.
-
-`virtual_site` - (Optional) Reference to virtual site object. See [ref](#ref) below for details.
-
 ### Cookie Tampering Disable Tampering Protection
 
 x-displayName: "Disable".
@@ -2293,83 +1966,53 @@ x-displayName: "Disable".
 
 x-displayName: "Enable".
 
-### Cors Support Choice Disable Cors Support
-
-protect against Bot Attacks..
-
-### Cors Support Choice Enable Cors Support
-
-Allows Bot Defense to work with your existing CORS policies..
-
 ### Count By Choice Use Http Lb User Id
 
 Defined in HTTP-LB Security Configuration -> User Identifier..
 
+### Credentials Choice Api Key
+
+x-displayName: "API Key".
+
+`key` - (Required) x-displayName: "Key" (`String`).
+
+`value` - (Required) x-displayName: "Value". See [Api Key Value ](#api-key-value) below for details.
+
+### Credentials Choice Basic Auth
+
+x-displayName: "Basic Authentication".
+
+`password` - (Required) x-displayName: "Password". See [Basic Auth Password ](#basic-auth-password) below for details.
+
+`user` - (Required) x-displayName: "User" (`String`).
+
+### Credentials Choice Bearer Token
+
+x-displayName: "Bearer Token".
+
+`token` - (Required) x-displayName: "Token". See [Bearer Token Token ](#bearer-token-token) below for details.
+
+### Credentials Choice Login Endpoint
+
+x-displayName: "Login Endpoint".
+
+`json_payload` - (Required) Defines the structure of the API request payload, including payload structure, fields and values.. See [Login Endpoint Json Payload ](#login-endpoint-json-payload) below for details.
+
+`method` - (Required) x-displayName: "Method" (`String`).
+
+`path` - (Required) x-displayName: "Path" (`String`).
+
+`token_response_key` - (Required) Specifies how to handle the API response, extracting authentication tokens. (`String`).
+
 ### Crl Choice No Crl
 
 Client certificate revocation status is not verified.
-
-### Custom Sensitive Data Detection Rules Metadata
-
-Common attributes for the rule including name and description..
-
-`description` - (Optional) Human readable description. (`String`).
-
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
-`name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
-
-### Custom Sensitive Data Detection Rules Sensitive Data Detection Config
-
-The custom data detection config specifies targets, scopes & the pattern to be detected..
-
-###### One of the arguments from this list "any_domain, specific_domain" must be set
-
-`any_domain` - (Optional) The rule will apply for all domains. (`Bool`).(Deprecated)
-
-`specific_domain` - (Optional) For example: api.example.com (`String`).(Deprecated)
-
-###### One of the arguments from this list "key_pattern, key_value_pattern, value_pattern" must be set
-
-`key_pattern` - (Optional) Search for pattern across all field names in the specified sections.. See [Pattern Choice Key Pattern ](#pattern-choice-key-pattern) below for details.
-
-`key_value_pattern` - (Optional) Search for specific field and value patterns in the specified sections.. See [Pattern Choice Key Value Pattern ](#pattern-choice-key-value-pattern) below for details.
-
-`value_pattern` - (Optional) Search for pattern across all field values in the specified sections.. See [Pattern Choice Value Pattern ](#pattern-choice-value-pattern) below for details.
-
-###### One of the arguments from this list "all_request_sections, all_response_sections, all_sections, custom_sections" must be set
-
-`all_request_sections` - (Optional) x-displayName: "All Request" (`Bool`).
-
-`all_response_sections` - (Optional) x-displayName: "All Response" (`Bool`).
-
-`all_sections` - (Optional) x-displayName: "All Request & Response" (`Bool`).
-
-`custom_sections` - (Optional) x-displayName: "Custom Sections". See [Section Choice Custom Sections ](#section-choice-custom-sections) below for details.
-
-###### One of the arguments from this list "any_target, api_endpoint_target, api_group, base_path" must be set
-
-`any_target` - (Optional) The rule will be applied for all requests on this LB. (`Bool`).
-
-`api_endpoint_target` - (Optional) The rule is applied only for the specified api endpoints.. See [Target Choice Api Endpoint Target ](#target-choice-api-endpoint-target) below for details.
-
-`api_group` - (Optional) Custom groups can be created if user tags paths or operations with "x-volterra-api-group" extensions inside swaggers. (`String`).(Deprecated)
-
-`base_path` - (Optional) The rule is applied only for the requests matching the specified base path. (`String`).(Deprecated)
-
-### Custom Sensitive Data Detection Rules Sensitive Data Type
-
-If the pattern is detected, the request is labeled with specified sensitive data type..
-
-`type` - (Required) The request is labeled as specified sensitive data type. (`String`).
 
 ### Data Guard Rules Metadata
 
 Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
-
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
@@ -2391,6 +2034,12 @@ The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoI
 
 `as_numbers` - (Required) An unordered set of RFC 6793 defined 4-byte AS numbers that can be used to create allow or deny lists for use in network policy or service policy. It can be used to create the allow list only for DNS Load Balancer. (`Int`).
 
+### Ddos Client Source Ja4 Tls Fingerprint Matcher
+
+The predicate evaluates to true if source JA4 TLS fingerprint matches any of the exact values of JA4 TLS fingerprints..
+
+`exact_values` - (Optional) A list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against (`String`).
+
 ### Ddos Client Source Tls Fingerprint Matcher
 
 The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints..
@@ -2407,9 +2056,11 @@ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
+
+### Ddos Policy Choice Ddos Policy None
+
+Do not apply additional service policy during an ongoing DDoS attack.
 
 ### Default Lb Choice Default Loadbalancer
 
@@ -2418,108 +2069,6 @@ x-displayName: "Yes".
 ### Default Lb Choice Non Default Loadbalancer
 
 x-displayName: "No".
-
-### Default Pool Advanced Options
-
-Advanced options configuration like timeouts, circuit breaker, subset load balancing.
-
-###### One of the arguments from this list "circuit_breaker, default_circuit_breaker, disable_circuit_breaker" must be set
-
-`circuit_breaker` - (Optional) allows to apply back pressure on downstream quickly.. See [Circuit Breaker Choice Circuit Breaker ](#circuit-breaker-choice-circuit-breaker) below for details.
-
-`default_circuit_breaker` - (Optional) requests are 1024 and the default value for retries is 3 (`Bool`).
-
-`disable_circuit_breaker` - (Optional) Circuit Breaker is disabled (`Bool`).
-
-`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2 seconds (`Int`).
-
-`header_transformation_type` - (Optional) Settings to normalize the headers of upstream requests.. See [Advanced Options Header Transformation Type ](#advanced-options-header-transformation-type) below for details.(Deprecated)
-
-`http_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 5 minutes. (`Int`).
-
-###### One of the arguments from this list "auto_http_config, http1_config, http2_options" must be set
-
-`auto_http_config` - (Optional) and will use whichever protocol is negotiated by ALPN with the upstream. (`Bool`).
-
-`http1_config` - (Optional) Enable HTTP/1.1 for upstream connections. See [Http Protocol Type Http1 Config ](#http-protocol-type-http1-config) below for details.
-
-`http2_options` - (Optional) Enable HTTP/2 for upstream connections.. See [Http Protocol Type Http2 Options ](#http-protocol-type-http2-options) below for details.
-
-###### One of the arguments from this list "disable_lb_source_ip_persistance, enable_lb_source_ip_persistance" can be set
-
-`disable_lb_source_ip_persistance` - (Optional) Disable LB source IP persistence (`Bool`).
-
-`enable_lb_source_ip_persistance` - (Optional) Enable LB source IP persistence (`Bool`).
-
-###### One of the arguments from this list "disable_outlier_detection, outlier_detection" must be set
-
-`disable_outlier_detection` - (Optional) Outlier detection is disabled (`Bool`).
-
-`outlier_detection` - (Optional) healthy load balancing set. Outlier detection is a form of passive health checking.. See [Outlier Detection Choice Outlier Detection ](#outlier-detection-choice-outlier-detection) below for details.
-
-###### One of the arguments from this list "no_panic_threshold, panic_threshold" must be set
-
-`no_panic_threshold` - (Optional) Disable panic threshold. Only healthy endpoints are considered for load balancing. (`Bool`).
-
-`panic_threshold` - (Optional) all endpoints will be considered for load balancing ignoring its health status. (`Int`).
-
-###### One of the arguments from this list "disable_proxy_protocol, proxy_protocol_v1, proxy_protocol_v2" can be set
-
-`disable_proxy_protocol` - (Optional) Disable Proxy Protocol for upstream connections (`Bool`).
-
-`proxy_protocol_v1` - (Optional) Enable Proxy Protocol Version 1 for upstream connections (`Bool`).
-
-`proxy_protocol_v2` - (Optional) Enable Proxy Protocol Version 2 for upstream connections (`Bool`).
-
-###### One of the arguments from this list "disable_subsets, enable_subsets" must be set
-
-`disable_subsets` - (Optional) Subset load balancing is disabled. All eligible origin servers will be considered for load balancing. (`Bool`).
-
-`enable_subsets` - (Optional) Subset load balancing is enabled. Based on route, subset of origin servers will be considered for load balancing.. See [Subset Choice Enable Subsets ](#subset-choice-enable-subsets) below for details.
-
-### Default Pool Origin Servers
-
-List of origin servers in this pool.
-
-###### One of the arguments from this list "cbip_service, consul_service, custom_endpoint_object, k8s_service, private_ip, private_name, public_ip, public_name, vn_private_ip, vn_private_name" must be set
-
-`cbip_service` - (Optional) Specify origin server with cBIP service name. See [Choice Cbip Service ](#choice-cbip-service) below for details.
-
-`consul_service` - (Optional) Specify origin server with Hashi Corp Consul service name and site information. See [Choice Consul Service ](#choice-consul-service) below for details.
-
-`custom_endpoint_object` - (Optional) Specify origin server with a reference to endpoint object. See [Choice Custom Endpoint Object ](#choice-custom-endpoint-object) below for details.
-
-`k8s_service` - (Optional) Specify origin server with K8s service name and site information. See [Choice K8s Service ](#choice-k8s-service) below for details.
-
-`private_ip` - (Optional) Specify origin server with private or public IP address and site information. See [Choice Private Ip ](#choice-private-ip) below for details.
-
-`private_name` - (Optional) Specify origin server with private or public DNS name and site information. See [Choice Private Name ](#choice-private-name) below for details.
-
-`public_ip` - (Optional) Specify origin server with public IP. See [Choice Public Ip ](#choice-public-ip) below for details.
-
-`public_name` - (Optional) Specify origin server with public DNS name. See [Choice Public Name ](#choice-public-name) below for details.
-
-`vn_private_ip` - (Optional) Specify origin server IP address on virtual network other than inside or outside network. See [Choice Vn Private Ip ](#choice-vn-private-ip) below for details.
-
-`vn_private_name` - (Optional) Specify origin server name on virtual network other than inside or outside network. See [Choice Vn Private Name ](#choice-vn-private-name) below for details.
-
-`labels` - (Optional) Add Labels for this origin server, these labels can be used to form subset. (`String`).
-
-### Default Pool List Pools
-
-List of Origin Pools.
-
-`endpoint_subsets` - (Optional) upstream origin pool which match this metadata will be selected for load balancing (`String`).
-
-###### One of the arguments from this list "cluster, pool" must be set
-
-`cluster` - (Optional) More flexible, advanced feature control with cluster. See [ref](#ref) below for details.
-
-`pool` - (Optional) Simple, commonly used pool parameters with origin pool. See [ref](#ref) below for details.
-
-`priority` - (Optional) made active as per the increasing priority. (`Int`).
-
-`weight` - (Optional) Weight of this origin pool, valid only with multiple origin pool. Value of 0 will disable the pool (`Int`).
 
 ### Destination Type Any Url
 
@@ -2591,6 +2140,10 @@ Send direct response.
 
 The rule will apply for all domains..
 
+### Domain Choice Ignore Domain
+
+Ignore max age attribute.
+
 ### Domain Matcher Any Domain
 
 x-displayName: "Any Domain".
@@ -2623,13 +2176,35 @@ Domain matcher..
 
 `suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
 
+### Domains Credentials
+
+Add credentials for API testing to use in the selected environment..
+
+`credential_name` - (Required) Enter a unique name for the credentials used in API testing (`String`).
+
+###### One of the arguments from this list "api_key, basic_auth, bearer_token, login_endpoint" must be set
+
+`api_key` - (Optional) x-displayName: "API Key". See [Credentials Choice Api Key ](#credentials-choice-api-key) below for details.
+
+`basic_auth` - (Optional) x-displayName: "Basic Authentication". See [Credentials Choice Basic Auth ](#credentials-choice-basic-auth) below for details.
+
+`bearer_token` - (Optional) x-displayName: "Bearer Token". See [Credentials Choice Bearer Token ](#credentials-choice-bearer-token) below for details.
+
+`login_endpoint` - (Optional) x-displayName: "Login Endpoint". See [Credentials Choice Login Endpoint ](#credentials-choice-login-endpoint) below for details.
+
+###### One of the arguments from this list "admin, standard" must be set
+
+`admin` - (Optional) x-displayName: "Admin" (`Bool`).
+
+`standard` - (Optional) x-displayName: "Standard" (`Bool`).
+
 ### Domains Simple Login
 
 Enter the username and password to assign credentials for the selected domain to crawl.
 
-`password` - (Required) x-required. See [Simple Login Password ](#simple-login-password) below for details.
+`password` - (Optional) Enter the password to assign credentials for the selected domain to crawl. See [Simple Login Password ](#simple-login-password) below for details.
 
-`user` - (Required) x-required (`String`).
+`user` - (Optional) Enter the username to assign credentials for the selected domain to crawl (`String`).
 
 ### Enable Api Discovery Api Crawler
 
@@ -2653,57 +2228,11 @@ Configure Discovered API Settings..
 
 `purge_duration_for_inactive_discovered_apis` - (Optional) Inactive discovered API will be deleted after configured duration. (`Int`).
 
-### Enable Api Discovery Sensitive Data Detection Rules
-
-Manage rules to detect sensitive data in requests and/or response sections..
-
-`custom_sensitive_data_detection_rules` - (Optional) Rules to detect custom sensitive data in requests and/or responses sections.. See [Sensitive Data Detection Rules Custom Sensitive Data Detection Rules ](#sensitive-data-detection-rules-custom-sensitive-data-detection-rules) below for details.
-
-`disabled_built_in_rules` - (Optional) List of disabled built-in sensitive data detection rules.. See [Sensitive Data Detection Rules Disabled Built In Rules ](#sensitive-data-detection-rules-disabled-built-in-rules) below for details.
-
-### Enable Discovery Api Crawler
-
-Configure Discovered API Settings..
-
-###### One of the arguments from this list "api_crawler_config, disable_api_crawler" must be set
-
-`api_crawler_config` - (Optional) Select to activate the API Crawling. See [Api Crawler Api Crawler Config ](#api-crawler-api-crawler-config) below for details.
-
-`disable_api_crawler` - (Optional) Select to turn off the API Crawling. No API Crawling actions will be performed. (`Bool`).
-
-### Enable Discovery Api Discovery From Code Scan
-
-Select API code repositories to the load balancer to use them as a source for API endpoint discovery..
-
-`code_base_integrations` - (Required) x-required. See [Api Discovery From Code Scan Code Base Integrations ](#api-discovery-from-code-scan-code-base-integrations) below for details.
-
-### Enable Discovery Discovered Api Settings
-
-Configure Discovered API Settings..
-
-`purge_duration_for_inactive_discovered_apis` - (Optional) Inactive discovered API will be deleted after configured duration. (`Int`).
-
-### Enable Discovery Sensitive Data Detection Rules
-
-Manage rules to detect sensitive data in requests and/or response sections..
-
-`custom_sensitive_data_detection_rules` - (Optional) Rules to detect custom sensitive data in requests and/or responses sections.. See [Sensitive Data Detection Rules Custom Sensitive Data Detection Rules ](#sensitive-data-detection-rules-custom-sensitive-data-detection-rules) below for details.
-
-`disabled_built_in_rules` - (Optional) List of disabled built-in sensitive data detection rules.. See [Sensitive Data Detection Rules Disabled Built In Rules ](#sensitive-data-detection-rules-disabled-built-in-rules) below for details.
-
-### Enable Subsets Endpoint Subsets
-
-List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class..
-
-`keys` - (Required) List of keys that define a cluster subset class. (`String`).
-
 ### Exclude List Metadata
 
 Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
-
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
@@ -2719,13 +2248,9 @@ URI path matcher..
 
 `regex` - (Optional) Regular expression of path match (e.g. the value .* will match on all paths) (`String`).
 
-### Fail Configuration Fail Close
+### Expiry Choice Ignore Expiry
 
-Handle the transaction as it failed the OpenAPI specification validation (Block or Report).
-
-### Fail Configuration Fail Open
-
-Continue to process the transaction without enforcing OpenAPI specification (Allow).
+Ignore expiry attribute.
 
 ### Fall Through Mode Choice Fall Through Mode Allow
 
@@ -2758,20 +2283,6 @@ x-displayName: "Custom Fall Through Rule List".
 `base_path` - (Optional) The base path which this validation applies to (`String`).
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Open Api Validation Rules Metadata ](#open-api-validation-rules-metadata) below for details.
-
-### Fallback Policy Choice Any Endpoint
-
-Select any origin server from available healthy origin servers in this pool.
-
-### Fallback Policy Choice Default Subset
-
-Use the default subset provided here. Select endpoints matching default subset..
-
-`default_subset` - (Optional) which gets used when route specifies no metadata or no subset matching the metadata exists. (`String`).
-
-### Fallback Policy Choice Fail Request
-
-Request will be failed and error returned, as if cluster has no origin servers..
 
 ### Flow Label Choice Account Management
 
@@ -2897,6 +2408,18 @@ x-displayName: "Shopping & Gift Cards".
 
 x-displayName: "Undefined".
 
+### Frequency Choice Every Day
+
+x-displayName: "Every Day".
+
+### Frequency Choice Every Month
+
+x-displayName: "Every Month".
+
+### Frequency Choice Every Week
+
+x-displayName: "Every Week".
+
 ### Goodbot Choice Allow Good Bots
 
 System flags Good Bot traffic and allow it to continue to the origin.
@@ -2921,17 +2444,11 @@ GraphQL configuration..
 
 `max_total_length` - (Required) Specify maximum length in bytes for the GraphQL query. (`Int`).
 
-`max_value_length` - (Required) Specify maximum value length in bytes for the GraphQL query. (`Int`).(Deprecated)
-
-`policy_name` - (Optional) Sets the BD Policy to use (`String`).(Deprecated)
-
 ### Graphql Rules Metadata
 
 Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
-
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
@@ -2999,10 +2516,6 @@ Preserves the original case of headers without any modifications..
 
 For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are”.
 
-### Health Check Port Choice Same As Endpoint Port
-
-Health check is performed on endpoint port itself.
-
 ### Host Rewrite Params Auto Host Rewrite
 
 Host header will be swapped with hostname of upstream host chosen by the cluster.
@@ -3010,20 +2523,6 @@ Host header will be swapped with hostname of upstream host chosen by the cluster
 ### Host Rewrite Params Disable Host Rewrite
 
 Host header is not modified.
-
-### Http1 Config Header Transformation
-
-the stateful formatter will take effect, and the stateless formatter will be disregarded..
-
-###### One of the arguments from this list "default_header_transformation, legacy_header_transformation, preserve_case_header_transformation, proper_case_header_transformation" must be set
-
-`default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
-
-`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
-
-`preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
-
-`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
 
 ### Http Header Headers
 
@@ -3069,22 +2568,6 @@ the stateful formatter will take effect, and the stateless formatter will be dis
 
 `proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
 
-### Http Protocol Type Auto Http Config
-
-and will use whichever protocol is negotiated by ALPN with the upstream..
-
-### Http Protocol Type Http1 Config
-
-Enable HTTP/1.1 for upstream connections.
-
-`header_transformation` - (Optional) the stateful formatter will take effect, and the stateless formatter will be disregarded.. See [Http1 Config Header Transformation ](#http1-config-header-transformation) below for details.
-
-### Http Protocol Type Http2 Options
-
-Enable HTTP/2 for upstream connections..
-
-`enabled` - (Optional) Enable/disable HTTP2 Protocol for upstream connections (`Bool`).
-
 ### Httponly Add Httponly
 
 Add httponly attribute.
@@ -3092,6 +2575,14 @@ Add httponly attribute.
 ### Httponly Ignore Httponly
 
 Ignore httponly attribute.
+
+### Httponly Choice Add Httponly
+
+x-displayName: "Add".
+
+### Httponly Choice Ignore Httponly
+
+x-displayName: "Ignore".
 
 ### Https Coalescing Options
 
@@ -3102,20 +2593,6 @@ Options for coalescing TLS for multiple HTTPS Load Balancers.
 `default_coalescing` - (Optional) or Cipher suite configuration (`Bool`).
 
 `strict_coalescing` - (Optional) and/or Cipher suite configuration (`Bool`).
-
-### Https Header Transformation Type
-
-Header transformation options for response headers to the client.
-
-###### One of the arguments from this list "default_header_transformation, legacy_header_transformation, preserve_case_header_transformation, proper_case_header_transformation" must be set
-
-`default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
-
-`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
-
-`preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
-
-`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
 
 ### Https Http Protocol Options
 
@@ -3138,20 +2615,6 @@ Options for coalescing TLS for multiple HTTPS Load Balancers.
 `default_coalescing` - (Optional) or Cipher suite configuration (`Bool`).
 
 `strict_coalescing` - (Optional) and/or Cipher suite configuration (`Bool`).
-
-### Https Auto Cert Header Transformation Type
-
-Header transformation options for response headers to the client.
-
-###### One of the arguments from this list "default_header_transformation, legacy_header_transformation, preserve_case_header_transformation, proper_case_header_transformation" must be set
-
-`default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
-
-`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
-
-`preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
-
-`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
 
 ### Https Auto Cert Http Protocol Options
 
@@ -3453,55 +2916,9 @@ Define endpoints for which JWT token validation will be performed.
 
 Define where in the HTTP request the JWT token will be extracted.
 
-###### One of the arguments from this list "bearer_token, cookie, header, query_param" must be set
+###### One of the arguments from this list "bearer_token" must be set
 
 `bearer_token` - (Optional) Token is found in Authorization HTTP header with Bearer authentication scheme (`Bool`).
-
-`cookie` - (Optional) Token is found in the cookie (`String`).(Deprecated)
-
-`header` - (Optional) Token is found in the header (`String`).(Deprecated)
-
-`query_param` - (Optional) Token is found in the query string parameter (`String`).(Deprecated)
-
-### K8s Service Site Locator
-
-Site or Virtual site where this origin server is located.
-
-###### One of the arguments from this list "site, virtual_site" must be set
-
-`site` - (Optional) Reference to site object. See [ref](#ref) below for details.
-
-`virtual_site` - (Optional) Reference to virtual site object. See [ref](#ref) below for details.
-
-### Key Value Pattern Key Pattern
-
-Pattern for key/field..
-
-###### One of the arguments from this list "exact_value, regex_value" must be set
-
-`exact_value` - (Optional) Search for values with exact match. (`String`).
-
-`regex_value` - (Optional) Search for values matching this regular expression. (`String`).
-
-### Key Value Pattern Value Pattern
-
-Pattern for value..
-
-###### One of the arguments from this list "exact_value, regex_value" must be set
-
-`exact_value` - (Optional) Pattern value to be detected. (`String`).
-
-`regex_value` - (Optional) Regular expression for this pattern. (`String`).
-
-### L7 Ddos Auto Mitigation Action L7 Ddos Action Js Challenge
-
-Serve JavaScript challenge to suspicious sources.
-
-`cookie_expiry` - (Optional) An expired cookie causes the loadbalancer to issue a new challenge. (`Int`).
-
-`custom_page` - (Optional) E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
-
-`js_script_delay` - (Optional) Delay introduced by Javascript, in milliseconds. (`Int`).
 
 ### Label Choice Apply
 
@@ -3615,14 +3032,6 @@ x-displayName: "Profile Update".
 
 x-displayName: "Profile View".
 
-### Lb Source Ip Persistance Choice Disable Lb Source Ip Persistance
-
-Disable LB source IP persistence.
-
-### Lb Source Ip Persistance Choice Enable Lb Source Ip Persistance
-
-Enable LB source IP persistence.
-
 ### Learn From Redirect Traffic Disable Learn From Redirect Traffic
 
 Disable learning API patterns from traffic with redirect response codes 3xx.
@@ -3658,8 +3067,6 @@ User is responsible for managing DNS to this load balancer..
 `default_loadbalancer` - (Optional) x-displayName: "Yes" (`Bool`).
 
 `non_default_loadbalancer` - (Optional) x-displayName: "No" (`Bool`).
-
-`header_transformation_type` - (Optional) Header transformation options for response headers to the client. See [Https Header Transformation Type ](#https-header-transformation-type) below for details.(Deprecated)
 
 `http_protocol_options` - (Optional) HTTP protocol configuration options for downstream connections.. See [Https Http Protocol Options ](#https-http-protocol-options) below for details.
 
@@ -3709,8 +3116,6 @@ or a DNS CNAME record should be created in your DNS provider's portal(only for D
 
 `non_default_loadbalancer` - (Optional) x-displayName: "No" (`Bool`).
 
-`header_transformation_type` - (Optional) Header transformation options for response headers to the client. See [Https Auto Cert Header Transformation Type ](#https-auto-cert-header-transformation-type) below for details.(Deprecated)
-
 `http_protocol_options` - (Optional) HTTP protocol configuration options for downstream connections.. See [Https Auto Cert Http Protocol Options ](#https-auto-cert-http-protocol-options) below for details.
 
 `http_redirect` - (Optional) Redirect HTTP traffic to HTTPS (`Bool`).
@@ -3745,13 +3150,15 @@ or a DNS CNAME record should be created in your DNS provider's portal(only for D
 
 `tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Https Auto Cert Tls Config ](#https-auto-cert-tls-config) below for details.
 
-### Malicious User Detection Choice Disable Malicious User Detection
+### Login Endpoint Json Payload
 
-x-displayName: "Disable".
+Defines the structure of the API request payload, including payload structure, fields and values..
 
-### Malicious User Detection Choice Enable Malicious User Detection
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
-x-displayName: "Enable".
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
 
 ### Malicious User Mitigation Choice Default Mitigation Settings
 
@@ -3789,8 +3196,6 @@ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Malware Protection Rules Path
@@ -3819,16 +3224,6 @@ Configure the match criteria to trigger Malware Protection Scan.
 
 `path` - (Optional) Path to be matched. See [Malware Protection Rules Path ](#malware-protection-rules-path) below for details.
 
-`protocol` - (Optional) Protocol to be matched (`String`).
-
-### Masking Mode Choice Mask
-
-x-displayName: "Mask Sensitive Data".
-
-### Masking Mode Choice Report
-
-x-displayName: "Report Sensitive Data".
-
 ### Match Check Not Present
 
 Check that the cookie is not present..
@@ -3847,17 +3242,9 @@ Criteria for matching the values for the cookie. The match is successful if any 
 
 `transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
 
-### Max Age Ignore Max Age
+### Max Age Choice Ignore Max Age
 
 Ignore max age attribute.
-
-### Max Session Keys Type Default Session Key Caching
-
-Default session key caching. Only one session key will be cached..
-
-### Max Session Keys Type Disable Session Key Caching
-
-Disable session key caching. This will disable TLS session resumption..
 
 ### Method Choice Method Get
 
@@ -3891,6 +3278,20 @@ useful for logging. For example, *cluster1* becomes *cluster1-shadow*..
 
 Block user for a duration determined by the expiration time.
 
+### Mitigation Action Choice Mitigation Block
+
+Block suspicious sources.
+
+### Mitigation Action Choice Mitigation Js Challenge
+
+Serve JavaScript challenge to suspicious sources.
+
+`cookie_expiry` - (Optional) An expired cookie causes the loadbalancer to issue a new challenge. (`Int`).
+
+`custom_page` - (Optional) E.g. "<p> Please Wait </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
+
+`js_script_delay` - (Optional) Delay introduced by Javascript, in milliseconds. (`Int`).
+
 ### Mitigation Choice Ddos Client Source
 
 Combination of Region, ASN and TLS Fingerprints.
@@ -3898,6 +3299,8 @@ Combination of Region, ASN and TLS Fingerprints.
 `asn_list` - (Optional) The ASN is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.. See [Ddos Client Source Asn List ](#ddos-client-source-asn-list) below for details.
 
 `country_list` - (Optional) Sources that are located in one of the countries in the given list (`List of Strings`).
+
+`ja4_tls_fingerprint_matcher` - (Optional) The predicate evaluates to true if source JA4 TLS fingerprint matches any of the exact values of JA4 TLS fingerprints.. See [Ddos Client Source Ja4 Tls Fingerprint Matcher ](#ddos-client-source-ja4-tls-fingerprint-matcher) below for details.
 
 `tls_fingerprint_matcher` - (Optional) The predicate evaluates to true if the TLS fingerprint matches any of the exact values or classes of known TLS fingerprints.. See [Ddos Client Source Tls Fingerprint Matcher ](#ddos-client-source-tls-fingerprint-matcher) below for details.
 
@@ -3910,22 +3313,6 @@ IP prefix string..
 `ip_prefixes` - (Optional) List of IPv4 prefix strings. (`String`).
 
 `ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
-
-### Ml Config Choice Single Lb App
-
-ML Config applied on this load balancer.
-
-###### One of the arguments from this list "disable_discovery, enable_discovery" must be set
-
-`disable_discovery` - (Optional) x-displayName: "Disable" (`Bool`).
-
-`enable_discovery` - (Optional) x-displayName: "Enable". See [Api Discovery Choice Enable Discovery ](#api-discovery-choice-enable-discovery) below for details.
-
-###### One of the arguments from this list "disable_malicious_user_detection, enable_malicious_user_detection" must be set
-
-`disable_malicious_user_detection` - (Optional) x-displayName: "Disable" (`Bool`).
-
-`enable_malicious_user_detection` - (Optional) x-displayName: "Enable" (`Bool`).
 
 ### Mobile Identifier Headers
 
@@ -3947,17 +3334,9 @@ Disable Mobile SDK..
 
 ### Mobile Sdk Choice Mobile Sdk Config
 
-Enable Mobile SDK Configuration.
-
-`mobile_identifier` - (Optional) Mobile Request Identifier Headers Type.. See [Mobile Sdk Config Mobile Identifier ](#mobile-sdk-config-mobile-identifier) below for details.
-
-### Mobile Sdk Choice Mobile Sdk Config
-
 Mobile SDK configuration.
 
 `mobile_identifier` - (Optional) Mobile traffic identifier type.. See [Mobile Sdk Config Mobile Identifier ](#mobile-sdk-config-mobile-identifier) below for details.
-
-`reload_header_name` - (Optional) Header that is used for SDK configuration sync. (`String`).(Deprecated)
 
 ### Mobile Sdk Config Mobile Identifier
 
@@ -3973,8 +3352,6 @@ specify the maximum buffer size and buffer interval with this config..
 
 `max_request_bytes` - (Optional) manager will stop buffering and return a RequestEntityTooLarge (413) response. (`Int`).
 
-`max_request_time` - (Optional) request before returning a RequestTimeout (408) response (`Int`).(Deprecated)
-
 ### More Option Compression Params
 
 Only GZIP compression is supported.
@@ -3987,15 +3364,49 @@ Only GZIP compression is supported.
 
 `remove_accept_encoding_header` - (Optional) so that responses do not get compressed before reaching the filter. (`Bool`).
 
-### More Option Cookies To Modify
+### More Option Request Cookies To Add
 
-List of cookies to be modified from the HTTP response being sent towards downstream..
+Cookies specified at this level are applied after cookies from matched Route are applied.
 
-###### One of the arguments from this list "disable_tampering_protection, enable_tampering_protection" must be set
+`name` - (Required) Name of the cookie in Cookie header. (`String`).
 
-`disable_tampering_protection` - (Optional) x-displayName: "Disable" (`Bool`).
+`overwrite` - (Optional) Default value is do not overwrite (`Bool`).
 
-`enable_tampering_protection` - (Optional) x-displayName: "Enable" (`Bool`).
+###### One of the arguments from this list "secret_value, value" must be set
+
+`secret_value` - (Optional) Secret Value of the Cookie header. See [Value Choice Secret Value ](#value-choice-secret-value) below for details.
+
+`value` - (Optional) Value of the Cookie header. (`String`).
+
+### More Option Request Headers To Add
+
+Headers specified at this level are applied after headers from matched Route are applied.
+
+`append` - (Optional) Default value is do not append (`Bool`).
+
+`name` - (Required) Name of the HTTP header. (`String`).
+
+###### One of the arguments from this list "secret_value, value" must be set
+
+`secret_value` - (Optional) Secret Value of the HTTP header.. See [Value Choice Secret Value ](#value-choice-secret-value) below for details.
+
+`value` - (Optional) Value of the HTTP header. (`String`).
+
+### More Option Response Cookies To Add
+
+Cookies specified at this level are applied after cookies from matched Route are applied.
+
+###### One of the arguments from this list "add_domain, ignore_domain" can be set
+
+`add_domain` - (Optional) Add domain attribute (`String`).
+
+`ignore_domain` - (Optional) Ignore max age attribute (`Bool`).
+
+###### One of the arguments from this list "add_expiry, ignore_expiry" can be set
+
+`add_expiry` - (Optional) Add expiry attribute (`String`).
+
+`ignore_expiry` - (Optional) Ignore expiry attribute (`Bool`).
 
 ###### One of the arguments from this list "add_httponly, ignore_httponly" can be set
 
@@ -4005,11 +3416,25 @@ List of cookies to be modified from the HTTP response being sent towards downstr
 
 ###### One of the arguments from this list "ignore_max_age, max_age_value" can be set
 
-`ignore_max_age` - (Optional) Ignore max age attribute (`Bool`).(Deprecated)
+`ignore_max_age` - (Optional) Ignore max age attribute (`Bool`).
 
-`max_age_value` - (Optional) Add max age attribute (`Int`).(Deprecated)
+`max_age_value` - (Optional) Add max age attribute (`Int`).
 
-`name` - (Required) Name of the Cookie (`String`).
+`name` - (Required) Name of the cookie in Cookie header. (`String`).
+
+`overwrite` - (Optional) Default value is do not overwrite (`Bool`).
+
+###### One of the arguments from this list "add_partitioned, ignore_partitioned" can be set
+
+`add_partitioned` - (Optional) x-displayName: "Add" (`Bool`).
+
+`ignore_partitioned` - (Optional) x-displayName: "Ignore" (`Bool`).
+
+###### One of the arguments from this list "add_path, ignore_path" can be set
+
+`add_path` - (Optional) Add path attribute (`String`).
+
+`ignore_path` - (Optional) Ignore path attribute (`Bool`).
 
 ###### One of the arguments from this list "ignore_samesite, samesite_lax, samesite_none, samesite_strict" can be set
 
@@ -4027,29 +3452,13 @@ List of cookies to be modified from the HTTP response being sent towards downstr
 
 `ignore_secure` - (Optional) x-displayName: "Ignore" (`Bool`).
 
-### More Option Javascript Info
+###### One of the arguments from this list "ignore_value, secret_value, value" can be set
 
-Custom JavaScript Configuration. Custom JavaScript code can be executed at various stages of request processing..
+`ignore_value` - (Optional) Ignore value of cookie (`Bool`).
 
-`cache_prefix` - (Optional) KeyValue store referred by script. (`String`).
+`secret_value` - (Optional) Secret Value of the Cookie header. See [Value Choice Secret Value ](#value-choice-secret-value) below for details.
 
-`custom_script_url` - (Optional) URL of JavaScript that gets executed (`String`).
-
-`script_config` - (Optional) Input passed to the script (`String`).
-
-### More Option Request Headers To Add
-
-Headers specified at this level are applied after headers from matched Route are applied.
-
-`append` - (Optional) Default value is do not append (`Bool`).
-
-`name` - (Required) Name of the HTTP header. (`String`).
-
-###### One of the arguments from this list "secret_value, value" must be set
-
-`secret_value` - (Optional) Secret Value of the HTTP header.. See [Value Choice Secret Value ](#value-choice-secret-value) below for details.
-
-`value` - (Optional) Value of the HTTP header. (`String`).
+`value` - (Optional) Value of the Cookie header. (`String`).
 
 ### More Option Response Headers To Add
 
@@ -4093,24 +3502,6 @@ x-displayName: "Enable".
 
 `xfcc_options` - (Optional) X-Forwarded-Client-Cert header will be added with the configured fields. See [Xfcc Header Xfcc Options ](#xfcc-header-xfcc-options) below for details.
 
-### Mtls Choice Use Mtls
-
-x-displayName: "Upload a client authentication certificate specifically for this Origin Pool".
-
-`tls_certificates` - (Required) mTLS Client Certificate. See [Use Mtls Tls Certificates ](#use-mtls-tls-certificates) below for details.
-
-### Network Choice Inside Network
-
-Inside network on the site.
-
-### Network Choice Outside Network
-
-Outside network on the site.
-
-### Network Choice Vk8s Networks
-
-origin server are on vK8s network on the site.
-
 ### Ocsp Stapling Choice Custom Hash Algorithms
 
 Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
@@ -4131,8 +3522,6 @@ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Open Api Validation Rules Validation Mode
@@ -4151,48 +3540,6 @@ When a validation mismatch occurs on a request to one of the endpoints listed on
 
 `validation_mode_active` - (Optional) Enforce OpenAPI validation processing for this event. See [Validation Mode Choice Validation Mode Active ](#validation-mode-choice-validation-mode-active) below for details.
 
-### Origin Pool Choice Default Pool
-
-Single Origin Pool.
-
-`advanced_options` - (Optional) Advanced options configuration like timeouts, circuit breaker, subset load balancing. See [Default Pool Advanced Options ](#default-pool-advanced-options) below for details.
-
-`endpoint_selection` - (Required) Policy for selection of endpoints from local site or remote site or both (`String`).
-
-###### One of the arguments from this list "health_check_port, same_as_endpoint_port" can be set
-
-`health_check_port` - (Optional) Port used for performing health check (`Int`).
-
-`same_as_endpoint_port` - (Optional) Health check is performed on endpoint port itself (`Bool`).
-
-`healthcheck` - (Optional) Reference to healthcheck configuration objects. See [ref](#ref) below for details.
-
-`loadbalancer_algorithm` - (Required) loadbalancer_algorithm to determine which host is selected. (`String`).
-
-`origin_servers` - (Required) List of origin servers in this pool. See [Default Pool Origin Servers ](#default-pool-origin-servers) below for details.
-
-###### One of the arguments from this list "automatic_port, lb_port, port" must be set
-
-`automatic_port` - (Optional) For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled (`Bool`).
-
-`lb_port` - (Optional) Endpoint port is selected based on loadbalancer port (`Bool`).
-
-`port` - (Optional) Endpoint service is available on this port (`Int`).
-
-###### One of the arguments from this list "no_tls, use_tls" must be set
-
-`no_tls` - (Optional) x-displayName: "Disable" (`Bool`).
-
-`use_tls` - (Optional) x-displayName: "Enable". See [Tls Choice Use Tls ](#tls-choice-use-tls) below for details.
-
-`view_internal` - (Optional) Reference to view internal object. See [ref](#ref) below for details.
-
-### Origin Pool Choice Default Pool List
-
-Multiple Origin Pools with weights and priorities.
-
-`pools` - (Optional) List of Origin Pools. See [Default Pool List Pools ](#default-pool-list-pools) below for details.
-
 ### Origin Server Subset Rule List Origin Server Subset Rules
 
 When an Origin server subset rule is matched, then this selection rule takes effect and no more rules are evaluated..
@@ -4204,8 +3551,6 @@ When an Origin server subset rule is matched, then this selection rule takes eff
 `asn_list` - (Optional) The predicate evaluates to true if the origin ASN is present in the ASN list.. See [Asn Choice Asn List ](#asn-choice-asn-list) below for details.
 
 `asn_matcher` - (Optional) The predicate evaluates to true if the origin ASN is present in one of the BGP ASN Set objects.. See [Asn Choice Asn Matcher ](#asn-choice-asn-matcher) below for details.
-
-`body_matcher` - (Optional) The actual request body value is extracted from the request API as a string.. See [Origin Server Subset Rules Body Matcher ](#origin-server-subset-rules-body-matcher) below for details.(Deprecated)
 
 `country_codes` - (Optional) List of Country Codes (`List of Strings`).
 
@@ -4229,43 +3574,13 @@ When an Origin server subset rule is matched, then this selection rule takes eff
 
 `none` - (Optional) No Label Selector (`Bool`).
 
-### Origin Server Subset Rules Body Matcher
-
-The actual request body value is extracted from the request API as a string..
-
-`exact_values` - (Optional) A list of exact values to match the input against. (`String`).
-
-`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
-
-`transformers` - (Optional) An ordered list of transformers (starting from index 0) to be applied to the path before matching. (`List of Strings`).
-
 ### Origin Server Subset Rules Metadata
 
 Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
-
-### Outlier Detection Choice Disable Outlier Detection
-
-Outlier detection is disabled.
-
-### Outlier Detection Choice Outlier Detection
-
-healthy load balancing set. Outlier detection is a form of passive health checking..
-
-`base_ejection_time` - (Optional) Defaults to 30000ms or 30s. Specified in milliseconds. (`Int`).
-
-`consecutive_5xx` - (Optional) a consecutive 5xx ejection occurs. Defaults to 5. (`Int`).
-
-`consecutive_gateway_failure` - (Optional) before a consecutive gateway failure ejection occurs. Defaults to 5. (`Int`).
-
-`interval` - (Optional) to 10000ms or 10s. Specified in milliseconds. (`Int`).
-
-`max_ejection_percent` - (Optional) detection. Defaults to 10% but will eject at least one host regardless of the value. (`Int`).
 
 ### Oversized Body Choice Oversized Body Fail Validation
 
@@ -4275,23 +3590,21 @@ Apply the request/response action (block or report) when the body length is too 
 
 Skip body validation when the body length is too long to verify (default 64Kb).
 
-### Panic Threshold Type No Panic Threshold
+### Partitioned Choice Add Partitioned
 
-Disable panic threshold. Only healthy endpoints are considered for load balancing..
+x-displayName: "Add".
 
-### Password Blindfold Secret Info Internal
+### Partitioned Choice Ignore Partitioned
 
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+x-displayName: "Ignore".
 
 ### Path Choice Any Path
 
 Match all paths.
+
+### Path Choice Ignore Path
+
+Ignore path attribute.
 
 ### Path Normalize Choice Disable Path Normalize
 
@@ -4301,37 +3614,9 @@ x-displayName: "Disable".
 
 x-displayName: "Enable".
 
-### Pattern Choice Key Pattern
-
-Search for pattern across all field names in the specified sections..
-
-###### One of the arguments from this list "exact_value, regex_value" must be set
-
-`exact_value` - (Optional) Search for values with exact match. (`String`).
-
-`regex_value` - (Optional) Search for values matching this regular expression. (`String`).
-
-### Pattern Choice Key Value Pattern
-
-Search for specific field and value patterns in the specified sections..
-
-`key_pattern` - (Required) Pattern for key/field.. See [Key Value Pattern Key Pattern ](#key-value-pattern-key-pattern) below for details.
-
-`value_pattern` - (Required) Pattern for value.. See [Key Value Pattern Value Pattern ](#key-value-pattern-value-pattern) below for details.
-
-### Pattern Choice Value Pattern
-
-Search for pattern across all field values in the specified sections..
-
-###### One of the arguments from this list "exact_value, regex_value" must be set
-
-`exact_value` - (Optional) Pattern value to be detected. (`String`).
-
-`regex_value` - (Optional) Regular expression for this pattern. (`String`).
-
 ### Policy Protected App Endpoints
 
-List of protected application endpoints (max 128 items)..
+List of protected endpoints. Limit: Approx '128 endpoints per Load Balancer (LB)' upto 4 LBs, '32 endpoints per LB' after 4 LBs..
 
 ###### One of the arguments from this list "mobile, web, web_mobile" must be set
 
@@ -4372,40 +3657,6 @@ List of protected application endpoints (max 128 items)..
 `protocol` - (Optional) Protocol. (`String`).
 
 `query_params` - (Optional) Note that all specified query parameter predicates must evaluate to true.. See [Protected App Endpoints Query Params ](#protected-app-endpoints-query-params) below for details.
-
-### Policy Protected App Endpoints
-
-List of protected endpoints (max 128 items).
-
-###### One of the arguments from this list "mobile_client, web_client, web_mobile_client" must be set
-
-`mobile_client` - (Optional) Mobile traffic channel. (`Bool`).
-
-`web_client` - (Optional) Web traffic channel. (`Bool`).
-
-`web_mobile_client` - (Optional) Web and mobile traffic channel.. See [App Traffic Type Choice Web Mobile Client ](#app-traffic-type-choice-web-mobile-client) below for details.
-
-###### One of the arguments from this list "any_domain, domain" can be set
-
-`any_domain` - (Optional) Any Domain (`Bool`).
-
-`domain` - (Optional) Select Domain matcher. See [Domain Matcher Choice Domain ](#domain-matcher-choice-domain) below for details.
-
-###### One of the arguments from this list "flow_label, undefined_flow_label" can be set
-
-`flow_label` - (Optional) x-displayName: "Specify endpoint label category". See [Flow Label Choice Flow Label ](#flow-label-choice-flow-label) below for details.
-
-`undefined_flow_label` - (Optional) x-displayName: "Undefined" (`Bool`).
-
-`http_methods` - (Required) List of HTTP methods. (`List of Strings`).
-
-`metadata` - (Required) Common attributes for the rule including name and description.. See [Protected App Endpoints Metadata ](#protected-app-endpoints-metadata) below for details.
-
-`path` - (Required) Accepts wildcards * to match multiple characters or ? to match a single character. See [Protected App Endpoints Path ](#protected-app-endpoints-path) below for details.
-
-`query` - (Optional) Enter a regular expression or exact value to match your query parameters of interest. See [Protected App Endpoints Query ](#protected-app-endpoints-query) below for details.
-
-`request_body` - (Optional) Request Body. See [Protected App Endpoints Request Body ](#protected-app-endpoints-request-body) below for details.
 
 ### Policy Based Challenge Rule List
 
@@ -4455,73 +3706,23 @@ Hash based on cookie.
 
 `ttl` - (Optional) be a session cookie. TTL value is in milliseconds (`Int`).
 
-### Port Choice Automatic Port
-
-For other origin server types, port will be automatically set as 443 if TLS is enabled at Origin Pool and 80 if TLS is disabled.
-
-### Port Choice Lb Port
-
-Endpoint port is selected based on loadbalancer port.
-
 ### Port Choice Use Default Port
 
-For HTTP, default is 80. For HTTPS/SNI, default is 443..
+Inherit the Load Balancer's Listen Port..
 
 ### Port Match No Port Match
 
 Disable matching of ports.
 
-### Private Ip Site Locator
-
-Site or Virtual site where this origin server is located.
-
-###### One of the arguments from this list "site, virtual_site" must be set
-
-`site` - (Optional) Reference to site object. See [ref](#ref) below for details.
-
-`virtual_site` - (Optional) Reference to virtual site object. See [ref](#ref) below for details.
-
-### Private Key Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Private Name Site Locator
-
-Site or Virtual site where this origin server is located.
-
-###### One of the arguments from this list "site, virtual_site" must be set
-
-`site` - (Optional) Reference to site object. See [ref](#ref) below for details.
-
-`virtual_site` - (Optional) Reference to virtual site object. See [ref](#ref) below for details.
-
 ### Property Validation Settings Choice Property Validation Settings Custom
 
 Use custom settings with Open API specification validation.
-
-`headers` - (Optional) Custom settings for headers validation. See [Property Validation Settings Custom Headers ](#property-validation-settings-custom-headers) below for details.(Deprecated)
 
 `queryParameters` - (Optional) Custom settings for query parameters validation. See [Property Validation Settings Custom QueryParameters ](#property-validation-settings-custom-queryParameters) below for details.
 
 ### Property Validation Settings Choice Property Validation Settings Default
 
 Keep the default settings of OpenAPI specification validation.
-
-### Property Validation Settings Custom Headers
-
-Custom settings for headers validation.
-
-###### One of the arguments from this list "allow_additional_headers, disallow_additional_headers" must be set
-
-`allow_additional_headers` - (Optional) Allow extra headers (on top of what specified in the OAS documentation) (`Bool`).
-
-`disallow_additional_headers` - (Optional) Disallow extra headers (on top of what specified in the OAS documentation) (`Bool`).
 
 ### Property Validation Settings Custom QueryParameters
 
@@ -4539,15 +3740,13 @@ Note that all specified header predicates must evaluate to true..
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
-###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+###### One of the arguments from this list "check_not_present, check_present, item" must be set
 
 `check_not_present` - (Optional) Check that the header is not present. (`Bool`).
 
 `check_present` - (Optional) Check that the header is present. (`Bool`).
 
 `item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`presence` - (Optional) Check if the header is present or absent. (`Bool`).(Deprecated)
 
 `name` - (Required) A case-insensitive HTTP header name. (`String`).
 
@@ -4557,21 +3756,17 @@ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Protected App Endpoints Mitigation
 
 Mitigation action..
 
-###### One of the arguments from this list "block, flag, none, redirect" can be set
+###### One of the arguments from this list "block, flag, redirect" can be set
 
 `block` - (Optional) Block bot request and send response with custom content.. See [Action Type Block ](#action-type-block) below for details.
 
 `flag` - (Optional) Flag the request while not taking any invasive actions.. See [Action Type Flag ](#action-type-flag) below for details.
-
-`none` - (Optional) No mitigation actions. (`Bool`).(Deprecated)
 
 `redirect` - (Optional) Redirect bot request to a custom URI.. See [Action Type Redirect ](#action-type-redirect) below for details.
 
@@ -4587,20 +3782,6 @@ Matching URI path of the route..
 
 `regex` - (Optional) Regular expression of path match (e.g. the value .* will match on all paths) (`String`).
 
-### Protected App Endpoints Query
-
-Enter a regular expression or exact value to match your query parameters of interest.
-
-`name` - (Optional) Enter query parameter name (`String`).
-
-###### One of the arguments from this list "check_presence, exact_value, regex_value" must be set
-
-`check_presence` - (Optional) Parameter name taken which is exist in the query parameter (`Bool`).
-
-`exact_value` - (Optional) Exact query value to match (`String`).
-
-`regex_value` - (Optional) Regular expression of query match (e.g. the value .* will match on all query) (`String`).
-
 ### Protected App Endpoints Query Params
 
 Note that all specified query parameter predicates must evaluate to true..
@@ -4609,39 +3790,13 @@ Note that all specified query parameter predicates must evaluate to true..
 
 `key` - (Required) A case-sensitive HTTP query parameter name. (`String`).
 
-###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+###### One of the arguments from this list "check_not_present, check_present, item" must be set
 
 `check_not_present` - (Optional) Check that the query parameter is not present. (`Bool`).
 
 `check_present` - (Optional) Check that the query parameter is present. (`Bool`).
 
 `item` - (Optional) criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`presence` - (Optional) Check if the query parameter is present or absent. (`Bool`).(Deprecated)
-
-### Protected App Endpoints Request Body
-
-Request Body.
-
-`name` - (Optional) Enter request body parameter name (`String`).
-
-###### One of the arguments from this list "exact_value, regex_value" must be set
-
-`exact_value` - (Optional) Exact query value to match (`String`).
-
-`regex_value` - (Optional) Regular expression of query match (e.g. the value .* will match on all query) (`String`).
-
-### Proxy Protocol Choice Disable Proxy Protocol
-
-Disable Proxy Protocol for upstream connections.
-
-### Proxy Protocol Choice Proxy Protocol V1
-
-Enable Proxy Protocol Version 1 for upstream connections.
-
-### Proxy Protocol Choice Proxy Protocol V2
-
-Enable Proxy Protocol Version 2 for upstream connections.
 
 ### Query Params Remove All Params
 
@@ -4651,19 +3806,21 @@ x-displayName: "Remove All Parameters".
 
 x-displayName: "Retain All Parameters".
 
-### Query Params Strip Query Params
-
-Specifies the list of query params to be removed. Not supported.
-
-`query_params` - (Optional) Query params keys to strip while manipulating the HTTP request (`String`).
-
 ### Rate Limit Rate Limiter
 
 Requests to the virtual_host are rate limited based on the parameters specified in the rate_limiter..
 
+###### One of the arguments from this list "action_block, disabled" can be set
+
+`action_block` - (Optional) Blocks the user for a specified duration of time. See [Action Choice Action Block ](#action-choice-action-block) below for details.
+
+`disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
+
 `burst_multiplier` - (Optional) The maximum burst of requests to accommodate, expressed as a multiple of the rate. (`Int`).
 
-`total_number` - (Required) The total number of allowed requests for 1 unit (e.g. SECOND/MINUTE/HOUR etc.) of the specified period. (`Int`).
+`period_multiplier` - (Optional) This setting, combined with Per Period units, provides a duration (`Int`).
+
+`total_number` - (Required) The total number of allowed requests per rate-limiting period. (`Int`).
 
 `unit` - (Required) Unit for the period per which the rate limit is applied. (`String`).
 
@@ -4765,21 +3922,15 @@ Send redirect response.
 
 `host_redirect` - (Optional) swap host part of incoming URL in redirect URL (`String`).
 
-`port_redirect` - (Optional) Specify the port value to redirect to a URL with non default port(443) (`Int`).(Deprecated)
-
 `proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
-###### One of the arguments from this list "all_params, remove_all_params, replace_params, retain_all_params, strip_query_params" can be set
-
-`all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).(Deprecated)
+###### One of the arguments from this list "remove_all_params, replace_params, retain_all_params" can be set
 
 `remove_all_params` - (Optional) x-displayName: "Remove All Parameters" (`Bool`).
 
 `replace_params` - (Optional) x-displayName: "Replace All Parameters" (`String`).
 
 `retain_all_params` - (Optional) x-displayName: "Retain All Parameters" (`Bool`).
-
-`strip_query_params` - (Optional) Specifies the list of query params to be removed. Not supported. See [Query Params Strip Query Params ](#query-params-strip-query-params) below for details.(Deprecated)
 
 ###### One of the arguments from this list "path_redirect, prefix_rewrite" can be set
 
@@ -4805,15 +3956,13 @@ Note that all specified cookie matcher predicates must evaluate to true..
 
 `invert_matcher` - (Optional) Invert Match of the expression defined (`Bool`).
 
-###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+###### One of the arguments from this list "check_not_present, check_present, item" must be set
 
 `check_not_present` - (Optional) Check that the cookie is not present. (`Bool`).
 
 `check_present` - (Optional) Check that the cookie is present. (`Bool`).
 
 `item` - (Optional) Criteria for matching the values for the cookie. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`presence` - (Optional) Check if the cookie is present or absent. (`Bool`).(Deprecated)
 
 `name` - (Required) A case-sensitive cookie name. (`String`).
 
@@ -4823,15 +3972,13 @@ Note that all specified header predicates must evaluate to true..
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
-###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+###### One of the arguments from this list "check_not_present, check_present, item" must be set
 
 `check_not_present` - (Optional) Check that the header is not present. (`Bool`).
 
 `check_present` - (Optional) Check that the header is present. (`Bool`).
 
 `item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`presence` - (Optional) Check if the header is present or absent. (`Bool`).(Deprecated)
 
 `name` - (Required) A case-insensitive HTTP header name. (`String`).
 
@@ -4859,15 +4006,13 @@ Note that all specified query parameter predicates must evaluate to true..
 
 `key` - (Required) A case-sensitive HTTP query parameter name. (`String`).
 
-###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+###### One of the arguments from this list "check_not_present, check_present, item" must be set
 
 `check_not_present` - (Optional) Check that the query parameter is not present. (`Bool`).
 
 `check_present` - (Optional) Check that the query parameter is present. (`Bool`).
 
 `item` - (Optional) criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`presence` - (Optional) Check if the query parameter is present or absent. (`Bool`).(Deprecated)
 
 ### Request Timeout Choice Disable Request Timeout
 
@@ -4919,8 +4064,6 @@ Configure custom retry policy.
 
 `retry_condition` - (Required) (disconnect/reset/read timeout.) (`String`).
 
-`retry_on` - (Optional) matching one defined in retriable_status_codes field (`String`).(Deprecated)
-
 ### Rewrite Choice Disable Prefix Rewrite
 
 Do not rewrite any path portion..
@@ -4947,6 +4090,14 @@ route the request.
 
 `terminal` - (Optional) Specify if its a terminal policy (`Bool`).
 
+### Role Choice Admin
+
+x-displayName: "Admin".
+
+### Role Choice Standard
+
+x-displayName: "Standard".
+
 ### Rule List Rules
 
 these rules can be used to disable challenge or launch a different challenge for requests that match the specified conditions.
@@ -4960,8 +4111,6 @@ these rules can be used to disable challenge or launch a different challenge for
 Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
-
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
@@ -5001,13 +4150,9 @@ Specification for the rule including match predicates and actions..
 
 `enable_javascript_challenge` - (Optional) Enable javascript challenge (`Bool`).
 
-###### One of the arguments from this list "any_client, client_name, client_name_matcher, client_selector" can be set
+###### One of the arguments from this list "any_client, client_selector" can be set
 
 `any_client` - (Optional)any_client (`Bool`).
-
-`client_name` - (Optional)client_name (`String`).(Deprecated)
-
-`client_name_matcher` - (Optional)client_name_matcher. See [Client Choice Client Name Matcher ](#client-choice-client-name-matcher) below for details.(Deprecated)
 
 `client_selector` - (Optional)client_selector. See [Client Choice Client Selector ](#client-choice-client-selector) below for details.
 
@@ -5033,9 +4178,7 @@ Specification for the rule including match predicates and actions..
 
 `query_params` - (Optional)query_params. See [Spec Query Params ](#spec-query-params) below for details.
 
-###### One of the arguments from this list "ja4_tls_fingerprint, tls_fingerprint_matcher" can be set
-
-`ja4_tls_fingerprint` - (Optional)ja4_tls_fingerprint. See [Tls Fingerprint Choice Ja4 Tls Fingerprint ](#tls-fingerprint-choice-ja4-tls-fingerprint) below for details.(Deprecated)
+###### One of the arguments from this list "tls_fingerprint_matcher" can be set
 
 `tls_fingerprint_matcher` - (Optional)tls_fingerprint_matcher. See [Tls Fingerprint Choice Tls Fingerprint Matcher ](#tls-fingerprint-choice-tls-fingerprint-matcher) below for details.
 
@@ -5052,6 +4195,22 @@ Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site
 Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests.
 
 ### Samesite Samesite Strict
+
+Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests.
+
+### Samesite Choice Ignore Samesite
+
+Ignore Samesite attribute.
+
+### Samesite Choice Samesite Lax
+
+Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests.
+
+### Samesite Choice Samesite None
+
+Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests.
+
+### Samesite Choice Samesite Strict
 
 Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests.
 
@@ -5073,54 +4232,6 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
-### Secret Info Oneof Vault Secret Info
-
-Vault Secret is used for the secrets managed by Hashicorp Vault.
-
-`key` - (Optional) If not provided entire secret will be returned. (`String`).
-
-`location` - (Required) Path to secret in Vault. (`String`).
-
-`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
-
-`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
-
-`version` - (Optional) If not provided latest version will be returned. (`Int`).
-
-### Secret Info Oneof Wingman Secret Info
-
-Secret is given as bootstrap secret in F5XC Security Sidecar.
-
-`name` - (Required) Name of the secret. (`String`).
-
-### Secret Value Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Section Choice All Request Sections
-
-x-displayName: "All Request".
-
-### Section Choice All Response Sections
-
-x-displayName: "All Response".
-
-### Section Choice All Sections
-
-x-displayName: "All Request & Response".
-
-### Section Choice Custom Sections
-
-x-displayName: "Custom Sections".
-
-`custom_sections` - (Required) Request & Response Sections. (`List of Strings`).
-
 ### Secure Add Secure
 
 Add secure attribute.
@@ -5128,6 +4239,14 @@ Add secure attribute.
 ### Secure Ignore Secure
 
 Ignore secure attribute.
+
+### Secure Choice Add Secure
+
+x-displayName: "Add".
+
+### Secure Choice Ignore Secure
+
+x-displayName: "Ignore".
 
 ### Selector Choice Client Selector
 
@@ -5151,41 +4270,15 @@ Append mitigation headers..
 
 No mitigation headers..
 
-### Sensitive Data Detection Rules Custom Sensitive Data Detection Rules
-
-Rules to detect custom sensitive data in requests and/or responses sections..
-
-`metadata` - (Required) Common attributes for the rule including name and description.. See [Custom Sensitive Data Detection Rules Metadata ](#custom-sensitive-data-detection-rules-metadata) below for details.
-
-`sensitive_data_detection_config` - (Required) The custom data detection config specifies targets, scopes & the pattern to be detected.. See [Custom Sensitive Data Detection Rules Sensitive Data Detection Config ](#custom-sensitive-data-detection-rules-sensitive-data-detection-config) below for details.
-
-`sensitive_data_type` - (Required) If the pattern is detected, the request is labeled with specified sensitive data type.. See [Custom Sensitive Data Detection Rules Sensitive Data Type ](#custom-sensitive-data-detection-rules-sensitive-data-type) below for details.
-
-### Sensitive Data Detection Rules Disabled Built In Rules
-
-List of disabled built-in sensitive data detection rules..
-
-`name` - (Required) Built-in rule for sensitive data detection. (`String`).
-
 ### Sensitive Data Disclosure Rules Sensitive Data Types In Response
 
-Sensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses .
+Sensitive Data Exposure Rules allows specifying rules to mask sensitive data fields in API responses.
 
 `body` - (Optional) x-displayName: "JSON Path". See [Sensitive Data Types In Response Body ](#sensitive-data-types-in-response-body) below for details.
 
-###### One of the arguments from this list "mask, report" can be set
-
-`mask` - (Optional) x-displayName: "Mask Sensitive Data" (`Bool`).(Deprecated)
-
-`report` - (Optional) x-displayName: "Report Sensitive Data" (`Bool`).(Deprecated)
-
-###### One of the arguments from this list "api_endpoint, api_group, base_path" must be set
+###### One of the arguments from this list "api_endpoint" must be set
 
 `api_endpoint` - (Optional) The API endpoint (Path + Method) which this validation applies to. See [Type Condition Type Choice Api Endpoint ](#type-condition-type-choice-api-endpoint) below for details.
-
-`api_group` - (Optional) The API group which this validation applies to (`String`).(Deprecated)
-
-`base_path` - (Optional) The base path which this validation applies to (`String`).(Deprecated)
 
 ### Sensitive Data Policy Choice Sensitive Data Policy
 
@@ -5197,7 +4290,7 @@ Apply custom sensitive data discovery.
 
 x-displayName: "JSON Path".
 
-`fields` - (Required) List of JSON Path field values. Use square brackets with an underscore \[*] to indicate array elements, e.g., person.emails\[*]. (`String`).
+`fields` - (Required) List of JSON Path field values. Use square brackets with an underscore \[*] to indicate array elements (e.g., person.emails\[*]). To reference JSON keys that contain spaces, enclose the entire path in double quotes. For example: "person.first name". (`String`).
 
 ### Server Header Choice Default Header
 
@@ -5245,30 +4338,6 @@ Conditions related to the request, such as query parameters, headers, etc..
 
 `query_params` - (Optional) Note that all specified query parameter predicates must evaluate to true.. See [Request Matcher Query Params ](#request-matcher-query-params) below for details.
 
-### Server Validation Choice Skip Server Verification
-
-Skip origin server verification.
-
-### Server Validation Choice Use Server Verification
-
-Perform origin server verification using the provided Root CA Certificate.
-
-###### One of the arguments from this list "trusted_ca, trusted_ca_url" must be set
-
-`trusted_ca` - (Optional) Select/Add a Root CA Certificate object to associate with this Origin Pool for verification of server's certificate. See [ref](#ref) below for details.
-
-`trusted_ca_url` - (Optional) Upload a Root CA Certificate specifically for this Origin Pool for verification of server's certificate (`String`).
-
-### Server Validation Choice Volterra Trusted Ca
-
-Perform origin server verification using F5XC Default Root CA Certificate.
-
-### Service Info Service Selector
-
-discovery has to happen. This implicit label is added to service_selector.
-
-`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
-
 ### Service Policy Choice Active Service Policies
 
 Apply the specified list of service policies and bypass the namespace service policy set.
@@ -5277,21 +4346,13 @@ Apply the specified list of service policies and bypass the namespace service po
 
 ### Simple Login Password
 
-x-required.
+Enter the password to assign credentials for the selected domain to crawl.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Simple Route Advanced Options
 
@@ -5337,9 +4398,17 @@ Configure Advanced per route options.
 
 `priority` - (Optional) Also, circuit-breaker configuration at destination cluster is chosen based on the route priority. (`String`).
 
+`request_cookies_to_add` - (Optional) Cookies specified at this level are applied after cookies from matched Route are applied. See [Advanced Options Request Cookies To Add ](#advanced-options-request-cookies-to-add) below for details.
+
+`request_cookies_to_remove` - (Optional) List of keys of Cookies to be removed from the HTTP request being sent towards upstream. (`String`).
+
 `request_headers_to_add` - (Optional) Headers are key-value pairs to be added to HTTP request being routed towards upstream.. See [Advanced Options Request Headers To Add ](#advanced-options-request-headers-to-add) below for details.
 
 `request_headers_to_remove` - (Optional) List of keys of Headers to be removed from the HTTP request being sent towards upstream. (`String`).
+
+`response_cookies_to_add` - (Optional) Cookies specified at this level are applied after cookies from matched Route are applied. See [Advanced Options Response Cookies To Add ](#advanced-options-response-cookies-to-add) below for details.
+
+`response_cookies_to_remove` - (Optional) List of name of Cookies to be removed from the HTTP response being sent towards downstream. Entire set-cookie header will be removed (`String`).
 
 `response_headers_to_add` - (Optional) Headers are key-value pairs to be added to HTTP response being sent towards downstream.. See [Advanced Options Response Headers To Add ](#advanced-options-response-headers-to-add) below for details.
 
@@ -5463,14 +4532,6 @@ Custom Settings for Slow DDoS Mitigation.
 
 `request_timeout` - (Optional) x-example: "60000" (`Int`).
 
-### Sni Choice Disable Sni
-
-Do not use SNI..
-
-### Sni Choice Use Host Header As Sni
-
-Use the host header as SNI. The host header value is extracted after any configured rewrites have been applied..
-
 ### Spdy Choice Disable Spdy
 
 SPDY upgrade is disabled.
@@ -5485,15 +4546,13 @@ arg_matchers.
 
 `invert_matcher` - (Optional) Invert Match of the expression defined (`Bool`).
 
-###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+###### One of the arguments from this list "check_not_present, check_present, item" must be set
 
 `check_not_present` - (Optional) Check that the argument is not present. (`Bool`).
 
 `check_present` - (Optional) Check that the argument is present. (`Bool`).
 
 `item` - (Optional) Criteria for matching the values for the Arg. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`presence` - (Optional) Check if the arg is present or absent. (`Bool`).(Deprecated)
 
 `name` - (Required) A case-sensitive JSON path in the HTTP request body. (`String`).
 
@@ -5513,15 +4572,13 @@ cookie_matchers.
 
 `invert_matcher` - (Optional) Invert Match of the expression defined (`Bool`).
 
-###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+###### One of the arguments from this list "check_not_present, check_present, item" must be set
 
 `check_not_present` - (Optional) Check that the cookie is not present. (`Bool`).
 
 `check_present` - (Optional) Check that the cookie is present. (`Bool`).
 
 `item` - (Optional) Criteria for matching the values for the cookie. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`presence` - (Optional) Check if the cookie is present or absent. (`Bool`).(Deprecated)
 
 `name` - (Required) A case-sensitive cookie name. (`String`).
 
@@ -5539,15 +4596,13 @@ headers.
 
 `invert_matcher` - (Optional) Invert the match result. (`Bool`).
 
-###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+###### One of the arguments from this list "check_not_present, check_present, item" must be set
 
 `check_not_present` - (Optional) Check that the header is not present. (`Bool`).
 
 `check_present` - (Optional) Check that the header is present. (`Bool`).
 
 `item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`presence` - (Optional) Check if the header is present or absent. (`Bool`).(Deprecated)
 
 `name` - (Required) A case-insensitive HTTP header name. (`String`).
 
@@ -5583,15 +4638,13 @@ query_params.
 
 `key` - (Required) A case-sensitive HTTP query parameter name. (`String`).
 
-###### One of the arguments from this list "check_not_present, check_present, item, presence" must be set
+###### One of the arguments from this list "check_not_present, check_present, item" must be set
 
 `check_not_present` - (Optional) Check that the query parameter is not present. (`Bool`).
 
 `check_present` - (Optional) Check that the query parameter is present. (`Bool`).
 
 `item` - (Optional) criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`presence` - (Optional) Check if the query parameter is present or absent. (`Bool`).(Deprecated)
 
 ### Specific Hash Policy Hash Policy
 
@@ -5606,34 +4659,6 @@ route the request.
 `source_ip` - (Optional) Hash based on source IP address (`Bool`).
 
 `terminal` - (Optional) Specify if its a terminal policy (`Bool`).
-
-### Strict Sni Host Header Check Choice Additional Domains
-
-Wildcard names are supported in the suffix or prefix form.
-
-`domains` - (Required) Wildcard names are supported in the suffix or prefix form. (`String`).
-
-### Strict Sni Host Header Check Choice Enable Strict Sni Host Header Check
-
-Enable strict SNI and Host header check.
-
-### Subset Choice Disable Subsets
-
-Subset load balancing is disabled. All eligible origin servers will be considered for load balancing..
-
-### Subset Choice Enable Subsets
-
-Subset load balancing is enabled. Based on route, subset of origin servers will be considered for load balancing..
-
-`endpoint_subsets` - (Required) List of subset class. Subsets class is defined using list of keys. Every unique combination of values of these keys form a subset withing the class.. See [Enable Subsets Endpoint Subsets ](#enable-subsets-endpoint-subsets) below for details.
-
-###### One of the arguments from this list "any_endpoint, default_subset, fail_request" must be set
-
-`any_endpoint` - (Optional) Select any origin server from available healthy origin servers in this pool (`Bool`).
-
-`default_subset` - (Optional) Use the default subset provided here. Select endpoints matching default subset.. See [Fallback Policy Choice Default Subset ](#fallback-policy-choice-default-subset) below for details.
-
-`fail_request` - (Optional) Request will be failed and error returned, as if cluster has no origin servers. (`Bool`).
 
 ### Target All Endpoint
 
@@ -5650,28 +4675,6 @@ Validation will be performed for the endpoints mentioned in the API Groups.
 Validation will be performed for selected path prefixes.
 
 `base_paths` - (Required) x-required (`String`).
-
-### Target Choice Any Target
-
-The rule will be applied for all requests on this LB..
-
-### Target Choice Api Endpoint Target
-
-The rule is applied only for the specified api endpoints..
-
-`api_endpoint_path` - (Required) The rule is applied only for the specified api endpoints. (`String`).
-
-`methods` - (Required) x-example: "['GET', 'POST', 'DELETE']" (`List of Strings`).
-
-### Temporary Blocking Parameters Choice Default Temporary Blocking Parameters
-
-Use default parameters.
-
-### Temporary Blocking Parameters Choice Temporary User Blocking
-
-Specifies configuration for temporary user blocking resulting from malicious user detection.
-
-`custom_page` - (Optional) E.g. "<p> Blocked </p>". Base64 encoded string for this html is "PHA+IFBsZWFzZSBXYWl0IDwvcD4=" (`String`).
 
 ### Tls Cert Params Tls Config
 
@@ -5691,19 +4694,11 @@ Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
 TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Private Key Blindfold Secret Info Internal ](#private-key-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Tls Certificates Choice Tls Cert Params
 
@@ -5732,54 +4727,6 @@ Upload a TLS certificate covering all domain names for this Load Balancer.
 `tls_certificates` - (Required) for example, domain.com and *.domain.com - but use different signature algorithms. See [Tls Parameters Tls Certificates ](#tls-parameters-tls-certificates) below for details.
 
 `tls_config` - (Optional) Configuration of TLS settings such as min/max TLS version and ciphersuites. See [Tls Parameters Tls Config ](#tls-parameters-tls-config) below for details.
-
-### Tls Choice No Tls
-
-x-displayName: "Disable".
-
-### Tls Choice Use Tls
-
-x-displayName: "Enable".
-
-###### One of the arguments from this list "default_session_key_caching, disable_session_key_caching, max_session_keys" must be set
-
-`default_session_key_caching` - (Optional) Default session key caching. Only one session key will be cached. (`Bool`).
-
-`disable_session_key_caching` - (Optional) Disable session key caching. This will disable TLS session resumption. (`Bool`).
-
-`max_session_keys` - (Optional) Number of session keys that are cached. (`Int`).
-
-###### One of the arguments from this list "no_mtls, use_mtls, use_mtls_obj" must be set
-
-`no_mtls` - (Optional) x-displayName: "Disable" (`Bool`).
-
-`use_mtls` - (Optional) x-displayName: "Upload a client authentication certificate specifically for this Origin Pool". See [Mtls Choice Use Mtls ](#mtls-choice-use-mtls) below for details.
-
-`use_mtls_obj` - (Optional) x-displayName: "Select/add a TLS Certificate object for client authentication". See [ref](#ref) below for details.
-
-###### One of the arguments from this list "skip_server_verification, use_server_verification, volterra_trusted_ca" must be set
-
-`skip_server_verification` - (Optional) Skip origin server verification (`Bool`).
-
-`use_server_verification` - (Optional) Perform origin server verification using the provided Root CA Certificate. See [Server Validation Choice Use Server Verification ](#server-validation-choice-use-server-verification) below for details.
-
-`volterra_trusted_ca` - (Optional) Perform origin server verification using F5XC Default Root CA Certificate (`Bool`).
-
-###### One of the arguments from this list "disable_sni, sni, use_host_header_as_sni" must be set
-
-`disable_sni` - (Optional) Do not use SNI. (`Bool`).
-
-`sni` - (Optional) SNI value to be used. (`String`).
-
-`use_host_header_as_sni` - (Optional) Use the host header as SNI. The host header value is extracted after any configured rewrites have been applied. (`Bool`).
-
-`tls_config` - (Required) TLS parameters such as min/max TLS version and ciphers. See [Use Tls Tls Config ](#use-tls-tls-config) below for details.
-
-### Tls Fingerprint Choice Ja4 Tls Fingerprint
-
-ja4_tls_fingerprint.
-
-`exact_values` - (Optional) A list of exact JA4 TLS fingerprint to match the input JA4 TLS fingerprint against (`String`).
 
 ### Tls Fingerprint Choice Tls Fingerprint Matcher
 
@@ -5827,38 +4774,6 @@ Configuration of TLS settings such as min/max TLS version and ciphersuites.
 
 Token is found in Authorization HTTP header with Bearer authentication scheme.
 
-### Transaction Result Failure Conditions
-
-Failure Conditions.
-
-`name` - (Optional) A case-insensitive HTTP header name. (`String`).
-
-`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
-
-`status` - (Required) HTTP Status code (`String`).
-
-### Transaction Result Success Conditions
-
-Success Conditions.
-
-`name` - (Optional) A case-insensitive HTTP header name. (`String`).
-
-`regex_values` - (Optional) A list of regular expressions to match the input against. (`String`).
-
-`status` - (Required) HTTP Status code (`String`).
-
-### Transaction Result Choice Disable Transaction Result
-
-Disable collection of transaction result..
-
-### Transaction Result Choice Transaction Result
-
-Collect transaction result..
-
-`failure_conditions` - (Optional) Failure Conditions. See [Transaction Result Failure Conditions ](#transaction-result-failure-conditions) below for details.
-
-`success_conditions` - (Optional) Success Conditions. See [Transaction Result Success Conditions ](#transaction-result-success-conditions) below for details.
-
 ### Trust Client Ip Headers Choice Enable Trust Client Ip Headers
 
 x-displayName: "Enable".
@@ -5871,8 +4786,6 @@ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Type Condition Type Choice Api Endpoint
@@ -5882,38 +4795,6 @@ The API endpoint (Path + Method) which this validation applies to.
 `methods` - (Optional) Methods to be matched (`List of Strings`).
 
 `path` - (Required) Path to be matched (`String`).
-
-### Use Mtls Tls Certificates
-
-mTLS Client Certificate.
-
-`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
-
-`description` - (Optional) Description for the certificate (`String`).
-
-###### One of the arguments from this list "custom_hash_algorithms, disable_ocsp_stapling, use_system_defaults" can be set
-
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
-
-`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Ocsp Stapling Choice Disable Ocsp Stapling ](#ocsp-stapling-choice-disable-ocsp-stapling) below for details.
-
-`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Ocsp Stapling Choice Use System Defaults ](#ocsp-stapling-choice-use-system-defaults) below for details.
-
-`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Tls Certificates Private Key ](#tls-certificates-private-key) below for details.
-
-### Use Tls Tls Config
-
-TLS parameters such as min/max TLS version and ciphers.
-
-###### One of the arguments from this list "custom_security, default_security, low_security, medium_security" must be set
-
-`custom_security` - (Optional) Custom selection of TLS versions and cipher suites. See [Choice Custom Security ](#choice-custom-security) below for details.
-
-`default_security` - (Optional) TLS v1.2+ with PFS ciphers and strong crypto algorithms. (`Bool`).
-
-`low_security` - (Optional) TLS v1.0+ including non-PFS ciphers and weak crypto algorithms. (`Bool`).
-
-`medium_security` - (Optional) TLS v1.0+ with PFS ciphers and medium strength crypto algorithms. (`Bool`).
 
 ### V6 Vip Choice Default V6 Vip
 
@@ -5940,12 +4821,6 @@ Determine what to do with unprotected endpoints (not part of the API Inventory o
 ### Validation All Spec Endpoints Settings
 
 OpenAPI specification validation settings relevant for "API Inventory" enforcement and for "Custom list" enforcement.
-
-###### One of the arguments from this list "fail_close, fail_open" can be set
-
-`fail_close` - (Optional) Handle the transaction as it failed the OpenAPI specification validation (Block or Report) (`Bool`).(Deprecated)
-
-`fail_open` - (Optional) Continue to process the transaction without enforcing OpenAPI specification (Allow) (`Bool`).(Deprecated)
 
 ###### One of the arguments from this list "oversized_body_fail_validation, oversized_body_skip_validation" can be set
 
@@ -6011,12 +4886,6 @@ x-displayName: "Validation List".
 
 OpenAPI specification validation settings relevant for "API Inventory" enforcement and for "Custom list" enforcement.
 
-###### One of the arguments from this list "fail_close, fail_open" can be set
-
-`fail_close` - (Optional) Handle the transaction as it failed the OpenAPI specification validation (Block or Report) (`Bool`).(Deprecated)
-
-`fail_open` - (Optional) Continue to process the transaction without enforcing OpenAPI specification (Allow) (`Bool`).(Deprecated)
-
 ###### One of the arguments from this list "oversized_body_fail_validation, oversized_body_skip_validation" can be set
 
 `oversized_body_fail_validation` - (Optional) Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb) (`Bool`).
@@ -6059,12 +4928,6 @@ All other API endpoints would proceed according to "Fall Through Mode".
 
 `fall_through_mode` - (Required) Determine what to do with unprotected endpoints (not part of the API Inventory or doesn't have a specific rule in custom rules). See [Validation All Spec Endpoints Fall Through Mode ](#validation-all-spec-endpoints-fall-through-mode) below for details.
 
-###### One of the arguments from this list "oversized_body_fail_validation, oversized_body_skip_validation" can be set
-
-`oversized_body_fail_validation` - (Optional) Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb) (`Bool`).(Deprecated)
-
-`oversized_body_skip_validation` - (Optional) Skip body validation when the body length is too long to verify (default 64Kb) (`Bool`).(Deprecated)
-
 `settings` - (Optional) OpenAPI specification validation settings relevant for "API Inventory" enforcement and for "Custom list" enforcement. See [Validation All Spec Endpoints Settings ](#validation-all-spec-endpoints-settings) below for details.
 
 `validation_mode` - (Required) When a validation mismatch occurs on a request to one of the API Inventory endpoints. See [Validation All Spec Endpoints Validation Mode ](#validation-all-spec-endpoints-validation-mode) below for details.
@@ -6077,39 +4940,25 @@ Any other end-points not listed will act according to "Fall Through Mode".
 
 `open_api_validation_rules` - (Required) x-displayName: "Validation List". See [Validation Custom List Open Api Validation Rules ](#validation-custom-list-open-api-validation-rules) below for details.
 
-###### One of the arguments from this list "oversized_body_fail_validation, oversized_body_skip_validation" can be set
-
-`oversized_body_fail_validation` - (Optional) Apply the request/response action (block or report) when the body length is too long to verify (default 64Kb) (`Bool`).(Deprecated)
-
-`oversized_body_skip_validation` - (Optional) Skip body validation when the body length is too long to verify (default 64Kb) (`Bool`).(Deprecated)
-
 `settings` - (Optional) OpenAPI specification validation settings relevant for "API Inventory" enforcement and for "Custom list" enforcement. See [Validation Custom List Settings ](#validation-custom-list-settings) below for details.
 
 ### Validation Target Choice Validation Disabled
 
 Don't run OpenAPI validation.
 
+### Value Choice Ignore Value
+
+Ignore value of cookie.
+
 ### Value Choice Secret Value
 
-Secret Value of the HTTP header..
+Secret Value of the Cookie header.
 
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Secret Value Blindfold Secret Info Internal ](#secret-value-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
-
-### Value Type Check Presence
-
-Parameter name taken which is exist in the query parameter.
 
 ### Vip Choice Default Vip
 
@@ -6145,65 +4994,7 @@ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
-
-### Web Mobile Header
-
-Header that is used by mobile traffic..
-
-###### One of the arguments from this list "check_not_present, check_present, item" must be set
-
-`check_not_present` - (Optional) Check that the header is not present. (`Bool`).
-
-`check_present` - (Optional) Check that the header is present. (`Bool`).
-
-`item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`name` - (Required) A case-insensitive HTTP header name. (`String`).
-
-### Web Mobile Headers
-
-Headers that can be used to identify mobile traffic..
-
-###### One of the arguments from this list "check_not_present, check_present, item" must be set
-
-`check_not_present` - (Optional) Check that the header is not present. (`Bool`).
-
-`check_present` - (Optional) Check that the header is present. (`Bool`).
-
-`item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`name` - (Required) A case-insensitive HTTP header name. (`String`).
-
-### Web Mobile Client Header
-
-Header that is used by mobile traffic..
-
-###### One of the arguments from this list "check_not_present, check_present, item" must be set
-
-`check_not_present` - (Optional) Check that the header is not present. (`Bool`).
-
-`check_present` - (Optional) Check that the header is present. (`Bool`).
-
-`item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`name` - (Required) A case-insensitive HTTP header name. (`String`).
-
-### Web Mobile Client Headers
-
-Headers that can be used to identify mobile traffic..
-
-###### One of the arguments from this list "check_not_present, check_present, item" must be set
-
-`check_not_present` - (Optional) Check that the header is not present. (`Bool`).
-
-`check_present` - (Optional) Check that the header is present. (`Bool`).
-
-`item` - (Optional) Criteria for matching the values for the header. The match is successful if any of the values in the input satisfies the criteria in the matcher.. See [Match Item ](#match-item) below for details.
-
-`name` - (Required) A case-insensitive HTTP header name. (`String`).
 
 ### Websocket Choice Disable Web Socket Config
 

@@ -310,7 +310,12 @@ func resourceVolterraApiDefinitionCreate(d *schema.ResourceData, meta interface{
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field swagger_specs")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		createSpec.SwaggerSpecs = ls
 
@@ -520,7 +525,12 @@ func resourceVolterraApiDefinitionUpdate(d *schema.ResourceData, meta interface{
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field swagger_specs")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		updateSpec.SwaggerSpecs = ls
 
@@ -552,5 +562,8 @@ func resourceVolterraApiDefinitionDelete(d *schema.ResourceData, meta interface{
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra ApiDefinition obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_views_api_definition.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_views_api_definition.ObjectType, namespace, name, opts...)
 }

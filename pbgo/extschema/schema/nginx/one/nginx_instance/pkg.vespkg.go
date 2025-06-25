@@ -23,7 +23,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nginx.one.nginx_instance.ListResponseItem"] = ListResponseItemValidator()
 
 	vr["ves.io.schema.nginx.one.nginx_instance.APIDiscoverySpec"] = APIDiscoverySpecValidator()
-	vr["ves.io.schema.nginx.one.nginx_instance.DataplaneIdentifier"] = DataplaneIdentifierValidator()
 	vr["ves.io.schema.nginx.one.nginx_instance.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.nginx.one.nginx_instance.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.nginx.one.nginx_instance.WAFSpec"] = WAFSpecValidator()

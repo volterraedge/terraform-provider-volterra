@@ -30,6 +30,7 @@ import (
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
+	strconv "strconv"
 	strings "strings"
 )
 
@@ -44,6 +45,39 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+
+// Site Status
+//
+// x-displayName: "Site Status"
+// Status of the given site
+type SiteStatus int32
+
+const (
+	// NOT_FOUND
+	//
+	// x-displayName: "NOT_FOUND"
+	// Site does not exist
+	NOT_FOUND SiteStatus = 0
+	// FOUND
+	//
+	// x-displayName: "FOUND"
+	// Site exists
+	FOUND SiteStatus = 1
+)
+
+var SiteStatus_name = map[int32]string{
+	0: "NOT_FOUND",
+	1: "FOUND",
+}
+
+var SiteStatus_value = map[string]int32{
+	"NOT_FOUND": 0,
+	"FOUND":     1,
+}
+
+func (SiteStatus) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_bc66d63407bdffe4, []int{0}
+}
 
 // Site Status Metrics Request
 //
@@ -241,11 +275,155 @@ func (m *SiteStatusMetricsResponse) GetStep() string {
 	return ""
 }
 
+// Check Site Exist Request
+//
+// x-displayName: "Check Site Exist Request"
+// Request to get status for a site
+type CheckSiteExistRequest struct {
+	// Name
+	//
+	// x-displayName: "Name"
+	// x-required
+	// x-example: "ce01"
+	// Name of the site
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Start time
+	//
+	// x-displayName: "Start Time"
+	// x-example: "1570007981"
+	// start time of metric collection from which data will be considered.
+	// Format: unix_timestamp|rfc 3339
+	//
+	// Optional: If not specified, then the start_time will be evaluated to end_time-10m
+	//           If end_time is not specified, then the start_time will be evaluated to <current time>-10m
+	StartTime string `protobuf:"bytes,2,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	// End time
+	//
+	// x-displayName: "End Time"
+	// x-example: "1570007981"
+	// end time of metric collection from which data will be considered.
+	// Format: unix_timestamp|rfc 3339
+	//
+	// Optional: If not specified, then the end_time will be evaluated to start_time+10m
+	//           If start_time is not specified, then the end_time will be evaluated to <current time>
+	EndTime string `protobuf:"bytes,3,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+}
+
+func (m *CheckSiteExistRequest) Reset()      { *m = CheckSiteExistRequest{} }
+func (*CheckSiteExistRequest) ProtoMessage() {}
+func (*CheckSiteExistRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bc66d63407bdffe4, []int{2}
+}
+func (m *CheckSiteExistRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CheckSiteExistRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CheckSiteExistRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CheckSiteExistRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CheckSiteExistRequest.Merge(m, src)
+}
+func (m *CheckSiteExistRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *CheckSiteExistRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CheckSiteExistRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CheckSiteExistRequest proto.InternalMessageInfo
+
+func (m *CheckSiteExistRequest) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *CheckSiteExistRequest) GetStartTime() string {
+	if m != nil {
+		return m.StartTime
+	}
+	return ""
+}
+
+func (m *CheckSiteExistRequest) GetEndTime() string {
+	if m != nil {
+		return m.EndTime
+	}
+	return ""
+}
+
+// Check Site Exist Response
+//
+// x-displayName: "Check Site Exist Response"
+// Response for the Check Site Exist Request
+type CheckSiteExistResponse struct {
+	// Status
+	//
+	// x-displayName: "Status"
+	// Status of the site
+	Status SiteStatus `protobuf:"varint,1,opt,name=status,proto3,enum=ves.io.schema.site.SiteStatus" json:"status,omitempty"`
+}
+
+func (m *CheckSiteExistResponse) Reset()      { *m = CheckSiteExistResponse{} }
+func (*CheckSiteExistResponse) ProtoMessage() {}
+func (*CheckSiteExistResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bc66d63407bdffe4, []int{3}
+}
+func (m *CheckSiteExistResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CheckSiteExistResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CheckSiteExistResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CheckSiteExistResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CheckSiteExistResponse.Merge(m, src)
+}
+func (m *CheckSiteExistResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *CheckSiteExistResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CheckSiteExistResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CheckSiteExistResponse proto.InternalMessageInfo
+
+func (m *CheckSiteExistResponse) GetStatus() SiteStatus {
+	if m != nil {
+		return m.Status
+	}
+	return NOT_FOUND
+}
+
 func init() {
+	proto.RegisterEnum("ves.io.schema.site.SiteStatus", SiteStatus_name, SiteStatus_value)
+	golang_proto.RegisterEnum("ves.io.schema.site.SiteStatus", SiteStatus_name, SiteStatus_value)
 	proto.RegisterType((*SiteStatusMetricsRequest)(nil), "ves.io.schema.site.SiteStatusMetricsRequest")
 	golang_proto.RegisterType((*SiteStatusMetricsRequest)(nil), "ves.io.schema.site.SiteStatusMetricsRequest")
 	proto.RegisterType((*SiteStatusMetricsResponse)(nil), "ves.io.schema.site.SiteStatusMetricsResponse")
 	golang_proto.RegisterType((*SiteStatusMetricsResponse)(nil), "ves.io.schema.site.SiteStatusMetricsResponse")
+	proto.RegisterType((*CheckSiteExistRequest)(nil), "ves.io.schema.site.CheckSiteExistRequest")
+	golang_proto.RegisterType((*CheckSiteExistRequest)(nil), "ves.io.schema.site.CheckSiteExistRequest")
+	proto.RegisterType((*CheckSiteExistResponse)(nil), "ves.io.schema.site.CheckSiteExistResponse")
+	golang_proto.RegisterType((*CheckSiteExistResponse)(nil), "ves.io.schema.site.CheckSiteExistResponse")
 }
 
 func init() {
@@ -256,50 +434,65 @@ func init() {
 }
 
 var fileDescriptor_bc66d63407bdffe4 = []byte{
-	// 650 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x93, 0xb1, 0x6f, 0x13, 0x4b,
-	0x10, 0xc6, 0xbd, 0xb6, 0x93, 0xf7, 0x72, 0x4f, 0x2f, 0xd2, 0xbb, 0xd7, 0x5c, 0x4c, 0xb4, 0x8a,
-	0x2c, 0x21, 0x92, 0x28, 0x77, 0x2b, 0x05, 0x51, 0x80, 0x04, 0x82, 0x80, 0x10, 0x14, 0x08, 0x70,
-	0xa8, 0x68, 0xac, 0xf5, 0xdd, 0xf8, 0xb2, 0xe0, 0xdb, 0x3d, 0x76, 0xe7, 0xac, 0x40, 0x14, 0x09,
-	0xa5, 0xa2, 0x04, 0xd1, 0x50, 0x52, 0xf2, 0x37, 0x10, 0x8a, 0x74, 0x50, 0xa1, 0x08, 0x9a, 0x94,
-	0xe4, 0x4c, 0x01, 0x5d, 0x7a, 0x1a, 0xe4, 0x3d, 0x3b, 0x89, 0x71, 0x8a, 0x34, 0xa7, 0xd9, 0xfd,
-	0x7d, 0x3b, 0xdf, 0xce, 0xdc, 0x8e, 0xb3, 0xd0, 0x05, 0x13, 0x08, 0xc5, 0x4c, 0xb8, 0x06, 0x09,
-	0x67, 0x46, 0x20, 0xd8, 0x4f, 0xd3, 0x20, 0xc7, 0xcc, 0x34, 0x85, 0x6c, 0xab, 0x20, 0xd5, 0x0a,
-	0x95, 0xeb, 0x16, 0xd2, 0xa0, 0x90, 0x06, 0x7d, 0x55, 0xcd, 0x8f, 0x05, 0xae, 0x65, 0xad, 0x20,
-	0x54, 0x09, 0x8b, 0x55, 0xac, 0x98, 0x95, 0xb6, 0xb2, 0xb6, 0x5d, 0xd9, 0x85, 0x8d, 0x8a, 0x14,
-	0xb5, 0xd9, 0x58, 0xa9, 0xb8, 0x03, 0x8c, 0xa7, 0x82, 0x71, 0x29, 0x15, 0x72, 0x14, 0x4a, 0x9a,
-	0x01, 0xad, 0x8d, 0xde, 0x05, 0xb4, 0x56, 0x7a, 0xc8, 0xce, 0x8c, 0x32, 0x95, 0x1e, 0x3f, 0x48,
-	0x4f, 0x28, 0x02, 0x9f, 0xa6, 0x30, 0xe4, 0x33, 0xa3, 0xfc, 0x38, 0x9a, 0x1d, 0x45, 0x5d, 0xde,
-	0x11, 0x11, 0x47, 0x18, 0xd0, 0xfa, 0x1f, 0x14, 0x0c, 0xc8, 0xee, 0xa8, 0x79, 0xfd, 0x55, 0xd9,
-	0xf1, 0x56, 0x05, 0xc2, 0xaa, 0x6d, 0xd8, 0x1d, 0x40, 0x2d, 0x42, 0xd3, 0x80, 0x27, 0x19, 0x18,
-	0x74, 0x67, 0x9d, 0x29, 0xc9, 0x13, 0x30, 0x29, 0x0f, 0xc1, 0x23, 0x73, 0x64, 0x7e, 0xaa, 0x71,
-	0xb4, 0xe1, 0xba, 0x4e, 0xb5, 0x7f, 0x57, 0xaf, 0x6c, 0x81, 0x8d, 0xdd, 0xfb, 0xce, 0x74, 0x5b,
-	0x40, 0x27, 0x6a, 0x1a, 0xe8, 0x40, 0x88, 0x4a, 0x7b, 0x95, 0xb9, 0xca, 0xfc, 0xf4, 0xf2, 0x62,
-	0x30, 0xde, 0xfe, 0x60, 0xcc, 0xf7, 0x66, 0xff, 0x68, 0xe3, 0x5f, 0x9b, 0x61, 0x75, 0x90, 0xc0,
-	0x5d, 0x70, 0x1c, 0x83, 0x5c, 0x63, 0x13, 0x45, 0x02, 0x5e, 0xb5, 0x6f, 0xb6, 0xe2, 0xbc, 0xff,
-	0xb9, 0x53, 0x99, 0xd0, 0x95, 0x37, 0x55, 0xd2, 0x98, 0xb2, 0xf4, 0x81, 0x48, 0xc0, 0x3d, 0xeb,
-	0xfc, 0x0d, 0x32, 0x2a, 0x84, 0x13, 0x63, 0xc2, 0xbf, 0x40, 0x46, 0x56, 0x46, 0x9d, 0xaa, 0x41,
-	0x48, 0xbd, 0xc9, 0x11, 0xc9, 0xdb, 0x2a, 0x69, 0xd8, 0xfd, 0xfa, 0x33, 0x67, 0xe6, 0x84, 0x96,
-	0x98, 0x54, 0x49, 0x03, 0xee, 0x65, 0xa7, 0x1a, 0x71, 0xe4, 0x1e, 0x99, 0xab, 0xcc, 0xff, 0xb3,
-	0xbc, 0x70, 0xaa, 0xba, 0x6e, 0x70, 0xe4, 0x0d, 0x7b, 0xec, 0xd0, 0xbb, 0x3c, 0xe2, 0x7d, 0x50,
-	0x1e, 0x78, 0x2f, 0x7f, 0x28, 0x3b, 0xff, 0x5f, 0xcf, 0x0c, 0xaa, 0xe4, 0x28, 0xcb, 0xb5, 0x7b,
-	0xb7, 0xdd, 0x5f, 0xc4, 0xf9, 0x6f, 0x2c, 0xaf, 0xbb, 0x74, 0x2a, 0xfb, 0xc1, 0xef, 0xac, 0xf9,
-	0xa7, 0x54, 0x17, 0x95, 0xd6, 0x5f, 0x90, 0xfc, 0xa3, 0x77, 0xb5, 0x7d, 0x61, 0x3d, 0xf4, 0xfb,
-	0x4a, 0x3f, 0xe1, 0x92, 0xc7, 0x90, 0x80, 0x44, 0xdf, 0x20, 0x97, 0x11, 0xd7, 0x91, 0x9f, 0x28,
-	0x29, 0x50, 0xe9, 0xa5, 0x2e, 0x18, 0x5f, 0x28, 0x5f, 0xc8, 0xb6, 0xe6, 0x06, 0x75, 0x16, 0x62,
-	0xa6, 0xc1, 0xd7, 0xc0, 0xa3, 0xad, 0xaf, 0xdf, 0x5f, 0x97, 0xaf, 0xd4, 0x2f, 0xb2, 0x34, 0x6b,
-	0x75, 0x44, 0xc8, 0x0e, 0xdf, 0x8f, 0x61, 0x1b, 0x87, 0xf1, 0x66, 0xf1, 0xea, 0x37, 0xfa, 0xdf,
-	0x4d, 0x56, 0x0c, 0x2f, 0x4b, 0x8a, 0xfb, 0x5c, 0x22, 0x8b, 0xb5, 0x73, 0x3b, 0xdb, 0xa4, 0xf2,
-	0x65, 0x9b, 0xcc, 0x9c, 0x50, 0xc0, 0xdd, 0xd6, 0x23, 0x08, 0x71, 0xeb, 0xb3, 0x57, 0xf6, 0xc8,
-	0xca, 0x16, 0xd9, 0xdd, 0xa7, 0xa5, 0xbd, 0x7d, 0x5a, 0x3a, 0xd8, 0xa7, 0xe4, 0x79, 0x4e, 0xc9,
-	0xbb, 0x9c, 0x92, 0x4f, 0x39, 0x25, 0xbb, 0x39, 0x25, 0xdf, 0x72, 0x4a, 0x7e, 0xe4, 0xb4, 0x74,
-	0x90, 0x53, 0xf2, 0xb2, 0x47, 0x4b, 0x3b, 0x3d, 0x4a, 0x76, 0x7b, 0xb4, 0xb4, 0xd7, 0xa3, 0xa5,
-	0x87, 0xb7, 0x62, 0x95, 0x3e, 0x8e, 0x83, 0xae, 0xea, 0x20, 0x68, 0xcd, 0x83, 0xcc, 0x30, 0x1b,
-	0xb4, 0x95, 0x4e, 0xfc, 0x54, 0xab, 0xae, 0x88, 0x40, 0xfb, 0x43, 0xcc, 0xd2, 0x56, 0xac, 0x18,
-	0xac, 0xe3, 0x70, 0x6a, 0x8f, 0x86, 0xb7, 0x35, 0x69, 0x47, 0xeb, 0xfc, 0xef, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0x4c, 0x74, 0x26, 0x47, 0x9e, 0x04, 0x00, 0x00,
+	// 780 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0xbf, 0x6f, 0x23, 0x45,
+	0x14, 0xf6, 0xd8, 0x9b, 0x80, 0x07, 0x9d, 0x05, 0x83, 0x40, 0x1b, 0x13, 0x8d, 0x22, 0x4b, 0x40,
+	0x62, 0x65, 0x77, 0x85, 0x11, 0x48, 0x9c, 0x04, 0x82, 0xbb, 0xe3, 0x04, 0x05, 0x97, 0xc3, 0x39,
+	0x1a, 0x1a, 0x6b, 0xbc, 0xfb, 0xbc, 0x19, 0xce, 0xbb, 0xb3, 0xcc, 0xcc, 0x5a, 0x39, 0xa2, 0x48,
+	0x28, 0x15, 0x25, 0x88, 0x86, 0x12, 0x89, 0x86, 0xbf, 0x81, 0x6b, 0xd2, 0x41, 0x85, 0x22, 0x68,
+	0xae, 0x24, 0xeb, 0x2b, 0xa0, 0x4b, 0x4f, 0x83, 0x76, 0x76, 0x1d, 0xdf, 0xc6, 0x06, 0xb9, 0xa0,
+	0x59, 0xbd, 0x7d, 0xdf, 0x37, 0xef, 0xbd, 0xef, 0x9b, 0x1f, 0x78, 0x67, 0x02, 0xca, 0xe5, 0xc2,
+	0x53, 0xfe, 0x01, 0x44, 0xcc, 0x53, 0x5c, 0x83, 0xf9, 0x0c, 0x94, 0x66, 0x3a, 0x55, 0x03, 0x1e,
+	0x8f, 0x84, 0x9b, 0x48, 0xa1, 0x05, 0x21, 0x05, 0xd5, 0x2d, 0xa8, 0x6e, 0xce, 0x6a, 0x3b, 0x21,
+	0xd7, 0x07, 0xe9, 0xd0, 0xf5, 0x45, 0xe4, 0x85, 0x22, 0x14, 0x9e, 0xa1, 0x0e, 0xd3, 0x91, 0xf9,
+	0x33, 0x3f, 0x26, 0x2a, 0x4a, 0xb4, 0x37, 0x43, 0x21, 0xc2, 0x31, 0x78, 0x2c, 0xe1, 0x1e, 0x8b,
+	0x63, 0xa1, 0x99, 0xe6, 0x22, 0x56, 0x25, 0xda, 0xae, 0xce, 0x02, 0x52, 0x0a, 0x39, 0xc3, 0x5e,
+	0xaa, 0x62, 0x22, 0x79, 0x72, 0x21, 0x5d, 0x22, 0x42, 0x3f, 0x48, 0x60, 0x86, 0x6f, 0x54, 0xf1,
+	0x27, 0xa1, 0xcd, 0x2a, 0x34, 0x61, 0x63, 0x1e, 0x30, 0x0d, 0x25, 0xda, 0xb9, 0x82, 0x82, 0x82,
+	0x78, 0x52, 0x6d, 0xde, 0xf9, 0xa6, 0x8e, 0xed, 0x7d, 0xae, 0x61, 0xdf, 0x18, 0xf6, 0x11, 0x68,
+	0xc9, 0x7d, 0xd5, 0x87, 0xcf, 0x53, 0x50, 0x9a, 0x6c, 0xe2, 0x66, 0xcc, 0x22, 0x50, 0x09, 0xf3,
+	0xc1, 0x46, 0x5b, 0x68, 0xbb, 0xd9, 0x9f, 0x27, 0x08, 0xc1, 0x56, 0x3e, 0xab, 0x5d, 0x37, 0x80,
+	0x89, 0xc9, 0xc7, 0xb8, 0x35, 0xe2, 0x30, 0x0e, 0x06, 0x0a, 0xc6, 0xe0, 0x6b, 0x21, 0xed, 0xc6,
+	0x56, 0x63, 0xbb, 0xd5, 0xeb, 0xba, 0x8b, 0xf6, 0xbb, 0x0b, 0x7d, 0x6f, 0xe7, 0x4b, 0xfb, 0xd7,
+	0x4c, 0x85, 0xfd, 0xb2, 0x00, 0xd9, 0xc1, 0x58, 0x69, 0x26, 0xf5, 0x40, 0xf3, 0x08, 0x6c, 0x2b,
+	0x6f, 0x76, 0x03, 0xff, 0xf4, 0xd7, 0x69, 0x63, 0x4d, 0x36, 0xbe, 0xb3, 0x50, 0xbf, 0x69, 0xd0,
+	0x7b, 0x3c, 0x02, 0xf2, 0x32, 0x7e, 0x1a, 0xe2, 0xa0, 0x20, 0xae, 0x2d, 0x10, 0x9f, 0x82, 0x38,
+	0x30, 0x34, 0x8a, 0x2d, 0xa5, 0x21, 0xb1, 0xd7, 0x2b, 0x94, 0xef, 0x2d, 0xd4, 0x37, 0xf9, 0xce,
+	0x17, 0x78, 0x63, 0x89, 0x25, 0x2a, 0x11, 0xb1, 0x02, 0xf2, 0x36, 0xb6, 0x02, 0xa6, 0x99, 0x8d,
+	0xb6, 0x1a, 0xdb, 0xcf, 0xf4, 0x76, 0x56, 0xd2, 0x75, 0x8b, 0x69, 0xd6, 0x37, 0xcb, 0x2e, 0x7b,
+	0xd7, 0x2b, 0xbd, 0x2f, 0xea, 0xb3, 0xde, 0xc7, 0xf8, 0x85, 0x9b, 0x07, 0xe0, 0xdf, 0xcf, 0x6b,
+	0xbc, 0x7f, 0xc8, 0x95, 0x9e, 0xed, 0x05, 0xc1, 0x56, 0x6e, 0x7d, 0xb9, 0x0d, 0x26, 0xbe, 0x62,
+	0x4d, 0x7d, 0x55, 0x6b, 0x1a, 0xff, 0x6a, 0x4d, 0xe7, 0x2e, 0x7e, 0xf1, 0x6a, 0xfb, 0x52, 0xf7,
+	0x9b, 0x78, 0xbd, 0xb8, 0x54, 0x66, 0x82, 0x56, 0x8f, 0xfe, 0xb7, 0xf2, 0x7e, 0xc9, 0xee, 0xbe,
+	0x82, 0xf1, 0x3c, 0x4b, 0xae, 0xe1, 0xe6, 0x9d, 0xbd, 0x7b, 0x83, 0xdb, 0x7b, 0x9f, 0xdc, 0xb9,
+	0xf5, 0x6c, 0x8d, 0x34, 0xf1, 0x5a, 0x11, 0xa2, 0xde, 0x0f, 0x16, 0x7e, 0xfe, 0x66, 0xaa, 0xb4,
+	0x88, 0xe6, 0xf4, 0xf7, 0xee, 0x7e, 0x48, 0xfe, 0x46, 0xf8, 0xb9, 0x05, 0x43, 0xc9, 0xee, 0x4a,
+	0xbe, 0x97, 0xde, 0xb5, 0x9d, 0x15, 0xd9, 0x85, 0xd4, 0xce, 0x57, 0x28, 0xfb, 0xd9, 0x7e, 0x77,
+	0xf4, 0xc6, 0xa1, 0xef, 0xe4, 0x4c, 0x27, 0x62, 0x31, 0x0b, 0x21, 0x82, 0x58, 0x3b, 0x4a, 0xb3,
+	0x38, 0x60, 0x32, 0x70, 0x22, 0x11, 0x73, 0x2d, 0xe4, 0xee, 0x04, 0x94, 0xc3, 0x85, 0xc3, 0xe3,
+	0x91, 0x64, 0x4a, 0xcb, 0xd4, 0xd7, 0xa9, 0x04, 0x47, 0x02, 0x0b, 0x4e, 0x7e, 0x7f, 0xfc, 0x6d,
+	0xfd, 0x9d, 0xce, 0x5b, 0x5e, 0x92, 0x0e, 0xc7, 0xdc, 0xf7, 0x2e, 0x2f, 0x8e, 0xf2, 0x8e, 0x2e,
+	0xe3, 0xe3, 0xe2, 0xba, 0x1f, 0xe5, 0xdf, 0x63, 0xaf, 0xb0, 0xcc, 0x8b, 0x8a, 0x79, 0xae, 0xa3,
+	0x2e, 0x79, 0x8c, 0x70, 0xab, 0xba, 0x21, 0x64, 0xe9, 0x91, 0x5b, 0x7a, 0x66, 0xda, 0xdd, 0x55,
+	0xa8, 0xa5, 0xe8, 0xa3, 0xff, 0x4d, 0xf3, 0x6b, 0x9d, 0xdd, 0x25, 0x9a, 0xd5, 0x03, 0xa5, 0x21,
+	0x2a, 0xe5, 0xe6, 0xf9, 0x99, 0xdc, 0xeb, 0xa8, 0xdb, 0x7e, 0xf5, 0xf4, 0x21, 0x6a, 0xfc, 0xf6,
+	0x10, 0x6d, 0x2c, 0x99, 0x77, 0x6f, 0xf8, 0x19, 0xf8, 0xfa, 0xe4, 0x57, 0xbb, 0x6e, 0xa3, 0x1b,
+	0x27, 0xe8, 0xec, 0x9c, 0xd6, 0x1e, 0x9d, 0xd3, 0xda, 0xc5, 0x39, 0x45, 0x5f, 0x66, 0x14, 0xfd,
+	0x98, 0x51, 0xf4, 0x4b, 0x46, 0xd1, 0x59, 0x46, 0xd1, 0x1f, 0x19, 0x45, 0x7f, 0x66, 0xb4, 0x76,
+	0x91, 0x51, 0xf4, 0xf5, 0x94, 0xd6, 0x4e, 0xa7, 0x14, 0x9d, 0x4d, 0x69, 0xed, 0xd1, 0x94, 0xd6,
+	0x3e, 0xfd, 0x20, 0x14, 0xc9, 0xfd, 0xd0, 0x9d, 0x88, 0xb1, 0x06, 0x29, 0x99, 0x9b, 0x2a, 0xcf,
+	0x04, 0x23, 0x21, 0x23, 0x27, 0x91, 0x62, 0xc2, 0x03, 0x90, 0xce, 0x0c, 0xf6, 0x92, 0x61, 0x28,
+	0x3c, 0x38, 0xd4, 0xb3, 0x57, 0x79, 0xfe, 0x38, 0x0f, 0xd7, 0xcd, 0xd3, 0xf9, 0xfa, 0x3f, 0x01,
+	0x00, 0x00, 0xff, 0xff, 0x21, 0x6e, 0xae, 0xa1, 0x7e, 0x06, 0x00, 0x00,
 }
 
+func (x SiteStatus) String() string {
+	s, ok := SiteStatus_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
 func (this *SiteStatusMetricsRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -376,6 +569,60 @@ func (this *SiteStatusMetricsResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CheckSiteExistRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CheckSiteExistRequest)
+	if !ok {
+		that2, ok := that.(CheckSiteExistRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Name != that1.Name {
+		return false
+	}
+	if this.StartTime != that1.StartTime {
+		return false
+	}
+	if this.EndTime != that1.EndTime {
+		return false
+	}
+	return true
+}
+func (this *CheckSiteExistResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CheckSiteExistResponse)
+	if !ok {
+		that2, ok := that.(CheckSiteExistResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Status != that1.Status {
+		return false
+	}
+	return true
+}
 func (this *SiteStatusMetricsRequest) GoString() string {
 	if this == nil {
 		return "nil"
@@ -401,6 +648,28 @@ func (this *SiteStatusMetricsResponse) GoString() string {
 		s = append(s, "Data: "+fmt.Sprintf("%#v", this.Data)+",\n")
 	}
 	s = append(s, "Step: "+fmt.Sprintf("%#v", this.Step)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CheckSiteExistRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&site.CheckSiteExistRequest{")
+	s = append(s, "Name: "+fmt.Sprintf("%#v", this.Name)+",\n")
+	s = append(s, "StartTime: "+fmt.Sprintf("%#v", this.StartTime)+",\n")
+	s = append(s, "EndTime: "+fmt.Sprintf("%#v", this.EndTime)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CheckSiteExistResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&site.CheckSiteExistResponse{")
+	s = append(s, "Status: "+fmt.Sprintf("%#v", this.Status)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -430,6 +699,11 @@ type CustomSiteStatusAPIClient interface {
 	// x-displayName: "Site Status Metrics"
 	// Get status metrics for a site
 	SiteStatusMetrics(ctx context.Context, in *SiteStatusMetricsRequest, opts ...grpc.CallOption) (*SiteStatusMetricsResponse, error)
+	// Check Site Exist
+	//
+	// x-displayName: "Check Site Exist"
+	// Check Site Exist for a site
+	CheckSiteExist(ctx context.Context, in *CheckSiteExistRequest, opts ...grpc.CallOption) (*CheckSiteExistResponse, error)
 }
 
 type customSiteStatusAPIClient struct {
@@ -449,6 +723,15 @@ func (c *customSiteStatusAPIClient) SiteStatusMetrics(ctx context.Context, in *S
 	return out, nil
 }
 
+func (c *customSiteStatusAPIClient) CheckSiteExist(ctx context.Context, in *CheckSiteExistRequest, opts ...grpc.CallOption) (*CheckSiteExistResponse, error) {
+	out := new(CheckSiteExistResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.site.CustomSiteStatusAPI/CheckSiteExist", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // CustomSiteStatusAPIServer is the server API for CustomSiteStatusAPI service.
 type CustomSiteStatusAPIServer interface {
 	// Site Status Metrics
@@ -456,6 +739,11 @@ type CustomSiteStatusAPIServer interface {
 	// x-displayName: "Site Status Metrics"
 	// Get status metrics for a site
 	SiteStatusMetrics(context.Context, *SiteStatusMetricsRequest) (*SiteStatusMetricsResponse, error)
+	// Check Site Exist
+	//
+	// x-displayName: "Check Site Exist"
+	// Check Site Exist for a site
+	CheckSiteExist(context.Context, *CheckSiteExistRequest) (*CheckSiteExistResponse, error)
 }
 
 // UnimplementedCustomSiteStatusAPIServer can be embedded to have forward compatible implementations.
@@ -464,6 +752,9 @@ type UnimplementedCustomSiteStatusAPIServer struct {
 
 func (*UnimplementedCustomSiteStatusAPIServer) SiteStatusMetrics(ctx context.Context, req *SiteStatusMetricsRequest) (*SiteStatusMetricsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SiteStatusMetrics not implemented")
+}
+func (*UnimplementedCustomSiteStatusAPIServer) CheckSiteExist(ctx context.Context, req *CheckSiteExistRequest) (*CheckSiteExistResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CheckSiteExist not implemented")
 }
 
 func RegisterCustomSiteStatusAPIServer(s *grpc.Server, srv CustomSiteStatusAPIServer) {
@@ -488,6 +779,24 @@ func _CustomSiteStatusAPI_SiteStatusMetrics_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _CustomSiteStatusAPI_CheckSiteExist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CheckSiteExistRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(CustomSiteStatusAPIServer).CheckSiteExist(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.site.CustomSiteStatusAPI/CheckSiteExist",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(CustomSiteStatusAPIServer).CheckSiteExist(ctx, req.(*CheckSiteExistRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 var _CustomSiteStatusAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.site.CustomSiteStatusAPI",
 	HandlerType: (*CustomSiteStatusAPIServer)(nil),
@@ -495,6 +804,10 @@ var _CustomSiteStatusAPI_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SiteStatusMetrics",
 			Handler:    _CustomSiteStatusAPI_SiteStatusMetrics_Handler,
+		},
+		{
+			MethodName: "CheckSiteExist",
+			Handler:    _CustomSiteStatusAPI_CheckSiteExist_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -621,6 +934,78 @@ func (m *SiteStatusMetricsResponse) MarshalToSizedBuffer(dAtA []byte) (int, erro
 	return len(dAtA) - i, nil
 }
 
+func (m *CheckSiteExistRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CheckSiteExistRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CheckSiteExistRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.EndTime) > 0 {
+		i -= len(m.EndTime)
+		copy(dAtA[i:], m.EndTime)
+		i = encodeVarintSiteStatusInfo(dAtA, i, uint64(len(m.EndTime)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.StartTime) > 0 {
+		i -= len(m.StartTime)
+		copy(dAtA[i:], m.StartTime)
+		i = encodeVarintSiteStatusInfo(dAtA, i, uint64(len(m.StartTime)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Name) > 0 {
+		i -= len(m.Name)
+		copy(dAtA[i:], m.Name)
+		i = encodeVarintSiteStatusInfo(dAtA, i, uint64(len(m.Name)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CheckSiteExistResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CheckSiteExistResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CheckSiteExistResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Status != 0 {
+		i = encodeVarintSiteStatusInfo(dAtA, i, uint64(m.Status))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintSiteStatusInfo(dAtA []byte, offset int, v uint64) int {
 	offset -= sovSiteStatusInfo(v)
 	base := offset
@@ -687,6 +1072,39 @@ func (m *SiteStatusMetricsResponse) Size() (n int) {
 	return n
 }
 
+func (m *CheckSiteExistRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovSiteStatusInfo(uint64(l))
+	}
+	l = len(m.StartTime)
+	if l > 0 {
+		n += 1 + l + sovSiteStatusInfo(uint64(l))
+	}
+	l = len(m.EndTime)
+	if l > 0 {
+		n += 1 + l + sovSiteStatusInfo(uint64(l))
+	}
+	return n
+}
+
+func (m *CheckSiteExistResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Status != 0 {
+		n += 1 + sovSiteStatusInfo(uint64(m.Status))
+	}
+	return n
+}
+
 func sovSiteStatusInfo(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -720,6 +1138,28 @@ func (this *SiteStatusMetricsResponse) String() string {
 	s := strings.Join([]string{`&SiteStatusMetricsResponse{`,
 		`Data:` + repeatedStringForData + `,`,
 		`Step:` + fmt.Sprintf("%v", this.Step) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CheckSiteExistRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CheckSiteExistRequest{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`StartTime:` + fmt.Sprintf("%v", this.StartTime) + `,`,
+		`EndTime:` + fmt.Sprintf("%v", this.EndTime) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CheckSiteExistResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CheckSiteExistResponse{`,
+		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1109,6 +1549,227 @@ func (m *SiteStatusMetricsResponse) Unmarshal(dAtA []byte) error {
 			}
 			m.Step = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipSiteStatusInfo(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthSiteStatusInfo
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthSiteStatusInfo
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CheckSiteExistRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowSiteStatusInfo
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CheckSiteExistRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CheckSiteExistRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSiteStatusInfo
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSiteStatusInfo
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthSiteStatusInfo
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSiteStatusInfo
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSiteStatusInfo
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthSiteStatusInfo
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.StartTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSiteStatusInfo
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthSiteStatusInfo
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthSiteStatusInfo
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.EndTime = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipSiteStatusInfo(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthSiteStatusInfo
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthSiteStatusInfo
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CheckSiteExistResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowSiteStatusInfo
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CheckSiteExistResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CheckSiteExistResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			m.Status = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowSiteStatusInfo
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Status |= SiteStatus(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipSiteStatusInfo(dAtA[iNdEx:])

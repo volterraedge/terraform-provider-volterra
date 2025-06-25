@@ -82,7 +82,7 @@ func (m *BigIpAccessSiteList) GetBigipSiteDRefInfo() ([]db.DRefInfo, error) {
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
 		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "bigip_instance_site.Object",
+			RefdType:   "site.Object",
 			RefdUID:    ref.Uid,
 			RefdTenant: ref.Tenant,
 			RefdNS:     ref.Namespace,
@@ -98,9 +98,9 @@ func (m *BigIpAccessSiteList) GetBigipSiteDRefInfo() ([]db.DRefInfo, error) {
 // GetBigipSiteDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *BigIpAccessSiteList) GetBigipSiteDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "bigip_instance_site.Object")
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_instance_site")
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
 	for _, ref := range m.GetBigipSite() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))

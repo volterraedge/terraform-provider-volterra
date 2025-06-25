@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/uztna_leasepools/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -1797,6 +1810,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.API.Create"
             },
             "x-displayname": "Lease Pool",
@@ -1897,6 +1911,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.API.Replace"
             },
             "x-displayname": "Lease Pool",
@@ -2013,6 +2028,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.API.List"
             },
             "x-displayname": "Lease Pool",
@@ -2123,6 +2139,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.API.Get"
             },
             "delete": {
@@ -2216,6 +2233,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_leasepool-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_leasepool.API.Delete"
             },
             "x-displayname": "Lease Pool",
@@ -3059,22 +3077,18 @@ var APISwaggerJSON string = `{
             "properties": {
                 "prefix": {
                     "type": "array",
-                    "description": " IPV4 Lease Pool Network \n\nExample: - \"['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " IPV4 Lease Pool Network \n\nExample: - \"['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 1024\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Lease Pool Network",
-                    "minItems": 1,
                     "maxItems": 1024,
                     "items": {
                         "type": "string"
                     },
                     "x-displayname": "Lease Pool Network",
                     "x-ves-example": "['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
                         "ves.io.schema.rules.repeated.items.string.not_empty": "true",
                         "ves.io.schema.rules.repeated.max_items": "1024",
-                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -3125,7 +3139,7 @@ var APISwaggerJSON string = `{
                 },
                 "vip6_range": {
                     "type": "array",
-                    "description": "x-displayName: \"Lease Pool Range\"\nx-required\nIPV6 Lease Pool Range",
+                    "description": "x-displayName: \"Lease Pool Range\"\nIPV6 Lease Pool Range",
                     "title": "IPV6 Lease Pool Range",
                     "items": {
                         "$ref": "#/definitions/uztna_leasepoolIPV6LeasePoolRange"

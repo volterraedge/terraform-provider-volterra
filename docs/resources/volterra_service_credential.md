@@ -1,6 +1,6 @@
 ---
 
-page_title: "Volterra: volterra_service_credential" 
+page_title: "Volterra: volterra_service_credential"
 
 description: "The volterra_service_credential allows creation of service_credential object on Volterra SaaS"
 

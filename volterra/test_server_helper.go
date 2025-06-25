@@ -136,8 +136,8 @@ func (s *apiCredentialCustomAPIServer) CreateServiceCredentials(ctx context.Cont
 	return &ves_io_schema_api_credential.CreateResponse{}, nil
 }
 
-func (s *apiCredentialCustomAPIServer) ListServiceCredentials(ctx context.Context, req *ves_io_schema_api_credential.ListRequest) (*ves_io_schema_api_credential.ListResponse, error) {
-	return &ves_io_schema_api_credential.ListResponse{}, nil
+func (s *apiCredentialCustomAPIServer) ListServiceCredentials(ctx context.Context, req *ves_io_schema_api_credential.ListRequest) (*ves_io_schema_api_credential.ListServiceCredentialsResponse, error) {
+	return &ves_io_schema_api_credential.ListServiceCredentialsResponse{}, nil
 }
 
 func (s *apiCredentialCustomAPIServer) ActivateServiceCredentials(ctx context.Context, req *ves_io_schema_api_credential.GetRequest) (*ves_io_schema_api_credential.StatusResponse, error) {

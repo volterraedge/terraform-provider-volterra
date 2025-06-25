@@ -11,10 +11,6 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_combined "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/combined"
-	schema_registration "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/registration"
-	schema_token "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token"
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/notify"
 	"gopkg.volterra.us/stdlib/server"
@@ -22,6 +18,10 @@ import (
 	"gopkg.volterra.us/stdlib/svcfw"
 	svcfw_test "gopkg.volterra.us/stdlib/svcfw/test"
 	"gopkg.volterra.us/stdlib/svcfw/test/generic"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_combined "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/combined"
+	schema_registration "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/registration"
+	schema_token "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token"
 	//ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
 )
 
@@ -264,6 +264,10 @@ func (s *MauriceCustomAPI) RegistrationApprove(ctx context.Context, r *schema_re
 
 func (s *MauriceCustomAPI) RegistrationCreate(ctx context.Context, r *schema_registration.RegistrationCreateRequest) (*schema_registration.Object, error) {
 	return nil, nil
+}
+
+func (s *MauriceCustomAPI) GetRegistrationsBySiteToken(ctx context.Context, in *schema_registration.GetRegistrationsBySiteTokenReq) (*schema_registration.GetRegistrationsBySiteTokenResp, error) {
+	return &schema_registration.GetRegistrationsBySiteTokenResp{}, nil
 }
 
 func (s *MauriceCustomAPI) ListRegistrationsByState(ctx context.Context, r *schema_registration.ListStateReq) (*schema_registration.ListResponse, error) {

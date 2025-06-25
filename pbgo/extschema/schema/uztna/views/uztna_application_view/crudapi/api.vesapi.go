@@ -1614,6 +1614,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_application_view-crudapi-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_application_view.crudapi.API.Get"
             },
             "delete": {
@@ -1689,6 +1690,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_application_view-crudapi-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_application_view.crudapi.API.Delete"
             },
             "put": {
@@ -1772,6 +1774,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_application_view-crudapi-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_application_view.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -1919,6 +1922,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_application_view-crudapi-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_application_view.crudapi.API.List"
             },
             "post": {
@@ -1996,6 +2000,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_application_view-crudapi-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_application_view.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2143,6 +2148,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_application_view-crudapi-api-liststream"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_application_view.crudapi.API.ListStream"
             },
             "x-displayname": "",
@@ -2250,6 +2256,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_application_view-crudapi-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_application_view.crudapi.API.Get"
             },
             "x-displayname": "",
@@ -2397,6 +2404,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_application_view-crudapi-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_application_view.crudapi.API.List"
             },
             "x-displayname": "",
@@ -2479,6 +2487,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_application_view-crudapi-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_application_view.crudapi.API.Delete"
             },
             "put": {
@@ -2562,6 +2571,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_application_view-crudapi-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_application_view.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -2646,6 +2656,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-views-uztna_application_view-crudapi-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_application_view.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -3439,16 +3450,13 @@ var APISwaggerJSON string = `{
         },
         "uztna_application_viewAppCertificate": {
             "type": "object",
-            "description": "\nThis is used to import or create new certificate for tls communication.",
+            "description": "x-displayName: \"Certificate\"\n\nThis is used to import or create new certificate for tls communication.",
             "title": "TLS Certificate",
-            "x-displayname": "Certificate",
-            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_application_view.AppCertificate",
             "properties": {
                 "certificate": {
-                    "description": "\n Select/Add TLS Certificate objects to associate with this Application",
+                    "description": "x-displayName: \"TLS Certificates\"\n\nSelect/Add TLS Certificate objects to associate with this Application",
                     "title": "TLS Certificates",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "TLS Certificates"
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 }
             }
         },
@@ -3591,32 +3599,14 @@ var APISwaggerJSON string = `{
             "description": "\nIt specifies the possible Protocols",
             "title": "Protocol",
             "x-displayname": "Protocol",
-            "x-ves-oneof-field-protocol_choice": "[\"HTTP\",\"HTTPS\",\"TCP\",\"UDP\"]",
+            "x-ves-oneof-field-protocol_choice": "[\"TCP\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_application_view.Protocol",
             "properties": {
-                "HTTP": {
-                    "description": "Exclusive with [HTTPS TCP UDP]\n",
-                    "title": "HTTP Protocol",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "HTTP"
-                },
-                "HTTPS": {
-                    "description": "Exclusive with [HTTP TCP UDP]\n For HTTPS there should the option to Attach certificate either \n Automatically from XC or User provided certificate.",
-                    "title": "HTTPS Protocol",
-                    "$ref": "#/definitions/uztna_application_viewAppCertificate",
-                    "x-displayname": "HTTPS"
-                },
                 "TCP": {
-                    "description": "Exclusive with [HTTP HTTPS UDP]\n",
+                    "description": "Exclusive with []\n",
                     "title": "TCP Protocol",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "TCP"
-                },
-                "UDP": {
-                    "description": "Exclusive with [HTTP HTTPS TCP]\n",
-                    "title": "UDP Protocol",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "UDP"
                 }
             }
         },

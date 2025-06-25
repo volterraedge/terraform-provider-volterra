@@ -632,7 +632,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	vrhElements := v.ElementsValidationRuleHandler
 	rulesElements := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 	}
 	vFn, err = vrhElements(rulesElements)
 	if err != nil {
@@ -915,7 +915,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	vrhElements := v.ElementsValidationRuleHandler
 	rulesElements := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 	}
 	vFn, err = vrhElements(rulesElements)
 	if err != nil {
@@ -1269,7 +1269,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	vrhElements := v.ElementsValidationRuleHandler
 	rulesElements := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 	}
 	vFn, err = vrhElements(rulesElements)
 	if err != nil {
@@ -1545,7 +1545,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	vrhElements := v.ElementsValidationRuleHandler
 	rulesElements := map[string]string{
 		"ves.io.schema.rules.message.required":   "true",
-		"ves.io.schema.rules.repeated.max_items": "1000",
+		"ves.io.schema.rules.repeated.max_items": "5000",
 	}
 	vFn, err = vrhElements(rulesElements)
 	if err != nil {

@@ -20,6 +20,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/status"
+	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_cdn"
 )
 
 var _ codes.Code
@@ -99,7 +100,7 @@ func local_request_CustomAPI_CDNMetrics_0(ctx context.Context, marshaler runtime
 }
 
 func request_CustomAPI_CDNCachePurge_0(ctx context.Context, marshaler runtime.Marshaler, client CustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq LilacCDNCachePurgeRequest
+	var protoReq common_cdn.LilacCDNCachePurgeRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -145,7 +146,7 @@ func request_CustomAPI_CDNCachePurge_0(ctx context.Context, marshaler runtime.Ma
 }
 
 func local_request_CustomAPI_CDNCachePurge_0(ctx context.Context, marshaler runtime.Marshaler, server CustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq LilacCDNCachePurgeRequest
+	var protoReq common_cdn.LilacCDNCachePurgeRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -399,7 +400,7 @@ func local_request_CustomAPI_CDNAccessLogAggregationQuery_0(ctx context.Context,
 }
 
 func request_CustomAPI_ListServiceOperations_0(ctx context.Context, marshaler runtime.Marshaler, client CustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListServiceOperationsReq
+	var protoReq common_cdn.ListServiceOperationsReq
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -434,7 +435,7 @@ func request_CustomAPI_ListServiceOperations_0(ctx context.Context, marshaler ru
 }
 
 func local_request_CustomAPI_ListServiceOperations_0(ctx context.Context, marshaler runtime.Marshaler, server CustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq ListServiceOperationsReq
+	var protoReq common_cdn.ListServiceOperationsReq
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -469,7 +470,7 @@ func local_request_CustomAPI_ListServiceOperations_0(ctx context.Context, marsha
 }
 
 func request_CustomAPI_GetServiceOperation_0(ctx context.Context, marshaler runtime.Marshaler, client CustomAPIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetServiceOperationReq
+	var protoReq common_cdn.GetServiceOperationReq
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -504,7 +505,7 @@ func request_CustomAPI_GetServiceOperation_0(ctx context.Context, marshaler runt
 }
 
 func local_request_CustomAPI_GetServiceOperation_0(ctx context.Context, marshaler runtime.Marshaler, server CustomAPIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq GetServiceOperationReq
+	var protoReq common_cdn.GetServiceOperationReq
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)

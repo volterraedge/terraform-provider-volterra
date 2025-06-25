@@ -85,17 +85,6 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 							},
 						},
 
-						"keys": {
-
-							Type: schema.TypeList,
-
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
-
 						"label_matcher": {
 
 							Type:     schema.TypeList,
@@ -128,12 +117,6 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 									"description": {
 										Type:     schema.TypeString,
 										Optional: true,
-									},
-
-									"disable": {
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"name": {
@@ -216,13 +199,6 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 							},
 						},
 
-						"namespace": {
-
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
 						"outside_endpoints": {
 
 							Type:     schema.TypeBool,
@@ -258,18 +234,6 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 									},
 								},
 							},
-						},
-
-						"rule_description": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"rule_name": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"all_tcp_traffic": {
@@ -360,34 +324,6 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 							Optional: true,
 						},
 
-						"interface": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"name": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-									"namespace": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-									"tenant": {
-										Type:       schema.TypeString,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-									},
-								},
-							},
-						},
-
 						"label_selector": {
 
 							Type:     schema.TypeList,
@@ -407,13 +343,6 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 									},
 								},
 							},
-						},
-
-						"namespace": {
-
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"outside_endpoints": {
@@ -478,17 +407,6 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 							},
 						},
 
-						"keys": {
-
-							Type: schema.TypeList,
-
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
-
 						"label_matcher": {
 
 							Type:     schema.TypeList,
@@ -521,12 +439,6 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 									"description": {
 										Type:     schema.TypeString,
 										Optional: true,
-									},
-
-									"disable": {
-										Type:       schema.TypeBool,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"name": {
@@ -609,13 +521,6 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 							},
 						},
 
-						"namespace": {
-
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
 						"outside_endpoints": {
 
 							Type:     schema.TypeBool,
@@ -651,18 +556,6 @@ func resourceVolterraNetworkPolicyView() *schema.Resource {
 									},
 								},
 							},
-						},
-
-						"rule_description": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-
-						"rule_name": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"all_tcp_traffic": {
@@ -820,14 +713,6 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 				}
 
-				if w, ok := egressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
-					ls := make([]string, len(w.([]interface{})))
-					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					egressRules[i].Keys = ls
-				}
-
 				if v, ok := egressRulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
 
 					sl := v.([]interface{})
@@ -840,7 +725,12 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 							if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field keys")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								labelMatcher.Keys = ls
 							}
@@ -861,10 +751,6 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 								metadata.Description = w.(string)
-							}
-
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
 							}
 
 							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -967,7 +853,12 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field expressions")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								otherEndpointInt.LabelSelector.Expressions = ls
 
@@ -975,17 +866,6 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 						}
 					}
-
-				}
-
-				if v, ok := egressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
-
-					otherEndpointTypeFound = true
-					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
-
-					egressRules[i].OtherEndpoint = otherEndpointInt
-
-					otherEndpointInt.Namespace = v.(string)
 
 				}
 
@@ -1017,7 +897,12 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								otherEndpointInt.PrefixList.Ipv6Prefixes = ls
 
@@ -1027,7 +912,12 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								otherEndpointInt.PrefixList.Prefixes = ls
 
@@ -1036,14 +926,6 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 						}
 					}
 
-				}
-
-				if w, ok := egressRulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
-					egressRules[i].RuleDescription = w.(string)
-				}
-
-				if w, ok := egressRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
-					egressRules[i].RuleName = w.(string)
 				}
 
 				trafficChoiceTypeFound := false
@@ -1100,6 +982,9 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 								applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field applications")
+									}
 									applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
 								}
 								trafficChoiceInt.Applications.Applications = applicationsList
@@ -1127,7 +1012,12 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field port_ranges")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								trafficChoiceInt.ProtocolPortRange.PortRanges = ls
 
@@ -1185,41 +1075,6 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 				}
 
-				if v, ok := endpointMapStrToI["interface"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
-
-					endpointChoiceTypeFound = true
-					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Interface{}
-					endpointChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
-					endpoint.EndpointChoice = endpointChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								endpointChoiceInt.Interface.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								endpointChoiceInt.Interface.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								endpointChoiceInt.Interface.Tenant = v.(string)
-
-							}
-
-						}
-					}
-
-				}
-
 				if v, ok := endpointMapStrToI["label_selector"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
 
 					endpointChoiceTypeFound = true
@@ -1236,7 +1091,12 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field expressions")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								endpointChoiceInt.LabelSelector.Expressions = ls
 
@@ -1244,17 +1104,6 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 						}
 					}
-
-				}
-
-				if v, ok := endpointMapStrToI["namespace"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
-
-					endpointChoiceTypeFound = true
-					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Namespace{}
-
-					endpoint.EndpointChoice = endpointChoiceInt
-
-					endpointChoiceInt.Namespace = v.(string)
 
 				}
 
@@ -1286,7 +1135,12 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								endpointChoiceInt.PrefixList.Ipv6Prefixes = ls
 
@@ -1296,7 +1150,12 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								endpointChoiceInt.PrefixList.Prefixes = ls
 
@@ -1343,14 +1202,6 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 				}
 
-				if w, ok := ingressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
-					ls := make([]string, len(w.([]interface{})))
-					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					ingressRules[i].Keys = ls
-				}
-
 				if v, ok := ingressRulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
 
 					sl := v.([]interface{})
@@ -1363,7 +1214,12 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 							if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field keys")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								labelMatcher.Keys = ls
 							}
@@ -1384,10 +1240,6 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 								metadata.Description = w.(string)
-							}
-
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
 							}
 
 							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -1490,7 +1342,12 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field expressions")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								otherEndpointInt.LabelSelector.Expressions = ls
 
@@ -1498,17 +1355,6 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 						}
 					}
-
-				}
-
-				if v, ok := ingressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
-
-					otherEndpointTypeFound = true
-					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
-
-					ingressRules[i].OtherEndpoint = otherEndpointInt
-
-					otherEndpointInt.Namespace = v.(string)
 
 				}
 
@@ -1540,7 +1386,12 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								otherEndpointInt.PrefixList.Ipv6Prefixes = ls
 
@@ -1550,7 +1401,12 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								otherEndpointInt.PrefixList.Prefixes = ls
 
@@ -1559,14 +1415,6 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 						}
 					}
 
-				}
-
-				if w, ok := ingressRulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
-					ingressRules[i].RuleDescription = w.(string)
-				}
-
-				if w, ok := ingressRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
-					ingressRules[i].RuleName = w.(string)
 				}
 
 				trafficChoiceTypeFound := false
@@ -1623,6 +1471,9 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 								applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field applications")
+									}
 									applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
 								}
 								trafficChoiceInt.Applications.Applications = applicationsList
@@ -1650,7 +1501,12 @@ func resourceVolterraNetworkPolicyViewCreate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field port_ranges")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								trafficChoiceInt.ProtocolPortRange.PortRanges = ls
 
@@ -1801,14 +1657,6 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 				}
 
-				if w, ok := egressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
-					ls := make([]string, len(w.([]interface{})))
-					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					egressRules[i].Keys = ls
-				}
-
 				if v, ok := egressRulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
 
 					sl := v.([]interface{})
@@ -1821,7 +1669,12 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 							if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field keys")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								labelMatcher.Keys = ls
 							}
@@ -1842,10 +1695,6 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 								metadata.Description = w.(string)
-							}
-
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
 							}
 
 							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -1948,7 +1797,12 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field expressions")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								otherEndpointInt.LabelSelector.Expressions = ls
 
@@ -1956,17 +1810,6 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 						}
 					}
-
-				}
-
-				if v, ok := egressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
-
-					otherEndpointTypeFound = true
-					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
-
-					egressRules[i].OtherEndpoint = otherEndpointInt
-
-					otherEndpointInt.Namespace = v.(string)
 
 				}
 
@@ -1998,7 +1841,12 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								otherEndpointInt.PrefixList.Ipv6Prefixes = ls
 
@@ -2008,7 +1856,12 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								otherEndpointInt.PrefixList.Prefixes = ls
 
@@ -2017,14 +1870,6 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 						}
 					}
 
-				}
-
-				if w, ok := egressRulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
-					egressRules[i].RuleDescription = w.(string)
-				}
-
-				if w, ok := egressRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
-					egressRules[i].RuleName = w.(string)
 				}
 
 				trafficChoiceTypeFound := false
@@ -2081,6 +1926,9 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 								applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field applications")
+									}
 									applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
 								}
 								trafficChoiceInt.Applications.Applications = applicationsList
@@ -2108,7 +1956,12 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field port_ranges")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								trafficChoiceInt.ProtocolPortRange.PortRanges = ls
 
@@ -2165,41 +2018,6 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 				}
 
-				if v, ok := endpointMapStrToI["interface"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
-
-					endpointChoiceTypeFound = true
-					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Interface{}
-					endpointChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
-					endpoint.EndpointChoice = endpointChoiceInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-								endpointChoiceInt.Interface.Name = v.(string)
-
-							}
-
-							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-								endpointChoiceInt.Interface.Namespace = v.(string)
-
-							}
-
-							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-								endpointChoiceInt.Interface.Tenant = v.(string)
-
-							}
-
-						}
-					}
-
-				}
-
 				if v, ok := endpointMapStrToI["label_selector"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
 
 					endpointChoiceTypeFound = true
@@ -2216,7 +2034,12 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field expressions")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								endpointChoiceInt.LabelSelector.Expressions = ls
 
@@ -2224,17 +2047,6 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 						}
 					}
-
-				}
-
-				if v, ok := endpointMapStrToI["namespace"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
-
-					endpointChoiceTypeFound = true
-					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Namespace{}
-
-					endpoint.EndpointChoice = endpointChoiceInt
-
-					endpointChoiceInt.Namespace = v.(string)
 
 				}
 
@@ -2266,7 +2078,12 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								endpointChoiceInt.PrefixList.Ipv6Prefixes = ls
 
@@ -2276,7 +2093,12 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								endpointChoiceInt.PrefixList.Prefixes = ls
 
@@ -2322,14 +2144,6 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 				}
 
-				if w, ok := ingressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
-					ls := make([]string, len(w.([]interface{})))
-					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					ingressRules[i].Keys = ls
-				}
-
 				if v, ok := ingressRulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
 
 					sl := v.([]interface{})
@@ -2342,7 +2156,12 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 							if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field keys")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								labelMatcher.Keys = ls
 							}
@@ -2363,10 +2182,6 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 								metadata.Description = w.(string)
-							}
-
-							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
-								metadata.Disable = w.(bool)
 							}
 
 							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -2469,7 +2284,12 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field expressions")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								otherEndpointInt.LabelSelector.Expressions = ls
 
@@ -2477,17 +2297,6 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 						}
 					}
-
-				}
-
-				if v, ok := ingressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
-
-					otherEndpointTypeFound = true
-					otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
-
-					ingressRules[i].OtherEndpoint = otherEndpointInt
-
-					otherEndpointInt.Namespace = v.(string)
 
 				}
 
@@ -2519,7 +2328,12 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								otherEndpointInt.PrefixList.Ipv6Prefixes = ls
 
@@ -2529,7 +2343,12 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								otherEndpointInt.PrefixList.Prefixes = ls
 
@@ -2538,14 +2357,6 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 						}
 					}
 
-				}
-
-				if w, ok := ingressRulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
-					ingressRules[i].RuleDescription = w.(string)
-				}
-
-				if w, ok := ingressRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
-					ingressRules[i].RuleName = w.(string)
 				}
 
 				trafficChoiceTypeFound := false
@@ -2602,6 +2413,9 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 								applicationsList := []ves_io_schema_network_policy.ApplicationEnumType{}
 								for _, j := range v.([]interface{}) {
+									if j == nil {
+										return fmt.Errorf("please provide valid non-empty enum value of field applications")
+									}
 									applicationsList = append(applicationsList, ves_io_schema_network_policy.ApplicationEnumType(ves_io_schema_network_policy.ApplicationEnumType_value[j.(string)]))
 								}
 								trafficChoiceInt.Applications.Applications = applicationsList
@@ -2629,7 +2443,12 @@ func resourceVolterraNetworkPolicyViewUpdate(d *schema.ResourceData, meta interf
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field port_ranges")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								trafficChoiceInt.ProtocolPortRange.PortRanges = ls
 
@@ -2677,5 +2496,8 @@ func resourceVolterraNetworkPolicyViewDelete(d *schema.ResourceData, meta interf
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra NetworkPolicyView obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_views_network_policy_view.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_views_network_policy_view.ObjectType, namespace, name, opts...)
 }

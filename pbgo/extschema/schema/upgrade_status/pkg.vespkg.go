@@ -17,6 +17,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.upgrade_status.Object"] = ObjectValidator()
 
+	vr["ves.io.schema.upgrade_status.GetUpgradableSWVersionsRequest"] = GetUpgradableSWVersionsRequestValidator()
+	vr["ves.io.schema.upgrade_status.GetUpgradableSWVersionsResponse"] = GetUpgradableSWVersionsResponseValidator()
 	vr["ves.io.schema.upgrade_status.GetUpgradeStatusRequest"] = GetUpgradeStatusRequestValidator()
 	vr["ves.io.schema.upgrade_status.GetUpgradeStatusResponse"] = GetUpgradeStatusResponseValidator()
 

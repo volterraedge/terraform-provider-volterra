@@ -57,16 +57,73 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.endpoint.API.Create"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.endpoint.CreateRequest.spec.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.endpoint.API.Create"] = []string{
 		"spec.dns_name_advanced.strict_ttl",
 		"spec.where.site.refs.#",
 		"spec.where.virtual_site.refs.#",
 	}
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.endpoint.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.endpoint.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.endpoint.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.endpoint.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
+	}
+
+	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.endpoint.API.Replace"] = []svcfw.SubscriptionField{
+		{
+			FieldPath:     "ves.io.schema.endpoint.ReplaceRequest.spec.snat_pool.snat_pool_choice.snat_pool.ipv6_prefixes",
+			AddonServices: []string{"f5xc-ipv6-standard"},
+		},
+	}
+
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.endpoint.API.Replace"] = []string{
 		"spec.dns_name_advanced.strict_ttl",
 		"spec.where.site.refs.#",
 		"spec.where.virtual_site.refs.#",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.endpoint.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.snat_pool.snat_pool.ipv6_prefixes.#",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
+		},
 	}
 
 }

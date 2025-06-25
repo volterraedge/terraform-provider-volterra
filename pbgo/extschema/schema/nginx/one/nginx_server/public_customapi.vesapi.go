@@ -34,12 +34,12 @@ type CustomAPIGrpcClient struct {
 	rpcFns map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error)
 }
 
-func (c *CustomAPIGrpcClient) doRPCGetInstanceServers(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
-	req := &GetInstanceServersRequest{}
+func (c *CustomAPIGrpcClient) doRPCGetDataplaneServers(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &GetDataplaneServersRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.nginx.one.nginx_server.GetInstanceServersRequest", yamlReq)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.nginx.one.nginx_server.GetDataplaneServersRequest", yamlReq)
 	}
-	rsp, err := c.grpcClient.GetInstanceServers(ctx, req, opts...)
+	rsp, err := c.grpcClient.GetDataplaneServers(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -73,7 +73,7 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 		grpcClient: NewCustomAPIClient(cc),
 	}
 	rpcFns := make(map[string]func(context.Context, string, ...grpc.CallOption) (proto.Message, error))
-	rpcFns["GetInstanceServers"] = ccl.doRPCGetInstanceServers
+	rpcFns["GetDataplaneServers"] = ccl.doRPCGetDataplaneServers
 
 	ccl.rpcFns = rpcFns
 
@@ -88,16 +88,16 @@ type CustomAPIRestClient struct {
 	rpcFns map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error)
 }
 
-func (c *CustomAPIRestClient) doRPCGetInstanceServers(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+func (c *CustomAPIRestClient) doRPCGetDataplaneServers(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
 	}
 	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
 
 	yamlReq := callOpts.YAMLReq
-	req := &GetInstanceServersRequest{}
+	req := &GetDataplaneServersRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
-		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.nginx.one.nginx_server.GetInstanceServersRequest: %s", yamlReq, err)
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.nginx.one.nginx_server.GetDataplaneServersRequest: %s", yamlReq, err)
 	}
 
 	var hReq *http.Request
@@ -127,7 +127,7 @@ func (c *CustomAPIRestClient) doRPCGetInstanceServers(ctx context.Context, callO
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
-		q.Add("instance_ref", fmt.Sprintf("%v", req.InstanceRef))
+		q.Add("dataplane_ref", fmt.Sprintf("%v", req.DataplaneRef))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -160,9 +160,9 @@ func (c *CustomAPIRestClient) doRPCGetInstanceServers(ctx context.Context, callO
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &GetInstanceServersResponse{}
+	pbRsp := &GetDataplaneServersResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.nginx.one.nginx_server.GetInstanceServersResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.nginx.one.nginx_server.GetDataplaneServersResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -196,7 +196,7 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 	}
 
 	rpcFns := make(map[string]func(context.Context, *server.CustomCallOpts) (proto.Message, error))
-	rpcFns["GetInstanceServers"] = ccl.doRPCGetInstanceServers
+	rpcFns["GetDataplaneServers"] = ccl.doRPCGetDataplaneServers
 
 	ccl.rpcFns = rpcFns
 
@@ -210,9 +210,9 @@ type customAPIInprocClient struct {
 	CustomAPIServer
 }
 
-func (c *customAPIInprocClient) GetInstanceServers(ctx context.Context, in *GetInstanceServersRequest, opts ...grpc.CallOption) (*GetInstanceServersResponse, error) {
-	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.nginx.one.nginx_server.CustomAPI.GetInstanceServers")
-	return c.CustomAPIServer.GetInstanceServers(ctx, in)
+func (c *customAPIInprocClient) GetDataplaneServers(ctx context.Context, in *GetDataplaneServersRequest, opts ...grpc.CallOption) (*GetDataplaneServersResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.nginx.one.nginx_server.CustomAPI.GetDataplaneServers")
+	return c.CustomAPIServer.GetDataplaneServers(ctx, in)
 }
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
@@ -236,7 +236,7 @@ type customAPISrv struct {
 	svc svcfw.Service
 }
 
-func (s *customAPISrv) GetInstanceServers(ctx context.Context, in *GetInstanceServersRequest) (*GetInstanceServersResponse, error) {
+func (s *customAPISrv) GetDataplaneServers(ctx context.Context, in *GetDataplaneServersRequest) (*GetDataplaneServersResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.nginx.one.nginx_server.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -244,16 +244,16 @@ func (s *customAPISrv) GetInstanceServers(ctx context.Context, in *GetInstanceSe
 	}
 
 	var (
-		rsp *GetInstanceServersResponse
+		rsp *GetDataplaneServersResponse
 		err error
 	)
 
-	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.nginx.one.nginx_server.GetInstanceServersRequest", in)
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.nginx.one.nginx_server.GetDataplaneServersRequest", in)
 	defer func() {
 		if len(bodyFields) > 0 {
 			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
 		}
-		userMsg := "The 'CustomAPI.GetInstanceServers' operation on 'nginx_server'"
+		userMsg := "The 'CustomAPI.GetDataplaneServers' operation on 'nginx_server'"
 		if err == nil {
 			userMsg += " was successfully performed."
 		} else {
@@ -271,7 +271,7 @@ func (s *customAPISrv) GetInstanceServers(ctx context.Context, in *GetInstanceSe
 	}
 
 	if s.svc.Config().EnableAPIValidation {
-		if rvFn := s.svc.GetRPCValidator("ves.io.schema.nginx.one.nginx_server.CustomAPI.GetInstanceServers"); rvFn != nil {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.nginx.one.nginx_server.CustomAPI.GetDataplaneServers"); rvFn != nil {
 			if verr := rvFn(ctx, in); verr != nil {
 				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
 				return nil, server.GRPCStatusFromError(err).Err()
@@ -279,12 +279,12 @@ func (s *customAPISrv) GetInstanceServers(ctx context.Context, in *GetInstanceSe
 		}
 	}
 
-	rsp, err = cah.GetInstanceServers(ctx, in)
+	rsp, err = cah.GetDataplaneServers(ctx, in)
 	if err != nil {
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.nginx.one.nginx_server.GetInstanceServersResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.nginx.one.nginx_server.GetDataplaneServersResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -296,8 +296,8 @@ func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
 var CustomAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
-        "title": "NGINX One Instance Server APIs",
-        "description": "Public Custom API definition for getting the NGINX One\nservers associated to an instance",
+        "title": "NGINX One Server APIs",
+        "description": "Public Custom API definition for getting the NGINX One\nservers associated to an NGINX dataplane",
         "version": "version not set"
     },
     "schemes": [
@@ -312,16 +312,16 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
-        "/public/namespaces/{namespace}/nginx_instance_servers": {
+        "/public/namespaces/{namespace}/nginx_dataplane_servers": {
             "post": {
-                "summary": "Get NGINX One Instance Servers",
-                "description": "Get NGINX One Servers associated to an instance",
-                "operationId": "ves.io.schema.nginx.one.nginx_server.CustomAPI.GetInstanceServers",
+                "summary": "Get NGINX One Dataplane Servers",
+                "description": "Get NGINX One Servers associated to an NGINX dataplane",
+                "operationId": "ves.io.schema.nginx.one.nginx_server.CustomAPI.GetDataplaneServers",
                 "responses": {
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/nginx_serverGetInstanceServersResponse"
+                            "$ref": "#/definitions/nginx_serverGetDataplaneServersResponse"
                         }
                     },
                     "401": {
@@ -387,7 +387,7 @@ var CustomAPISwaggerJSON string = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/nginx_serverGetInstanceServersRequest"
+                            "$ref": "#/definitions/nginx_serverGetDataplaneServersRequest"
                         }
                     }
                 ],
@@ -396,11 +396,11 @@ var CustomAPISwaggerJSON string = `{
                 ],
                 "externalDocs": {
                     "description": "Examples of this operation",
-                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-nginx-one-nginx_server-customapi-getinstanceservers"
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-nginx-one-nginx_server-customapi-getdataplaneservers"
                 },
-                "x-ves-proto-rpc": "ves.io.schema.nginx.one.nginx_server.CustomAPI.GetInstanceServers"
+                "x-ves-proto-rpc": "ves.io.schema.nginx.one.nginx_server.CustomAPI.GetDataplaneServers"
             },
-            "x-displayname": "Instance Servers",
+            "x-displayname": "Dataplane Servers",
             "x-ves-proto-service": "ves.io.schema.nginx.one.nginx_server.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
@@ -412,50 +412,6 @@ var CustomAPISwaggerJSON string = `{
             "title": "Empty",
             "x-displayname": "Empty",
             "x-ves-proto-message": "ves.io.schema.Empty"
-        },
-        "ioschemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
-                }
-            }
         },
         "nginx_instanceAPIDiscoverySpec": {
             "type": "object",
@@ -476,13 +432,40 @@ var CustomAPISwaggerJSON string = `{
         },
         "nginx_instanceWAFSpec": {
             "type": "object",
+            "x-ves-oneof-field-policy_management_platform": "[\"distributed_cloud_policy_management\",\"nginx_policy_management\"]",
+            "x-ves-oneof-field-waf_mode": "[\"blocking_waf_mode\",\"monitoring_waf_mode\",\"none_waf_mode\"]",
             "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_instance.WAFSpec",
             "properties": {
+                "blocking_waf_mode": {
+                    "description": "Exclusive with [monitoring_waf_mode none_waf_mode]\n",
+                    "title": "x-displayName: \"Blocking\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "distributed_cloud_policy_management": {
+                    "description": "Exclusive with [nginx_policy_management]\n",
+                    "title": "x-displayName: \"Distributed Cloud\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "monitoring_waf_mode": {
+                    "description": "Exclusive with [blocking_waf_mode none_waf_mode]\n",
+                    "title": "x-displayName: \"Monitoring\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "nginx_policy_management": {
+                    "description": "Exclusive with [distributed_cloud_policy_management]\n",
+                    "title": "x-displayName: \"NGINX\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "none_waf_mode": {
+                    "description": "Exclusive with [blocking_waf_mode monitoring_waf_mode]\n",
+                    "title": "x-displayName: \"None\"",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
                 "policy_file_name": {
                     "type": "string",
                     "description": " Policy file name for WAF\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "policy_file_name",
-                    "x-displayname": "PolicyFileName",
+                    "x-displayname": "WAF Policy File Name",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -493,7 +476,7 @@ var CustomAPISwaggerJSON string = `{
                     "description": " Specifies if security logging is enabled",
                     "title": "security_log_enabled",
                     "format": "boolean",
-                    "x-displayname": "SecurityLogEnabled"
+                    "x-displayname": "WAF Log Enabled"
                 },
                 "security_log_file_names": {
                     "type": "array",
@@ -502,13 +485,34 @@ var CustomAPISwaggerJSON string = `{
                     "items": {
                         "type": "string"
                     },
-                    "x-displayname": "SecurityLogFileNames"
+                    "x-displayname": "WAF Log File Names"
                 }
             }
         },
-        "nginx_serverGetInstanceServerResponse": {
+        "nginx_serverDataplaneReference": {
             "type": "object",
-            "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_server.GetInstanceServerResponse",
+            "title": "DataplaneReference",
+            "x-displayname": "DataplaneReference",
+            "x-ves-oneof-field-dataplane_ref": "[\"nginx_csg\",\"nginx_instance\"]",
+            "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_server.DataplaneReference",
+            "properties": {
+                "nginx_csg": {
+                    "description": "Exclusive with [nginx_instance]\n Reference to NGINX CSG",
+                    "title": "NGINX One Config Sync Group",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "NGINX One Config Sync Group"
+                },
+                "nginx_instance": {
+                    "description": "Exclusive with [nginx_csg]\n Reference to NGINX Instance",
+                    "title": "NGINX One Instance",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "NGINX One Instance"
+                }
+            }
+        },
+        "nginx_serverGetDataplaneServerResponse": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_server.GetDataplaneServerResponse",
             "properties": {
                 "metadata": {
                     "description": " Common attributes of the object like name, labels etc.",
@@ -530,18 +534,18 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "nginx_serverGetInstanceServersRequest": {
+        "nginx_serverGetDataplaneServersRequest": {
             "type": "object",
-            "description": "Get NGINX One Instance servers request",
-            "title": "Get NGINX One Instance servers request",
-            "x-displayname": "Get NGINX One Instance servers request",
-            "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_server.GetInstanceServersRequest",
+            "description": "Get NGINX One Dataplane servers request",
+            "title": "Get NGINX One Dataplane servers request",
+            "x-displayname": "Get NGINX One Dataplane servers request",
+            "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_server.GetDataplaneServersRequest",
             "properties": {
-                "instance_ref": {
-                    "description": " The instance for which the servers are requested\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "The NGINX One Instance for which the servers are requested",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "The instance for which the servers are requested",
+                "dataplane_ref": {
+                    "description": " This is reference to the NGINX dataplane type that has this NGINX server configured\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Dataplane",
+                    "$ref": "#/definitions/nginx_serverDataplaneReference",
+                    "x-displayname": "Dataplane",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -556,21 +560,21 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "nginx_serverGetInstanceServersResponse": {
+        "nginx_serverGetDataplaneServersResponse": {
             "type": "object",
-            "description": "Get NGINX One Instance servers response",
-            "title": "Get NGINX One Instance servers response",
-            "x-displayname": "Get NGINX One Instance servers response",
-            "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_server.GetInstanceServersResponse",
+            "description": "Get NGINX One Dataplane servers response",
+            "title": "Get NGINX One Dataplane servers response",
+            "x-displayname": "Get NGINX One Dataplane servers response",
+            "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_server.GetDataplaneServersResponse",
             "properties": {
                 "items": {
                     "type": "array",
-                    "description": " The NGINX One Servers associated to the instance\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "The NGINX One Servers associated to the instance",
+                    "description": " The NGINX One Servers associated to the dataplane\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "The NGINX One Servers associated to the dataplane",
                     "items": {
-                        "$ref": "#/definitions/nginx_serverGetInstanceServerResponse"
+                        "$ref": "#/definitions/nginx_serverGetDataplaneServerResponse"
                     },
-                    "x-displayname": "The NGINX One Servers associated to the instance",
+                    "x-displayname": "The NGINX One Servers associated to the dataplane",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -629,18 +633,13 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Get Request",
             "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_server.GetSpecType",
             "properties": {
-                "nginx_instance": {
-                    "type": "array",
-                    "description": " This is reference to the NGINX instance that has this NGINX server configured\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "NGINX Instance",
+                "dataplane_ref": {
+                    "description": " This is reference to the NGINX dataplane type that has this NGINX server configured\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/nginx_serverDataplaneReference",
+                    "x-displayname": "Dataplane",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1"
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 },
                 "server_spec": {
@@ -1009,6 +1008,6 @@ var CustomAPISwaggerJSON string = `{
             }
         }
     },
-    "x-displayname": "NGINX One Instance Server APIs",
+    "x-displayname": "NGINX One Server APIs",
     "x-ves-proto-file": "ves.io/schema/nginx/one/nginx_server/public_customapi.proto"
 }`

@@ -3240,11 +3240,31 @@ var APISwaggerJSON string = `{
             "x-displayname": "Global Specification",
             "x-ves-proto-message": "ves.io.schema.ticket_management.ticket.GlobalSpecType",
             "properties": {
+                "author": {
+                    "type": "string",
+                    "description": " The user that initiated creation of this ticket\n\nExample: - \"user@email.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.email: true\n",
+                    "title": "author",
+                    "x-displayname": "Author",
+                    "x-ves-example": "user@email.com",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.email": "true"
+                    }
+                },
                 "external_id": {
                     "type": "string",
-                    "description": " The external ID of the ticket that is assigned by the ticket tracking system (not XC)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " The third-party non-changing primary ID of the ticket that is assigned by the ticket tracking system (not XC)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "external_id",
                     "x-displayname": "External ID",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "issue_key": {
+                    "type": "string",
+                    "description": " The third party public-facing key of the issue - this may or may not be equal to the external_id field depending on the third party.\n In JIRA's case, it is possible for an issue's key to change on the JIRA side when a project has been modified, imported, \n or migrated so this should not be relied on as a primary identifier.\n This key is cached here to allow easier creation of issue hyperlinks + to keep hyperlinks available in situations\n such as when the TTS credentials have expired and we cannot retrieve the up-to-date issue key\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "issue_key",
+                    "x-displayname": "Issue Key",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"

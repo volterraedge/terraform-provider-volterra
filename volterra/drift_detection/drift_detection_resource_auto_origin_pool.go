@@ -2,9 +2,10 @@ package driftdetection
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"gopkg.volterra.us/stdlib/client/vesapi"
+	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
-	"gopkg.volterra.us/stdlib/client/vesapi"
 )
 
 func FlattenHTTP1Config(x *ves_io_schema_cluster.Http1ProtocolOptions) []interface{} {
@@ -18,6 +19,18 @@ func FlattenHTTP1Config(x *ves_io_schema_cluster.Http1ProtocolOptions) []interfa
 	return ruiValue
 }
 
+func FlattenUpstreamConnPoolReuseType(x *ves_io_schema.UpstreamConnPoolReuseType) []interface{} {
+	res := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"disable_conn_pool_reuse": isEmpty(x.GetDisableConnPoolReuse()),
+			"enable_conn_pool_reuse":  isEmpty(x.GetEnableConnPoolReuse()),
+		}
+		res = append(res, val)
+	}
+	return res
+}
+
 func FlattenAdvancedOptions(x *ves_io_schema_views_origin_pool.OriginPoolAdvancedOptions) []interface{} {
 	rslt := make([]interface{}, 0)
 	if x != nil {
@@ -26,7 +39,6 @@ func FlattenAdvancedOptions(x *ves_io_schema_views_origin_pool.OriginPoolAdvance
 			"default_circuit_breaker":          isEmpty(x.GetDefaultCircuitBreaker()),
 			"disable_circuit_breaker":          isEmpty(x.GetDisableCircuitBreaker()),
 			"connection_timeout":               x.GetConnectionTimeout(),
-			"header_transformation_type":       FlattenHeaderTransformationType(x.GetHeaderTransformationType()),
 			"http_idle_timeout":                x.GetHttpIdleTimeout(),
 			"auto_http_config":                 isEmpty(x.GetAutoHttpConfig()),
 			"http1_config":                     FlattenHTTP1Config(x.GetHttp1Config()),
@@ -75,4 +87,5 @@ func DriftDetectionSpec_OriginPool(d *schema.ResourceData, resp vesapi.GetObject
 
 	d.Set("use_tls", FlattenUseTls(spec.GcSpec.GetUseTls()))
 
+	d.Set("upstream_conn_pool_reuse_type", FlattenUpstreamConnPoolReuseType(spec.GcSpec.GetUpstreamConnPoolReuseType()))
 }

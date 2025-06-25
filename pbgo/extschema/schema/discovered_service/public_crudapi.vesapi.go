@@ -1478,6 +1478,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.lte": "65535"
                     }
                 },
+                "server_name": {
+                    "type": "string",
+                    "description": " Virtual Server name\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "title": "Server Name",
+                    "maxLength": 1024,
+                    "x-displayname": "Server Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1024"
+                    }
+                },
                 "status": {
                     "description": " Availability Status of virtual server.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Availability Status of virtual server",

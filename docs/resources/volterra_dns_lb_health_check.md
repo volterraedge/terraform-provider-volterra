@@ -22,12 +22,12 @@ resource "volterra_dns_lb_health_check" "example" {
 
   // One of the arguments from this list "http_health_check https_health_check icmp_health_check tcp_health_check tcp_hex_health_check udp_health_check" must be set
 
-  https_health_check {
+  tcp_hex_health_check {
     health_check_port = "80"
 
-    receive = "HTTP/1"
+    receive = "00000034"
 
-    send = "HEAD / HTTP/1.0"
+    send = "000000FF"
   }
 }
 

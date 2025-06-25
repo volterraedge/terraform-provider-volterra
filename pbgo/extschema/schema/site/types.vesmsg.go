@@ -1996,6 +1996,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
@@ -2340,6 +2349,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
 	v.FldValidators["default_underlay_network"] = DefaultUnderlayNetworkTypeValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
 }()
@@ -4335,6 +4346,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["local_access_k8s_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("local_access_k8s_enabled"))
@@ -4856,6 +4876,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
 
 	v.FldValidators["admin_user_credentials"] = ves_io_schema_views.AdminUserCredentialsTypeValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
 }()
@@ -9822,6 +9844,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["kubernetes_upgrade_drain"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("kubernetes_upgrade_drain"))
+		if err := fv(ctx, m.GetKubernetesUpgradeDrain(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["operating_system_version"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("operating_system_version"))
@@ -10155,6 +10186,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["coordinates"] = CoordinatesValidator().Validate
 
 	v.FldValidators["default_underlay_network"] = DefaultUnderlayNetworkTypeValidator().Validate
+
+	v.FldValidators["kubernetes_upgrade_drain"] = ves_io_schema_views.KubernetesUpgradeDrainValidator().Validate
 
 	return v
 }()
@@ -10570,6 +10603,105 @@ var DefaultScalingStatusValidator = func() *ValidateScalingStatus {
 
 func ScalingStatusValidator() db.Validator {
 	return DefaultScalingStatusValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SiteReachabilityStatus) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SiteReachabilityStatus) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SiteReachabilityStatus) DeepCopy() *SiteReachabilityStatus {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SiteReachabilityStatus{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SiteReachabilityStatus) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SiteReachabilityStatus) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SiteReachabilityStatusValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSiteReachabilityStatus struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSiteReachabilityStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SiteReachabilityStatus)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SiteReachabilityStatus got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["error_message"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_message"))
+		if err := fv(ctx, m.GetErrorMessage(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node_name"))
+		if err := fv(ctx, m.GetNodeName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scan_result"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("scan_result"))
+		for key, value := range m.GetScanResult() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSiteReachabilityStatusValidator = func() *ValidateSiteReachabilityStatus {
+	v := &ValidateSiteReachabilityStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SiteReachabilityStatusValidator() db.Validator {
+	return DefaultSiteReachabilityStatusValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -11014,8 +11146,216 @@ func (m *TunnelConnectionStatus) Validate(ctx context.Context, opts ...db.Valida
 	return TunnelConnectionStatusValidator().Validate(ctx, m, opts...)
 }
 
+func (m *TunnelConnectionStatus) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetBgpDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetBgpDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetTunnelDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetTunnelDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+func (m *TunnelConnectionStatus) GetBgpDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetBgp()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("TunnelConnectionStatus.bgp[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "bgp.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "bgp",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetBgpDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *TunnelConnectionStatus) GetBgpDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "bgp.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: bgp")
+	}
+	for _, ref := range m.GetBgp() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+func (m *TunnelConnectionStatus) GetTunnelDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetTunnel()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("TunnelConnectionStatus.tunnel[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "tunnel.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "tunnel",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetTunnelDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *TunnelConnectionStatus) GetTunnelDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "tunnel.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: tunnel")
+	}
+	for _, ref := range m.GetTunnel() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
 type ValidateTunnelConnectionStatus struct {
 	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTunnelConnectionStatus) BgpValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for bgp")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for bgp")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated bgp")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items bgp")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateTunnelConnectionStatus) TunnelValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for tunnel")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for tunnel")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated tunnel")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items tunnel")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
 }
 
 func (v *ValidateTunnelConnectionStatus) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -11030,6 +11370,32 @@ func (v *ValidateTunnelConnectionStatus) Validate(ctx context.Context, pm interf
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["bgp"]; exists {
+		vOpts := append(opts, db.WithValidateField("bgp"))
+		if err := fv(ctx, m.GetBgp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_peer_protocol_state"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_peer_protocol_state"))
+		if err := fv(ctx, m.GetBgpPeerProtocolState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["bgp_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bgp_status"))
+		if err := fv(ctx, m.GetBgpStatus(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["encap"]; exists {
@@ -11095,6 +11461,14 @@ func (v *ValidateTunnelConnectionStatus) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["tunnel"]; exists {
+		vOpts := append(opts, db.WithValidateField("tunnel"))
+		if err := fv(ctx, m.GetTunnel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tunnelName"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tunnelName"))
@@ -11137,6 +11511,36 @@ func (v *ValidateTunnelConnectionStatus) Validate(ctx context.Context, pm interf
 // Well-known symbol for default validator implementation
 var DefaultTunnelConnectionStatusValidator = func() *ValidateTunnelConnectionStatus {
 	v := &ValidateTunnelConnectionStatus{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhBgp := v.BgpValidationRuleHandler
+	rulesBgp := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhBgp(rulesBgp)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TunnelConnectionStatus.bgp: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bgp"] = vFn
+
+	vrhTunnel := v.TunnelValidationRuleHandler
+	rulesTunnel := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhTunnel(rulesTunnel)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TunnelConnectionStatus.tunnel: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tunnel"] = vFn
 
 	return v
 }()
@@ -11692,6 +12096,100 @@ func (m *VerStatusType) Validate(ctx context.Context, opts ...db.ValidateOpt) er
 	return VerStatusTypeValidator().Validate(ctx, m, opts...)
 }
 
+func (m *VerStatusType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetConfiguredTunnelStatusDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetConfiguredTunnelStatusDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetExtConnectorTunnelStatusDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetExtConnectorTunnelStatusDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSiteTunnelStatusDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSiteTunnelStatusDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *VerStatusType) GetConfiguredTunnelStatusDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetConfiguredTunnelStatus() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetConfiguredTunnelStatus() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConfiguredTunnelStatus() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("configured_tunnel_status[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *VerStatusType) GetExtConnectorTunnelStatusDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetExtConnectorTunnelStatus() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetExtConnectorTunnelStatus() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetExtConnectorTunnelStatus() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("ext_connector_tunnel_status[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *VerStatusType) GetSiteTunnelStatusDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSiteTunnelStatus() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSiteTunnelStatus() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSiteTunnelStatus() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("site_tunnel_status[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
 type ValidateVerStatusType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -11726,6 +12224,18 @@ func (v *ValidateVerStatusType) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("configured_tunnel_status"))
 		for idx, item := range m.GetConfiguredTunnelStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ext_connector_tunnel_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ext_connector_tunnel_status"))
+		for idx, item := range m.GetExtConnectorTunnelStatus() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
@@ -11784,6 +12294,12 @@ var DefaultVerStatusTypeValidator = func() *ValidateVerStatusType {
 	v := &ValidateVerStatusType{FldValidators: map[string]db.ValidatorFunc{}}
 
 	v.FldValidators["intf_status"] = InterfaceStatusValidator().Validate
+
+	v.FldValidators["configured_tunnel_status"] = TunnelConnectionStatusValidator().Validate
+
+	v.FldValidators["site_tunnel_status"] = TunnelConnectionStatusValidator().Validate
+
+	v.FldValidators["ext_connector_tunnel_status"] = TunnelConnectionStatusValidator().Validate
 
 	return v
 }()
@@ -11992,6 +12508,15 @@ func (v *ValidateVolterraSoftwareStatus) Validate(ctx context.Context, pm interf
 
 	}
 
+	if fv, exists := v.FldValidators["min_supported_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("min_supported_version"))
+		if err := fv(ctx, m.GetMinSupportedVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["nonconforming_state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("nonconforming_state"))
@@ -12050,6 +12575,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.InsideNameserverV6 = f.GetInsideNameserverV6()
 	m.InsideVip = f.GetInsideVip()
 	m.InsideVipV6 = f.GetInsideVipV6()
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideNameserver = f.GetOutsideNameserver()
 	m.OutsideNameserverV6 = f.GetOutsideNameserverV6()
@@ -12093,6 +12619,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.InsideNameserverV6 = m1.InsideNameserverV6
 	f.InsideVip = m1.InsideVip
 	f.InsideVipV6 = m1.InsideVipV6
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideNameserver = m1.OutsideNameserver
 	f.OutsideNameserverV6 = m1.OutsideNameserverV6
@@ -12138,6 +12665,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.InsideVip = f.GetInsideVip()
 	m.InsideVipV6 = f.GetInsideVipV6()
 	m.IpsecSslNodesFqdn = f.GetIpsecSslNodesFqdn()
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 
 	m.LocalK8SAccessEnabled = f.GetLocalK8SAccessEnabled()
 	m.MainNodes = f.GetMainNodes()
@@ -12199,6 +12727,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.InsideVip = m1.InsideVip
 	f.InsideVipV6 = m1.InsideVipV6
 	f.IpsecSslNodesFqdn = m1.IpsecSslNodesFqdn
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 
 	f.LocalK8SAccessEnabled = m1.LocalK8SAccessEnabled
 	f.MainNodes = m1.MainNodes
@@ -12251,6 +12780,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.InsideNameserverV6 = f.GetInsideNameserverV6()
 	m.InsideVip = f.GetInsideVip()
 	m.InsideVipV6 = f.GetInsideVipV6()
+	m.KubernetesUpgradeDrain = f.GetKubernetesUpgradeDrain()
 	m.OperatingSystemVersion = f.GetOperatingSystemVersion()
 	m.OutsideNameserver = f.GetOutsideNameserver()
 	m.OutsideNameserverV6 = f.GetOutsideNameserverV6()
@@ -12293,6 +12823,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.InsideNameserverV6 = m1.InsideNameserverV6
 	f.InsideVip = m1.InsideVip
 	f.InsideVipV6 = m1.InsideVipV6
+	f.KubernetesUpgradeDrain = m1.KubernetesUpgradeDrain
 	f.OperatingSystemVersion = m1.OperatingSystemVersion
 	f.OutsideNameserver = m1.OutsideNameserver
 	f.OutsideNameserverV6 = m1.OutsideNameserverV6

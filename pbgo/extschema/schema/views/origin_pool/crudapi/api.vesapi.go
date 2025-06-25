@@ -3336,6 +3336,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "snat_pool": {
+                    "title": "SNAT Pool Configuration",
+                    "$ref": "#/definitions/viewsSnatPoolConfiguration",
+                    "x-displayname": "SNAT Pool Configuration"
                 }
             }
         },
@@ -3364,7 +3369,7 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with K8s service name and site information",
             "title": "OriginServerK8SService",
             "x-displayname": "K8s Service Name on given Sites",
-            "x-ves-displayorder": "10,2,3",
+            "x-ves-displayorder": "10,12,2,3",
             "x-ves-oneof-field-network_choice": "[\"inside_network\",\"outside_network\",\"vk8s_networks\"]",
             "x-ves-oneof-field-service_info": "[\"service_name\"]",
             "x-ves-proto-message": "ves.io.schema.views.origin_pool.OriginServerK8SService",
@@ -3380,6 +3385,12 @@ var APISwaggerJSON string = `{
                     "title": "Outside Network",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Outside Network"
+                },
+                "protocol": {
+                    "description": " Protocol to be used in the discovery.",
+                    "title": "Protocol",
+                    "$ref": "#/definitions/origin_poolProtocolType",
+                    "x-displayname": "Protocol"
                 },
                 "service_name": {
                     "type": "string",
@@ -3400,6 +3411,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "snat_pool": {
+                    "title": "SNAT Pool Configuration",
+                    "$ref": "#/definitions/viewsSnatPoolConfiguration",
+                    "x-displayname": "SNAT Pool Configuration"
                 },
                 "vk8s_networks": {
                     "description": "Exclusive with [inside_network outside_network]\n origin server are on vK8s network on the site",
@@ -3470,6 +3486,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "snat_pool": {
+                    "title": "SNAT Pool Configuration",
+                    "$ref": "#/definitions/viewsSnatPoolConfiguration",
+                    "x-displayname": "SNAT Pool Configuration"
                 }
             }
         },
@@ -3535,6 +3556,11 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "snat_pool": {
+                    "title": "SNAT Pool Configuration",
+                    "$ref": "#/definitions/viewsSnatPoolConfiguration",
+                    "x-displayname": "SNAT Pool Configuration"
                 }
             }
         },
@@ -3754,6 +3780,18 @@ var APISwaggerJSON string = `{
                     }
                 }
             }
+        },
+        "origin_poolProtocolType": {
+            "type": "string",
+            "description": "Type of protocol\n\n - PROTOCOL_TCP: TCP\n\n - PROTOCOL_UDP: UDP\n",
+            "title": "Protocol Type",
+            "enum": [
+                "PROTOCOL_TCP",
+                "PROTOCOL_UDP"
+            ],
+            "default": "PROTOCOL_TCP",
+            "x-displayname": "Protocol Type",
+            "x-ves-proto-enum": "ves.io.schema.views.origin_pool.ProtocolType"
         },
         "origin_poolSpecType": {
             "type": "object",
@@ -4563,6 +4601,28 @@ var APISwaggerJSON string = `{
             "x-displayname": "TLS Protocol",
             "x-ves-proto-enum": "ves.io.schema.TlsProtocol"
         },
+        "schemaUpstreamConnPoolReuseType": {
+            "type": "object",
+            "description": "Select upstream connection pool reuse state for every downstream connection. This configuration choice is for HTTP(S) LB only.",
+            "title": "UpstreamConnPoolReuseType",
+            "x-displayname": "Select upstream connection pool reuse state",
+            "x-ves-oneof-field-map_downstream_to_upstream_conn_pool_type": "[\"disable_conn_pool_reuse\",\"enable_conn_pool_reuse\"]",
+            "x-ves-proto-message": "ves.io.schema.UpstreamConnPoolReuseType",
+            "properties": {
+                "disable_conn_pool_reuse": {
+                    "description": "Exclusive with [enable_conn_pool_reuse]\n Open new upstream connection pool for every new downstream connection",
+                    "title": "disable_conn_pool_reuse",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Connection Pool Reuse"
+                },
+                "enable_conn_pool_reuse": {
+                    "description": "Exclusive with [disable_conn_pool_reuse]\n Reuse upstream connection pool for multiple downstream connections",
+                    "title": "enable_conn_pool_reuse",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable Connection Pool Reuse"
+                }
+            }
+        },
         "schemaVaultSecretInfoType": {
             "type": "object",
             "description": "x-displayName: \"Vault Secret\"\nVaultSecretInfoType specifies information about the Secret managed by Hashicorp Vault.",
@@ -4729,6 +4789,47 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsPrefixStringListType": {
+            "type": "object",
+            "description": "x-example: \"192.168.20.0/24\"\nList of IPv4 prefixes that represent an endpoint",
+            "title": "ipv4 prefix list",
+            "x-displayname": "IPv4 Prefix List",
+            "x-ves-proto-message": "ves.io.schema.views.PrefixStringListType",
+            "properties": {
+                "ipv6_prefixes": {
+                    "type": "array",
+                    "description": " List of IPv6 prefix strings.\n\nExample: - \"fd48:fa09:d9d4::/48\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv6_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ipv6 prefixes",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv6 Prefix List",
+                    "x-ves-example": "fd48:fa09:d9d4::/48",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv6_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "prefixes": {
+                    "type": "array",
+                    "description": " List of IPv4 prefixes that represent an endpoint\n\nExample: - \"192.168.20.0/24\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.max_items: 128\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "ipv4 prefix list",
+                    "maxItems": 128,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "IPv4 Prefix List",
+                    "x-ves-example": "192.168.20.0/24",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.max_items": "128",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
         "viewsSiteLocator": {
             "type": "object",
             "description": "This message defines a reference to a site or virtual site object",
@@ -4748,6 +4849,28 @@ var APISwaggerJSON string = `{
                     "title": "Virtual Site",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Virtual Site"
+                }
+            }
+        },
+        "viewsSnatPoolConfiguration": {
+            "type": "object",
+            "description": "Snat Pool configuration",
+            "title": "SnatPoolConfiguration",
+            "x-displayname": "Snat Pool",
+            "x-ves-oneof-field-snat_pool_choice": "[\"no_snat_pool\",\"snat_pool\"]",
+            "x-ves-proto-message": "ves.io.schema.views.SnatPoolConfiguration",
+            "properties": {
+                "no_snat_pool": {
+                    "description": "Exclusive with [snat_pool]\n No configured SNAT Pool to reach Origin Server",
+                    "title": "No SNAT Pool",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No SNAT Pool"
+                },
+                "snat_pool": {
+                    "description": "Exclusive with [no_snat_pool]\n Configure SNAT Pool to reach Origin Server",
+                    "title": "SNAT Pool",
+                    "$ref": "#/definitions/viewsPrefixStringListType",
+                    "x-displayname": "Configured SNAT Pool"
                 }
             }
         },
@@ -4898,6 +5021,12 @@ var APISwaggerJSON string = `{
                     "title": "Same as endpoint port",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Endpoint port"
+                },
+                "upstream_conn_pool_reuse_type": {
+                    "description": " Select upstream connection pool reuse state for every downstream connection\n This configuration choice is for HTTP(S) LB only.",
+                    "title": "Select upstream connection pool reuse state",
+                    "$ref": "#/definitions/schemaUpstreamConnPoolReuseType",
+                    "x-displayname": "Select upstream connection pool reuse state"
                 },
                 "use_tls": {
                     "description": "Exclusive with [no_tls]\n",

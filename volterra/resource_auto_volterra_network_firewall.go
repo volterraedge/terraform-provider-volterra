@@ -101,34 +101,6 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 				Optional: true,
 			},
 
-			"fast_acl_set": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"name": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"namespace": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"tenant": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-					},
-				},
-			},
-
 			"active_forward_proxy_policies": {
 
 				Type:     schema.TypeList,
@@ -167,34 +139,6 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 
 				Type:     schema.TypeBool,
 				Optional: true,
-			},
-
-			"forward_proxy_policy_set": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"name": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"namespace": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"tenant": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-					},
-				},
 			},
 
 			"active_enhanced_firewall_policies": {
@@ -270,34 +214,6 @@ func resourceVolterraNetworkFirewall() *schema.Resource {
 				Type:     schema.TypeBool,
 				Optional: true,
 			},
-
-			"network_policy_set": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"name": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"namespace": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-						"tenant": {
-							Type:       schema.TypeString,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-						},
-					},
-				},
-			},
 		},
 	}
 }
@@ -359,7 +275,7 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 
 	fastAclChoiceTypeFound := false
 
-	if v, ok := d.GetOk("active_fast_acls"); ok && !fastAclChoiceTypeFound {
+	if v, ok := d.GetOk("active_fast_acls"); ok && !isIntfNil(v) && !fastAclChoiceTypeFound {
 
 		fastAclChoiceTypeFound = true
 		fastAclChoiceInt := &ves_io_schema_network_firewall.CreateSpecType_ActiveFastAcls{}
@@ -414,46 +330,11 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("fast_acl_set"); ok && !fastAclChoiceTypeFound {
-
-		fastAclChoiceTypeFound = true
-		fastAclChoiceInt := &ves_io_schema_network_firewall.CreateSpecType_FastAclSet{}
-		fastAclChoiceInt.FastAclSet = &ves_io_schema_views.ObjectRefType{}
-		createSpec.FastAclChoice = fastAclChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-					fastAclChoiceInt.FastAclSet.Name = v.(string)
-
-				}
-
-				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-					fastAclChoiceInt.FastAclSet.Namespace = v.(string)
-
-				}
-
-				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-					fastAclChoiceInt.FastAclSet.Tenant = v.(string)
-
-				}
-
-			}
-		}
-
-	}
-
 	//forward_proxy_policy_choice
 
 	forwardProxyPolicyChoiceTypeFound := false
 
-	if v, ok := d.GetOk("active_forward_proxy_policies"); ok && !forwardProxyPolicyChoiceTypeFound {
+	if v, ok := d.GetOk("active_forward_proxy_policies"); ok && !isIntfNil(v) && !forwardProxyPolicyChoiceTypeFound {
 
 		forwardProxyPolicyChoiceTypeFound = true
 		forwardProxyPolicyChoiceInt := &ves_io_schema_network_firewall.CreateSpecType_ActiveForwardProxyPolicies{}
@@ -508,46 +389,11 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("forward_proxy_policy_set"); ok && !forwardProxyPolicyChoiceTypeFound {
-
-		forwardProxyPolicyChoiceTypeFound = true
-		forwardProxyPolicyChoiceInt := &ves_io_schema_network_firewall.CreateSpecType_ForwardProxyPolicySet{}
-		forwardProxyPolicyChoiceInt.ForwardProxyPolicySet = &ves_io_schema_views.ObjectRefType{}
-		createSpec.ForwardProxyPolicyChoice = forwardProxyPolicyChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-					forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Name = v.(string)
-
-				}
-
-				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-					forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Namespace = v.(string)
-
-				}
-
-				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-					forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Tenant = v.(string)
-
-				}
-
-			}
-		}
-
-	}
-
 	//network_policy_choice
 
 	networkPolicyChoiceTypeFound := false
 
-	if v, ok := d.GetOk("active_enhanced_firewall_policies"); ok && !networkPolicyChoiceTypeFound {
+	if v, ok := d.GetOk("active_enhanced_firewall_policies"); ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
 		networkPolicyChoiceTypeFound = true
 		networkPolicyChoiceInt := &ves_io_schema_network_firewall.CreateSpecType_ActiveEnhancedFirewallPolicies{}
@@ -590,7 +436,7 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("active_network_policies"); ok && !networkPolicyChoiceTypeFound {
+	if v, ok := d.GetOk("active_network_policies"); ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
 		networkPolicyChoiceTypeFound = true
 		networkPolicyChoiceInt := &ves_io_schema_network_firewall.CreateSpecType_ActiveNetworkPolicies{}
@@ -641,41 +487,6 @@ func resourceVolterraNetworkFirewallCreate(d *schema.ResourceData, meta interfac
 			networkPolicyChoiceInt := &ves_io_schema_network_firewall.CreateSpecType_DisableNetworkPolicy{}
 			networkPolicyChoiceInt.DisableNetworkPolicy = &ves_io_schema.Empty{}
 			createSpec.NetworkPolicyChoice = networkPolicyChoiceInt
-		}
-
-	}
-
-	if v, ok := d.GetOk("network_policy_set"); ok && !networkPolicyChoiceTypeFound {
-
-		networkPolicyChoiceTypeFound = true
-		networkPolicyChoiceInt := &ves_io_schema_network_firewall.CreateSpecType_NetworkPolicySet{}
-		networkPolicyChoiceInt.NetworkPolicySet = &ves_io_schema_views.ObjectRefType{}
-		createSpec.NetworkPolicyChoice = networkPolicyChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-					networkPolicyChoiceInt.NetworkPolicySet.Name = v.(string)
-
-				}
-
-				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-					networkPolicyChoiceInt.NetworkPolicySet.Namespace = v.(string)
-
-				}
-
-				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-					networkPolicyChoiceInt.NetworkPolicySet.Tenant = v.(string)
-
-				}
-
-			}
 		}
 
 	}
@@ -781,7 +592,7 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 
 	fastAclChoiceTypeFound := false
 
-	if v, ok := d.GetOk("active_fast_acls"); ok && !fastAclChoiceTypeFound {
+	if v, ok := d.GetOk("active_fast_acls"); ok && !isIntfNil(v) && !fastAclChoiceTypeFound {
 
 		fastAclChoiceTypeFound = true
 		fastAclChoiceInt := &ves_io_schema_network_firewall.ReplaceSpecType_ActiveFastAcls{}
@@ -836,44 +647,9 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("fast_acl_set"); ok && !fastAclChoiceTypeFound {
-
-		fastAclChoiceTypeFound = true
-		fastAclChoiceInt := &ves_io_schema_network_firewall.ReplaceSpecType_FastAclSet{}
-		fastAclChoiceInt.FastAclSet = &ves_io_schema_views.ObjectRefType{}
-		updateSpec.FastAclChoice = fastAclChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-					fastAclChoiceInt.FastAclSet.Name = v.(string)
-
-				}
-
-				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-					fastAclChoiceInt.FastAclSet.Namespace = v.(string)
-
-				}
-
-				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-					fastAclChoiceInt.FastAclSet.Tenant = v.(string)
-
-				}
-
-			}
-		}
-
-	}
-
 	forwardProxyPolicyChoiceTypeFound := false
 
-	if v, ok := d.GetOk("active_forward_proxy_policies"); ok && !forwardProxyPolicyChoiceTypeFound {
+	if v, ok := d.GetOk("active_forward_proxy_policies"); ok && !isIntfNil(v) && !forwardProxyPolicyChoiceTypeFound {
 
 		forwardProxyPolicyChoiceTypeFound = true
 		forwardProxyPolicyChoiceInt := &ves_io_schema_network_firewall.ReplaceSpecType_ActiveForwardProxyPolicies{}
@@ -928,44 +704,9 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("forward_proxy_policy_set"); ok && !forwardProxyPolicyChoiceTypeFound {
-
-		forwardProxyPolicyChoiceTypeFound = true
-		forwardProxyPolicyChoiceInt := &ves_io_schema_network_firewall.ReplaceSpecType_ForwardProxyPolicySet{}
-		forwardProxyPolicyChoiceInt.ForwardProxyPolicySet = &ves_io_schema_views.ObjectRefType{}
-		updateSpec.ForwardProxyPolicyChoice = forwardProxyPolicyChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-					forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Name = v.(string)
-
-				}
-
-				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-					forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Namespace = v.(string)
-
-				}
-
-				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-					forwardProxyPolicyChoiceInt.ForwardProxyPolicySet.Tenant = v.(string)
-
-				}
-
-			}
-		}
-
-	}
-
 	networkPolicyChoiceTypeFound := false
 
-	if v, ok := d.GetOk("active_enhanced_firewall_policies"); ok && !networkPolicyChoiceTypeFound {
+	if v, ok := d.GetOk("active_enhanced_firewall_policies"); ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
 		networkPolicyChoiceTypeFound = true
 		networkPolicyChoiceInt := &ves_io_schema_network_firewall.ReplaceSpecType_ActiveEnhancedFirewallPolicies{}
@@ -1008,7 +749,7 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("active_network_policies"); ok && !networkPolicyChoiceTypeFound {
+	if v, ok := d.GetOk("active_network_policies"); ok && !isIntfNil(v) && !networkPolicyChoiceTypeFound {
 
 		networkPolicyChoiceTypeFound = true
 		networkPolicyChoiceInt := &ves_io_schema_network_firewall.ReplaceSpecType_ActiveNetworkPolicies{}
@@ -1063,41 +804,6 @@ func resourceVolterraNetworkFirewallUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("network_policy_set"); ok && !networkPolicyChoiceTypeFound {
-
-		networkPolicyChoiceTypeFound = true
-		networkPolicyChoiceInt := &ves_io_schema_network_firewall.ReplaceSpecType_NetworkPolicySet{}
-		networkPolicyChoiceInt.NetworkPolicySet = &ves_io_schema_views.ObjectRefType{}
-		updateSpec.NetworkPolicyChoice = networkPolicyChoiceInt
-
-		sl := v.([]interface{})
-		for _, set := range sl {
-			if set != nil {
-				cs := set.(map[string]interface{})
-
-				if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-					networkPolicyChoiceInt.NetworkPolicySet.Name = v.(string)
-
-				}
-
-				if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
-
-					networkPolicyChoiceInt.NetworkPolicySet.Namespace = v.(string)
-
-				}
-
-				if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
-
-					networkPolicyChoiceInt.NetworkPolicySet.Tenant = v.(string)
-
-				}
-
-			}
-		}
-
-	}
-
 	log.Printf("[DEBUG] Updating Volterra NetworkFirewall obj with struct: %+v", updateReq)
 
 	err := client.ReplaceObject(context.Background(), ves_io_schema_network_firewall.ObjectType, updateReq)
@@ -1124,5 +830,8 @@ func resourceVolterraNetworkFirewallDelete(d *schema.ResourceData, meta interfac
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra NetworkFirewall obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_network_firewall.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_network_firewall.ObjectType, namespace, name, opts...)
 }

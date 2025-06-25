@@ -132,29 +132,6 @@ func resourceVolterraFilterSet() *schema.Resource {
 							},
 						},
 
-						"label_selector_field": {
-
-							Type:       schema.TypeList,
-							MaxItems:   1,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Resource{
-								Schema: map[string]*schema.Schema{
-
-									"expressions": {
-
-										Type: schema.TypeList,
-
-										Required:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Schema{
-											Type: schema.TypeString,
-										},
-									},
-								},
-							},
-						},
-
 						"string_field": {
 
 							Type:     schema.TypeList,
@@ -309,7 +286,7 @@ func resourceVolterraFilterSetCreate(d *schema.ResourceData, meta interface{}) e
 
 							}
 
-							if _, ok := cs["relative"]; ok && !rangeTypeTypeFound {
+							if v, ok := cs["relative"]; ok && !isIntfNil(v) && !rangeTypeTypeFound {
 
 								rangeTypeTypeFound = true
 								rangeTypeInt := &ves_io_schema_filter_set.FilterTimeRangeField_Relative{}
@@ -346,33 +323,6 @@ func resourceVolterraFilterSetCreate(d *schema.ResourceData, meta interface{}) e
 
 				}
 
-				if v, ok := filterFieldsMapStrToI["label_selector_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
-
-					fieldValueTypeFound = true
-					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_LabelSelectorField{}
-					fieldValueInt.LabelSelectorField = &ves_io_schema.LabelSelectorType{}
-					filterFields[i].FieldValue = fieldValueInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								fieldValueInt.LabelSelectorField.Expressions = ls
-
-							}
-
-						}
-					}
-
-				}
-
 				if v, ok := filterFieldsMapStrToI["string_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
 
 					fieldValueTypeFound = true
@@ -389,7 +339,12 @@ func resourceVolterraFilterSetCreate(d *schema.ResourceData, meta interface{}) e
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field field_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								fieldValueInt.StringField.FieldValues = ls
 
@@ -576,7 +531,7 @@ func resourceVolterraFilterSetUpdate(d *schema.ResourceData, meta interface{}) e
 
 							}
 
-							if _, ok := cs["relative"]; ok && !rangeTypeTypeFound {
+							if v, ok := cs["relative"]; ok && !isIntfNil(v) && !rangeTypeTypeFound {
 
 								rangeTypeTypeFound = true
 								rangeTypeInt := &ves_io_schema_filter_set.FilterTimeRangeField_Relative{}
@@ -613,33 +568,6 @@ func resourceVolterraFilterSetUpdate(d *schema.ResourceData, meta interface{}) e
 
 				}
 
-				if v, ok := filterFieldsMapStrToI["label_selector_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
-
-					fieldValueTypeFound = true
-					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_LabelSelectorField{}
-					fieldValueInt.LabelSelectorField = &ves_io_schema.LabelSelectorType{}
-					filterFields[i].FieldValue = fieldValueInt
-
-					sl := v.([]interface{})
-					for _, set := range sl {
-						if set != nil {
-							cs := set.(map[string]interface{})
-
-							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
-
-								ls := make([]string, len(v.([]interface{})))
-								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
-								}
-								fieldValueInt.LabelSelectorField.Expressions = ls
-
-							}
-
-						}
-					}
-
-				}
-
 				if v, ok := filterFieldsMapStrToI["string_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
 
 					fieldValueTypeFound = true
@@ -656,7 +584,12 @@ func resourceVolterraFilterSetUpdate(d *schema.ResourceData, meta interface{}) e
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field field_values")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								fieldValueInt.StringField.FieldValues = ls
 
@@ -698,5 +631,8 @@ func resourceVolterraFilterSetDelete(d *schema.ResourceData, meta interface{}) e
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra FilterSet obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_filter_set.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_filter_set.ObjectType, namespace, name, opts...)
 }

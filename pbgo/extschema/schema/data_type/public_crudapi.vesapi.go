@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/data_types/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -2332,15 +2345,19 @@ var APISwaggerJSON string = `{
                 },
                 "rules": {
                     "type": "array",
-                    "description": " Configure key/value or regex match rules to enable the platform to detect this custom data type in the API request or response\n\nExample: - \"Value or Regex\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure key/value or regex match rules to enable the platform to detect this custom data type in the API request or response\n\nExample: - \"Value or Regex\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "minItems": 1,
                     "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/data_typeDetectionRule"
                     },
                     "x-displayname": "Data Type Rules",
                     "x-ves-example": "Value or Regex",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
@@ -2556,15 +2573,19 @@ var APISwaggerJSON string = `{
                 },
                 "rules": {
                     "type": "array",
-                    "description": " Configure key/value or regex match rules to enable the platform to detect this custom data type in the API request or response\n\nExample: - \"Value or Regex\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure key/value or regex match rules to enable the platform to detect this custom data type in the API request or response\n\nExample: - \"Value or Regex\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "minItems": 1,
                     "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/data_typeDetectionRule"
                     },
                     "x-displayname": "Data Type Rules",
                     "x-ves-example": "Value or Regex",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -2806,15 +2827,19 @@ var APISwaggerJSON string = `{
                 },
                 "rules": {
                     "type": "array",
-                    "description": " Configure key/value or regex match rules to enable the platform to detect this custom data type in the API request or response\n\nExample: - \"Value or Regex\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure key/value or regex match rules to enable the platform to detect this custom data type in the API request or response\n\nExample: - \"Value or Regex\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "minItems": 1,
                     "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/data_typeDetectionRule"
                     },
                     "x-displayname": "Data Type Rules",
                     "x-ves-example": "Value or Regex",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }

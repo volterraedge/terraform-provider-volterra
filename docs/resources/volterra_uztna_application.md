@@ -29,7 +29,8 @@ resource "volterra_uztna_application" "example" {
   }
 
   port = ["443"]
-  url  = ["test.f5net.com"]
+
+  url = ["test.f5net.com"]
 
   uztna_domain_ref {
     name      = "test1"
@@ -60,8 +61,6 @@ Argument Reference
 ### Spec Argument Reference
 
 `app_tags` - (Required) ZTNA Application tags to associate with Application (`List of String`).
-
-`app_vh` - (Optional) Internal reference to Application VH. See [ref](#ref) below for details.(Deprecated)
 
 `application_vip` - (Optional) for the Application on TMM. See [Application Vip ](#application-vip) below for details.
 

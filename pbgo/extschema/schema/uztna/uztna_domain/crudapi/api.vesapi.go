@@ -1614,6 +1614,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_domain-crudapi-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_domain.crudapi.API.Get"
             },
             "delete": {
@@ -1689,6 +1690,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_domain-crudapi-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_domain.crudapi.API.Delete"
             },
             "put": {
@@ -1772,6 +1774,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_domain-crudapi-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_domain.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -1919,6 +1922,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_domain-crudapi-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_domain.crudapi.API.List"
             },
             "post": {
@@ -1996,6 +2000,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_domain-crudapi-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_domain.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2143,6 +2148,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_domain-crudapi-api-liststream"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_domain.crudapi.API.ListStream"
             },
             "x-displayname": "",
@@ -2250,6 +2256,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_domain-crudapi-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_domain.crudapi.API.Get"
             },
             "x-displayname": "",
@@ -2397,6 +2404,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_domain-crudapi-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_domain.crudapi.API.List"
             },
             "x-displayname": "",
@@ -2479,6 +2487,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_domain-crudapi-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_domain.crudapi.API.Delete"
             },
             "put": {
@@ -2562,6 +2571,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_domain-crudapi-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_domain.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -2646,6 +2656,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_domain-crudapi-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_domain.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -3436,20 +3447,18 @@ var APISwaggerJSON string = `{
             "type": "object",
             "description": "This is used to select VIP Network and VIP Range from \nthe already created VIP Pool.",
             "title": "Application VIP Pool",
-            "x-displayname": "Application VIP Pool",
+            "x-displayname": "Advanced Configuration",
+            "x-ves-oneof-field-ipaddress_type": "[\"ipv4_app_vip_pool\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_domain.AppVIPPool",
             "properties": {
-                "app_vip_pool": {
-                    "type": "array",
-                    "description": " Selected VIP Pools\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
-                    "title": "Selected VIP Pool for Application",
-                    "maxItems": 1,
-                    "items": {
-                        "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Selected VIP Pools",
+                "ipv4_app_vip_pool": {
+                    "description": "Exclusive with []\n IPv4 App VIP Pools\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "IPv4 App VIP Pool",
+                    "$ref": "#/definitions/uztna_domainIPv4AppVipPool",
+                    "x-displayname": "IPv4 App VIP Pool",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
+                        "ves.io.schema.rules.message.required": "true"
                     }
                 }
             }
@@ -3516,6 +3525,23 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "uztna_domainDualStackAppVipPool": {
+            "type": "object",
+            "description": "x-displayName: \"Dual Stack App VIP Pool\"\n\nThis is used to import or create new IPv4 and Ipv6 App VIP Pools",
+            "title": "Dual Stack App VIP Pool",
+            "properties": {
+                "ipv4_app_vip_pool": {
+                    "description": "x-displayName: \"IPv4 App VIP Pool\"\nx-required\nSelect or create new IPv4 App VIP Pools",
+                    "title": "IPv4 App VIP Pool",
+                    "$ref": "#/definitions/uztna_domainIPv4AppVipPool"
+                },
+                "ipv6_app_vip_pool": {
+                    "description": "x-displayName: \"IPv6 App VIP Pool\"\nx-required\nSelect or create new IPv6 App VIP Pools",
+                    "title": "IPv6 App VIP Pool",
+                    "$ref": "#/definitions/uztna_domainIPv6AppVipPool"
+                }
+            }
+        },
         "uztna_domainDualStackLeasePool": {
             "type": "object",
             "description": "x-displayName: \"Dual Stack Lease Pool\"\n\nThis is used to import or create new IPv4 and Ipv6 Lease Pools",
@@ -3527,7 +3553,7 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/uztna_domainIPv4Leasepool"
                 },
                 "ipv6_leasepool": {
-                    "description": "x-displayName: \"IPv6 Lease Pool\"\nx-required\nSelect or create new IPv4 Lease Pools",
+                    "description": "x-displayName: \"IPv6 Lease Pool\"\nx-required\nSelect or create new IPv6 Lease Pools",
                     "title": "IPv6 Lease Pool",
                     "$ref": "#/definitions/uztna_domainIPv6Leasepool"
                 }
@@ -3566,15 +3592,17 @@ var APISwaggerJSON string = `{
             "properties": {
                 "access_fqdn": {
                     "type": "string",
-                    "description": " FQDN to access the gateways\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.url_or_uri_ref: true\n",
+                    "description": " FQDN to access the gateways\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
                     "title": "Access FQDN",
-                    "maxLength": 1024,
+                    "minLength": 1,
+                    "maxLength": 256,
                     "x-displayname": "Access FQDN",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "1024",
-                        "ves.io.schema.rules.string.url_or_uri_ref": "true"
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
                     }
                 },
                 "app_vip_pool": {
@@ -3645,6 +3673,30 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "uztna_domainIPv4AppVipPool": {
+            "type": "object",
+            "description": "x-required\nSelect or create new IPv4 App VIP Pool",
+            "title": "IPv4 App VIP Pool",
+            "x-displayname": "IPv4 App VIP Pool",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_domain.IPv4AppVipPool",
+            "properties": {
+                "ipv4_app_vip_pool": {
+                    "type": "array",
+                    "description": " Select or create new IPv4 App VIP Pool\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "IPv4 App VIP Pool",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "IPv4 App VIP Pool",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
+        },
         "uztna_domainIPv4Leasepool": {
             "type": "object",
             "description": "x-required\nSelect or create new IPv4 Lease Pool",
@@ -3665,6 +3717,21 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                }
+            }
+        },
+        "uztna_domainIPv6AppVipPool": {
+            "type": "object",
+            "description": "x-displayName: \"IPv6 App VIP Pool\"\nx-required\nSelect or create new IPv6 App VIP Pool",
+            "title": "IPv6 App VIP Pool",
+            "properties": {
+                "ipv6_app_vip_pool": {
+                    "type": "array",
+                    "description": "x-displayName: \"IPv6 App VIP Pool\"\nx-required\nSelect or create new IPv6 App VIP Pools",
+                    "title": "IPv6 App VIP Pool",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     }
                 }
             }
@@ -3712,14 +3779,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "policy": {
                     "type": "array",
-                    "description": "\n Select/Add ZTNA Policy to associate with this ZeroTrust Domain\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " Select/Add ZTNA Policy to associate with this ZeroTrust Domain\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "ZTNA Policy",
                     "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "ZTNA Policy",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 }

@@ -90,33 +90,13 @@ SNAT pool is an advanced field which is used to configure the SNAT pool IPs.
 
 Protocol used by the Application for communication.
 
-###### One of the arguments from this list "HTTP, HTTPS, TCP, UDP" must be set
-
-`HTTP` - (Optional) x-displayName: "HTTP" (`Bool`).
-
-`HTTPS` - (Optional) Automatically from XC or User provided certificate.. See [Protocol Choice HTTPS ](#protocol-choice-HTTPS) below for details.
+###### One of the arguments from this list "TCP" must be set
 
 `TCP` - (Optional) x-displayName: "TCP" (`Bool`).
-
-`UDP` - (Optional) x-displayName: "UDP" (`Bool`).
-
-### Protocol Choice HTTPS
-
-Automatically from XC or User provided certificate..
-
-`certificate` - (Optional) Select/Add TLS Certificate objects to associate with this Application. See [ref](#ref) below for details.
-
-### Protocol Choice HTTP
-
-x-displayName: "HTTP".
 
 ### Protocol Choice TCP
 
 x-displayName: "TCP".
-
-### Protocol Choice UDP
-
-x-displayName: "UDP".
 
 ### Ref
 

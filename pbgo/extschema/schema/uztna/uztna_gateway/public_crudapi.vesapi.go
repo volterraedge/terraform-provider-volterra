@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/uztna_gateways/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -1797,6 +1810,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_gateway-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_gateway.API.Create"
             },
             "x-displayname": "Gateway",
@@ -1897,6 +1911,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_gateway-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_gateway.API.Replace"
             },
             "x-displayname": "Gateway",
@@ -2013,6 +2028,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_gateway-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_gateway.API.List"
             },
             "x-displayname": "Gateway",
@@ -2123,6 +2139,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_gateway-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_gateway.API.Get"
             },
             "delete": {
@@ -2216,6 +2233,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_gateway-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_gateway.API.Delete"
             },
             "x-displayname": "Gateway",
@@ -2224,6 +2242,50 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "ioschemaObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
+            "properties": {
+                "kind": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
+                    "title": "kind",
+                    "x-displayname": "Kind",
+                    "x-ves-example": "virtual_site"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "contactus-route"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                }
+            }
+        },
         "protobufAny": {
             "type": "object",
             "description": "-Any- contains an arbitrary serialized protocol buffer message along with a\nURL that describes the type of the serialized message.\n\nProtobuf library provides support to pack/unpack Any values in the form\nof utility functions or additional generated methods of the Any type.\n\nExample 1: Pack and unpack a message in C++.\n\n    Foo foo = ...;\n    Any any;\n    any.PackFrom(foo);\n    ...\n    if (any.UnpackTo(\u0026foo)) {\n      ...\n    }\n\nExample 2: Pack and unpack a message in Java.\n\n    Foo foo = ...;\n    Any any = Any.pack(foo);\n    ...\n    if (any.is(Foo.class)) {\n      foo = any.unpack(Foo.class);\n    }\n\n Example 3: Pack and unpack a message in Python.\n\n    foo = Foo(...)\n    any = Any()\n    any.Pack(foo)\n    ...\n    if any.Is(Foo.DESCRIPTOR):\n      any.Unpack(foo)\n      ...\n\n Example 4: Pack and unpack a message in Go\n\n     foo := \u0026pb.Foo{...}\n     any, err := ptypes.MarshalAny(foo)\n     ...\n     foo := \u0026pb.Foo{}\n     if err := ptypes.UnmarshalAny(any, foo); err != nil {\n       ...\n     }\n\nThe pack methods provided by protobuf library will by default use\n'type.googleapis.com/full.type.name' as the type URL and the unpack\nmethods only use the fully qualified type name after the last '/'\nin the type URL, for example \"foo.bar.com/x/y.z\" will yield type\nname \"y.z\".\n\n\nJSON\n====\nThe JSON representation of an -Any- value uses the regular\nrepresentation of the deserialized, embedded message, with an\nadditional field -@type- which contains the type URL. Example:\n\n    package google.profile;\n    message Person {\n      string first_name = 1;\n      string last_name = 2;\n    }\n\n    {\n      \"@type\": \"type.googleapis.com/google.profile.Person\",\n      \"firstName\": \u003cstring\u003e,\n      \"lastName\": \u003cstring\u003e\n    }\n\nIf the embedded message type is well-known and has a custom JSON\nrepresentation, that representation will be embedded adding a field\n-value- which holds the custom JSON in addition to the -@type-\nfield. Example (for message [google.protobuf.Duration][]):\n\n    {\n      \"@type\": \"type.googleapis.com/google.protobuf.Duration\",\n      \"value\": \"1.212s\"\n    }",
@@ -2506,50 +2568,6 @@ var APISwaggerJSON string = `{
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "staging"
-                }
-            }
-        },
-        "schemaObjectRefType": {
-            "type": "object",
-            "description": "This type establishes a 'direct reference' from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name for public API and Uid for private API\nThis type of reference is called direct because the relation is explicit and concrete (as opposed\nto selector reference which builds a group based on labels of selectee objects)",
-            "title": "ObjectRefType",
-            "x-displayname": "Object reference",
-            "x-ves-proto-message": "ves.io.schema.ObjectRefType",
-            "properties": {
-                "kind": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then kind will hold the referred object's kind (e.g. \"route\")\n\nExample: - \"virtual_site\"-",
-                    "title": "kind",
-                    "x-displayname": "Kind",
-                    "x-ves-example": "virtual_site"
-                },
-                "name": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contactus-route\"-",
-                    "title": "name",
-                    "x-displayname": "Name",
-                    "x-ves-example": "contactus-route"
-                },
-                "namespace": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-",
-                    "title": "namespace",
-                    "x-displayname": "Namespace",
-                    "x-ves-example": "ns1"
-                },
-                "tenant": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-",
-                    "title": "tenant",
-                    "x-displayname": "Tenant",
-                    "x-ves-example": "acmecorp"
-                },
-                "uid": {
-                    "type": "string",
-                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then uid will hold the referred object's(e.g. route's) uid.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
-                    "title": "uid",
-                    "x-displayname": "UID",
-                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 }
             }
         },
@@ -2863,11 +2881,11 @@ var APISwaggerJSON string = `{
             "properties": {
                 "bigip_site": {
                     "type": "array",
-                    "description": " Selected BIG-IP Instance\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": " Select private gateway instance\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Selected BigIP Instance",
                     "maxItems": 1,
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "BIG-IP Instance",
                     "x-ves-required": "true",
@@ -2941,7 +2959,7 @@ var APISwaggerJSON string = `{
                 },
                 "listeners": {
                     "type": "array",
-                    "description": " BIG-IP Edge Gateway Listener.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " The IP address assigned to the Private Gateway when configured as an endpoint for the Access FQDN\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "items": {
                         "$ref": "#/definitions/uztna_gatewayListeners"
                     },
@@ -3001,7 +3019,7 @@ var APISwaggerJSON string = `{
                     "description": "The set of deleted objects that are referred by this object",
                     "title": "deleted_referred_objects",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Deleted Referred Objects"
                 },
@@ -3010,7 +3028,7 @@ var APISwaggerJSON string = `{
                     "description": "The set of deleted objects that are referred by this object",
                     "title": "disabled_referred_objects",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Disabled Referred Objects"
                 },
@@ -3025,7 +3043,7 @@ var APISwaggerJSON string = `{
                     "description": "The set of objects that are referring to this object in their spec",
                     "title": "referring_objects",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Referring Objects"
                 },
@@ -3091,7 +3109,7 @@ var APISwaggerJSON string = `{
                 },
                 "listeners": {
                     "type": "array",
-                    "description": " BIG-IP Edge Gateway Listener.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " The IP address assigned to the Private Gateway when configured as an endpoint for the Access FQDN\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "items": {
                         "$ref": "#/definitions/uztna_gatewayListeners"
                     },
@@ -3227,28 +3245,19 @@ var APISwaggerJSON string = `{
         },
         "uztna_gatewayListeners": {
             "type": "object",
-            "description": "\nConfigure BIG-IP Edge Gateway Listener IP",
+            "description": "\nConfigure Private Gateway Listener IP",
             "title": "Listeners",
             "x-displayname": "Listeners",
-            "x-ves-oneof-field-flow_type": "[\"ipv4\",\"ipv6\"]",
+            "x-ves-oneof-field-flow_type": "[\"ipv4\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_gateway.Listeners",
             "properties": {
                 "ipv4": {
                     "type": "string",
-                    "description": "Exclusive with [ipv6]\n\n IPv4 Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with []\n\n IPv4 Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IPv4",
                     "x-displayname": "IPv4 Address",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4": "true"
-                    }
-                },
-                "ipv6": {
-                    "type": "string",
-                    "description": "Exclusive with [ipv4]\n\n IPv6 Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "IPv6",
-                    "x-displayname": "IPv6 Address",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 }
             }
@@ -3296,7 +3305,7 @@ var APISwaggerJSON string = `{
                 },
                 "listeners": {
                     "type": "array",
-                    "description": " BIG-IP Edge Gateway Listener.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " The IP address assigned to the Private Gateway when configured as an endpoint for the Access FQDN\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "items": {
                         "$ref": "#/definitions/uztna_gatewayListeners"
                     },
@@ -3335,7 +3344,7 @@ var APISwaggerJSON string = `{
                     "description": " Object reference",
                     "title": "object_refs",
                     "items": {
-                        "$ref": "#/definitions/schemaObjectRefType"
+                        "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
                 }

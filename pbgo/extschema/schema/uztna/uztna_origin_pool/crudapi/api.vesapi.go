@@ -1614,6 +1614,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_origin_pool-crudapi-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_origin_pool.crudapi.API.Get"
             },
             "delete": {
@@ -1689,6 +1690,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_origin_pool-crudapi-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_origin_pool.crudapi.API.Delete"
             },
             "put": {
@@ -1772,6 +1774,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_origin_pool-crudapi-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_origin_pool.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -1919,6 +1922,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_origin_pool-crudapi-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_origin_pool.crudapi.API.List"
             },
             "post": {
@@ -1996,6 +2000,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_origin_pool-crudapi-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_origin_pool.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2143,6 +2148,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_origin_pool-crudapi-api-liststream"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_origin_pool.crudapi.API.ListStream"
             },
             "x-displayname": "",
@@ -2250,6 +2256,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_origin_pool-crudapi-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_origin_pool.crudapi.API.Get"
             },
             "x-displayname": "",
@@ -2397,6 +2404,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_origin_pool-crudapi-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_origin_pool.crudapi.API.List"
             },
             "x-displayname": "",
@@ -2479,6 +2487,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_origin_pool-crudapi-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_origin_pool.crudapi.API.Delete"
             },
             "put": {
@@ -2562,6 +2571,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_origin_pool-crudapi-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_origin_pool.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -2646,6 +2656,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_origin_pool-crudapi-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_origin_pool.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -3442,27 +3453,17 @@ var APISwaggerJSON string = `{
             "description": "Specify origin server with private or public IP address and site information",
             "title": "OriginServerPrivateIP",
             "x-displayname": "IP address on given Sites",
-            "x-ves-oneof-field-private_ip_choice": "[\"ip\",\"ipv6\"]",
+            "x-ves-oneof-field-private_ip_choice": "[\"ip\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_origin_pool.OriginServerPrivateIP",
             "properties": {
                 "ip": {
                     "type": "string",
-                    "description": "Exclusive with [ipv6]\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with []\n Private IPV4 address\n\nExample: - \"8.8.8.8\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP",
                     "x-displayname": "IP",
                     "x-ves-example": "8.8.8.8",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.ipv4": "true"
-                    }
-                },
-                "ipv6": {
-                    "type": "string",
-                    "description": "Exclusive with [ip]\n Private IPV6 address\n\nExample: - \"2001::10\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
-                    "title": "IP6",
-                    "x-displayname": "IP6",
-                    "x-ves-example": "2001::10",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.ipv6": "true"
                     }
                 }
             }

@@ -1877,6 +1877,18 @@ func (m *RuleType) GetScopeChoiceDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *RuleType_NodeInterface:
+
+		drInfos, err := m.GetNodeInterface().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetNodeInterface().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "node_interface." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -2066,6 +2078,17 @@ func (v *ValidateRuleType) Validate(ctx context.Context, pm interface{}, opts ..
 				return err
 			}
 		}
+	case *RuleType_NodeInterface:
+		if fv, exists := v.FldValidators["scope_choice.node_interface"]; exists {
+			val := m.GetScopeChoice().(*RuleType_NodeInterface).NodeInterface
+			vOpts := append(opts,
+				db.WithValidateField("scope_choice"),
+				db.WithValidateField("node_interface"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2132,6 +2155,7 @@ var DefaultRuleTypeValidator = func() *ValidateRuleType {
 	v.FldValidators["scope_choice.network_interface"] = ves_io_schema.NetworkInterfaceRefTypeValidator().Validate
 	v.FldValidators["scope_choice.segment"] = ves_io_schema.SegmentRefTypeValidator().Validate
 	v.FldValidators["scope_choice.virtual_network"] = ves_io_schema.VirtualNetworkReferenceTypeValidator().Validate
+	v.FldValidators["scope_choice.node_interface"] = ves_io_schema.NodeInterfaceTypeValidator().Validate
 
 	v.FldValidators["criteria"] = MatchCriteriaTypeValidator().Validate
 

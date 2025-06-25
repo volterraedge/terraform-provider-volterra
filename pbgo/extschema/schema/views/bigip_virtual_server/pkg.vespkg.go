@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/store"
 	"gopkg.volterra.us/stdlib/svcfw"
 )
@@ -24,6 +25,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.bigip_virtual_server.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.views.bigip_virtual_server.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.views.bigip_virtual_server.ReplaceResponse"] = ReplaceResponseValidator()
+
+	vr["ves.io.schema.views.bigip_virtual_server.BigIPVirtualServerList"] = BigIPVirtualServerListValidator()
+	vr["ves.io.schema.views.bigip_virtual_server.GetSecurityConfigReq"] = GetSecurityConfigReqValidator()
 
 	vr["ves.io.schema.views.bigip_virtual_server.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.views.bigip_virtual_server.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -92,6 +96,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.views.bigip_virtual_server.API"] = "config"
+	sm["ves.io.schema.views.bigip_virtual_server.CustomAPI"] = "config"
 
 }
 
@@ -126,6 +131,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 		mdr.SvcRegisterHandlers["ves.io.schema.views.bigip_virtual_server.API"] = RegisterAPIServer
 		mdr.SvcGwRegisterHandlers["ves.io.schema.views.bigip_virtual_server.API"] = RegisterGwAPIHandler
 		csr.CRUDServerRegistry["ves.io.schema.views.bigip_virtual_server.Object"] = NewCRUDAPIServer
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.views.bigip_virtual_server.Object"] = CustomAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.views.bigip_virtual_server.CustomAPI"] = NewCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.views.bigip_virtual_server.CustomAPI"] = NewCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.views.bigip_virtual_server.CustomAPI"] = RegisterCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.views.bigip_virtual_server.CustomAPI"] = RegisterGwCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.views.bigip_virtual_server.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomAPIServer(svc)
+		}
 
 	}()
 

@@ -17,13 +17,14 @@ Example Usage
 
 ```hcl
 resource "volterra_dns_load_balancer" "example" {
-  name        = "acmecorp-web"
-  namespace   = "staging"
+  name      = "acmecorp-web"
+  namespace = "staging"
+
   record_type = ["record_type"]
 
   rule_list {
     rules {
-      // One of the arguments from this list "nxdomain pool" must be set
+      // One of the arguments from this list "pool" must be set
 
       pool {
         name      = "test1"
@@ -33,8 +34,12 @@ resource "volterra_dns_load_balancer" "example" {
 
       // One of the arguments from this list "asn_list asn_matcher geo_location_label_selector geo_location_set ip_prefix_list ip_prefix_set" must be set
 
-      geo_location_label_selector {
-        expressions = ["region in (us-west1, us-west2),tier in (staging)"]
+      ip_prefix_list {
+        invert_match = true
+
+        ip_prefixes = ["192.168.20.0/24"]
+
+        ipv6_prefixes = ["fd48:fa09:d9d4::/48"]
       }
       score = "50"
     }
@@ -87,10 +92,6 @@ Response Cache Parameters.
 Load Balancing Rules.
 
 `rules` - (Required) Rules to perform load balancing. See [Rule List Rules ](#rule-list-rules) below for details.
-
-### Action Choice Nxdomain
-
-Do not perform any load-balancing. Instead return NXDOMAIN.
 
 ### Client Choice Asn List
 
@@ -160,9 +161,7 @@ Customize the parameters for Response cache.
 
 Rules to perform load balancing.
 
-###### One of the arguments from this list "nxdomain, pool" must be set
-
-`nxdomain` - (Optional) Do not perform any load-balancing. Instead return NXDOMAIN (`Bool`).(Deprecated)
+###### One of the arguments from this list "pool" must be set
 
 `pool` - (Optional) Use this pool for the Load Balancing.. See [ref](#ref) below for details.
 

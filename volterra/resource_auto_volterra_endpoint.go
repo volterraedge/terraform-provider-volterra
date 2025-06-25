@@ -16,6 +16,7 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_endpoint "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/endpoint"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // resourceVolterraEndpoint is implementation of Volterra's Endpoint resources
@@ -83,13 +84,6 @@ func resourceVolterraEndpoint() *schema.Resource {
 
 							Type:     schema.TypeInt,
 							Optional: true,
-						},
-
-						"strict_ttl": {
-
-							Type:       schema.TypeBool,
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -159,6 +153,54 @@ func resourceVolterraEndpoint() *schema.Resource {
 				Optional: true,
 			},
 
+			"snat_pool": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"no_snat_pool": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"snat_pool": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"ipv6_prefixes": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
+									"prefixes": {
+
+										Type: schema.TypeList,
+
+										Optional: true,
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"where": {
 
 				Type:     schema.TypeList,
@@ -215,39 +257,6 @@ func resourceVolterraEndpoint() *schema.Resource {
 												"tenant": {
 													Type:     schema.TypeString,
 													Optional: true,
-												},
-											},
-										},
-									},
-
-									"refs": {
-
-										Type:       schema.TypeList,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"kind": {
-													Type:       schema.TypeString,
-													Computed:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"name": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-												"namespace": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-												"tenant": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -347,39 +356,6 @@ func resourceVolterraEndpoint() *schema.Resource {
 											},
 										},
 									},
-
-									"refs": {
-
-										Type:       schema.TypeList,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"kind": {
-													Type:       schema.TypeString,
-													Computed:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"name": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-												"namespace": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-												"tenant": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-											},
-										},
-									},
 								},
 							},
 						},
@@ -447,7 +423,7 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 	endpointAddressTypeFound := false
 
-	if v, ok := d.GetOk("dns_name"); ok && !endpointAddressTypeFound {
+	if v, ok := d.GetOk("dns_name"); ok && !isIntfNil(v) && !endpointAddressTypeFound {
 
 		endpointAddressTypeFound = true
 		endpointAddressInt := &ves_io_schema_endpoint.CreateSpecType_DnsName{}
@@ -458,7 +434,7 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 	}
 
-	if v, ok := d.GetOk("dns_name_advanced"); ok && !endpointAddressTypeFound {
+	if v, ok := d.GetOk("dns_name_advanced"); ok && !isIntfNil(v) && !endpointAddressTypeFound {
 
 		endpointAddressTypeFound = true
 		endpointAddressInt := &ves_io_schema_endpoint.CreateSpecType_DnsNameAdvanced{}
@@ -489,24 +465,12 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 				}
 
-				if v, ok := cs["strict_ttl"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
-
-					ttlChoiceTypeFound = true
-
-					if v.(bool) {
-						ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_StrictTtl{}
-						ttlChoiceInt.StrictTtl = &ves_io_schema.Empty{}
-						endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
-					}
-
-				}
-
 			}
 		}
 
 	}
 
-	if v, ok := d.GetOk("ip"); ok && !endpointAddressTypeFound {
+	if v, ok := d.GetOk("ip"); ok && !isIntfNil(v) && !endpointAddressTypeFound {
 
 		endpointAddressTypeFound = true
 		endpointAddressInt := &ves_io_schema_endpoint.CreateSpecType_Ip{}
@@ -517,7 +481,7 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 	}
 
-	if v, ok := d.GetOk("service_info"); ok && !endpointAddressTypeFound {
+	if v, ok := d.GetOk("service_info"); ok && !isIntfNil(v) && !endpointAddressTypeFound {
 
 		endpointAddressTypeFound = true
 		endpointAddressInt := &ves_io_schema_endpoint.CreateSpecType_ServiceInfo{}
@@ -564,7 +528,12 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field expressions")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								serviceInfoInt.ServiceSelector.Expressions = ls
 
@@ -601,6 +570,82 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 		createSpec.Protocol =
 			v.(string)
+
+	}
+
+	//snat_pool
+	if v, ok := d.GetOk("snat_pool"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		snatPool := &ves_io_schema_views.SnatPoolConfiguration{}
+		createSpec.SnatPool = snatPool
+		for _, set := range sl {
+			if set != nil {
+				snatPoolMapStrToI := set.(map[string]interface{})
+
+				snatPoolChoiceTypeFound := false
+
+				if v, ok := snatPoolMapStrToI["no_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+					snatPoolChoiceTypeFound = true
+
+					if v.(bool) {
+						snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_NoSnatPool{}
+						snatPoolChoiceInt.NoSnatPool = &ves_io_schema.Empty{}
+						snatPool.SnatPoolChoice = snatPoolChoiceInt
+					}
+
+				}
+
+				if v, ok := snatPoolMapStrToI["snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+					snatPoolChoiceTypeFound = true
+					snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_SnatPool{}
+					snatPoolChoiceInt.SnatPool = &ves_io_schema_views.PrefixStringListType{}
+					snatPool.SnatPoolChoice = snatPoolChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								snatPoolChoiceInt.SnatPool.Ipv6Prefixes = ls
+
+							}
+
+							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								snatPoolChoiceInt.SnatPool.Prefixes = ls
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
 
 	}
 
@@ -686,38 +731,6 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
 										refIntNew[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								refOrSelectorInt.Site.Refs = refsInt
-								for i, ps := range sl {
-
-									rMapToStrVal := ps.(map[string]interface{})
-									refsInt[i] = &ves_io_schema.ObjectRefType{}
-
-									refsInt[i].Kind = "virtual_network"
-
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refsInt[i].Name = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refsInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refsInt[i].Uid = v.(string)
 									}
 
 								}
@@ -848,38 +861,6 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 
 									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
 										refIntNew[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								refOrSelectorInt.VirtualSite.Refs = refsInt
-								for i, ps := range sl {
-
-									rMapToStrVal := ps.(map[string]interface{})
-									refsInt[i] = &ves_io_schema.ObjectRefType{}
-
-									refsInt[i].Kind = "virtual_network"
-
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refsInt[i].Name = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refsInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refsInt[i].Uid = v.(string)
 									}
 
 								}
@@ -997,7 +978,7 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 
 	endpointAddressTypeFound := false
 
-	if v, ok := d.GetOk("dns_name"); ok && !endpointAddressTypeFound {
+	if v, ok := d.GetOk("dns_name"); ok && !isIntfNil(v) && !endpointAddressTypeFound {
 
 		endpointAddressTypeFound = true
 		endpointAddressInt := &ves_io_schema_endpoint.ReplaceSpecType_DnsName{}
@@ -1008,7 +989,7 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 
 	}
 
-	if v, ok := d.GetOk("dns_name_advanced"); ok && !endpointAddressTypeFound {
+	if v, ok := d.GetOk("dns_name_advanced"); ok && !isIntfNil(v) && !endpointAddressTypeFound {
 
 		endpointAddressTypeFound = true
 		endpointAddressInt := &ves_io_schema_endpoint.ReplaceSpecType_DnsNameAdvanced{}
@@ -1039,24 +1020,12 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 
 				}
 
-				if v, ok := cs["strict_ttl"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
-
-					ttlChoiceTypeFound = true
-
-					if v.(bool) {
-						ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_StrictTtl{}
-						ttlChoiceInt.StrictTtl = &ves_io_schema.Empty{}
-						endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
-					}
-
-				}
-
 			}
 		}
 
 	}
 
-	if v, ok := d.GetOk("ip"); ok && !endpointAddressTypeFound {
+	if v, ok := d.GetOk("ip"); ok && !isIntfNil(v) && !endpointAddressTypeFound {
 
 		endpointAddressTypeFound = true
 		endpointAddressInt := &ves_io_schema_endpoint.ReplaceSpecType_Ip{}
@@ -1067,7 +1036,7 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 
 	}
 
-	if v, ok := d.GetOk("service_info"); ok && !endpointAddressTypeFound {
+	if v, ok := d.GetOk("service_info"); ok && !isIntfNil(v) && !endpointAddressTypeFound {
 
 		endpointAddressTypeFound = true
 		endpointAddressInt := &ves_io_schema_endpoint.ReplaceSpecType_ServiceInfo{}
@@ -1114,7 +1083,12 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 
 								ls := make([]string, len(v.([]interface{})))
 								for i, v := range v.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field expressions")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								serviceInfoInt.ServiceSelector.Expressions = ls
 
@@ -1148,6 +1122,81 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 
 		updateSpec.Protocol =
 			v.(string)
+
+	}
+
+	if v, ok := d.GetOk("snat_pool"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		snatPool := &ves_io_schema_views.SnatPoolConfiguration{}
+		updateSpec.SnatPool = snatPool
+		for _, set := range sl {
+			if set != nil {
+				snatPoolMapStrToI := set.(map[string]interface{})
+
+				snatPoolChoiceTypeFound := false
+
+				if v, ok := snatPoolMapStrToI["no_snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+					snatPoolChoiceTypeFound = true
+
+					if v.(bool) {
+						snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_NoSnatPool{}
+						snatPoolChoiceInt.NoSnatPool = &ves_io_schema.Empty{}
+						snatPool.SnatPoolChoice = snatPoolChoiceInt
+					}
+
+				}
+
+				if v, ok := snatPoolMapStrToI["snat_pool"]; ok && !isIntfNil(v) && !snatPoolChoiceTypeFound {
+
+					snatPoolChoiceTypeFound = true
+					snatPoolChoiceInt := &ves_io_schema_views.SnatPoolConfiguration_SnatPool{}
+					snatPoolChoiceInt.SnatPool = &ves_io_schema_views.PrefixStringListType{}
+					snatPool.SnatPoolChoice = snatPoolChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["ipv6_prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								snatPoolChoiceInt.SnatPool.Ipv6Prefixes = ls
+
+							}
+
+							if v, ok := cs["prefixes"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								snatPoolChoiceInt.SnatPool.Prefixes = ls
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
 
 	}
 
@@ -1232,38 +1281,6 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 
 									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
 										refIntNew[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								refOrSelectorInt.Site.Refs = refsInt
-								for i, ps := range sl {
-
-									rMapToStrVal := ps.(map[string]interface{})
-									refsInt[i] = &ves_io_schema.ObjectRefType{}
-
-									refsInt[i].Kind = "virtual_network"
-
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refsInt[i].Name = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refsInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refsInt[i].Uid = v.(string)
 									}
 
 								}
@@ -1400,38 +1417,6 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 
 							}
 
-							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								refOrSelectorInt.VirtualSite.Refs = refsInt
-								for i, ps := range sl {
-
-									rMapToStrVal := ps.(map[string]interface{})
-									refsInt[i] = &ves_io_schema.ObjectRefType{}
-
-									refsInt[i].Kind = "virtual_network"
-
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refsInt[i].Name = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refsInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refsInt[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
 						}
 					}
 
@@ -1468,5 +1453,8 @@ func resourceVolterraEndpointDelete(d *schema.ResourceData, meta interface{}) er
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra Endpoint obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_endpoint.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_endpoint.ObjectType, namespace, name, opts...)
 }

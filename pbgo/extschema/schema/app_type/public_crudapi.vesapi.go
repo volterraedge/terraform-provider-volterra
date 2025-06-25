@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/app_types/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -2517,7 +2530,7 @@ var APISwaggerJSON string = `{
                     "description": " Inactive discovered API will be deleted after configured duration.\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 7\n",
                     "title": "purge_duration_for_inactive_discovered_apis",
                     "format": "int64",
-                    "x-displayname": "Purge Duration for Inactive Discovered APIs",
+                    "x-displayname": "Purge Duration for Inactive Discovered APIs from Traffic",
                     "x-ves-example": "2",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",

@@ -33,13 +33,17 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewAppVIPPool"] = DomainViewAppVIPPoolValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewCertificate"] = DomainViewCertificateValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewCloudGateways"] = DomainViewCloudGatewaysValidator()
+	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewDualStackAppVipPool"] = DomainViewDualStackAppVipPoolValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewDualStackLeasePool"] = DomainViewDualStackLeasePoolValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewGateways"] = DomainViewGatewaysValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewLeasePoolList"] = DomainViewLeasePoolListValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewPolicy"] = DomainViewPolicyValidator()
+	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewPrivateGateways"] = DomainViewPrivateGatewaysValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.DomainViewSites"] = DomainViewSitesValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.uztna.views.uztna_domain_view.IPv4LeasePool"] = IPv4LeasePoolValidator()
+	vr["ves.io.schema.uztna.views.uztna_domain_view.IPv6LeasePool"] = IPv6LeasePoolValidator()
 	vr["ves.io.schema.uztna.views.uztna_domain_view.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 
 }

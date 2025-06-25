@@ -1614,6 +1614,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-application-uztna_application_tag-crudapi-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application_tag.crudapi.API.Get"
             },
             "delete": {
@@ -1689,6 +1690,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-application-uztna_application_tag-crudapi-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application_tag.crudapi.API.Delete"
             },
             "put": {
@@ -1772,6 +1774,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-application-uztna_application_tag-crudapi-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application_tag.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -1919,6 +1922,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-application-uztna_application_tag-crudapi-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application_tag.crudapi.API.List"
             },
             "post": {
@@ -1996,6 +2000,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-application-uztna_application_tag-crudapi-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application_tag.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2143,6 +2148,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-application-uztna_application_tag-crudapi-api-liststream"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application_tag.crudapi.API.ListStream"
             },
             "x-displayname": "",
@@ -2250,6 +2256,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-application-uztna_application_tag-crudapi-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application_tag.crudapi.API.Get"
             },
             "x-displayname": "",
@@ -2397,6 +2404,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-application-uztna_application_tag-crudapi-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application_tag.crudapi.API.List"
             },
             "x-displayname": "",
@@ -2479,6 +2487,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-application-uztna_application_tag-crudapi-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application_tag.crudapi.API.Delete"
             },
             "put": {
@@ -2562,6 +2571,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-application-uztna_application_tag-crudapi-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application_tag.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -2646,6 +2656,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-application-uztna_application_tag-crudapi-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application_tag.crudapi.API.Create"
             },
             "x-displayname": "",

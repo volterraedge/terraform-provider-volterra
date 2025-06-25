@@ -6583,6 +6583,103 @@ func SiteRegionLocatorValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SnatPoolConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SnatPoolConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SnatPoolConfiguration) DeepCopy() *SnatPoolConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SnatPoolConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SnatPoolConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SnatPoolConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SnatPoolConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSnatPoolConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSnatPoolConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SnatPoolConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SnatPoolConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetSnatPoolChoice().(type) {
+	case *SnatPoolConfiguration_NoSnatPool:
+		if fv, exists := v.FldValidators["snat_pool_choice.no_snat_pool"]; exists {
+			val := m.GetSnatPoolChoice().(*SnatPoolConfiguration_NoSnatPool).NoSnatPool
+			vOpts := append(opts,
+				db.WithValidateField("snat_pool_choice"),
+				db.WithValidateField("no_snat_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SnatPoolConfiguration_SnatPool:
+		if fv, exists := v.FldValidators["snat_pool_choice.snat_pool"]; exists {
+			val := m.GetSnatPoolChoice().(*SnatPoolConfiguration_SnatPool).SnatPool
+			vOpts := append(opts,
+				db.WithValidateField("snat_pool_choice"),
+				db.WithValidateField("snat_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSnatPoolConfigurationValidator = func() *ValidateSnatPoolConfiguration {
+	v := &ValidateSnatPoolConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["snat_pool_choice.snat_pool"] = PrefixStringListTypeValidator().Validate
+
+	return v
+}()
+
+func SnatPoolConfigurationValidator() db.Validator {
+	return DefaultSnatPoolConfigurationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SpecificRE) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

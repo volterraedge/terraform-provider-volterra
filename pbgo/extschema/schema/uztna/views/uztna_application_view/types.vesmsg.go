@@ -468,9 +468,9 @@ func (m *CreateSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 	vdRef := db.NewDirectRefForView(vref)
-	vdRef.SetKind("bigip_instance_site.Object")
+	vdRef.SetKind("site.Object")
 	dri := db.DRefInfo{
-		RefdType:   "bigip_instance_site.Object",
+		RefdType:   "site.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
@@ -484,9 +484,9 @@ func (m *CreateSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 // GetLocationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *CreateSpecType) GetLocationDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "bigip_instance_site.Object")
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_instance_site")
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
 
 	vref := m.GetLocation()
@@ -494,7 +494,7 @@ func (m *CreateSpecType) GetLocationDBEntries(ctx context.Context, d db.Interfac
 		return nil, nil
 	}
 	ref := &ves_io_schema.ObjectRefType{
-		Kind:      "bigip_instance_site.Object",
+		Kind:      "site.Object",
 		Tenant:    vref.Tenant,
 		Namespace: vref.Namespace,
 		Name:      vref.Name,
@@ -851,9 +851,9 @@ func (m *GetSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 	vdRef := db.NewDirectRefForView(vref)
-	vdRef.SetKind("bigip_instance_site.Object")
+	vdRef.SetKind("site.Object")
 	dri := db.DRefInfo{
-		RefdType:   "bigip_instance_site.Object",
+		RefdType:   "site.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
@@ -867,9 +867,9 @@ func (m *GetSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 // GetLocationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GetSpecType) GetLocationDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "bigip_instance_site.Object")
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_instance_site")
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
 
 	vref := m.GetLocation()
@@ -877,7 +877,7 @@ func (m *GetSpecType) GetLocationDBEntries(ctx context.Context, d db.Interface) 
 		return nil, nil
 	}
 	ref := &ves_io_schema.ObjectRefType{
-		Kind:      "bigip_instance_site.Object",
+		Kind:      "site.Object",
 		Tenant:    vref.Tenant,
 		Namespace: vref.Namespace,
 		Name:      vref.Name,
@@ -1240,9 +1240,9 @@ func (m *GlobalSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 	vdRef := db.NewDirectRefForView(vref)
-	vdRef.SetKind("bigip_instance_site.Object")
+	vdRef.SetKind("site.Object")
 	dri := db.DRefInfo{
-		RefdType:   "bigip_instance_site.Object",
+		RefdType:   "site.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
@@ -1256,9 +1256,9 @@ func (m *GlobalSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 // GetLocationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetLocationDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "bigip_instance_site.Object")
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_instance_site")
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
 
 	vref := m.GetLocation()
@@ -1266,7 +1266,7 @@ func (m *GlobalSpecType) GetLocationDBEntries(ctx context.Context, d db.Interfac
 		return nil, nil
 	}
 	ref := &ves_io_schema.ObjectRefType{
-		Kind:      "bigip_instance_site.Object",
+		Kind:      "site.Object",
 		Tenant:    vref.Tenant,
 		Namespace: vref.Namespace,
 		Name:      vref.Name,
@@ -2227,9 +2227,9 @@ func (m *ReplaceSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 	vdRef := db.NewDirectRefForView(vref)
-	vdRef.SetKind("bigip_instance_site.Object")
+	vdRef.SetKind("site.Object")
 	dri := db.DRefInfo{
-		RefdType:   "bigip_instance_site.Object",
+		RefdType:   "site.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
@@ -2243,9 +2243,9 @@ func (m *ReplaceSpecType) GetLocationDRefInfo() ([]db.DRefInfo, error) {
 // GetLocationDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *ReplaceSpecType) GetLocationDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "bigip_instance_site.Object")
+	refdType, err := d.TypeForEntryKind("", "", "site.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: bigip_instance_site")
+		return nil, errors.Wrap(err, "Cannot find type for kind: site")
 	}
 
 	vref := m.GetLocation()
@@ -2253,7 +2253,7 @@ func (m *ReplaceSpecType) GetLocationDBEntries(ctx context.Context, d db.Interfa
 		return nil, nil
 	}
 	ref := &ves_io_schema.ObjectRefType{
-		Kind:      "bigip_instance_site.Object",
+		Kind:      "site.Object",
 		Tenant:    vref.Tenant,
 		Namespace: vref.Namespace,
 		Name:      vref.Name,

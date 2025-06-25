@@ -138,6 +138,7 @@ func (c *CustomAPIRestClient) doRPCAllocateIP(ctx context.Context, callOpts *ser
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("context", fmt.Sprintf("%v", req.Context))
 		q.Add("use_v6_range", fmt.Sprintf("%v", req.UseV6Range))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -221,6 +222,7 @@ func (c *CustomAPIRestClient) doRPCDeallocateIP(ctx context.Context, callOpts *s
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("context", fmt.Sprintf("%v", req.Context))
 		q.Add("ip", fmt.Sprintf("%v", req.Ip))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -633,6 +635,13 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "AllocateIP Request",
             "x-ves-proto-message": "ves.io.schema.gia.AllocateIPRequest",
             "properties": {
+                "context": {
+                    "type": "string",
+                    "description": " This is the global ip allocator context from which ip allocation will happen\n Optional: If not specified, gia will try to allocate ip from default ip range\n\nExample: - \"app-vip-pool-1\"-",
+                    "title": "context",
+                    "x-displayname": "Context",
+                    "x-ves-example": "app-vip-pool-1"
+                },
                 "use_v6_range": {
                     "type": "boolean",
                     "description": " Optional: If not specified, v4 range for this tenant will be used\n\nExample: - false-",
@@ -672,6 +681,13 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "DeAllocateIP Request",
             "x-ves-proto-message": "ves.io.schema.gia.DeallocateIPRequest",
             "properties": {
+                "context": {
+                    "type": "string",
+                    "description": " This is the global ip allocator context from which ip deallocation will happen\n Optional: If not specified, gia will try to deallocate given ip from default ip range\n\nExample: - \"app-vip-pool-1\"-",
+                    "title": "context",
+                    "x-displayname": "Context",
+                    "x-ves-example": "app-vip-pool-1"
+                },
                 "ip": {
                     "type": "string",
                     "description": " IP which needs to de-allocated\n\nExample: - \"192.168.0.1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip: true\n",

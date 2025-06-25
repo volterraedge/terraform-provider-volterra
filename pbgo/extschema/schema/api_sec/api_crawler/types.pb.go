@@ -91,7 +91,6 @@ type DomainConfiguration struct {
 	// The Domain credentials
 	//
 	// x-displayName: "Credentials"
-	// x-required
 	// Username and Password to assign credentials for the selected domain to crawl
 	SimpleLogin *SimpleLogin `protobuf:"bytes,2,opt,name=simple_login,json=simpleLogin,proto3" json:"simple_login,omitempty"`
 }
@@ -144,13 +143,13 @@ func (m *DomainConfiguration) GetSimpleLogin() *SimpleLogin {
 type SimpleLogin struct {
 	// The custom domain user authentication
 	//
-	// x-required
 	// x-displayName: "User"
+	// Enter the username to assign credentials for the selected domain to crawl
 	User string `protobuf:"bytes,1,opt,name=user,proto3" json:"user,omitempty"`
 	// The custom domain password authentication
 	//
-	// x-required
 	// x-displayName: "Password"
+	// Enter the password to assign credentials for the selected domain to crawl
 	Password *schema.SecretType `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
 }
 

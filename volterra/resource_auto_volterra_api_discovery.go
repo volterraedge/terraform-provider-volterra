@@ -312,5 +312,8 @@ func resourceVolterraApiDiscoveryDelete(d *schema.ResourceData, meta interface{}
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra ApiDiscovery obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_api_sec_api_discovery.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_api_sec_api_discovery.ObjectType, namespace, name, opts...)
 }

@@ -931,12 +931,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Not specified"
                 },
                 "route_advertisement_mgmt_not_using_f5xc": {
-                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_using_f5xc]\n Tenant manages outside F5XC",
+                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_using_f5xc]\n Tenant manages using F5XC Routed DDoS Always On",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Tenant manages not using F5XC"
                 },
                 "route_advertisement_mgmt_using_f5xc": {
-                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_not_using_f5xc]\n Tenant manages using F5XC",
+                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_not_using_f5xc]\n Tenant manages using F5XC Routed DDoS Always Available",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Tenant manages using F5XC"
                 },

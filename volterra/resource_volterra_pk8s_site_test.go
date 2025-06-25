@@ -142,7 +142,6 @@ func testPk8sSiteConfig(name string) string {
 				name = volterra_k8s_cluster.this.name
 				namespace = "system"
 			}
-			master_nodes = [ "master-0" ]
 			custom_network_config {
 			  forward_proxy_allow_all = true
 			  no_global_network = true
@@ -158,7 +157,6 @@ func testPk8sSiteConfig(name string) string {
 			volterra_certified_hw = "generic-single-nic-volstack-combo"
 			logs_streaming_disabled = true
 			allow_all_usb = true
-			no_local_control_plane = true
 			master_node_configuration {
 				name      = "master-0"
 			}

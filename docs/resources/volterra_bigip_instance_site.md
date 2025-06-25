@@ -192,10 +192,6 @@ Manage interfaces belonging to this node.
 
 `static_ipv6_address` - (Optional) Interface IPv6 address is configured statically.. See [Ipv6 Address Choice Static Ipv6 Address ](#ipv6-address-choice-static-ipv6-address) below for details.
 
-`is_management` - (Optional) To be used internally to set an interface as management interface (`Bool`).(Deprecated)
-
-`is_primary` - (Optional) Use for Primary Interface (`Bool`).(Deprecated)
-
 `labels` - (Optional) Add Labels for this Interface, these labels can be used in firewall policy (`String`).
 
 ###### One of the arguments from this list "monitor, monitor_disabled" can be set

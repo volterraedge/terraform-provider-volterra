@@ -42,19 +42,13 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`algo` - (Optional) - DENY_OVERRIDES Rules with a DENY action are evaluated prior to rules with an ALLOW action (`String`).(Deprecated)
-
 `allow_f5xc` - (Optional) if allow_f5xc is set to true, it allows relevant F5XC infrastructure services to decrypt the secret encrypted using this policy. (`Bool`).
 
 `decrypt_cache_timeout` - (Optional) Value for this parameter is a string ending in the suffix "s" (indicating seconds), suffix "m" (indicating minutes) or suffix "h" (indicating hours) (`String`).
 
-###### One of the arguments from this list "legacy_rule_list, rule_list" can be set
-
-`legacy_rule_list` - (Optional) x-displayName: "Legacy Rule List". See [Rule Choice Legacy Rule List ](#rule-choice-legacy-rule-list) below for details.(Deprecated)
+###### One of the arguments from this list "rule_list" can be set
 
 `rule_list` - (Optional) x-displayName: "Custom Rule List". See [Rule Choice Rule List ](#rule-choice-rule-list) below for details.
-
-`rules` - (Optional) The order of evaluation of the rules depends on the rule combining algorithm.. See [ref](#ref) below for details.(Deprecated)
 
 ### Client Choice Client Name Matcher
 
@@ -71,22 +65,6 @@ The predicate evaluates to true if any of the client's actual names match any of
 The predicate evaluates to true if the expressions in the label selector are true for the client labels..
 
 `expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
-
-### Ref
-
-Reference to another volterra object is shown like below
-
-name - (Required) then name will hold the referred object's(e.g. route's) name. (String).
-
-namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
-
-tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
-
-### Rule Choice Legacy Rule List
-
-x-displayName: "Legacy Rule List".
-
-`rules` - (Optional) The order of evaluation of the rules depends on the rule combining algorithm.. See [ref](#ref) below for details.
 
 ### Rule Choice Rule List
 
@@ -108,8 +86,6 @@ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Rules Spec
@@ -125,14 +101,6 @@ Specification for the rule including match predicates and actions..
 `client_name_matcher` - (Optional) The predicate evaluates to true if any of the client's actual names match any of the exact values or regular expressions in the client name matcher.. See [Client Choice Client Name Matcher ](#client-choice-client-name-matcher) below for details.
 
 `client_selector` - (Optional) The predicate evaluates to true if the expressions in the label selector are true for the client labels.. See [Client Choice Client Selector ](#client-choice-client-selector) below for details.
-
-`label_matcher` - (Optional) The values of any other labels do not matter.. See [Spec Label Matcher ](#spec-label-matcher) below for details.(Deprecated)
-
-### Spec Label Matcher
-
-The values of any other labels do not matter..
-
-`keys` - (Optional) The list of label key names that have to match (`String`).
 
 Attribute Reference
 -------------------

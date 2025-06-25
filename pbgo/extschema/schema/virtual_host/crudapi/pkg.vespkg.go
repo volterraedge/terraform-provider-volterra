@@ -29,7 +29,42 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Create"] = []string{
+		"spec.gc_spec.cdn_service.cache_ttl",
+		"spec.gc_spec.cdn_service.service_domains.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Create"] = []string{
+		"spec.gc_spec.cdn_service.cache_ttl",
+		"spec.gc_spec.cdn_service.service_domains.#",
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.crudapi.API.Create"] = "ves.io.schema.virtual_host.crudapi.ObjectCreateReq"
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Get"] = []string{
+		"spec.gc_spec.cdn_service.cache_ttl",
+		"spec.gc_spec.cdn_service.service_domains.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.List"] = []string{
+		"items.#.spec.gc_spec.cdn_service.cache_ttl",
+		"items.#.spec.gc_spec.cdn_service.service_domains.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.ListStream"] = []string{
+		"items.#.spec.gc_spec.cdn_service.cache_ttl",
+		"items.#.spec.gc_spec.cdn_service.service_domains.#",
+	}
+
+	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.cdn_service.cache_ttl",
+		"spec.gc_spec.cdn_service.service_domains.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Replace"] = []string{
+		"spec.gc_spec.cdn_service.cache_ttl",
+		"spec.gc_spec.cdn_service.service_domains.#",
+	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.virtual_host.crudapi.API.Replace"] = "ves.io.schema.virtual_host.crudapi.ObjectReplaceReq"
 

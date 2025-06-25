@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/api_definitions/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -3426,27 +3439,27 @@ var APISwaggerJSON string = `{
             "properties": {
                 "api_inventory_exclusion_list": {
                     "type": "array",
-                    "description": " List of API Endpoints excluded from the API Inventory.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 1000,
+                    "description": " List of API Endpoints excluded from the API Inventory.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Exclusion List",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "api_inventory_inclusion_list": {
                     "type": "array",
-                    "description": " List of API Endpoints included in the API Inventory.\n Typically, discovered API endpoints are added to the API Inventory using this list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 1000,
+                    "description": " List of API Endpoints included in the API Inventory.\n Typically, discovered API endpoints are added to the API Inventory using this list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Inclusion List",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -3457,14 +3470,14 @@ var APISwaggerJSON string = `{
                 },
                 "non_api_endpoints": {
                     "type": "array",
-                    "description": " List of Non-API Endpoints.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 1000,
+                    "description": " List of Non-API Endpoints.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Discovery Exclusion List",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -3510,27 +3523,27 @@ var APISwaggerJSON string = `{
                 },
                 "api_inventory_exclusion_list": {
                     "type": "array",
-                    "description": " List of API Endpoints excluded from the API Inventory.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 1000,
+                    "description": " List of API Endpoints excluded from the API Inventory.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Exclusion List",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "api_inventory_inclusion_list": {
                     "type": "array",
-                    "description": " List of API Endpoints included in the API Inventory.\n Typically, discovered API endpoints are added to the API Inventory using this list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 1000,
+                    "description": " List of API Endpoints included in the API Inventory.\n Typically, discovered API endpoints are added to the API Inventory using this list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Inclusion List",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -3541,14 +3554,14 @@ var APISwaggerJSON string = `{
                 },
                 "non_api_endpoints": {
                     "type": "array",
-                    "description": " List of Non-API Endpoints.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 1000,
+                    "description": " List of Non-API Endpoints.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Discovery Exclusion List",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -3586,27 +3599,27 @@ var APISwaggerJSON string = `{
             "properties": {
                 "api_inventory_exclusion_list": {
                     "type": "array",
-                    "description": " List of API Endpoints excluded from the API Inventory.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 1000,
+                    "description": " List of API Endpoints excluded from the API Inventory.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Exclusion List",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "api_inventory_inclusion_list": {
                     "type": "array",
-                    "description": " List of API Endpoints included in the API Inventory.\n Typically, discovered API endpoints are added to the API Inventory using this list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 1000,
+                    "description": " List of API Endpoints included in the API Inventory.\n Typically, discovered API endpoints are added to the API Inventory using this list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Inclusion List",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -3617,14 +3630,14 @@ var APISwaggerJSON string = `{
                 },
                 "non_api_endpoints": {
                     "type": "array",
-                    "description": " List of Non-API Endpoints.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "maxItems": 1000,
+                    "description": " List of Non-API Endpoints.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Discovery Exclusion List",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1000",
+                        "ves.io.schema.rules.repeated.max_items": "5000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },

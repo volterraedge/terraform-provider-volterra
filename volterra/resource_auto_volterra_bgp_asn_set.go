@@ -272,5 +272,8 @@ func resourceVolterraBgpAsnSetDelete(d *schema.ResourceData, meta interface{}) e
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra BgpAsnSet obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_bgp_asn_set.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_bgp_asn_set.ObjectType, namespace, name, opts...)
 }

@@ -122,135 +122,6 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 										},
 									},
 
-									"cloud_edge_segment": {
-
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"cloud_edge": {
-
-													Type:     schema.TypeList,
-													MaxItems: 1,
-													Required: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
-															},
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-
-												"ip": {
-													Type:     schema.TypeString,
-													Required: true,
-												},
-
-												"ipv6": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"segment": {
-
-													Type:     schema.TypeList,
-													MaxItems: 1,
-													Required: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
-															},
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-
-									"segment": {
-
-										Type:     schema.TypeList,
-										MaxItems: 1,
-										Optional: true,
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"ipv4_vip": {
-													Type:     schema.TypeString,
-													Required: true,
-												},
-
-												"ipv6_vip": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-
-												"segment": {
-
-													Type:     schema.TypeList,
-													MaxItems: 1,
-													Required: true,
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:     schema.TypeString,
-																Computed: true,
-															},
-
-															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
-															},
-														},
-													},
-												},
-											},
-										},
-									},
-
 									"site": {
 
 										Type:     schema.TypeList,
@@ -1254,42 +1125,6 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
-															"blindfold_secret_info_internal": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"decryption_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"store_provider": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"secret_encoding_type": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -1332,66 +1167,6 @@ func resourceVolterraTcpLoadbalancer() *schema.Resource {
 																		"url": {
 																			Type:     schema.TypeString,
 																			Required: true,
-																		},
-																	},
-																},
-															},
-
-															"vault_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"key": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"location": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"provider": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"secret_encoding": {
-																			Type:       schema.TypeString,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-
-																		"version": {
-																			Type:       schema.TypeInt,
-																			Optional:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
-																		},
-																	},
-																},
-															},
-
-															"wingman_secret_info": {
-
-																Type:       schema.TypeList,
-																MaxItems:   1,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-																Elem: &schema.Resource{
-																	Schema: map[string]*schema.Schema{
-
-																		"name": {
-																			Type:       schema.TypeString,
-																			Required:   true,
-																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1878,7 +1653,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 	advertiseChoiceTypeFound := false
 
-	if v, ok := d.GetOk("advertise_custom"); ok && !advertiseChoiceTypeFound {
+	if v, ok := d.GetOk("advertise_custom"); ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
 
 		advertiseChoiceTypeFound = true
 		advertiseChoiceInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_AdvertiseCustom{}
@@ -2229,6 +2004,87 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 							}
 
+							if v, ok := advertiseWhereMapStrToI["virtual_site_segment"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.WhereType_VirtualSiteSegment{}
+								choiceInt.VirtualSiteSegment = &ves_io_schema_views.WhereVirtualSiteSegment{}
+								advertiseWhere[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+											choiceInt.VirtualSiteSegment.Ip = v.(string)
+
+										}
+
+										if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+											choiceInt.VirtualSiteSegment.Ipv6 = v.(string)
+
+										}
+
+										if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											segment := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.VirtualSiteSegment.Segment = segment
+											for _, set := range sl {
+												if set != nil {
+													segmentMapStrToI := set.(map[string]interface{})
+
+													if w, ok := segmentMapStrToI["name"]; ok && !isIntfNil(w) {
+														segment.Name = w.(string)
+													}
+
+													if w, ok := segmentMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														segment.Namespace = w.(string)
+													}
+
+													if w, ok := segmentMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														segment.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											virtualSite := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.VirtualSiteSegment.VirtualSite = virtualSite
+											for _, set := range sl {
+												if set != nil {
+													virtualSiteMapStrToI := set.(map[string]interface{})
+
+													if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
+														virtualSite.Name = w.(string)
+													}
+
+													if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														virtualSite.Namespace = w.(string)
+													}
+
+													if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														virtualSite.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
 							if v, ok := advertiseWhereMapStrToI["virtual_site_with_vip"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 								choiceTypeFound = true
@@ -2425,7 +2281,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("advertise_on_public"); ok && !advertiseChoiceTypeFound {
+	if v, ok := d.GetOk("advertise_on_public"); ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
 
 		advertiseChoiceTypeFound = true
 		advertiseChoiceInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_AdvertiseOnPublic{}
@@ -2533,7 +2389,12 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field domains")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		createSpec.Domains = ls
 
@@ -2615,7 +2476,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("tls_tcp"); ok && !loadbalancerTypeTypeFound {
+	if v, ok := d.GetOk("tls_tcp"); ok && !isIntfNil(v) && !loadbalancerTypeTypeFound {
 
 		loadbalancerTypeTypeFound = true
 		loadbalancerTypeInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_TlsTcp{}
@@ -2826,6 +2687,9 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+															}
 															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 														}
 														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -2869,7 +2733,12 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -3109,6 +2978,9 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+															}
 															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 														}
 														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -3161,6 +3033,9 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+															}
 															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
 														}
 														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
@@ -3172,7 +3047,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
@@ -3181,7 +3056,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
@@ -3198,38 +3073,6 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 											for _, set := range sl {
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
-
-													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															if set != nil {
-																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.Location = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
 
 													secretInfoOneofTypeFound := false
 
@@ -3297,76 +3140,6 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 													}
 
-													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																}
-
-																if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																}
-
-																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																}
-
-																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																}
-
-																if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
 												}
 											}
 
@@ -3404,7 +3177,12 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -3478,7 +3256,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("tls_tcp_auto_cert"); ok && !loadbalancerTypeTypeFound {
+	if v, ok := d.GetOk("tls_tcp_auto_cert"); ok && !isIntfNil(v) && !loadbalancerTypeTypeFound {
 
 		loadbalancerTypeTypeFound = true
 		loadbalancerTypeInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_TlsTcpAutoCert{}
@@ -3649,6 +3427,9 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 											xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 											for _, j := range v.([]interface{}) {
+												if j == nil {
+													return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+												}
 												xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 											}
 											xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -3692,7 +3473,12 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -3869,7 +3655,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 	portChoiceTypeFound := false
 
-	if v, ok := d.GetOk("listen_port"); ok && !portChoiceTypeFound {
+	if v, ok := d.GetOk("listen_port"); ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 		portChoiceTypeFound = true
 		portChoiceInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_ListenPort{}
@@ -3880,7 +3666,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("port_ranges"); ok && !portChoiceTypeFound {
+	if v, ok := d.GetOk("port_ranges"); ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 		portChoiceTypeFound = true
 		portChoiceInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_PortRanges{}
@@ -3895,7 +3681,7 @@ func resourceVolterraTcpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 	servicePolicyChoiceTypeFound := false
 
-	if v, ok := d.GetOk("active_service_policies"); ok && !servicePolicyChoiceTypeFound {
+	if v, ok := d.GetOk("active_service_policies"); ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
 
 		servicePolicyChoiceTypeFound = true
 		servicePolicyChoiceInt := &ves_io_schema_views_tcp_loadbalancer.CreateSpecType_ActiveServicePolicies{}
@@ -4108,7 +3894,7 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 	advertiseChoiceTypeFound := false
 
-	if v, ok := d.GetOk("advertise_custom"); ok && !advertiseChoiceTypeFound {
+	if v, ok := d.GetOk("advertise_custom"); ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
 
 		advertiseChoiceTypeFound = true
 		advertiseChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_AdvertiseCustom{}
@@ -4459,6 +4245,87 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 							}
 
+							if v, ok := advertiseWhereMapStrToI["virtual_site_segment"]; ok && !isIntfNil(v) && !choiceTypeFound {
+
+								choiceTypeFound = true
+								choiceInt := &ves_io_schema_views.WhereType_VirtualSiteSegment{}
+								choiceInt.VirtualSiteSegment = &ves_io_schema_views.WhereVirtualSiteSegment{}
+								advertiseWhere[i].Choice = choiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["ip"]; ok && !isIntfNil(v) {
+
+											choiceInt.VirtualSiteSegment.Ip = v.(string)
+
+										}
+
+										if v, ok := cs["ipv6"]; ok && !isIntfNil(v) {
+
+											choiceInt.VirtualSiteSegment.Ipv6 = v.(string)
+
+										}
+
+										if v, ok := cs["segment"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											segment := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.VirtualSiteSegment.Segment = segment
+											for _, set := range sl {
+												if set != nil {
+													segmentMapStrToI := set.(map[string]interface{})
+
+													if w, ok := segmentMapStrToI["name"]; ok && !isIntfNil(w) {
+														segment.Name = w.(string)
+													}
+
+													if w, ok := segmentMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														segment.Namespace = w.(string)
+													}
+
+													if w, ok := segmentMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														segment.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["virtual_site"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											virtualSite := &ves_io_schema_views.ObjectRefType{}
+											choiceInt.VirtualSiteSegment.VirtualSite = virtualSite
+											for _, set := range sl {
+												if set != nil {
+													virtualSiteMapStrToI := set.(map[string]interface{})
+
+													if w, ok := virtualSiteMapStrToI["name"]; ok && !isIntfNil(w) {
+														virtualSite.Name = w.(string)
+													}
+
+													if w, ok := virtualSiteMapStrToI["namespace"]; ok && !isIntfNil(w) {
+														virtualSite.Namespace = w.(string)
+													}
+
+													if w, ok := virtualSiteMapStrToI["tenant"]; ok && !isIntfNil(w) {
+														virtualSite.Tenant = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
 							if v, ok := advertiseWhereMapStrToI["virtual_site_with_vip"]; ok && !isIntfNil(v) && !choiceTypeFound {
 
 								choiceTypeFound = true
@@ -4655,7 +4522,7 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("advertise_on_public"); ok && !advertiseChoiceTypeFound {
+	if v, ok := d.GetOk("advertise_on_public"); ok && !isIntfNil(v) && !advertiseChoiceTypeFound {
 
 		advertiseChoiceTypeFound = true
 		advertiseChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_AdvertiseOnPublic{}
@@ -4759,7 +4626,12 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field domains")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		updateSpec.Domains = ls
 
@@ -4836,7 +4708,7 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("tls_tcp"); ok && !loadbalancerTypeTypeFound {
+	if v, ok := d.GetOk("tls_tcp"); ok && !isIntfNil(v) && !loadbalancerTypeTypeFound {
 
 		loadbalancerTypeTypeFound = true
 		loadbalancerTypeInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_TlsTcp{}
@@ -5047,6 +4919,9 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+															}
 															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 														}
 														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -5090,7 +4965,12 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -5330,6 +5210,9 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 														xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+															}
 															xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 														}
 														xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -5382,6 +5265,9 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 														hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
 														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+															}
 															hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
 														}
 														ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
@@ -5393,7 +5279,7 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
@@ -5402,7 +5288,7 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 										}
 
-										if _, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !ocspStaplingChoiceTypeFound {
+										if v, ok := tlsCertificatesMapStrToI["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
 
 											ocspStaplingChoiceTypeFound = true
 											ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
@@ -5419,38 +5305,6 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 											for _, set := range sl {
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
-
-													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
-
-														sl := v.([]interface{})
-														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
-														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
-														for _, set := range sl {
-															if set != nil {
-																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.Location = w.(string)
-																}
-
-																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
-																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
-
-														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-													}
 
 													secretInfoOneofTypeFound := false
 
@@ -5518,76 +5372,6 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 													}
 
-													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
-														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["key"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
-
-																}
-
-																if v, ok := cs["location"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
-
-																}
-
-																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
-
-																}
-
-																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
-
-																}
-
-																if v, ok := cs["version"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
-
-																}
-
-															}
-														}
-
-													}
-
-													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
-
-														secretInfoOneofTypeFound = true
-														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
-														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
-														privateKey.SecretInfoOneof = secretInfoOneofInt
-
-														sl := v.([]interface{})
-														for _, set := range sl {
-															if set != nil {
-																cs := set.(map[string]interface{})
-
-																if v, ok := cs["name"]; ok && !isIntfNil(v) {
-
-																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
-
-																}
-
-															}
-														}
-
-													}
-
 												}
 											}
 
@@ -5625,7 +5409,12 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -5699,7 +5488,7 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("tls_tcp_auto_cert"); ok && !loadbalancerTypeTypeFound {
+	if v, ok := d.GetOk("tls_tcp_auto_cert"); ok && !isIntfNil(v) && !loadbalancerTypeTypeFound {
 
 		loadbalancerTypeTypeFound = true
 		loadbalancerTypeInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_TlsTcpAutoCert{}
@@ -5870,6 +5659,9 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 											xfcc_header_elementsList := []ves_io_schema.XfccElement{}
 											for _, j := range v.([]interface{}) {
+												if j == nil {
+													return fmt.Errorf("please provide valid non-empty enum value of field xfcc_header_elements")
+												}
 												xfcc_header_elementsList = append(xfcc_header_elementsList, ves_io_schema.XfccElement(ves_io_schema.XfccElement_value[j.(string)]))
 											}
 											xfccHeaderInt.XfccOptions.XfccHeaderElements = xfcc_header_elementsList
@@ -5913,7 +5705,12 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 											ls := make([]string, len(v.([]interface{})))
 											for i, v := range v.([]interface{}) {
-												ls[i] = v.(string)
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field cipher_suites")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
 											}
 											choiceInt.CustomSecurity.CipherSuites = ls
 
@@ -5978,32 +5775,6 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 				}
 
 			}
-		}
-
-	}
-
-	if v, ok := d.GetOk("origin_pools"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		originPoolsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
-		updateSpec.OriginPools = originPoolsInt
-		for i, ps := range sl {
-
-			opMapToStrVal := ps.(map[string]interface{})
-			originPoolsInt[i] = &ves_io_schema_views.ObjectRefType{}
-
-			if v, ok := opMapToStrVal["name"]; ok && !isIntfNil(v) {
-				originPoolsInt[i].Name = v.(string)
-			}
-
-			if v, ok := opMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				originPoolsInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := opMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				originPoolsInt[i].Tenant = v.(string)
-			}
-
 		}
 
 	}
@@ -6113,7 +5884,7 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 	portChoiceTypeFound := false
 
-	if v, ok := d.GetOk("listen_port"); ok && !portChoiceTypeFound {
+	if v, ok := d.GetOk("listen_port"); ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 		portChoiceTypeFound = true
 		portChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_ListenPort{}
@@ -6124,7 +5895,7 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
-	if v, ok := d.GetOk("port_ranges"); ok && !portChoiceTypeFound {
+	if v, ok := d.GetOk("port_ranges"); ok && !isIntfNil(v) && !portChoiceTypeFound {
 
 		portChoiceTypeFound = true
 		portChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_PortRanges{}
@@ -6137,7 +5908,7 @@ func resourceVolterraTcpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 	servicePolicyChoiceTypeFound := false
 
-	if v, ok := d.GetOk("active_service_policies"); ok && !servicePolicyChoiceTypeFound {
+	if v, ok := d.GetOk("active_service_policies"); ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
 
 		servicePolicyChoiceTypeFound = true
 		servicePolicyChoiceInt := &ves_io_schema_views_tcp_loadbalancer.ReplaceSpecType_ActiveServicePolicies{}
@@ -6268,5 +6039,8 @@ func resourceVolterraTcpLoadbalancerDelete(d *schema.ResourceData, meta interfac
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra TcpLoadbalancer obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_views_tcp_loadbalancer.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_views_tcp_loadbalancer.ObjectType, namespace, name, opts...)
 }

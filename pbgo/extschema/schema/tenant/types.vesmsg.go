@@ -953,6 +953,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["spoke_vpc_manual_attachment"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("spoke_vpc_manual_attachment"))
+		if err := fv(ctx, m.GetSpokeVpcManualAttachment(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["state"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("state"))

@@ -44,11 +44,7 @@ Argument Reference
 
 `ipv4_prefixes` - (Optional) list of IPv4 prefixes with description.. See [Ipv4 Prefixes ](#ipv4-prefixes) below for details.
 
-`ipv6_prefix` - (Optional) An unordered list of IPv6 prefixes. (`List of String`).(Deprecated)
-
 `ipv6_prefixes` - (Optional) list of IPv6 prefixes with description.. See [Ipv6 Prefixes ](#ipv6-prefixes) below for details.
-
-`prefix` - (Optional) An unordered list of IPv4 prefixes. (`List of String`).(Deprecated)
 
 ### Ipv4 Prefixes
 

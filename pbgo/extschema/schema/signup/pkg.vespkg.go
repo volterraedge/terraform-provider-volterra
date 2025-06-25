@@ -20,6 +20,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 
 	vr["ves.io.schema.signup.CreateV2Request"] = CreateV2RequestValidator()
 	vr["ves.io.schema.signup.CreateV2Response"] = CreateV2ResponseValidator()
+	vr["ves.io.schema.signup.TenantMetadata"] = TenantMetadataValidator()
 
 	vr["ves.io.schema.signup.CityItem"] = CityItemValidator()
 	vr["ves.io.schema.signup.CountryItem"] = CountryItemValidator()

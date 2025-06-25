@@ -177,6 +177,9 @@ func resourceVolterraSensitiveDataPolicyCreate(d *schema.ResourceData, meta inte
 
 		compliancesList := []ves_io_schema_data_type.Compliance{}
 		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field compliances")
+			}
 			compliancesList = append(compliancesList, ves_io_schema_data_type.Compliance(ves_io_schema_data_type.Compliance_value[j.(string)]))
 		}
 		createSpec.Compliances = compliancesList
@@ -228,7 +231,12 @@ func resourceVolterraSensitiveDataPolicyCreate(d *schema.ResourceData, meta inte
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field disabled_predefined_data_types")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		createSpec.DisabledPredefinedDataTypes = ls
 
@@ -337,6 +345,9 @@ func resourceVolterraSensitiveDataPolicyUpdate(d *schema.ResourceData, meta inte
 
 		compliancesList := []ves_io_schema_data_type.Compliance{}
 		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field compliances")
+			}
 			compliancesList = append(compliancesList, ves_io_schema_data_type.Compliance(ves_io_schema_data_type.Compliance_value[j.(string)]))
 		}
 		updateSpec.Compliances = compliancesList
@@ -386,7 +397,12 @@ func resourceVolterraSensitiveDataPolicyUpdate(d *schema.ResourceData, meta inte
 
 		ls := make([]string, len(v.([]interface{})))
 		for i, v := range v.([]interface{}) {
-			ls[i] = v.(string)
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field disabled_predefined_data_types")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
 		}
 		updateSpec.DisabledPredefinedDataTypes = ls
 
@@ -418,5 +434,8 @@ func resourceVolterraSensitiveDataPolicyDelete(d *schema.ResourceData, meta inte
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra SensitiveDataPolicy obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_sensitive_data_policy.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_sensitive_data_policy.ObjectType, namespace, name, opts...)
 }

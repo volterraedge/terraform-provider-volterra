@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/dns_zones/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -4898,8 +4911,8 @@ var APISwaggerJSON string = `{
             "description": "TSIG key value must be compatible with the specified algorithm\n\n - UNDEFINED: UNDEFINED\n\n - HMAC_MD5: HMAC_MD5\n\n - HMAC_SHA1: HMAC_SHA1\n\n - HMAC_SHA224: HMAC_SHA224\n\n - HMAC_SHA256: HMAC_SHA256\n\n - HMAC_SHA384: HMAC_SHA384\n\n - HMAC_SHA512: HMAC_SHA512\n",
             "title": "TSIG Key Algorithm",
             "enum": [
-                "UNDEFINED",
                 "HMAC_MD5",
+                "UNDEFINED",
                 "HMAC_SHA1",
                 "HMAC_SHA224",
                 "HMAC_SHA256",

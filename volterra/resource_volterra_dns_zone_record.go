@@ -14,10 +14,10 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"gopkg.volterra.us/stdlib/codec"
 	ves_io_schema_dns_zone "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone"
 	ves_io_schema_dns_zone_rrset "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/rrset"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-	"gopkg.volterra.us/stdlib/codec"
 )
 
 const (
@@ -1379,7 +1379,6 @@ func resourceVolterraSetRRSETRecordCreate(d *schema.ResourceData, meta interface
 							}
 
 						}
-
 					}
 
 				}
@@ -2396,7 +2395,7 @@ func resourceVolterraSetRRSETRecordRead(d *schema.ResourceData, meta interface{}
 
 			if v, ok := RrSetGroupMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = append(types, "LB")
+				types = append(types, "DNSLB")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})
@@ -2583,7 +2582,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 
 						typeRecordSetInt.ARecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
-
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -2617,6 +2617,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.AaaaRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -2650,6 +2652,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.AfsdbRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -2696,6 +2700,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.AliasRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["value"]; ok && !isIntfNil(v) {
@@ -2725,6 +2731,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.CaaRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -2773,6 +2781,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.CdsRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -2884,6 +2894,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.CertRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -2969,6 +2981,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.DlvRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3080,6 +3094,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.DsRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3191,6 +3207,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.Eui48Record.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["value"]; ok && !isIntfNil(v) {
@@ -3220,6 +3238,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.Eui64Record.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["value"]; ok && !isIntfNil(v) {
@@ -3238,7 +3258,7 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 				typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_LbRecord{}
 				typeRecordSetInt.LbRecord = &ves_io_schema_dns_zone.DNSLBResourceRecord{}
 				RrSetGroup.TypeRecordSet = typeRecordSetInt
-				types = append(types, "LB")
+				types = append(types, "DNSLB")
 
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
@@ -3249,6 +3269,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.LbRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["value"]; ok && !isIntfNil(v) {
@@ -3294,6 +3316,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.LocRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3382,6 +3406,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.MxRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3426,6 +3452,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.NaptrRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3486,6 +3514,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.NsRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3519,6 +3549,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.PtrRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3604,6 +3636,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.SshfpRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3700,6 +3734,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.TlsaRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3758,6 +3794,8 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 						typeRecordSetInt.TxtRecord.Name = v.(string)
 						recordName = append(recordName, v.(string))
 
+					} else {
+						recordName = append(recordName, "")
 					}
 
 					if v, ok := cs["values"]; ok && !isIntfNil(v) {
@@ -3963,7 +4001,7 @@ func resourceVolterraSetRRSETRecordDelete(d *schema.ResourceData, meta interface
 
 			if v, ok := RrSetGroupMapStrToI["lb_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
 				typeRecordSetTypeFound = true
-				types = append(types, "LB")
+				types = append(types, "DNSLB")
 				sl := v.(*schema.Set).List()
 				for _, set := range sl {
 					cs := set.(map[string]interface{})

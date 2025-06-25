@@ -107,6 +107,22 @@ func (v *ValidateGlobalSpecType) AddonServicesSubscribedValidationRuleHandler(ru
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) OriginValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.SignupOrigin)
+		return int32(i)
+	}
+	// ves_io_schema.SignupOrigin_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, ves_io_schema.SignupOrigin_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for origin")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -138,10 +154,28 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["origin"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("origin"))
+		if err := fv(ctx, m.GetOrigin(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["plan_type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("plan_type"))
 		if err := fv(ctx, m.GetPlanType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tenant_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tenant_type"))
+		if err := fv(ctx, m.GetTenantType(), vOpts...); err != nil {
 			return err
 		}
 
@@ -172,6 +206,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["addon_services_subscribed"] = vFn
+
+	vrhOrigin := v.OriginValidationRuleHandler
+	rulesOrigin := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhOrigin(rulesOrigin)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.origin: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["origin"] = vFn
 
 	v.FldValidators["crm_info"] = ves_io_schema.CRMInfoValidator().Validate
 

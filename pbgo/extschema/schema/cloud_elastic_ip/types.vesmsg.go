@@ -854,6 +854,24 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["finalizer_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("finalizer_timestamp"))
+		if err := fv(ctx, m.GetFinalizerTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["force_delete"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("force_delete"))
+		if err := fv(ctx, m.GetForceDelete(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_ref"]; exists {
 		vOpts := append(opts, db.WithValidateField("site_ref"))
 		if err := fv(ctx, m.GetSiteRef(), vOpts...); err != nil {
@@ -1079,6 +1097,24 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("count"))
 		if err := fv(ctx, m.GetCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["finalizer_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("finalizer_timestamp"))
+		if err := fv(ctx, m.GetFinalizerTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["force_delete"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("force_delete"))
+		if err := fv(ctx, m.GetForceDelete(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1443,6 +1479,8 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.Count = f.GetCount()
+	m.FinalizerTimestamp = f.GetFinalizerTimestamp()
+	m.ForceDelete = f.GetForceDelete()
 	m.SiteRef = f.GetSiteRef()
 }
 
@@ -1462,6 +1500,8 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.Count = m1.Count
+	f.FinalizerTimestamp = m1.FinalizerTimestamp
+	f.ForceDelete = m1.ForceDelete
 	f.SiteRef = m1.SiteRef
 }
 

@@ -272,6 +272,17 @@ func (v *ValidateCreateObjectRequest) Validate(ctx context.Context, pm interface
 				return err
 			}
 		}
+	case *CreateObjectRequest_MobileAppShield:
+		if fv, exists := v.FldValidators["object_attributes.mobile_app_shield"]; exists {
+			val := m.GetObjectAttributes().(*CreateObjectRequest_MobileAppShield).MobileAppShield
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_app_shield"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -301,7 +312,7 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 
 	vrhContentsStringValue := v.ContentsStringValueValidationRuleHandler
 	rulesContentsStringValue := map[string]string{
-		"ves.io.schema.rules.string.max_len": "2097152",
+		"ves.io.schema.rules.string.max_len": "5242880",
 	}
 	vFnMap["contents.string_value"], err = vrhContentsStringValue(rulesContentsStringValue)
 	if err != nil {
@@ -310,7 +321,7 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 	}
 	vrhContentsBytesValue := v.ContentsBytesValueValidationRuleHandler
 	rulesContentsBytesValue := map[string]string{
-		"ves.io.schema.rules.bytes.max_len": "2097152",
+		"ves.io.schema.rules.bytes.max_len": "5242880",
 	}
 	vFnMap["contents.bytes_value"], err = vrhContentsBytesValue(rulesContentsBytesValue)
 	if err != nil {
@@ -335,7 +346,7 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\", \"mobile-app-shield\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -382,6 +393,7 @@ var DefaultCreateObjectRequestValidator = func() *ValidateCreateObjectRequest {
 
 	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
 	v.FldValidators["object_attributes.mobile_integrator"] = MobileIntegratorAttributesValidator().Validate
+	v.FldValidators["object_attributes.mobile_app_shield"] = MobileAppShieldAttributesValidator().Validate
 
 	return v
 }()
@@ -674,7 +686,7 @@ var DefaultDeleteObjectRequestValidator = func() *ValidateDeleteObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\", \"mobile-app-shield\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -956,7 +968,7 @@ var DefaultGetObjectRequestValidator = func() *ValidateGetObjectRequest {
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\"]",
+		"ves.io.schema.rules.string.in":        "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\", \"mobile-app-shield\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -1139,7 +1151,7 @@ var DefaultGetObjectResponseValidator = func() *ValidateGetObjectResponse {
 
 	vrhContentsStringValue := v.ContentsStringValueValidationRuleHandler
 	rulesContentsStringValue := map[string]string{
-		"ves.io.schema.rules.string.max_len": "2097152",
+		"ves.io.schema.rules.string.max_len": "5242880",
 	}
 	vFnMap["contents.string_value"], err = vrhContentsStringValue(rulesContentsStringValue)
 	if err != nil {
@@ -1148,7 +1160,7 @@ var DefaultGetObjectResponseValidator = func() *ValidateGetObjectResponse {
 	}
 	vrhContentsBytesValue := v.ContentsBytesValueValidationRuleHandler
 	rulesContentsBytesValue := map[string]string{
-		"ves.io.schema.rules.bytes.max_len": "2097152",
+		"ves.io.schema.rules.bytes.max_len": "5242880",
 	}
 	vFnMap["contents.bytes_value"], err = vrhContentsBytesValue(rulesContentsBytesValue)
 	if err != nil {
@@ -1266,6 +1278,17 @@ func (v *ValidateListItemDescriptor) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
+	case *ListItemDescriptor_MobileAppShield:
+		if fv, exists := v.FldValidators["object_attributes.mobile_app_shield"]; exists {
+			val := m.GetObjectAttributes().(*ListItemDescriptor_MobileAppShield).MobileAppShield
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_app_shield"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1299,6 +1322,7 @@ var DefaultListItemDescriptorValidator = func() *ValidateListItemDescriptor {
 
 	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
 	v.FldValidators["object_attributes.mobile_integrator"] = MobileIntegratorAttributesValidator().Validate
+	v.FldValidators["object_attributes.mobile_app_shield"] = MobileAppShieldAttributesValidator().Validate
 
 	v.FldValidators["versions"] = VersionDescriptorValidator().Validate
 
@@ -1467,7 +1491,7 @@ var DefaultListObjectsRequestValidator = func() *ValidateListObjectsRequest {
 
 	vrhObjectType := v.ObjectTypeValidationRuleHandler
 	rulesObjectType := map[string]string{
-		"ves.io.schema.rules.string.in": "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\"]",
+		"ves.io.schema.rules.string.in": "[\"swagger\", \"generic\", \"big-object\", \"mobile-sdk\", \"mobile-integrator\", \"mobile-app-shield\"]",
 	}
 	vFn, err = vrhObjectType(rulesObjectType)
 	if err != nil {
@@ -1576,6 +1600,151 @@ var DefaultListObjectsResponseValidator = func() *ValidateListObjectsResponse {
 
 func ListObjectsResponseValidator() db.Validator {
 	return DefaultListObjectsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MobileAppShieldAttributes) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MobileAppShieldAttributes) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MobileAppShieldAttributes) DeepCopy() *MobileAppShieldAttributes {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MobileAppShieldAttributes{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MobileAppShieldAttributes) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MobileAppShieldAttributes) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MobileAppShieldAttributesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMobileAppShieldAttributes struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMobileAppShieldAttributes) OsTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(OSType)
+		return int32(i)
+	}
+	// OSType_name is generated in .pb.go
+	validatorFn, err := db.NewEnumValidationRuleHandler(rules, OSType_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for os_type")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMobileAppShieldAttributes) ReleaseVersionValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for release_version")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateMobileAppShieldAttributes) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MobileAppShieldAttributes)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MobileAppShieldAttributes got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["os_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("os_type"))
+		if err := fv(ctx, m.GetOsType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["release_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("release_version"))
+		if err := fv(ctx, m.GetReleaseVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMobileAppShieldAttributesValidator = func() *ValidateMobileAppShieldAttributes {
+	v := &ValidateMobileAppShieldAttributes{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhOsType := v.OsTypeValidationRuleHandler
+	rulesOsType := map[string]string{
+		"ves.io.schema.rules.enum.defined_only": "true",
+		"ves.io.schema.rules.message.required":  "true",
+	}
+	vFn, err = vrhOsType(rulesOsType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MobileAppShieldAttributes.os_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["os_type"] = vFn
+
+	vrhReleaseVersion := v.ReleaseVersionValidationRuleHandler
+	rulesReleaseVersion := map[string]string{
+		"ves.io.schema.rules.string.max_len":   "32",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFn, err = vrhReleaseVersion(rulesReleaseVersion)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for MobileAppShieldAttributes.release_version: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["release_version"] = vFn
+
+	return v
+}()
+
+func MobileAppShieldAttributesValidator() db.Validator {
+	return DefaultMobileAppShieldAttributesValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2217,6 +2386,17 @@ func (v *ValidateStoredObjectDescriptor) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *StoredObjectDescriptor_MobileAppShield:
+		if fv, exists := v.FldValidators["object_attributes.mobile_app_shield"]; exists {
+			val := m.GetObjectAttributes().(*StoredObjectDescriptor_MobileAppShield).MobileAppShield
+			vOpts := append(opts,
+				db.WithValidateField("object_attributes"),
+				db.WithValidateField("mobile_app_shield"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2321,6 +2501,7 @@ var DefaultStoredObjectDescriptorValidator = func() *ValidateStoredObjectDescrip
 
 	v.FldValidators["object_attributes.mobile_sdk"] = MobileSDKAttributesValidator().Validate
 	v.FldValidators["object_attributes.mobile_integrator"] = MobileIntegratorAttributesValidator().Validate
+	v.FldValidators["object_attributes.mobile_app_shield"] = MobileAppShieldAttributesValidator().Validate
 
 	return v
 }()

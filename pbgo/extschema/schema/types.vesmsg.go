@@ -7032,6 +7032,215 @@ func CookieManipulationOptionTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *CookieValueOption) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *CookieValueOption) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *CookieValueOption) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetSecretValue().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting CookieValueOption.secret_value")
+	}
+
+	return nil
+}
+
+func (m *CookieValueOption) DeepCopy() *CookieValueOption {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &CookieValueOption{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *CookieValueOption) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *CookieValueOption) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return CookieValueOptionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateCookieValueOption struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateCookieValueOption) ValueChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for value_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateCookieValueOption) ValueChoiceValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Value, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
+	}
+	return oValidatorFn_Value, nil
+}
+
+func (v *ValidateCookieValueOption) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCookieValueOption) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*CookieValueOption)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *CookieValueOption got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["overwrite"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("overwrite"))
+		if err := fv(ctx, m.GetOverwrite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value_choice"]; exists {
+		val := m.GetValueChoice()
+		vOpts := append(opts,
+			db.WithValidateField("value_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetValueChoice().(type) {
+	case *CookieValueOption_Value:
+		if fv, exists := v.FldValidators["value_choice.value"]; exists {
+			val := m.GetValueChoice().(*CookieValueOption_Value).Value
+			vOpts := append(opts,
+				db.WithValidateField("value_choice"),
+				db.WithValidateField("value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CookieValueOption_SecretValue:
+		if fv, exists := v.FldValidators["value_choice.secret_value"]; exists {
+			val := m.GetValueChoice().(*CookieValueOption_SecretValue).SecretValue
+			vOpts := append(opts,
+				db.WithValidateField("value_choice"),
+				db.WithValidateField("secret_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultCookieValueOptionValidator = func() *ValidateCookieValueOption {
+	v := &ValidateCookieValueOption{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhValueChoice := v.ValueChoiceValidationRuleHandler
+	rulesValueChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhValueChoice(rulesValueChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CookieValueOption.value_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["value_choice"] = vFn
+
+	vrhValueChoiceValue := v.ValueChoiceValueValidationRuleHandler
+	rulesValueChoiceValue := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["value_choice.value"], err = vrhValueChoiceValue(rulesValueChoiceValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CookieValueOption.value_choice_value: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["value_choice.value"] = vFnMap["value_choice.value"]
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.string.cookie_name": "true",
+		"ves.io.schema.rules.string.max_len":     "256",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CookieValueOption.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	v.FldValidators["value_choice.secret_value"] = SecretTypeValidator().Validate
+
+	return v
+}()
+
+func CookieValueOptionValidator() db.Validator {
+	return DefaultCookieValueOptionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CorsPolicy) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -9606,6 +9815,284 @@ var DefaultHostIdentifierValidator = func() *ValidateHostIdentifier {
 
 func HostIdentifierValidator() db.Validator {
 	return DefaultHostIdentifierValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPv4AddressRange) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPv4AddressRange) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPv4AddressRange) DeepCopy() *IPv4AddressRange {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPv4AddressRange{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPv4AddressRange) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPv4AddressRange) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPv4AddressRangeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIPv4AddressRange struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPv4AddressRange) StartIpv4AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_ipv4_address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIPv4AddressRange) EndIpv4AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_ipv4_address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIPv4AddressRange) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPv4AddressRange)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPv4AddressRange got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["end_ipv4_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_ipv4_address"))
+		if err := fv(ctx, m.GetEndIpv4Address(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_ipv4_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_ipv4_address"))
+		if err := fv(ctx, m.GetStartIpv4Address(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPv4AddressRangeValidator = func() *ValidateIPv4AddressRange {
+	v := &ValidateIPv4AddressRange{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartIpv4Address := v.StartIpv4AddressValidationRuleHandler
+	rulesStartIpv4Address := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
+	}
+	vFn, err = vrhStartIpv4Address(rulesStartIpv4Address)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPv4AddressRange.start_ipv4_address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_ipv4_address"] = vFn
+
+	vrhEndIpv4Address := v.EndIpv4AddressValidationRuleHandler
+	rulesEndIpv4Address := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv4":      "true",
+	}
+	vFn, err = vrhEndIpv4Address(rulesEndIpv4Address)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPv4AddressRange.end_ipv4_address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_ipv4_address"] = vFn
+
+	return v
+}()
+
+func IPv4AddressRangeValidator() db.Validator {
+	return DefaultIPv4AddressRangeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPv6AddressRange) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPv6AddressRange) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPv6AddressRange) DeepCopy() *IPv6AddressRange {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPv6AddressRange{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPv6AddressRange) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPv6AddressRange) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPv6AddressRangeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateIPv6AddressRange struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPv6AddressRange) StartIpv6AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for start_ipv6_address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIPv6AddressRange) EndIpv6AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for end_ipv6_address")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIPv6AddressRange) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPv6AddressRange)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPv6AddressRange got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["end_ipv6_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("end_ipv6_address"))
+		if err := fv(ctx, m.GetEndIpv6Address(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["start_ipv6_address"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("start_ipv6_address"))
+		if err := fv(ctx, m.GetStartIpv6Address(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPv6AddressRangeValidator = func() *ValidateIPv6AddressRange {
+	v := &ValidateIPv6AddressRange{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStartIpv6Address := v.StartIpv6AddressValidationRuleHandler
+	rulesStartIpv6Address := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv6":      "true",
+	}
+	vFn, err = vrhStartIpv6Address(rulesStartIpv6Address)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPv6AddressRange.start_ipv6_address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["start_ipv6_address"] = vFn
+
+	vrhEndIpv6Address := v.EndIpv6AddressValidationRuleHandler
+	rulesEndIpv6Address := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.ipv6":      "true",
+	}
+	vFn, err = vrhEndIpv6Address(rulesEndIpv6Address)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPv6AddressRange.end_ipv6_address: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["end_ipv6_address"] = vFn
+
+	return v
+}()
+
+func IPv6AddressRangeValidator() db.Validator {
+	return DefaultIPv6AddressRangeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -12545,6 +13032,388 @@ var DefaultNextHopTypeValidator = func() *ValidateNextHopType {
 
 func NextHopTypeValidator() db.Validator {
 	return DefaultNextHopTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NodeInterfaceInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NodeInterfaceInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NodeInterfaceInfo) DeepCopy() *NodeInterfaceInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NodeInterfaceInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NodeInterfaceInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NodeInterfaceInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NodeInterfaceInfoValidator().Validate(ctx, m, opts...)
+}
+
+func (m *NodeInterfaceInfo) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetInterfaceDRefInfo()
+
+}
+
+func (m *NodeInterfaceInfo) GetInterfaceDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetInterface()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("NodeInterfaceInfo.interface[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "network_interface.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "interface",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetInterfaceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *NodeInterfaceInfo) GetInterfaceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "network_interface.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: network_interface")
+	}
+	for _, ref := range m.GetInterface() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateNodeInterfaceInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNodeInterfaceInfo) InterfaceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for interface")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for interface")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated interface")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items interface")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNodeInterfaceInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NodeInterfaceInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NodeInterfaceInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["interface"]; exists {
+		vOpts := append(opts, db.WithValidateField("interface"))
+		if err := fv(ctx, m.GetInterface(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["node"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node"))
+		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNodeInterfaceInfoValidator = func() *ValidateNodeInterfaceInfo {
+	v := &ValidateNodeInterfaceInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhInterface := v.InterfaceValidationRuleHandler
+	rulesInterface := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhInterface(rulesInterface)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NodeInterfaceInfo.interface: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["interface"] = vFn
+
+	return v
+}()
+
+func NodeInterfaceInfoValidator() db.Validator {
+	return DefaultNodeInterfaceInfoValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NodeInterfaceType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NodeInterfaceType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NodeInterfaceType) DeepCopy() *NodeInterfaceType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NodeInterfaceType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NodeInterfaceType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NodeInterfaceType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NodeInterfaceTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *NodeInterfaceType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetListDRefInfo()
+
+}
+
+// GetDRefInfo for the field's type
+func (m *NodeInterfaceType) GetListDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetList() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetList() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetList() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("list[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
+type ValidateNodeInterfaceType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNodeInterfaceType) ListValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for list")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*NodeInterfaceInfo, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := NodeInterfaceInfoValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for list")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*NodeInterfaceInfo)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*NodeInterfaceInfo, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated list")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items list")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNodeInterfaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NodeInterfaceType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NodeInterfaceType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["list"]; exists {
+		vOpts := append(opts, db.WithValidateField("list"))
+		if err := fv(ctx, m.GetList(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNodeInterfaceTypeValidator = func() *ValidateNodeInterfaceType {
+	v := &ValidateNodeInterfaceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhList := v.ListValidationRuleHandler
+	rulesList := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "8",
+	}
+	vFn, err = vrhList(rulesList)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NodeInterfaceType.list: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["list"] = vFn
+
+	return v
+}()
+
+func NodeInterfaceTypeValidator() db.Validator {
+	return DefaultNodeInterfaceTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -17018,6 +17887,510 @@ func SegmentRefTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *SetCookieValueOption) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SetCookieValueOption) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *SetCookieValueOption) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	if err := m.GetSecretValue().Redact(ctx); err != nil {
+		return errors.Wrapf(err, "Redacting SetCookieValueOption.secret_value")
+	}
+
+	return nil
+}
+
+func (m *SetCookieValueOption) DeepCopy() *SetCookieValueOption {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SetCookieValueOption{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SetCookieValueOption) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SetCookieValueOption) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SetCookieValueOptionValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSetCookieValueOption struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSetCookieValueOption) DomainChoiceAddDomainValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AddDomain, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for add_domain")
+	}
+	return oValidatorFn_AddDomain, nil
+}
+
+func (v *ValidateSetCookieValueOption) ExpiryChoiceAddExpiryValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AddExpiry, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for add_expiry")
+	}
+	return oValidatorFn_AddExpiry, nil
+}
+
+func (v *ValidateSetCookieValueOption) MaxAgeChoiceMaxAgeValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MaxAgeValue, err := db.NewInt32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for max_age_value")
+	}
+	return oValidatorFn_MaxAgeValue, nil
+}
+
+func (v *ValidateSetCookieValueOption) PathChoiceAddPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_AddPath, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for add_path")
+	}
+	return oValidatorFn_AddPath, nil
+}
+
+func (v *ValidateSetCookieValueOption) ValueChoiceValueValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_Value, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for value")
+	}
+	return oValidatorFn_Value, nil
+}
+
+func (v *ValidateSetCookieValueOption) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSetCookieValueOption) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SetCookieValueOption)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SetCookieValueOption got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetDomainChoice().(type) {
+	case *SetCookieValueOption_IgnoreDomain:
+		if fv, exists := v.FldValidators["domain_choice.ignore_domain"]; exists {
+			val := m.GetDomainChoice().(*SetCookieValueOption_IgnoreDomain).IgnoreDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("ignore_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SetCookieValueOption_AddDomain:
+		if fv, exists := v.FldValidators["domain_choice.add_domain"]; exists {
+			val := m.GetDomainChoice().(*SetCookieValueOption_AddDomain).AddDomain
+			vOpts := append(opts,
+				db.WithValidateField("domain_choice"),
+				db.WithValidateField("add_domain"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetExpiryChoice().(type) {
+	case *SetCookieValueOption_IgnoreExpiry:
+		if fv, exists := v.FldValidators["expiry_choice.ignore_expiry"]; exists {
+			val := m.GetExpiryChoice().(*SetCookieValueOption_IgnoreExpiry).IgnoreExpiry
+			vOpts := append(opts,
+				db.WithValidateField("expiry_choice"),
+				db.WithValidateField("ignore_expiry"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SetCookieValueOption_AddExpiry:
+		if fv, exists := v.FldValidators["expiry_choice.add_expiry"]; exists {
+			val := m.GetExpiryChoice().(*SetCookieValueOption_AddExpiry).AddExpiry
+			vOpts := append(opts,
+				db.WithValidateField("expiry_choice"),
+				db.WithValidateField("add_expiry"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetHttponlyChoice().(type) {
+	case *SetCookieValueOption_IgnoreHttponly:
+		if fv, exists := v.FldValidators["httponly_choice.ignore_httponly"]; exists {
+			val := m.GetHttponlyChoice().(*SetCookieValueOption_IgnoreHttponly).IgnoreHttponly
+			vOpts := append(opts,
+				db.WithValidateField("httponly_choice"),
+				db.WithValidateField("ignore_httponly"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SetCookieValueOption_AddHttponly:
+		if fv, exists := v.FldValidators["httponly_choice.add_httponly"]; exists {
+			val := m.GetHttponlyChoice().(*SetCookieValueOption_AddHttponly).AddHttponly
+			vOpts := append(opts,
+				db.WithValidateField("httponly_choice"),
+				db.WithValidateField("add_httponly"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetMaxAgeChoice().(type) {
+	case *SetCookieValueOption_IgnoreMaxAge:
+		if fv, exists := v.FldValidators["max_age_choice.ignore_max_age"]; exists {
+			val := m.GetMaxAgeChoice().(*SetCookieValueOption_IgnoreMaxAge).IgnoreMaxAge
+			vOpts := append(opts,
+				db.WithValidateField("max_age_choice"),
+				db.WithValidateField("ignore_max_age"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SetCookieValueOption_MaxAgeValue:
+		if fv, exists := v.FldValidators["max_age_choice.max_age_value"]; exists {
+			val := m.GetMaxAgeChoice().(*SetCookieValueOption_MaxAgeValue).MaxAgeValue
+			vOpts := append(opts,
+				db.WithValidateField("max_age_choice"),
+				db.WithValidateField("max_age_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["overwrite"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("overwrite"))
+		if err := fv(ctx, m.GetOverwrite(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	switch m.GetPartitionedChoice().(type) {
+	case *SetCookieValueOption_IgnorePartitioned:
+		if fv, exists := v.FldValidators["partitioned_choice.ignore_partitioned"]; exists {
+			val := m.GetPartitionedChoice().(*SetCookieValueOption_IgnorePartitioned).IgnorePartitioned
+			vOpts := append(opts,
+				db.WithValidateField("partitioned_choice"),
+				db.WithValidateField("ignore_partitioned"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SetCookieValueOption_AddPartitioned:
+		if fv, exists := v.FldValidators["partitioned_choice.add_partitioned"]; exists {
+			val := m.GetPartitionedChoice().(*SetCookieValueOption_AddPartitioned).AddPartitioned
+			vOpts := append(opts,
+				db.WithValidateField("partitioned_choice"),
+				db.WithValidateField("add_partitioned"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetPathChoice().(type) {
+	case *SetCookieValueOption_IgnorePath:
+		if fv, exists := v.FldValidators["path_choice.ignore_path"]; exists {
+			val := m.GetPathChoice().(*SetCookieValueOption_IgnorePath).IgnorePath
+			vOpts := append(opts,
+				db.WithValidateField("path_choice"),
+				db.WithValidateField("ignore_path"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SetCookieValueOption_AddPath:
+		if fv, exists := v.FldValidators["path_choice.add_path"]; exists {
+			val := m.GetPathChoice().(*SetCookieValueOption_AddPath).AddPath
+			vOpts := append(opts,
+				db.WithValidateField("path_choice"),
+				db.WithValidateField("add_path"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetSamesiteChoice().(type) {
+	case *SetCookieValueOption_IgnoreSamesite:
+		if fv, exists := v.FldValidators["samesite_choice.ignore_samesite"]; exists {
+			val := m.GetSamesiteChoice().(*SetCookieValueOption_IgnoreSamesite).IgnoreSamesite
+			vOpts := append(opts,
+				db.WithValidateField("samesite_choice"),
+				db.WithValidateField("ignore_samesite"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SetCookieValueOption_SamesiteStrict:
+		if fv, exists := v.FldValidators["samesite_choice.samesite_strict"]; exists {
+			val := m.GetSamesiteChoice().(*SetCookieValueOption_SamesiteStrict).SamesiteStrict
+			vOpts := append(opts,
+				db.WithValidateField("samesite_choice"),
+				db.WithValidateField("samesite_strict"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SetCookieValueOption_SamesiteLax:
+		if fv, exists := v.FldValidators["samesite_choice.samesite_lax"]; exists {
+			val := m.GetSamesiteChoice().(*SetCookieValueOption_SamesiteLax).SamesiteLax
+			vOpts := append(opts,
+				db.WithValidateField("samesite_choice"),
+				db.WithValidateField("samesite_lax"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SetCookieValueOption_SamesiteNone:
+		if fv, exists := v.FldValidators["samesite_choice.samesite_none"]; exists {
+			val := m.GetSamesiteChoice().(*SetCookieValueOption_SamesiteNone).SamesiteNone
+			vOpts := append(opts,
+				db.WithValidateField("samesite_choice"),
+				db.WithValidateField("samesite_none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetSecureChoice().(type) {
+	case *SetCookieValueOption_IgnoreSecure:
+		if fv, exists := v.FldValidators["secure_choice.ignore_secure"]; exists {
+			val := m.GetSecureChoice().(*SetCookieValueOption_IgnoreSecure).IgnoreSecure
+			vOpts := append(opts,
+				db.WithValidateField("secure_choice"),
+				db.WithValidateField("ignore_secure"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SetCookieValueOption_AddSecure:
+		if fv, exists := v.FldValidators["secure_choice.add_secure"]; exists {
+			val := m.GetSecureChoice().(*SetCookieValueOption_AddSecure).AddSecure
+			vOpts := append(opts,
+				db.WithValidateField("secure_choice"),
+				db.WithValidateField("add_secure"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetValueChoice().(type) {
+	case *SetCookieValueOption_IgnoreValue:
+		if fv, exists := v.FldValidators["value_choice.ignore_value"]; exists {
+			val := m.GetValueChoice().(*SetCookieValueOption_IgnoreValue).IgnoreValue
+			vOpts := append(opts,
+				db.WithValidateField("value_choice"),
+				db.WithValidateField("ignore_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SetCookieValueOption_Value:
+		if fv, exists := v.FldValidators["value_choice.value"]; exists {
+			val := m.GetValueChoice().(*SetCookieValueOption_Value).Value
+			vOpts := append(opts,
+				db.WithValidateField("value_choice"),
+				db.WithValidateField("value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SetCookieValueOption_SecretValue:
+		if fv, exists := v.FldValidators["value_choice.secret_value"]; exists {
+			val := m.GetValueChoice().(*SetCookieValueOption_SecretValue).SecretValue
+			vOpts := append(opts,
+				db.WithValidateField("value_choice"),
+				db.WithValidateField("secret_value"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSetCookieValueOptionValidator = func() *ValidateSetCookieValueOption {
+	v := &ValidateSetCookieValueOption{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDomainChoiceAddDomain := v.DomainChoiceAddDomainValidationRuleHandler
+	rulesDomainChoiceAddDomain := map[string]string{
+		"ves.io.schema.rules.string.hostname": "true",
+		"ves.io.schema.rules.string.max_len":  "256",
+		"ves.io.schema.rules.string.min_len":  "1",
+	}
+	vFnMap["domain_choice.add_domain"], err = vrhDomainChoiceAddDomain(rulesDomainChoiceAddDomain)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SetCookieValueOption.domain_choice_add_domain: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["domain_choice.add_domain"] = vFnMap["domain_choice.add_domain"]
+
+	vrhExpiryChoiceAddExpiry := v.ExpiryChoiceAddExpiryValidationRuleHandler
+	rulesExpiryChoiceAddExpiry := map[string]string{
+		"ves.io.schema.rules.string.max_len": "256",
+	}
+	vFnMap["expiry_choice.add_expiry"], err = vrhExpiryChoiceAddExpiry(rulesExpiryChoiceAddExpiry)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SetCookieValueOption.expiry_choice_add_expiry: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["expiry_choice.add_expiry"] = vFnMap["expiry_choice.add_expiry"]
+
+	vrhMaxAgeChoiceMaxAgeValue := v.MaxAgeChoiceMaxAgeValueValidationRuleHandler
+	rulesMaxAgeChoiceMaxAgeValue := map[string]string{
+		"ves.io.schema.rules.uint32.lte": "34560000",
+	}
+	vFnMap["max_age_choice.max_age_value"], err = vrhMaxAgeChoiceMaxAgeValue(rulesMaxAgeChoiceMaxAgeValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SetCookieValueOption.max_age_choice_max_age_value: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["max_age_choice.max_age_value"] = vFnMap["max_age_choice.max_age_value"]
+
+	vrhPathChoiceAddPath := v.PathChoiceAddPathValidationRuleHandler
+	rulesPathChoiceAddPath := map[string]string{
+		"ves.io.schema.rules.string.http_path": "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+	}
+	vFnMap["path_choice.add_path"], err = vrhPathChoiceAddPath(rulesPathChoiceAddPath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SetCookieValueOption.path_choice_add_path: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["path_choice.add_path"] = vFnMap["path_choice.add_path"]
+
+	vrhValueChoiceValue := v.ValueChoiceValueValidationRuleHandler
+	rulesValueChoiceValue := map[string]string{
+		"ves.io.schema.rules.string.max_len": "8096",
+	}
+	vFnMap["value_choice.value"], err = vrhValueChoiceValue(rulesValueChoiceValue)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field SetCookieValueOption.value_choice_value: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["value_choice.value"] = vFnMap["value_choice.value"]
+
+	vrhName := v.NameValidationRuleHandler
+	rulesName := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.string.cookie_name": "true",
+		"ves.io.schema.rules.string.max_len":     "256",
+	}
+	vFn, err = vrhName(rulesName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SetCookieValueOption.name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["name"] = vFn
+
+	v.FldValidators["value_choice.secret_value"] = SecretTypeValidator().Validate
+
+	return v
+}()
+
+func SetCookieValueOptionValidator() db.Validator {
+	return DefaultSetCookieValueOptionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *SiteInfo) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -20731,6 +22104,138 @@ var DefaultTrustedCAListValidator = func() *ValidateTrustedCAList {
 
 func TrustedCAListValidator() db.Validator {
 	return DefaultTrustedCAListValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UpstreamConnPoolReuseType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UpstreamConnPoolReuseType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UpstreamConnPoolReuseType) DeepCopy() *UpstreamConnPoolReuseType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UpstreamConnPoolReuseType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UpstreamConnPoolReuseType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UpstreamConnPoolReuseType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UpstreamConnPoolReuseTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUpstreamConnPoolReuseType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUpstreamConnPoolReuseType) MapDownstreamToUpstreamConnPoolTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for map_downstream_to_upstream_conn_pool_type")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateUpstreamConnPoolReuseType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UpstreamConnPoolReuseType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UpstreamConnPoolReuseType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["map_downstream_to_upstream_conn_pool_type"]; exists {
+		val := m.GetMapDownstreamToUpstreamConnPoolType()
+		vOpts := append(opts,
+			db.WithValidateField("map_downstream_to_upstream_conn_pool_type"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetMapDownstreamToUpstreamConnPoolType().(type) {
+	case *UpstreamConnPoolReuseType_EnableConnPoolReuse:
+		if fv, exists := v.FldValidators["map_downstream_to_upstream_conn_pool_type.enable_conn_pool_reuse"]; exists {
+			val := m.GetMapDownstreamToUpstreamConnPoolType().(*UpstreamConnPoolReuseType_EnableConnPoolReuse).EnableConnPoolReuse
+			vOpts := append(opts,
+				db.WithValidateField("map_downstream_to_upstream_conn_pool_type"),
+				db.WithValidateField("enable_conn_pool_reuse"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *UpstreamConnPoolReuseType_DisableConnPoolReuse:
+		if fv, exists := v.FldValidators["map_downstream_to_upstream_conn_pool_type.disable_conn_pool_reuse"]; exists {
+			val := m.GetMapDownstreamToUpstreamConnPoolType().(*UpstreamConnPoolReuseType_DisableConnPoolReuse).DisableConnPoolReuse
+			vOpts := append(opts,
+				db.WithValidateField("map_downstream_to_upstream_conn_pool_type"),
+				db.WithValidateField("disable_conn_pool_reuse"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUpstreamConnPoolReuseTypeValidator = func() *ValidateUpstreamConnPoolReuseType {
+	v := &ValidateUpstreamConnPoolReuseType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhMapDownstreamToUpstreamConnPoolType := v.MapDownstreamToUpstreamConnPoolTypeValidationRuleHandler
+	rulesMapDownstreamToUpstreamConnPoolType := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMapDownstreamToUpstreamConnPoolType(rulesMapDownstreamToUpstreamConnPoolType)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpstreamConnPoolReuseType.map_downstream_to_upstream_conn_pool_type: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["map_downstream_to_upstream_conn_pool_type"] = vFn
+
+	return v
+}()
+
+func UpstreamConnPoolReuseTypeValidator() db.Validator {
+	return DefaultUpstreamConnPoolReuseTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

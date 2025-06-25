@@ -400,7 +400,13 @@ var PrivateCustomAPISwaggerJSON string = `{
             "enum": [
                 "INITIALIZING",
                 "CONNECTED",
-                "DISCONNECTED"
+                "DISCONNECTED",
+                "AUTHENTICATION_ERROR",
+                "CODE_BASE_ERROR",
+                "REPO_NOT_FOUND",
+                "REPO_NO_API_FOUND",
+                "GENERAL_ERROR",
+                "SCAN_ERROR"
             ],
             "default": "INITIALIZING",
             "x-displayname": "Health Status",

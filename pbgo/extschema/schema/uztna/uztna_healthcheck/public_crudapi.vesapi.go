@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/uztna_healthchecks/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -1797,6 +1810,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_healthcheck-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_healthcheck.API.Create"
             },
             "x-displayname": "Health Check",
@@ -1897,6 +1911,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_healthcheck-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_healthcheck.API.Replace"
             },
             "x-displayname": "Health Check",
@@ -2013,6 +2028,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_healthcheck-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_healthcheck.API.List"
             },
             "x-displayname": "Health Check",
@@ -2123,6 +2139,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_healthcheck-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_healthcheck.API.Get"
             },
             "delete": {
@@ -2216,6 +2233,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_healthcheck-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_healthcheck.API.Delete"
             },
             "x-displayname": "Health Check",
@@ -2226,10 +2244,8 @@ var APISwaggerJSON string = `{
     "definitions": {
         "ioschemaEmpty": {
             "type": "object",
-            "description": "This can be used for messages where no values are needed",
-            "title": "Empty",
-            "x-displayname": "Empty",
-            "x-ves-proto-message": "ves.io.schema.Empty"
+            "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
+            "title": "Empty"
         },
         "protobufAny": {
             "type": "object",
@@ -2248,68 +2264,40 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
+            "description": "x-displayName: \"Blindfold Secret\"\nBlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
-            "x-displayname": "Blindfold Secret",
-            "x-ves-displayorder": "3,1,2",
-            "x-ves-proto-message": "ves.io.schema.BlindfoldSecretInfoType",
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
-                    "title": "Decryption Provider",
-                    "x-displayname": "Decryption Provider",
-                    "x-ves-example": "value"
+                    "description": "x-displayName: \"Decryption Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "title": "Decryption Provider"
                 },
                 "location": {
                     "type": "string",
-                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
-                    "title": "Location",
-                    "x-displayname": "Location",
-                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.uri_ref": "true"
-                    }
+                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"\nLocation is the uri_ref. It could be in url format for string:///\nOr it could be a path if the store provider is an http/https location",
+                    "title": "Location"
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
-                    "title": "Store Provider",
-                    "x-displayname": "Store Provider",
-                    "x-ves-example": "value"
+                    "description": "x-displayName: \"Store Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
+                    "title": "Store Provider"
                 }
             }
         },
         "schemaClearSecretInfoType": {
             "type": "object",
-            "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
+            "description": "x-displayName: \"In-Clear Secret\"\nClearSecretInfoType specifies information about the Secret that is not encrypted.",
             "title": "ClearSecretInfoType",
-            "x-displayname": "In-Clear Secret",
-            "x-ves-displayorder": "2,1",
-            "x-ves-proto-message": "ves.io.schema.ClearSecretInfoType",
             "properties": {
                 "provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"box-provider\"-",
-                    "title": "Provider",
-                    "x-displayname": "Provider",
-                    "x-ves-example": "box-provider"
+                    "description": "x-displayName: \"Provider\"\nx-example: \"box-provider\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
+                    "title": "Provider"
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
-                    "title": "URL",
-                    "maxLength": 131072,
-                    "x-displayname": "URL",
-                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "131072",
-                        "ves.io.schema.rules.string.uri_ref": "true"
-                    }
+                    "description": "x-displayName: \"URL\"\nx-required\nx-example: \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"\nURL of the secret. Currently supported URL schemes is string:///.\nFor string:/// scheme, Secret needs to be encoded Base64 format.\nWhen asked for this secret, caller will get Secret bytes after Base64 decoding.",
+                    "title": "URL"
                 }
             }
         },
@@ -2703,23 +2691,38 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretType": {
             "type": "object",
-            "description": "SecretType is used in an object to indicate a sensitive/confidential field",
+            "description": "x-displayName: \"Secret\"\nSecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
-            "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
-            "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "x-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
-                    "x-displayname": "Blindfold Secret"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                },
+                "blindfold_secret_info_internal": {
+                    "description": "x-displayName: \"Blindfold Secret Internal\"\nBlindfold Secret Internal is used for the putting re-encrypted blindfold secret",
+                    "title": "Blindfold Secret Internal",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "description": "x-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType",
-                    "x-displayname": "Clear Secret"
+                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                },
+                "secret_encoding_type": {
+                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\nthis will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\nNote - Do NOT set this field for Clear Secret with string:/// scheme.\ne.g. if a secret is base64 encoded and then put into vault.",
+                    "title": "secret_encoding_type",
+                    "$ref": "#/definitions/schemaSecretEncodingType"
+                },
+                "vault_secret_info": {
+                    "description": "x-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
+                    "title": "Vault Secret",
+                    "$ref": "#/definitions/schemaVaultSecretInfoType"
+                },
+                "wingman_secret_info": {
+                    "description": "x-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in F5XC Security Sidecar",
+                    "title": "Wingman Secret",
+                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
                 }
             }
         },
@@ -3055,24 +3058,9 @@ var APISwaggerJSON string = `{
             "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
             "title": "Create healthcheck",
             "x-displayname": "Create Health Check",
-            "x-ves-oneof-field-health_check": "[\"http_health_check\",\"https_health_check\",\"icmp_health_check\",\"tcp_health_check\"]",
+            "x-ves-oneof-field-health_check": "[\"tcp_health_check\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.CreateSpecType",
             "properties": {
-                "http_health_check": {
-                    "description": "Exclusive with [https_health_check icmp_health_check tcp_health_check]\n Specifies the following details for HTTP health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
-                    "$ref": "#/definitions/uztna_healthcheckHttpHealthCheck",
-                    "x-displayname": "HTTP HealthCheck"
-                },
-                "https_health_check": {
-                    "description": "Exclusive with [http_health_check icmp_health_check tcp_health_check]\n Specifies the following details for HTTPS health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
-                    "$ref": "#/definitions/uztna_healthcheckHttpsHealthCheck",
-                    "x-displayname": "HTTPS HealthCheck"
-                },
-                "icmp_health_check": {
-                    "description": "Exclusive with [http_health_check https_health_check tcp_health_check]\n Specifies ICMP HealthCheck",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "ICMP HealthCheck"
-                },
                 "interval": {
                     "type": "integer",
                     "description": " Time interval in seconds between two healthcheck requests.\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 600\n",
@@ -3087,7 +3075,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tcp_health_check": {
-                    "description": "Exclusive with [http_health_check https_health_check icmp_health_check]\n Specifies send payload and expected response payload",
+                    "description": "Exclusive with []\n Specifies send payload and expected response payload",
                     "$ref": "#/definitions/uztna_healthcheckTcpHealthCheck",
                     "x-displayname": "TCP HealthCheck"
                 },
@@ -3231,24 +3219,9 @@ var APISwaggerJSON string = `{
             "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
             "title": "Get healthcheck",
             "x-displayname": "Get Health Check",
-            "x-ves-oneof-field-health_check": "[\"http_health_check\",\"https_health_check\",\"icmp_health_check\",\"tcp_health_check\"]",
+            "x-ves-oneof-field-health_check": "[\"tcp_health_check\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.GetSpecType",
             "properties": {
-                "http_health_check": {
-                    "description": "Exclusive with [https_health_check icmp_health_check tcp_health_check]\n Specifies the following details for HTTP health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
-                    "$ref": "#/definitions/uztna_healthcheckHttpHealthCheck",
-                    "x-displayname": "HTTP HealthCheck"
-                },
-                "https_health_check": {
-                    "description": "Exclusive with [http_health_check icmp_health_check tcp_health_check]\n Specifies the following details for HTTPS health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
-                    "$ref": "#/definitions/uztna_healthcheckHttpsHealthCheck",
-                    "x-displayname": "HTTPS HealthCheck"
-                },
-                "icmp_health_check": {
-                    "description": "Exclusive with [http_health_check https_health_check tcp_health_check]\n Specifies ICMP HealthCheck",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "ICMP HealthCheck"
-                },
                 "interval": {
                     "type": "integer",
                     "description": " Time interval in seconds between two healthcheck requests.\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 600\n",
@@ -3263,7 +3236,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tcp_health_check": {
-                    "description": "Exclusive with [http_health_check https_health_check icmp_health_check]\n Specifies send payload and expected response payload",
+                    "description": "Exclusive with []\n Specifies send payload and expected response payload",
                     "$ref": "#/definitions/uztna_healthcheckTcpHealthCheck",
                     "x-displayname": "TCP HealthCheck"
                 },
@@ -3284,180 +3257,88 @@ var APISwaggerJSON string = `{
         },
         "uztna_healthcheckHeader": {
             "type": "object",
-            "description": "\nSpecify the value of host header in HTTPS/HTTP health check request",
+            "description": "x-displayName: \"Host Header\"\n\nSpecify the value of host header in HTTPS/HTTP health check request",
             "title": "Host Header",
-            "x-displayname": "Host Header",
-            "x-ves-displayorder": "6,2,5,3,4,8",
-            "x-ves-oneof-field-host_header_choice": "[\"host_header\",\"use_origin_server_name\"]",
-            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.Header",
             "properties": {
                 "expected_response": {
                     "type": "string",
-                    "description": " Regular expression used to match against the response to the health check's request. Mark node up upon receipt of a successful regular expression match. Uses re2 regular expression syntax.\n\nExample: - \"HTTP/1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 2048\n  ves.io.schema.rules.string.regex: true\n",
-                    "title": "Receive String",
-                    "maxLength": 2048,
-                    "x-displayname": "Receive String",
-                    "x-ves-example": "HTTP/1",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "2048",
-                        "ves.io.schema.rules.string.regex": "true"
-                    }
+                    "description": "x-required\nx-displayName: \"Receive String\"\nx-example: \"HTTP/1\"\nRegular expression used to match against the response to the health check's request. Mark node up upon receipt of a successful regular expression match. Uses re2 regular expression syntax.",
+                    "title": "Receive String"
                 },
                 "expected_status_codes": {
                     "type": "array",
-                    "description": " Specifies a list of HTTP response status codes considered healthy. To treat default HTTP expected\n status code 200 as healthy, user has to configure it explicitly. This is a list of strings, each\n of which is single HTTP status code or a range with start and end values separated by \"-\".\n\nExample: - \"200-250\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.http_status_range: true\n  ves.io.schema.rules.repeated.items.string.max_len: 10\n  ves.io.schema.rules.repeated.items.string.min_len: 3\n  ves.io.schema.rules.repeated.max_items: 16\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": "x-displayName: \"Expected Status Codes\"\nx-example: \"200-250\"\nSpecifies a list of HTTP response status codes considered healthy. To treat default HTTP expected\nstatus code 200 as healthy, user has to configure it explicitly. This is a list of strings, each\nof which is single HTTP status code or a range with start and end values separated by \"-\".",
                     "title": "Expected Status Codes",
-                    "maxItems": 16,
                     "items": {
-                        "type": "string",
-                        "minLength": 3,
-                        "maxLength": 10
-                    },
-                    "x-displayname": "Expected Status Codes",
-                    "x-ves-example": "200-250",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.http_status_range": "true",
-                        "ves.io.schema.rules.repeated.items.string.max_len": "10",
-                        "ves.io.schema.rules.repeated.items.string.min_len": "3",
-                        "ves.io.schema.rules.repeated.max_items": "16",
-                        "ves.io.schema.rules.repeated.unique": "true"
+                        "type": "string"
                     }
                 },
                 "headers": {
                     "type": "object",
-                    "description": " Specifies a list of HTTP headers that should be added to each request that is sent to the\n health checked cluster. This is a list of key-value pairs.\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.map.keys.string.max_len: 256\n  ves.io.schema.rules.map.keys.string.min_len: 1\n  ves.io.schema.rules.map.max_pairs: 16\n  ves.io.schema.rules.map.values.string.max_len: 2048\n  ves.io.schema.rules.map.values.string.min_len: 1\n",
-                    "title": "Headers to add in health check request",
-                    "x-displayname": "Request Headers to Add",
-                    "x-ves-example": "value",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.map.keys.string.max_len": "256",
-                        "ves.io.schema.rules.map.keys.string.min_len": "1",
-                        "ves.io.schema.rules.map.max_pairs": "16",
-                        "ves.io.schema.rules.map.values.string.max_len": "2048",
-                        "ves.io.schema.rules.map.values.string.min_len": "1"
-                    }
+                    "description": "x-displayName: \"Request Headers to Add\"\nx-example: \"value\"\nSpecifies a list of HTTP headers that should be added to each request that is sent to the\nhealth checked cluster. This is a list of key-value pairs.",
+                    "title": "Headers to add in health check request"
                 },
                 "host_header": {
                     "type": "string",
-                    "description": "Exclusive with [use_origin_server_name]\n The value of the host header.\n\nExample: - \"one.volterra.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostport: true\n  ves.io.schema.rules.string.max_len: 262\n",
-                    "title": "host_header",
-                    "maxLength": 262,
-                    "x-displayname": "Host Header Value",
-                    "x-ves-example": "one.volterra.com",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.hostport": "true",
-                        "ves.io.schema.rules.string.max_len": "262"
-                    }
+                    "description": "x-displayName: \"Host Header Value\"\nx-example: \"one.volterra.com\"\nThe value of the host header.",
+                    "title": "host_header"
                 },
                 "password": {
-                    "description": "\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-required\nx-displayName: \"Password\"\nx-example: \"value\"",
                     "title": "Password",
-                    "$ref": "#/definitions/schemaSecretType",
-                    "x-displayname": "Password",
-                    "x-ves-example": "value",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/schemaSecretType"
                 },
                 "path": {
                     "type": "string",
-                    "description": " Specifies the HTTPS path that will be requested during health checking.\n\nExample: - \"/healthcheck\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 2048\n",
-                    "title": "path",
-                    "maxLength": 2048,
-                    "x-displayname": "Path",
-                    "x-ves-example": "/healthcheck",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.http_path": "true",
-                        "ves.io.schema.rules.string.max_len": "2048"
-                    }
+                    "description": "x-displayName: \"Path\"\nx-required\nx-example: \"/healthcheck\"\nSpecifies the HTTPS path that will be requested during health checking.",
+                    "title": "path"
                 },
                 "request_headers_to_remove": {
                     "type": "array",
-                    "description": " Specifies a list of HTTP headers that should be removed from each request that is sent to the\n health checked cluster. This is a list of keys of headers.\n\nExample: - \"user-agent\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_len: 256\n  ves.io.schema.rules.repeated.max_items: 16\n",
+                    "description": "x-displayName: \"Request Headers to Remove\"\nx-example: \"user-agent\"\nSpecifies a list of HTTP headers that should be removed from each request that is sent to the\nhealth checked cluster. This is a list of keys of headers.",
                     "title": "Headers to be removed from health check request",
-                    "maxItems": 16,
                     "items": {
-                        "type": "string",
-                        "maxLength": 256
-                    },
-                    "x-displayname": "Request Headers to Remove",
-                    "x-ves-example": "user-agent",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.max_len": "256",
-                        "ves.io.schema.rules.repeated.max_items": "16"
+                        "type": "string"
                     }
                 },
                 "send_payload": {
                     "type": "string",
-                    "description": " HTTP payload to send to the target \n\nExample: - \"HEAD / HTTP/1.0\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 2048\n",
-                    "title": "Send String",
-                    "maxLength": 2048,
-                    "x-displayname": "Send String",
-                    "x-ves-example": "HEAD / HTTP/1.0",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "2048"
-                    }
+                    "description": "x-required\nx-displayName: \"Send String\"\nx-example: \"HEAD / HTTP/1.0\"\nHTTP payload to send to the target",
+                    "title": "Send String"
                 },
                 "use_origin_server_name": {
-                    "description": "Exclusive with [host_header]\n Use the origin server name.",
+                    "description": "x-displayName: \"Origin Server Name\"\nUse the origin server name.",
                     "title": "use origin server name",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Origin Server Name"
+                    "$ref": "#/definitions/ioschemaEmpty"
                 },
                 "user_name": {
                     "type": "string",
-                    "description": " User Name\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "UserName",
-                    "x-displayname": "User Name",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "description": "x-required\nx-displayName: \"User Name\"\nUser Name",
+                    "title": "UserName"
                 }
             }
         },
         "uztna_healthcheckHttpHealthCheck": {
             "type": "object",
-            "description": "Healthy if \"get\" method on URL \"http://\u003chost\u003e/\u003cpath\u003e\" with optional \"\u003cheader\u003e\" returns success.\n\"host\" is not used for DNS resolution. It is used as HTTP Header in the request.",
+            "description": "x-displayName: \"HTTP Health Check\"\nHealthy if \"get\" method on URL \"http://\u003chost\u003e/\u003cpath\u003e\" with optional \"\u003cheader\u003e\" returns success.\n\"host\" is not used for DNS resolution. It is used as HTTP Header in the request.",
             "title": "HttpHealthCheck",
-            "x-displayname": "HTTP Health Check",
-            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.HttpHealthCheck",
             "properties": {
                 "host_header": {
-                    "description": " Host Header \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-required\nx-displayName: \"Host Header\"\nHost Header",
                     "title": "Host Header",
-                    "$ref": "#/definitions/uztna_healthcheckHeader",
-                    "x-displayname": "Host Header",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/uztna_healthcheckHeader"
                 }
             }
         },
         "uztna_healthcheckHttpsHealthCheck": {
             "type": "object",
-            "description": "Healthy if \"get\" method on URL \"https://\u003chost\u003e/\u003cpath\u003e\" with optional \"\u003cheader\u003e\" returns success.\n\"host\" is not used for DNS resolution. It is used as HTTPS Header in the request.",
+            "description": "x-displayName: \"HTTPS Health Check\"\nHealthy if \"get\" method on URL \"https://\u003chost\u003e/\u003cpath\u003e\" with optional \"\u003cheader\u003e\" returns success.\n\"host\" is not used for DNS resolution. It is used as HTTPS Header in the request.",
             "title": "HttpsHealthCheck",
-            "x-displayname": "HTTPS Health Check",
-            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.HttpsHealthCheck",
             "properties": {
                 "host_header": {
-                    "description": " Host Header for HTTPS Header \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-required\nx-displayName: \"Host Header\"\nHost Header for HTTPS Header",
                     "title": "Host Header",
-                    "$ref": "#/definitions/uztna_healthcheckHeader",
-                    "x-displayname": "Host Header",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/uztna_healthcheckHeader"
                 }
             }
         },
@@ -3613,24 +3494,9 @@ var APISwaggerJSON string = `{
             "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
             "title": "replace healthcheck",
             "x-displayname": "Replace Health Check",
-            "x-ves-oneof-field-health_check": "[\"http_health_check\",\"https_health_check\",\"icmp_health_check\",\"tcp_health_check\"]",
+            "x-ves-oneof-field-health_check": "[\"tcp_health_check\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.ReplaceSpecType",
             "properties": {
-                "http_health_check": {
-                    "description": "Exclusive with [https_health_check icmp_health_check tcp_health_check]\n Specifies the following details for HTTP health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
-                    "$ref": "#/definitions/uztna_healthcheckHttpHealthCheck",
-                    "x-displayname": "HTTP HealthCheck"
-                },
-                "https_health_check": {
-                    "description": "Exclusive with [http_health_check icmp_health_check tcp_health_check]\n Specifies the following details for HTTPS health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
-                    "$ref": "#/definitions/uztna_healthcheckHttpsHealthCheck",
-                    "x-displayname": "HTTPS HealthCheck"
-                },
-                "icmp_health_check": {
-                    "description": "Exclusive with [http_health_check https_health_check tcp_health_check]\n Specifies ICMP HealthCheck",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "ICMP HealthCheck"
-                },
                 "interval": {
                     "type": "integer",
                     "description": " Time interval in seconds between two healthcheck requests.\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 600\n",
@@ -3645,7 +3511,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tcp_health_check": {
-                    "description": "Exclusive with [http_health_check https_health_check icmp_health_check]\n Specifies send payload and expected response payload",
+                    "description": "Exclusive with []\n Specifies send payload and expected response payload",
                     "$ref": "#/definitions/uztna_healthcheckTcpHealthCheck",
                     "x-displayname": "TCP HealthCheck"
                 },

@@ -29,6 +29,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.registration.DeleteRequest"] = DeleteRequestValidator()
 	vr["ves.io.schema.registration.GetImageDownloadUrlReq"] = GetImageDownloadUrlReqValidator()
 	vr["ves.io.schema.registration.GetImageDownloadUrlResp"] = GetImageDownloadUrlRespValidator()
+	vr["ves.io.schema.registration.GetRegistrationsBySiteTokenReq"] = GetRegistrationsBySiteTokenReqValidator()
+	vr["ves.io.schema.registration.GetRegistrationsBySiteTokenResp"] = GetRegistrationsBySiteTokenRespValidator()
 	vr["ves.io.schema.registration.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.registration.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.registration.ListBySiteReq"] = ListBySiteReqValidator()

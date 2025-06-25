@@ -79,7 +79,6 @@ func testAzureVNETSiteConfig(resourceName, name string) string {
 			azure_certified_hw = "azure-byol-multi-nic-voltmesh"
 			az_nodes {
 				azure_az = "1"
-				disk_size = "100"
 				inside_subnet {
 					subnet_param {
 						ipv4 = "192.168.0.0/25"
@@ -93,7 +92,6 @@ func testAzureVNETSiteConfig(resourceName, name string) string {
 			}
 			az_nodes {
 				azure_az = "2"
-				disk_size = "100"
 				inside_subnet {
 					subnet_param {
 						ipv4 = "192.168.0.128/25"
@@ -107,7 +105,6 @@ func testAzureVNETSiteConfig(resourceName, name string) string {
 			}
 			az_nodes {
 				azure_az = "3"
-				disk_size = "100"
 				inside_subnet {
 					subnet_param {
 						ipv4 = "192.168.2.128/25"

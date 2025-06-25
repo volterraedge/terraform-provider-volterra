@@ -53,6 +53,14 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_origin_pool.API.Create"] = []string{
+		"spec.origin_servers.#.private_ip.ipv6",
+	}
+
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_origin_pool.API.Replace"] = []string{
+		"spec.origin_servers.#.private_ip.ipv6",
+	}
+
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {

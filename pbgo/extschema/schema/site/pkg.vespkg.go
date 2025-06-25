@@ -65,6 +65,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.UpgradeSWRequest"] = UpgradeSWRequestValidator()
 	vr["ves.io.schema.site.UpgradeSWResponse"] = UpgradeSWResponseValidator()
 
+	vr["ves.io.schema.site.CheckSiteExistRequest"] = CheckSiteExistRequestValidator()
+	vr["ves.io.schema.site.CheckSiteExistResponse"] = CheckSiteExistResponseValidator()
 	vr["ves.io.schema.site.SiteStatusMetricsRequest"] = SiteStatusMetricsRequestValidator()
 	vr["ves.io.schema.site.SiteStatusMetricsResponse"] = SiteStatusMetricsResponseValidator()
 
@@ -122,6 +124,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.RouteServerPeeringStatusType"] = RouteServerPeeringStatusTypeValidator()
 	vr["ves.io.schema.site.RouteServerStatusType"] = RouteServerStatusTypeValidator()
 	vr["ves.io.schema.site.ScalingStatus"] = ScalingStatusValidator()
+	vr["ves.io.schema.site.SiteReachabilityStatus"] = SiteReachabilityStatusValidator()
 	vr["ves.io.schema.site.SiteStatusMetricsData"] = SiteStatusMetricsDataValidator()
 	vr["ves.io.schema.site.SiteStatusMetricsFieldData"] = SiteStatusMetricsFieldDataValidator()
 	vr["ves.io.schema.site.SiteToSiteTunnelConnectivity"] = SiteToSiteTunnelConnectivityValidator()

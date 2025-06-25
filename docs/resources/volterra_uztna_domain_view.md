@@ -17,8 +17,9 @@ Example Usage
 
 ```hcl
 resource "volterra_uztna_domain_view" "example" {
-  name       = "acmecorp-web"
-  namespace  = "staging"
+  name      = "acmecorp-web"
+  namespace = "staging"
+
   access_url = ["access_url"]
 
   cert {
@@ -31,33 +32,17 @@ resource "volterra_uztna_domain_view" "example" {
 
   gateways {
     perimeter_re {
-      // One of the arguments from this list "all_cloud re_sites" can be set
+      // One of the arguments from this list "all_cloud" can be set
 
       all_cloud = true
     }
 
-    uztna_gateway {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
-
-  lease_pool {
-    // One of the arguments from this list "ipv4_ipv6_leasepool ipv4_leasepool ipv6_leasepool" must be set
-
-    ipv4_leasepool {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
-
-  policy {
-    policy_name {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
+    private_gateway {
+      uztna_gateway {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
     }
   }
 }
@@ -83,27 +68,29 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`access_url` - (Required) Url to access the gateways (`String`).
+`access_url` - (Required) This URL would resolve to the Cloud or the Private Gateway (`String`).
 
-`app_vip_pool` - (Optional) Application VIP Pools . See [App Vip Pool ](#app-vip-pool) below for details.
+`app_vip_pool` - (Optional) Configure this option only if the default range is unacceptable.. See [App Vip Pool ](#app-vip-pool) below for details.
 
-`cert` - (Required) Domain in XC is an established pattern and we would reuse the same.. See [Cert ](#cert) below for details.
+`cert` - (Required) and the server on Cloud and Private gateways. See [Cert ](#cert) below for details.
 
 `gateways` - (Required) List of all RE prime and Big Ip edge CE. See [Gateways ](#gateways) below for details.
 
-`lease_pool` - (Required) The Lease Pool assigned to the Zero Trust Domain. . See [Lease Pool ](#lease-pool) below for details.
+`lease_pool` - (Optional) range using the leasepool for this assignment. See [Lease Pool ](#lease-pool) below for details.
 
-`policy` - (Required) The name of the ZTNA profile. See [Policy ](#policy) below for details.
+`policy` - (Optional) The name of the ZTNA profile. See [Policy ](#policy) below for details.
 
 ### App Vip Pool
 
-Application VIP Pools .
+Configure this option only if the default range is unacceptable..
 
-`app_vip_pool` - (Optional) VIP Pools. See [ref](#ref) below for details.
+###### One of the arguments from this list "ipv4_app_vip_pool" can be set
+
+`ipv4_app_vip_pool` - (Required) Select or create new IPv4 App VIP pools. See [ref](#ref) below for details.
 
 ### Cert
 
-Domain in XC is an established pattern and we would reuse the same..
+and the server on Cloud and Private gateways.
 
 `certificate` - (Optional) Select/Add one or more TLS Certificate objects to associate with this ZeroTrust Domain. See [ref](#ref) below for details.
 
@@ -113,53 +100,39 @@ List of all RE prime and Big Ip edge CE.
 
 `perimeter_re` - (Optional) Cloud Gateways and Big-IP Edge Gateways. See [Gateways Perimeter Re ](#gateways-perimeter-re) below for details.
 
-`uztna_gateway` - (Optional) Select BIG-IP Edge Gateway for Advertisement .. See [ref](#ref) below for details.
+`private_gateway` - (Optional) Private gateways are gateways hosted within the customer's data centers and are typically accessed by users connected to their office or corporate network.. See [Gateways Private Gateway ](#gateways-private-gateway) below for details.
 
 ### Lease Pool
 
-The Lease Pool assigned to the Zero Trust Domain. .
+range using the leasepool for this assignment.
 
-###### One of the arguments from this list "ipv4_ipv6_leasepool, ipv4_leasepool, ipv6_leasepool" must be set
+###### One of the arguments from this list "ipv4_leasepool" must be set
 
-`ipv4_ipv6_leasepool` - (Optional) Select or create new IPv4 and IPv6 Leasepools. See [Ipaddress Type Ipv4 Ipv6 Leasepool ](#ipaddress-type-ipv4-ipv6-leasepool) below for details.(Deprecated)
-
-`ipv4_leasepool` - (Optional) Select or create new IPv4 Leasepools. See [ref](#ref) below for details.
-
-`ipv6_leasepool` - (Optional) Select or create new IPv4 Leasepools. See [ref](#ref) below for details.(Deprecated)
+`ipv4_leasepool` - (Required) Select or create new IPv4 leasepool. See [ref](#ref) below for details.
 
 ### Policy
 
 The name of the ZTNA profile.
 
-`policy_name` - (Optional) Select/Add ZTNA Policy to associate with this ZeroTrust Domain. See [ref](#ref) below for details.
+`policy_name` - (Optional) The ZeroTrust Domain enforces an Access policy that all end users must comply with to access private and potentially public applications. The ZTNA policy allows the admin to set up the access policy for this ZeroTrust Domain. See [ref](#ref) below for details.
 
 ### Cloud Gateway Choice All Cloud
 
 Advertise on all Cloud Gateways.
 
-### Cloud Gateway Choice Re Sites
-
-Advertise on selected Cloud Gateways.
-
-`cloud_gateways` - (Optional) Cloud Gateways. See [ref](#ref) below for details.
-
 ### Gateways Perimeter Re
 
 Cloud Gateways and Big-IP Edge Gateways.
 
-###### One of the arguments from this list "all_cloud, re_sites" can be set
+###### One of the arguments from this list "all_cloud" can be set
 
 `all_cloud` - (Optional) Advertise on all Cloud Gateways (`Bool`).
 
-`re_sites` - (Optional) Advertise on selected Cloud Gateways. See [Cloud Gateway Choice Re Sites ](#cloud-gateway-choice-re-sites) below for details.(Deprecated)
+### Gateways Private Gateway
 
-### Ipaddress Type Ipv4 Ipv6 Leasepool
+Private gateways are gateways hosted within the customer's data centers and are typically accessed by users connected to their office or corporate network..
 
-Select or create new IPv4 and IPv6 Leasepools.
-
-`ipv4_leasepool` - (Required) Select or create new IPv4 Leasepools. See [ref](#ref) below for details.
-
-`ipv6_leasepool` - (Required) Select or create new IPv4 Lease Pools. See [ref](#ref) below for details.
+`uztna_gateway` - (Optional) x-example: "system/alon-ge". See [ref](#ref) below for details.
 
 ### Ref
 

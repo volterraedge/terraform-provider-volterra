@@ -1614,6 +1614,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-crudapi-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.crudapi.API.Get"
             },
             "delete": {
@@ -1689,6 +1690,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-crudapi-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.crudapi.API.Delete"
             },
             "put": {
@@ -1772,6 +1774,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-crudapi-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -1919,6 +1922,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-crudapi-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.crudapi.API.List"
             },
             "post": {
@@ -1996,6 +2000,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-crudapi-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -2143,6 +2148,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-crudapi-api-liststream"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.crudapi.API.ListStream"
             },
             "x-displayname": "",
@@ -2250,6 +2256,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-crudapi-api-get"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.crudapi.API.Get"
             },
             "x-displayname": "",
@@ -2397,6 +2404,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-crudapi-api-list"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.crudapi.API.List"
             },
             "x-displayname": "",
@@ -2479,6 +2487,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-crudapi-api-delete"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.crudapi.API.Delete"
             },
             "put": {
@@ -2562,6 +2571,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-crudapi-api-replace"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.crudapi.API.Replace"
             },
             "x-displayname": "",
@@ -2646,6 +2656,7 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-uztna-uztna_flow-crudapi-api-create"
                 },
+                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.crudapi.API.Create"
             },
             "x-displayname": "",
@@ -3458,24 +3469,14 @@ var APISwaggerJSON string = `{
             "description": "Audience URI\nSelect Audience URI",
             "title": "Audience URI",
             "x-displayname": "Audience URI",
-            "x-ves-oneof-field-audience_uri_choice": "[\"uniform_resource_locator\",\"uniform_resource_name\"]",
+            "x-ves-oneof-field-audience_uri_choice": "[\"uniform_resource_locator\"]",
             "x-ves-proto-message": "ves.io.schema.uztna.uztna_flow.AudienceUri",
             "properties": {
                 "uniform_resource_locator": {
-                    "description": "Exclusive with [uniform_resource_name]\n\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "Exclusive with []\n\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Uniform Resource Locator",
                     "$ref": "#/definitions/uztna_flowUniformResourceLocator",
                     "x-displayname": "Uniform Resource Locator (URL)",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                },
-                "uniform_resource_name": {
-                    "description": "Exclusive with [uniform_resource_locator]\n\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "Uniform Resource Name",
-                    "$ref": "#/definitions/uztna_flowUniformResourceName",
-                    "x-displayname": "Uniform Resource Name",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3874,52 +3875,33 @@ var APISwaggerJSON string = `{
             "properties": {
                 "url": {
                     "type": "string",
-                    "description": "\nExample: - https://sp.example.com-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "description": "\nExample: - https://sp.example.com-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.url_or_uri_ref: true\n",
                     "title": "Uniform Resource Name",
                     "maxLength": 1024,
                     "x-displayname": "URL",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "1024"
+                        "ves.io.schema.rules.string.max_bytes": "1024",
+                        "ves.io.schema.rules.string.url_or_uri_ref": "true"
                     }
                 }
             }
         },
         "uztna_flowUniformResourceName": {
             "type": "object",
-            "description": "Uniform Resource Name to identify the Uniform resource locator",
+            "description": "x-displayName: \"Uniform Resource Name\"\nUniform Resource Name to identify the Uniform resource locator",
             "title": "Uniform Resource Name",
-            "x-displayname": "Uniform Resource Name",
-            "x-ves-proto-message": "ves.io.schema.uztna.uztna_flow.UniformResourceName",
             "properties": {
                 "host_name": {
                     "type": "string",
-                    "description": " Host name of Uniform resource\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 1024\n",
-                    "title": "Host Name",
-                    "maxLength": 1024,
-                    "x-displayname": "Host Name",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.hostname": "true",
-                        "ves.io.schema.rules.string.max_len": "1024"
-                    }
+                    "description": "x-displayName: \"Host Name\"\nx-required\nHost name of Uniform resource",
+                    "title": "Host Name"
                 },
                 "urn": {
                     "type": "string",
-                    "description": " Name of Uniform resource\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.uri_ref: true\n",
-                    "title": "Uniform Resource Name",
-                    "minLength": 1,
-                    "maxLength": 128,
-                    "x-displayname": "URN",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "128",
-                        "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.uri_ref": "true"
-                    }
+                    "description": "x-displayName: \"URN\"\nx-required\nName of Uniform resource",
+                    "title": "Uniform Resource Name"
                 }
             }
         },

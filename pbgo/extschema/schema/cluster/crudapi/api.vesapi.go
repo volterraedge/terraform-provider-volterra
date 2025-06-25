@@ -2973,6 +2973,12 @@ var APISwaggerJSON string = `{
                     "title": "tls_parameters",
                     "$ref": "#/definitions/schemaUpstreamTlsParamsType",
                     "x-displayname": "TLS Parameters"
+                },
+                "upstream_conn_pool_reuse_type": {
+                    "description": " Select upstream connection pool reuse state for every downstream connection\n This configuration choice is for HTTP(S) LB only.",
+                    "title": "Select upstream connection pool reuse state",
+                    "$ref": "#/definitions/schemaUpstreamConnPoolReuseType",
+                    "x-displayname": "Select upstream connection pool reuse state"
                 }
             }
         },
@@ -4292,6 +4298,28 @@ var APISwaggerJSON string = `{
                     "title": "validation_params",
                     "$ref": "#/definitions/schemaTlsValidationParamsType",
                     "x-displayname": "Root CA Validation parameters"
+                }
+            }
+        },
+        "schemaUpstreamConnPoolReuseType": {
+            "type": "object",
+            "description": "Select upstream connection pool reuse state for every downstream connection. This configuration choice is for HTTP(S) LB only.",
+            "title": "UpstreamConnPoolReuseType",
+            "x-displayname": "Select upstream connection pool reuse state",
+            "x-ves-oneof-field-map_downstream_to_upstream_conn_pool_type": "[\"disable_conn_pool_reuse\",\"enable_conn_pool_reuse\"]",
+            "x-ves-proto-message": "ves.io.schema.UpstreamConnPoolReuseType",
+            "properties": {
+                "disable_conn_pool_reuse": {
+                    "description": "Exclusive with [enable_conn_pool_reuse]\n Open new upstream connection pool for every new downstream connection",
+                    "title": "disable_conn_pool_reuse",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable Connection Pool Reuse"
+                },
+                "enable_conn_pool_reuse": {
+                    "description": "Exclusive with [disable_conn_pool_reuse]\n Reuse upstream connection pool for multiple downstream connections",
+                    "title": "enable_conn_pool_reuse",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable Connection Pool Reuse"
                 }
             }
         },

@@ -222,6 +222,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.local_control_plane.bgp_config.peers.#.external.outside_interfaces",
 		"spec.local_control_plane.bgp_config.peers.#.internal",
 		"spec.local_control_plane.bgp_config.peers.#.metadata.disable",
+		"spec.local_control_plane.bgp_config.peers.#.routing_policies",
 		"spec.local_control_plane.bgp_config.peers.#.target_service",
 	}
 
@@ -722,6 +723,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.local_control_plane.bgp_config.peers.#.external.outside_interfaces",
 		"spec.local_control_plane.bgp_config.peers.#.internal",
 		"spec.local_control_plane.bgp_config.peers.#.metadata.disable",
+		"spec.local_control_plane.bgp_config.peers.#.routing_policies",
 		"spec.local_control_plane.bgp_config.peers.#.target_service",
 	}
 

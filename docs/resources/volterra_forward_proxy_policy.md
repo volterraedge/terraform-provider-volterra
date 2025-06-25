@@ -22,39 +22,15 @@ resource "volterra_forward_proxy_policy" "example" {
 
   // One of the arguments from this list "any_proxy drp_http_connect network_connector proxy_label_selector" must be set
 
-  any_proxy = true
+  network_connector {
+    name      = "test1"
+    namespace = "staging"
+    tenant    = "acmecorp"
+  }
 
   // One of the arguments from this list "allow_all allow_list deny_list rule_list" must be set
 
-  deny_list {
-    // One of the arguments from this list "default_action_allow default_action_deny default_action_next_policy" must be set
-
-    default_action_next_policy = true
-
-    dest_list {
-      ipv6_prefixes = ["2001::1/64"]
-
-      port_ranges = "80,443,8080-8191,9080"
-
-      prefixes = ["10.0.0.1/24"]
-    }
-
-    http_list {
-      // One of the arguments from this list "exact_value regex_value suffix_value" must be set
-
-      exact_value = "abc.zyz.com"
-
-      // One of the arguments from this list "any_path path_exact_value path_prefix_value path_regex_value" must be set
-
-      path_exact_value = "/abc/zyz"
-    }
-
-    tls_list {
-      // One of the arguments from this list "exact_value regex_value suffix_value" must be set
-
-      suffix_value = "xyz.com"
-    }
-  }
+  allow_all = true
 }
 
 ```
@@ -404,23 +380,13 @@ List of custom rules.
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Rules Metadata ](#rules-metadata) below for details.
 
-`rule_description` - (Optional) Human readable description for the rule (`String`).(Deprecated)
-
-`rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).(Deprecated)
-
-###### One of the arguments from this list "all_sources, inside_sources, interface, ip_prefix_set, label_selector, namespace, prefix_list" must be set
+###### One of the arguments from this list "all_sources, ip_prefix_set, label_selector, prefix_list" must be set
 
 `all_sources` - (Optional) Any source that matches 0/0 ip prefix (`Bool`).
-
-`inside_sources` - (Optional) All ip prefixes that are reachable via inside interfaces are chosen as Endpoints (`Bool`).(Deprecated)
-
-`interface` - (Optional) All ip prefixes that are reachable via an interfaces are chosen as Endpoints. See [ref](#ref) below for details.(Deprecated)
 
 `ip_prefix_set` - (Optional) All ip prefixes that are in a given ip prefix set.. See [ref](#ref) below for details.
 
 `label_selector` - (Optional) Sources is set of prefixes determined by label selector expression. See [Source Choice Label Selector ](#source-choice-label-selector) below for details.
-
-`namespace` - (Optional) All ip prefixes that are of a namespace are chosen as Endpoints (`String`).(Deprecated)
 
 `prefix_list` - (Optional) list is a sublist of both V4 and V6 prefix list. See [Source Choice Prefix List ](#source-choice-prefix-list) below for details.
 
@@ -430,17 +396,11 @@ Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
-
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Source Choice All Sources
 
 Any source that matches 0/0 ip prefix.
-
-### Source Choice Inside Sources
-
-All ip prefixes that are reachable via inside interfaces are chosen as Endpoints.
 
 ### Source Choice Label Selector
 

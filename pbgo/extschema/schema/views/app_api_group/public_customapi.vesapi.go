@@ -1088,9 +1088,9 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "elements": {
                     "type": "array",
-                    "description": " List of API group elements with methods and path regex for matching requests.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1000\n",
+                    "description": " List of API group elements with methods and path regex for matching requests.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 5000\n",
                     "title": "elements",
-                    "maxItems": 1000,
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/schemaapi_group_elementGlobalSpecType"
                     },
@@ -1098,7 +1098,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1000"
+                        "ves.io.schema.rules.repeated.max_items": "5000"
                     }
                 },
                 "http_loadbalancer": {

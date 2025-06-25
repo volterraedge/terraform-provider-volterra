@@ -2308,6 +2308,16 @@ func (v *ValidateDiscoveredServiceType) PortMapValidationRuleHandler(rules map[s
 	return validatorFn, nil
 }
 
+func (v *ValidateDiscoveredServiceType) ClusterIpv6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cluster_ipv6")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateDiscoveredServiceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DiscoveredServiceType)
 	if !ok {
@@ -2326,6 +2336,15 @@ func (v *ValidateDiscoveredServiceType) Validate(ctx context.Context, pm interfa
 
 		vOpts := append(opts, db.WithValidateField("cluster_ip"))
 		if err := fv(ctx, m.GetClusterIp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cluster_ipv6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("cluster_ipv6"))
+		if err := fv(ctx, m.GetClusterIpv6(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2482,6 +2501,17 @@ var DefaultDiscoveredServiceTypeValidator = func() *ValidateDiscoveredServiceTyp
 		panic(errMsg)
 	}
 	v.FldValidators["port_map"] = vFn
+
+	vrhClusterIpv6 := v.ClusterIpv6ValidationRuleHandler
+	rulesClusterIpv6 := map[string]string{
+		"ves.io.schema.rules.string.ip": "true",
+	}
+	vFn, err = vrhClusterIpv6(rulesClusterIpv6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DiscoveredServiceType.cluster_ipv6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cluster_ipv6"] = vFn
 
 	v.FldValidators["ports"] = PortInfoTypeValidator().Validate
 

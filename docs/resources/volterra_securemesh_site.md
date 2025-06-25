@@ -40,7 +40,7 @@ resource "volterra_securemesh_site" "example" {
   // One of the arguments from this list "custom_network_config default_network_config" must be set
 
   default_network_config = true
-  volterra_certified_hw  = ["isv-8000-series-voltmesh"]
+  volterra_certified_hw = ["isv-8000-series-voltmesh"]
 }
 
 ```
@@ -184,8 +184,6 @@ DHCP Server is configured for this interface. IP for this Interface will be deri
 
 `dhcp_networks` - (Required) List of networks from which DHCP Server can allocate IPv4 Addresses. See [Dhcp Server Dhcp Networks ](#dhcp-server-dhcp-networks) below for details.
 
-`dhcp_option82_tag` - (Optional) Optional tag that can be given to this configuration (`String`).(Deprecated)
-
 `fixed_ip_map` - (Optional) Assign fixed IPv4 addresses based on the MAC Address of the DHCP Client. (`String`).
 
 ###### One of the arguments from this list "automatic_from_end, automatic_from_start, interface_ip_map" must be set
@@ -216,11 +214,9 @@ works along with Router Advertisement' Managed flag.
 
 Interface IP is configured statically.
 
-###### One of the arguments from this list "cluster_static_ip, fleet_static_ip, node_static_ip" must be set
+###### One of the arguments from this list "cluster_static_ip, node_static_ip" must be set
 
 `cluster_static_ip` - (Optional) Static IP configuration for a specific node. See [Network Prefix Choice Cluster Static Ip ](#network-prefix-choice-cluster-static-ip) below for details.
-
-`fleet_static_ip` - (Optional) Static IP configuration for the fleet. See [Network Prefix Choice Fleet Static Ip ](#network-prefix-choice-fleet-static-ip) below for details.(Deprecated)
 
 `node_static_ip` - (Optional) Static IP configuration for the Node. See [Network Prefix Choice Node Static Ip ](#network-prefix-choice-node-static-ip) below for details.
 
@@ -302,8 +298,6 @@ Map of Node to Static ip configuration value, Key:Node, Value:IP Address.
 
 `default_gw` - (Optional) IP address of the default gateway. (`String`).
 
-`dns_server` - (Optional) IP address of the DNS server (`String`).(Deprecated)
-
 `ip_address` - (Required) IP address of the interface and prefix length (`String`).
 
 ### Connection Choice Sli To Global Dr
@@ -317,24 +311,6 @@ Site local inside is connected directly to a given global network.
 Site local outside is connected directly to a given global network.
 
 `global_vn` - (Required) Select Virtual Network of Global Type. See [ref](#ref) below for details.
-
-### Custom Certificate Private Key
-
-TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
-
-`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Private Key Blindfold Secret Info Internal ](#private-key-blindfold-secret-info-internal) below for details.(Deprecated)
-
-`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
-
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
-
-`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
-
-`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
-
-`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
-
-`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Dc Cluster Group Choice No Dc Cluster Group
 
@@ -354,8 +330,6 @@ List of non overlapping ip address ranges..
 
 `end_ip` - (Optional) In case of address allocator, offset is derived based on network prefix. (`String`).
 
-`exclude` - (Optional) If exclude is true, IP addresses are not assigned from this range. (`Bool`).(Deprecated)
-
 `start_ip` - (Optional) 2001::1 with prefix length of 64, start offset is 5 (`String`).
 
 ### Dhcp Networks Pools
@@ -363,8 +337,6 @@ List of non overlapping ip address ranges..
 List of non overlapping ip address ranges..
 
 `end_ip` - (Optional) 10.1.1.200 with prefix length of 24, end offset is 0.0.0.200 (`String`).
-
-`exclude` - (Optional) If exclude is true, IP addresses are not assigned from this range. (`Bool`).(Deprecated)
 
 `start_ip` - (Optional) 10.1.1.5 with prefix length of 24, start offset is 0.0.0.5 (`String`).
 
@@ -386,11 +358,9 @@ List of networks from which DHCP Server can allocate IPv4 Addresses.
 
 `last_address` - (Optional) Last usable address from the network prefix is chosen as default gateway (`Bool`).
 
-###### One of the arguments from this list "network_prefix, network_prefix_allocator" must be set
+###### One of the arguments from this list "network_prefix" must be set
 
 `network_prefix` - (Optional) Set the network prefix for the site. ex: 10.1.1.0/24 (`String`).
-
-`network_prefix_allocator` - (Optional) Prefix length from address allocator scheme is used to calculate offsets. See [ref](#ref) below for details.(Deprecated)
 
 `pool_settings` - (Required) Controls how DHCP pools are handled (`String`).
 
@@ -418,41 +388,11 @@ Choose the address from the network prefix range as dns server.
 
 DNS server address is same as default gateway address.
 
-### Enable Disable Choice Disable Interception
-
-Disable Interception.
-
-### Enable Disable Choice Enable Interception
-
-Enable Interception.
-
 ### Forward Proxy Choice Active Forward Proxy Policies
 
 Enable Forward Proxy for this site and manage policies.
 
 `forward_proxy_policies` - (Required) Ordered List of Forward Proxy Policies active. See [ref](#ref) below for details.
-
-### Forward Proxy Choice Disable Forward Proxy
-
-Forward Proxy is disabled for this connector.
-
-### Forward Proxy Choice Enable Forward Proxy
-
-Forward Proxy is enabled for this connector.
-
-`connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2000 (2 seconds) (`Int`).
-
-`max_connect_attempts` - (Optional) Specifies the allowed number of retries on connect failure to upstream server. Defaults to 1. (`Int`).
-
-###### One of the arguments from this list "no_interception, tls_intercept" can be set
-
-`no_interception` - (Optional) No TLS interception is enabled for this network connector (`Bool`).(Deprecated)
-
-`tls_intercept` - (Optional) Specify TLS interception configuration for the network connector. See [Tls Interception Choice Tls Intercept ](#tls-interception-choice-tls-intercept) below for details.(Deprecated)
-
-`white_listed_ports` - (Optional) Example "tmate" server port (`Int`).
-
-`white_listed_prefixes` - (Optional) Example "tmate" server ip (`String`).
 
 ### Forward Proxy Choice Forward Proxy Allow All
 
@@ -489,34 +429,6 @@ Global network connections.
 `sli_to_global_dr` - (Optional) Site local inside is connected directly to a given global network. See [Connection Choice Sli To Global Dr ](#connection-choice-sli-to-global-dr) below for details.
 
 `slo_to_global_dr` - (Optional) Site local outside is connected directly to a given global network. See [Connection Choice Slo To Global Dr ](#connection-choice-slo-to-global-dr) below for details.
-
-###### One of the arguments from this list "disable_forward_proxy, enable_forward_proxy" can be set
-
-`disable_forward_proxy` - (Optional) Forward Proxy is disabled for this connector (`Bool`).(Deprecated)
-
-`enable_forward_proxy` - (Optional) Forward Proxy is enabled for this connector. See [Forward Proxy Choice Enable Forward Proxy ](#forward-proxy-choice-enable-forward-proxy) below for details.(Deprecated)
-
-### Interception Policy Choice Enable For All Domains
-
-Enable interception for all domains.
-
-### Interception Policy Choice Policy
-
-Policy to enable/disable specific domains, with implicit enable all domains.
-
-`interception_rules` - (Required) List of ordered rules to enable or disable for TLS interception. See [Policy Interception Rules ](#policy-interception-rules) below for details.
-
-### Interception Rules Domain Match
-
-Domain value or regular expression to match.
-
-###### One of the arguments from this list "exact_value, regex_value, suffix_value" must be set
-
-`exact_value` - (Optional) Exact domain name. (`String`).
-
-`regex_value` - (Optional) Regular Expression value for the domain name (`String`).
-
-`suffix_value` - (Optional) Suffix of domain name e.g "xyz.com" will match "*.xyz.com" and "xyz.com" (`String`).
 
 ### Interface Choice Dedicated Interface
 
@@ -594,19 +506,13 @@ Ethernet interface configuration..
 
 `mtu` - (Optional) When configured, mtu must be between 512 and 16384 (`Int`).
 
-###### One of the arguments from this list "inside_network, ip_fabric_network, segment_network, site_local_inside_network, site_local_network, srv6_network, storage_network" must be set
-
-`inside_network` - (Optional) Interface belongs to user configured inside network. See [ref](#ref) below for details.(Deprecated)
-
-`ip_fabric_network` - (Optional) Interface belongs to IP Fabric network (`Bool`).(Deprecated)
+###### One of the arguments from this list "segment_network, site_local_inside_network, site_local_network, storage_network" must be set
 
 `segment_network` - (Optional) x-displayName: "Segment". See [ref](#ref) below for details.
 
 `site_local_inside_network` - (Optional) Interface belongs to site local network inside (`Bool`).
 
 `site_local_network` - (Optional) Interface belongs to site local network (outside) (`Bool`).
-
-`srv6_network` - (Optional) Interface belongs to per site srv6 network. See [ref](#ref) below for details.(Deprecated)
 
 `storage_network` - (Optional) Interface belongs to site local network inside (`Bool`).
 
@@ -636,42 +542,6 @@ Add all interfaces belonging to this site.
 
 `interfaces` - (Required) Configure network interfaces for this Secure Mesh site. See [Interface List Interfaces ](#interface-list-interfaces) below for details.
 
-### Interface Choice Loopback Interface
-
-Loopback device..
-
-###### One of the arguments from this list "dhcp_client, dhcp_server, static_ip" must be set
-
-`dhcp_client` - (Optional) Interface gets it IP address from external DHCP server (`Bool`).
-
-`dhcp_server` - (Optional) DHCP Server is configured for this interface. IP for this Interface will be derived from the DHCP Server configuration.. See [Address Choice Dhcp Server ](#address-choice-dhcp-server) below for details.
-
-`static_ip` - (Optional) Interface IP is configured statically. See [Address Choice Static Ip ](#address-choice-static-ip) below for details.
-
-`device` - (Required) Interface configuration for the Loopback Ethernet device (`String`).
-
-###### One of the arguments from this list "no_ipv6_address, static_ipv6_address" can be set
-
-`no_ipv6_address` - (Optional) Interface does not have an IPv6 Address. (`Bool`).
-
-`static_ipv6_address` - (Optional) Interface IP is configured statically. See [Ipv6 Address Choice Static Ipv6 Address ](#ipv6-address-choice-static-ipv6-address) below for details.
-
-`mtu` - (Optional) When configured, mtu must be between 512 and 16384 (`Int`).
-
-###### One of the arguments from this list "ip_fabric_network, site_local_inside_network, site_local_network" must be set
-
-`ip_fabric_network` - (Optional) Interface belongs to IP Fabric network (`Bool`).(Deprecated)
-
-`site_local_inside_network` - (Optional) Interface belongs to site local network inside (`Bool`).
-
-`site_local_network` - (Optional) Interface belongs to site local network (outside) (`Bool`).
-
-###### One of the arguments from this list "cluster, node" must be set
-
-`cluster` - (Optional) Configuration will apply to given device on all nodes of the site. (`Bool`).
-
-`node` - (Optional) Configuration will apply to a device on the given node. (`String`).
-
 ### Interface List Interfaces
 
 Configure network interfaces for this Secure Mesh site.
@@ -684,15 +554,13 @@ Configure network interfaces for this Secure Mesh site.
 
 `description` - (Optional) Description for this Interface (`String`).
 
-###### One of the arguments from this list "dedicated_interface, dedicated_management_interface, ethernet_interface, loopback_interface" must be set
+###### One of the arguments from this list "dedicated_interface, dedicated_management_interface, ethernet_interface" must be set
 
 `dedicated_interface` - (Optional) Networking configuration for dedicated interface is configured locally on site e.g. (outside/inside)Ethernet. See [Interface Choice Dedicated Interface ](#interface-choice-dedicated-interface) below for details.
 
 `dedicated_management_interface` - (Optional) Fallback management interfaces can be made into dedicated management interface. See [Interface Choice Dedicated Management Interface ](#interface-choice-dedicated-management-interface) below for details.
 
 `ethernet_interface` - (Optional) Ethernet interface configuration.. See [Interface Choice Ethernet Interface ](#interface-choice-ethernet-interface) below for details.
-
-`loopback_interface` - (Optional) Loopback device.. See [Interface Choice Loopback Interface ](#interface-choice-loopback-interface) below for details.(Deprecated)
 
 `labels` - (Optional) Add Labels for this Interface, these labels can be used in firewall policy (`String`).
 
@@ -734,11 +602,9 @@ Interface does not have an IPv6 Address..
 
 Interface IP is configured statically.
 
-###### One of the arguments from this list "cluster_static_ip, fleet_static_ip, node_static_ip" must be set
+###### One of the arguments from this list "cluster_static_ip, node_static_ip" must be set
 
 `cluster_static_ip` - (Optional) Static IP configuration for a specific node. See [Network Prefix Choice Cluster Static Ip ](#network-prefix-choice-cluster-static-ip) below for details.
-
-`fleet_static_ip` - (Optional) Static IP configuration for the fleet. See [Network Prefix Choice Fleet Static Ip ](#network-prefix-choice-fleet-static-ip) below for details.(Deprecated)
 
 `node_static_ip` - (Optional) Static IP configuration for the Node. See [Network Prefix Choice Node Static Ip ](#network-prefix-choice-node-static-ip) below for details.
 
@@ -750,19 +616,11 @@ x-displayName: "Disable".
 
 x-displayName: "Enable".
 
-###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
+###### One of the arguments from this list "drain_max_unavailable_node_count" must be set
 
 `drain_max_unavailable_node_count` - (Optional) x-example: "1" (`Int`).
 
-`drain_max_unavailable_node_percentage` - (Optional) Max number of worker nodes to be upgraded in parallel by percentage. Note: 1% would mean batch size of 1 worker node. (`Int`).(Deprecated)
-
 `drain_node_timeout` - (Required) (Warning: It may block upgrade if services on a node cannot be gracefully upgraded. It is recommended to use the default value). (`Int`).
-
-###### One of the arguments from this list "disable_vega_upgrade_mode, enable_vega_upgrade_mode" must be set
-
-`disable_vega_upgrade_mode` - (Optional) Disable Vega Upgrade Mode (`Bool`).(Deprecated)
-
-`enable_vega_upgrade_mode` - (Optional) When enabled, vega will inform RE to stop traffic to the specific node. (`Bool`).(Deprecated)
 
 ### Lacp Choice Active Backup
 
@@ -793,12 +651,6 @@ Link quality monitoring disabled on the interface..
 ### Network Cfg Choice Custom Network Config
 
 Use custom networking configuration.
-
-`bgp_peer_address` - (Optional) to fetch BGP peer address from site Object. This can be used to change peer address per site in fleet. (`String`).(Deprecated)
-
-`bgp_peer_address_v6` - (Optional) to fetch BGP peer IPv6 address from site Object. This can be used to change peer IPv6 address per site in fleet. (`String`).(Deprecated)
-
-`bgp_router_id` - (Optional) fetch BGP router ID from site object. (`String`).(Deprecated)
 
 ###### One of the arguments from this list "active_forward_proxy_policies, forward_proxy_allow_all, no_forward_proxy" must be set
 
@@ -850,10 +702,6 @@ Use custom networking configuration.
 
 `vip_vrrp_mode` - (Optional) When Outside VIP / Inside VIP are configured, it is recommended to turn on vrrp and also configure BGP. (`String`).
 
-### Network Choice Ip Fabric Network
-
-Interface belongs to IP Fabric network.
-
 ### Network Choice Site Local Inside Network
 
 Interface belongs to site local network inside.
@@ -888,23 +736,11 @@ Static IP configuration for a specific node.
 
 `interface_ip_map` - (Optional) Map of Node to Static ip configuration value, Key:Node, Value:IP Address. See [Cluster Static Ip Interface Ip Map ](#cluster-static-ip-interface-ip-map) below for details.
 
-### Network Prefix Choice Fleet Static Ip
-
-Static IP configuration for the fleet.
-
-`default_gw` - (Optional) IP address offset of the default gateway, prefix len is used to calculate offset (`String`).
-
-`dns_server` - (Optional) IP address offset of the DNS server, prefix len is used to calculate offset (`String`).
-
-`network_prefix_allocator` - (Optional) Static IP configuration for the fleet. See [ref](#ref) below for details.
-
 ### Network Prefix Choice Node Static Ip
 
 Static IP configuration for the Node.
 
 `default_gw` - (Optional) IP address of the default gateway. (`String`).
-
-`dns_server` - (Optional) IP address of the DNS server (`String`).(Deprecated)
 
 `ip_address` - (Required) IP address of the interface and prefix length (`String`).
 
@@ -915,20 +751,6 @@ Traffic matching the ip prefixes is sent to the default gateway.
 ### Node Choice Cluster
 
 Configuration will apply to given device on all nodes of the site..
-
-### Ocsp Stapling Choice Custom Hash Algorithms
-
-Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set..
-
-`hash_algorithms` - (Required) Ordered list of hash algorithms to be used. (`List of Strings`).
-
-### Ocsp Stapling Choice Disable Ocsp Stapling
-
-This is the default behavior if no choice is selected..
-
-### Ocsp Stapling Choice Use System Defaults
-
-F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
 ### Offline Survivability Mode Choice Enable Offline Survivability Mode
 
@@ -964,18 +786,6 @@ Site optimized for L3 traffic processing.
 
 Site optimized for L7 traffic processing.
 
-### Policy Interception Rules
-
-List of ordered rules to enable or disable for TLS interception.
-
-`domain_match` - (Required) Domain value or regular expression to match. See [Interception Rules Domain Match ](#interception-rules-domain-match) below for details.
-
-###### One of the arguments from this list "disable_interception, enable_interception" must be set
-
-`disable_interception` - (Optional) Disable Interception (`Bool`).
-
-`enable_interception` - (Optional) Enable Interception (`Bool`).
-
 ### Primary Choice Is Primary
 
 This interface is primary.
@@ -983,16 +793,6 @@ This interface is primary.
 ### Primary Choice Not Primary
 
 This interface is not primary.
-
-### Private Key Blindfold Secret Info Internal
-
-Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Ref
 
@@ -1013,66 +813,6 @@ Dns information that needs to added in the RouterAdvetisement.
 `configured_list` - (Optional) Configured address outside network range - external dns server. See [Dns Choice Configured List ](#dns-choice-configured-list) below for details.
 
 `local_dns` - (Optional) Choose the address from the network prefix range as dns server. See [Dns Choice Local Dns ](#dns-choice-local-dns) below for details.
-
-### Secret Info Oneof Blindfold Secret Info
-
-Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
-
-`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
-
-`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
-
-`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-### Secret Info Oneof Clear Secret Info
-
-Clear Secret is used for the secrets that are not encrypted.
-
-`provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
-
-`url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
-
-### Secret Info Oneof Vault Secret Info
-
-Vault Secret is used for the secrets managed by Hashicorp Vault.
-
-`key` - (Optional) If not provided entire secret will be returned. (`String`).
-
-`location` - (Required) Path to secret in Vault. (`String`).
-
-`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
-
-`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
-
-`version` - (Optional) If not provided latest version will be returned. (`Int`).
-
-### Secret Info Oneof Wingman Secret Info
-
-Secret is given as bootstrap secret in F5XC Security Sidecar.
-
-`name` - (Required) Name of the secret. (`String`).
-
-### Signing Cert Choice Custom Certificate
-
-Certificates for generating intermediate certificate for TLS interception..
-
-`certificate_url` - (Required) Certificate or certificate chain in PEM format including the PEM headers. (`String`).
-
-`description` - (Optional) Description for the certificate (`String`).
-
-###### One of the arguments from this list "custom_hash_algorithms, disable_ocsp_stapling, use_system_defaults" can be set
-
-`custom_hash_algorithms` - (Optional) Use hash algorithms in the custom order. F5XC will try to fetch ocsp response from the CA in the given order. Additionally, LoadBalancer will not become active until ocspResponse cannot be fetched if the certificate has MustStaple extension set.. See [Ocsp Stapling Choice Custom Hash Algorithms ](#ocsp-stapling-choice-custom-hash-algorithms) below for details.
-
-`disable_ocsp_stapling` - (Optional) This is the default behavior if no choice is selected.. See [Ocsp Stapling Choice Disable Ocsp Stapling ](#ocsp-stapling-choice-disable-ocsp-stapling) below for details.
-
-`use_system_defaults` - (Optional) F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order.. See [Ocsp Stapling Choice Use System Defaults ](#ocsp-stapling-choice-use-system-defaults) below for details.
-
-`private_key` - (Required) TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate.. See [Custom Certificate Private Key ](#custom-certificate-private-key) below for details.
-
-### Signing Cert Choice Volterra Certificate
-
-F5XC certificates for generating intermediate certificate for TLS interception..
 
 ### Site Mesh Group Choice Sm Connection Public Ip
 
@@ -1095,8 +835,6 @@ Configuration for site local inside network.
 `dc_cluster_group` - (Optional) This site is member of dc cluster group via network. See [ref](#ref) below for details.
 
 `no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (`Bool`).
-
-`dc_cluster_group_interface` - (Optional) This Secure Mesh is member of dc cluster group and connected to network over this interface. By default it takes default gateway interface.. See [ref](#ref) below for details.(Deprecated)
 
 `labels` - (Optional) Add Labels for this network, these labels can be used in firewall policy (`String`).
 
@@ -1134,8 +872,6 @@ Configuration for site local network.
 
 `no_dc_cluster_group` - (Optional) This site is not a member of dc cluster group (`Bool`).
 
-`dc_cluster_group_interface` - (Optional) This Secure Mesh is member of dc cluster group and connected to network over this interface. By default it takes default gateway interface.. See [ref](#ref) below for details.(Deprecated)
-
 `labels` - (Optional) Add Labels for this network, these labels can be used in firewall policy (`String`).
 
 `nameserver` - (Optional) Optional DNS V4 server IP to be used for name resolution (`String`).
@@ -1162,11 +898,9 @@ Configuration for site local network.
 
 List of networks from which DHCP server can allocate ip addresses.
 
-###### One of the arguments from this list "network_prefix, network_prefix_allocator" must be set
+###### One of the arguments from this list "network_prefix" must be set
 
 `network_prefix` - (Optional) Network Prefix to be used for IPV6 address auto configuration (`String`).
-
-`network_prefix_allocator` - (Optional) Prefix length from address allocator scheme is used to calculate offsets. See [ref](#ref) below for details.(Deprecated)
 
 `pool_settings` - (Required) Controls how DHCPV6 pools are handled (`String`).
 
@@ -1223,44 +957,6 @@ List of IPv6 static routes.
 `interface` - (Optional) Traffic matching the ip prefixes is sent to this interface. See [ref](#ref) below for details.
 
 `ip_address` - (Optional) Traffic matching the ip prefixes is sent to this IP Address (`String`).
-
-### Tls Interception Choice No Interception
-
-No TLS interception is enabled for this network connector.
-
-### Tls Interception Choice Tls Intercept
-
-Specify TLS interception configuration for the network connector.
-
-###### One of the arguments from this list "enable_for_all_domains, policy" must be set
-
-`enable_for_all_domains` - (Optional) Enable interception for all domains (`Bool`).
-
-`policy` - (Optional) Policy to enable/disable specific domains, with implicit enable all domains. See [Interception Policy Choice Policy ](#interception-policy-choice-policy) below for details.
-
-###### One of the arguments from this list "custom_certificate, volterra_certificate" must be set
-
-`custom_certificate` - (Optional) Certificates for generating intermediate certificate for TLS interception.. See [Signing Cert Choice Custom Certificate ](#signing-cert-choice-custom-certificate) below for details.
-
-`volterra_certificate` - (Optional) F5XC certificates for generating intermediate certificate for TLS interception. (`Bool`).
-
-###### One of the arguments from this list "trusted_ca_url, volterra_trusted_ca" must be set
-
-`trusted_ca_url` - (Optional) Custom Root CA Certificate for validating upstream server certificate (`String`).
-
-`volterra_trusted_ca` - (Optional) F5XC Root CA Certificate for validating upstream server certificate (`Bool`).
-
-### Trusted Ca Choice Volterra Trusted Ca
-
-F5XC Root CA Certificate for validating upstream server certificate.
-
-### Vega Upgrade Mode Toggle Choice Disable Vega Upgrade Mode
-
-Disable Vega Upgrade Mode.
-
-### Vega Upgrade Mode Toggle Choice Enable Vega Upgrade Mode
-
-When enabled, vega will inform RE to stop traffic to the specific node..
 
 ### Vlan Choice Untagged
 

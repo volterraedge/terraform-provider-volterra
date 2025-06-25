@@ -21,11 +21,9 @@ resource "volterra_network_policy_view" "example" {
   namespace = "staging"
 
   endpoint {
-    // One of the arguments from this list "any inside_endpoints interface label_selector namespace outside_endpoints prefix_list" must be set
+    // One of the arguments from this list "any inside_endpoints label_selector outside_endpoints prefix_list" must be set
 
-    label_selector {
-      expressions = ["region in (us-west1, us-west2),tier in (staging)"]
-    }
+    inside_endpoints = true
   }
 }
 
@@ -64,13 +62,11 @@ Ordered list of rules applied to connections from policy endpoints..
 
 `adv_action` - (Optional) Enable or disable logging.. See [Egress Rules Adv Action ](#egress-rules-adv-action) below for details.
 
-`keys` - (Optional) can talk to "db" in site "abc" and can not talk to "db" in site "xyz" (`String`).(Deprecated)
-
 `label_matcher` - (Optional) not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location.. See [Egress Rules Label Matcher ](#egress-rules-label-matcher) below for details.
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Egress Rules Metadata ](#egress-rules-metadata) below for details.
 
-###### One of the arguments from this list "any, inside_endpoints, ip_prefix_set, label_selector, namespace, outside_endpoints, prefix_list" can be set
+###### One of the arguments from this list "any, inside_endpoints, ip_prefix_set, label_selector, outside_endpoints, prefix_list" can be set
 
 `any` - (Optional) Any Endpoint that matches 0/0 ip prefix (`Bool`).
 
@@ -80,15 +76,9 @@ Ordered list of rules applied to connections from policy endpoints..
 
 `label_selector` - (Optional) local end point is set of prefixes determined by label selector expression. See [Other Endpoint Label Selector ](#other-endpoint-label-selector) below for details.
 
-`namespace` - (Optional) All ip prefixes that are of a namespace are chosen as Endpoints (`String`).(Deprecated)
-
 `outside_endpoints` - (Optional) All ip prefixes that are reachable via outside interfaces are chosen as Endpoints (`Bool`).
 
 `prefix_list` - (Optional) For Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs.. See [Other Endpoint Prefix List ](#other-endpoint-prefix-list) below for details.
-
-`rule_description` - (Optional) Human readable description for the rule (`String`).(Deprecated)
-
-`rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).(Deprecated)
 
 ###### One of the arguments from this list "all_tcp_traffic, all_traffic, all_udp_traffic, applications, protocol_port_range" can be set
 
@@ -106,17 +96,13 @@ Ordered list of rules applied to connections from policy endpoints..
 
 Policy is for set of endpoints defined, rules are applied to connections to or from these endpoints..
 
-###### One of the arguments from this list "any, inside_endpoints, interface, label_selector, namespace, outside_endpoints, prefix_list" must be set
+###### One of the arguments from this list "any, inside_endpoints, label_selector, outside_endpoints, prefix_list" must be set
 
 `any` - (Optional) Any Endpoint that matches 0/0 ip prefix (`Bool`).
 
 `inside_endpoints` - (Optional) All ip prefixes that are reachable via inside interfaces are chosen as Endpoints (`Bool`).
 
-`interface` - (Optional) All ip prefixes that are reachable via an interfaces are chosen as Endpoints. See [ref](#ref) below for details.(Deprecated)
-
 `label_selector` - (Optional) local end point is set of prefixes determined by label selector expression. See [Endpoint Choice Label Selector ](#endpoint-choice-label-selector) below for details.
-
-`namespace` - (Optional) All ip prefixes that are of a namespace are chosen as Endpoints (`String`).(Deprecated)
 
 `outside_endpoints` - (Optional) All ip prefixes that are reachable via outside interfaces are chosen as Endpoints (`Bool`).
 
@@ -130,13 +116,11 @@ Ordered list of rules applied to connections to policy endpoints..
 
 `adv_action` - (Optional) Enable or disable logging.. See [Ingress Rules Adv Action ](#ingress-rules-adv-action) below for details.
 
-`keys` - (Optional) can talk to "db" in site "abc" and can not talk to "db" in site "xyz" (`String`).(Deprecated)
-
 `label_matcher` - (Optional) not specified here, just the label keys. This facilitates reuse of policies across multiple dimensions such as deployment, environment, and location.. See [Ingress Rules Label Matcher ](#ingress-rules-label-matcher) below for details.
 
 `metadata` - (Required) Common attributes for the rule including name and description.. See [Ingress Rules Metadata ](#ingress-rules-metadata) below for details.
 
-###### One of the arguments from this list "any, inside_endpoints, ip_prefix_set, label_selector, namespace, outside_endpoints, prefix_list" can be set
+###### One of the arguments from this list "any, inside_endpoints, ip_prefix_set, label_selector, outside_endpoints, prefix_list" can be set
 
 `any` - (Optional) Any Endpoint that matches 0/0 ip prefix (`Bool`).
 
@@ -146,15 +130,9 @@ Ordered list of rules applied to connections to policy endpoints..
 
 `label_selector` - (Optional) local end point is set of prefixes determined by label selector expression. See [Other Endpoint Label Selector ](#other-endpoint-label-selector) below for details.
 
-`namespace` - (Optional) All ip prefixes that are of a namespace are chosen as Endpoints (`String`).(Deprecated)
-
 `outside_endpoints` - (Optional) All ip prefixes that are reachable via outside interfaces are chosen as Endpoints (`Bool`).
 
 `prefix_list` - (Optional) For Ingress rules: To these endpoints from remote endpoints these ip prefixes are destination IPs.. See [Other Endpoint Prefix List ](#other-endpoint-prefix-list) below for details.
-
-`rule_description` - (Optional) Human readable description for the rule (`String`).(Deprecated)
-
-`rule_name` - (Optional) Rule Name that will be used to query metrics for this rule. (`String`).(Deprecated)
 
 ###### One of the arguments from this list "all_tcp_traffic, all_traffic, all_udp_traffic, applications, protocol_port_range" can be set
 
@@ -183,8 +161,6 @@ not specified here, just the label keys. This facilitates reuse of policies acro
 Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
-
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
@@ -229,8 +205,6 @@ not specified here, just the label keys. This facilitates reuse of policies acro
 Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
-
-`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 

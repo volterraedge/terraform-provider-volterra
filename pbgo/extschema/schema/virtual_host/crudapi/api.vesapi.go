@@ -3439,6 +3439,53 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaCookieValueOption": {
+            "type": "object",
+            "description": "Cookie name and value for cookie header",
+            "title": "CookieValueOption",
+            "x-displayname": "Cookie Value Option",
+            "x-ves-oneof-field-value_choice": "[\"secret_value\",\"value\"]",
+            "x-ves-proto-message": "ves.io.schema.CookieValueOption",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " Name of the cookie in Cookie header.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.cookie_name: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "name",
+                    "maxLength": 256,
+                    "x-displayname": "Name",
+                    "x-ves-example": "value",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.cookie_name": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "overwrite": {
+                    "type": "boolean",
+                    "description": " Should the value be overwritten? If true, the value is overwritten to existing values.\n Default value is do not overwrite",
+                    "title": "overwrite",
+                    "format": "boolean",
+                    "x-displayname": "Overwrite"
+                },
+                "secret_value": {
+                    "description": "Exclusive with [value]\n Secret Value of the Cookie header",
+                    "title": "Secret Value",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Secret Value"
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Exclusive with [secret_value]\n Value of the Cookie header.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",
+                    "title": "value",
+                    "maxLength": 8096,
+                    "x-displayname": "Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8096"
+                    }
+                }
+            }
+        },
         "schemaCorsPolicy": {
             "type": "object",
             "description": "Cross-Origin Resource Sharing requests configuration specified at Virtual-host or\nRoute level. Route level configuration takes precedence.\n\nAn example of an Cross origin HTTP request\n    GET /resources/public-data/ HTTP/1.1\n    Host: bar.other\n    User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3pre) Gecko/20081130 Minefield/3.1b3pre\n    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\n    Accept-Language: en-us,en;q=0.5\n    Accept-Encoding: gzip,deflate\n    Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\n    Connection: keep-alive\n    Referrer: http://foo.example/examples/access-control/simpleXSInvocation.html\n    Origin: http://foo.example\n\n\n    HTTP/1.1 200 OK\n    Date: Mon, 01 Dec 2008 00:23:53 GMT\n    Server: Apache/2.0.61\n    Access-Control-Allow-Origin: *\n    Keep-Alive: timeout=2, max=100\n    Connection: Keep-Alive\n    Transfer-Encoding: chunked\n    Content-Type: application/xml\n\nAn example for cross origin HTTP OPTIONS request with Access-Control-Request-* header\n\n    OPTIONS /resources/post-here/ HTTP/1.1\n    Host: bar.other\n    User-Agent: Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.5; en-US; rv:1.9.1b3pre) Gecko/20081130 Minefield/3.1b3pre\n    Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\n    Accept-Language: en-us,en;q=0.5\n    Accept-Encoding: gzip,deflate\n    Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\n    Connection: keep-alive\n    Origin: http://foo.example\n    Access-Control-Request-Method: POST\n    Access-Control-Request-Headers: X-PINGOTHER, Content-Type\n\n\n    HTTP/1.1 204 No Content\n    Date: Mon, 01 Dec 2008 01:15:39 GMT\n    Server: Apache/2.0.61 (Unix)\n    Access-Control-Allow-Origin: http://foo.example\n    Access-Control-Allow-Methods: POST, GET, OPTIONS\n    Access-Control-Allow-Headers: X-PINGOTHER, Content-Type\n    Access-Control-Max-Age: 86400\n    Vary: Accept-Encoding, Origin\n    Keep-Alive: timeout=2, max=100\n    Connection: Keep-Alive",
@@ -4031,6 +4078,195 @@ var APISwaggerJSON string = `{
                     "title": "Clear Secret",
                     "$ref": "#/definitions/schemaClearSecretInfoType",
                     "x-displayname": "Clear Secret"
+                }
+            }
+        },
+        "schemaSetCookieValueOption": {
+            "type": "object",
+            "description": "Cookie name and its attribute values in set-cookie header",
+            "title": "SetCookieValueOption",
+            "x-displayname": "Set-Cookie Value Option",
+            "x-ves-oneof-field-domain_choice": "[\"add_domain\",\"ignore_domain\"]",
+            "x-ves-oneof-field-expiry_choice": "[\"add_expiry\",\"ignore_expiry\"]",
+            "x-ves-oneof-field-httponly_choice": "[\"add_httponly\",\"ignore_httponly\"]",
+            "x-ves-oneof-field-max_age_choice": "[\"ignore_max_age\",\"max_age_value\"]",
+            "x-ves-oneof-field-partitioned_choice": "[\"add_partitioned\",\"ignore_partitioned\"]",
+            "x-ves-oneof-field-path_choice": "[\"add_path\",\"ignore_path\"]",
+            "x-ves-oneof-field-samesite_choice": "[\"ignore_samesite\",\"samesite_lax\",\"samesite_none\",\"samesite_strict\"]",
+            "x-ves-oneof-field-secure_choice": "[\"add_secure\",\"ignore_secure\"]",
+            "x-ves-oneof-field-value_choice": "[\"ignore_value\",\"secret_value\",\"value\"]",
+            "x-ves-proto-message": "ves.io.schema.SetCookieValueOption",
+            "properties": {
+                "add_domain": {
+                    "type": "string",
+                    "description": "Exclusive with [ignore_domain]\n Add domain attribute\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "title": "add_domain",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Add Domain",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "add_expiry": {
+                    "type": "string",
+                    "description": "Exclusive with [ignore_expiry]\n Add expiry attribute\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "add_expiry",
+                    "maxLength": 256,
+                    "x-displayname": "Add expiry",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "add_httponly": {
+                    "description": "Exclusive with [ignore_httponly]\n",
+                    "title": "add_httponly",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Add"
+                },
+                "add_partitioned": {
+                    "description": "Exclusive with [ignore_partitioned]\n",
+                    "title": "add_partitioned",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Add"
+                },
+                "add_path": {
+                    "type": "string",
+                    "description": "Exclusive with [ignore_path]\n Add path attribute\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "add_path",
+                    "maxLength": 256,
+                    "x-displayname": "Add path",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.http_path": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "add_secure": {
+                    "description": "Exclusive with [ignore_secure]\n",
+                    "title": "add_secure",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Add"
+                },
+                "ignore_domain": {
+                    "description": "Exclusive with [add_domain]\n Ignore max age attribute",
+                    "title": "ignore_domain",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ignore Domain"
+                },
+                "ignore_expiry": {
+                    "description": "Exclusive with [add_expiry]\n Ignore expiry attribute",
+                    "title": "ignore_expiry",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ignore Expiry"
+                },
+                "ignore_httponly": {
+                    "description": "Exclusive with [add_httponly]\n",
+                    "title": "ignore_httponly",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ignore"
+                },
+                "ignore_max_age": {
+                    "description": "Exclusive with [max_age_value]\n Ignore max age attribute",
+                    "title": "ignore_max_age",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ignore Max Age"
+                },
+                "ignore_partitioned": {
+                    "description": "Exclusive with [add_partitioned]\n",
+                    "title": "ignore_partitioned",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ignore"
+                },
+                "ignore_path": {
+                    "description": "Exclusive with [add_path]\n Ignore path attribute",
+                    "title": "ignore_domain",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ignore Path"
+                },
+                "ignore_samesite": {
+                    "description": "Exclusive with [samesite_lax samesite_none samesite_strict]\n Ignore Samesite attribute",
+                    "title": "ignore_samesite",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ignore"
+                },
+                "ignore_secure": {
+                    "description": "Exclusive with [add_secure]\n",
+                    "title": "ignore_secure",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ignore"
+                },
+                "ignore_value": {
+                    "description": "Exclusive with [secret_value value]\n Ignore value of cookie",
+                    "title": "ignore_value",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Ignore"
+                },
+                "max_age_value": {
+                    "type": "integer",
+                    "description": "Exclusive with [ignore_max_age]\n Add max age attribute\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 34560000\n",
+                    "title": "add_max_age",
+                    "format": "int32",
+                    "x-displayname": "Add Max Age",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.lte": "34560000"
+                    }
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the cookie in Cookie header.\n\nExample: - \"value\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.cookie_name: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "name",
+                    "maxLength": 256,
+                    "x-displayname": "Name",
+                    "x-ves-example": "value",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.cookie_name": "true",
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "overwrite": {
+                    "type": "boolean",
+                    "description": " Should the value be overwritten? If true, the value is overwritten to existing values.\n Default value is do not overwrite",
+                    "title": "overwrite",
+                    "format": "boolean",
+                    "x-displayname": "Overwrite"
+                },
+                "samesite_lax": {
+                    "description": "Exclusive with [ignore_samesite samesite_none samesite_strict]\n Add Samesite attribute with Lax. Means that the cookie is not sent on cross-site requests",
+                    "title": "lax",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Lax"
+                },
+                "samesite_none": {
+                    "description": "Exclusive with [ignore_samesite samesite_lax samesite_strict]\n Add Samesite attribute with None. Means that the browser sends the cookie with both cross-site and same-site requests",
+                    "title": "none",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "None"
+                },
+                "samesite_strict": {
+                    "description": "Exclusive with [ignore_samesite samesite_lax samesite_none]\n Add Samesite attribute with Strict. Means that the browser sends the cookie only for same-site requests",
+                    "title": "strict",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Strict"
+                },
+                "secret_value": {
+                    "description": "Exclusive with [ignore_value value]\n Secret Value of the Cookie header",
+                    "title": "Secret Value",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Secret Value"
+                },
+                "value": {
+                    "type": "string",
+                    "description": "Exclusive with [ignore_value secret_value]\n Value of the Cookie header.\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 8096\n",
+                    "title": "value",
+                    "maxLength": 8096,
+                    "x-displayname": "Value",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "8096"
+                    }
                 }
             }
         },
@@ -4717,22 +4953,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.WafType",
             "properties": {
                 "app_firewall": {
-                    "description": "Exclusive with [disable_waf inherit_waf]\n A direct reference to an Application Firewall configuration object",
+                    "description": "Exclusive with [disable_waf inherit_waf]\n A direct reference to an App Firewall configuration object",
                     "title": "app_firewall",
                     "$ref": "#/definitions/schemaAppFirewallRefType",
-                    "x-displayname": "Application Firewall"
+                    "x-displayname": "App Firewall"
                 },
                 "disable_waf": {
-                    "description": "Exclusive with [app_firewall inherit_waf]\n Any Application Firewall configuration will not be enforced",
+                    "description": "Exclusive with [app_firewall inherit_waf]\n No App Firewall enforcement",
                     "title": "disable app firewall",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disabled"
+                    "x-displayname": "Disable App Firewall"
                 },
                 "inherit_waf": {
-                    "description": "Exclusive with [app_firewall disable_waf]\n Any Application Firewall configuration that was configured on a higher level will be enforced",
+                    "description": "Exclusive with [app_firewall disable_waf]\n Any App Firewall configuration that was configured on a higher level will be enforced",
                     "title": "inherit app firewall",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Inherit"
+                    "x-displayname": "Inherit App Firewall"
                 }
             }
         },
@@ -4823,6 +5059,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-dns_zone_state_choice": "[\"not_ready\",\"ready\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
             "x-ves-oneof-field-server_header_choice": "[\"append_server_name\",\"default_header\",\"pass_through\",\"server_name\"]",
+            "x-ves-oneof-field-service_action_delegation": "[]",
             "x-ves-oneof-field-strict_sni_host_header_check_choice": "[]",
             "x-ves-oneof-field-tls_certificates_choice": "[\"tls_cert_params\",\"tls_parameters\"]",
             "x-ves-oneof-field-trust_client_ip_headers_choice": "[\"disable_trust_client_ip_headers\",\"enable_trust_client_ip_headers\"]",
@@ -5208,6 +5445,38 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Ready"
                 },
+                "request_cookies_to_add": {
+                    "type": "array",
+                    "description": " Cookies are key-value pairs to be added to HTTP request being routed towards upstream.\n Cookies specified at this level are applied after cookies from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Cookies to add in request",
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/schemaCookieValueOption"
+                    },
+                    "x-displayname": "Add Cookies in Cookie Header",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "request_cookies_to_remove": {
+                    "type": "array",
+                    "description": " List of keys of Cookies to be removed from the HTTP request being sent towards upstream.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Cookies to be removed from request",
+                    "maxItems": 32,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Remove Cookies from Cookie Header",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
                 "request_headers_to_add": {
                     "type": "array",
                     "description": " Headers are key-value pairs to be added to HTTP request being routed towards upstream.\n Headers specified at this level are applied after headers from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
@@ -5233,6 +5502,38 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Remove Request Headers",
                     "x-ves-example": "host",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "response_cookies_to_add": {
+                    "type": "array",
+                    "description": " Cookies are name-value pairs along with optional attribute parameters to be added to HTTP response being sent towards downstream.\n Cookies specified at this level are applied after cookies from matched Route are applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Cookies to add in set-cookie header in response",
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/schemaSetCookieValueOption"
+                    },
+                    "x-displayname": "Add Set-Cookie Headers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "response_cookies_to_remove": {
+                    "type": "array",
+                    "description": " List of name of Cookies to be removed from the HTTP response being sent towards downstream. Entire set-cookie header will be removed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.max_bytes: 256\n  ves.io.schema.rules.repeated.items.string.min_bytes: 1\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Cookies to be removed from response",
+                    "maxItems": 32,
+                    "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "maxLength": 256
+                    },
+                    "x-displayname": "Remove Cookies from Set-Cookie Headers",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.max_bytes": "256",
+                        "ves.io.schema.rules.repeated.items.string.min_bytes": "1",
                         "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
@@ -5550,6 +5851,63 @@ var APISwaggerJSON string = `{
             ],
             "default": "API_MODE"
         },
+        "virtual_hostCDNOriginServerPublicIP": {
+            "type": "object",
+            "description": "x-displayName: \"Public IP\"\nSpecify origin server with public IP address",
+            "title": "OriginServerPublicIP",
+            "properties": {
+                "ip": {
+                    "type": "string",
+                    "description": "x-displayName: \"Public IPV4\"\nx-example: \"8.8.8.8\"\nPublic IPV4 address",
+                    "title": "IP"
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": "x-displayName: \"Public IPV6\"\nx-example: \"2001::1\"\nPublic IPV6 address",
+                    "title": "IPV6"
+                }
+            }
+        },
+        "virtual_hostCDNOriginServerPublicName": {
+            "type": "object",
+            "description": "x-displayName: \"Public DNS Name\"\nSpecify origin server with public DNS name",
+            "title": "CDNOriginServerPublicName",
+            "properties": {
+                "dns_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"DNS Name\"\nx-example: \"value\"\nDNS Name",
+                    "title": "DNS name"
+                }
+            }
+        },
+        "virtual_hostCDNOriginServerType": {
+            "type": "object",
+            "description": "x-displayName: \"Origin Server\"\nVarious options to specify origin server",
+            "title": "CDNOriginServerType",
+            "properties": {
+                "port": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Origin Server Port\"\nx-example: \"80\"\nPort the workload can be reached on",
+                    "title": "Port",
+                    "format": "int64"
+                },
+                "public_ip": {
+                    "description": "x-displayName: \"Public IP of Origin Server\"\nSpecify origin server with public IP",
+                    "title": "OriginServerPublicName",
+                    "$ref": "#/definitions/virtual_hostCDNOriginServerPublicIP"
+                },
+                "public_name": {
+                    "description": "x-displayName: \"Public DNS Name of Origin Server\"\nSpecify origin server with public DNS name",
+                    "title": "OriginServerPublicName",
+                    "$ref": "#/definitions/virtual_hostCDNOriginServerPublicName"
+                }
+            }
+        },
+        "virtual_hostCDNUpstreamTlsParameters": {
+            "type": "object",
+            "description": "x-displayName: \"TLS Parameters for Origin Servers\"\nUpstream TLS Parameters",
+            "title": "CDNUpstreamTlsParameters"
+        },
         "virtual_hostCaptchaChallengeType": {
             "type": "object",
             "description": "\nEnables loadbalancer to perform captcha challenge\n\nCaptcha challenge will be based on Google Recaptcha.\n\nWith this feature enabled, only clients that pass the captcha challenge will be allowed to\ncomplete the HTTP request.\n\nWhen loadbalancer is configured to do Captcha Challenge, it will redirect the browser to an\nHTML page on every new HTTP request. This HTML page will have captcha challenge embedded in it.\nClient will be allowed to make the request only if the captcha challenge is successful.\nLoadbalancer will tag response header with a cookie to avoid Captcha challenge for subsequent requests.\n\nCAPTCHA is mainly used as a security check to ensure only human users can pass through.\nGenerally, computers or bots are not capable of solving a captcha.\n\nYou can enable either Javascript challenge or Captcha challenge on a virtual host",
@@ -5583,19 +5941,57 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostCdnOriginPoolType": {
+            "type": "object",
+            "description": "x-displayName: \"CDN Origin Pool\"\nOrigin Pool for the CDN distribution",
+            "title": "CdnOriginPoolType",
+            "properties": {
+                "follow_origin_redirect": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Follow Origin Redirect\"\nx-example: \"true\"\nx-example: true\nInstructs the CDN to follow redirects from the origin server(s)",
+                    "title": "Follow Origin Redirect",
+                    "format": "boolean"
+                },
+                "more_origin_options": {
+                    "description": "x-displayName: \"Advanced Configuration\"",
+                    "title": "Advanced Configuration",
+                    "$ref": "#/definitions/virtual_hostOriginAdvancedConfiguration"
+                },
+                "no_tls": {
+                    "description": "x-displayName: \"No TLS\"\nOrigin servers do not use TLS",
+                    "title": "No TLS",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "origin_request_timeout": {
+                    "type": "string",
+                    "description": "x-displayName: \"Origin Request Timeout Duration\"\nx-example: \"100s\"\nConfigures the time after which a request to the origin will time out waiting for a response",
+                    "title": "Origin Request Timeout"
+                },
+                "origin_servers": {
+                    "type": "array",
+                    "description": "x-displayName: \"List Of Origin Servers\"\nx-required\nList of original servers",
+                    "title": "List of Origin Servers",
+                    "items": {
+                        "$ref": "#/definitions/virtual_hostCDNOriginServerType"
+                    }
+                },
+                "public_name": {
+                    "description": "x-displayName: \"Origin Host Header\"\nThe DNS name to be used as the host header for the request to the origin server",
+                    "title": "OriginServerPublicName",
+                    "$ref": "#/definitions/virtual_hostCDNOriginServerPublicName"
+                },
+                "use_tls": {
+                    "description": "x-displayName: \"TLS\"\nOrigin servers use TLS",
+                    "title": "Use TLS",
+                    "$ref": "#/definitions/virtual_hostCDNUpstreamTlsParameters"
+                }
+            }
+        },
         "virtual_hostCdnServiceType": {
             "type": "object",
             "x-ves-oneof-field-content_choice": "[\"download_delivery\",\"live_streaming\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_host.CdnServiceType",
             "properties": {
-                "cache_ttl": {
-                    "type": "integer",
-                    "description": " The Cache TTL is the number of seconds after which cache content is no longer valid\n\nExample: - \"3600\"-",
-                    "title": "Cache TTL values",
-                    "format": "int64",
-                    "x-displayname": "Cache TTL",
-                    "x-ves-example": "3600"
-                },
                 "download_delivery": {
                     "description": "Exclusive with [live_streaming]\n Content type is download delivery",
                     "title": "Download Delivery",
@@ -5607,15 +6003,6 @@ var APISwaggerJSON string = `{
                     "title": "Live Streaming",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Live Streaming"
-                },
-                "service_domains": {
-                    "type": "array",
-                    "description": " CNAME provided from service per domain",
-                    "title": "Service Domains",
-                    "items": {
-                        "$ref": "#/definitions/virtual_hostServiceDomain"
-                    },
-                    "x-displayname": "Service Domains"
                 }
             }
         },
@@ -5827,6 +6214,85 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostDefaultCacheAction": {
+            "type": "object",
+            "description": "x-displayName: \"Default Cache Action\"\nThis defines a Default Cache Action",
+            "title": "Default Cache Action",
+            "properties": {
+                "cache_disabled": {
+                    "description": "x-displayName: \"Disable Cache\"\nDisable Caching of content from the origin",
+                    "title": "Disable Cache",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "cache_ttl_default": {
+                    "type": "string",
+                    "description": "x-displayName: \"Default Cache TTL\"\nCache TTL value to use when the origin does not provide one",
+                    "title": "Default Cache TTL"
+                },
+                "cache_ttl_override": {
+                    "type": "string",
+                    "description": "x-displayName: \"Override Cache TTL\"\nOverride the Cache TTL directive in the response from the origin",
+                    "title": "Override Cache TTL"
+                }
+            }
+        },
+        "virtual_hostDelegationLocation": {
+            "type": "string",
+            "description": "x-displayName: \"Service Action Delegation Location\"\nLocation in the service-chain topology where a virtual_host's service action is to be \napplied. It could be either in CDN or LB or BIG-IP etc.\n\n - NONE: NONE\n\nx-displayName: \"Not Performed\"\nThe service action is not performed. This should override the user selection. This option is chosen \nby the system in cases where the action is either redundant etc.\n - HTTP_LB: HTTP_LB\n\nx-displayName: \"Http Load Balancer\"\nThe HTTP-LB service action will be performed by the LB (envoy).\nThis implies that the service action is performed only on cache miss requests.\n - CDN: CDN\n\nx-displayName: \"CDN\"\nThe HTTP-LB service action will be performed by the CDN (nginx)\nThe service action is performed for all requests, both cache hits and miss.\n - BOTH: BOTH\n\nx-displayName: \"CDN AND Load Balancer\"\nThe HTTP-LB service action will be performed by both the CDN (nginx) and LB (envoy)\nThe service action is performed for all requests. The action is performed twice for origin requests, once\nin CDN (nginx) and once in LB (envoy)",
+            "title": "HTTP-LB Service Delegation Location",
+            "enum": [
+                "NONE",
+                "HTTP_LB",
+                "CDN",
+                "BOTH"
+            ],
+            "default": "NONE"
+        },
+        "virtual_hostDelegationLocationSelection": {
+            "type": "object",
+            "properties": {
+                "direct_response_route": {
+                    "description": "x-displayName: \"Service Delection selection for Direct Response Route\"\nSpecifies where the Direct Response Route service action is delegated to.\nSince direct response route is to be applied ASAP, it is delegated to CDN.",
+                    "title": "Direct Response Route Service Delegation",
+                    "$ref": "#/definitions/virtual_hostDelegationLocation"
+                },
+                "l7ddos": {
+                    "description": "x-displayName: \"Service Delection selection for L7DDoS\"\nSpecifies where the L7DDoS service action is delegated to.\nSince L7DDoS is to be applied first in the service chain, it is delegated to CDN.",
+                    "title": "L7DDoS Service Delegation",
+                    "$ref": "#/definitions/virtual_hostDelegationLocation"
+                },
+                "redirect_route": {
+                    "description": "x-displayName: \"Service Delection selection for Redirect Route\"\nSpecifies where the Redirect Route service action is delegated to.\nSince redirect route is to be applied ASAP, it is delegated to CDN.",
+                    "title": "Redirect Route Service Delegation",
+                    "$ref": "#/definitions/virtual_hostDelegationLocation"
+                },
+                "request_header_manipulation": {
+                    "description": "x-displayName: \"Service Delection selection for Request Header Manipulation\"\nSpecifies where the Request Header Manipulation service action is delegated to.\nSince request header manipulation is to be applied just before origin, it is delegated to LB.",
+                    "title": "Request Header Manipulation Service Delegation",
+                    "$ref": "#/definitions/virtual_hostDelegationLocation"
+                },
+                "request_rewrite": {
+                    "description": "x-displayName: \"Service Delection selection for Request Rewrite\"\nSpecifies where the Request Rewrite service action is delegated to.\nSince request rewrite is to be applied just before origin, it is delegated to LB.",
+                    "title": "Request Rewrite Service Delegation Location",
+                    "$ref": "#/definitions/virtual_hostDelegationLocation"
+                },
+                "response_header_manipulation": {
+                    "description": "x-displayName: \"Service Delection selection for Response Header Manipulation\"\nSpecifies where the Response Header Manipulation service action is delegated to.\nSince response header manipulation is to be applied just before responding to client, it is delegated to CDN.",
+                    "title": "Response Header Manipulation Service Delegation",
+                    "$ref": "#/definitions/virtual_hostDelegationLocation"
+                },
+                "simple_route": {
+                    "description": "x-displayName: \"Service Delection selection for Simple Route\"\nSpecifies where the Simple Route service action is delegated to. \nSince simple route is applied just before origin, it is delegated to LB.",
+                    "title": "Simple Route Service Delegation",
+                    "$ref": "#/definitions/virtual_hostDelegationLocation"
+                },
+                "waap": {
+                    "description": "x-displayName: \"Service Delection selection for WAAP\"\nSpecifies where the WAAP service action is delegated to. This is for all WAAP except for L7DDoS.",
+                    "title": "WAAP Service Delegation",
+                    "$ref": "#/definitions/virtual_hostDelegationLocation"
+                }
+            }
+        },
         "virtual_hostDomainCertificates": {
             "type": "object",
             "description": "x-displayName: \"Domain Certificates\"\nThe certificates for a given domain per public key algorithm. A certificate is required for at least one of the algorithm types.",
@@ -5889,6 +6355,45 @@ var APISwaggerJSON string = `{
                     "title": "Enable the dynamic resolution of the endpoint",
                     "format": "boolean",
                     "x-displayname": "Dynamic Endpoint Resolution"
+                }
+            }
+        },
+        "virtual_hostHeaderControlType": {
+            "type": "object",
+            "description": "x-displayName: \"Header Control\"\nThis defines various options related to request/response headers",
+            "title": "Header Control",
+            "properties": {
+                "request_headers_to_add": {
+                    "type": "array",
+                    "description": "x-displayName: \"Add Origin Request Headers\"\nHeaders are key-value pairs to be added to HTTP request being routed towards upstream.\nHeaders specified at this level are applied after headers from matched Route are applied",
+                    "title": "Headers to add in request",
+                    "items": {
+                        "$ref": "#/definitions/schemaHeaderManipulationOptionType"
+                    }
+                },
+                "request_headers_to_remove": {
+                    "type": "array",
+                    "description": "x-displayName: \"Remove Origin Request Headers\"\nx-example: \"host\"\nList of keys of Headers to be removed from the HTTP request being sent towards upstream.",
+                    "title": "Header to be removed from request",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "response_headers_to_add": {
+                    "type": "array",
+                    "description": "x-displayName: \"Add Response Headers\"\nHeaders are key-value pairs to be added to HTTP response being sent towards downstream.\nHeaders specified at this level are applied after headers from matched Route are applied",
+                    "title": "Headers to add in response",
+                    "items": {
+                        "$ref": "#/definitions/schemaHeaderManipulationOptionType"
+                    }
+                },
+                "response_headers_to_remove": {
+                    "type": "array",
+                    "description": "x-displayName: \"Remove Response Headers\"\nx-example: \"host\"\nList of keys of Headers to be removed from the HTTP response being sent towards downstream.",
+                    "title": "Header to be removed from response",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
@@ -6000,6 +6505,38 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostLogHeaderOptions": {
+            "type": "object",
+            "description": "x-displayName: \"Headers to Log\"\nList of headers to Log",
+            "title": "LogHeaderOptions",
+            "properties": {
+                "header_list": {
+                    "type": "array",
+                    "description": "x-displayName: \"Headers\"\nx-example: \"x-custom-length\"\nList of headers",
+                    "title": "List of Headers",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "virtual_hostLoggingOptionsType": {
+            "type": "object",
+            "description": "x-displayName: \"Logging Options\"\nThis defines various options related to logging",
+            "title": "Logging options",
+            "properties": {
+                "client_log_options": {
+                    "description": "x-displayName: \"Client Request Headers to Log\"\nClient request headers to log",
+                    "title": "client_log_options",
+                    "$ref": "#/definitions/virtual_hostLogHeaderOptions"
+                },
+                "origin_log_options": {
+                    "description": "x-displayName: \"Origin Response Headers to Log\"\nOrigin response headers to log",
+                    "title": "origin_log_options",
+                    "$ref": "#/definitions/virtual_hostLogHeaderOptions"
+                }
+            }
+        },
         "virtual_hostMaskingConfiguration": {
             "type": "object",
             "description": "x-displayName: \"Masking Configuration\"\nMasking configuration settings",
@@ -6045,6 +6582,48 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"Fail Oversized Body Validation\"\nSet to fail validation on request/response with too long body",
                     "title": "fail oversized body validation",
                     "format": "boolean"
+                }
+            }
+        },
+        "virtual_hostOriginAdvancedConfiguration": {
+            "type": "object",
+            "description": "x-displayName: \"Origin Byte Range Request Config\"",
+            "title": "Origin Byte Range Request Config",
+            "properties": {
+                "disable_byte_range_request": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Disable Origin Byte Range Requests\"\nx-example: \"true/false\"\nChoice to enable/disable origin byte range requrests towards origin",
+                    "title": "Disable Origin Byte Range Requests",
+                    "format": "boolean"
+                },
+                "websocket_proxy": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Enable websocket proxy to the origin\"\nOption to enable proxying of websocket connections to the origin server",
+                    "title": "Enable websocket proxy to the origin",
+                    "format": "boolean"
+                }
+            }
+        },
+        "virtual_hostOtherSettings": {
+            "type": "object",
+            "description": "x-displayName: \"Other Settings\"\nOther Settings",
+            "title": "Other Settings",
+            "properties": {
+                "add_location": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Add Location\"\nx-example: \"true\"\nx-example: true\nAppends header x-volterra-location = \u003cre-site-name\u003e in responses.",
+                    "title": "Add Site information",
+                    "format": "boolean"
+                },
+                "header_options": {
+                    "description": "x-displayName: \"Header Control\"\nRequest/Response header related options",
+                    "title": "Header Control",
+                    "$ref": "#/definitions/virtual_hostHeaderControlType"
+                },
+                "logging_options": {
+                    "description": "x-displayName: \"Logging Options\"\nLogging related options",
+                    "title": "Logging Options",
+                    "$ref": "#/definitions/virtual_hostLoggingOptionsType"
                 }
             }
         },
@@ -6109,23 +6688,34 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostServiceDomain": {
             "type": "object",
-            "x-ves-proto-message": "ves.io.schema.virtual_host.ServiceDomain",
             "properties": {
                 "domain": {
                     "type": "string",
-                    "description": " Domain Name\n\nExample: - \"cdn.acmecorp.com\"-",
-                    "title": "Domain Name",
-                    "x-displayname": "Domain Name",
-                    "x-ves-example": "cdn.acmecorp.com"
+                    "description": "x-displayName: \"Domain Name\"\nx-example: \"cdn.acmecorp.com\"\nDomain Name",
+                    "title": "Domain Name"
+                },
+                "internal_service_domain": {
+                    "type": "string",
+                    "description": "x-displayName: \"Internal Service Domain\"\nx-example: \"cdn.f898e588-1995-4a41-838f-ec4025a0c87e.crt-f5.lilaccdn.net\"\nInternal Service Domain determined by Lilac",
+                    "title": "Internal Service Domain"
                 },
                 "service_domain": {
                     "type": "string",
-                    "description": " Service Domain\n\nExample: - \"ves-io-cdn-cdn-acmecorp-com.demo1.ac.vh.volterra.us\"-",
-                    "title": "Service Domain",
-                    "x-displayname": "Service Domain",
-                    "x-ves-example": "ves-io-cdn-cdn-acmecorp-com.demo1.ac.vh.volterra.us"
+                    "description": "x-displayName: \"Service Domain\"\nx-example: \"ves-io-cdn-cdn-acmecorp-com.demo1.ac.vh.volterra.us\"\nService Domain",
+                    "title": "Service Domain"
                 }
             }
+        },
+        "virtual_hostServicePolicyOption": {
+            "type": "string",
+            "description": "x-displayName: \"Service Policy Option\"\nDefinitions for Service Policy Option\n\n - NO_SERVICE_POLICIES: NO SERVICE POLICIES\n\nx-displayName: \"NO_SERVICE_POLICIES\"\nThis option indicates that no service policy has been selected for the view object.\n - SERVICE_POLICIES_FROM_NAMESPACE: SERVICE POLICIES FROM NAMESPACE\n\nx-displayName: \"SERVICE_POLICIES_FROM_NAMESPACE\"\nThis indicates that all service policies within the namespace, having names prefixed with \"active,\" have been selected.\n - ACTIVE_SERVICE_POLICIES: ACTIVE SERVICE POLICIES\n\nx-displayName: \"ACTIVE_SERVICE_POLICIES\"\nThis indicates that a custom service policy has been selected for the view object.",
+            "title": "ServicePolicyOption",
+            "enum": [
+                "NO_SERVICE_POLICIES",
+                "SERVICE_POLICIES_FROM_NAMESPACE",
+                "ACTIVE_SERVICE_POLICIES"
+            ],
+            "default": "NO_SERVICE_POLICIES"
         },
         "virtual_hostShapeBotDefenseConfigType": {
             "type": "object",
@@ -6347,7 +6937,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostVirtualHostType": {
             "type": "string",
-            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block\n - BIGIP_VIRTUAL_SERVER: BIG-IP Virtual Server\n\nVirtual Host representing a BIG-IP Virtual Server",
+            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block\n - BIGIP_VIRTUAL_SERVER: BIG-IP Virtual Server\n\nVirtual Host representing a BIG-IP Virtual Server\n - UDP_LOAD_BALANCER: UDP LoadBalancer\n\nVirtual Host used as Load Balancer",
             "title": "VirtualHostType",
             "enum": [
                 "VIRTUAL_SERVICE",
@@ -6356,7 +6946,8 @@ var APISwaggerJSON string = `{
                 "TCP_LOAD_BALANCER",
                 "PROXY",
                 "CDN_LOAD_BALANCER",
-                "NGINX_SERVER"
+                "NGINX_SERVER",
+                "UDP_LOAD_BALANCER"
             ],
             "default": "VIRTUAL_SERVICE",
             "x-displayname": "Virtual Host Type",

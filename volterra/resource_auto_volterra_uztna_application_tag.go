@@ -261,5 +261,8 @@ func resourceVolterraUztnaApplicationTagDelete(d *schema.ResourceData, meta inte
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra UztnaApplicationTag obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_uztna_application_uztna_application_tag.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_uztna_application_uztna_application_tag.ObjectType, namespace, name, opts...)
 }

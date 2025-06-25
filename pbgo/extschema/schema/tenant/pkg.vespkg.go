@@ -72,6 +72,24 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.tenant.CustomAPI.GetIDMSettings"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "session_management",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
+	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.tenant.CustomAPI.UpdateIDMSettings"] = []string{
+		"session_management.cookie_refresh_interval",
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.tenant.CustomAPI.UpdateIDMSettings"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "session_management",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.tenant.CustomAPI.UpdateImage"] = "ves.io.schema.tenant.UpdateImageRequest"
 
 }

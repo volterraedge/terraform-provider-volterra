@@ -66,105 +66,67 @@ func (m *AppVIPPool) GetDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 
-	return m.GetAppVipPoolDRefInfo()
+	return m.GetIpaddressTypeDRefInfo()
 
 }
 
-func (m *AppVIPPool) GetAppVipPoolDRefInfo() ([]db.DRefInfo, error) {
-	refs := m.GetAppVipPool()
-	if len(refs) == 0 {
+// GetDRefInfo for the field's type
+func (m *AppVIPPool) GetIpaddressTypeDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetIpaddressType() == nil {
 		return nil, nil
 	}
-	drInfos := make([]db.DRefInfo, 0, len(refs))
-	for i, ref := range refs {
-		if ref == nil {
-			return nil, fmt.Errorf("AppVIPPool.app_vip_pool[%d] has a nil value", i)
-		}
-		// resolve kind to type if needed at DBObject.GetDRefInfo()
-		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "uztna_app_vip_pool.Object",
-			RefdUID:    ref.Uid,
-			RefdTenant: ref.Tenant,
-			RefdNS:     ref.Namespace,
-			RefdName:   ref.Name,
-			DRField:    "app_vip_pool",
-			Ref:        ref,
-		})
-	}
-	return drInfos, nil
+	switch m.GetIpaddressType().(type) {
+	case *AppVIPPool_Ipv4AppVipPool:
 
-}
-
-// GetAppVipPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
-func (m *AppVIPPool) GetAppVipPoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
-	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "uztna_app_vip_pool.Object")
-	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: uztna_app_vip_pool")
-	}
-	for _, ref := range m.GetAppVipPool() {
-		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		drInfos, err := m.GetIpv4AppVipPool().GetDRefInfo()
 		if err != nil {
-			return nil, errors.Wrap(err, "Getting referred entry")
+			return nil, errors.Wrap(err, "GetIpv4AppVipPool().GetDRefInfo() FAILED")
 		}
-		if refdEnt != nil {
-			entries = append(entries, refdEnt)
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipv4_app_vip_pool." + dri.DRField
 		}
+		return drInfos, err
+
+	case *AppVIPPool_Ipv6AppVipPool:
+
+		drInfos, err := m.GetIpv6AppVipPool().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpv6AppVipPool().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipv6_app_vip_pool." + dri.DRField
+		}
+		return drInfos, err
+
+	case *AppVIPPool_Ipv4Ipv6AppVipPool:
+
+		drInfos, err := m.GetIpv4Ipv6AppVipPool().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetIpv4Ipv6AppVipPool().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "ipv4_ipv6_app_vip_pool." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
 	}
 
-	return entries, nil
 }
 
 type ValidateAppVIPPool struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateAppVIPPool) AppVipPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	itemRules := db.GetRepMessageItemRules(rules)
-	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Message ValidationRuleHandler for app_vip_pool")
-	}
-	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
-		for i, el := range elems {
-			if err := itemValFn(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
-				return errors.Wrap(err, fmt.Sprintf("element %d", i))
-			}
-		}
-		return nil
-	}
-	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for app_vip_pool")
-	}
-
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*ves_io_schema.ObjectRefType)
-		if !ok {
-			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
-		}
-		l := []string{}
-		for _, elem := range elems {
-			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
-			if err != nil {
-				return errors.Wrapf(err, "Converting %v to JSON", elem)
-			}
-			l = append(l, strVal)
-		}
-		if err := repValFn(ctx, l, opts...); err != nil {
-			return errors.Wrap(err, "repeated app_vip_pool")
-		}
-		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
-			return errors.Wrap(err, "items app_vip_pool")
-		}
-		return nil
-	}
-
-	return validatorFn, nil
+func (v *ValidateAppVIPPool) IpaddressTypeIpv4AppVipPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return IPv4AppVipPoolValidator().Validate, nil
+}
+func (v *ValidateAppVIPPool) IpaddressTypeIpv6AppVipPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return IPv6AppVipPoolValidator().Validate, nil
 }
 
 func (v *ValidateAppVIPPool) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
@@ -181,10 +143,39 @@ func (v *ValidateAppVIPPool) Validate(ctx context.Context, pm interface{}, opts 
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["app_vip_pool"]; exists {
-		vOpts := append(opts, db.WithValidateField("app_vip_pool"))
-		if err := fv(ctx, m.GetAppVipPool(), vOpts...); err != nil {
-			return err
+	switch m.GetIpaddressType().(type) {
+	case *AppVIPPool_Ipv4AppVipPool:
+		if fv, exists := v.FldValidators["ipaddress_type.ipv4_app_vip_pool"]; exists {
+			val := m.GetIpaddressType().(*AppVIPPool_Ipv4AppVipPool).Ipv4AppVipPool
+			vOpts := append(opts,
+				db.WithValidateField("ipaddress_type"),
+				db.WithValidateField("ipv4_app_vip_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AppVIPPool_Ipv6AppVipPool:
+		if fv, exists := v.FldValidators["ipaddress_type.ipv6_app_vip_pool"]; exists {
+			val := m.GetIpaddressType().(*AppVIPPool_Ipv6AppVipPool).Ipv6AppVipPool
+			vOpts := append(opts,
+				db.WithValidateField("ipaddress_type"),
+				db.WithValidateField("ipv6_app_vip_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AppVIPPool_Ipv4Ipv6AppVipPool:
+		if fv, exists := v.FldValidators["ipaddress_type.ipv4_ipv6_app_vip_pool"]; exists {
+			val := m.GetIpaddressType().(*AppVIPPool_Ipv4Ipv6AppVipPool).Ipv4Ipv6AppVipPool
+			vOpts := append(opts,
+				db.WithValidateField("ipaddress_type"),
+				db.WithValidateField("ipv4_ipv6_app_vip_pool"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -204,16 +195,29 @@ var DefaultAppVIPPoolValidator = func() *ValidateAppVIPPool {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhAppVipPool := v.AppVipPoolValidationRuleHandler
-	rulesAppVipPool := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "1",
+	vrhIpaddressTypeIpv4AppVipPool := v.IpaddressTypeIpv4AppVipPoolValidationRuleHandler
+	rulesIpaddressTypeIpv4AppVipPool := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
 	}
-	vFn, err = vrhAppVipPool(rulesAppVipPool)
+	vFnMap["ipaddress_type.ipv4_app_vip_pool"], err = vrhIpaddressTypeIpv4AppVipPool(rulesIpaddressTypeIpv4AppVipPool)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for AppVIPPool.app_vip_pool: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AppVIPPool.ipaddress_type_ipv4_app_vip_pool: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["app_vip_pool"] = vFn
+	vrhIpaddressTypeIpv6AppVipPool := v.IpaddressTypeIpv6AppVipPoolValidationRuleHandler
+	rulesIpaddressTypeIpv6AppVipPool := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["ipaddress_type.ipv6_app_vip_pool"], err = vrhIpaddressTypeIpv6AppVipPool(rulesIpaddressTypeIpv6AppVipPool)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field AppVIPPool.ipaddress_type_ipv6_app_vip_pool: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["ipaddress_type.ipv4_app_vip_pool"] = vFnMap["ipaddress_type.ipv4_app_vip_pool"]
+	v.FldValidators["ipaddress_type.ipv6_app_vip_pool"] = vFnMap["ipaddress_type.ipv6_app_vip_pool"]
+
+	v.FldValidators["ipaddress_type.ipv4_ipv6_app_vip_pool"] = DualStackAppVipPoolValidator().Validate
 
 	return v
 }()
@@ -1282,9 +1286,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhAccessFqdn := v.AccessFqdnValidationRuleHandler
 	rulesAccessFqdn := map[string]string{
-		"ves.io.schema.rules.message.required":      "true",
-		"ves.io.schema.rules.string.max_bytes":      "1024",
-		"ves.io.schema.rules.string.url_or_uri_ref": "true",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.hostname":  "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhAccessFqdn(rulesAccessFqdn)
 	if err != nil {
@@ -1316,6 +1321,223 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 func CreateSpecTypeValidator() db.Validator {
 	return DefaultCreateSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *DualStackAppVipPool) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *DualStackAppVipPool) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *DualStackAppVipPool) DeepCopy() *DualStackAppVipPool {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &DualStackAppVipPool{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *DualStackAppVipPool) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *DualStackAppVipPool) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return DualStackAppVipPoolValidator().Validate(ctx, m, opts...)
+}
+
+func (m *DualStackAppVipPool) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetIpv4AppVipPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIpv4AppVipPoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetIpv6AppVipPoolDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetIpv6AppVipPoolDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *DualStackAppVipPool) GetIpv4AppVipPoolDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetIpv4AppVipPool() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetIpv4AppVipPool().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIpv4AppVipPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ipv4_app_vip_pool." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+// GetDRefInfo for the field's type
+func (m *DualStackAppVipPool) GetIpv6AppVipPoolDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetIpv6AppVipPool() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetIpv6AppVipPool().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetIpv6AppVipPool().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "ipv6_app_vip_pool." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+type ValidateDualStackAppVipPool struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateDualStackAppVipPool) Ipv4AppVipPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ipv4_app_vip_pool")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := IPv4AppVipPoolValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDualStackAppVipPool) Ipv6AppVipPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "MessageValidationRuleHandler for ipv6_app_vip_pool")
+	}
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		if err := IPv6AppVipPoolValidator().Validate(ctx, val, opts...); err != nil {
+			return err
+		}
+
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateDualStackAppVipPool) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*DualStackAppVipPool)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *DualStackAppVipPool got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ipv4_app_vip_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv4_app_vip_pool"))
+		if err := fv(ctx, m.GetIpv4AppVipPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ipv6_app_vip_pool"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("ipv6_app_vip_pool"))
+		if err := fv(ctx, m.GetIpv6AppVipPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultDualStackAppVipPoolValidator = func() *ValidateDualStackAppVipPool {
+	v := &ValidateDualStackAppVipPool{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIpv4AppVipPool := v.Ipv4AppVipPoolValidationRuleHandler
+	rulesIpv4AppVipPool := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhIpv4AppVipPool(rulesIpv4AppVipPool)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DualStackAppVipPool.ipv4_app_vip_pool: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv4_app_vip_pool"] = vFn
+
+	vrhIpv6AppVipPool := v.Ipv6AppVipPoolValidationRuleHandler
+	rulesIpv6AppVipPool := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhIpv6AppVipPool(rulesIpv6AppVipPool)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DualStackAppVipPool.ipv6_app_vip_pool: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6_app_vip_pool"] = vFn
+
+	return v
+}()
+
+func DualStackAppVipPoolValidator() db.Validator {
+	return DefaultDualStackAppVipPoolValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -2305,9 +2527,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhAccessFqdn := v.AccessFqdnValidationRuleHandler
 	rulesAccessFqdn := map[string]string{
-		"ves.io.schema.rules.message.required":      "true",
-		"ves.io.schema.rules.string.max_bytes":      "1024",
-		"ves.io.schema.rules.string.url_or_uri_ref": "true",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.hostname":  "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhAccessFqdn(rulesAccessFqdn)
 	if err != nil {
@@ -2936,9 +3159,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhAccessFqdn := v.AccessFqdnValidationRuleHandler
 	rulesAccessFqdn := map[string]string{
-		"ves.io.schema.rules.message.required":      "true",
-		"ves.io.schema.rules.string.max_bytes":      "1024",
-		"ves.io.schema.rules.string.url_or_uri_ref": "true",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.hostname":  "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhAccessFqdn(rulesAccessFqdn)
 	if err != nil {
@@ -2970,6 +3194,205 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPv4AppVipPool) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPv4AppVipPool) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPv4AppVipPool) DeepCopy() *IPv4AppVipPool {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPv4AppVipPool{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPv4AppVipPool) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPv4AppVipPool) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPv4AppVipPoolValidator().Validate(ctx, m, opts...)
+}
+
+func (m *IPv4AppVipPool) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIpv4AppVipPoolDRefInfo()
+
+}
+
+func (m *IPv4AppVipPool) GetIpv4AppVipPoolDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetIpv4AppVipPool()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("IPv4AppVipPool.ipv4_app_vip_pool[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_app_vip_pool.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ipv4_app_vip_pool",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetIpv4AppVipPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *IPv4AppVipPool) GetIpv4AppVipPoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "uztna_app_vip_pool.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: uztna_app_vip_pool")
+	}
+	for _, ref := range m.GetIpv4AppVipPool() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateIPv4AppVipPool struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPv4AppVipPool) Ipv4AppVipPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ipv4_app_vip_pool")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv4_app_vip_pool")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv4_app_vip_pool")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv4_app_vip_pool")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIPv4AppVipPool) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPv4AppVipPool)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPv4AppVipPool got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ipv4_app_vip_pool"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv4_app_vip_pool"))
+		if err := fv(ctx, m.GetIpv4AppVipPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPv4AppVipPoolValidator = func() *ValidateIPv4AppVipPool {
+	v := &ValidateIPv4AppVipPool{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIpv4AppVipPool := v.Ipv4AppVipPoolValidationRuleHandler
+	rulesIpv4AppVipPool := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhIpv4AppVipPool(rulesIpv4AppVipPool)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPv4AppVipPool.ipv4_app_vip_pool: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv4_app_vip_pool"] = vFn
+
+	return v
+}()
+
+func IPv4AppVipPoolValidator() db.Validator {
+	return DefaultIPv4AppVipPoolValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3169,6 +3592,205 @@ var DefaultIPv4LeasepoolValidator = func() *ValidateIPv4Leasepool {
 
 func IPv4LeasepoolValidator() db.Validator {
 	return DefaultIPv4LeasepoolValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *IPv6AppVipPool) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *IPv6AppVipPool) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *IPv6AppVipPool) DeepCopy() *IPv6AppVipPool {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &IPv6AppVipPool{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *IPv6AppVipPool) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *IPv6AppVipPool) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return IPv6AppVipPoolValidator().Validate(ctx, m, opts...)
+}
+
+func (m *IPv6AppVipPool) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetIpv6AppVipPoolDRefInfo()
+
+}
+
+func (m *IPv6AppVipPool) GetIpv6AppVipPoolDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetIpv6AppVipPool()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("IPv6AppVipPool.ipv6_app_vip_pool[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "uztna_app_vip_pool.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "ipv6_app_vip_pool",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetIpv6AppVipPoolDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *IPv6AppVipPool) GetIpv6AppVipPoolDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "uztna_app_vip_pool.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: uztna_app_vip_pool")
+	}
+	for _, ref := range m.GetIpv6AppVipPool() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateIPv6AppVipPool struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateIPv6AppVipPool) Ipv6AppVipPoolValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ipv6_app_vip_pool")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ipv6_app_vip_pool")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ipv6_app_vip_pool")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ipv6_app_vip_pool")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateIPv6AppVipPool) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*IPv6AppVipPool)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *IPv6AppVipPool got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["ipv6_app_vip_pool"]; exists {
+		vOpts := append(opts, db.WithValidateField("ipv6_app_vip_pool"))
+		if err := fv(ctx, m.GetIpv6AppVipPool(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultIPv6AppVipPoolValidator = func() *ValidateIPv6AppVipPool {
+	v := &ValidateIPv6AppVipPool{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhIpv6AppVipPool := v.Ipv6AppVipPoolValidationRuleHandler
+	rulesIpv6AppVipPool := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhIpv6AppVipPool(rulesIpv6AppVipPool)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for IPv6AppVipPool.ipv6_app_vip_pool: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ipv6_app_vip_pool"] = vFn
+
+	return v
+}()
+
+func IPv6AppVipPoolValidator() db.Validator {
+	return DefaultIPv6AppVipPoolValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3783,6 +4405,7 @@ var DefaultPolicyValidator = func() *ValidatePolicy {
 
 	vrhPolicy := v.PolicyValidationRuleHandler
 	rulesPolicy := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
 		"ves.io.schema.rules.repeated.max_items": "1",
 	}
 	vFn, err = vrhPolicy(rulesPolicy)
@@ -4394,9 +5017,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhAccessFqdn := v.AccessFqdnValidationRuleHandler
 	rulesAccessFqdn := map[string]string{
-		"ves.io.schema.rules.message.required":      "true",
-		"ves.io.schema.rules.string.max_bytes":      "1024",
-		"ves.io.schema.rules.string.url_or_uri_ref": "true",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.hostname":  "true",
+		"ves.io.schema.rules.string.max_len":   "256",
+		"ves.io.schema.rules.string.min_len":   "1",
 	}
 	vFn, err = vrhAccessFqdn(rulesAccessFqdn)
 	if err != nil {

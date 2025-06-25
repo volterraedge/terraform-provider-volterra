@@ -143,6 +143,7 @@ func (c *CustomPrivateAPIEywaprimeRestClient) doRPCCreateV2(ctx context.Context,
 		q.Add("company_details", fmt.Sprintf("%v", req.CompanyDetails))
 		q.Add("origin", fmt.Sprintf("%v", req.Origin))
 		q.Add("signup_type", fmt.Sprintf("%v", req.SignupType))
+		q.Add("tenant_metadata", fmt.Sprintf("%v", req.TenantMetadata))
 		q.Add("user_details", fmt.Sprintf("%v", req.UserDetails))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -231,6 +232,7 @@ func (c *CustomPrivateAPIEywaprimeRestClient) doRPCRestrictedCreateV2(ctx contex
 		q.Add("company_details", fmt.Sprintf("%v", req.CompanyDetails))
 		q.Add("origin", fmt.Sprintf("%v", req.Origin))
 		q.Add("signup_type", fmt.Sprintf("%v", req.SignupType))
+		q.Add("tenant_metadata", fmt.Sprintf("%v", req.TenantMetadata))
 		q.Add("user_details", fmt.Sprintf("%v", req.UserDetails))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -906,13 +908,13 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                     "x-displayname": "Not specified"
                 },
                 "route_advertisement_mgmt_not_using_f5xc": {
-                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_using_f5xc]\n Tenant manages outside F5XC",
+                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_using_f5xc]\n Tenant manages using F5XC Routed DDoS Always On",
                     "title": "Tenant manages outside F5XC",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Tenant manages not using F5XC"
                 },
                 "route_advertisement_mgmt_using_f5xc": {
-                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_not_using_f5xc]\n Tenant manages using F5XC",
+                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_not_using_f5xc]\n Tenant manages using F5XC Routed DDoS Always Available",
                     "title": "Tenant manages using F5XC",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Tenant manages using F5XC"
@@ -1195,6 +1197,12 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                     "$ref": "#/definitions/signupSignupTypeInternalSre",
                     "x-displayname": "Signup Type Internal SRE"
                 },
+                "tenant_metadata": {
+                    "description": " x-example:\n tenant_metadata: {\n   labels: {\n     \"ves-io/vip-allocation-type\": \"shared_vip\"\n   }\n }\n\n Tenant metadata provides additional context for processing the tenant during signup",
+                    "title": "TenantMetadata",
+                    "$ref": "#/definitions/signupTenantMetadata",
+                    "x-displayname": "TenantMetadata"
+                },
                 "user_details": {
                     "description": " details of the user",
                     "title": "User Details",
@@ -1310,6 +1318,21 @@ var CustomPrivateAPIEywaprimeSwaggerJSON string = `{
                     "description": "x-displayName: \"IsSsoEnabled\"\nx-example: true\nIsSsoEnabled tells whether the sso should be enabled for new tenant",
                     "title": "IsSsoEnabled",
                     "format": "boolean"
+                }
+            }
+        },
+        "signupTenantMetadata": {
+            "type": "object",
+            "description": "Tenant metadata provides additional context for processing the tenant during signup",
+            "title": "Tenant Metadata",
+            "x-displayname": "TenantMetadata",
+            "x-ves-proto-message": "ves.io.schema.signup.TenantMetadata",
+            "properties": {
+                "labels": {
+                    "type": "object",
+                    "description": " x-example:\n labels: {\n   \"ves-io/vip-allocation-type\": \"shared_vip\"\n }\n The labels stores key-value pairs that represent metadata associated with the tenant.\n Currently, only the \"ves-io/vip-allocation-type\" label is supported.\n The allowed values for \"ves-io/vip-allocation-type\" are:\n   - \"shared_vip\"\n   - \"dedicated_vip\"\n   - \"private_vip\"",
+                    "title": "Labels",
+                    "x-displayname": "Labels"
                 }
             }
         },

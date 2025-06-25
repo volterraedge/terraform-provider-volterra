@@ -430,7 +430,7 @@ type Ingress struct {
 	//
 	// x-displayName: "Type"
 	// x-required
-	// Choose Ingress Type
+	// Hostname or IP
 	//
 	// Types that are valid to be assigned to TypeChoice:
 	//	*Ingress_HostName
@@ -441,7 +441,7 @@ type Ingress struct {
 	// x-displayName: "Location"
 	// x-required
 	// x-example: "AWS_US_WEST_1"
-	// Location
+	// Bot infrastructure region
 	Location Location `protobuf:"varint,5,opt,name=location,proto3,enum=ves.io.schema.views.bot_defense_app_infrastructure.Location" json:"location,omitempty"`
 }
 

@@ -5975,27 +5975,6 @@ func (v *ValidateDomainConfiguration) DomainValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateDomainConfiguration) SimpleLoginValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for simple_login")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := SimpleLoginValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
-
-	return validatorFn, nil
-}
-
 func (v *ValidateDomainConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DomainConfiguration)
 	if !ok {
@@ -6056,16 +6035,7 @@ var DefaultDomainConfigurationValidator = func() *ValidateDomainConfiguration {
 	}
 	v.FldValidators["domain"] = vFn
 
-	vrhSimpleLogin := v.SimpleLoginValidationRuleHandler
-	rulesSimpleLogin := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-	}
-	vFn, err = vrhSimpleLogin(rulesSimpleLogin)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for DomainConfiguration.simple_login: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["simple_login"] = vFn
+	v.FldValidators["simple_login"] = SimpleLoginValidator().Validate
 
 	return v
 }()
@@ -11113,21 +11083,7 @@ func (v *ValidateSimpleLogin) UserValidationRuleHandler(rules map[string]string)
 
 func (v *ValidateSimpleLogin) PasswordValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for password")
-	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		if err := ves_io_schema.SecretTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
-	}
+	validatorFn := ves_io_schema.SecretTypeValidator().Validate
 
 	return validatorFn, nil
 }
@@ -11181,8 +11137,7 @@ var DefaultSimpleLoginValidator = func() *ValidateSimpleLogin {
 
 	vrhUser := v.UserValidationRuleHandler
 	rulesUser := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "64",
+		"ves.io.schema.rules.string.max_len": "64",
 	}
 	vFn, err = vrhUser(rulesUser)
 	if err != nil {
@@ -11193,8 +11148,7 @@ var DefaultSimpleLoginValidator = func() *ValidateSimpleLogin {
 
 	vrhPassword := v.PasswordValidationRuleHandler
 	rulesPassword := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
-		"ves.io.schema.rules.string.max_len":   "128",
+		"ves.io.schema.rules.string.max_len": "128",
 	}
 	vFn, err = vrhPassword(rulesPassword)
 	if err != nil {
@@ -12144,4 +12098,321 @@ var DefaultValidationSettingForQueryParametersValidator = func() *ValidateValida
 
 func ValidationSettingForQueryParametersValidator() db.Validator {
 	return DefaultValidationSettingForQueryParametersValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *WafExclusion) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *WafExclusion) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *WafExclusion) DeepCopy() *WafExclusion {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &WafExclusion{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *WafExclusion) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *WafExclusion) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return WafExclusionValidator().Validate(ctx, m, opts...)
+}
+
+func (m *WafExclusion) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetWafExclusionChoiceDRefInfo()
+
+}
+
+func (m *WafExclusion) GetWafExclusionChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetWafExclusionChoice().(type) {
+	case *WafExclusion_WafExclusionInlineRules:
+
+		return nil, nil
+
+	case *WafExclusion_WafExclusionPolicy:
+
+		vref := m.GetWafExclusionPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("waf_exclusion_policy.Object")
+		dri := db.DRefInfo{
+			RefdType:   "waf_exclusion_policy.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "waf_exclusion_policy",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetWafExclusionChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *WafExclusion) GetWafExclusionChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetWafExclusionChoice().(type) {
+	case *WafExclusion_WafExclusionInlineRules:
+
+	case *WafExclusion_WafExclusionPolicy:
+		refdType, err := d.TypeForEntryKind("", "", "waf_exclusion_policy.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: waf_exclusion_policy")
+		}
+
+		vref := m.GetWafExclusionPolicy()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "waf_exclusion_policy.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
+type ValidateWafExclusion struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateWafExclusion) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*WafExclusion)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *WafExclusion got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetWafExclusionChoice().(type) {
+	case *WafExclusion_WafExclusionInlineRules:
+		if fv, exists := v.FldValidators["waf_exclusion_choice.waf_exclusion_inline_rules"]; exists {
+			val := m.GetWafExclusionChoice().(*WafExclusion_WafExclusionInlineRules).WafExclusionInlineRules
+			vOpts := append(opts,
+				db.WithValidateField("waf_exclusion_choice"),
+				db.WithValidateField("waf_exclusion_inline_rules"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *WafExclusion_WafExclusionPolicy:
+		if fv, exists := v.FldValidators["waf_exclusion_choice.waf_exclusion_policy"]; exists {
+			val := m.GetWafExclusionChoice().(*WafExclusion_WafExclusionPolicy).WafExclusionPolicy
+			vOpts := append(opts,
+				db.WithValidateField("waf_exclusion_choice"),
+				db.WithValidateField("waf_exclusion_policy"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultWafExclusionValidator = func() *ValidateWafExclusion {
+	v := &ValidateWafExclusion{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["waf_exclusion_choice.waf_exclusion_inline_rules"] = WafExclusionInlineRulesValidator().Validate
+	v.FldValidators["waf_exclusion_choice.waf_exclusion_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func WafExclusionValidator() db.Validator {
+	return DefaultWafExclusionValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *WafExclusionInlineRules) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *WafExclusionInlineRules) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *WafExclusionInlineRules) DeepCopy() *WafExclusionInlineRules {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &WafExclusionInlineRules{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *WafExclusionInlineRules) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *WafExclusionInlineRules) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return WafExclusionInlineRulesValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateWafExclusionInlineRules struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateWafExclusionInlineRules) RulesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for rules")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_policy.SimpleWafExclusionRule, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_policy.SimpleWafExclusionRuleValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for rules")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_policy.SimpleWafExclusionRule)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_policy.SimpleWafExclusionRule, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated rules")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items rules")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateWafExclusionInlineRules) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*WafExclusionInlineRules)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *WafExclusionInlineRules got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["rules"]; exists {
+		vOpts := append(opts, db.WithValidateField("rules"))
+		if err := fv(ctx, m.GetRules(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultWafExclusionInlineRulesValidator = func() *ValidateWafExclusionInlineRules {
+	v := &ValidateWafExclusionInlineRules{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhRules := v.RulesValidationRuleHandler
+	rulesRules := map[string]string{
+		"ves.io.schema.rules.repeated.max_items":            "256",
+		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
+	}
+	vFn, err = vrhRules(rulesRules)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WafExclusionInlineRules.rules: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["rules"] = vFn
+
+	return v
+}()
+
+func WafExclusionInlineRulesValidator() db.Validator {
+	return DefaultWafExclusionInlineRulesValidator
 }

@@ -535,7 +535,6 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-customapi-jiraprojectsissuetypes"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.CustomAPI.JiraProjectsIssueTypes"
             },
             "x-displayname": "Ticket Tracking System Custom API",
@@ -620,7 +619,6 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ticket_management-ticket_tracking_system-customapi-validatetickettrackingsystem"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.ticket_management.ticket_tracking_system.CustomAPI.ValidateTicketTrackingSystem"
             },
             "x-displayname": "Ticket Tracking System Custom API",

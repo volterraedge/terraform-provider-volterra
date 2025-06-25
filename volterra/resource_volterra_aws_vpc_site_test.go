@@ -93,7 +93,6 @@ func testAWSVPCSiteIEConfig(resourceName, cloudCred, name string) string {
 			aws_certified_hw = "aws-byol-multi-nic-voltmesh"
 			az_nodes {
 				aws_az_name = "us-west-2a"
-				disk_size = "100"
 				inside_subnet {
 					subnet_param {
 						ipv4 = "192.168.0.0/25"
@@ -107,7 +106,6 @@ func testAWSVPCSiteIEConfig(resourceName, cloudCred, name string) string {
 			}
 			az_nodes {
 				aws_az_name = "us-west-2b"
-				disk_size = "100"
 				inside_subnet {
 					subnet_param {
 						ipv4 = "192.168.0.128/25"
@@ -121,7 +119,6 @@ func testAWSVPCSiteIEConfig(resourceName, cloudCred, name string) string {
 			}
 			az_nodes {
 				aws_az_name = "us-west-2c"
-				disk_size = "100"
 				inside_subnet {
 					subnet_param {
 						ipv4 = "192.168.2.128/25"
@@ -222,7 +219,6 @@ func testAWSVPCSiteIConfig(resourceName, cloudCred, name string) string {
 		  aws_certified_hw = "aws-byol-voltmesh"
 		  az_nodes {
 		    aws_az_name = "us-east-1a"
-		    disk_size   = 20
 		    local_subnet {
 		  	  subnet_param {
 		  	    ipv4 = "192.168.0.0/24"

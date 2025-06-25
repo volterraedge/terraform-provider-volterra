@@ -263,15 +263,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["type"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("type"))
-		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
 	return nil
 }
 
@@ -487,7 +478,7 @@ func (m *JiraAdhocRestApiConfigurationType) Redact(ctx context.Context) error {
 
 	m.EncryptedApiToken = nil
 
-	m.ApiToken = ""
+	m.ApiToken = "Redacted"
 
 	return nil
 }
@@ -998,7 +989,6 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.GetProviderConfigFromGlobalSpecType(f)
-	m.Type = f.GetType()
 }
 
 func (m *GetSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -1017,7 +1007,6 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	m1.SetProviderConfigToGlobalSpecType(f)
-	f.Type = m1.Type
 }
 
 func (m *GetSpecType) ToGlobalSpecType(f *GlobalSpecType) {

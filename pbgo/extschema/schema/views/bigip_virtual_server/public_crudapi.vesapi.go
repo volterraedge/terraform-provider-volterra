@@ -1768,7 +1768,7 @@ var APISwaggerJSON string = `{
                     "description": " Inactive discovered API will be deleted after configured duration.\n\nExample: - \"2\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 7\n",
                     "title": "purge_duration_for_inactive_discovered_apis",
                     "format": "int64",
-                    "x-displayname": "Purge Duration for Inactive Discovered APIs",
+                    "x-displayname": "Purge Duration for Inactive Discovered APIs from Traffic",
                     "x-ves-example": "2",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "1",
@@ -1850,6 +1850,18 @@ var APISwaggerJSON string = `{
                     "title": "regex value"
                 }
             }
+        },
+        "bigip_virtual_serverBigIpVirtualServerAWAFEnforcementMode": {
+            "type": "string",
+            "description": "BigIpVirtualServerAWAFEnforcementMode could be of type NONE, ALARM or BLOCKING.\n\nSpecifies the Virtual Server AWAF enforcement mode\n\nNo AWAF Policy attached\nAWAF Enforcement Transparent mode\nAWAF  Enforcement Blocking mode",
+            "enum": [
+                "NONE",
+                "MONITORING",
+                "BLOCKING"
+            ],
+            "default": "NONE",
+            "x-displayname": "BigIP AWAF Enforcement Mode",
+            "x-ves-proto-enum": "ves.io.schema.views.bigip_virtual_server.BigIpVirtualServerAWAFEnforcementMode"
         },
         "bigip_virtual_serverBigIpVirtualServerType": {
             "type": "string",
@@ -2315,7 +2327,7 @@ var APISwaggerJSON string = `{
                     "description": " Select API code repositories to the load balancer to use them as a source for API endpoint discovery.",
                     "title": "Code Base Integration",
                     "$ref": "#/definitions/common_wafApiDiscoveryFromCodeScan",
-                    "x-displayname": "API repositories"
+                    "x-displayname": "Code Repositories"
                 },
                 "custom_api_auth_discovery": {
                     "description": "Exclusive with [default_api_auth_discovery]\n Apply custom API discovery settings",
@@ -2465,14 +2477,10 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "simple_login": {
-                    "description": " Enter the username and password to assign credentials for the selected domain to crawl\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Enter the username and password to assign credentials for the selected domain to crawl",
                     "title": "The Domain credentials",
                     "$ref": "#/definitions/common_wafSimpleLogin",
-                    "x-displayname": "Credentials",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "x-displayname": "Credentials"
                 }
             }
         },
@@ -2837,26 +2845,22 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.views.common_waf.SimpleLogin",
             "properties": {
                 "password": {
-                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 128\n",
+                    "description": " Enter the password to assign credentials for the selected domain to crawl\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 128\n",
                     "title": "The custom domain password authentication",
                     "$ref": "#/definitions/schemaSecretType",
                     "maximum": 128,
                     "x-displayname": "Password",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "128"
                     }
                 },
                 "user": {
                     "type": "string",
-                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n",
+                    "description": " Enter the username to assign credentials for the selected domain to crawl\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n",
                     "title": "The custom domain user authentication",
                     "maxLength": 64,
                     "x-displayname": "User",
-                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "64"
                     }
                 }
@@ -3824,6 +3828,21 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/common_wafAPISpecificationSettings",
                     "x-displayname": "Enable"
                 },
+                "awaf_enforcement_mode": {
+                    "description": " Type of the BIG-IP AWAF Enforcement mode - None, Monitoring or Blocking",
+                    "$ref": "#/definitions/bigip_virtual_serverBigIpVirtualServerAWAFEnforcementMode",
+                    "x-displayname": "WAF Mode"
+                },
+                "awaf_policy_name": {
+                    "type": "string",
+                    "description": " BIG-IP AWAF policy name",
+                    "x-displayname": "WAF Policy Name"
+                },
+                "bigip_hostname": {
+                    "type": "string",
+                    "description": " BIG-IP Hostname",
+                    "x-displayname": "Hostname"
+                },
                 "bigip_version": {
                     "type": "string",
                     "description": " Version of the BIG-IP which hosts the virtual server\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
@@ -3834,6 +3853,11 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.string.max_len": "256"
                     }
+                },
+                "bigip_vs_description": {
+                    "type": "string",
+                    "description": " BIG-IP Virtual Server Description",
+                    "x-displayname": "Description"
                 },
                 "default_sensitive_data_policy": {
                     "description": "Exclusive with [sensitive_data_policy]\n Apply system default sensitive data policy",
@@ -3859,6 +3883,15 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [default_sensitive_data_policy]\n Apply custom sensitive data policy",
                     "$ref": "#/definitions/common_securitySensitiveDataPolicySettings",
                     "x-displayname": "Custom"
+                },
+                "server_name": {
+                    "type": "string",
+                    "description": " Virtual Server name\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "maxLength": 1024,
+                    "x-displayname": "Server Name",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1024"
+                    }
                 },
                 "service_discovery": {
                     "description": " Service Discovery Object, which discovered the bigip virtual server\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",

@@ -425,7 +425,7 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 
 	poolTypeChoiceTypeFound := false
 
-	if v, ok := d.GetOk("a_pool"); ok && !poolTypeChoiceTypeFound {
+	if v, ok := d.GetOk("a_pool"); ok && !isIntfNil(v) && !poolTypeChoiceTypeFound {
 
 		poolTypeChoiceTypeFound = true
 		poolTypeChoiceInt := &ves_io_schema_dns_lb_pool.CreateSpecType_APool{}
@@ -532,7 +532,7 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 
 	}
 
-	if v, ok := d.GetOk("aaaa_pool"); ok && !poolTypeChoiceTypeFound {
+	if v, ok := d.GetOk("aaaa_pool"); ok && !isIntfNil(v) && !poolTypeChoiceTypeFound {
 
 		poolTypeChoiceTypeFound = true
 		poolTypeChoiceInt := &ves_io_schema_dns_lb_pool.CreateSpecType_AaaaPool{}
@@ -590,7 +590,7 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 
 	}
 
-	if v, ok := d.GetOk("cname_pool"); ok && !poolTypeChoiceTypeFound {
+	if v, ok := d.GetOk("cname_pool"); ok && !isIntfNil(v) && !poolTypeChoiceTypeFound {
 
 		poolTypeChoiceTypeFound = true
 		poolTypeChoiceInt := &ves_io_schema_dns_lb_pool.CreateSpecType_CnamePool{}
@@ -638,7 +638,7 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 
 	}
 
-	if v, ok := d.GetOk("mx_pool"); ok && !poolTypeChoiceTypeFound {
+	if v, ok := d.GetOk("mx_pool"); ok && !isIntfNil(v) && !poolTypeChoiceTypeFound {
 
 		poolTypeChoiceTypeFound = true
 		poolTypeChoiceInt := &ves_io_schema_dns_lb_pool.CreateSpecType_MxPool{}
@@ -692,7 +692,7 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 
 	}
 
-	if v, ok := d.GetOk("srv_pool"); ok && !poolTypeChoiceTypeFound {
+	if v, ok := d.GetOk("srv_pool"); ok && !isIntfNil(v) && !poolTypeChoiceTypeFound {
 
 		poolTypeChoiceTypeFound = true
 		poolTypeChoiceInt := &ves_io_schema_dns_lb_pool.CreateSpecType_SrvPool{}
@@ -762,7 +762,7 @@ func resourceVolterraDnsLbPoolCreate(d *schema.ResourceData, meta interface{}) e
 
 	ttlChoiceTypeFound := false
 
-	if v, ok := d.GetOk("ttl"); ok && !ttlChoiceTypeFound {
+	if v, ok := d.GetOk("ttl"); ok && !isIntfNil(v) && !ttlChoiceTypeFound {
 
 		ttlChoiceTypeFound = true
 		ttlChoiceInt := &ves_io_schema_dns_lb_pool.CreateSpecType_Ttl{}
@@ -892,7 +892,7 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 
 	poolTypeChoiceTypeFound := false
 
-	if v, ok := d.GetOk("a_pool"); ok && !poolTypeChoiceTypeFound {
+	if v, ok := d.GetOk("a_pool"); ok && !isIntfNil(v) && !poolTypeChoiceTypeFound {
 
 		poolTypeChoiceTypeFound = true
 		poolTypeChoiceInt := &ves_io_schema_dns_lb_pool.ReplaceSpecType_APool{}
@@ -999,7 +999,7 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 
 	}
 
-	if v, ok := d.GetOk("aaaa_pool"); ok && !poolTypeChoiceTypeFound {
+	if v, ok := d.GetOk("aaaa_pool"); ok && !isIntfNil(v) && !poolTypeChoiceTypeFound {
 
 		poolTypeChoiceTypeFound = true
 		poolTypeChoiceInt := &ves_io_schema_dns_lb_pool.ReplaceSpecType_AaaaPool{}
@@ -1057,7 +1057,7 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 
 	}
 
-	if v, ok := d.GetOk("cname_pool"); ok && !poolTypeChoiceTypeFound {
+	if v, ok := d.GetOk("cname_pool"); ok && !isIntfNil(v) && !poolTypeChoiceTypeFound {
 
 		poolTypeChoiceTypeFound = true
 		poolTypeChoiceInt := &ves_io_schema_dns_lb_pool.ReplaceSpecType_CnamePool{}
@@ -1105,7 +1105,7 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 
 	}
 
-	if v, ok := d.GetOk("mx_pool"); ok && !poolTypeChoiceTypeFound {
+	if v, ok := d.GetOk("mx_pool"); ok && !isIntfNil(v) && !poolTypeChoiceTypeFound {
 
 		poolTypeChoiceTypeFound = true
 		poolTypeChoiceInt := &ves_io_schema_dns_lb_pool.ReplaceSpecType_MxPool{}
@@ -1159,7 +1159,7 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 
 	}
 
-	if v, ok := d.GetOk("srv_pool"); ok && !poolTypeChoiceTypeFound {
+	if v, ok := d.GetOk("srv_pool"); ok && !isIntfNil(v) && !poolTypeChoiceTypeFound {
 
 		poolTypeChoiceTypeFound = true
 		poolTypeChoiceInt := &ves_io_schema_dns_lb_pool.ReplaceSpecType_SrvPool{}
@@ -1227,7 +1227,7 @@ func resourceVolterraDnsLbPoolUpdate(d *schema.ResourceData, meta interface{}) e
 
 	ttlChoiceTypeFound := false
 
-	if v, ok := d.GetOk("ttl"); ok && !ttlChoiceTypeFound {
+	if v, ok := d.GetOk("ttl"); ok && !isIntfNil(v) && !ttlChoiceTypeFound {
 
 		ttlChoiceTypeFound = true
 		ttlChoiceInt := &ves_io_schema_dns_lb_pool.ReplaceSpecType_Ttl{}
@@ -1276,5 +1276,8 @@ func resourceVolterraDnsLbPoolDelete(d *schema.ResourceData, meta interface{}) e
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra DnsLbPool obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_dns_lb_pool.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_dns_lb_pool.ObjectType, namespace, name, opts...)
 }

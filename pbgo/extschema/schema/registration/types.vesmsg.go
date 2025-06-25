@@ -580,10 +580,37 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["admin_password"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_password"))
+		if err := fv(ctx, m.GetAdminPassword(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["admin_ssh_key"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("admin_ssh_key"))
+		if err := fv(ctx, m.GetAdminSshKey(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["infra"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("infra"))
 		if err := fv(ctx, m.GetInfra(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["long_term_token"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("long_term_token"))
+		if err := fv(ctx, m.GetLongTermToken(), vOpts...); err != nil {
 			return err
 		}
 

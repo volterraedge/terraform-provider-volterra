@@ -23,6 +23,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.log.LogAggregationResponse"] = LogAggregationResponseValidator()
 	vr["ves.io.schema.log.LogResponse"] = LogResponseValidator()
 	vr["ves.io.schema.log.LogScrollRequest"] = LogScrollRequestValidator()
+	vr["ves.io.schema.log.PlatformEventAggregationRequest"] = PlatformEventAggregationRequestValidator()
+	vr["ves.io.schema.log.PlatformEventRequest"] = PlatformEventRequestValidator()
 	vr["ves.io.schema.log.VK8SAuditLogAggregationRequest"] = VK8SAuditLogAggregationRequestValidator()
 	vr["ves.io.schema.log.VK8SAuditLogRequest"] = VK8SAuditLogRequestValidator()
 	vr["ves.io.schema.log.VK8SEventsAggregationRequest"] = VK8SEventsAggregationRequestValidator()

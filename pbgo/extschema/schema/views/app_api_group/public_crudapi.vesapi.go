@@ -764,22 +764,35 @@ func (c *crudAPIRestClient) ListStream(ctx context.Context, opts ...server.CRUDC
 
 func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...server.CRUDCallOpt) error {
 
-	dReq, err := NewDeleteRequest(key)
+	var jsn string
+	var dReq *DeleteRequest
+	var err error
+
+	dReq, err = NewDeleteRequest(key)
 	if err != nil {
 		return errors.Wrap(err, "Delete")
 	}
 
 	url := fmt.Sprintf("%s/public/namespaces/%s/app_api_groups/%s", c.baseURL, dReq.Namespace, dReq.Name)
-	hReq, err := http.NewRequest(http.MethodDelete, url, nil)
-	if err != nil {
-		return errors.Wrap(err, "RestClient delete")
-	}
-	hReq = hReq.WithContext(ctx)
-
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
 	}
+	if cco.FailIfReferredDelete {
+		dReq.FailIfReferred = true
+	}
+
+	j, err := codec.ToJSON(dReq, codec.ToWithUseProtoFieldName())
+	if err != nil {
+		return errors.Wrap(err, "RestClient Delete converting protobuf to json")
+	}
+	jsn = j
+
+	hReq, err := http.NewRequest(http.MethodDelete, url, bytes.NewBuffer([]byte(jsn)))
+	if err != nil {
+		return errors.Wrap(err, "RestClient delete")
+	}
+	hReq = hReq.WithContext(ctx)
 	client.AddHdrsToReq(cco.Headers, hReq)
 
 	rsp, err := c.client.Do(hReq)
@@ -3449,8 +3462,8 @@ var APISwaggerJSON string = `{
             "properties": {
                 "elements": {
                     "type": "array",
-                    "description": " List of API group elements with methods and path regex for matching requests.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1000\n",
-                    "maxItems": 1000,
+                    "description": " List of API group elements with methods and path regex for matching requests.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 5000\n",
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/schemaapi_group_elementGlobalSpecType"
                     },
@@ -3458,7 +3471,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1000"
+                        "ves.io.schema.rules.repeated.max_items": "5000"
                     }
                 },
                 "http_loadbalancer": {
@@ -3485,8 +3498,8 @@ var APISwaggerJSON string = `{
                 },
                 "elements": {
                     "type": "array",
-                    "description": " List of API group elements with methods and path regex for matching requests.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1000\n",
-                    "maxItems": 1000,
+                    "description": " List of API group elements with methods and path regex for matching requests.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 5000\n",
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/schemaapi_group_elementGlobalSpecType"
                     },
@@ -3494,7 +3507,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1000"
+                        "ves.io.schema.rules.repeated.max_items": "5000"
                     }
                 },
                 "http_loadbalancer": {
@@ -3514,8 +3527,8 @@ var APISwaggerJSON string = `{
             "properties": {
                 "elements": {
                     "type": "array",
-                    "description": " List of API group elements with methods and path regex for matching requests.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1000\n",
-                    "maxItems": 1000,
+                    "description": " List of API group elements with methods and path regex for matching requests.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 5000\n",
+                    "maxItems": 5000,
                     "items": {
                         "$ref": "#/definitions/schemaapi_group_elementGlobalSpecType"
                     },
@@ -3523,7 +3536,7 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "1000"
+                        "ves.io.schema.rules.repeated.max_items": "5000"
                     }
                 },
                 "http_loadbalancer": {

@@ -50,10 +50,6 @@ Malicious user mitigation rules specifies the actions to be taken for users to d
 
 `rules` - (Required) Define the threat levels and the corresponding mitigation actions to be taken. See [Mitigation Type Rules ](#mitigation-type-rules) below for details.
 
-### Mitigation Action Alert Only
-
-Generate alert while not taking any invasive actions.
-
 ### Mitigation Action Block Temporarily
 
 assigned to this mitigation action.
@@ -65,10 +61,6 @@ configured on the corresponding http load balancer.
 ### Mitigation Action Javascript Challenge
 
 configured on the corresponding http load balancer.
-
-### Mitigation Action None
-
-No mitigation actions.
 
 ### Mitigation Type Rules
 
@@ -82,17 +74,13 @@ Define the threat levels and the corresponding mitigation actions to be taken.
 
 The action to be taken at the specified threat level.
 
-###### One of the arguments from this list "alert_only, block_temporarily, captcha_challenge, javascript_challenge, none" must be set
-
-`alert_only` - (Optional) Generate alert while not taking any invasive actions (`Bool`).(Deprecated)
+###### One of the arguments from this list "block_temporarily, captcha_challenge, javascript_challenge" must be set
 
 `block_temporarily` - (Optional) assigned to this mitigation action (`Bool`).
 
 `captcha_challenge` - (Optional) configured on the corresponding http load balancer (`Bool`).
 
 `javascript_challenge` - (Optional) configured on the corresponding http load balancer (`Bool`).
-
-`none` - (Optional) No mitigation actions (`Bool`).(Deprecated)
 
 ### Rules Threat Level
 

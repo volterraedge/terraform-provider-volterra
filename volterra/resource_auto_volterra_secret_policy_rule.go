@@ -123,29 +123,6 @@ func resourceVolterraSecretPolicyRule() *schema.Resource {
 					},
 				},
 			},
-
-			"label_matcher": {
-
-				Type:       schema.TypeList,
-				MaxItems:   1,
-				Optional:   true,
-				Deprecated: "This field is deprecated and will be removed in future release.",
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-
-						"keys": {
-
-							Type: schema.TypeList,
-
-							Optional:   true,
-							Deprecated: "This field is deprecated and will be removed in future release.",
-							Elem: &schema.Schema{
-								Type: schema.TypeString,
-							},
-						},
-					},
-				},
-			},
 		},
 	}
 }
@@ -214,7 +191,7 @@ func resourceVolterraSecretPolicyRuleCreate(d *schema.ResourceData, meta interfa
 
 	clientChoiceTypeFound := false
 
-	if v, ok := d.GetOk("client_name"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("client_name"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_secret_policy_rule.CreateSpecType_ClientName{}
@@ -225,7 +202,7 @@ func resourceVolterraSecretPolicyRuleCreate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("client_name_matcher"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("client_name_matcher"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_secret_policy_rule.CreateSpecType_ClientNameMatcher{}
@@ -241,7 +218,12 @@ func resourceVolterraSecretPolicyRuleCreate(d *schema.ResourceData, meta interfa
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					clientChoiceInt.ClientNameMatcher.ExactValues = ls
 
@@ -251,7 +233,12 @@ func resourceVolterraSecretPolicyRuleCreate(d *schema.ResourceData, meta interfa
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					clientChoiceInt.ClientNameMatcher.RegexValues = ls
 
@@ -262,7 +249,7 @@ func resourceVolterraSecretPolicyRuleCreate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("client_selector"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("client_selector"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_secret_policy_rule.CreateSpecType_ClientSelector{}
@@ -278,33 +265,15 @@ func resourceVolterraSecretPolicyRuleCreate(d *schema.ResourceData, meta interfa
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field expressions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					clientChoiceInt.ClientSelector.Expressions = ls
 
-				}
-
-			}
-		}
-
-	}
-
-	//label_matcher
-	if v, ok := d.GetOk("label_matcher"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		labelMatcher := &ves_io_schema.LabelMatcherType{}
-		createSpec.LabelMatcher = labelMatcher
-		for _, set := range sl {
-			if set != nil {
-				labelMatcherMapStrToI := set.(map[string]interface{})
-
-				if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
-					ls := make([]string, len(w.([]interface{})))
-					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					labelMatcher.Keys = ls
 				}
 
 			}
@@ -419,7 +388,7 @@ func resourceVolterraSecretPolicyRuleUpdate(d *schema.ResourceData, meta interfa
 
 	clientChoiceTypeFound := false
 
-	if v, ok := d.GetOk("client_name"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("client_name"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_secret_policy_rule.ReplaceSpecType_ClientName{}
@@ -430,7 +399,7 @@ func resourceVolterraSecretPolicyRuleUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("client_name_matcher"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("client_name_matcher"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_secret_policy_rule.ReplaceSpecType_ClientNameMatcher{}
@@ -446,7 +415,12 @@ func resourceVolterraSecretPolicyRuleUpdate(d *schema.ResourceData, meta interfa
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					clientChoiceInt.ClientNameMatcher.ExactValues = ls
 
@@ -456,7 +430,12 @@ func resourceVolterraSecretPolicyRuleUpdate(d *schema.ResourceData, meta interfa
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					clientChoiceInt.ClientNameMatcher.RegexValues = ls
 
@@ -467,7 +446,7 @@ func resourceVolterraSecretPolicyRuleUpdate(d *schema.ResourceData, meta interfa
 
 	}
 
-	if v, ok := d.GetOk("client_selector"); ok && !clientChoiceTypeFound {
+	if v, ok := d.GetOk("client_selector"); ok && !isIntfNil(v) && !clientChoiceTypeFound {
 
 		clientChoiceTypeFound = true
 		clientChoiceInt := &ves_io_schema_secret_policy_rule.ReplaceSpecType_ClientSelector{}
@@ -483,32 +462,15 @@ func resourceVolterraSecretPolicyRuleUpdate(d *schema.ResourceData, meta interfa
 
 					ls := make([]string, len(v.([]interface{})))
 					for i, v := range v.([]interface{}) {
-						ls[i] = v.(string)
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field expressions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
 					}
 					clientChoiceInt.ClientSelector.Expressions = ls
 
-				}
-
-			}
-		}
-
-	}
-
-	if v, ok := d.GetOk("label_matcher"); ok && !isIntfNil(v) {
-
-		sl := v.([]interface{})
-		labelMatcher := &ves_io_schema.LabelMatcherType{}
-		updateSpec.LabelMatcher = labelMatcher
-		for _, set := range sl {
-			if set != nil {
-				labelMatcherMapStrToI := set.(map[string]interface{})
-
-				if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
-					ls := make([]string, len(w.([]interface{})))
-					for i, v := range w.([]interface{}) {
-						ls[i] = v.(string)
-					}
-					labelMatcher.Keys = ls
 				}
 
 			}
@@ -542,5 +504,8 @@ func resourceVolterraSecretPolicyRuleDelete(d *schema.ResourceData, meta interfa
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra SecretPolicyRule obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_secret_policy_rule.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_secret_policy_rule.ObjectType, namespace, name, opts...)
 }

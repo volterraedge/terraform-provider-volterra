@@ -410,5 +410,8 @@ func resourceVolterraUztnaSnatPoolDelete(d *schema.ResourceData, meta interface{
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra UztnaSnatPool obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_uztna_application_uztna_snat_pool.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_uztna_application_uztna_snat_pool.ObjectType, namespace, name, opts...)
 }

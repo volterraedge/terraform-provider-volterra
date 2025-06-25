@@ -1726,6 +1726,253 @@ func ListResponseItemValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *ListServiceCredentialsResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListServiceCredentialsResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListServiceCredentialsResponse) DeepCopy() *ListServiceCredentialsResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListServiceCredentialsResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListServiceCredentialsResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListServiceCredentialsResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListServiceCredentialsResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListServiceCredentialsResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListServiceCredentialsResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListServiceCredentialsResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListServiceCredentialsResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["items"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("items"))
+		for idx, item := range m.GetItems() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListServiceCredentialsResponseValidator = func() *ValidateListServiceCredentialsResponse {
+	v := &ValidateListServiceCredentialsResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["items"] = ListServiceCredentialsResponseItemValidator().Validate
+
+	return v
+}()
+
+func ListServiceCredentialsResponseValidator() db.Validator {
+	return DefaultListServiceCredentialsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ListServiceCredentialsResponseItem) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ListServiceCredentialsResponseItem) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ListServiceCredentialsResponseItem) DeepCopy() *ListServiceCredentialsResponseItem {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ListServiceCredentialsResponseItem{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ListServiceCredentialsResponseItem) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ListServiceCredentialsResponseItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ListServiceCredentialsResponseItemValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateListServiceCredentialsResponseItem struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateListServiceCredentialsResponseItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ListServiceCredentialsResponseItem)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ListServiceCredentialsResponseItem got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["active"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("active"))
+		if err := fv(ctx, m.GetActive(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["create_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("create_timestamp"))
+		if err := fv(ctx, m.GetCreateTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["expiry_timestamp"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("expiry_timestamp"))
+		if err := fv(ctx, m.GetExpiryTimestamp(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace_access"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace_access"))
+		if err := fv(ctx, m.GetNamespaceAccess(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("type"))
+		if err := fv(ctx, m.GetType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["uid"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("uid"))
+		if err := fv(ctx, m.GetUid(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_email"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_email"))
+		if err := fv(ctx, m.GetUserEmail(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["user_group_names"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("user_group_names"))
+		for idx, item := range m.GetUserGroupNames() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultListServiceCredentialsResponseItemValidator = func() *ValidateListServiceCredentialsResponseItem {
+	v := &ValidateListServiceCredentialsResponseItem{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["namespace_access"] = ves_io_schema.NamespaceAccessTypeValidator().Validate
+
+	return v
+}()
+
+func ListServiceCredentialsResponseItemValidator() db.Validator {
+	return DefaultListServiceCredentialsResponseItemValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *RecreateScimTokenRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }

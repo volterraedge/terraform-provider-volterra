@@ -14,13 +14,16 @@ import (
 	ves_io_schema_alert_receiver "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_receiver"
 	ves_io_schema_api_crawler "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_crawler"
 	ves_io_schema_api_discovery "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_discovery"
+	ves_io_schema_api_testing "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_testing"
 	ves_io_schema_code_base_integration "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/code_base_integration"
 	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
 	ves_io_schema_app_setting "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_setting"
 	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 	ves_io_schema_bgp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp"
 	ves_io_schema_bgp_asn_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp_asn_set"
+	ves_io_schema_bgp_routing_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp_routing_policy"
 	ves_io_schema_apm "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigip/apm"
+	ves_io_schema_cdn_cache_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cdn_cache_rule"
 	ves_io_schema_certificate "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate"
 	ves_io_schema_certificate_chain "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate_chain"
 	ves_io_schema_cloud_credentials "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
@@ -50,6 +53,9 @@ import (
 	ves_io_schema_flow_anomaly "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/flow_anomaly"
 	ves_io_schema_global_log_receiver "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/global_log_receiver"
 	ves_io_schema_healthcheck "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/healthcheck"
+	ves_io_schema_ike1 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ike1"
+	ves_io_schema_ike2 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ike2"
+	ves_io_schema_infraprotect_firewall_rule_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_rule_group"
 	ves_io_schema_ip_prefix_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set"
 	ves_io_schema_k8s_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster"
 	ves_io_schema_k8s_cluster_role "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role"
@@ -65,6 +71,7 @@ import (
 	ves_io_schema_network_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule"
 	ves_io_schema_network_policy_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_set"
 	ves_io_schema_nfv_service "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nfv_service"
+	ves_io_schema_nginx_csg "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_csg"
 	ves_io_schema_nginx_instance "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_instance"
 	ves_io_schema_nginx_server "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_server"
 	ves_io_schema_policer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policer"
@@ -106,132 +113,148 @@ import (
 	ves_io_schema_bigip_instance_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_instance_site"
 	ves_io_schema_bigip_virtual_server "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_virtual_server"
 	ves_io_schema_cdn_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer"
+	ves_io_schema_external_connector "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/external_connector"
 	ves_io_schema_forward_proxy_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/forward_proxy_policy"
 	ves_io_schema_gcp_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
 	ves_io_schema_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
+	ves_io_schema_ike_phase1_profile "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/ike_phase1_profile"
+	ves_io_schema_ike_phase2_profile "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/ike_phase2_profile"
 	ves_io_schema_network_policy_view "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/network_policy_view"
 	ves_io_schema_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	ves_io_schema_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	ves_io_schema_securemesh_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/securemesh_site"
 	ves_io_schema_securemesh_site_v2 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/securemesh_site_v2"
 	ves_io_schema_tcp_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer"
+	ves_io_schema_udp_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/udp_loadbalancer"
 	ves_io_schema_voltstack_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site"
 	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	ves_io_schema_virtual_k8s "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s"
 	ves_io_schema_virtual_network "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_network"
 	ves_io_schema_virtual_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_site"
+	ves_io_schema_waf_exclusion_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_exclusion_policy"
 	ves_io_schema_ztna "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ztna"
 	ves_io_schema_ztna_application "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ztna_application"
 )
 
 func getVolterraResourceMap() map[string]*schema.Resource {
 	return map[string]*schema.Resource{
-		"volterra_namespace":                  resourceVolterraNamespace(),
-		"volterra_advertise_policy":           resourceVolterraAdvertisePolicy(),
-		"volterra_alert_policy":               resourceVolterraAlertPolicy(),
-		"volterra_alert_receiver":             resourceVolterraAlertReceiver(),
-		"volterra_api_crawler":                resourceVolterraApiCrawler(),
-		"volterra_api_discovery":              resourceVolterraApiDiscovery(),
-		"volterra_code_base_integration":      resourceVolterraCodeBaseIntegration(),
-		"volterra_app_firewall":               resourceVolterraAppFirewall(),
-		"volterra_app_setting":                resourceVolterraAppSetting(),
-		"volterra_app_type":                   resourceVolterraAppType(),
-		"volterra_bgp":                        resourceVolterraBgp(),
-		"volterra_bgp_asn_set":                resourceVolterraBgpAsnSet(),
-		"volterra_apm":                        resourceVolterraApm(),
-		"volterra_certificate":                resourceVolterraCertificate(),
-		"volterra_certificate_chain":          resourceVolterraCertificateChain(),
-		"volterra_cloud_credentials":          resourceVolterraCloudCredentials(),
-		// "volterra_cloud_elastic_ip":           resourceVolterraCloudElasticIp(),
-		"volterra_cloud_link":                 resourceVolterraCloudLink(),
-		"volterra_cloud_transit_gateway":      resourceVolterraCloudTransitGateway(),
-		"volterra_cluster":                    resourceVolterraCluster(),
-		"volterra_container_registry":         resourceVolterraContainerRegistry(),
-		"volterra_crl":                        resourceVolterraCrl(),
-		"volterra_data_type":                  resourceVolterraDataType(),
+		"volterra_namespace":                        resourceVolterraNamespace(),
+		"volterra_advertise_policy":                 resourceVolterraAdvertisePolicy(),
+		"volterra_alert_policy":                     resourceVolterraAlertPolicy(),
+		"volterra_alert_receiver":                   resourceVolterraAlertReceiver(),
+		"volterra_api_crawler":                      resourceVolterraApiCrawler(),
+		"volterra_api_discovery":                    resourceVolterraApiDiscovery(),
+		"volterra_api_testing":                      resourceVolterraApiTesting(),
+		"volterra_code_base_integration":            resourceVolterraCodeBaseIntegration(),
+		"volterra_app_firewall":                     resourceVolterraAppFirewall(),
+		"volterra_app_setting":                      resourceVolterraAppSetting(),
+		"volterra_app_type":                         resourceVolterraAppType(),
+		"volterra_bgp":                              resourceVolterraBgp(),
+		"volterra_bgp_asn_set":                      resourceVolterraBgpAsnSet(),
+		"volterra_bgp_routing_policy":               resourceVolterraBgpRoutingPolicy(),
+		"volterra_apm":                              resourceVolterraApm(),
+		"volterra_cdn_cache_rule":                   resourceVolterraCdnCacheRule(),
+		"volterra_certificate":                      resourceVolterraCertificate(),
+		"volterra_certificate_chain":                resourceVolterraCertificateChain(),
+		"volterra_cloud_credentials":                resourceVolterraCloudCredentials(),
+		"volterra_cloud_elastic_ip":                 resourceVolterraCloudElasticIp(),
+		"volterra_cloud_link":                       resourceVolterraCloudLink(),
+		"volterra_cloud_transit_gateway":            resourceVolterraCloudTransitGateway(),
+		"volterra_cluster":                          resourceVolterraCluster(),
+		"volterra_container_registry":               resourceVolterraContainerRegistry(),
+		"volterra_crl":                              resourceVolterraCrl(),
+		"volterra_data_type":                        resourceVolterraDataType(),
 		"volterra_dc_cluster_group":          resourceVolterraDcClusterGroup(),
-		"volterra_discovery":                  resourceVolterraDiscovery(),
-		"volterra_dns_compliance_checks":      resourceVolterraDnsComplianceChecks(),
-		"volterra_dns_domain":                 resourceVolterraDnsDomain(),
-		"volterra_dns_lb_health_check":        resourceVolterraDnsLbHealthCheck(),
-		"volterra_dns_lb_pool":                resourceVolterraDnsLbPool(),
-		"volterra_dns_load_balancer":          resourceVolterraDnsLoadBalancer(),
-		"volterra_dns_zone":                   resourceVolterraDnsZone(),
-		"volterra_endpoint":                   resourceVolterraEndpoint(),
-		"volterra_enhanced_firewall_policy":   resourceVolterraEnhancedFirewallPolicy(),
-		"volterra_fast_acl":                   resourceVolterraFastAcl(),
-		"volterra_fast_acl_rule":              resourceVolterraFastAclRule(),
-		"volterra_filter_set":                 resourceVolterraFilterSet(),
-		"volterra_fleet":                      resourceVolterraFleet(),
-		"volterra_global_log_receiver":        resourceVolterraGlobalLogReceiver(),
-		"volterra_healthcheck":                resourceVolterraHealthcheck(),
-		"volterra_ip_prefix_set":              resourceVolterraIpPrefixSet(),
-		"volterra_k8s_cluster":                resourceVolterraK8SCluster(),
-		"volterra_k8s_cluster_role":           resourceVolterraK8SClusterRole(),
-		"volterra_k8s_cluster_role_binding":   resourceVolterraK8SClusterRoleBinding(),
-		"volterra_k8s_pod_security_admission": resourceVolterraK8SPodSecurityAdmission(),
-		"volterra_k8s_pod_security_policy":    resourceVolterraK8SPodSecurityPolicy(),
-		"volterra_log_receiver":               resourceVolterraLogReceiver(),
-		"volterra_malicious_user_mitigation":  resourceVolterraMaliciousUserMitigation(),
-		"volterra_nat_policy":                 resourceVolterraNatPolicy(),
-		"volterra_network_connector":          resourceVolterraNetworkConnector(),
-		"volterra_network_firewall":           resourceVolterraNetworkFirewall(),
-		"volterra_network_policy":             resourceVolterraNetworkPolicy(),
-		"volterra_network_policy_rule":        resourceVolterraNetworkPolicyRule(),
-		"volterra_nfv_service":                resourceVolterraNfvService(),
-		"volterra_policer":                    resourceVolterraPolicer(),
-		"volterra_protocol_inspection":        resourceVolterraProtocolInspection(),
-		"volterra_protocol_policer":           resourceVolterraProtocolPolicer(),
-		"volterra_rate_limiter":               resourceVolterraRateLimiter(),
-		"volterra_role":                       resourceVolterraRole(),
-		"volterra_route":                      resourceVolterraRoute(),
-		"volterra_secret_policy":              resourceVolterraSecretPolicy(),
-		"volterra_secret_policy_rule":         resourceVolterraSecretPolicyRule(),
-		"volterra_sensitive_data_policy":      resourceVolterraSensitiveDataPolicy(),
-		"volterra_service_policy_rule":        resourceVolterraServicePolicyRule(),
-		"volterra_site_mesh_group":            resourceVolterraSiteMeshGroup(),
-		"volterra_ticket_tracking_system":     resourceVolterraTicketTrackingSystem(),
-		"volterra_trusted_ca_list":            resourceVolterraTrustedCaList(),
-		"volterra_usb_policy":                 resourceVolterraUsbPolicy(),
-		"volterra_user_identification":        resourceVolterraUserIdentification(),
-		"volterra_uztna_application":          resourceVolterraUztnaApplication(),
-		"volterra_uztna_application_group":    resourceVolterraUztnaApplicationGroup(),
-		"volterra_uztna_application_tag":      resourceVolterraUztnaApplicationTag(),
-		"volterra_uztna_snat_pool":            resourceVolterraUztnaSnatPool(),
-		"volterra_uztna_app_vip_pool":         resourceVolterraUztnaAppVipPool(),
-		"volterra_uztna_domain":               resourceVolterraUztnaDomain(),
-		"volterra_uztna_flow":                 resourceVolterraUztnaFlow(),
-		"volterra_uztna_gateway":              resourceVolterraUztnaGateway(),
-		"volterra_uztna_healthcheck":          resourceVolterraUztnaHealthcheck(),
-		"volterra_uztna_leasepool":            resourceVolterraUztnaLeasepool(),
-		"volterra_uztna_origin_pool":          resourceVolterraUztnaOriginPool(),
-		"volterra_uztna_policy_template":      resourceVolterraUztnaPolicyTemplate(),
-		"volterra_uztna_application_view":     resourceVolterraUztnaApplicationView(),
-		"volterra_uztna_domain_view":          resourceVolterraUztnaDomainView(),
-		"volterra_api_definition":             resourceVolterraApiDefinition(),
-		"volterra_app_api_group":              resourceVolterraAppApiGroup(),
-		"volterra_aws_tgw_site":               resourceVolterraAwsTgwSite(),
-		"volterra_aws_vpc_site":               resourceVolterraAwsVpcSite(),
-		"volterra_azure_vnet_site":            resourceVolterraAzureVnetSite(),
-		"volterra_bigip_centralmanager_site":  resourceVolterraBigipCentralmanagerSite(),
-		"volterra_bigip_instance_site":        resourceVolterraBigipInstanceSite(),
-		"volterra_cdn_loadbalancer":           resourceVolterraCdnLoadbalancer(),
-		"volterra_forward_proxy_policy":       resourceVolterraForwardProxyPolicy(),
-		"volterra_gcp_vpc_site":               resourceVolterraGcpVpcSite(),
-		"volterra_http_loadbalancer":          resourceVolterraHttpLoadbalancer(),
-		"volterra_network_policy_view":        resourceVolterraNetworkPolicyView(),
-		"volterra_origin_pool":                resourceVolterraOriginPool(),
-		"volterra_rate_limiter_policy":        resourceVolterraRateLimiterPolicy(),
-		"volterra_securemesh_site":            resourceVolterraSecuremeshSite(),
-		"volterra_securemesh_site_v2":         resourceVolterraSecuremeshSiteV2(),
-		"volterra_tcp_loadbalancer":           resourceVolterraTcpLoadbalancer(),
-		"volterra_voltstack_site":             resourceVolterraVoltstackSite(),
-		"volterra_virtual_host":               resourceVolterraVirtualHost(),
-		"volterra_virtual_k8s":                resourceVolterraVirtualK8S(),
-		"volterra_virtual_network":            resourceVolterraVirtualNetwork(),
-		"volterra_virtual_site":               resourceVolterraVirtualSite(),
-		"volterra_ztna":                       resourceVolterraZtna(),
-		"volterra_ztna_application":           resourceVolterraZtnaApplication(),
+		"volterra_discovery":                        resourceVolterraDiscovery(),
+		"volterra_dns_compliance_checks":            resourceVolterraDnsComplianceChecks(),
+		"volterra_dns_domain":                       resourceVolterraDnsDomain(),
+		"volterra_dns_lb_health_check":              resourceVolterraDnsLbHealthCheck(),
+		"volterra_dns_lb_pool":                      resourceVolterraDnsLbPool(),
+		"volterra_dns_load_balancer":                resourceVolterraDnsLoadBalancer(),
+		"volterra_dns_zone":                         resourceVolterraDnsZone(),
+		"volterra_endpoint":                         resourceVolterraEndpoint(),
+		"volterra_enhanced_firewall_policy":         resourceVolterraEnhancedFirewallPolicy(),
+		"volterra_fast_acl":                         resourceVolterraFastAcl(),
+		"volterra_fast_acl_rule":                    resourceVolterraFastAclRule(),
+		"volterra_filter_set":                       resourceVolterraFilterSet(),
+		"volterra_fleet":                            resourceVolterraFleet(),
+		"volterra_global_log_receiver":              resourceVolterraGlobalLogReceiver(),
+		"volterra_healthcheck":                      resourceVolterraHealthcheck(),
+		"volterra_ike1":                             resourceVolterraIke1(),
+		"volterra_ike2":                             resourceVolterraIke2(),
+		"volterra_infraprotect_firewall_rule_group": resourceVolterraInfraprotectFirewallRuleGroup(),
+		"volterra_ip_prefix_set":                    resourceVolterraIpPrefixSet(),
+		"volterra_k8s_cluster":                      resourceVolterraK8SCluster(),
+		"volterra_k8s_cluster_role":                 resourceVolterraK8SClusterRole(),
+		"volterra_k8s_cluster_role_binding":         resourceVolterraK8SClusterRoleBinding(),
+		"volterra_k8s_pod_security_admission":       resourceVolterraK8SPodSecurityAdmission(),
+		"volterra_k8s_pod_security_policy":          resourceVolterraK8SPodSecurityPolicy(),
+		"volterra_log_receiver":                     resourceVolterraLogReceiver(),
+		"volterra_malicious_user_mitigation":        resourceVolterraMaliciousUserMitigation(),
+		"volterra_nat_policy":                       resourceVolterraNatPolicy(),
+		"volterra_network_connector":                resourceVolterraNetworkConnector(),
+		"volterra_network_firewall":                 resourceVolterraNetworkFirewall(),
+		"volterra_network_policy":                   resourceVolterraNetworkPolicy(),
+		"volterra_network_policy_rule":              resourceVolterraNetworkPolicyRule(),
+		"volterra_nfv_service":                      resourceVolterraNfvService(),
+		"volterra_policer":                          resourceVolterraPolicer(),
+		"volterra_protocol_inspection":              resourceVolterraProtocolInspection(),
+		"volterra_protocol_policer":                 resourceVolterraProtocolPolicer(),
+		"volterra_rate_limiter":                     resourceVolterraRateLimiter(),
+		"volterra_role":                             resourceVolterraRole(),
+		"volterra_route":                            resourceVolterraRoute(),
+		"volterra_secret_policy":                    resourceVolterraSecretPolicy(),
+		"volterra_secret_policy_rule":               resourceVolterraSecretPolicyRule(),
+		"volterra_sensitive_data_policy":            resourceVolterraSensitiveDataPolicy(),
+		"volterra_service_policy_rule":              resourceVolterraServicePolicyRule(),
+		"volterra_site_mesh_group":                  resourceVolterraSiteMeshGroup(),
+		"volterra_ticket_tracking_system":           resourceVolterraTicketTrackingSystem(),
+		"volterra_trusted_ca_list":                  resourceVolterraTrustedCaList(),
+		"volterra_usb_policy":                       resourceVolterraUsbPolicy(),
+		"volterra_user_identification":              resourceVolterraUserIdentification(),
+		"volterra_uztna_application":                resourceVolterraUztnaApplication(),
+		"volterra_uztna_application_group":          resourceVolterraUztnaApplicationGroup(),
+		"volterra_uztna_application_tag":            resourceVolterraUztnaApplicationTag(),
+		"volterra_uztna_snat_pool":                  resourceVolterraUztnaSnatPool(),
+		"volterra_uztna_app_vip_pool":               resourceVolterraUztnaAppVipPool(),
+		"volterra_uztna_domain":                     resourceVolterraUztnaDomain(),
+		"volterra_uztna_flow":                       resourceVolterraUztnaFlow(),
+		"volterra_uztna_gateway":                    resourceVolterraUztnaGateway(),
+		"volterra_uztna_healthcheck":                resourceVolterraUztnaHealthcheck(),
+		"volterra_uztna_leasepool":                  resourceVolterraUztnaLeasepool(),
+		"volterra_uztna_origin_pool":                resourceVolterraUztnaOriginPool(),
+		"volterra_uztna_policy_template":            resourceVolterraUztnaPolicyTemplate(),
+		"volterra_uztna_application_view":           resourceVolterraUztnaApplicationView(),
+		"volterra_uztna_domain_view":                resourceVolterraUztnaDomainView(),
+		"volterra_api_definition":                   resourceVolterraApiDefinition(),
+		"volterra_app_api_group":                    resourceVolterraAppApiGroup(),
+		"volterra_aws_tgw_site":                     resourceVolterraAwsTgwSite(),
+		"volterra_aws_vpc_site":                     resourceVolterraAwsVpcSite(),
+		"volterra_azure_vnet_site":                  resourceVolterraAzureVnetSite(),
+		"volterra_bigip_centralmanager_site":        resourceVolterraBigipCentralmanagerSite(),
+		"volterra_bigip_instance_site":              resourceVolterraBigipInstanceSite(),
+		"volterra_cdn_loadbalancer":                 resourceVolterraCdnLoadbalancer(),
+		"volterra_external_connector":               resourceVolterraExternalConnector(),
+		"volterra_forward_proxy_policy":             resourceVolterraForwardProxyPolicy(),
+		"volterra_gcp_vpc_site":                     resourceVolterraGcpVpcSite(),
+		"volterra_http_loadbalancer":                resourceVolterraHttpLoadbalancer(),
+		"volterra_ike_phase1_profile":               resourceVolterraIkePhase1Profile(),
+		"volterra_ike_phase2_profile":               resourceVolterraIkePhase2Profile(),
+		"volterra_network_policy_view":              resourceVolterraNetworkPolicyView(),
+		"volterra_origin_pool":                      resourceVolterraOriginPool(),
+		"volterra_rate_limiter_policy":              resourceVolterraRateLimiterPolicy(),
+		"volterra_securemesh_site":                  resourceVolterraSecuremeshSite(),
+		"volterra_securemesh_site_v2":               resourceVolterraSecuremeshSiteV2(),
+		"volterra_tcp_loadbalancer":                 resourceVolterraTcpLoadbalancer(),
+		"volterra_udp_loadbalancer":                 resourceVolterraUdpLoadbalancer(),
+		"volterra_voltstack_site":                   resourceVolterraVoltstackSite(),
+		"volterra_virtual_host":                     resourceVolterraVirtualHost(),
+		"volterra_virtual_k8s":                      resourceVolterraVirtualK8S(),
+		"volterra_virtual_network":                  resourceVolterraVirtualNetwork(),
+		"volterra_virtual_site":                     resourceVolterraVirtualSite(),
+		"volterra_waf_exclusion_policy":             resourceVolterraWafExclusionPolicy(),
+		"volterra_ztna":                             resourceVolterraZtna(),
+		"volterra_ztna_application":                 resourceVolterraZtnaApplication(),
 	}
 }
 
@@ -244,13 +267,16 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_alert_receiver.ObjectType,
 		ves_io_schema_api_crawler.ObjectType,
 		ves_io_schema_api_discovery.ObjectType,
+		ves_io_schema_api_testing.ObjectType,
 		ves_io_schema_code_base_integration.ObjectType,
 		ves_io_schema_app_firewall.ObjectType,
 		ves_io_schema_app_setting.ObjectType,
 		ves_io_schema_app_type.ObjectType,
 		ves_io_schema_bgp.ObjectType,
 		ves_io_schema_bgp_asn_set.ObjectType,
+		ves_io_schema_bgp_routing_policy.ObjectType,
 		ves_io_schema_apm.ObjectType,
+		ves_io_schema_cdn_cache_rule.ObjectType,
 		ves_io_schema_certificate.ObjectType,
 		ves_io_schema_certificate_chain.ObjectType,
 		ves_io_schema_cloud_credentials.ObjectType,
@@ -280,6 +306,9 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_flow_anomaly.ObjectType,
 		ves_io_schema_global_log_receiver.ObjectType,
 		ves_io_schema_healthcheck.ObjectType,
+		ves_io_schema_ike1.ObjectType,
+		ves_io_schema_ike2.ObjectType,
+		ves_io_schema_infraprotect_firewall_rule_group.ObjectType,
 		ves_io_schema_ip_prefix_set.ObjectType,
 		ves_io_schema_k8s_cluster.ObjectType,
 		ves_io_schema_k8s_cluster_role.ObjectType,
@@ -295,6 +324,7 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_network_policy_rule.ObjectType,
 		ves_io_schema_network_policy_set.ObjectType,
 		ves_io_schema_nfv_service.ObjectType,
+		ves_io_schema_nginx_csg.ObjectType,
 		ves_io_schema_nginx_instance.ObjectType,
 		ves_io_schema_nginx_server.ObjectType,
 		ves_io_schema_policer.ObjectType,
@@ -336,20 +366,25 @@ func getAllAkarObjectTypes() sets.String {
 		ves_io_schema_bigip_instance_site.ObjectType,
 		ves_io_schema_bigip_virtual_server.ObjectType,
 		ves_io_schema_cdn_loadbalancer.ObjectType,
+		ves_io_schema_external_connector.ObjectType,
 		ves_io_schema_forward_proxy_policy.ObjectType,
 		ves_io_schema_gcp_vpc_site.ObjectType,
 		ves_io_schema_http_loadbalancer.ObjectType,
+		ves_io_schema_ike_phase1_profile.ObjectType,
+		ves_io_schema_ike_phase2_profile.ObjectType,
 		ves_io_schema_network_policy_view.ObjectType,
 		ves_io_schema_origin_pool.ObjectType,
 		ves_io_schema_rate_limiter_policy.ObjectType,
 		ves_io_schema_securemesh_site.ObjectType,
 		ves_io_schema_securemesh_site_v2.ObjectType,
 		ves_io_schema_tcp_loadbalancer.ObjectType,
+		ves_io_schema_udp_loadbalancer.ObjectType,
 		ves_io_schema_voltstack_site.ObjectType,
 		ves_io_schema_virtual_host.ObjectType,
 		ves_io_schema_virtual_k8s.ObjectType,
 		ves_io_schema_virtual_network.ObjectType,
 		ves_io_schema_virtual_site.ObjectType,
+		ves_io_schema_waf_exclusion_policy.ObjectType,
 		ves_io_schema_ztna.ObjectType,
 		ves_io_schema_ztna_application.ObjectType,
 	)

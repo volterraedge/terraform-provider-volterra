@@ -42,7 +42,7 @@ resource "volterra_nat_policy" "example" {
       destination_port {
         // One of the arguments from this list "no_port_match port port_ranges" can be set
 
-        port = "6443"
+        no_port_match = true
       }
 
       // One of the arguments from this list "segment virtual_network" can be set
@@ -59,7 +59,7 @@ resource "volterra_nat_policy" "example" {
       source_port {
         // One of the arguments from this list "no_port_match port port_ranges" can be set
 
-        port = "6443"
+        no_port_match = true
       }
     }
 
@@ -68,13 +68,17 @@ resource "volterra_nat_policy" "example" {
     enable = true
     name = "NAT to Internet"
 
-    // One of the arguments from this list "cloud_connect network_interface segment virtual_network" must be set
+    // One of the arguments from this list "cloud_connect node_interface segment virtual_network" must be set
 
-    cloud_connect {
-      refs {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
+    node_interface {
+      list {
+        interface {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+
+        node = "master-0"
       }
     }
   }
@@ -123,15 +127,15 @@ List of rules to apply under the NAT Policy. Rule that matches first would be ap
 
 `name` - (Required) Name of the Rule (`String`).
 
-###### One of the arguments from this list "cloud_connect, network_interface, segment, virtual_network" must be set
+###### One of the arguments from this list "cloud_connect, node_interface, segment, virtual_network" must be set
 
 `cloud_connect` - (Optional) NAT rule is applied to packet coming from cloud connect. See [Scope Choice Cloud Connect ](#scope-choice-cloud-connect) below for details.
 
-`network_interface` - (Optional) NAT rule is applied to packet coming from interface. If "Action" is "Source Nat", this scope should not be used. See [Scope Choice Network Interface ](#scope-choice-network-interface) below for details.
+`node_interface` - (Optional) NAT rule is applied to packet coming from one or more interfaces of nodes. See [Scope Choice Node Interface ](#scope-choice-node-interface) below for details.
 
-`segment` - (Optional) NAT rule is applied to packet in the segment. If "Action" is "Virtual Subnet NAT", this scope should not be used. See [Scope Choice Segment ](#scope-choice-segment) below for details.
+`segment` - (Optional) NAT rule is applied to packet in the segment. See [Scope Choice Segment ](#scope-choice-segment) below for details.
 
-`virtual_network` - (Optional) NAT rule is applied to packet in the virtual network. If "Action" is "Virtual Subnet NAT", this scope should not be used. See [Scope Choice Virtual Network ](#scope-choice-virtual-network) below for details.
+`virtual_network` - (Optional) NAT rule is applied to packet in the virtual network. See [Scope Choice Virtual Network ](#scope-choice-virtual-network) below for details.
 
 ### Applies To Choice Site
 
@@ -177,13 +181,19 @@ When there is no segment connector, this field need not be specified. When there
 
 `refs` - (Required) Reference to Segment Object. See [ref](#ref) below for details.
 
-`virtual_networks` - (Optional) Internally used to resolve segment ref to networks.. See [ref](#ref) below for details.(Deprecated)
-
 ### Network Choice Virtual Network
 
 When there is no network connector, this field need not be specified. When there is network connector configured and if packet is destined to destination network, destination network needs to be configured here.
 
 `refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.
+
+### Node Interface List
+
+On a multinode site, this list holds the nodes and corresponding networking_interface.
+
+`interface` - (Optional) Interface reference on this node. See [ref](#ref) below for details.
+
+`node` - (Optional) Node name on this site (`String`).
 
 ### Pool Choice Elastic Ips
 
@@ -249,23 +259,21 @@ NAT rule is applied to packet coming from cloud connect.
 
 `refs` - (Required) Reference to Cloud Connect Object. See [ref](#ref) below for details.
 
-### Scope Choice Network Interface
+### Scope Choice Node Interface
 
-NAT rule is applied to packet coming from interface. If "Action" is "Source Nat", this scope should not be used.
+NAT rule is applied to packet coming from one or more interfaces of nodes.
 
-`refs` - (Required) Reference to Network Interface Object. See [ref](#ref) below for details.
+`list` - (Optional) On a multinode site, this list holds the nodes and corresponding networking_interface. See [Node Interface List ](#node-interface-list) below for details.
 
 ### Scope Choice Segment
 
-NAT rule is applied to packet in the segment. If "Action" is "Virtual Subnet NAT", this scope should not be used.
+NAT rule is applied to packet in the segment.
 
 `refs` - (Required) Reference to Segment Object. See [ref](#ref) below for details.
 
-`virtual_networks` - (Optional) Internally used to resolve segment ref to networks.. See [ref](#ref) below for details.(Deprecated)
-
 ### Scope Choice Virtual Network
 
-NAT rule is applied to packet in the virtual network. If "Action" is "Virtual Subnet NAT", this scope should not be used.
+NAT rule is applied to packet in the virtual network.
 
 `refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.
 

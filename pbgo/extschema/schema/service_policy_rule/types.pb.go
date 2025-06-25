@@ -3271,19 +3271,16 @@ type RateLimiterRuleSpec struct {
 	// Specify action for the rule.
 	//
 	// Types that are valid to be assigned to ActionChoice:
-	//
 	//	*RateLimiterRuleSpec_BypassRateLimiter
 	//	*RateLimiterRuleSpec_ApplyRateLimiter
 	//	*RateLimiterRuleSpec_CustomRateLimiter
 	ActionChoice isRateLimiterRuleSpec_ActionChoice `protobuf_oneof:"action_choice"`
 	// Types that are valid to be assigned to IpChoice:
-	//
 	//	*RateLimiterRuleSpec_AnyIp
 	//	*RateLimiterRuleSpec_IpPrefixList
 	//	*RateLimiterRuleSpec_IpMatcher
 	IpChoice isRateLimiterRuleSpec_IpChoice `protobuf_oneof:"ip_choice"`
 	// Types that are valid to be assigned to AsnChoice:
-	//
 	//	*RateLimiterRuleSpec_AnyAsn
 	//	*RateLimiterRuleSpec_AsnList
 	//	*RateLimiterRuleSpec_AsnMatcher
@@ -3296,7 +3293,6 @@ type RateLimiterRuleSpec struct {
 	// The country is obtained by performing a lookup for the source IPv4 Address in a GeoIP DB.
 	//
 	// Types that are valid to be assigned to CountryChoice:
-	//
 	//	*RateLimiterRuleSpec_AnyCountry
 	//	*RateLimiterRuleSpec_CountryList
 	CountryChoice isRateLimiterRuleSpec_CountryChoice `protobuf_oneof:"country_choice"`

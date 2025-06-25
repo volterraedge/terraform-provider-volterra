@@ -1008,9 +1008,9 @@ func (c *CustomAPIRestClient) doRPCListServiceCredentials(ctx context.Context, c
 	if err != nil {
 		return nil, errors.Wrap(err, "Custom API RestClient read body")
 	}
-	pbRsp := &ListResponse{}
+	pbRsp := &ListServiceCredentialsResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
-		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.ListResponse", body)
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.ListServiceCredentialsResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1713,7 +1713,7 @@ func (c *customAPIInprocClient) List(ctx context.Context, in *ListRequest, opts 
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.List")
 	return c.CustomAPIServer.List(ctx, in)
 }
-func (c *customAPIInprocClient) ListServiceCredentials(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
+func (c *customAPIInprocClient) ListServiceCredentials(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListServiceCredentialsResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.ListServiceCredentials")
 	return c.CustomAPIServer.ListServiceCredentials(ctx, in)
 }
@@ -2159,7 +2159,7 @@ func (s *customAPISrv) List(ctx context.Context, in *ListRequest) (*ListResponse
 
 	return rsp, nil
 }
-func (s *customAPISrv) ListServiceCredentials(ctx context.Context, in *ListRequest) (*ListResponse, error) {
+func (s *customAPISrv) ListServiceCredentials(ctx context.Context, in *ListRequest) (*ListServiceCredentialsResponse, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
 	cah, ok := ah.(CustomAPIServer)
 	if !ok {
@@ -2167,7 +2167,7 @@ func (s *customAPISrv) ListServiceCredentials(ctx context.Context, in *ListReque
 	}
 
 	var (
-		rsp *ListResponse
+		rsp *ListServiceCredentialsResponse
 		err error
 	)
 
@@ -2204,7 +2204,7 @@ func (s *customAPISrv) ListServiceCredentials(ctx context.Context, in *ListReque
 		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
 	}
 
-	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListResponse", rsp)...)
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.ListServiceCredentialsResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -3662,7 +3662,7 @@ var CustomAPISwaggerJSON string = `{
                     "200": {
                         "description": "A successful response.",
                         "schema": {
-                            "$ref": "#/definitions/api_credentialListResponse"
+                            "$ref": "#/definitions/api_credentialListServiceCredentialsResponse"
                         }
                     },
                     "401": {
@@ -4568,6 +4568,105 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Email of user",
                     "x-displayname": "User",
                     "x-ves-example": "admin@acmecorp.com"
+                }
+            }
+        },
+        "api_credentialListServiceCredentialsResponse": {
+            "type": "object",
+            "description": "Response of request to list all of service credential objects.",
+            "title": "List service credential response",
+            "x-displayname": "List Service Credential Response",
+            "x-ves-proto-message": "ves.io.schema.api_credential.ListServiceCredentialsResponse",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " List of service credential items.",
+                    "title": "List of the service credentials",
+                    "items": {
+                        "$ref": "#/definitions/api_credentialListServiceCredentialsResponseItem"
+                    },
+                    "x-displayname": "Service Credentials"
+                }
+            }
+        },
+        "api_credentialListServiceCredentialsResponseItem": {
+            "type": "object",
+            "description": "Each item of service credential list request.",
+            "title": "List Service Credential item",
+            "x-displayname": "List service credential response item",
+            "x-ves-proto-message": "ves.io.schema.api_credential.ListServiceCredentialsResponseItem",
+            "properties": {
+                "active": {
+                    "type": "boolean",
+                    "description": " Possibility to deactivate credential with no deletion.\n\nExample: - \"true\"-",
+                    "title": "Active",
+                    "format": "boolean",
+                    "x-displayname": "Active",
+                    "x-ves-example": "true"
+                },
+                "create_timestamp": {
+                    "type": "string",
+                    "description": " Create time of API credential.",
+                    "title": "Create timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Creation Time"
+                },
+                "expiry_timestamp": {
+                    "type": "string",
+                    "description": " Expiry time of credential.",
+                    "title": "Expiry time",
+                    "format": "date-time",
+                    "x-displayname": "Expiry Time"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of API credential object.\n\nExample: - \"value\"-",
+                    "title": "Credential name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "value"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of API credential object.\n\nExample: - \"system\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "system"
+                },
+                "namespace_access": {
+                    "description": " List of directly attached roles that the service credential has for each namespace.",
+                    "title": "Namespace Access",
+                    "$ref": "#/definitions/schemaNamespaceAccessType",
+                    "x-displayname": "namespace access"
+                },
+                "type": {
+                    "description": " Type of API credential.",
+                    "title": "Type of credential",
+                    "$ref": "#/definitions/api_credentialAPICredentialType",
+                    "x-displayname": "Credential Type"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " UUID of API credential object.\n\nExample: - \"fa45979f-4e41-4f4b-8b0b-c3ab844ab0aa\"-",
+                    "title": "uuid of the record",
+                    "x-displayname": "UUID",
+                    "x-ves-example": "fa45979f-4e41-4f4b-8b0b-c3ab844ab0aa"
+                },
+                "user_email": {
+                    "type": "string",
+                    "description": " User email of user that requested credential .\n\nExample: - \"admin@acmecorp.com\"-",
+                    "title": "Email of user",
+                    "x-displayname": "User",
+                    "x-ves-example": "admin@acmecorp.com"
+                },
+                "user_group_names": {
+                    "type": "array",
+                    "description": " user group list associated to this service credential.\n\nExample: - \"[\"dev-group-1\"]\"-",
+                    "title": "User Groups Names",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "User Groups",
+                    "x-ves-example": "[\"dev-group-1\"]"
                 }
             }
         },

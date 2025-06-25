@@ -148,7 +148,7 @@ type DualStackLeasePool struct {
 	//
 	// x-displayName: "IPv6 Lease Pool"
 	// x-required
-	// Select or create new IPv4 Lease Pools
+	// Select or create new IPv6 Lease Pools
 	Ipv6Leasepool *IPv6Leasepool `protobuf:"bytes,4,opt,name=ipv6_leasepool,json=ipv6Leasepool,proto3" json:"ipv6_leasepool,omitempty"`
 }
 
@@ -314,7 +314,7 @@ type Policy struct {
 	// ZTNA Policy
 	//
 	// x-displayName: "ZTNA Policy"
-	//
+	// x-required
 	// Select/Add ZTNA Policy to associate with this ZeroTrust Domain
 	Policy []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=policy,proto3" json:"policy,omitempty"`
 }
@@ -358,23 +358,200 @@ func (m *Policy) GetPolicy() []*schema.ObjectRefType {
 	return nil
 }
 
+// IPv4 App VIP Pool
+//
+// x-displayName: "IPv4 App VIP Pool"
+// x-required
+// Select or create new IPv4 App VIP Pool
+type IPv4AppVipPool struct {
+	// IPv4 App VIP Pool
+	//
+	// x-displayName: "IPv4 App VIP Pool"
+	// x-required
+	// Select or create new IPv4 App VIP Pool
+	Ipv4AppVipPool []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=ipv4_app_vip_pool,json=ipv4AppVipPool,proto3" json:"ipv4_app_vip_pool,omitempty"`
+}
+
+func (m *IPv4AppVipPool) Reset()      { *m = IPv4AppVipPool{} }
+func (*IPv4AppVipPool) ProtoMessage() {}
+func (*IPv4AppVipPool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4628a4276549e24f, []int{5}
+}
+func (m *IPv4AppVipPool) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IPv4AppVipPool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IPv4AppVipPool.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IPv4AppVipPool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPv4AppVipPool.Merge(m, src)
+}
+func (m *IPv4AppVipPool) XXX_Size() int {
+	return m.Size()
+}
+func (m *IPv4AppVipPool) XXX_DiscardUnknown() {
+	xxx_messageInfo_IPv4AppVipPool.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IPv4AppVipPool proto.InternalMessageInfo
+
+func (m *IPv4AppVipPool) GetIpv4AppVipPool() []*schema.ObjectRefType {
+	if m != nil {
+		return m.Ipv4AppVipPool
+	}
+	return nil
+}
+
+// IPv6 App VIP Pool
+//
+// x-displayName: "IPv6 App VIP Pool"
+// x-required
+// Select or create new IPv6 App VIP Pool
+type IPv6AppVipPool struct {
+	// IPv6 App VIP Pool
+	//
+	// x-displayName: "IPv6 App VIP Pool"
+	// x-required
+	// Select or create new IPv6 App VIP Pools
+	Ipv6AppVipPool []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=ipv6_app_vip_pool,json=ipv6AppVipPool,proto3" json:"ipv6_app_vip_pool,omitempty"`
+}
+
+func (m *IPv6AppVipPool) Reset()      { *m = IPv6AppVipPool{} }
+func (*IPv6AppVipPool) ProtoMessage() {}
+func (*IPv6AppVipPool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4628a4276549e24f, []int{6}
+}
+func (m *IPv6AppVipPool) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *IPv6AppVipPool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_IPv6AppVipPool.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *IPv6AppVipPool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_IPv6AppVipPool.Merge(m, src)
+}
+func (m *IPv6AppVipPool) XXX_Size() int {
+	return m.Size()
+}
+func (m *IPv6AppVipPool) XXX_DiscardUnknown() {
+	xxx_messageInfo_IPv6AppVipPool.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_IPv6AppVipPool proto.InternalMessageInfo
+
+func (m *IPv6AppVipPool) GetIpv6AppVipPool() []*schema.ObjectRefType {
+	if m != nil {
+		return m.Ipv6AppVipPool
+	}
+	return nil
+}
+
+// Dual Stack App VIP Pool
+//
+// x-displayName: "Dual Stack App VIP Pool"
+//
+// This is used to import or create new IPv4 and Ipv6 App VIP Pools
+type DualStackAppVipPool struct {
+	// IPv4 App VIP Pool
+	//
+	// x-displayName: "IPv4 App VIP Pool"
+	// x-required
+	// Select or create new IPv4 App VIP Pools
+	Ipv4AppVipPool *IPv4AppVipPool `protobuf:"bytes,1,opt,name=ipv4_app_vip_pool,json=ipv4AppVipPool,proto3" json:"ipv4_app_vip_pool,omitempty"`
+	// IPv6 App VIP Pool
+	//
+	// x-displayName: "IPv6 App VIP Pool"
+	// x-required
+	// Select or create new IPv6 App VIP Pools
+	Ipv6AppVipPool *IPv6AppVipPool `protobuf:"bytes,2,opt,name=ipv6_app_vip_pool,json=ipv6AppVipPool,proto3" json:"ipv6_app_vip_pool,omitempty"`
+}
+
+func (m *DualStackAppVipPool) Reset()      { *m = DualStackAppVipPool{} }
+func (*DualStackAppVipPool) ProtoMessage() {}
+func (*DualStackAppVipPool) Descriptor() ([]byte, []int) {
+	return fileDescriptor_4628a4276549e24f, []int{7}
+}
+func (m *DualStackAppVipPool) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DualStackAppVipPool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_DualStackAppVipPool.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *DualStackAppVipPool) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DualStackAppVipPool.Merge(m, src)
+}
+func (m *DualStackAppVipPool) XXX_Size() int {
+	return m.Size()
+}
+func (m *DualStackAppVipPool) XXX_DiscardUnknown() {
+	xxx_messageInfo_DualStackAppVipPool.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DualStackAppVipPool proto.InternalMessageInfo
+
+func (m *DualStackAppVipPool) GetIpv4AppVipPool() *IPv4AppVipPool {
+	if m != nil {
+		return m.Ipv4AppVipPool
+	}
+	return nil
+}
+
+func (m *DualStackAppVipPool) GetIpv6AppVipPool() *IPv6AppVipPool {
+	if m != nil {
+		return m.Ipv6AppVipPool
+	}
+	return nil
+}
+
 // Application VIP Pool
 //
-// x-displayName: "Application VIP Pool"
+// x-displayName: "Advanced Configuration"
 // This is used to select VIP Network and VIP Range from
 // the already created VIP Pool.
 type AppVIPPool struct {
-	// Selected VIP Pool for Application
+	// App VIP Pool
 	//
-	// x-displayName: "Selected VIP Pools"
+	// x-displayName: "App VIP Pool"
 	// Selected VIP Pools
-	AppVipPool []*schema.ObjectRefType `protobuf:"bytes,1,rep,name=app_vip_pool,json=appVipPool,proto3" json:"app_vip_pool,omitempty"`
+	//
+	// Types that are valid to be assigned to IpaddressType:
+	//	*AppVIPPool_Ipv4AppVipPool
+	//	*AppVIPPool_Ipv6AppVipPool
+	//	*AppVIPPool_Ipv4Ipv6AppVipPool
+	IpaddressType isAppVIPPool_IpaddressType `protobuf_oneof:"ipaddress_type"`
 }
 
 func (m *AppVIPPool) Reset()      { *m = AppVIPPool{} }
 func (*AppVIPPool) ProtoMessage() {}
 func (*AppVIPPool) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{5}
+	return fileDescriptor_4628a4276549e24f, []int{8}
 }
 func (m *AppVIPPool) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -403,11 +580,62 @@ func (m *AppVIPPool) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AppVIPPool proto.InternalMessageInfo
 
-func (m *AppVIPPool) GetAppVipPool() []*schema.ObjectRefType {
+type isAppVIPPool_IpaddressType interface {
+	isAppVIPPool_IpaddressType()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type AppVIPPool_Ipv4AppVipPool struct {
+	Ipv4AppVipPool *IPv4AppVipPool `protobuf:"bytes,2,opt,name=ipv4_app_vip_pool,json=ipv4AppVipPool,proto3,oneof" json:"ipv4_app_vip_pool,omitempty"`
+}
+type AppVIPPool_Ipv6AppVipPool struct {
+	Ipv6AppVipPool *IPv6AppVipPool `protobuf:"bytes,3,opt,name=ipv6_app_vip_pool,json=ipv6AppVipPool,proto3,oneof" json:"ipv6_app_vip_pool,omitempty"`
+}
+type AppVIPPool_Ipv4Ipv6AppVipPool struct {
+	Ipv4Ipv6AppVipPool *DualStackAppVipPool `protobuf:"bytes,4,opt,name=ipv4_ipv6_app_vip_pool,json=ipv4Ipv6AppVipPool,proto3,oneof" json:"ipv4_ipv6_app_vip_pool,omitempty"`
+}
+
+func (*AppVIPPool_Ipv4AppVipPool) isAppVIPPool_IpaddressType()     {}
+func (*AppVIPPool_Ipv6AppVipPool) isAppVIPPool_IpaddressType()     {}
+func (*AppVIPPool_Ipv4Ipv6AppVipPool) isAppVIPPool_IpaddressType() {}
+
+func (m *AppVIPPool) GetIpaddressType() isAppVIPPool_IpaddressType {
 	if m != nil {
-		return m.AppVipPool
+		return m.IpaddressType
 	}
 	return nil
+}
+
+func (m *AppVIPPool) GetIpv4AppVipPool() *IPv4AppVipPool {
+	if x, ok := m.GetIpaddressType().(*AppVIPPool_Ipv4AppVipPool); ok {
+		return x.Ipv4AppVipPool
+	}
+	return nil
+}
+
+func (m *AppVIPPool) GetIpv6AppVipPool() *IPv6AppVipPool {
+	if x, ok := m.GetIpaddressType().(*AppVIPPool_Ipv6AppVipPool); ok {
+		return x.Ipv6AppVipPool
+	}
+	return nil
+}
+
+func (m *AppVIPPool) GetIpv4Ipv6AppVipPool() *DualStackAppVipPool {
+	if x, ok := m.GetIpaddressType().(*AppVIPPool_Ipv4Ipv6AppVipPool); ok {
+		return x.Ipv4Ipv6AppVipPool
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*AppVIPPool) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*AppVIPPool_Ipv4AppVipPool)(nil),
+		(*AppVIPPool_Ipv6AppVipPool)(nil),
+		(*AppVIPPool_Ipv4Ipv6AppVipPool)(nil),
+	}
 }
 
 // Cloud Gateway
@@ -427,7 +655,7 @@ type CloudGateways struct {
 func (m *CloudGateways) Reset()      { *m = CloudGateways{} }
 func (*CloudGateways) ProtoMessage() {}
 func (*CloudGateways) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{6}
+	return fileDescriptor_4628a4276549e24f, []int{9}
 }
 func (m *CloudGateways) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -484,7 +712,7 @@ type CloudGatewayAdvertisement struct {
 func (m *CloudGatewayAdvertisement) Reset()      { *m = CloudGatewayAdvertisement{} }
 func (*CloudGatewayAdvertisement) ProtoMessage() {}
 func (*CloudGatewayAdvertisement) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{7}
+	return fileDescriptor_4628a4276549e24f, []int{10}
 }
 func (m *CloudGatewayAdvertisement) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -590,7 +818,7 @@ type Gateways struct {
 func (m *Gateways) Reset()      { *m = Gateways{} }
 func (*Gateways) ProtoMessage() {}
 func (*Gateways) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{8}
+	return fileDescriptor_4628a4276549e24f, []int{11}
 }
 func (m *Gateways) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -648,7 +876,7 @@ type Certificate struct {
 func (m *Certificate) Reset()      { *m = Certificate{} }
 func (*Certificate) ProtoMessage() {}
 func (*Certificate) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{9}
+	return fileDescriptor_4628a4276549e24f, []int{12}
 }
 func (m *Certificate) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -749,7 +977,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{10}
+	return fileDescriptor_4628a4276549e24f, []int{13}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -860,7 +1088,7 @@ type CreateSpecType struct {
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{11}
+	return fileDescriptor_4628a4276549e24f, []int{14}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -971,7 +1199,7 @@ type ReplaceSpecType struct {
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{12}
+	return fileDescriptor_4628a4276549e24f, []int{15}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1082,7 +1310,7 @@ type GetSpecType struct {
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4628a4276549e24f, []int{13}
+	return fileDescriptor_4628a4276549e24f, []int{16}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1180,6 +1408,9 @@ func init() {
 	proto.RegisterType((*DualStackLeasePool)(nil), "ves.io.schema.uztna.uztna_domain.DualStackLeasePool")
 	proto.RegisterType((*LeasePoolList)(nil), "ves.io.schema.uztna.uztna_domain.LeasePoolList")
 	proto.RegisterType((*Policy)(nil), "ves.io.schema.uztna.uztna_domain.Policy")
+	proto.RegisterType((*IPv4AppVipPool)(nil), "ves.io.schema.uztna.uztna_domain.IPv4AppVipPool")
+	proto.RegisterType((*IPv6AppVipPool)(nil), "ves.io.schema.uztna.uztna_domain.IPv6AppVipPool")
+	proto.RegisterType((*DualStackAppVipPool)(nil), "ves.io.schema.uztna.uztna_domain.DualStackAppVipPool")
 	proto.RegisterType((*AppVIPPool)(nil), "ves.io.schema.uztna.uztna_domain.AppVIPPool")
 	proto.RegisterType((*CloudGateways)(nil), "ves.io.schema.uztna.uztna_domain.CloudGateways")
 	proto.RegisterType((*CloudGatewayAdvertisement)(nil), "ves.io.schema.uztna.uztna_domain.CloudGatewayAdvertisement")
@@ -1196,88 +1427,97 @@ func init() {
 }
 
 var fileDescriptor_4628a4276549e24f = []byte{
-	// 1294 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xcf, 0x6b, 0x1b, 0x47,
-	0x14, 0xd6, 0x48, 0x2b, 0x79, 0xfd, 0x24, 0x39, 0xca, 0x36, 0x25, 0x8a, 0x1b, 0xd6, 0x42, 0xc9,
-	0xc1, 0x04, 0x47, 0x22, 0x8e, 0x71, 0x21, 0x85, 0x12, 0xc9, 0xae, 0x7f, 0xe1, 0xa6, 0x66, 0x9d,
-	0x9a, 0x10, 0x4a, 0xb6, 0xa3, 0xd5, 0x58, 0xde, 0x66, 0xa5, 0x9d, 0xec, 0x8e, 0xe5, 0xb8, 0x20,
-	0xf0, 0x1f, 0xd0, 0x43, 0xc9, 0x5f, 0x11, 0x74, 0xed, 0xa5, 0x54, 0x39, 0x98, 0x42, 0xa0, 0xe4,
-	0xa4, 0xa3, 0x8f, 0x89, 0x72, 0x49, 0x2f, 0x25, 0xed, 0xa9, 0xc7, 0xb2, 0xb3, 0x2b, 0x79, 0x77,
-	0xed, 0x62, 0xc5, 0x0d, 0xa1, 0x07, 0x5f, 0xc4, 0x6a, 0x66, 0xde, 0xf7, 0xcd, 0xf7, 0xde, 0xf7,
-	0xde, 0xc2, 0xc2, 0x54, 0x93, 0xd8, 0x05, 0xdd, 0x2c, 0xda, 0xda, 0x16, 0xa9, 0xe3, 0xe2, 0xf6,
-	0xf7, 0xac, 0xe1, 0xfd, 0xaa, 0x55, 0xb3, 0x8e, 0xf5, 0x46, 0x91, 0xed, 0x52, 0x62, 0x17, 0xa8,
-	0x65, 0x32, 0x53, 0xca, 0xb9, 0xa7, 0x0b, 0xee, 0xe9, 0x02, 0x3f, 0x57, 0xf0, 0x9f, 0x1e, 0xbf,
-	0x18, 0xc4, 0x6b, 0x10, 0xe6, 0x86, 0x8e, 0x7f, 0x12, 0xdc, 0x30, 0x29, 0xd3, 0xcd, 0x86, 0x87,
-	0x3b, 0x7e, 0x29, 0xb8, 0xe9, 0xa3, 0x1c, 0xbf, 0x1c, 0xdc, 0x6a, 0x62, 0x43, 0xaf, 0x62, 0x46,
-	0xbc, 0xdd, 0x5c, 0x68, 0x57, 0x27, 0x3b, 0x6a, 0x10, 0x7a, 0xe2, 0xe8, 0x09, 0xdb, 0x4f, 0x90,
-	0x7f, 0x0c, 0xe9, 0xe5, 0xb5, 0xe6, 0xcc, 0x2a, 0xc1, 0x36, 0xa1, 0xa6, 0x69, 0x48, 0x18, 0xc6,
-	0x74, 0xda, 0x9c, 0x51, 0x8d, 0xfe, 0x4a, 0x36, 0x9a, 0x8b, 0x4d, 0x26, 0xa7, 0x2f, 0x17, 0x82,
-	0xea, 0xbf, 0xaa, 0x7c, 0x47, 0x34, 0xa6, 0x90, 0xcd, 0xbb, 0xbb, 0x94, 0x94, 0x2f, 0xb7, 0x5b,
-	0xe7, 0xdc, 0x4c, 0x0c, 0xe2, 0x7e, 0xf9, 0x7d, 0x3f, 0x16, 0x7f, 0x82, 0xa2, 0x19, 0xa4, 0xa4,
-	0x1d, 0xc4, 0x01, 0xc5, 0x8a, 0x20, 0xa2, 0x4c, 0xd4, 0x63, 0x9e, 0x0d, 0x33, 0xcf, 0xbe, 0x77,
-	0xe6, 0xd9, 0x30, 0x73, 0x17, 0x81, 0x34, 0xbf, 0x8d, 0x8d, 0x75, 0x86, 0xb5, 0x87, 0x7c, 0x73,
-	0xcd, 0xe1, 0xdf, 0x38, 0xa2, 0x3c, 0x96, 0x43, 0x93, 0xc9, 0xe9, 0x62, 0xe1, 0xa4, 0xba, 0x17,
-	0x02, 0x29, 0x0c, 0xc9, 0xf5, 0x70, 0xfd, 0xba, 0x84, 0x77, 0xc0, 0x9d, 0x0d, 0xe2, 0x86, 0xc5,
-	0xac, 0x08, 0x62, 0x34, 0x13, 0xcb, 0xbf, 0x89, 0x42, 0x7a, 0xa0, 0x64, 0x55, 0xb7, 0x99, 0x74,
-	0xef, 0x98, 0x3a, 0x9e, 0x46, 0xcd, 0x52, 0x24, 0xac, 0xe7, 0xc1, 0x11, 0x3d, 0xb1, 0x53, 0xe9,
-	0x29, 0x0b, 0x6f, 0x3a, 0x08, 0x79, 0xf8, 0x3e, 0x1f, 0x18, 0xf0, 0x11, 0xbf, 0xf9, 0xb1, 0x49,
-	0x9b, 0x39, 0x99, 0xe4, 0x68, 0x69, 0x07, 0x4c, 0xe7, 0x1d, 0xe0, 0x65, 0x3f, 0x5b, 0xf9, 0x8a,
-	0xa3, 0x06, 0x57, 0xab, 0x16, 0xb1, 0x6d, 0xd5, 0xe9, 0x0c, 0xe9, 0xfc, 0x7e, 0x07, 0x45, 0xbb,
-	0x1d, 0x14, 0xef, 0x75, 0x50, 0x7c, 0x7a, 0xea, 0xe6, 0xd4, 0xcc, 0x20, 0xd5, 0xf1, 0x4c, 0x22,
-	0x5f, 0x81, 0xc4, 0x9a, 0x69, 0xe8, 0xda, 0xae, 0x74, 0x0f, 0x12, 0x94, 0x3f, 0x65, 0xd1, 0x10,
-	0x46, 0xcd, 0xb7, 0x5b, 0x1f, 0xbb, 0xf7, 0x74, 0x83, 0x54, 0x46, 0xea, 0xd4, 0xc0, 0x8c, 0xf8,
-	0xec, 0xea, 0xe1, 0xe5, 0xeb, 0x00, 0x25, 0x4a, 0x37, 0x96, 0xd7, 0xb8, 0x31, 0x55, 0x48, 0x61,
-	0x4a, 0xd5, 0xa6, 0x4e, 0x55, 0x9e, 0x89, 0x61, 0xd8, 0x26, 0xda, 0x2d, 0xc9, 0x65, 0xf3, 0x87,
-	0xfa, 0xa8, 0x00, 0x53, 0xba, 0xa1, 0x53, 0x87, 0x20, 0xaf, 0x42, 0x7a, 0xce, 0x30, 0xb7, 0xab,
-	0x8b, 0x98, 0x91, 0x1d, 0xbc, 0x6b, 0x4b, 0x77, 0x20, 0xad, 0x39, 0x0b, 0x6a, 0xcd, 0x5d, 0x19,
-	0x8a, 0x32, 0xd9, 0x6e, 0x09, 0xb6, 0xce, 0xc8, 0xde, 0x33, 0x84, 0x94, 0x94, 0xe6, 0x03, 0xcc,
-	0xff, 0x1c, 0x85, 0x4b, 0x7e, 0x86, 0x52, 0xb5, 0x49, 0x2c, 0xa6, 0xdb, 0xa4, 0x4e, 0x1a, 0x4c,
-	0xba, 0x09, 0xa3, 0xd8, 0x30, 0x54, 0x1e, 0x91, 0x8d, 0xf3, 0x32, 0x5f, 0x08, 0x31, 0x7d, 0x51,
-	0xa7, 0x6c, 0x77, 0x29, 0xa2, 0x88, 0xd8, 0x30, 0x38, 0x90, 0xb4, 0x0a, 0xa2, 0x45, 0x54, 0x87,
-	0xcf, 0xce, 0x26, 0x86, 0xf5, 0x5f, 0x40, 0xe5, 0x52, 0x44, 0x19, 0xb1, 0xc8, 0xba, 0x83, 0x70,
-	0xeb, 0xdb, 0x17, 0x1d, 0xf4, 0x0d, 0xdc, 0x87, 0x31, 0x7e, 0x22, 0xd7, 0x3f, 0x72, 0x6d, 0x09,
-	0x16, 0x60, 0xc2, 0x77, 0xbd, 0x69, 0xa9, 0x64, 0x18, 0xb9, 0xe0, 0x21, 0xb8, 0x72, 0x78, 0x95,
-	0xe9, 0x8b, 0xf3, 0x9c, 0x69, 0x43, 0x27, 0x3b, 0x01, 0xb2, 0xf2, 0x55, 0xb8, 0x10, 0x48, 0xa9,
-	0xaa, 0x6d, 0x99, 0xba, 0x46, 0xa4, 0xd4, 0x7e, 0x07, 0xc5, 0xbb, 0x1d, 0x24, 0xfc, 0xdd, 0x41,
-	0x51, 0x7f, 0x4f, 0xaf, 0x08, 0xa2, 0x90, 0x89, 0xe7, 0x9f, 0x23, 0x10, 0x07, 0x75, 0x79, 0x00,
-	0x29, 0x4a, 0x2c, 0xbd, 0x4e, 0x18, 0xb1, 0x54, 0x8b, 0x78, 0x3d, 0xf1, 0xd9, 0xbb, 0x09, 0x0f,
-	0x24, 0x5f, 0x49, 0x0e, 0x00, 0x15, 0x22, 0x7d, 0x09, 0x50, 0xd1, 0x6b, 0x3a, 0xe5, 0x62, 0xb2,
-	0xb1, 0x21, 0x8a, 0x9e, 0x69, 0xb7, 0xd2, 0x2e, 0x93, 0xa7, 0x4b, 0x19, 0xe5, 0x08, 0x4e, 0x5a,
-	0x03, 0x13, 0xaa, 0x06, 0xc9, 0x39, 0x87, 0x76, 0x53, 0xd7, 0x30, 0x23, 0xd2, 0x3d, 0x48, 0x6a,
-	0x87, 0x7f, 0x87, 0x9a, 0xf4, 0xd9, 0x76, 0xcb, 0x1f, 0xe3, 0xf3, 0xb2, 0x7f, 0x39, 0xff, 0x53,
-	0x02, 0xc6, 0x16, 0x0d, 0xb3, 0x82, 0x8d, 0x75, 0x4a, 0x34, 0x27, 0x52, 0xba, 0x03, 0xc0, 0xe7,
-	0x48, 0xbf, 0x7d, 0x86, 0x74, 0x4b, 0x60, 0xa0, 0x2a, 0xa3, 0xc6, 0xe0, 0x4d, 0xb1, 0x00, 0xa2,
-	0xa7, 0xd6, 0xf6, 0xa6, 0xea, 0xb5, 0x93, 0xd1, 0xfa, 0x45, 0x54, 0x06, 0xb1, 0x52, 0x01, 0x92,
-	0x58, 0xd3, 0x9c, 0xc1, 0xb3, 0xf9, 0xa8, 0xda, 0xc8, 0x26, 0x73, 0x68, 0x72, 0xb4, 0x9c, 0x76,
-	0x84, 0x89, 0x56, 0x62, 0x72, 0x4f, 0xdc, 0x8b, 0x3b, 0x7d, 0xca, 0x4f, 0x2c, 0x3c, 0xaa, 0x36,
-	0xa4, 0x12, 0x08, 0x8e, 0x52, 0xaf, 0xec, 0xd7, 0x87, 0x28, 0xfb, 0x61, 0x5e, 0x14, 0x1e, 0x2a,
-	0x6d, 0x42, 0x46, 0xab, 0x36, 0x54, 0x8d, 0xa8, 0xcd, 0x2d, 0x15, 0x53, 0x5d, 0xad, 0xed, 0x64,
-	0x13, 0x43, 0x24, 0x3f, 0xd7, 0x6e, 0xa5, 0x9a, 0xba, 0xc5, 0xb6, 0xb1, 0xa1, 0x6e, 0x99, 0x36,
-	0x3b, 0x68, 0x21, 0x67, 0xa6, 0xfa, 0x8a, 0x90, 0xd2, 0xaa, 0x8d, 0x39, 0xb2, 0xb1, 0x55, 0xa2,
-	0xfa, 0xe2, 0x8e, 0x74, 0x37, 0x34, 0xb3, 0x46, 0xf8, 0x95, 0xa7, 0x4e, 0xbe, 0xf2, 0xe1, 0xdc,
-	0x2b, 0x0b, 0xfb, 0x1d, 0x14, 0x18, 0x54, 0xd2, 0xed, 0xc1, 0xc4, 0x15, 0x39, 0xde, 0xe4, 0xc9,
-	0x78, 0xee, 0xac, 0xee, 0x4f, 0x56, 0x69, 0x19, 0xd2, 0xce, 0x9d, 0xaa, 0x0d, 0x5b, 0xa5, 0x96,
-	0xf9, 0x78, 0x37, 0x3b, 0xca, 0x81, 0xc2, 0xe2, 0x97, 0x69, 0xc9, 0x7d, 0x25, 0x70, 0xf1, 0x23,
-	0x9e, 0x5a, 0x25, 0xd9, 0xd4, 0xe9, 0x7c, 0xc3, 0x5e, 0x73, 0x22, 0xa5, 0x3a, 0x8c, 0xf5, 0x25,
-	0xda, 0xdb, 0x95, 0x06, 0x61, 0xd9, 0x54, 0x2e, 0x36, 0x39, 0x5a, 0x5e, 0x74, 0x92, 0x02, 0x4f,
-	0xd0, 0x48, 0x3e, 0x6e, 0xc5, 0x9e, 0xba, 0x39, 0xea, 0xff, 0x3d, 0xf0, 0xa5, 0x0c, 0xfa, 0x4f,
-	0xe2, 0x60, 0x2d, 0x8b, 0x7a, 0x2f, 0x9f, 0xc7, 0x12, 0x4f, 0x9e, 0xa1, 0x68, 0x26, 0xa2, 0xa4,
-	0x5c, 0xe5, 0xeb, 0x1c, 0xfc, 0xd6, 0xca, 0xaf, 0x1d, 0xb4, 0x00, 0xe7, 0x00, 0xb8, 0x2d, 0x73,
-	0x3c, 0x1f, 0xe8, 0x06, 0xa4, 0x7d, 0xe3, 0x01, 0x4d, 0x43, 0x06, 0xa0, 0xc4, 0x0d, 0x93, 0xfb,
-	0x5a, 0x59, 0x95, 0xa2, 0x37, 0x6e, 0x80, 0x14, 0x6c, 0xbc, 0xd8, 0xcc, 0xd4, 0xa7, 0x2b, 0x82,
-	0x18, 0xcb, 0x08, 0xee, 0xfb, 0x6c, 0x45, 0x10, 0x21, 0x93, 0xcc, 0xff, 0x29, 0xc0, 0xd8, 0x9c,
-	0x45, 0x30, 0x23, 0xff, 0xfb, 0xae, 0x99, 0x38, 0xa6, 0x6b, 0xde, 0x77, 0x9b, 0xcc, 0x9f, 0xae,
-	0x4d, 0x42, 0x4d, 0x70, 0xe7, 0xbf, 0x37, 0xc1, 0x7b, 0xb6, 0xff, 0xed, 0x53, 0xd8, 0x3f, 0xe8,
-	0xfa, 0xab, 0xc7, 0xbb, 0x3e, 0x64, 0xd6, 0xf3, 0x2f, 0x3e, 0x0f, 0x0d, 0xe1, 0x63, 0x3c, 0xf7,
-	0x97, 0x00, 0xe7, 0x14, 0x42, 0x0d, 0xac, 0x9d, 0x99, 0xee, 0xcc, 0x74, 0x1f, 0xc8, 0x74, 0x7f,
-	0x08, 0x90, 0x5c, 0x24, 0xec, 0xcc, 0x70, 0x67, 0x86, 0xfb, 0x20, 0x86, 0x2b, 0xff, 0x80, 0xba,
-	0xaf, 0xe4, 0xc8, 0xc1, 0x2b, 0x39, 0xf2, 0xf6, 0x95, 0x8c, 0xf6, 0x7a, 0x32, 0x7a, 0xda, 0x93,
-	0xd1, 0x6f, 0x3d, 0x19, 0x75, 0x7b, 0x32, 0x7a, 0xd9, 0x93, 0xd1, 0x9b, 0x9e, 0x1c, 0x79, 0xdb,
-	0x93, 0xd1, 0x8f, 0xaf, 0xe5, 0x48, 0xf7, 0xb5, 0x1c, 0x39, 0x78, 0x2d, 0x47, 0xee, 0x6f, 0xd4,
-	0x4c, 0xfa, 0xb0, 0x56, 0x68, 0x9a, 0x06, 0x23, 0x96, 0x85, 0x0b, 0xdb, 0x76, 0x91, 0x3f, 0x6c,
-	0x9a, 0x56, 0xfd, 0x3a, 0xb5, 0xcc, 0xa6, 0x5e, 0x25, 0xd6, 0xf5, 0xfe, 0x76, 0x91, 0x56, 0x6a,
-	0x66, 0x91, 0x3c, 0x66, 0xde, 0x87, 0x9e, 0x7f, 0xfd, 0xa0, 0x55, 0x49, 0xf0, 0xef, 0x3e, 0x37,
-	0xff, 0x09, 0x00, 0x00, 0xff, 0xff, 0x9d, 0x6d, 0xcd, 0x4a, 0xfb, 0x12, 0x00, 0x00,
+	// 1438 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xdf, 0x6f, 0xd3, 0xe6,
+	0x1a, 0xce, 0xe7, 0x38, 0x69, 0xfa, 0xe6, 0x07, 0xc1, 0x70, 0x20, 0x14, 0x94, 0x46, 0x81, 0x8b,
+	0x0a, 0x95, 0xe4, 0x50, 0x7a, 0x72, 0x8e, 0x38, 0xd2, 0x44, 0xd2, 0x8e, 0xfe, 0x50, 0xc7, 0x2a,
+	0x97, 0x55, 0x88, 0x6d, 0x78, 0x8e, 0xfd, 0x35, 0xf1, 0x70, 0x6c, 0x63, 0x3b, 0x29, 0x45, 0x8a,
+	0xc4, 0x1f, 0xb0, 0x8b, 0x89, 0xbf, 0x02, 0xe5, 0x2f, 0x98, 0x16, 0x2e, 0xaa, 0x49, 0x48, 0x13,
+	0x37, 0xeb, 0x65, 0x2f, 0x76, 0x01, 0xe1, 0x86, 0xdd, 0x4c, 0x6c, 0x57, 0xbb, 0x9c, 0xfc, 0xd9,
+	0x71, 0x6c, 0x27, 0xa8, 0x69, 0xc7, 0xd0, 0x2e, 0x7a, 0x53, 0xc5, 0xdf, 0x8f, 0xe7, 0xf9, 0x9e,
+	0xf7, 0x7d, 0x9f, 0xd7, 0x5f, 0x0d, 0xb3, 0x2d, 0x6c, 0x14, 0x24, 0xb5, 0x68, 0x08, 0x75, 0xdc,
+	0xe0, 0x8b, 0xcd, 0x47, 0xa6, 0xe2, 0xfc, 0xe5, 0x44, 0xb5, 0xc1, 0x4b, 0x4a, 0xd1, 0xdc, 0xd1,
+	0xb0, 0x51, 0xd0, 0x74, 0xd5, 0x54, 0x99, 0x9c, 0xbd, 0xba, 0x60, 0xaf, 0x2e, 0x90, 0x75, 0x05,
+	0xef, 0xea, 0xa9, 0xb3, 0x7e, 0x3c, 0x05, 0x9b, 0xf6, 0xd6, 0xa9, 0xf3, 0xfe, 0x09, 0x55, 0x33,
+	0x25, 0x55, 0x71, 0x70, 0xa7, 0xce, 0xf9, 0x27, 0x3d, 0x94, 0x53, 0x17, 0xfc, 0x53, 0x2d, 0x5e,
+	0x96, 0x44, 0xde, 0xc4, 0xce, 0x6c, 0x2e, 0x30, 0x2b, 0xe1, 0x6d, 0xce, 0x0f, 0x3d, 0x3d, 0xbc,
+	0xc2, 0xf0, 0x12, 0xe4, 0x1f, 0x42, 0x72, 0x65, 0xbd, 0x35, 0xbf, 0x86, 0x79, 0x03, 0x6b, 0xaa,
+	0x2a, 0x33, 0x3c, 0xa4, 0x24, 0xad, 0x35, 0xcf, 0xc9, 0xfd, 0x91, 0x0c, 0x95, 0x0b, 0xcf, 0xc4,
+	0xe7, 0x2e, 0x14, 0xfc, 0xea, 0x3f, 0xad, 0x7e, 0x8d, 0x05, 0x93, 0xc5, 0x5b, 0xb7, 0x77, 0x34,
+	0x5c, 0xb9, 0xd0, 0x69, 0x9f, 0xb0, 0x23, 0xe1, 0xee, 0xfb, 0xfe, 0x97, 0xdd, 0x70, 0xe4, 0x09,
+	0xa2, 0xd2, 0x88, 0x4d, 0x5a, 0x88, 0x2e, 0xc5, 0x2a, 0x1d, 0x43, 0x69, 0xca, 0x61, 0x2e, 0x05,
+	0x99, 0x4b, 0xef, 0x9d, 0xb9, 0x14, 0x64, 0xde, 0x43, 0xc0, 0x2c, 0x36, 0x79, 0x79, 0xc3, 0xe4,
+	0x85, 0xfb, 0x64, 0x72, 0xdd, 0xe2, 0xdf, 0x1c, 0x52, 0x1e, 0xce, 0xa1, 0x99, 0xf8, 0x5c, 0xb1,
+	0x70, 0x50, 0xde, 0x0b, 0xbe, 0x10, 0x06, 0xe4, 0x3a, 0xb8, 0x5e, 0x5d, 0xf4, 0x21, 0x70, 0x4b,
+	0x7e, 0xdc, 0xa0, 0x98, 0x55, 0x3a, 0x46, 0xa5, 0xc3, 0xf9, 0x37, 0x14, 0x24, 0x5d, 0x25, 0x6b,
+	0x92, 0x61, 0x32, 0x77, 0x46, 0xe4, 0xf1, 0x28, 0x6a, 0x96, 0x43, 0x41, 0x3d, 0xf7, 0x86, 0xf4,
+	0x84, 0x8f, 0xa4, 0xa7, 0x42, 0xbf, 0xe9, 0x22, 0xe4, 0xe0, 0x7b, 0xea, 0x40, 0x86, 0x53, 0xe4,
+	0xe4, 0x23, 0x83, 0x36, 0x7f, 0x30, 0xc9, 0x70, 0x6a, 0x5d, 0xa6, 0x93, 0x16, 0xf0, 0x8a, 0x97,
+	0xad, 0x72, 0xd1, 0x52, 0xc3, 0x8b, 0xa2, 0x8e, 0x0d, 0x83, 0xb3, 0x9c, 0xc1, 0x9c, 0xdc, 0xed,
+	0x22, 0x6a, 0xaf, 0x8b, 0x22, 0xbd, 0x2e, 0x8a, 0xcc, 0xcd, 0x5e, 0x9b, 0x9d, 0x77, 0x43, 0x1d,
+	0x49, 0x47, 0xf3, 0x55, 0x88, 0xae, 0xab, 0xb2, 0x24, 0xec, 0x30, 0x77, 0x20, 0xaa, 0x91, 0x5f,
+	0x19, 0x34, 0x46, 0xa1, 0xe6, 0x3b, 0xed, 0x7f, 0xd9, 0xe7, 0xb4, 0x37, 0x71, 0x26, 0x6e, 0x68,
+	0x32, 0x6f, 0x62, 0x4f, 0xb9, 0x3a, 0x78, 0xf9, 0x47, 0x90, 0xb2, 0x92, 0x50, 0xd6, 0xb4, 0x4d,
+	0x49, 0x23, 0xc5, 0x59, 0x07, 0x72, 0x76, 0x8e, 0xd7, 0x34, 0xae, 0x25, 0x69, 0x1c, 0x09, 0xc9,
+	0x38, 0xb4, 0xd3, 0x9d, 0x36, 0x63, 0xd3, 0x7a, 0xb7, 0x7a, 0x38, 0x49, 0x99, 0x0c, 0x98, 0x1c,
+	0xee, 0xd2, 0x10, 0x77, 0xe9, 0x6f, 0xe2, 0xf6, 0x30, 0xe5, 0x7f, 0x42, 0x70, 0xca, 0x4d, 0x9f,
+	0xe7, 0x04, 0x9f, 0x8f, 0x56, 0x6f, 0x15, 0xc4, 0xbf, 0xc7, 0xab, 0xe7, 0x01, 0x58, 0x50, 0xb0,
+	0x03, 0x1e, 0x90, 0x47, 0x1d, 0x02, 0xbc, 0x14, 0x00, 0xf7, 0x2a, 0x7a, 0x4b, 0x01, 0x58, 0x8f,
+	0x2b, 0xeb, 0x84, 0xeb, 0xcb, 0x51, 0x42, 0xa8, 0xa3, 0x09, 0x59, 0x0e, 0x0d, 0x49, 0x11, 0x46,
+	0x49, 0x09, 0x1f, 0x4d, 0x8a, 0x6b, 0x9a, 0x80, 0x24, 0xe6, 0x01, 0x9c, 0x19, 0xf8, 0xd3, 0xc7,
+	0x64, 0x5b, 0xf4, 0x3f, 0x87, 0xb0, 0xe8, 0x08, 0x3a, 0xa6, 0xef, 0x51, 0xcf, 0xdc, 0xf4, 0x90,
+	0x49, 0x93, 0xef, 0x36, 0x28, 0x07, 0xc9, 0x05, 0x59, 0x6d, 0x8a, 0x4b, 0xbc, 0x89, 0xb7, 0xf9,
+	0x1d, 0x83, 0xb9, 0x05, 0x49, 0xc1, 0x1a, 0xe0, 0x6a, 0xf6, 0xc8, 0x58, 0xb5, 0x1b, 0xef, 0xb4,
+	0x69, 0x43, 0x32, 0xf1, 0xe3, 0x67, 0x08, 0xb1, 0x09, 0xc1, 0x03, 0x98, 0xff, 0x8e, 0x82, 0x73,
+	0x5e, 0x86, 0xb2, 0xd8, 0xc2, 0xba, 0x29, 0x19, 0xb8, 0x81, 0x15, 0x93, 0xb9, 0x06, 0x93, 0xbc,
+	0x2c, 0x73, 0x64, 0x47, 0x26, 0x42, 0x22, 0x72, 0x3a, 0xc0, 0xf4, 0x71, 0x43, 0x33, 0x77, 0x96,
+	0x43, 0x6c, 0x8c, 0x97, 0x65, 0x02, 0xc4, 0xac, 0x41, 0x4c, 0xc7, 0x9c, 0xc5, 0x67, 0x64, 0xa2,
+	0xe3, 0x76, 0x53, 0x9f, 0xca, 0xe5, 0x10, 0x3b, 0xa1, 0xe3, 0x0d, 0x0b, 0xe1, 0xfa, 0x57, 0x2f,
+	0xba, 0xe8, 0x0b, 0xb8, 0x0b, 0x29, 0xb2, 0x22, 0xd7, 0x5f, 0x72, 0x79, 0x19, 0x6e, 0xc2, 0xb4,
+	0xe7, 0x78, 0x73, 0x4c, 0x59, 0x96, 0x73, 0xfe, 0x45, 0x70, 0x71, 0x70, 0x94, 0xb9, 0xb3, 0x8b,
+	0x84, 0x69, 0x53, 0xc2, 0xdb, 0x3e, 0xb2, 0xca, 0x25, 0x38, 0xed, 0x0b, 0x29, 0x27, 0xd4, 0x55,
+	0x49, 0xc0, 0x4c, 0x62, 0xb7, 0x8b, 0x22, 0x7b, 0x5d, 0x44, 0xff, 0xd1, 0x45, 0x94, 0xf7, 0x0d,
+	0xb5, 0x4a, 0xc7, 0xe8, 0x74, 0x24, 0xff, 0x1c, 0x41, 0xcc, 0xcd, 0xcb, 0x3d, 0x48, 0x68, 0x58,
+	0x97, 0x1a, 0xd8, 0xc4, 0x3a, 0xa7, 0x63, 0xa7, 0x7c, 0xfe, 0x7f, 0x38, 0xe1, 0xbe, 0xe0, 0xb3,
+	0x71, 0x17, 0x90, 0xc5, 0xcc, 0x27, 0x00, 0x55, 0xa9, 0x26, 0x69, 0x44, 0x4c, 0x26, 0x3c, 0x46,
+	0xd2, 0xd3, 0x9d, 0x76, 0xd2, 0x66, 0x72, 0x74, 0xb1, 0x93, 0x04, 0xc1, 0x0a, 0xab, 0xef, 0x7d,
+	0x5b, 0x83, 0xf8, 0x82, 0x45, 0xbb, 0x25, 0x09, 0xbc, 0x89, 0x99, 0x3b, 0x10, 0x17, 0x06, 0x8f,
+	0x63, 0xdd, 0x5b, 0x32, 0x9d, 0xb6, 0x77, 0x8f, 0xa7, 0x29, 0x7a, 0x87, 0xf3, 0x3f, 0x47, 0x21,
+	0xb5, 0x24, 0xab, 0x55, 0x5e, 0xde, 0xd0, 0xb0, 0x60, 0xed, 0x64, 0x6e, 0x01, 0x90, 0xb7, 0xa2,
+	0xb7, 0x0b, 0x8e, 0x51, 0x2d, 0xbe, 0xeb, 0x01, 0x3b, 0x29, 0xbb, 0xf7, 0x9e, 0x9b, 0x10, 0x73,
+	0xd4, 0x1a, 0x4e, 0x2b, 0xba, 0x7c, 0x30, 0x5a, 0x3f, 0x89, 0xac, 0xbb, 0x97, 0x29, 0x42, 0x9c,
+	0x17, 0x04, 0xcb, 0xa1, 0x5b, 0x0f, 0x44, 0x25, 0x13, 0xcf, 0xa1, 0x99, 0xc9, 0x4a, 0xca, 0x12,
+	0x36, 0xa9, 0x4f, 0xa4, 0x51, 0xe6, 0x31, 0x55, 0x47, 0x2c, 0xd8, 0x4b, 0x6e, 0x3e, 0x10, 0x15,
+	0xa6, 0x0c, 0xb4, 0x25, 0xd5, 0xc9, 0xfb, 0x95, 0x31, 0xf2, 0x3e, 0x08, 0x0c, 0x4b, 0xb6, 0x32,
+	0x5b, 0x90, 0x16, 0x44, 0x85, 0x13, 0x30, 0xd7, 0xaa, 0x73, 0xbc, 0x26, 0x71, 0xb5, 0xed, 0x4c,
+	0x74, 0x8c, 0xe8, 0xe7, 0x3a, 0xed, 0x44, 0x4b, 0xd2, 0xcd, 0x26, 0x2f, 0x73, 0x75, 0xd5, 0x30,
+	0xf7, 0xdb, 0xc8, 0x6a, 0x3f, 0x9e, 0x2c, 0x24, 0x04, 0x51, 0x59, 0xc0, 0x9b, 0xf5, 0xb2, 0x26,
+	0x2d, 0x6d, 0x33, 0xb7, 0x21, 0xe1, 0xeb, 0x74, 0x13, 0xe4, 0xc8, 0xb3, 0x07, 0x1f, 0x79, 0xd0,
+	0xfb, 0x2b, 0xf4, 0x6e, 0x17, 0x59, 0x01, 0x18, 0x74, 0xd2, 0x1b, 0xee, 0x05, 0x22, 0x46, 0xf0,
+	0x66, 0x0e, 0xc6, 0xb3, 0xaf, 0x1e, 0xfd, 0x8b, 0x02, 0xb3, 0x02, 0x49, 0xeb, 0x4c, 0xa2, 0x62,
+	0x70, 0x9a, 0xae, 0x3e, 0xdc, 0xc9, 0x4c, 0x12, 0xa0, 0xa0, 0xf8, 0x15, 0xad, 0x6c, 0x37, 0x4f,
+	0x22, 0x7e, 0xc2, 0x51, 0xcb, 0xc6, 0x5b, 0x92, 0xb6, 0xa8, 0x18, 0xeb, 0xd6, 0x4e, 0xa6, 0x01,
+	0xa9, 0xbe, 0x44, 0xa3, 0x59, 0x55, 0xb0, 0x99, 0x49, 0xe4, 0xc2, 0x33, 0x93, 0x95, 0x25, 0x2b,
+	0x28, 0xf0, 0x04, 0x4d, 0xe4, 0x23, 0x7a, 0xf8, 0xa9, 0x1d, 0xa3, 0xfe, 0xe3, 0xbe, 0x27, 0x64,
+	0xd0, 0xff, 0x15, 0x73, 0xc7, 0x32, 0xa8, 0xf7, 0xf2, 0x79, 0x38, 0xfa, 0xe4, 0x19, 0xa2, 0xd2,
+	0x21, 0x36, 0x61, 0x2b, 0xdf, 0x20, 0xe0, 0xd7, 0xf5, 0x1f, 0xba, 0x48, 0x81, 0x13, 0x00, 0xa4,
+	0x2e, 0x73, 0x24, 0x1e, 0xe8, 0x2a, 0x24, 0x3d, 0xfd, 0x01, 0xcd, 0x41, 0x1a, 0xa0, 0x4c, 0x0a,
+	0x26, 0xf7, 0x19, 0xbb, 0xc6, 0x50, 0x57, 0xaf, 0x42, 0xda, 0xef, 0x3c, 0x34, 0x0f, 0x71, 0xf7,
+	0x42, 0x86, 0xfe, 0x07, 0xe7, 0xe1, 0x4c, 0x59, 0x6c, 0xf1, 0x8a, 0x80, 0xc5, 0xdc, 0x82, 0xaa,
+	0x6c, 0x49, 0xb5, 0xa6, 0xce, 0x5b, 0xff, 0x11, 0x31, 0xe8, 0xbf, 0xab, 0x74, 0x2c, 0x9c, 0xa6,
+	0xed, 0xb7, 0xc4, 0x2a, 0x1d, 0x83, 0x74, 0x3c, 0xff, 0x1b, 0x0d, 0xa9, 0x05, 0x1d, 0xf3, 0x26,
+	0xfe, 0xc7, 0xdb, 0x6b, 0x7a, 0x84, 0xbd, 0xde, 0xb7, 0x9d, 0x16, 0x8f, 0x66, 0xa7, 0x80, 0x59,
+	0x6e, 0xfd, 0x75, 0xb3, 0xbc, 0x67, 0x9b, 0xdc, 0x38, 0x82, 0x4d, 0xfc, 0xee, 0xb8, 0x34, 0xda,
+	0x1d, 0x81, 0xa2, 0x3e, 0xf9, 0xe2, 0xa3, 0x40, 0xb7, 0x1e, 0x51, 0x73, 0xbf, 0xd3, 0x70, 0x82,
+	0xc5, 0x9a, 0xcc, 0x0b, 0xc7, 0x45, 0x77, 0x5c, 0x74, 0x1f, 0xa8, 0xe8, 0x7e, 0xa5, 0x21, 0xbe,
+	0x84, 0xcd, 0xe3, 0x82, 0x3b, 0x2e, 0xb8, 0x0f, 0x52, 0x70, 0x95, 0x6f, 0xd0, 0xde, 0xab, 0x6c,
+	0x68, 0xff, 0x55, 0x36, 0xf4, 0xf6, 0x55, 0x16, 0x3d, 0xee, 0x65, 0xd1, 0xd3, 0x5e, 0x16, 0xfd,
+	0xd8, 0xcb, 0xa2, 0xbd, 0x5e, 0x16, 0xbd, 0xec, 0x65, 0xd1, 0x9b, 0x5e, 0x36, 0xf4, 0xb6, 0x97,
+	0x45, 0xdf, 0xbe, 0xce, 0x86, 0xf6, 0x5e, 0x67, 0x43, 0xfb, 0xaf, 0xb3, 0xa1, 0xbb, 0x9b, 0x35,
+	0x55, 0xbb, 0x5f, 0x2b, 0xb4, 0x54, 0xd9, 0xc4, 0xba, 0xce, 0x17, 0x9a, 0x46, 0x91, 0xfc, 0xd8,
+	0x52, 0xf5, 0xc6, 0x15, 0x4d, 0x57, 0x5b, 0x92, 0x88, 0xf5, 0x2b, 0xfd, 0xe9, 0xa2, 0x56, 0xad,
+	0xa9, 0x45, 0xfc, 0xd0, 0x74, 0xbe, 0x6f, 0xbe, 0xf3, 0x3b, 0x6e, 0x35, 0x4a, 0x3e, 0x77, 0x5e,
+	0xfb, 0x33, 0x00, 0x00, 0xff, 0xff, 0x6c, 0xa0, 0xe9, 0x2c, 0xf2, 0x15, 0x00, 0x00,
 }
 
 func (this *IPv4Leasepool) Equal(that interface{}) bool {
@@ -1496,6 +1736,91 @@ func (this *Policy) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *IPv4AppVipPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IPv4AppVipPool)
+	if !ok {
+		that2, ok := that.(IPv4AppVipPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Ipv4AppVipPool) != len(that1.Ipv4AppVipPool) {
+		return false
+	}
+	for i := range this.Ipv4AppVipPool {
+		if !this.Ipv4AppVipPool[i].Equal(that1.Ipv4AppVipPool[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *IPv6AppVipPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*IPv6AppVipPool)
+	if !ok {
+		that2, ok := that.(IPv6AppVipPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.Ipv6AppVipPool) != len(that1.Ipv6AppVipPool) {
+		return false
+	}
+	for i := range this.Ipv6AppVipPool {
+		if !this.Ipv6AppVipPool[i].Equal(that1.Ipv6AppVipPool[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *DualStackAppVipPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DualStackAppVipPool)
+	if !ok {
+		that2, ok := that.(DualStackAppVipPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ipv4AppVipPool.Equal(that1.Ipv4AppVipPool) {
+		return false
+	}
+	if !this.Ipv6AppVipPool.Equal(that1.Ipv6AppVipPool) {
+		return false
+	}
+	return true
+}
 func (this *AppVIPPool) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1515,13 +1840,86 @@ func (this *AppVIPPool) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.AppVipPool) != len(that1.AppVipPool) {
-		return false
-	}
-	for i := range this.AppVipPool {
-		if !this.AppVipPool[i].Equal(that1.AppVipPool[i]) {
+	if that1.IpaddressType == nil {
+		if this.IpaddressType != nil {
 			return false
 		}
+	} else if this.IpaddressType == nil {
+		return false
+	} else if !this.IpaddressType.Equal(that1.IpaddressType) {
+		return false
+	}
+	return true
+}
+func (this *AppVIPPool_Ipv4AppVipPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AppVIPPool_Ipv4AppVipPool)
+	if !ok {
+		that2, ok := that.(AppVIPPool_Ipv4AppVipPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ipv4AppVipPool.Equal(that1.Ipv4AppVipPool) {
+		return false
+	}
+	return true
+}
+func (this *AppVIPPool_Ipv6AppVipPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AppVIPPool_Ipv6AppVipPool)
+	if !ok {
+		that2, ok := that.(AppVIPPool_Ipv6AppVipPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ipv6AppVipPool.Equal(that1.Ipv6AppVipPool) {
+		return false
+	}
+	return true
+}
+func (this *AppVIPPool_Ipv4Ipv6AppVipPool) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AppVIPPool_Ipv4Ipv6AppVipPool)
+	if !ok {
+		that2, ok := that.(AppVIPPool_Ipv4Ipv6AppVipPool)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Ipv4Ipv6AppVipPool.Equal(that1.Ipv4Ipv6AppVipPool) {
+		return false
 	}
 	return true
 }
@@ -2012,17 +2410,80 @@ func (this *Policy) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *AppVIPPool) GoString() string {
+func (this *IPv4AppVipPool) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 5)
-	s = append(s, "&uztna_domain.AppVIPPool{")
-	if this.AppVipPool != nil {
-		s = append(s, "AppVipPool: "+fmt.Sprintf("%#v", this.AppVipPool)+",\n")
+	s = append(s, "&uztna_domain.IPv4AppVipPool{")
+	if this.Ipv4AppVipPool != nil {
+		s = append(s, "Ipv4AppVipPool: "+fmt.Sprintf("%#v", this.Ipv4AppVipPool)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
+}
+func (this *IPv6AppVipPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&uztna_domain.IPv6AppVipPool{")
+	if this.Ipv6AppVipPool != nil {
+		s = append(s, "Ipv6AppVipPool: "+fmt.Sprintf("%#v", this.Ipv6AppVipPool)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DualStackAppVipPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&uztna_domain.DualStackAppVipPool{")
+	if this.Ipv4AppVipPool != nil {
+		s = append(s, "Ipv4AppVipPool: "+fmt.Sprintf("%#v", this.Ipv4AppVipPool)+",\n")
+	}
+	if this.Ipv6AppVipPool != nil {
+		s = append(s, "Ipv6AppVipPool: "+fmt.Sprintf("%#v", this.Ipv6AppVipPool)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AppVIPPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&uztna_domain.AppVIPPool{")
+	if this.IpaddressType != nil {
+		s = append(s, "IpaddressType: "+fmt.Sprintf("%#v", this.IpaddressType)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AppVIPPool_Ipv4AppVipPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_domain.AppVIPPool_Ipv4AppVipPool{` +
+		`Ipv4AppVipPool:` + fmt.Sprintf("%#v", this.Ipv4AppVipPool) + `}`}, ", ")
+	return s
+}
+func (this *AppVIPPool_Ipv6AppVipPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_domain.AppVIPPool_Ipv6AppVipPool{` +
+		`Ipv6AppVipPool:` + fmt.Sprintf("%#v", this.Ipv6AppVipPool) + `}`}, ", ")
+	return s
+}
+func (this *AppVIPPool_Ipv4Ipv6AppVipPool) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&uztna_domain.AppVIPPool_Ipv4Ipv6AppVipPool{` +
+		`Ipv4Ipv6AppVipPool:` + fmt.Sprintf("%#v", this.Ipv4Ipv6AppVipPool) + `}`}, ", ")
+	return s
 }
 func (this *CloudGateways) GoString() string {
 	if this == nil {
@@ -2480,6 +2941,127 @@ func (m *Policy) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *IPv4AppVipPool) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IPv4AppVipPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IPv4AppVipPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Ipv4AppVipPool) > 0 {
+		for iNdEx := len(m.Ipv4AppVipPool) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Ipv4AppVipPool[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *IPv6AppVipPool) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *IPv6AppVipPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *IPv6AppVipPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Ipv6AppVipPool) > 0 {
+		for iNdEx := len(m.Ipv6AppVipPool) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Ipv6AppVipPool[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DualStackAppVipPool) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DualStackAppVipPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DualStackAppVipPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Ipv6AppVipPool != nil {
+		{
+			size, err := m.Ipv6AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.Ipv4AppVipPool != nil {
+		{
+			size, err := m.Ipv4AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *AppVIPPool) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2500,23 +3082,81 @@ func (m *AppVIPPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.AppVipPool) > 0 {
-		for iNdEx := len(m.AppVipPool) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.AppVipPool[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
+	if m.IpaddressType != nil {
+		{
+			size := m.IpaddressType.Size()
+			i -= size
+			if _, err := m.IpaddressType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
 			}
-			i--
-			dAtA[i] = 0xa
 		}
 	}
 	return len(dAtA) - i, nil
 }
 
+func (m *AppVIPPool_Ipv4AppVipPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AppVIPPool_Ipv4AppVipPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ipv4AppVipPool != nil {
+		{
+			size, err := m.Ipv4AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AppVIPPool_Ipv6AppVipPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AppVIPPool_Ipv6AppVipPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ipv6AppVipPool != nil {
+		{
+			size, err := m.Ipv6AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AppVIPPool_Ipv4Ipv6AppVipPool) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AppVIPPool_Ipv4Ipv6AppVipPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Ipv4Ipv6AppVipPool != nil {
+		{
+			size, err := m.Ipv4Ipv6AppVipPool.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CloudGateways) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -3335,14 +3975,14 @@ func (m *Policy) Size() (n int) {
 	return n
 }
 
-func (m *AppVIPPool) Size() (n int) {
+func (m *IPv4AppVipPool) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if len(m.AppVipPool) > 0 {
-		for _, e := range m.AppVipPool {
+	if len(m.Ipv4AppVipPool) > 0 {
+		for _, e := range m.Ipv4AppVipPool {
 			l = e.Size()
 			n += 1 + l + sovTypes(uint64(l))
 		}
@@ -3350,6 +3990,86 @@ func (m *AppVIPPool) Size() (n int) {
 	return n
 }
 
+func (m *IPv6AppVipPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.Ipv6AppVipPool) > 0 {
+		for _, e := range m.Ipv6AppVipPool {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *DualStackAppVipPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ipv4AppVipPool != nil {
+		l = m.Ipv4AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Ipv6AppVipPool != nil {
+		l = m.Ipv6AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *AppVIPPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.IpaddressType != nil {
+		n += m.IpaddressType.Size()
+	}
+	return n
+}
+
+func (m *AppVIPPool_Ipv4AppVipPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ipv4AppVipPool != nil {
+		l = m.Ipv4AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AppVIPPool_Ipv6AppVipPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ipv6AppVipPool != nil {
+		l = m.Ipv6AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AppVIPPool_Ipv4Ipv6AppVipPool) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Ipv4Ipv6AppVipPool != nil {
+		l = m.Ipv4Ipv6AppVipPool.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CloudGateways) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3733,17 +4453,83 @@ func (this *Policy) String() string {
 	}, "")
 	return s
 }
+func (this *IPv4AppVipPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForIpv4AppVipPool := "[]*ObjectRefType{"
+	for _, f := range this.Ipv4AppVipPool {
+		repeatedStringForIpv4AppVipPool += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForIpv4AppVipPool += "}"
+	s := strings.Join([]string{`&IPv4AppVipPool{`,
+		`Ipv4AppVipPool:` + repeatedStringForIpv4AppVipPool + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *IPv6AppVipPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForIpv6AppVipPool := "[]*ObjectRefType{"
+	for _, f := range this.Ipv6AppVipPool {
+		repeatedStringForIpv6AppVipPool += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
+	}
+	repeatedStringForIpv6AppVipPool += "}"
+	s := strings.Join([]string{`&IPv6AppVipPool{`,
+		`Ipv6AppVipPool:` + repeatedStringForIpv6AppVipPool + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DualStackAppVipPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DualStackAppVipPool{`,
+		`Ipv4AppVipPool:` + strings.Replace(this.Ipv4AppVipPool.String(), "IPv4AppVipPool", "IPv4AppVipPool", 1) + `,`,
+		`Ipv6AppVipPool:` + strings.Replace(this.Ipv6AppVipPool.String(), "IPv6AppVipPool", "IPv6AppVipPool", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AppVIPPool) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForAppVipPool := "[]*ObjectRefType{"
-	for _, f := range this.AppVipPool {
-		repeatedStringForAppVipPool += strings.Replace(fmt.Sprintf("%v", f), "ObjectRefType", "schema.ObjectRefType", 1) + ","
-	}
-	repeatedStringForAppVipPool += "}"
 	s := strings.Join([]string{`&AppVIPPool{`,
-		`AppVipPool:` + repeatedStringForAppVipPool + `,`,
+		`IpaddressType:` + fmt.Sprintf("%v", this.IpaddressType) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AppVIPPool_Ipv4AppVipPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AppVIPPool_Ipv4AppVipPool{`,
+		`Ipv4AppVipPool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv4AppVipPool), "IPv4AppVipPool", "IPv4AppVipPool", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AppVIPPool_Ipv6AppVipPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AppVIPPool_Ipv6AppVipPool{`,
+		`Ipv6AppVipPool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv6AppVipPool), "IPv6AppVipPool", "IPv6AppVipPool", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AppVIPPool_Ipv4Ipv6AppVipPool) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AppVIPPool_Ipv4Ipv6AppVipPool{`,
+		`Ipv4Ipv6AppVipPool:` + strings.Replace(fmt.Sprintf("%v", this.Ipv4Ipv6AppVipPool), "DualStackAppVipPool", "DualStackAppVipPool", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4468,6 +5254,305 @@ func (m *Policy) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *IPv4AppVipPool) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IPv4AppVipPool: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IPv4AppVipPool: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ipv4AppVipPool = append(m.Ipv4AppVipPool, &schema.ObjectRefType{})
+			if err := m.Ipv4AppVipPool[len(m.Ipv4AppVipPool)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *IPv6AppVipPool) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: IPv6AppVipPool: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: IPv6AppVipPool: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ipv6AppVipPool = append(m.Ipv6AppVipPool, &schema.ObjectRefType{})
+			if err := m.Ipv6AppVipPool[len(m.Ipv6AppVipPool)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *DualStackAppVipPool) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DualStackAppVipPool: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DualStackAppVipPool: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Ipv4AppVipPool == nil {
+				m.Ipv4AppVipPool = &IPv4AppVipPool{}
+			}
+			if err := m.Ipv4AppVipPool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Ipv6AppVipPool == nil {
+				m.Ipv6AppVipPool = &IPv6AppVipPool{}
+			}
+			if err := m.Ipv6AppVipPool.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *AppVIPPool) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -4497,9 +5582,9 @@ func (m *AppVIPPool) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: AppVIPPool: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AppVipPool", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4AppVipPool", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4526,10 +5611,81 @@ func (m *AppVIPPool) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.AppVipPool = append(m.AppVipPool, &schema.ObjectRefType{})
-			if err := m.AppVipPool[len(m.AppVipPool)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			v := &IPv4AppVipPool{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			m.IpaddressType = &AppVIPPool_Ipv4AppVipPool{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv6AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &IPv6AppVipPool{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IpaddressType = &AppVIPPool_Ipv6AppVipPool{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ipv4Ipv6AppVipPool", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &DualStackAppVipPool{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.IpaddressType = &AppVIPPool_Ipv4Ipv6AppVipPool{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

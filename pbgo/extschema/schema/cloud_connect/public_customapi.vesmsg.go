@@ -830,6 +830,16 @@ type ValidateListMetricsResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateListMetricsResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateListMetricsResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*ListMetricsResponse)
 	if !ok {
@@ -856,12 +866,40 @@ func (v *ValidateListMetricsResponse) Validate(ctx context.Context, pm interface
 
 	}
 
+	if fv, exists := v.FldValidators["step"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("step"))
+		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultListMetricsResponseValidator = func() *ValidateListMetricsResponse {
 	v := &ValidateListMetricsResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStep := v.StepValidationRuleHandler
+	rulesStep := map[string]string{
+		"ves.io.schema.rules.string.time_interval": "true",
+	}
+	vFn, err = vrhStep(rulesStep)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ListMetricsResponse.step: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["step"] = vFn
 
 	return v
 }()
@@ -1630,8 +1668,9 @@ var DefaultTopCloudConnectRequestValidator = func() *ValidateTopCloudConnectRequ
 
 	vrhLimit := v.LimitValidationRuleHandler
 	rulesLimit := map[string]string{
-		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "100",
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "0",
+		"ves.io.schema.rules.uint32.lte":       "100",
 	}
 	vFn, err = vrhLimit(rulesLimit)
 	if err != nil {
@@ -1688,6 +1727,16 @@ type ValidateTopCloudConnectResponse struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateTopCloudConnectResponse) StepValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for step")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateTopCloudConnectResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*TopCloudConnectResponse)
 	if !ok {
@@ -1714,12 +1763,40 @@ func (v *ValidateTopCloudConnectResponse) Validate(ctx context.Context, pm inter
 
 	}
 
+	if fv, exists := v.FldValidators["step"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("step"))
+		if err := fv(ctx, m.GetStep(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultTopCloudConnectResponseValidator = func() *ValidateTopCloudConnectResponse {
 	v := &ValidateTopCloudConnectResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStep := v.StepValidationRuleHandler
+	rulesStep := map[string]string{
+		"ves.io.schema.rules.string.time_interval": "true",
+	}
+	vFn, err = vrhStep(rulesStep)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TopCloudConnectResponse.step: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["step"] = vFn
 
 	return v
 }()

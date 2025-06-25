@@ -2549,6 +2549,54 @@ func (v *ValidateAzureVnetIngressEgressGwReplaceType) SiteMeshGroupChoiceValidat
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetIngressEgressGwReplaceType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AzureVnetTwoInterfaceNodeType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.AzureVnetTwoInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for az_nodes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.AzureVnetTwoInterfaceNodeType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.AzureVnetTwoInterfaceNodeType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated az_nodes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items az_nodes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetIngressEgressGwReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AzureVnetIngressEgressGwReplaceType)
 	if !ok {
@@ -2561,6 +2609,14 @@ func (v *ValidateAzureVnetIngressEgressGwReplaceType) Validate(ctx context.Conte
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["az_nodes"]; exists {
+		vOpts := append(opts, db.WithValidateField("az_nodes"))
+		if err := fv(ctx, m.GetAzNodes(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["dc_cluster_group_choice"]; exists {
@@ -2995,6 +3051,18 @@ var DefaultAzureVnetIngressEgressGwReplaceTypeValidator = func() *ValidateAzureV
 		panic(errMsg)
 	}
 	v.FldValidators["site_mesh_group_choice"] = vFn
+
+	vrhAzNodes := v.AzNodesValidationRuleHandler
+	rulesAzNodes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.num_items": "1,3",
+	}
+	vFn, err = vrhAzNodes(rulesAzNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressEgressGwReplaceType.az_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["az_nodes"] = vFn
 
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group_outside_vn"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group_inside_vn"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
@@ -4091,12 +4159,23 @@ func (v *ValidateAzureVnetIngressGwARReplaceType) Validate(ctx context.Context, 
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["node"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node"))
+		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVnetIngressGwARReplaceTypeValidator = func() *ValidateAzureVnetIngressGwARReplaceType {
 	v := &ValidateAzureVnetIngressGwARReplaceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["node"] = ves_io_schema_views.AzureVnetOneInterfaceNodeARTypeValidator().Validate
 
 	return v
 }()
@@ -4288,6 +4367,54 @@ type ValidateAzureVnetIngressGwReplaceType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAzureVnetIngressGwReplaceType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AzureVnetOneInterfaceNodeType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.AzureVnetOneInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for az_nodes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.AzureVnetOneInterfaceNodeType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.AzureVnetOneInterfaceNodeType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated az_nodes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items az_nodes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetIngressGwReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AzureVnetIngressGwReplaceType)
 	if !ok {
@@ -4302,12 +4429,40 @@ func (v *ValidateAzureVnetIngressGwReplaceType) Validate(ctx context.Context, pm
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["az_nodes"]; exists {
+		vOpts := append(opts, db.WithValidateField("az_nodes"))
+		if err := fv(ctx, m.GetAzNodes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	return nil
 }
 
 // Well-known symbol for default validator implementation
 var DefaultAzureVnetIngressGwReplaceTypeValidator = func() *ValidateAzureVnetIngressGwReplaceType {
 	v := &ValidateAzureVnetIngressGwReplaceType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhAzNodes := v.AzNodesValidationRuleHandler
+	rulesAzNodes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.num_items": "1,3",
+	}
+	vFn, err = vrhAzNodes(rulesAzNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetIngressGwReplaceType.az_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["az_nodes"] = vFn
 
 	return v
 }()
@@ -5335,6 +5490,15 @@ func (v *ValidateAzureVnetVoltstackClusterARReplaceType) Validate(ctx context.Co
 
 	}
 
+	if fv, exists := v.FldValidators["node"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("node"))
+		if err := fv(ctx, m.GetNode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["outside_static_route_choice"]; exists {
 		val := m.GetOutsideStaticRouteChoice()
 		vOpts := append(opts,
@@ -5498,6 +5662,8 @@ var DefaultAzureVnetVoltstackClusterARReplaceTypeValidator = func() *ValidateAzu
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesTypeValidator().Validate
 
 	v.FldValidators["outside_static_route_choice.outside_static_routes"] = ves_io_schema_views.SiteStaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["node"] = ves_io_schema_views.AzureVnetOneInterfaceNodeARTypeValidator().Validate
 
 	return v
 }()
@@ -6768,6 +6934,54 @@ func (v *ValidateAzureVnetVoltstackClusterReplaceType) SiteMeshGroupChoiceValida
 	return validatorFn, nil
 }
 
+func (v *ValidateAzureVnetVoltstackClusterReplaceType) AzNodesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for az_nodes")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_views.AzureVnetOneInterfaceNodeType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_views.AzureVnetOneInterfaceNodeTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for az_nodes")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_views.AzureVnetOneInterfaceNodeType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_views.AzureVnetOneInterfaceNodeType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated az_nodes")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items az_nodes")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateAzureVnetVoltstackClusterReplaceType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*AzureVnetVoltstackClusterReplaceType)
 	if !ok {
@@ -6780,6 +6994,14 @@ func (v *ValidateAzureVnetVoltstackClusterReplaceType) Validate(ctx context.Cont
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["az_nodes"]; exists {
+		vOpts := append(opts, db.WithValidateField("az_nodes"))
+		if err := fv(ctx, m.GetAzNodes(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["dc_cluster_group_choice"]; exists {
@@ -7100,6 +7322,18 @@ var DefaultAzureVnetVoltstackClusterReplaceTypeValidator = func() *ValidateAzure
 		panic(errMsg)
 	}
 	v.FldValidators["site_mesh_group_choice"] = vFn
+
+	vrhAzNodes := v.AzNodesValidationRuleHandler
+	rulesAzNodes := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.num_items": "1,3",
+	}
+	vFn, err = vrhAzNodes(rulesAzNodes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AzureVnetVoltstackClusterReplaceType.az_nodes: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["az_nodes"] = vFn
 
 	v.FldValidators["dc_cluster_group_choice.dc_cluster_group"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -13987,8 +14221,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["logs_receiver_choice.log_receiver"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
+	v.FldValidators["site_type.ingress_gw"] = AzureVnetIngressGwReplaceTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw"] = AzureVnetIngressEgressGwReplaceTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster"] = AzureVnetVoltstackClusterReplaceTypeValidator().Validate
+	v.FldValidators["site_type.ingress_gw_ar"] = AzureVnetIngressGwARReplaceTypeValidator().Validate
 	v.FldValidators["site_type.ingress_egress_gw_ar"] = AzureVnetIngressEgressGwARReplaceTypeValidator().Validate
 	v.FldValidators["site_type.voltstack_cluster_ar"] = AzureVnetVoltstackClusterARReplaceTypeValidator().Validate
 
@@ -15053,6 +15289,7 @@ func (m *AzureVnetIngressEgressGwReplaceType) fromAzureVnetIngressEgressGwType(f
 	if f == nil {
 		return
 	}
+	m.AzNodes = f.GetAzNodes()
 	m.GetDcClusterGroupChoiceFromAzureVnetIngressEgressGwType(f)
 	m.GetForwardProxyChoiceFromAzureVnetIngressEgressGwType(f)
 	m.GetGlobalNetworkChoiceFromAzureVnetIngressEgressGwType(f)
@@ -15079,6 +15316,7 @@ func (m *AzureVnetIngressEgressGwReplaceType) toAzureVnetIngressEgressGwType(f *
 	}
 	_ = m1
 
+	f.AzNodes = m1.AzNodes
 	m1.SetDcClusterGroupChoiceToAzureVnetIngressEgressGwType(f)
 	m1.SetForwardProxyChoiceToAzureVnetIngressEgressGwType(f)
 	m1.SetGlobalNetworkChoiceToAzureVnetIngressEgressGwType(f)
@@ -15102,6 +15340,7 @@ func (m *AzureVnetIngressGwARReplaceType) fromAzureVnetIngressGwARType(f *AzureV
 	if f == nil {
 		return
 	}
+	m.Node = f.GetNode()
 }
 
 func (m *AzureVnetIngressGwARReplaceType) FromAzureVnetIngressGwARType(f *AzureVnetIngressGwARType) {
@@ -15119,6 +15358,7 @@ func (m *AzureVnetIngressGwARReplaceType) toAzureVnetIngressGwARType(f *AzureVne
 	}
 	_ = m1
 
+	f.Node = m1.Node
 }
 
 func (m *AzureVnetIngressGwARReplaceType) ToAzureVnetIngressGwARType(f *AzureVnetIngressGwARType) {
@@ -15133,6 +15373,7 @@ func (m *AzureVnetIngressGwReplaceType) fromAzureVnetIngressGwType(f *AzureVnetI
 	if f == nil {
 		return
 	}
+	m.AzNodes = f.GetAzNodes()
 }
 
 func (m *AzureVnetIngressGwReplaceType) FromAzureVnetIngressGwType(f *AzureVnetIngressGwType) {
@@ -15150,6 +15391,7 @@ func (m *AzureVnetIngressGwReplaceType) toAzureVnetIngressGwType(f *AzureVnetIng
 	}
 	_ = m1
 
+	f.AzNodes = m1.AzNodes
 }
 
 func (m *AzureVnetIngressGwReplaceType) ToAzureVnetIngressGwType(f *AzureVnetIngressGwType) {
@@ -15390,6 +15632,7 @@ func (m *AzureVnetVoltstackClusterARReplaceType) fromAzureVnetVoltstackClusterAR
 	m.GetForwardProxyChoiceFromAzureVnetVoltstackClusterARType(f)
 	m.GetGlobalNetworkChoiceFromAzureVnetVoltstackClusterARType(f)
 	m.GetNetworkPolicyChoiceFromAzureVnetVoltstackClusterARType(f)
+	m.Node = f.GetNode()
 	m.GetOutsideStaticRouteChoiceFromAzureVnetVoltstackClusterARType(f)
 	m.GetSiteMeshGroupChoiceFromAzureVnetVoltstackClusterARType(f)
 }
@@ -15413,6 +15656,7 @@ func (m *AzureVnetVoltstackClusterARReplaceType) toAzureVnetVoltstackClusterARTy
 	m1.SetForwardProxyChoiceToAzureVnetVoltstackClusterARType(f)
 	m1.SetGlobalNetworkChoiceToAzureVnetVoltstackClusterARType(f)
 	m1.SetNetworkPolicyChoiceToAzureVnetVoltstackClusterARType(f)
+	f.Node = m1.Node
 	m1.SetOutsideStaticRouteChoiceToAzureVnetVoltstackClusterARType(f)
 	m1.SetSiteMeshGroupChoiceToAzureVnetVoltstackClusterARType(f)
 }
@@ -15651,6 +15895,7 @@ func (m *AzureVnetVoltstackClusterReplaceType) fromAzureVnetVoltstackClusterType
 	if f == nil {
 		return
 	}
+	m.AzNodes = f.GetAzNodes()
 	m.GetDcClusterGroupChoiceFromAzureVnetVoltstackClusterType(f)
 	m.GetForwardProxyChoiceFromAzureVnetVoltstackClusterType(f)
 	m.GetGlobalNetworkChoiceFromAzureVnetVoltstackClusterType(f)
@@ -15674,6 +15919,7 @@ func (m *AzureVnetVoltstackClusterReplaceType) toAzureVnetVoltstackClusterType(f
 	}
 	_ = m1
 
+	f.AzNodes = m1.AzNodes
 	m1.SetDcClusterGroupChoiceToAzureVnetVoltstackClusterType(f)
 	m1.SetForwardProxyChoiceToAzureVnetVoltstackClusterType(f)
 	m1.SetGlobalNetworkChoiceToAzureVnetVoltstackClusterType(f)

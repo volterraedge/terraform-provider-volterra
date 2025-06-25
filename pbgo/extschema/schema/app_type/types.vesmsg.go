@@ -325,10 +325,28 @@ func (v *ValidateAPIEPInfo) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["err_rsp_count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("err_rsp_count"))
+		if err := fv(ctx, m.GetErrRspCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["has_learnt_schema"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("has_learnt_schema"))
 		if err := fv(ctx, m.GetHasLearntSchema(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["last_tested"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_tested"))
+		if err := fv(ctx, m.GetLastTested(), vOpts...); err != nil {
 			return err
 		}
 

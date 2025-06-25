@@ -3562,7 +3562,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "route_table_id": {
                     "type": "array",
-                    "description": " Route table ID in the format /\u003cresource-group-name\u003e/\u003croute-table-name\u003e\n\nExample: - \"/rg-1/rtb-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.pattern: ^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$\n",
+                    "description": " Route table ID in the format /\u003cresource-group-name\u003e/\u003croute-table-name\u003e\n\nExample: - \"/rg-1/rtb-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Route table ID",
                     "items": {
                         "type": "string",
@@ -3572,8 +3572,7 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "/rg-1/rtb-12345678901234567",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.unique": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.pattern": "^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z0-9][a-zA-Z0-9-._]+[a-zA-Z0-9_]$"
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 }
             }
@@ -3597,6 +3596,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/cloud_connectAzureDefaultRoute",
                     "x-displayname": "Override Default Route"
                 },
+                "labels": {
+                    "type": "object",
+                    "description": " Add labels for the VNET attachments. These labels can then be used in policies such as enhanced firewall policies.\n\nExample: - \"value\"-",
+                    "title": "Labels",
+                    "x-displayname": "Labels",
+                    "x-ves-example": "value"
+                },
                 "manual_routing": {
                     "description": "Exclusive with [custom_routing default_route]\n No route tables will be programmed by F5. User will manage routing",
                     "title": "Manual Routing",
@@ -3617,15 +3623,14 @@ var APISwaggerJSON string = `{
                 },
                 "vnet_id": {
                     "type": "string",
-                    "description": " Enter the vnet ID of the VNET to be attached in format /\u003cresource-group-name\u003e/\u003cvnet-name\u003e\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.pattern: ^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z0-9][a-zA-Z0-9-_.]{0,78}[a-zA-Z0-9_]$\n",
+                    "description": " Enter the vnet ID of the VNET to be attached in format /\u003cresource-group-name\u003e/\u003cvnet-name\u003e\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "VNET ID",
                     "maxLength": 256,
                     "x-displayname": "VNET ID",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_len": "256",
-                        "ves.io.schema.rules.string.pattern": "^\\\\/[-\\\\w\\\\._\\\\(\\\\)]+\\\\/[a-zA-Z0-9][a-zA-Z0-9-_.]{0,78}[a-zA-Z0-9_]$"
+                        "ves.io.schema.rules.string.max_len": "256"
                     }
                 }
             }

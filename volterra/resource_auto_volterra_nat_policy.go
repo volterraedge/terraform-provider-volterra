@@ -287,39 +287,6 @@ func resourceVolterraNatPolicy() *schema.Resource {
 														},
 													},
 												},
-
-												"virtual_networks": {
-
-													Type:       schema.TypeList,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-													Elem: &schema.Resource{
-														Schema: map[string]*schema.Schema{
-
-															"kind": {
-																Type:       schema.TypeString,
-																Computed:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-
-															"name": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-															"namespace": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-															"tenant": {
-																Type:       schema.TypeString,
-																Optional:   true,
-																Deprecated: "This field is deprecated and will be removed in future release.",
-															},
-														},
-													},
-												},
 											},
 										},
 									},
@@ -466,7 +433,7 @@ func resourceVolterraNatPolicy() *schema.Resource {
 							},
 						},
 
-						"network_interface": {
+						"node_interface": {
 
 							Type:     schema.TypeList,
 							MaxItems: 1,
@@ -474,27 +441,42 @@ func resourceVolterraNatPolicy() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
-									"refs": {
+									"list": {
 
 										Type:     schema.TypeList,
-										Required: true,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
-												"kind": {
-													Type:     schema.TypeString,
-													Computed: true,
+												"interface": {
+
+													Type:     schema.TypeList,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
 												},
 
-												"name": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"namespace": {
-													Type:     schema.TypeString,
-													Optional: true,
-												},
-												"tenant": {
+												"node": {
 													Type:     schema.TypeString,
 													Optional: true,
 												},
@@ -536,39 +518,6 @@ func resourceVolterraNatPolicy() *schema.Resource {
 												"tenant": {
 													Type:     schema.TypeString,
 													Optional: true,
-												},
-											},
-										},
-									},
-
-									"virtual_networks": {
-
-										Type:       schema.TypeList,
-										Optional:   true,
-										Deprecated: "This field is deprecated and will be removed in future release.",
-										Elem: &schema.Resource{
-											Schema: map[string]*schema.Schema{
-
-												"kind": {
-													Type:       schema.TypeString,
-													Computed:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-
-												"name": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-												"namespace": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
-												},
-												"tenant": {
-													Type:       schema.TypeString,
-													Optional:   true,
-													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -679,7 +628,7 @@ func resourceVolterraNatPolicyCreate(d *schema.ResourceData, meta interface{}) e
 
 	appliesToChoiceTypeFound := false
 
-	if v, ok := d.GetOk("site"); ok && !appliesToChoiceTypeFound {
+	if v, ok := d.GetOk("site"); ok && !isIntfNil(v) && !appliesToChoiceTypeFound {
 
 		appliesToChoiceTypeFound = true
 		appliesToChoiceInt := &ves_io_schema_nat_policy.CreateSpecType_Site{}
@@ -829,7 +778,12 @@ func resourceVolterraNatPolicyCreate(d *schema.ResourceData, meta interface{}) e
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														poolChoiceInt.Pools.Ipv6Prefixes = ls
 
@@ -839,7 +793,12 @@ func resourceVolterraNatPolicyCreate(d *schema.ResourceData, meta interface{}) e
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														poolChoiceInt.Pools.Prefixes = ls
 
@@ -883,7 +842,12 @@ func resourceVolterraNatPolicyCreate(d *schema.ResourceData, meta interface{}) e
 							if w, ok := criteriaMapStrToI["destination_cidr"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field destination_cidr")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								criteria.DestinationCidr = ls
 							}
@@ -984,38 +948,6 @@ func resourceVolterraNatPolicyCreate(d *schema.ResourceData, meta interface{}) e
 
 										}
 
-										if v, ok := cs["virtual_networks"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											virtualNetworksInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-											networkChoiceInt.Segment.VirtualNetworks = virtualNetworksInt
-											for i, ps := range sl {
-
-												vnMapToStrVal := ps.(map[string]interface{})
-												virtualNetworksInt[i] = &ves_io_schema.ObjectRefType{}
-
-												virtualNetworksInt[i].Kind = "virtual_network"
-
-												if v, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
-													virtualNetworksInt[i].Name = v.(string)
-												}
-
-												if v, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													virtualNetworksInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													virtualNetworksInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := vnMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													virtualNetworksInt[i].Uid = v.(string)
-												}
-
-											}
-
-										}
-
 									}
 								}
 
@@ -1079,7 +1011,12 @@ func resourceVolterraNatPolicyCreate(d *schema.ResourceData, meta interface{}) e
 							if w, ok := criteriaMapStrToI["source_cidr"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field source_cidr")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								criteria.SourceCidr = ls
 							}
@@ -1220,11 +1157,11 @@ func resourceVolterraNatPolicyCreate(d *schema.ResourceData, meta interface{}) e
 
 				}
 
-				if v, ok := rulesMapStrToI["network_interface"]; ok && !isIntfNil(v) && !scopeChoiceTypeFound {
+				if v, ok := rulesMapStrToI["node_interface"]; ok && !isIntfNil(v) && !scopeChoiceTypeFound {
 
 					scopeChoiceTypeFound = true
-					scopeChoiceInt := &ves_io_schema_nat_policy.RuleType_NetworkInterface{}
-					scopeChoiceInt.NetworkInterface = &ves_io_schema.NetworkInterfaceRefType{}
+					scopeChoiceInt := &ves_io_schema_nat_policy.RuleType_NodeInterface{}
+					scopeChoiceInt.NodeInterface = &ves_io_schema.NodeInterfaceType{}
 					rules[i].ScopeChoice = scopeChoiceInt
 
 					sl := v.([]interface{})
@@ -1232,34 +1169,53 @@ func resourceVolterraNatPolicyCreate(d *schema.ResourceData, meta interface{}) e
 						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+							if v, ok := cs["list"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
-								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								scopeChoiceInt.NetworkInterface.Refs = refsInt
-								for i, ps := range sl {
+								list := make([]*ves_io_schema.NodeInterfaceInfo, len(sl))
+								scopeChoiceInt.NodeInterface.List = list
+								for i, set := range sl {
+									if set != nil {
+										list[i] = &ves_io_schema.NodeInterfaceInfo{}
+										listMapStrToI := set.(map[string]interface{})
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refsInt[i] = &ves_io_schema.ObjectRefType{}
+										if v, ok := listMapStrToI["interface"]; ok && !isIntfNil(v) {
 
-									refsInt[i].Kind = "network_interface"
+											sl := v.([]interface{})
+											intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											list[i].Interface = intfInt
+											for i, ps := range sl {
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refsInt[i].Name = v.(string)
+												iMapToStrVal := ps.(map[string]interface{})
+												intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+												intfInt[i].Kind = "network_interface"
+
+												if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+													intfInt[i].Name = v.(string)
+												}
+
+												if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+													intfInt[i].Namespace = v.(string)
+												}
+
+												if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+													intfInt[i].Tenant = v.(string)
+												}
+
+												if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+													intfInt[i].Uid = v.(string)
+												}
+
+											}
+
+										}
+
+										if w, ok := listMapStrToI["node"]; ok && !isIntfNil(w) {
+											list[i].Node = w.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refsInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refsInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -1307,38 +1263,6 @@ func resourceVolterraNatPolicyCreate(d *schema.ResourceData, meta interface{}) e
 
 									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
 										refsInt[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["virtual_networks"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								virtualNetworksInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								scopeChoiceInt.Segment.VirtualNetworks = virtualNetworksInt
-								for i, ps := range sl {
-
-									vnMapToStrVal := ps.(map[string]interface{})
-									virtualNetworksInt[i] = &ves_io_schema.ObjectRefType{}
-
-									virtualNetworksInt[i].Kind = "virtual_network"
-
-									if v, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
-										virtualNetworksInt[i].Name = v.(string)
-									}
-
-									if v, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										virtualNetworksInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										virtualNetworksInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := vnMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										virtualNetworksInt[i].Uid = v.(string)
 									}
 
 								}
@@ -1505,7 +1429,7 @@ func resourceVolterraNatPolicyUpdate(d *schema.ResourceData, meta interface{}) e
 
 	appliesToChoiceTypeFound := false
 
-	if v, ok := d.GetOk("site"); ok && !appliesToChoiceTypeFound {
+	if v, ok := d.GetOk("site"); ok && !isIntfNil(v) && !appliesToChoiceTypeFound {
 
 		appliesToChoiceTypeFound = true
 		appliesToChoiceInt := &ves_io_schema_nat_policy.ReplaceSpecType_Site{}
@@ -1654,7 +1578,12 @@ func resourceVolterraNatPolicyUpdate(d *schema.ResourceData, meta interface{}) e
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														poolChoiceInt.Pools.Ipv6Prefixes = ls
 
@@ -1664,7 +1593,12 @@ func resourceVolterraNatPolicyUpdate(d *schema.ResourceData, meta interface{}) e
 
 														ls := make([]string, len(v.([]interface{})))
 														for i, v := range v.([]interface{}) {
-															ls[i] = v.(string)
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
 														}
 														poolChoiceInt.Pools.Prefixes = ls
 
@@ -1708,7 +1642,12 @@ func resourceVolterraNatPolicyUpdate(d *schema.ResourceData, meta interface{}) e
 							if w, ok := criteriaMapStrToI["destination_cidr"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field destination_cidr")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								criteria.DestinationCidr = ls
 							}
@@ -1809,38 +1748,6 @@ func resourceVolterraNatPolicyUpdate(d *schema.ResourceData, meta interface{}) e
 
 										}
 
-										if v, ok := cs["virtual_networks"]; ok && !isIntfNil(v) {
-
-											sl := v.([]interface{})
-											virtualNetworksInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-											networkChoiceInt.Segment.VirtualNetworks = virtualNetworksInt
-											for i, ps := range sl {
-
-												vnMapToStrVal := ps.(map[string]interface{})
-												virtualNetworksInt[i] = &ves_io_schema.ObjectRefType{}
-
-												virtualNetworksInt[i].Kind = "virtual_network"
-
-												if v, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
-													virtualNetworksInt[i].Name = v.(string)
-												}
-
-												if v, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													virtualNetworksInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													virtualNetworksInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := vnMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													virtualNetworksInt[i].Uid = v.(string)
-												}
-
-											}
-
-										}
-
 									}
 								}
 
@@ -1904,7 +1811,12 @@ func resourceVolterraNatPolicyUpdate(d *schema.ResourceData, meta interface{}) e
 							if w, ok := criteriaMapStrToI["source_cidr"]; ok && !isIntfNil(w) {
 								ls := make([]string, len(w.([]interface{})))
 								for i, v := range w.([]interface{}) {
-									ls[i] = v.(string)
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field source_cidr")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
 								}
 								criteria.SourceCidr = ls
 							}
@@ -2045,11 +1957,11 @@ func resourceVolterraNatPolicyUpdate(d *schema.ResourceData, meta interface{}) e
 
 				}
 
-				if v, ok := rulesMapStrToI["network_interface"]; ok && !isIntfNil(v) && !scopeChoiceTypeFound {
+				if v, ok := rulesMapStrToI["node_interface"]; ok && !isIntfNil(v) && !scopeChoiceTypeFound {
 
 					scopeChoiceTypeFound = true
-					scopeChoiceInt := &ves_io_schema_nat_policy.RuleType_NetworkInterface{}
-					scopeChoiceInt.NetworkInterface = &ves_io_schema.NetworkInterfaceRefType{}
+					scopeChoiceInt := &ves_io_schema_nat_policy.RuleType_NodeInterface{}
+					scopeChoiceInt.NodeInterface = &ves_io_schema.NodeInterfaceType{}
 					rules[i].ScopeChoice = scopeChoiceInt
 
 					sl := v.([]interface{})
@@ -2057,34 +1969,53 @@ func resourceVolterraNatPolicyUpdate(d *schema.ResourceData, meta interface{}) e
 						if set != nil {
 							cs := set.(map[string]interface{})
 
-							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+							if v, ok := cs["list"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
-								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								scopeChoiceInt.NetworkInterface.Refs = refsInt
-								for i, ps := range sl {
+								list := make([]*ves_io_schema.NodeInterfaceInfo, len(sl))
+								scopeChoiceInt.NodeInterface.List = list
+								for i, set := range sl {
+									if set != nil {
+										list[i] = &ves_io_schema.NodeInterfaceInfo{}
+										listMapStrToI := set.(map[string]interface{})
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refsInt[i] = &ves_io_schema.ObjectRefType{}
+										if v, ok := listMapStrToI["interface"]; ok && !isIntfNil(v) {
 
-									refsInt[i].Kind = "network_interface"
+											sl := v.([]interface{})
+											intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											list[i].Interface = intfInt
+											for i, ps := range sl {
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refsInt[i].Name = v.(string)
+												iMapToStrVal := ps.(map[string]interface{})
+												intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+												intfInt[i].Kind = "network_interface"
+
+												if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+													intfInt[i].Name = v.(string)
+												}
+
+												if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+													intfInt[i].Namespace = v.(string)
+												}
+
+												if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+													intfInt[i].Tenant = v.(string)
+												}
+
+												if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+													intfInt[i].Uid = v.(string)
+												}
+
+											}
+
+										}
+
+										if w, ok := listMapStrToI["node"]; ok && !isIntfNil(w) {
+											list[i].Node = w.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refsInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refsInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -2132,38 +2063,6 @@ func resourceVolterraNatPolicyUpdate(d *schema.ResourceData, meta interface{}) e
 
 									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
 										refsInt[i].Uid = v.(string)
-									}
-
-								}
-
-							}
-
-							if v, ok := cs["virtual_networks"]; ok && !isIntfNil(v) {
-
-								sl := v.([]interface{})
-								virtualNetworksInt := make([]*ves_io_schema.ObjectRefType, len(sl))
-								scopeChoiceInt.Segment.VirtualNetworks = virtualNetworksInt
-								for i, ps := range sl {
-
-									vnMapToStrVal := ps.(map[string]interface{})
-									virtualNetworksInt[i] = &ves_io_schema.ObjectRefType{}
-
-									virtualNetworksInt[i].Kind = "virtual_network"
-
-									if v, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
-										virtualNetworksInt[i].Name = v.(string)
-									}
-
-									if v, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										virtualNetworksInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										virtualNetworksInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := vnMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										virtualNetworksInt[i].Uid = v.(string)
 									}
 
 								}
@@ -2255,5 +2154,8 @@ func resourceVolterraNatPolicyDelete(d *schema.ResourceData, meta interface{}) e
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra NatPolicy obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_nat_policy.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_nat_policy.ObjectType, namespace, name, opts...)
 }

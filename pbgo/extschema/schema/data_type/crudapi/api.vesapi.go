@@ -2970,16 +2970,20 @@ var APISwaggerJSON string = `{
                 },
                 "rules": {
                     "type": "array",
-                    "description": " Configure key/value or regex match rules to enable the platform to detect this custom data type in the API request or response\n\nExample: - \"Value or Regex\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Configure key/value or regex match rules to enable the platform to detect this custom data type in the API request or response\n\nExample: - \"Value or Regex\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 100\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Data Type Rules",
+                    "minItems": 1,
                     "maxItems": 100,
                     "items": {
                         "$ref": "#/definitions/data_typeDetectionRule"
                     },
                     "x-displayname": "Data Type Rules",
                     "x-ves-example": "Value or Regex",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "100",
+                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },

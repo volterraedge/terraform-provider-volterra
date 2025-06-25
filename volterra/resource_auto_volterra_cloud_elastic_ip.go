@@ -354,5 +354,8 @@ func resourceVolterraCloudElasticIpDelete(d *schema.ResourceData, meta interface
 	}
 
 	log.Printf("[DEBUG] Deleting Volterra CloudElasticIp obj with name %+v in namespace %+v", name, namespace)
-	return client.DeleteObject(context.Background(), ves_io_schema_cloud_elastic_ip.ObjectType, namespace, name)
+	opts := []vesapi.CallOpt{
+		vesapi.WithFailIfReferred(),
+	}
+	return client.DeleteObject(context.Background(), ves_io_schema_cloud_elastic_ip.ObjectType, namespace, name, opts...)
 }
