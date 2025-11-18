@@ -64,6 +64,16 @@ type apiCredentialCustomAPIServer struct {
 	sf svcfw.Service
 }
 
+func (s *apiCredentialCustomAPIServer) BulkRevoke(ctx context.Context, request *ves_io_schema_api_credential.BulkRevokeRequest) (*ves_io_schema_api_credential.BulkRevokeResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (s *apiCredentialCustomAPIServer) BulkRevokeServiceCredentials(ctx context.Context, request *ves_io_schema_api_credential.BulkRevokeRequest) (*ves_io_schema_api_credential.BulkRevokeResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func randomFunc() string {
 	source := rand.NewSource(time.Now().UnixNano())
 	random := rand.New(source)

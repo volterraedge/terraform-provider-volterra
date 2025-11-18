@@ -11,9 +11,9 @@ import (
 	"log"
 	"strings"
 
+	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
-	google_protobuf "github.com/gogo/protobuf/types"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_filter_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/filter_set"
@@ -127,6 +127,29 @@ func resourceVolterraFilterSet() *schema.Resource {
 									"expression": {
 										Type:     schema.TypeString,
 										Required: true,
+									},
+								},
+							},
+						},
+
+						"label_selector_field": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"expressions": {
+
+										Type: schema.TypeList,
+
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
 									},
 								},
 							},
@@ -315,6 +338,38 @@ func resourceVolterraFilterSetCreate(d *schema.ResourceData, meta interface{}) e
 							if v, ok := cs["expression"]; ok && !isIntfNil(v) {
 
 								fieldValueInt.FilterExpressionField.Expression = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := filterFieldsMapStrToI["label_selector_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
+
+					fieldValueTypeFound = true
+					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_LabelSelectorField{}
+					fieldValueInt.LabelSelectorField = &ves_io_schema.LabelSelectorType{}
+					filterFields[i].FieldValue = fieldValueInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field expressions")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								fieldValueInt.LabelSelectorField.Expressions = ls
 
 							}
 
@@ -560,6 +615,38 @@ func resourceVolterraFilterSetUpdate(d *schema.ResourceData, meta interface{}) e
 							if v, ok := cs["expression"]; ok && !isIntfNil(v) {
 
 								fieldValueInt.FilterExpressionField.Expression = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := filterFieldsMapStrToI["label_selector_field"]; ok && !isIntfNil(v) && !fieldValueTypeFound {
+
+					fieldValueTypeFound = true
+					fieldValueInt := &ves_io_schema_filter_set.FilterSetField_LabelSelectorField{}
+					fieldValueInt.LabelSelectorField = &ves_io_schema.LabelSelectorType{}
+					filterFields[i].FieldValue = fieldValueInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+								ls := make([]string, len(v.([]interface{})))
+								for i, v := range v.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field expressions")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								fieldValueInt.LabelSelectorField.Expressions = ls
 
 							}
 

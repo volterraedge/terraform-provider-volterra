@@ -31,6 +31,18 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_sec.api_crawler.crudapi.API.Create"] = "ves.io.schema.api_sec.api_crawler.crudapi.ObjectCreateReq"
 
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.api_crawler.crudapi.API.Get"] = []string{
+		"status.#.conditions.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.api_crawler.crudapi.API.List"] = []string{
+		"items.#.status.#.conditions.#",
+	}
+
+	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.api_sec.api_crawler.crudapi.API.ListStream"] = []string{
+		"items.#.status.#.conditions.#",
+	}
+
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_sec.api_crawler.crudapi.API.Replace"] = "ves.io.schema.api_sec.api_crawler.crudapi.ObjectReplaceReq"
 
 }
@@ -74,11 +86,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

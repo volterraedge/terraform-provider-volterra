@@ -30,22 +30,12 @@ resource "volterra_dns_zone" "example" {
 
       ttl = "3600"
 
-      // One of the arguments from this list "a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record" must be set
+      // One of the arguments from this list "a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record" must be set
 
-      ds_record {
-        name = "www or mail or * or ww* or *ab"
+      ptr_record {
+        name = "www or mail or * or corp.web or *.b"
 
-        values {
-          // One of the arguments from this list "sha1_digest sha256_digest sha384_digest" must be set
-
-          sha1_digest {
-            digest = "addf120b430021c36c232c99ef8d926aea2acd6b"
-          }
-
-          ds_key_algorithm = "ds_key_algorithm"
-
-          key_tag = "15228"
-        }
+        values = ["my.example.com"]
       }
     }
 
@@ -59,6 +49,8 @@ resource "volterra_dns_zone" "example" {
       metadata {
         description = "Virtual Host for acmecorp website"
 
+        disable = true
+
         name = "acmecorp-web"
       }
 
@@ -67,12 +59,18 @@ resource "volterra_dns_zone" "example" {
 
         ttl = "3600"
 
-        // One of the arguments from this list "a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record" must be set
+        // One of the arguments from this list "a_record aaaa_record afsdb_record alias_record caa_record cds_record cert_record cname_record dlv_record ds_record eui48_record eui64_record lb_record loc_record mx_record naptr_record ns_record ptr_record srv_record sshfp_record tlsa_record txt_record" must be set
 
-        eui64_record {
-          name = "www or mail or * or ww* or *ab"
+        caa_record {
+          name = "www or mail or * or corp.web or *.b"
 
-          value = "01-23-45-67-89-ab-cd-ef"
+          values {
+            flags = "0"
+
+            tag = "issue"
+
+            value = "value"
+          }
         }
       }
     }
@@ -173,6 +171,22 @@ x-displayName: "SHA256 Digest".
 x-displayName: "SHA384 Digest".
 
 `digest` - (Required) The 'digest' is the DS key and the actual contents of the DS record. (`String`).
+
+### Dlv Record Values
+
+It uses the same format as the DS record..
+
+###### One of the arguments from this list "sha1_digest, sha256_digest, sha384_digest" must be set
+
+`sha1_digest` - (Optional) x-displayName: "SHA1 Digest". See [Digest Choice Sha1 Digest ](#digest-choice-sha1-digest) below for details.
+
+`sha256_digest` - (Optional) x-displayName: "SHA256 Digest". See [Digest Choice Sha256 Digest ](#digest-choice-sha256-digest) below for details.
+
+`sha384_digest` - (Optional) x-displayName: "SHA384 Digest". See [Digest Choice Sha384 Digest ](#digest-choice-sha384-digest) below for details.
+
+`ds_key_algorithm` - (Required) DS key value must be compatible with the specified algorithm. (`String`).
+
+`key_tag` - (Required) A short numeric value which can help quickly identify the referenced DNSKEY-record. (`Int`).
 
 ### Dns Type Primary
 
@@ -300,7 +314,7 @@ default_rr_set_group.
 
 `ttl` - (Optional) x-example: "3600" (`Int`).
 
-###### One of the arguments from this list "a_record, aaaa_record, afsdb_record, alias_record, caa_record, cds_record, cert_record, cname_record, ds_record, eui48_record, eui64_record, lb_record, loc_record, mx_record, naptr_record, ns_record, ptr_record, srv_record, sshfp_record, tlsa_record, txt_record" must be set
+###### One of the arguments from this list "a_record, aaaa_record, afsdb_record, alias_record, caa_record, cds_record, cert_record, cname_record, dlv_record, ds_record, eui48_record, eui64_record, lb_record, loc_record, mx_record, naptr_record, ns_record, ptr_record, srv_record, sshfp_record, tlsa_record, txt_record" must be set
 
 `a_record` - (Optional) x-displayName: "A". See [Type Record Set A Record ](#type-record-set-a-record) below for details.
 
@@ -317,6 +331,8 @@ default_rr_set_group.
 `cert_record` - (Optional) x-displayName: "CERT". See [Type Record Set Cert Record ](#type-record-set-cert-record) below for details.
 
 `cname_record` - (Optional) x-displayName: "CNAME". See [Type Record Set Cname Record ](#type-record-set-cname-record) below for details.
+
+`dlv_record` - (Optional) x-displayName: "DLV". See [Type Record Set Dlv Record ](#type-record-set-dlv-record) below for details.(Deprecated)
 
 `ds_record` - (Optional) x-displayName: "DS". See [Type Record Set Ds Record ](#type-record-set-ds-record) below for details.
 
@@ -378,6 +394,8 @@ x-required.
 
 `description` - (Optional) Human readable description. (`String`).
 
+`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
+
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 
 ### Rr Set Group Rr Set
@@ -388,7 +406,7 @@ Collection of DNS resource record sets.
 
 `ttl` - (Optional) x-example: "3600" (`Int`).
 
-###### One of the arguments from this list "a_record, aaaa_record, afsdb_record, alias_record, caa_record, cds_record, cert_record, cname_record, ds_record, eui48_record, eui64_record, lb_record, loc_record, mx_record, naptr_record, ns_record, ptr_record, srv_record, sshfp_record, tlsa_record, txt_record" must be set
+###### One of the arguments from this list "a_record, aaaa_record, afsdb_record, alias_record, caa_record, cds_record, cert_record, cname_record, dlv_record, ds_record, eui48_record, eui64_record, lb_record, loc_record, mx_record, naptr_record, ns_record, ptr_record, srv_record, sshfp_record, tlsa_record, txt_record" must be set
 
 `a_record` - (Optional) x-displayName: "A". See [Type Record Set A Record ](#type-record-set-a-record) below for details.
 
@@ -405,6 +423,8 @@ Collection of DNS resource record sets.
 `cert_record` - (Optional) x-displayName: "CERT". See [Type Record Set Cert Record ](#type-record-set-cert-record) below for details.
 
 `cname_record` - (Optional) x-displayName: "CNAME". See [Type Record Set Cname Record ](#type-record-set-cname-record) below for details.
+
+`dlv_record` - (Optional) x-displayName: "DLV". See [Type Record Set Dlv Record ](#type-record-set-dlv-record) below for details.(Deprecated)
 
 `ds_record` - (Optional) x-displayName: "DS". See [Type Record Set Ds Record ](#type-record-set-ds-record) below for details.
 
@@ -436,11 +456,19 @@ Collection of DNS resource record sets.
 
 x-displayName: "TSIG Key Value in Base 64 Format".
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Tsig Key Value Blindfold Secret Info Internal ](#tsig-key-value-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Secret Info Oneof Blindfold Secret Info
 
@@ -459,6 +487,26 @@ Clear Secret is used for the secrets that are not encrypted.
 `provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
+
+### Secret Info Oneof Vault Secret Info
+
+Vault Secret is used for the secrets managed by Hashicorp Vault.
+
+`key` - (Optional) If not provided entire secret will be returned. (`String`).
+
+`location` - (Required) Path to secret in Vault. (`String`).
+
+`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
+
+`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
+
+`version` - (Optional) If not provided latest version will be returned. (`Int`).
+
+### Secret Info Oneof Wingman Secret Info
+
+Secret is given as bootstrap secret in F5XC Security Sidecar.
+
+`name` - (Required) Name of the secret. (`String`).
 
 ### Soa Record Parameters Choice Default Soa Parameters
 
@@ -496,11 +544,15 @@ x-required.
 
 `algorithm` - (Required) Algorithm of the public key. (`String`).
 
+`fingerprint` - (Optional) The hexadecimal representation of the hash result of the SSH key as text. (`String`).(Deprecated)
+
 ###### One of the arguments from this list "sha1_fingerprint, sha256_fingerprint" must be set
 
 `sha1_fingerprint` - (Optional) x-displayName: "SHA1 Fingerprint". See [Fingerprint Type Sha1 Fingerprint ](#fingerprint-type-sha1-fingerprint) below for details.
 
 `sha256_fingerprint` - (Optional) x-displayName: "SHA256 Fingerprint". See [Fingerprint Type Sha256 Fingerprint ](#fingerprint-type-sha256-fingerprint) below for details.
+
+`fingerprinttype` - (Required) Algorithm used to calculate the fingerprint of the public key. (`String`).(Deprecated)
 
 ### Tlsa Record Values
 
@@ -513,6 +565,16 @@ x-required.
 `matching_type` - (Required) TLSA Record Matching Type. (`String`).
 
 `selector` - (Required) TLSA Record Selector. (`String`).
+
+### Tsig Key Value Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Type Record Set A Record
 
@@ -541,6 +603,8 @@ x-displayName: "AFSDB".
 ### Type Record Set Alias Record
 
 x-displayName: "ALIAS".
+
+`name` - (Optional) Alias Record name, please provide only the specific subdomain or record name without the base domain. (`String`).(Deprecated)
 
 `value` - (Optional) A valid domain name, for example: example.com (`String`).
 
@@ -575,6 +639,14 @@ x-displayName: "CNAME".
 `name` - (Required) CName Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
 
 `value` - (Optional) x-example: "example.com" (`String`).
+
+### Type Record Set Dlv Record
+
+x-displayName: "DLV".
+
+`name` - (Optional) DLV Record name, please provide only the specific subdomain or record name without the base domain. (`String`).
+
+`values` - (Required) It uses the same format as the DS record.. See [Dlv Record Values ](#dlv-record-values) below for details.
 
 ### Type Record Set Ds Record
 

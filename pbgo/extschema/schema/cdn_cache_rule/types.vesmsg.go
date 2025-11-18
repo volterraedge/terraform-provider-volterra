@@ -1234,6 +1234,14 @@ func (v *ValidateCacheOperator) CacheOperatorValidationRuleHandler(rules map[str
 	return validatorFn, nil
 }
 
+func (v *ValidateCacheOperator) CacheOperatorMatchRegexValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	oValidatorFn_MatchRegex, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for MatchRegex")
+	}
+	return oValidatorFn_MatchRegex, nil
+}
+
 func (v *ValidateCacheOperator) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*CacheOperator)
 	if !ok {
@@ -1386,6 +1394,20 @@ var DefaultCacheOperatorValidator = func() *ValidateCacheOperator {
 		panic(errMsg)
 	}
 	v.FldValidators["cache_operator"] = vFn
+
+	vrhCacheOperatorMatchRegex := v.CacheOperatorMatchRegexValidationRuleHandler
+	rulesCacheOperatorMatchRegex := map[string]string{
+		"ves.io.schema.rules.string.max_len":    "256",
+		"ves.io.schema.rules.string.min_len":    "1",
+		"ves.io.schema.rules.string.pcre_regex": "true",
+	}
+	vFnMap["cache_operator.MatchRegex"], err = vrhCacheOperatorMatchRegex(rulesCacheOperatorMatchRegex)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field CacheOperator.cache_operator_MatchRegex: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["cache_operator.MatchRegex"] = vFnMap["cache_operator.MatchRegex"]
 
 	return v
 }()

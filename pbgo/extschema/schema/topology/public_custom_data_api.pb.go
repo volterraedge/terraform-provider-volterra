@@ -1816,7 +1816,7 @@ func (m *SubnetData) GetSubnet() *SubnetType {
 
 // NetworkRouteTableMetaData
 //
-// x-displayName: Network RouteTable Metadata"
+// x-displayName: "Network RouteTable Metadata"
 // Metadata associated with the network route tables
 type NetworkRouteTableMetaData struct {
 	// Route Table Metadata
@@ -1942,7 +1942,7 @@ func (m *NetworkRouteTableData) GetSubnetData() []*SubnetData {
 
 // NetworkRoutesMetaData
 //
-// x-displayName: Network RouteTable Metadata"
+// x-displayName: "Network RouteTable Metadata"
 // Metadata associated with the network routes
 type NetworkRoutesMetaData struct {
 	//Network Route Tables Metadata
@@ -2053,7 +2053,7 @@ func (m *NetworkRoutesMetaData) GetCloudResourceId() string {
 
 // NetworkRoutesData
 //
-// x-displayName: Network Routes Data"
+// x-displayName: "Network Routes Data"
 // Data associated with the network routes
 type NetworkRoutesData struct {
 	// Network Id

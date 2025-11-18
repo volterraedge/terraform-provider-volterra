@@ -1127,7 +1127,7 @@ var DefaultSetL7DDoSRPSThresholdReqValidator = func() *ValidateSetL7DDoSRPSThres
 	rulesRpsThreshold := map[string]string{
 		"ves.io.schema.rules.message.required": "true",
 		"ves.io.schema.rules.uint32.gte":       "0",
-		"ves.io.schema.rules.uint32.lte":       "10000",
+		"ves.io.schema.rules.uint32.lte":       "20000",
 	}
 	vFn, err = vrhRpsThreshold(rulesRpsThreshold)
 	if err != nil {

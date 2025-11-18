@@ -26,51 +26,13 @@ resource "volterra_external_connector" "example" {
     tenant    = "acmecorp"
   }
 
-  // One of the arguments from this list "ipsec" must be set
+  // One of the arguments from this list "direct_connection gre ipsec" must be set
 
-  ipsec {
-    ike_parameters {
-      // One of the arguments from this list "dpd_disabled dpd_keep_alive_timer" can be set
-
-      dpd_disabled = true
-
-      ike_phase1_profile {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-
-      ike_phase2_profile {
-        name      = "test1"
-        namespace = "staging"
-        tenant    = "acmecorp"
-      }
-
-      // One of the arguments from this list "use_default_local_ike_id" can be set
-
-      use_default_local_ike_id = true
-
-      // One of the arguments from this list "initiator responder" must be set
-
-      initiator = true
-
-      // One of the arguments from this list "rm_hostname rm_ip_address use_default_remote_ike_id" can be set
-
-      rm_ip_address {
-        // One of the arguments from this list "ipv4 ipv6" can be set
-
-        ipv4 {
-          addr = "192.168.1.1"
-        }
-      }
-    }
-
-    ipsec_tunnel_parameters {
+  gre {
+    gre_parameters {
       peer_ip_address {
         addr = "192.168.1.1"
       }
-
-      psk = "psk"
 
       tunnel_eps {
         interface = "interface"
@@ -84,7 +46,7 @@ resource "volterra_external_connector" "example" {
 
       tunnel_mtu = "tunnel_mtu"
 
-      // One of the arguments from this list "segment site_local_inside_network site_local_network" must be set
+      // One of the arguments from this list "segment site_local_inside_network site_local_network" can be set
 
       site_local_network = true
     }
@@ -114,9 +76,23 @@ Argument Reference
 
 `ce_site_reference` - (Required) Choose a CE site that will terminate the tunnel. See [ref](#ref) below for details.
 
-###### One of the arguments from this list "ipsec" must be set
+###### One of the arguments from this list "direct_connection, gre, ipsec" must be set
+
+`direct_connection` - (Optional) External Connector with direct connection. See [Connection Type Direct Connection ](#connection-type-direct-connection) below for details.(Deprecated)
+
+`gre` - (Optional) External Connector with GRE tunnel. See [Connection Type Gre ](#connection-type-gre) below for details.(Deprecated)
 
 `ipsec` - (Optional) External Connector with IPSec tunnel. See [Connection Type Ipsec ](#connection-type-ipsec) below for details.
+
+### Connection Type Direct Connection
+
+External Connector with direct connection.
+
+### Connection Type Gre
+
+External Connector with GRE tunnel.
+
+`gre_parameters` - (Optional) GRE configuration parameters required for GRE Connection type. See [Gre Gre Parameters ](#gre-gre-parameters) below for details.
 
 ### Connection Type Ipsec
 
@@ -136,6 +112,42 @@ Enable Dead Peer Detection (DPD) by setting the keepalive timer..
 
 `timeout` - (Optional) x-inlineHint: "The range is between 1 and 5 seconds." (`Int`).
 
+### Gre Gre Parameters
+
+GRE configuration parameters required for GRE Connection type.
+
+`peer_ip_address` - (Optional) Configure tunnel remote endpoint's IP address. See [Gre Parameters Peer Ip Address ](#gre-parameters-peer-ip-address) below for details.
+
+`tunnel_eps` - (Required) Configure tunnel parameters, source, destination, IP addresses.. See [Gre Parameters Tunnel Eps ](#gre-parameters-tunnel-eps) below for details.
+
+`tunnel_mtu` - (Optional) Configure MTU for the GRE tunnel interface. (`Int`).
+
+###### One of the arguments from this list "segment, site_local_inside_network, site_local_network" can be set
+
+`segment` - (Optional) Interface belongs to user configured inside network segment. See [Tunnel Source Vn Segment ](#tunnel-source-vn-segment) below for details.
+
+`site_local_inside_network` - (Optional) Interface belongs to site local network inside (`Bool`).
+
+`site_local_network` - (Optional) Interface belongs to site local network (outside) (`Bool`).
+
+### Gre Parameters Peer Ip Address
+
+Configure tunnel remote endpoint's IP address.
+
+`addr` - (Optional) IPv4 Address in string form with dot-decimal notation (`String`).
+
+### Gre Parameters Tunnel Eps
+
+Configure tunnel parameters, source, destination, IP addresses..
+
+`interface` - (Required) For the chosen node, specify the interface that will be the tunnel source. (`String`).
+
+`local_tunnel_ip` - (Required) For a particular tunnel on a node, specify the local tunnel IP Address i.e. the IP address of the tunnel on the CE node itself and a subnet prefix length (`String`).
+
+`node` - (Required) A CE site is composed of multiple nodes. Choose a node that will be part of this external connection. (`String`).
+
+`remote_tunnel_ip` - (Required) For a particular tunnel on a node, specify the remote tunnel IP Address i.e. the IP address of the tunnel on the remote gateway and a subnet prefix length (`String`).
+
 ### Ipsec Ike Parameters
 
 This section involves choosing the IKE parameters including the Phase 1 & Phase 2 Policies as well as other parameters..
@@ -150,7 +162,11 @@ This section involves choosing the IKE parameters including the Phase 1 & Phase 
 
 `ike_phase2_profile` - (Required) IKE Phase 2 profile defines mainly the encryption and authentication algorithms to be used for ESP SA. See [ref](#ref) below for details.
 
-###### One of the arguments from this list "use_default_local_ike_id" can be set
+###### One of the arguments from this list "lc_hostname, lc_ip_address, use_default_local_ike_id" can be set
+
+`lc_hostname` - (Optional) Configure an hostname Local IKE ID (`String`).(Deprecated)
+
+`lc_ip_address` - (Optional) Configure an IP address as Local IKE ID. See [Local Ike Id Lc Ip Address ](#local-ike-id-lc-ip-address) below for details.(Deprecated)
 
 `use_default_local_ike_id` - (Optional) Use default local IKE ID (IP address of tunnel source) (`Bool`).
 
@@ -206,6 +222,16 @@ Configure tunnel parameters, local and remote IP addresses .
 
 `remote_tunnel_ip` - (Required) For a particular tunnel on a node, specify the remote tunnel IP Address i.e. the IP address of the tunnel on the remote gateway and a subnet prefix length (`String`).
 
+### Local Ike Id Lc Ip Address
+
+Configure an IP address as Local IKE ID.
+
+###### One of the arguments from this list "ipv4, ipv6" can be set
+
+`ipv4` - (Optional) IPv4 Address. See [Ver Ipv4 ](#ver-ipv4) below for details.
+
+`ipv6` - (Optional) IPv6 Address. See [Ver Ipv6 ](#ver-ipv6) below for details.
+
 ### Local Ike Id Use Default Local Ike Id
 
 Use default local IKE ID (IP address of tunnel source).
@@ -244,9 +270,11 @@ Use default remote IKE ID (IP address of tunnel gateway).
 
 ### Tunnel Source Vn Segment
 
-Interface belongs to user configured network segment.
+Interface belongs to user configured inside network segment.
 
 `refs` - (Required) Reference to Segment Object. See [ref](#ref) below for details.
+
+`virtual_networks` - (Optional) Internally used to resolve segment ref to networks.. See [ref](#ref) below for details.(Deprecated)
 
 ### Tunnel Source Vn Site Local Inside Network
 

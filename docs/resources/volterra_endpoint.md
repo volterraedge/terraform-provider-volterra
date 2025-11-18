@@ -90,9 +90,11 @@ Specifies name and TTL used for DNS resolution..
 
 `name` - (Optional) Endpoint's ip address is discovered using DNS name resolution. The name given here is fully qualified domain name. (`String`).
 
-###### One of the arguments from this list "refresh_interval" can be set
+###### One of the arguments from this list "refresh_interval, strict_ttl" can be set
 
 `refresh_interval` - (Optional) Interval for DNS refresh in seconds. (`Int`).
+
+`strict_ttl` - (Optional) Use TTL value returned by DNS Server during DNS resolution as DNS refresh interval (`Bool`).(Deprecated)
 
 ### Endpoint Address Service Info
 
@@ -140,6 +142,8 @@ Direct reference to site object.
 
 `ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
+`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
+
 ### Ref Or Selector Virtual Network
 
 Direct reference to virtual network object.
@@ -160,6 +164,8 @@ Direct reference to virtual site object.
 
 `ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
+`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
+
 ### Service Info Service Selector
 
 discovery has to happen. This implicit label is added to service_selector.
@@ -177,6 +183,10 @@ Configure SNAT Pool to reach Origin Server.
 `ipv6_prefixes` - (Optional) List of IPv6 prefix strings. (`String`).
 
 `prefixes` - (Optional) List of IPv4 prefixes that represent an endpoint (`String`).
+
+### Ttl Choice Strict Ttl
+
+Use TTL value returned by DNS Server during DNS resolution as DNS refresh interval.
 
 Attribute Reference
 -------------------

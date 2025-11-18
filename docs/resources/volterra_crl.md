@@ -17,9 +17,8 @@ Example Usage
 
 ```hcl
 resource "volterra_crl" "example" {
-  name      = "acmecorp-web"
-  namespace = "staging"
-
+  name           = "acmecorp-web"
+  namespace      = "staging"
   server_address = ["mycrl.it.com"]
 }
 
@@ -55,6 +54,8 @@ Argument Reference
 `server_port` - (Optional) Set CRL Server port number (`Int`).
 
 `timeout` - (Optional) CRL download wait time, in seconds (`Int`).
+
+`verify_all_certs_with_crl` - (Optional) from that chain. (`Bool`).(Deprecated)
 
 ### Access Info Choice Http Access
 

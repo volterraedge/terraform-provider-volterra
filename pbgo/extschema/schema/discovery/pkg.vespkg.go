@@ -7,6 +7,7 @@ import (
 	"reflect"
 
 	"gopkg.volterra.us/stdlib/db"
+	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/store"
 	"gopkg.volterra.us/stdlib/svcfw"
 )
@@ -30,6 +31,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.discovery.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.discovery.ReplaceResponse"] = ReplaceResponseValidator()
 
+	vr["ves.io.schema.discovery.DownloadCertificatesRequest"] = DownloadCertificatesRequestValidator()
+	vr["ves.io.schema.discovery.DownloadCertificatesResponse"] = DownloadCertificatesResponseValidator()
+
 	vr["ves.io.schema.discovery.CbipAdminCredentials"] = CbipAdminCredentialsValidator()
 	vr["ves.io.schema.discovery.CbipCertificateAuthority"] = CbipCertificateAuthorityValidator()
 	vr["ves.io.schema.discovery.CbipCluster"] = CbipClusterValidator()
@@ -38,6 +42,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.discovery.ConsulAccessInfo"] = ConsulAccessInfoValidator()
 	vr["ves.io.schema.discovery.ConsulDiscoveryType"] = ConsulDiscoveryTypeValidator()
 	vr["ves.io.schema.discovery.ConsulHttpBasicAuthInfoType"] = ConsulHttpBasicAuthInfoTypeValidator()
+	vr["ves.io.schema.discovery.ConsulNamespaceMapping"] = ConsulNamespaceMappingValidator()
+	vr["ves.io.schema.discovery.ConsulNamespaceMappingItem"] = ConsulNamespaceMappingItemValidator()
 	vr["ves.io.schema.discovery.ConsulVipDiscoveryInfoType"] = ConsulVipDiscoveryInfoTypeValidator()
 	vr["ves.io.schema.discovery.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.discovery.DiscoveredServiceType"] = DiscoveredServiceTypeValidator()
@@ -46,8 +52,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.discovery.K8SAccessInfo"] = K8SAccessInfoValidator()
 	vr["ves.io.schema.discovery.K8SDelegationType"] = K8SDelegationTypeValidator()
 	vr["ves.io.schema.discovery.K8SDiscoveryType"] = K8SDiscoveryTypeValidator()
+	vr["ves.io.schema.discovery.K8SNamespaceMapping"] = K8SNamespaceMappingValidator()
+	vr["ves.io.schema.discovery.K8SNamespaceMappingItem"] = K8SNamespaceMappingItemValidator()
 	vr["ves.io.schema.discovery.K8SPublishType"] = K8SPublishTypeValidator()
 	vr["ves.io.schema.discovery.K8SVipDiscoveryInfoType"] = K8SVipDiscoveryInfoTypeValidator()
+	vr["ves.io.schema.discovery.ManagementPort"] = ManagementPortValidator()
 	vr["ves.io.schema.discovery.NamespaceMapping"] = NamespaceMappingValidator()
 	vr["ves.io.schema.discovery.NamespaceMappingItem"] = NamespaceMappingItemValidator()
 	vr["ves.io.schema.discovery.PodInfoType"] = PodInfoTypeValidator()
@@ -55,6 +64,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.discovery.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.discovery.RestConfigType"] = RestConfigTypeValidator()
 	vr["ves.io.schema.discovery.TLSClientConfigType"] = TLSClientConfigTypeValidator()
+	vr["ves.io.schema.discovery.ThirdPartyDiscoveryType"] = ThirdPartyDiscoveryTypeValidator()
 	vr["ves.io.schema.discovery.VerStatusType"] = VerStatusTypeValidator()
 	vr["ves.io.schema.discovery.VipDiscoveryInfoType"] = VipDiscoveryInfoTypeValidator()
 	vr["ves.io.schema.discovery.VirtualServerFilter"] = VirtualServerFilterValidator()
@@ -76,20 +86,27 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.discovery.API.Create"] = []string{
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#",
+		"spec.discovery_cbip.cbip_clusters.#.virtual_server_filter.protocols.#",
+		"spec.discovery_cbip.internal_lb_domain",
+		"spec.discovery_consul.namespace_mapping",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovery.API.Create"] = []string{
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#",
+		"spec.discovery_cbip.cbip_clusters.#.virtual_server_filter.protocols.#",
+		"spec.discovery_cbip.internal_lb_domain",
+		"spec.discovery_consul.namespace_mapping",
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.discovery.API.Create"] = []string{
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.admin_credentials.password.blindfold_secret_info_internal",
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.admin_credentials.password.secret_encoding_type",
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.admin_credentials.password.vault_secret_info",
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.admin_credentials.password.wingman_secret_info",
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+		"spec.discovery_cbip.cbip_clusters.#.admin_credentials.password.blindfold_secret_info_internal",
+		"spec.discovery_cbip.cbip_clusters.#.admin_credentials.password.secret_encoding_type",
+		"spec.discovery_cbip.cbip_clusters.#.admin_credentials.password.vault_secret_info",
+		"spec.discovery_cbip.cbip_clusters.#.admin_credentials.password.wingman_secret_info",
+		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#",
 		"spec.discovery_cbip.cbip_clusters.#.metadata.disable",
+		"spec.discovery_cbip.cbip_clusters.#.virtual_server_filter.protocols.#",
 		"spec.discovery_cbip.internal_lb_domain",
 		"spec.discovery_cbip.server_ca.#",
 		"spec.discovery_consul.access_info.connection_info.tls_info.ca_certificate_url",
@@ -103,6 +120,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.discovery_consul.access_info.http_basic_auth_info.passwd_url.vault_secret_info",
 		"spec.discovery_consul.access_info.http_basic_auth_info.passwd_url.wingman_secret_info",
 		"spec.discovery_consul.access_info.scheme",
+		"spec.discovery_consul.default_all",
+		"spec.discovery_consul.namespace_mapping",
 		"spec.discovery_k8s.access_info.connection_info.tls_info.ca_certificate_url",
 		"spec.discovery_k8s.access_info.connection_info.tls_info.certificate_url",
 		"spec.discovery_k8s.access_info.connection_info.tls_info.key_url.blindfold_secret_info_internal",
@@ -114,6 +133,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.discovery_k8s.access_info.kubeconfig_url.secret_encoding_type",
 		"spec.discovery_k8s.access_info.kubeconfig_url.vault_secret_info",
 		"spec.discovery_k8s.access_info.kubeconfig_url.wingman_secret_info",
+		"spec.discovery_third_party.expiration_timestamp",
 		"spec.where.site.refs.#",
 		"spec.where.virtual_site.refs.#",
 	}
@@ -123,6 +143,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "spec.discovery_cbip",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
 		},
+		{
+			FieldPath:           "spec.discovery_consul.namespace_mapping_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.discovery_third_party",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
+		},
 	}
 
 	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.discovery.API.Create"] = []svcfw.EnvironmentField{
@@ -130,14 +158,31 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "spec.discovery_cbip",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
 		},
+		{
+			FieldPath:           "spec.discovery_consul.namespace_mapping_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.discovery_third_party",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
+		},
 	}
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.discovery.API.Create"] = "ves.io.schema.discovery.CreateRequest"
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovery.API.Get"] = []string{
-		"create_form.spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
-		"replace_form.spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+		"create_form.spec.discovery_cbip.cbip_clusters.#.cbip_devices.#",
+		"create_form.spec.discovery_cbip.cbip_clusters.#.virtual_server_filter.protocols.#",
+		"create_form.spec.discovery_cbip.internal_lb_domain",
+		"create_form.spec.discovery_consul.namespace_mapping",
+		"replace_form.spec.discovery_cbip.cbip_clusters.#.cbip_devices.#",
+		"replace_form.spec.discovery_cbip.cbip_clusters.#.virtual_server_filter.protocols.#",
+		"replace_form.spec.discovery_cbip.internal_lb_domain",
+		"replace_form.spec.discovery_consul.namespace_mapping",
+		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#",
+		"spec.discovery_cbip.cbip_clusters.#.virtual_server_filter.protocols.#",
+		"spec.discovery_cbip.internal_lb_domain",
+		"spec.discovery_consul.namespace_mapping",
 		"status.#.cbip_status.domain",
 	}
 
@@ -147,17 +192,44 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
 		},
 		{
+			FieldPath:           "create_form.spec.discovery_consul.namespace_mapping_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
+			FieldPath:           "create_form.spec.discovery_third_party",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
+		},
+		{
 			FieldPath:           "replace_form.spec.discovery_cbip",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.discovery_consul.namespace_mapping_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.discovery_third_party",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
 		},
 		{
 			FieldPath:           "spec.discovery_cbip",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
 		},
+		{
+			FieldPath:           "spec.discovery_consul.namespace_mapping_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.discovery_third_party",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
+		},
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.discovery.API.List"] = []string{
-		"items.#.get_spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+		"items.#.get_spec.discovery_cbip.cbip_clusters.#.cbip_devices.#",
+		"items.#.get_spec.discovery_cbip.cbip_clusters.#.virtual_server_filter.protocols.#",
+		"items.#.get_spec.discovery_cbip.internal_lb_domain",
+		"items.#.get_spec.discovery_consul.namespace_mapping",
 		"items.#.status_set.#.cbip_status.domain",
 	}
 
@@ -166,19 +238,31 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:           "items.#.get_spec.discovery_cbip",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
 		},
+		{
+			FieldPath:           "items.#.get_spec.discovery_consul.namespace_mapping_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
+			FieldPath:           "items.#.get_spec.discovery_third_party",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
+		},
 	}
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.discovery.API.Replace"] = []string{
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#",
+		"spec.discovery_cbip.cbip_clusters.#.virtual_server_filter.protocols.#",
+		"spec.discovery_cbip.internal_lb_domain",
+		"spec.discovery_consul.namespace_mapping",
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.discovery.API.Replace"] = []string{
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.admin_credentials.password.blindfold_secret_info_internal",
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.admin_credentials.password.secret_encoding_type",
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.admin_credentials.password.vault_secret_info",
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.admin_credentials.password.wingman_secret_info",
-		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#.virtual_server_filter.protocols.#",
+		"spec.discovery_cbip.cbip_clusters.#.admin_credentials.password.blindfold_secret_info_internal",
+		"spec.discovery_cbip.cbip_clusters.#.admin_credentials.password.secret_encoding_type",
+		"spec.discovery_cbip.cbip_clusters.#.admin_credentials.password.vault_secret_info",
+		"spec.discovery_cbip.cbip_clusters.#.admin_credentials.password.wingman_secret_info",
+		"spec.discovery_cbip.cbip_clusters.#.cbip_devices.#",
 		"spec.discovery_cbip.cbip_clusters.#.metadata.disable",
+		"spec.discovery_cbip.cbip_clusters.#.virtual_server_filter.protocols.#",
 		"spec.discovery_cbip.internal_lb_domain",
 		"spec.discovery_cbip.server_ca.#",
 		"spec.discovery_consul.access_info.connection_info.tls_info.ca_certificate_url",
@@ -192,6 +276,8 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.discovery_consul.access_info.http_basic_auth_info.passwd_url.vault_secret_info",
 		"spec.discovery_consul.access_info.http_basic_auth_info.passwd_url.wingman_secret_info",
 		"spec.discovery_consul.access_info.scheme",
+		"spec.discovery_consul.default_all",
+		"spec.discovery_consul.namespace_mapping",
 		"spec.discovery_k8s.access_info.connection_info.tls_info.ca_certificate_url",
 		"spec.discovery_k8s.access_info.connection_info.tls_info.certificate_url",
 		"spec.discovery_k8s.access_info.connection_info.tls_info.key_url.blindfold_secret_info_internal",
@@ -203,6 +289,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.discovery_k8s.access_info.kubeconfig_url.secret_encoding_type",
 		"spec.discovery_k8s.access_info.kubeconfig_url.vault_secret_info",
 		"spec.discovery_k8s.access_info.kubeconfig_url.wingman_secret_info",
+		"spec.discovery_third_party.expiration_timestamp",
 		"spec.where.site.refs.#",
 		"spec.where.virtual_site.refs.#",
 	}
@@ -210,6 +297,14 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.discovery.API.Replace"] = []svcfw.EnvironmentField{
 		{
 			FieldPath:           "spec.discovery_cbip",
+			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
+		},
+		{
+			FieldPath:           "spec.discovery_consul.namespace_mapping_choice",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.discovery_third_party",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "staging", "test"},
 		},
 	}
@@ -220,6 +315,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.discovery.API"] = "config"
+	sm["ves.io.schema.discovery.CustomAPI"] = "config"
 
 }
 
@@ -257,6 +353,26 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 
 	}()
 
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
+
+		customCSR.SwaggerRegistry["ves.io.schema.discovery.Object"] = CustomAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.discovery.CustomAPI"] = NewCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.discovery.CustomAPI"] = NewCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.discovery.CustomAPI"] = RegisterCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.discovery.CustomAPI"] = RegisterGwCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.discovery.CustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewCustomAPIServer(svc)
+		}
+
+	}()
+
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -264,11 +380,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

@@ -79,7 +79,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.udp_loadbalancer.API.Create"] = []string{
 		"spec.do_not_retract_cluster",
 		"spec.hash_policy_choice_least_active",
-		"spec.port_ranges",
 		"spec.retract_cluster",
 	}
 
@@ -265,7 +264,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.views.udp_loadbalancer.API.Replace"] = []string{
 		"spec.do_not_retract_cluster",
 		"spec.hash_policy_choice_least_active",
-		"spec.port_ranges",
 		"spec.retract_cluster",
 	}
 
@@ -365,11 +363,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

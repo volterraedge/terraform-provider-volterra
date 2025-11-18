@@ -17,6 +17,7 @@ import (
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_api_group_element "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group_element"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views_api_definition "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition"
 	ves_io_schema_views_app_api_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/app_api_group"
 )
 
@@ -62,6 +63,123 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"api_group_builder": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"excluded_operations": {
+
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"method": {
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"path": {
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"included_operations": {
+
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"method": {
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"path": {
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"label_filter": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"expressions": {
+
+										Type: schema.TypeList,
+
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+								},
+							},
+						},
+
+						"metadata": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"description": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"disable": {
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"name": {
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"path_filter": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
 			"elements": {
 
 				Type:     schema.TypeList,
@@ -85,6 +203,123 @@ func resourceVolterraAppApiGroup() *schema.Resource {
 						},
 					},
 				},
+			},
+
+			"api_definition": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"api_definition": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"namespace": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"tenant": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"bigip_virtual_server": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"bigip_virtual_server": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"cdn_loadbalancer": {
+
+				Type:     schema.TypeList,
+				MaxItems: 1,
+				Optional: true,
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"cdn_loadbalancer": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"generic": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"http_loadbalancer": {
@@ -178,6 +413,128 @@ func resourceVolterraAppApiGroupCreate(d *schema.ResourceData, meta interface{})
 			v.(string)
 	}
 
+	//api_group_builder
+	if v, ok := d.GetOk("api_group_builder"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		apiGroupBuilder := &ves_io_schema_views_api_definition.ApiGroupBuilder{}
+		createSpec.ApiGroupBuilder = apiGroupBuilder
+		for _, set := range sl {
+			if set != nil {
+				apiGroupBuilderMapStrToI := set.(map[string]interface{})
+
+				if v, ok := apiGroupBuilderMapStrToI["excluded_operations"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					excludedOperations := make([]*ves_io_schema_views.ApiOperation, len(sl))
+					apiGroupBuilder.ExcludedOperations = excludedOperations
+					for i, set := range sl {
+						if set != nil {
+							excludedOperations[i] = &ves_io_schema_views.ApiOperation{}
+							excludedOperationsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludedOperationsMapStrToI["method"]; ok && !isIntfNil(v) {
+
+								excludedOperations[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+							}
+
+							if w, ok := excludedOperationsMapStrToI["path"]; ok && !isIntfNil(w) {
+								excludedOperations[i].Path = w.(string)
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := apiGroupBuilderMapStrToI["included_operations"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					includedOperations := make([]*ves_io_schema_views.ApiOperation, len(sl))
+					apiGroupBuilder.IncludedOperations = includedOperations
+					for i, set := range sl {
+						if set != nil {
+							includedOperations[i] = &ves_io_schema_views.ApiOperation{}
+							includedOperationsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := includedOperationsMapStrToI["method"]; ok && !isIntfNil(v) {
+
+								includedOperations[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+							}
+
+							if w, ok := includedOperationsMapStrToI["path"]; ok && !isIntfNil(w) {
+								includedOperations[i].Path = w.(string)
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := apiGroupBuilderMapStrToI["label_filter"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					labelFilter := &ves_io_schema.LabelSelectorType{}
+					apiGroupBuilder.LabelFilter = labelFilter
+					for _, set := range sl {
+						if set != nil {
+							labelFilterMapStrToI := set.(map[string]interface{})
+
+							if w, ok := labelFilterMapStrToI["expressions"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field expressions")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								labelFilter.Expressions = ls
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := apiGroupBuilderMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					metadata := &ves_io_schema.MessageMetaType{}
+					apiGroupBuilder.Metadata = metadata
+					for _, set := range sl {
+						if set != nil {
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := apiGroupBuilderMapStrToI["path_filter"]; ok && !isIntfNil(w) {
+					apiGroupBuilder.PathFilter = w.(string)
+				}
+
+			}
+		}
+
+	}
+
 	//elements
 	if v, ok := d.GetOk("elements"); ok && !isIntfNil(v) {
 
@@ -214,6 +571,141 @@ func resourceVolterraAppApiGroupCreate(d *schema.ResourceData, meta interface{})
 	//scope_choice
 
 	scopeChoiceTypeFound := false
+
+	if v, ok := d.GetOk("api_definition"); ok && !isIntfNil(v) && !scopeChoiceTypeFound {
+
+		scopeChoiceTypeFound = true
+		scopeChoiceInt := &ves_io_schema_views_app_api_group.CreateSpecType_ApiDefinition{}
+		scopeChoiceInt.ApiDefinition = &ves_io_schema_views_app_api_group.ApiGroupScopeApiDefinition{}
+		createSpec.ScopeChoice = scopeChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["api_definition"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					apiDefinitionInt := &ves_io_schema_views.ObjectRefType{}
+					scopeChoiceInt.ApiDefinition.ApiDefinition = apiDefinitionInt
+
+					for _, set := range sl {
+						if set != nil {
+							adMapToStrVal := set.(map[string]interface{})
+							if val, ok := adMapToStrVal["name"]; ok && !isIntfNil(v) {
+								apiDefinitionInt.Name = val.(string)
+							}
+							if val, ok := adMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								apiDefinitionInt.Namespace = val.(string)
+							}
+
+							if val, ok := adMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								apiDefinitionInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("bigip_virtual_server"); ok && !isIntfNil(v) && !scopeChoiceTypeFound {
+
+		scopeChoiceTypeFound = true
+		scopeChoiceInt := &ves_io_schema_views_app_api_group.CreateSpecType_BigipVirtualServer{}
+		scopeChoiceInt.BigipVirtualServer = &ves_io_schema_views_app_api_group.ApiGroupScopeBIGIPVirtualServer{}
+		createSpec.ScopeChoice = scopeChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["bigip_virtual_server"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					bigipVirtualServerInt := &ves_io_schema_views.ObjectRefType{}
+					scopeChoiceInt.BigipVirtualServer.BigipVirtualServer = bigipVirtualServerInt
+
+					for _, set := range sl {
+						if set != nil {
+							bvsMapToStrVal := set.(map[string]interface{})
+							if val, ok := bvsMapToStrVal["name"]; ok && !isIntfNil(v) {
+								bigipVirtualServerInt.Name = val.(string)
+							}
+							if val, ok := bvsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								bigipVirtualServerInt.Namespace = val.(string)
+							}
+
+							if val, ok := bvsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								bigipVirtualServerInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("cdn_loadbalancer"); ok && !isIntfNil(v) && !scopeChoiceTypeFound {
+
+		scopeChoiceTypeFound = true
+		scopeChoiceInt := &ves_io_schema_views_app_api_group.CreateSpecType_CdnLoadbalancer{}
+		scopeChoiceInt.CdnLoadbalancer = &ves_io_schema_views_app_api_group.ApiGroupScopeCDNLoadbalancer{}
+		createSpec.ScopeChoice = scopeChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["cdn_loadbalancer"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					cdnLoadbalancerInt := &ves_io_schema_views.ObjectRefType{}
+					scopeChoiceInt.CdnLoadbalancer.CdnLoadbalancer = cdnLoadbalancerInt
+
+					for _, set := range sl {
+						if set != nil {
+							clMapToStrVal := set.(map[string]interface{})
+							if val, ok := clMapToStrVal["name"]; ok && !isIntfNil(v) {
+								cdnLoadbalancerInt.Name = val.(string)
+							}
+							if val, ok := clMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								cdnLoadbalancerInt.Namespace = val.(string)
+							}
+
+							if val, ok := clMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								cdnLoadbalancerInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("generic"); ok && !scopeChoiceTypeFound {
+
+		scopeChoiceTypeFound = true
+
+		if v.(bool) {
+			scopeChoiceInt := &ves_io_schema_views_app_api_group.CreateSpecType_Generic{}
+			scopeChoiceInt.Generic = &ves_io_schema.Empty{}
+			createSpec.ScopeChoice = scopeChoiceInt
+		}
+
+	}
 
 	if v, ok := d.GetOk("http_loadbalancer"); ok && !isIntfNil(v) && !scopeChoiceTypeFound {
 
@@ -355,6 +847,127 @@ func resourceVolterraAppApiGroupUpdate(d *schema.ResourceData, meta interface{})
 			v.(string)
 	}
 
+	if v, ok := d.GetOk("api_group_builder"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		apiGroupBuilder := &ves_io_schema_views_api_definition.ApiGroupBuilder{}
+		updateSpec.ApiGroupBuilder = apiGroupBuilder
+		for _, set := range sl {
+			if set != nil {
+				apiGroupBuilderMapStrToI := set.(map[string]interface{})
+
+				if v, ok := apiGroupBuilderMapStrToI["excluded_operations"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					excludedOperations := make([]*ves_io_schema_views.ApiOperation, len(sl))
+					apiGroupBuilder.ExcludedOperations = excludedOperations
+					for i, set := range sl {
+						if set != nil {
+							excludedOperations[i] = &ves_io_schema_views.ApiOperation{}
+							excludedOperationsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := excludedOperationsMapStrToI["method"]; ok && !isIntfNil(v) {
+
+								excludedOperations[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+							}
+
+							if w, ok := excludedOperationsMapStrToI["path"]; ok && !isIntfNil(w) {
+								excludedOperations[i].Path = w.(string)
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := apiGroupBuilderMapStrToI["included_operations"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					includedOperations := make([]*ves_io_schema_views.ApiOperation, len(sl))
+					apiGroupBuilder.IncludedOperations = includedOperations
+					for i, set := range sl {
+						if set != nil {
+							includedOperations[i] = &ves_io_schema_views.ApiOperation{}
+							includedOperationsMapStrToI := set.(map[string]interface{})
+
+							if v, ok := includedOperationsMapStrToI["method"]; ok && !isIntfNil(v) {
+
+								includedOperations[i].Method = ves_io_schema.HttpMethod(ves_io_schema.HttpMethod_value[v.(string)])
+
+							}
+
+							if w, ok := includedOperationsMapStrToI["path"]; ok && !isIntfNil(w) {
+								includedOperations[i].Path = w.(string)
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := apiGroupBuilderMapStrToI["label_filter"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					labelFilter := &ves_io_schema.LabelSelectorType{}
+					apiGroupBuilder.LabelFilter = labelFilter
+					for _, set := range sl {
+						if set != nil {
+							labelFilterMapStrToI := set.(map[string]interface{})
+
+							if w, ok := labelFilterMapStrToI["expressions"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field expressions")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								labelFilter.Expressions = ls
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := apiGroupBuilderMapStrToI["metadata"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					metadata := &ves_io_schema.MessageMetaType{}
+					apiGroupBuilder.Metadata = metadata
+					for _, set := range sl {
+						if set != nil {
+							metadataMapStrToI := set.(map[string]interface{})
+
+							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
+								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
+							}
+
+							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
+								metadata.Name = w.(string)
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := apiGroupBuilderMapStrToI["path_filter"]; ok && !isIntfNil(w) {
+					apiGroupBuilder.PathFilter = w.(string)
+				}
+
+			}
+		}
+
+	}
+
 	if v, ok := d.GetOk("elements"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -388,6 +1001,141 @@ func resourceVolterraAppApiGroupUpdate(d *schema.ResourceData, meta interface{})
 	}
 
 	scopeChoiceTypeFound := false
+
+	if v, ok := d.GetOk("api_definition"); ok && !isIntfNil(v) && !scopeChoiceTypeFound {
+
+		scopeChoiceTypeFound = true
+		scopeChoiceInt := &ves_io_schema_views_app_api_group.ReplaceSpecType_ApiDefinition{}
+		scopeChoiceInt.ApiDefinition = &ves_io_schema_views_app_api_group.ApiGroupScopeApiDefinition{}
+		updateSpec.ScopeChoice = scopeChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["api_definition"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					apiDefinitionInt := &ves_io_schema_views.ObjectRefType{}
+					scopeChoiceInt.ApiDefinition.ApiDefinition = apiDefinitionInt
+
+					for _, set := range sl {
+						if set != nil {
+							adMapToStrVal := set.(map[string]interface{})
+							if val, ok := adMapToStrVal["name"]; ok && !isIntfNil(v) {
+								apiDefinitionInt.Name = val.(string)
+							}
+							if val, ok := adMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								apiDefinitionInt.Namespace = val.(string)
+							}
+
+							if val, ok := adMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								apiDefinitionInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("bigip_virtual_server"); ok && !isIntfNil(v) && !scopeChoiceTypeFound {
+
+		scopeChoiceTypeFound = true
+		scopeChoiceInt := &ves_io_schema_views_app_api_group.ReplaceSpecType_BigipVirtualServer{}
+		scopeChoiceInt.BigipVirtualServer = &ves_io_schema_views_app_api_group.ApiGroupScopeBIGIPVirtualServer{}
+		updateSpec.ScopeChoice = scopeChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["bigip_virtual_server"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					bigipVirtualServerInt := &ves_io_schema_views.ObjectRefType{}
+					scopeChoiceInt.BigipVirtualServer.BigipVirtualServer = bigipVirtualServerInt
+
+					for _, set := range sl {
+						if set != nil {
+							bvsMapToStrVal := set.(map[string]interface{})
+							if val, ok := bvsMapToStrVal["name"]; ok && !isIntfNil(v) {
+								bigipVirtualServerInt.Name = val.(string)
+							}
+							if val, ok := bvsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								bigipVirtualServerInt.Namespace = val.(string)
+							}
+
+							if val, ok := bvsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								bigipVirtualServerInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("cdn_loadbalancer"); ok && !isIntfNil(v) && !scopeChoiceTypeFound {
+
+		scopeChoiceTypeFound = true
+		scopeChoiceInt := &ves_io_schema_views_app_api_group.ReplaceSpecType_CdnLoadbalancer{}
+		scopeChoiceInt.CdnLoadbalancer = &ves_io_schema_views_app_api_group.ApiGroupScopeCDNLoadbalancer{}
+		updateSpec.ScopeChoice = scopeChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["cdn_loadbalancer"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					cdnLoadbalancerInt := &ves_io_schema_views.ObjectRefType{}
+					scopeChoiceInt.CdnLoadbalancer.CdnLoadbalancer = cdnLoadbalancerInt
+
+					for _, set := range sl {
+						if set != nil {
+							clMapToStrVal := set.(map[string]interface{})
+							if val, ok := clMapToStrVal["name"]; ok && !isIntfNil(v) {
+								cdnLoadbalancerInt.Name = val.(string)
+							}
+							if val, ok := clMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								cdnLoadbalancerInt.Namespace = val.(string)
+							}
+
+							if val, ok := clMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								cdnLoadbalancerInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("generic"); ok && !scopeChoiceTypeFound {
+
+		scopeChoiceTypeFound = true
+
+		if v.(bool) {
+			scopeChoiceInt := &ves_io_schema_views_app_api_group.ReplaceSpecType_Generic{}
+			scopeChoiceInt.Generic = &ves_io_schema.Empty{}
+			updateSpec.ScopeChoice = scopeChoiceInt
+		}
+
+	}
 
 	if v, ok := d.GetOk("http_loadbalancer"); ok && !isIntfNil(v) && !scopeChoiceTypeFound {
 

@@ -17,9 +17,8 @@ Example Usage
 
 ```hcl
 resource "volterra_infraprotect_firewall_rule_group" "example" {
-  name      = "acmecorp-web"
-  namespace = "staging"
-
+  name                     = "acmecorp-web"
+  namespace                = "staging"
   firewall_rule_group_name = ["Group Name"]
 }
 

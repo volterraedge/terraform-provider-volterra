@@ -43,14 +43,21 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.discovered_service.ListServicesResponseItem"] = ListServicesResponseItemValidator()
 	vr["ves.io.schema.discovered_service.ProxyTypeHttp"] = ProxyTypeHttpValidator()
 	vr["ves.io.schema.discovered_service.ProxyTypeHttps"] = ProxyTypeHttpsValidator()
+	vr["ves.io.schema.discovered_service.SuggestValuesReq"] = SuggestValuesReqValidator()
+	vr["ves.io.schema.discovered_service.SuggestValuesResp"] = SuggestValuesRespValidator()
+	vr["ves.io.schema.discovered_service.SuggestedItem"] = SuggestedItemValidator()
 	vr["ves.io.schema.discovered_service.TCPLBRequest"] = TCPLBRequestValidator()
 	vr["ves.io.schema.discovered_service.WhereSite"] = WhereSiteValidator()
 	vr["ves.io.schema.discovered_service.WhereVirtualSite"] = WhereVirtualSiteValidator()
 
+	vr["ves.io.schema.discovered_service.ConsulService"] = ConsulServiceValidator()
 	vr["ves.io.schema.discovered_service.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.discovered_service.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.discovered_service.GlobalSpecType"] = GlobalSpecTypeValidator()
+	vr["ves.io.schema.discovered_service.K8sService"] = K8SServiceValidator()
+	vr["ves.io.schema.discovered_service.NginxOneDiscoveredServer"] = NginxOneDiscoveredServerValidator()
 	vr["ves.io.schema.discovered_service.ReplaceSpecType"] = ReplaceSpecTypeValidator()
+	vr["ves.io.schema.discovered_service.ThirdPartyApplicationDiscovery"] = ThirdPartyApplicationDiscoveryValidator()
 	vr["ves.io.schema.discovered_service.VirtualServer"] = VirtualServerValidator()
 
 }
@@ -271,11 +278,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

@@ -394,6 +394,14 @@ type ValidateAWSManagedMode struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateAWSManagedMode) CloudConnectAttachmentsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for cloud_connect_attachments")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateAWSManagedMode) ServiceVpcChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -542,6 +550,42 @@ func (v *ValidateAWSManagedMode) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("aws_region"))
 		if err := fv(ctx, m.GetAwsRegion(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["cloud_connect_attachments"]; exists {
+		val := m.GetCloudConnectAttachments()
+		vOpts := append(opts,
+			db.WithValidateField("cloud_connect_attachments"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetCloudConnectAttachments().(type) {
+	case *AWSManagedMode_Disabled:
+		if fv, exists := v.FldValidators["cloud_connect_attachments.disabled"]; exists {
+			val := m.GetCloudConnectAttachments().(*AWSManagedMode_Disabled).Disabled
+			vOpts := append(opts,
+				db.WithValidateField("cloud_connect_attachments"),
+				db.WithValidateField("disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AWSManagedMode_Tgw:
+		if fv, exists := v.FldValidators["cloud_connect_attachments.tgw"]; exists {
+			val := m.GetCloudConnectAttachments().(*AWSManagedMode_Tgw).Tgw
+			vOpts := append(opts,
+				db.WithValidateField("cloud_connect_attachments"),
+				db.WithValidateField("tgw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -748,6 +792,17 @@ var DefaultAWSManagedModeValidator = func() *ValidateAWSManagedMode {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhCloudConnectAttachments := v.CloudConnectAttachmentsValidationRuleHandler
+	rulesCloudConnectAttachments := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhCloudConnectAttachments(rulesCloudConnectAttachments)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for AWSManagedMode.cloud_connect_attachments: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["cloud_connect_attachments"] = vFn
+
 	vrhServiceVpcChoice := v.ServiceVpcChoiceValidationRuleHandler
 	rulesServiceVpcChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -840,6 +895,8 @@ var DefaultAWSManagedModeValidator = func() *ValidateAWSManagedMode {
 		panic(errMsg)
 	}
 	v.FldValidators["disk_size"] = vFn
+
+	v.FldValidators["cloud_connect_attachments.tgw"] = TGWTypeValidator().Validate
 
 	v.FldValidators["egress_gateway_choice.egress_nat_gw"] = ves_io_schema_views.AWSNATGatewaychoiceTypeValidator().Validate
 	v.FldValidators["egress_gateway_choice.egress_virtual_private_gateway"] = ves_io_schema_views.AWSVirtualPrivateGatewaychoiceTypeValidator().Validate
@@ -1881,4 +1938,196 @@ var DefaultSingleInterfaceValidator = func() *ValidateSingleInterface {
 
 func SingleInterfaceValidator() db.Validator {
 	return DefaultSingleInterfaceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TGWType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TGWType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TGWType) DeepCopy() *TGWType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TGWType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TGWType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TGWType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TGWTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTGWType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTGWType) TgwChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateTGWType) TgwCidrChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for tgw_cidr_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateTGWType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TGWType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TGWType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["tgw_choice"]; exists {
+		val := m.GetTgwChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tgw_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTgwChoice().(type) {
+	case *TGWType_NewTgw:
+		if fv, exists := v.FldValidators["tgw_choice.new_tgw"]; exists {
+			val := m.GetTgwChoice().(*TGWType_NewTgw).NewTgw
+			vOpts := append(opts,
+				db.WithValidateField("tgw_choice"),
+				db.WithValidateField("new_tgw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *TGWType_ExistingTgw:
+		if fv, exists := v.FldValidators["tgw_choice.existing_tgw"]; exists {
+			val := m.GetTgwChoice().(*TGWType_ExistingTgw).ExistingTgw
+			vOpts := append(opts,
+				db.WithValidateField("tgw_choice"),
+				db.WithValidateField("existing_tgw"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["tgw_cidr_choice"]; exists {
+		val := m.GetTgwCidrChoice()
+		vOpts := append(opts,
+			db.WithValidateField("tgw_cidr_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetTgwCidrChoice().(type) {
+	case *TGWType_ReservedTgwCidr:
+		if fv, exists := v.FldValidators["tgw_cidr_choice.reserved_tgw_cidr"]; exists {
+			val := m.GetTgwCidrChoice().(*TGWType_ReservedTgwCidr).ReservedTgwCidr
+			vOpts := append(opts,
+				db.WithValidateField("tgw_cidr_choice"),
+				db.WithValidateField("reserved_tgw_cidr"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *TGWType_TgwCidr:
+		if fv, exists := v.FldValidators["tgw_cidr_choice.tgw_cidr"]; exists {
+			val := m.GetTgwCidrChoice().(*TGWType_TgwCidr).TgwCidr
+			vOpts := append(opts,
+				db.WithValidateField("tgw_cidr_choice"),
+				db.WithValidateField("tgw_cidr"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTGWTypeValidator = func() *ValidateTGWType {
+	v := &ValidateTGWType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTgwChoice := v.TgwChoiceValidationRuleHandler
+	rulesTgwChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTgwChoice(rulesTgwChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TGWType.tgw_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tgw_choice"] = vFn
+
+	vrhTgwCidrChoice := v.TgwCidrChoiceValidationRuleHandler
+	rulesTgwCidrChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhTgwCidrChoice(rulesTgwCidrChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TGWType.tgw_cidr_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["tgw_cidr_choice"] = vFn
+
+	v.FldValidators["tgw_choice.new_tgw"] = ves_io_schema_views.TGWParamsTypeValidator().Validate
+	v.FldValidators["tgw_choice.existing_tgw"] = ves_io_schema_views.ExistingTGWTypeValidator().Validate
+
+	v.FldValidators["tgw_cidr_choice.tgw_cidr"] = ves_io_schema_views.CloudSubnetParamTypeValidator().Validate
+
+	return v
+}()
+
+func TGWTypeValidator() db.Validator {
+	return DefaultTGWTypeValidator
 }

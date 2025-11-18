@@ -578,28 +578,30 @@ func resourceVolterraAlertPolicyCreate(d *schema.ResourceData, meta interface{})
 		receiversInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		createSpec.Receivers = receiversInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			rMapToStrVal := ps.(map[string]interface{})
-			receiversInt[i] = &ves_io_schema.ObjectRefType{}
+				rMapToStrVal := ps.(map[string]interface{})
+				receiversInt[i] = &ves_io_schema.ObjectRefType{}
 
-			receiversInt[i].Kind = "alert_receiver"
+				receiversInt[i].Kind = "alert_receiver"
 
-			if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-				receiversInt[i].Name = v.(string)
+				if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+					receiversInt[i].Name = v.(string)
+				}
+
+				if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					receiversInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					receiversInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					receiversInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				receiversInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				receiversInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				receiversInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -1223,28 +1225,30 @@ func resourceVolterraAlertPolicyUpdate(d *schema.ResourceData, meta interface{})
 		receiversInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		updateSpec.Receivers = receiversInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			rMapToStrVal := ps.(map[string]interface{})
-			receiversInt[i] = &ves_io_schema.ObjectRefType{}
+				rMapToStrVal := ps.(map[string]interface{})
+				receiversInt[i] = &ves_io_schema.ObjectRefType{}
 
-			receiversInt[i].Kind = "alert_receiver"
+				receiversInt[i].Kind = "alert_receiver"
 
-			if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-				receiversInt[i].Name = v.(string)
+				if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+					receiversInt[i].Name = v.(string)
+				}
+
+				if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					receiversInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					receiversInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					receiversInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				receiversInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				receiversInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				receiversInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}

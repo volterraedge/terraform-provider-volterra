@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.bgp.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.bgp.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2656,6 +2656,57 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bgpBFD": {
+            "type": "object",
+            "description": "BFD parameters.",
+            "title": "BFD",
+            "x-displayname": "BFD",
+            "x-ves-proto-message": "ves.io.schema.bgp.BFD",
+            "properties": {
+                "multiplier": {
+                    "type": "integer",
+                    "description": " Specify Number of missed packets to bring session down\"\n\nExample: - \"3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 255\n",
+                    "title": "Multiplier",
+                    "format": "int64",
+                    "x-displayname": "Multiplier",
+                    "x-ves-example": "3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "255"
+                    }
+                },
+                "receive_interval_milliseconds": {
+                    "type": "integer",
+                    "description": " BFD receive interval timer, in milliseconds\n\nExample: - \"3000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 255000\n",
+                    "title": "Receive Interval in milliseconds",
+                    "format": "int64",
+                    "x-displayname": "Minimum Receive Interval",
+                    "x-ves-example": "3000",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "255000"
+                    }
+                },
+                "transmit_interval_milliseconds": {
+                    "type": "integer",
+                    "description": " BFD transmit interval timer, in milliseconds\n\nExample: - \"3000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 255000\n",
+                    "title": "Transmit Interval in milliseconds",
+                    "format": "int64",
+                    "x-displayname": "Transmit Interval",
+                    "x-ves-example": "3000",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "255000"
+                    }
+                }
+            }
+        },
         "bgpBgpParameters": {
             "type": "object",
             "description": "BGP parameters for the local site",
@@ -2723,6 +2774,16 @@ var APISwaggerJSON string = `{
                     "description": "x-displayName: \"ASN\"\nAutonomous System Number for BGP peer",
                     "title": "ASN",
                     "format": "int64"
+                },
+                "bfd_disabled": {
+                    "description": "x-displayName: \"Disabled\"",
+                    "title": "bfd_disabled",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "bfd_enabled": {
+                    "description": "x-displayName: \"Enabled\"",
+                    "title": "bfd_enabled",
+                    "$ref": "#/definitions/bgpBFD"
                 },
                 "bgp_peer_address": {
                     "description": "x-displayName: \"Peer Address\"\nIf Peer Address Type is set to \"From IP Address\", this is used as Peer Address. Else, this is ignored.",
@@ -2925,51 +2986,76 @@ var APISwaggerJSON string = `{
         },
         "bgpBgpRoutePolicies": {
             "type": "object",
-            "description": "x-displayName: \"BGP Routing Policy\"\nList of rules which can be applied on all or particular nodes",
+            "description": "List of rules which can be applied on all or particular nodes",
             "title": "BGP Routing policies",
+            "x-displayname": "BGP Routing Policy",
+            "x-ves-proto-message": "ves.io.schema.bgp.BgpRoutePolicies",
             "properties": {
                 "route_policy": {
                     "type": "array",
-                    "description": "x-displayName: \"BGP Routing policy\"\nRoute policy to be applied",
+                    "description": " Route policy to be applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
                     "title": "route_policy",
+                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/bgpBgpRoutePolicy"
+                    },
+                    "x-displayname": "BGP Routing policy",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "4"
                     }
                 }
             }
         },
         "bgpBgpRoutePolicy": {
             "type": "object",
-            "description": "x-displayName: \"BGP Routing Policy\"\nList of filter rules which can be applied on all or particular nodes",
+            "description": "List of filter rules which can be applied on all or particular nodes",
             "title": "BGP Route policy",
+            "x-displayname": "BGP Routing Policy",
+            "x-ves-displayorder": "7,4,1",
+            "x-ves-oneof-field-direction": "[\"inbound\",\"outbound\"]",
+            "x-ves-oneof-field-node_choice": "[\"all_nodes\",\"node_name\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.BgpRoutePolicy",
             "properties": {
                 "all_nodes": {
-                    "description": "x-displayName: \"All nodes\"\nApply filter on all nodes where Peer is valid",
+                    "description": "Exclusive with [node_name]\n Apply filter on all nodes where Peer is valid",
                     "title": "all",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All nodes"
                 },
                 "inbound": {
-                    "description": "x-displayName: \"Inbound\"\nApply policy on routes being imported",
+                    "description": "Exclusive with [outbound]\n Apply policy on routes being imported",
                     "title": "inbound",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Inbound"
                 },
                 "node_name": {
-                    "description": "x-displayName: \"Node name\"\nSelect nodes where BGP routing policy has to be applied",
+                    "description": "Exclusive with [all_nodes]\n Select nodes where BGP routing policy has to be applied",
                     "title": "node_name",
-                    "$ref": "#/definitions/bgpNodes"
+                    "$ref": "#/definitions/bgpNodes",
+                    "x-displayname": "Node name"
                 },
                 "object_refs": {
                     "type": "array",
-                    "description": "x-displayName: \"BGP routing policy\"\nx-required\nSelect route policy to apply.",
+                    "description": " Select route policy to apply.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Policy to apply",
+                    "minItems": 1,
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "BGP routing policy",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1",
+                        "ves.io.schema.rules.repeated.min_items": "1"
                     }
                 },
                 "outbound": {
-                    "description": "x-displayName: \"Outbound\"\nApply policy on routes being exported",
+                    "description": "Exclusive with [inbound]\n Apply policy on routes being exported",
                     "title": "outbound",
-                    "$ref": "#/definitions/schemaEmpty"
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Outbound"
                 }
             }
         },
@@ -3244,16 +3330,19 @@ var APISwaggerJSON string = `{
         },
         "bgpNodes": {
             "type": "object",
-            "description": "x-displayName: \"Nodes\"\nList of nodes on which BGP routing policy has to be applied",
+            "description": "List of nodes on which BGP routing policy has to be applied",
             "title": "Nodes",
+            "x-displayname": "Nodes",
+            "x-ves-proto-message": "ves.io.schema.bgp.Nodes",
             "properties": {
                 "node": {
                     "type": "array",
-                    "description": "x-displayName: \"Node of choice\"\nSelect BGP Session on which policy will be applied.",
+                    "description": " Select BGP Session on which policy will be applied.",
                     "title": "Node",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "x-displayname": "Node of choice"
                 }
             }
         },
@@ -3263,13 +3352,26 @@ var APISwaggerJSON string = `{
             "title": "Peer",
             "x-displayname": "BGP Peer",
             "x-ves-displayorder": "1,2,5",
-            "x-ves-oneof-field-enable_choice": "[\"disable\"]",
+            "x-ves-oneof-field-bfd_choice": "[\"bfd_disabled\",\"bfd_enabled\"]",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"routing_policies\"]",
             "x-ves-oneof-field-passive_choice": "[\"passive_mode_disabled\",\"passive_mode_enabled\"]",
             "x-ves-oneof-field-type_choice": "[\"external\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.Peer",
             "properties": {
+                "bfd_disabled": {
+                    "description": "Exclusive with [bfd_enabled]\n",
+                    "title": "bfd_disabled",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "bfd_enabled": {
+                    "description": "Exclusive with [bfd_disabled]\n",
+                    "title": "bfd_enabled",
+                    "$ref": "#/definitions/bgpBFD",
+                    "x-displayname": "Enabled"
+                },
                 "disable": {
-                    "description": "Exclusive with []\n Disables the BGP routing policy",
+                    "description": "Exclusive with [routing_policies]\n Disables the BGP routing policy",
                     "title": "disable",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disabled"
@@ -3306,6 +3408,12 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [passive_mode_disabled]\n",
                     "title": "passive_mode_enabled",
                     "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enabled"
+                },
+                "routing_policies": {
+                    "description": "Exclusive with [disable]\n BGP Routing policies are enabled, created policies need to be referenced with\n a direction inbound or outbound and specify the node or nodes that this\n policy applies to",
+                    "title": "routing_policies",
+                    "$ref": "#/definitions/bgpBgpRoutePolicies",
                     "x-displayname": "Enabled"
                 }
             }
@@ -4443,6 +4551,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

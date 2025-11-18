@@ -2972,9 +2972,10 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-displayname": "Network"
                 },
                 "orchestration_mode": {
-                    "description": " x-displayName: Orchestration Mode\n Whether the site is managed or not managed",
+                    "description": " Whether the site is managed or not managed",
                     "title": "Orchestration Mode",
-                    "$ref": "#/definitions/topologyOrchestrationMode"
+                    "$ref": "#/definitions/topologyOrchestrationMode",
+                    "x-displayname": "Orchestration Mode"
                 },
                 "site_type": {
                     "description": " Site type indicates whether the site is CUSTOMER_EDGE or REGIONAL_EDGE",
@@ -3673,7 +3674,7 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "topologyGCPRouteType": {
             "type": "string",
-            "description": "x-displayName: GCP Route type\nGCP Route Type\n\n - GCP_ROUTE_TYPE_NONE: GCP Route Type None\n\nx-displayName: GCP Route Type None\nGCP Route Type None\n - GCP_ROUTE_TYPE_TRANSIT: GCP Route Type Transit\n\nx-displayName: GCP Route Type Transit\nGCP Route Type Transit\n - GCP_ROUTE_TYPE_SUBNET: GCP Route Type Subnet\n\nx-displayName: GCP Route Type Subnet\nGCP Route Type Subnet\n - GCP_ROUTE_TYPE_STATIC: GCP Route Type Static\n\nx-displayName: GCP Route Type Static\nGCP Route Type Static\n - GCP_ROUTE_TYPE_BGP: GCP Route Type BGP\n\nx-displayName: GCP Route Type BGP\nGCP Route Type BGP",
+            "description": "GCP Route Type\n\n - GCP_ROUTE_TYPE_NONE: GCP Route Type None\n\nGCP Route Type None\n - GCP_ROUTE_TYPE_TRANSIT: GCP Route Type Transit\n\nGCP Route Type Transit\n - GCP_ROUTE_TYPE_SUBNET: GCP Route Type Subnet\n\nGCP Route Type Subnet\n - GCP_ROUTE_TYPE_STATIC: GCP Route Type Static\n\nGCP Route Type Static\n - GCP_ROUTE_TYPE_BGP: GCP Route Type BGP\n\nGCP Route Type BGP",
             "title": "GCPRouteType",
             "enum": [
                 "GCP_ROUTE_TYPE_NONE",
@@ -3683,19 +3684,19 @@ var CustomDataAPISwaggerJSON string = `{
                 "GCP_ROUTE_TYPE_BGP"
             ],
             "default": "GCP_ROUTE_TYPE_NONE",
-            "x-displayname": "",
+            "x-displayname": "GCP Route type",
             "x-ves-proto-enum": "ves.io.schema.topology.GCPRouteType"
         },
         "topologyGatewayTypeEnum": {
             "type": "string",
-            "description": "x-displayName: Gateway type\nGateway Type\n\n - INGRESS_GATEWAY: Ingress gateway\n\nx-displayName: Ingress gateway\nIngress gateway (single nic)\n - INGRESS_EGRESS_GATEWAY: Ingress and Egress gateway\n\nx-displayName: Ingress and Egress gateway\nIngress and Egress gateway (dual nic)",
+            "description": "Gateway Type\n\n - INGRESS_GATEWAY: Ingress gateway\n\nIngress gateway (single nic)\n - INGRESS_EGRESS_GATEWAY: Ingress and Egress gateway\n\nIngress and Egress gateway (dual nic)",
             "title": "GatewayType",
             "enum": [
                 "INGRESS_GATEWAY",
                 "INGRESS_EGRESS_GATEWAY"
             ],
             "default": "INGRESS_GATEWAY",
-            "x-displayname": "",
+            "x-displayname": "Gateway type",
             "x-ves-proto-enum": "ves.io.schema.topology.GatewayTypeEnum"
         },
         "topologyInstanceType": {
@@ -4173,8 +4174,9 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "topologyNetworkRouteTableMetaData": {
             "type": "object",
-            "description": "x-displayName: Network RouteTable Metadata\"\nMetadata associated with the network route tables",
+            "description": "Metadata associated with the network route tables",
             "title": "NetworkRouteTableMetaData",
+            "x-displayname": "Network RouteTable Metadata",
             "x-ves-proto-message": "ves.io.schema.topology.NetworkRouteTableMetaData",
             "properties": {
                 "route_table_metadata": {
@@ -4214,8 +4216,9 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "topologyNetworkRoutesData": {
             "type": "object",
-            "description": "x-displayName: Network Routes Data\"\nData associated with the network routes",
+            "description": "Data associated with the network routes",
             "title": "NetworkRoutesData",
+            "x-displayname": "Network Routes Data",
             "x-ves-proto-message": "ves.io.schema.topology.NetworkRoutesData",
             "properties": {
                 "network_id": {
@@ -4237,8 +4240,9 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "topologyNetworkRoutesMetaData": {
             "type": "object",
-            "description": "x-displayName: Network RouteTable Metadata\"\nMetadata associated with the network routes",
+            "description": "Metadata associated with the network routes",
             "title": "NetworkRoutesMetaData",
+            "x-displayname": "Network RouteTable Metadata",
             "x-ves-proto-message": "ves.io.schema.topology.NetworkRoutesMetaData",
             "properties": {
                 "cloud_resource_id": {
@@ -4666,7 +4670,7 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "topologyRouteNextHopTypeEnum": {
             "type": "string",
-            "description": "x-displayName: RouteNextHopTypeEnum\nRouteNextHopTypeEnum\n\n - VIRTUAL_NETWORK_GATEWAY: VIRTUAL NETWORK GATEWAY\n\nx-displayName: VIRTUAL NETWORK GATEWAY\nVIRTUAL NETWORK GATEWAY\n - VNET_LOCAL: VNET LOCAL\n\nx-displayName: VNET LOCAL\nVNET LOCAL\n - INTERNET: INTERNET\n\nx-displayName: INTERNET\nINTERNET\n - VIRTUAL_APPLIANCE: VIRTUAL APPLIANCE\n\nx-displayName: VIRTUAL APPLIANCE\nVIRTUAL APPLIANCE\n - NONE: NONE\n\nx-displayName: NONE\nNONE\n - VNET_PEERING: VNET PEERING\n\nx-displayName: VNET PEERING\nVNET PEERING\n - VIRTUAL_NETWORK_SERVICE_ENDPOINT: VIRTUAL NETWORK SERVICE ENDPOINT\n\nx-displayName: VIRTUAL NETWORK SERVICE ENDPOINT\nVIRTUAL NETWORK SERVICE ENDPOINT\n - NEXT_HOP_TYPE_NOT_APPLICABLE: NEXT_HOP_TYPE_NOT_APPLICABLE\n\nx-displayName: NEXT_HOP_TYPE_NOT_APPLICABLE\nNEXT_HOP_TYPE_NOT_APPLICABLE should be used when the cloud provider doesn't support this.\n - LOADBALANCER: LOAD BALANCER\n\nx-displayName: LOAD BALANCER\nLOAD BALANCER\n - VPC_NETWORK: VPC NETWORK\n\nx-displayName: VPC NETWORK\nVPC NETWORK\n - VPC_PEERING: VPC PEERING\n\nx-displayName: VPC PEERING\nVPC PEERING\n - INTERNAL_LOAD_BALANCER: INTERNAL LOAD BALANCER\n\nx-displayName: INTERNAL LOAD BALANCER\nINTERNAL LOAD BALANCER\n - INSTANCE: INSTANCE\n\nx-displayName: INSTANCE\nINSTANCE\n - INTERCONNECT: INTERCONNECT\n\nx-displayName: INTERCONNECT\nINTERCONNECT\n - INTERNET_GATEWAY: INTERNET GATEWAY\n\nx-displayName: INTERNET GATEWAY\nINTERNET GATEWAY\n - IP: IP\n\nx-displayName: IP\nIP\n - VPN_TUNNEL: VPN TUNNEL\n\nx-displayName: VPN TUNNEL\nVPN TUNNEL\n - TGW_ATTACHMENT: TGW ATTACHMENT\n\nx-displayName: TGW ATTACHMENT\nTGW ATTACHMENT",
+            "description": "RouteNextHopTypeEnum\n\n - VIRTUAL_NETWORK_GATEWAY: VIRTUAL NETWORK GATEWAY\n\nVIRTUAL NETWORK GATEWAY\n - VNET_LOCAL: VNET LOCAL\n\nVNET LOCAL\n - INTERNET: INTERNET\n\nINTERNET\n - VIRTUAL_APPLIANCE: VIRTUAL APPLIANCE\n\nVIRTUAL APPLIANCE\n - NONE: NONE\n\nNONE\n - VNET_PEERING: VNET PEERING\n\nVNET PEERING\n - VIRTUAL_NETWORK_SERVICE_ENDPOINT: VIRTUAL NETWORK SERVICE ENDPOINT\n\nVIRTUAL NETWORK SERVICE ENDPOINT\n - NEXT_HOP_TYPE_NOT_APPLICABLE: NEXT_HOP_TYPE_NOT_APPLICABLE\n\nNEXT_HOP_TYPE_NOT_APPLICABLE should be used when the cloud provider doesn't support this.\n - LOADBALANCER: LOAD BALANCER\n\nLOAD BALANCER\n - VPC_NETWORK: VPC NETWORK\n\nVPC NETWORK\n - VPC_PEERING: VPC PEERING\n\nVPC PEERING\n - INTERNAL_LOAD_BALANCER: INTERNAL LOAD BALANCER\n\nINTERNAL LOAD BALANCER\n - INSTANCE: INSTANCE\n\nINSTANCE\n - INTERCONNECT: INTERCONNECT\n\nINTERCONNECT\n - INTERNET_GATEWAY: INTERNET GATEWAY\n\nINTERNET GATEWAY\n - IP: IP\n\nIP\n - VPN_TUNNEL: VPN TUNNEL\n\nVPN TUNNEL\n - TGW_ATTACHMENT: TGW ATTACHMENT\n\nTGW ATTACHMENT",
             "title": "RouteNextHopTypeEnum",
             "enum": [
                 "VIRTUAL_NETWORK_GATEWAY",
@@ -4689,12 +4693,12 @@ var CustomDataAPISwaggerJSON string = `{
                 "TGW_ATTACHMENT"
             ],
             "default": "VIRTUAL_NETWORK_GATEWAY",
-            "x-displayname": "",
+            "x-displayname": "RouteNextHopTypeEnum",
             "x-ves-proto-enum": "ves.io.schema.topology.RouteNextHopTypeEnum"
         },
         "topologyRouteSourceTypeEnum": {
             "type": "string",
-            "description": "x-displayName: RouteSourceTypeEnum\nRouteSourceTypeEnum\n\n - INVALID_SOURCE: INVALID_SOURCE\n\nx-displayName: INVALID_SOURCE\nINVALID_SOURCE\n - DEFAULT: DEFAULT\n\nx-displayName: DEFAULT\nDEFAULT\n - USER: USER\n\nx-displayName: USER\nUSER\n - UNKNOWN: UNKNOWN\n\nx-displayName: UNKNOWN\nUNKNOWN\n - VIRTUAL_NETWORK_GATEWAY_SOURCE: VIRTUAL_NETWORK_GATEWAY_SOURCE\n\nx-displayName: VIRTUAL_NETWORK_GATEWAY_SOURCE\nVIRTUAL_NETWORK_GATEWAY_SOURCE\n - SOURCE_NOT_APPLICABLE: SOURCE_NOT_APPLICABLE\n\nx-displayName: SOURCE_NOT_APPLICABLE\nSOURCE_NOT_APPLICABLE should be used when the cloud provider does not supports this.",
+            "description": "RouteSourceTypeEnum\n\n - INVALID_SOURCE: INVALID_SOURCE\n\nINVALID_SOURCE\n - DEFAULT: DEFAULT\n\nDEFAULT\n - USER: USER\n\nUSER\n - UNKNOWN: UNKNOWN\n\nUNKNOWN\n - VIRTUAL_NETWORK_GATEWAY_SOURCE: VIRTUAL_NETWORK_GATEWAY_SOURCE\n\nVIRTUAL_NETWORK_GATEWAY_SOURCE\n - SOURCE_NOT_APPLICABLE: SOURCE_NOT_APPLICABLE\n\nSOURCE_NOT_APPLICABLE should be used when the cloud provider does not supports this.",
             "title": "RouteSourceTypeEnum",
             "enum": [
                 "INVALID_SOURCE",
@@ -4705,12 +4709,12 @@ var CustomDataAPISwaggerJSON string = `{
                 "SOURCE_NOT_APPLICABLE"
             ],
             "default": "INVALID_SOURCE",
-            "x-displayname": "",
+            "x-displayname": "RouteSourceTypeEnum",
             "x-ves-proto-enum": "ves.io.schema.topology.RouteSourceTypeEnum"
         },
         "topologyRouteStateTypeEnum": {
             "type": "string",
-            "description": "x-displayName: RouteStateTypeEnum\nRouteStateTypeEnum\n\n - ACTIVE_STATE: ACTIVE_STATE\n\nx-displayName: ACTIVE_STATE\nACTIVE_STATE\n - INVALID_STATE: INVALID_STATE\n\nx-displayName: INVALID_STATE\nINVALID_STATE\n - STATE_NOT_APPLICABLE: STATE_NOT_APPLICABLE\n\nx-displayName: STATE_NOT_APPLICABLE\nSTATE_NOT_APPLICABLE should be used when the cloud provider doesn't supports this\n - STATE_BLACKHOLE: STATE_BLACKHOLE\n\nx-displayName: STATE_BLACKHOLE\nSTATE_BLACKHOLE\n - STATE_UNAVAILABLE: STATE_UNAVAILABLE\n\nx-displayName: STATE_UNAVAILABLE\nSTATE_UNAVAILABLE\n - STATE_PENDING: STATE_PENDING\n\nx-displayName: STATE_PENDING\nSTATE_PENDING\n - STATE_DELETING: STATE_DELETING\n\nx-displayName: STATE_DELETING\nSTATE_DELETING\n - STATE_DELETED: STATE_DELETING\n\nx-displayName: STATE_DELETED\nSTATE_DELETED",
+            "description": "RouteStateTypeEnum\n\n - ACTIVE_STATE: ACTIVE_STATE\n\nACTIVE_STATE\n - INVALID_STATE: INVALID_STATE\n\nINVALID_STATE\n - STATE_NOT_APPLICABLE: STATE_NOT_APPLICABLE\n\nSTATE_NOT_APPLICABLE should be used when the cloud provider doesn't supports this\n - STATE_BLACKHOLE: STATE_BLACKHOLE\n\nSTATE_BLACKHOLE\n - STATE_UNAVAILABLE: STATE_UNAVAILABLE\n\nSTATE_UNAVAILABLE\n - STATE_PENDING: STATE_PENDING\n\nSTATE_PENDING\n - STATE_DELETING: STATE_DELETING\n\nSTATE_DELETING\n - STATE_DELETED: STATE_DELETING\n\nSTATE_DELETED",
             "title": "RouteStateTypeEnum",
             "enum": [
                 "ACTIVE_STATE",
@@ -4723,7 +4727,7 @@ var CustomDataAPISwaggerJSON string = `{
                 "STATE_DELETED"
             ],
             "default": "ACTIVE_STATE",
-            "x-displayname": "",
+            "x-displayname": "RouteStateTypeEnum",
             "x-ves-proto-enum": "ves.io.schema.topology.RouteStateTypeEnum"
         },
         "topologyRouteTableData": {
@@ -4977,7 +4981,7 @@ var CustomDataAPISwaggerJSON string = `{
         },
         "topologySiteAppTypeEnum": {
             "type": "string",
-            "description": "x-displayName: Site App type\nSite App Type\n\n - SITE_APPTYPE_NONE: Not applicable \n\nx-displayName: Not applicable \nNot applicable\n - SITE_APPTYPE_APPSTACK: AppStack Site\n\nx-displayName: AppStack Site\nAppStack Site\n - SITE_APPTYPE_MESH: Mesh site \n\nx-displayName: Mesh site \nMesh site",
+            "description": "Site App Type\n\n - SITE_APPTYPE_NONE: Not applicable \n\nNot applicable\n - SITE_APPTYPE_APPSTACK: AppStack Site\n\nAppStack Site\n - SITE_APPTYPE_MESH: Mesh site \n\nMesh site",
             "title": "Site App Type",
             "enum": [
                 "SITE_APPTYPE_NONE",
@@ -4985,7 +4989,7 @@ var CustomDataAPISwaggerJSON string = `{
                 "SITE_APPTYPE_MESH"
             ],
             "default": "SITE_APPTYPE_NONE",
-            "x-displayname": "",
+            "x-displayname": "Site App type",
             "x-ves-proto-enum": "ves.io.schema.topology.SiteAppTypeEnum"
         },
         "topologySiteMeshGroupSummaryInfo": {

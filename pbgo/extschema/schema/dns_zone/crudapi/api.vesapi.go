@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.dns_zone.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.dns_zone.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -4324,13 +4324,13 @@ var APISwaggerJSON string = `{
                 },
                 "default_rr_set_group": {
                     "type": "array",
-                    "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
+                    "description": " Add and manage DNS resource record sets part of Default set group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
                     "title": "Default DNS Record Sets",
                     "maxItems": 50000,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSet"
                     },
-                    "x-displayname": "Resource Record Sets",
+                    "x-displayname": "Default Resource Record Sets",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "50000"
                     }
@@ -4348,13 +4348,13 @@ var APISwaggerJSON string = `{
                 },
                 "rr_set_group": {
                     "type": "array",
-                    "description": " Collection of additional DNS resource record sets\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Create and manage set groups, and resource record sets within them, x-ves-io-managed set is managed by F5.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "title": "Record Sets Group",
                     "maxItems": 50,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSetGroup"
                     },
-                    "x-displayname": "Additional Resource Record Sets",
+                    "x-displayname": "Set Groups and F5-Managed",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "50",
                         "ves.io.schema.rules.repeated.unique_metadata_name": "true"
@@ -5770,6 +5770,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

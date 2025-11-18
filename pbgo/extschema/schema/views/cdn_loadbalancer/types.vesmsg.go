@@ -5552,14 +5552,6 @@ func (v *ValidateCreateSpecType) BotDefenseChoiceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) ClientSideDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -5584,34 +5576,10 @@ func (v *ValidateCreateSpecType) LoadbalancerTypeValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateCreateSpecType) MaliciousUserDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) RateLimitChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateCreateSpecType) SensitiveDataPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for sensitive_data_policy_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -5628,14 +5596,6 @@ func (v *ValidateCreateSpecType) ThreatMeshChoiceValidationRuleHandler(rules map
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for threat_mesh_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateCreateSpecType) UserIdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for user_id_choice")
 	}
 	return validatorFn, nil
 }
@@ -6284,16 +6244,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["challenge_type"]; exists {
-		val := m.GetChallengeType()
-		vOpts := append(opts,
-			db.WithValidateField("challenge_type"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetChallengeType().(type) {
 	case *CreateSpecType_NoChallenge:
 		if fv, exists := v.FldValidators["challenge_type.no_challenge"]; exists {
@@ -6619,16 +6569,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["malicious_user_detection_choice"]; exists {
-		val := m.GetMaliciousUserDetectionChoice()
-		vOpts := append(opts,
-			db.WithValidateField("malicious_user_detection_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetMaliciousUserDetectionChoice().(type) {
 	case *CreateSpecType_DisableMaliciousUserDetection:
 		if fv, exists := v.FldValidators["malicious_user_detection_choice.disable_malicious_user_detection"]; exists {
@@ -6699,16 +6639,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["rate_limit_choice"]; exists {
-		val := m.GetRateLimitChoice()
-		vOpts := append(opts,
-			db.WithValidateField("rate_limit_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetRateLimitChoice().(type) {
@@ -6782,16 +6712,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			}
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
-		val := m.GetServicePolicyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("service_policy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetServicePolicyChoice().(type) {
@@ -6909,16 +6829,6 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["user_id_choice"]; exists {
-		val := m.GetUserIdChoice()
-		vOpts := append(opts,
-			db.WithValidateField("user_id_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetUserIdChoice().(type) {
@@ -7059,17 +6969,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["bot_defense_choice"] = vFn
 
-	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
-	rulesChallengeType := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhChallengeType(rulesChallengeType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.challenge_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["challenge_type"] = vFn
-
 	vrhClientSideDefenseChoice := v.ClientSideDefenseChoiceValidationRuleHandler
 	rulesClientSideDefenseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7103,28 +7002,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
 
-	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
-	rulesMaliciousUserDetectionChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhMaliciousUserDetectionChoice(rulesMaliciousUserDetectionChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.malicious_user_detection_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["malicious_user_detection_choice"] = vFn
-
-	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
-	rulesRateLimitChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.rate_limit_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["rate_limit_choice"] = vFn
-
 	vrhSensitiveDataPolicyChoice := v.SensitiveDataPolicyChoiceValidationRuleHandler
 	rulesSensitiveDataPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -7135,17 +7012,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["sensitive_data_policy_choice"] = vFn
-
-	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
-	rulesServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.service_policy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["service_policy_choice"] = vFn
 
 	vrhSlowDdosMitigationChoice := v.SlowDdosMitigationChoiceValidationRuleHandler
 	rulesSlowDdosMitigationChoice := map[string]string{
@@ -7168,17 +7034,6 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["threat_mesh_choice"] = vFn
-
-	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
-	rulesUserIdChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhUserIdChoice(rulesUserIdChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.user_id_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["user_id_choice"] = vFn
 
 	vrhWafChoice := v.WafChoiceValidationRuleHandler
 	rulesWafChoice := map[string]string{
@@ -8248,14 +8103,6 @@ func (v *ValidateGetSpecType) BotDefenseChoiceValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateGetSpecType) ClientSideDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -8280,34 +8127,10 @@ func (v *ValidateGetSpecType) LoadbalancerTypeValidationRuleHandler(rules map[st
 	return validatorFn, nil
 }
 
-func (v *ValidateGetSpecType) MaliciousUserDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateGetSpecType) RateLimitChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateGetSpecType) SensitiveDataPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for sensitive_data_policy_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateGetSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -8324,14 +8147,6 @@ func (v *ValidateGetSpecType) ThreatMeshChoiceValidationRuleHandler(rules map[st
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for threat_mesh_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateGetSpecType) UserIdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for user_id_choice")
 	}
 	return validatorFn, nil
 }
@@ -8998,16 +8813,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["challenge_type"]; exists {
-		val := m.GetChallengeType()
-		vOpts := append(opts,
-			db.WithValidateField("challenge_type"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetChallengeType().(type) {
 	case *GetSpecType_NoChallenge:
 		if fv, exists := v.FldValidators["challenge_type.no_challenge"]; exists {
@@ -9354,16 +9159,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
-	if fv, exists := v.FldValidators["malicious_user_detection_choice"]; exists {
-		val := m.GetMaliciousUserDetectionChoice()
-		vOpts := append(opts,
-			db.WithValidateField("malicious_user_detection_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetMaliciousUserDetectionChoice().(type) {
 	case *GetSpecType_DisableMaliciousUserDetection:
 		if fv, exists := v.FldValidators["malicious_user_detection_choice.disable_malicious_user_detection"]; exists {
@@ -9434,16 +9229,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["rate_limit_choice"]; exists {
-		val := m.GetRateLimitChoice()
-		vOpts := append(opts,
-			db.WithValidateField("rate_limit_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetRateLimitChoice().(type) {
@@ -9529,16 +9314,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			}
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
-		val := m.GetServicePolicyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("service_policy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetServicePolicyChoice().(type) {
@@ -9665,16 +9440,6 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["user_id_choice"]; exists {
-		val := m.GetUserIdChoice()
-		vOpts := append(opts,
-			db.WithValidateField("user_id_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetUserIdChoice().(type) {
@@ -9815,17 +9580,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["bot_defense_choice"] = vFn
 
-	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
-	rulesChallengeType := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhChallengeType(rulesChallengeType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.challenge_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["challenge_type"] = vFn
-
 	vrhClientSideDefenseChoice := v.ClientSideDefenseChoiceValidationRuleHandler
 	rulesClientSideDefenseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9859,28 +9613,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
 
-	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
-	rulesMaliciousUserDetectionChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhMaliciousUserDetectionChoice(rulesMaliciousUserDetectionChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.malicious_user_detection_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["malicious_user_detection_choice"] = vFn
-
-	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
-	rulesRateLimitChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.rate_limit_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["rate_limit_choice"] = vFn
-
 	vrhSensitiveDataPolicyChoice := v.SensitiveDataPolicyChoiceValidationRuleHandler
 	rulesSensitiveDataPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -9891,17 +9623,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["sensitive_data_policy_choice"] = vFn
-
-	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
-	rulesServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.service_policy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["service_policy_choice"] = vFn
 
 	vrhSlowDdosMitigationChoice := v.SlowDdosMitigationChoiceValidationRuleHandler
 	rulesSlowDdosMitigationChoice := map[string]string{
@@ -9924,17 +9645,6 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["threat_mesh_choice"] = vFn
-
-	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
-	rulesUserIdChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhUserIdChoice(rulesUserIdChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.user_id_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["user_id_choice"] = vFn
 
 	vrhWafChoice := v.WafChoiceValidationRuleHandler
 	rulesWafChoice := map[string]string{
@@ -10967,14 +10677,6 @@ func (v *ValidateGlobalSpecType) BotDefenseChoiceValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateGlobalSpecType) ClientSideDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -10999,34 +10701,10 @@ func (v *ValidateGlobalSpecType) LoadbalancerTypeValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
-func (v *ValidateGlobalSpecType) MaliciousUserDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateGlobalSpecType) RateLimitChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateGlobalSpecType) SensitiveDataPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for sensitive_data_policy_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateGlobalSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -11043,14 +10721,6 @@ func (v *ValidateGlobalSpecType) ThreatMeshChoiceValidationRuleHandler(rules map
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for threat_mesh_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateGlobalSpecType) UserIdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for user_id_choice")
 	}
 	return validatorFn, nil
 }
@@ -11735,16 +11405,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["challenge_type"]; exists {
-		val := m.GetChallengeType()
-		vOpts := append(opts,
-			db.WithValidateField("challenge_type"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetChallengeType().(type) {
 	case *GlobalSpecType_NoChallenge:
 		if fv, exists := v.FldValidators["challenge_type.no_challenge"]; exists {
@@ -12091,16 +11751,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
-	if fv, exists := v.FldValidators["malicious_user_detection_choice"]; exists {
-		val := m.GetMaliciousUserDetectionChoice()
-		vOpts := append(opts,
-			db.WithValidateField("malicious_user_detection_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetMaliciousUserDetectionChoice().(type) {
 	case *GlobalSpecType_DisableMaliciousUserDetection:
 		if fv, exists := v.FldValidators["malicious_user_detection_choice.disable_malicious_user_detection"]; exists {
@@ -12171,16 +11821,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["rate_limit_choice"]; exists {
-		val := m.GetRateLimitChoice()
-		vOpts := append(opts,
-			db.WithValidateField("rate_limit_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetRateLimitChoice().(type) {
@@ -12266,16 +11906,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			}
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
-		val := m.GetServicePolicyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("service_policy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetServicePolicyChoice().(type) {
@@ -12402,16 +12032,6 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["user_id_choice"]; exists {
-		val := m.GetUserIdChoice()
-		vOpts := append(opts,
-			db.WithValidateField("user_id_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetUserIdChoice().(type) {
@@ -12561,17 +12181,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["bot_defense_choice"] = vFn
 
-	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
-	rulesChallengeType := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhChallengeType(rulesChallengeType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.challenge_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["challenge_type"] = vFn
-
 	vrhClientSideDefenseChoice := v.ClientSideDefenseChoiceValidationRuleHandler
 	rulesClientSideDefenseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -12605,28 +12214,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
 
-	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
-	rulesMaliciousUserDetectionChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhMaliciousUserDetectionChoice(rulesMaliciousUserDetectionChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.malicious_user_detection_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["malicious_user_detection_choice"] = vFn
-
-	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
-	rulesRateLimitChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.rate_limit_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["rate_limit_choice"] = vFn
-
 	vrhSensitiveDataPolicyChoice := v.SensitiveDataPolicyChoiceValidationRuleHandler
 	rulesSensitiveDataPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -12637,17 +12224,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["sensitive_data_policy_choice"] = vFn
-
-	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
-	rulesServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.service_policy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["service_policy_choice"] = vFn
 
 	vrhSlowDdosMitigationChoice := v.SlowDdosMitigationChoiceValidationRuleHandler
 	rulesSlowDdosMitigationChoice := map[string]string{
@@ -12670,17 +12246,6 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["threat_mesh_choice"] = vFn
-
-	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
-	rulesUserIdChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhUserIdChoice(rulesUserIdChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.user_id_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["user_id_choice"] = vFn
 
 	vrhWafChoice := v.WafChoiceValidationRuleHandler
 	rulesWafChoice := map[string]string{
@@ -14220,6 +13785,15 @@ func (v *ValidateOriginAdvancedConfiguration) Validate(ctx context.Context, pm i
 
 	}
 
+	if fv, exists := v.FldValidators["enable_byte_range_request"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("enable_byte_range_request"))
+		if err := fv(ctx, m.GetEnableByteRangeRequest(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["websocket_proxy"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("websocket_proxy"))
@@ -15368,14 +14942,6 @@ func (v *ValidateReplaceSpecType) BotDefenseChoiceValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) ChallengeTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for challenge_type")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) ClientSideDefenseChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -15400,34 +14966,10 @@ func (v *ValidateReplaceSpecType) LoadbalancerTypeValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
-func (v *ValidateReplaceSpecType) MaliciousUserDetectionChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for malicious_user_detection_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) RateLimitChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for rate_limit_choice")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateReplaceSpecType) SensitiveDataPolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for sensitive_data_policy_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) ServicePolicyChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for service_policy_choice")
 	}
 	return validatorFn, nil
 }
@@ -15444,14 +14986,6 @@ func (v *ValidateReplaceSpecType) ThreatMeshChoiceValidationRuleHandler(rules ma
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for threat_mesh_choice")
-	}
-	return validatorFn, nil
-}
-
-func (v *ValidateReplaceSpecType) UserIdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for user_id_choice")
 	}
 	return validatorFn, nil
 }
@@ -16100,16 +15634,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["challenge_type"]; exists {
-		val := m.GetChallengeType()
-		vOpts := append(opts,
-			db.WithValidateField("challenge_type"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetChallengeType().(type) {
 	case *ReplaceSpecType_NoChallenge:
 		if fv, exists := v.FldValidators["challenge_type.no_challenge"]; exists {
@@ -16435,16 +15959,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
-	if fv, exists := v.FldValidators["malicious_user_detection_choice"]; exists {
-		val := m.GetMaliciousUserDetectionChoice()
-		vOpts := append(opts,
-			db.WithValidateField("malicious_user_detection_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
-	}
-
 	switch m.GetMaliciousUserDetectionChoice().(type) {
 	case *ReplaceSpecType_DisableMaliciousUserDetection:
 		if fv, exists := v.FldValidators["malicious_user_detection_choice.disable_malicious_user_detection"]; exists {
@@ -16515,16 +16029,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["rate_limit_choice"]; exists {
-		val := m.GetRateLimitChoice()
-		vOpts := append(opts,
-			db.WithValidateField("rate_limit_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetRateLimitChoice().(type) {
@@ -16598,16 +16102,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			}
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["service_policy_choice"]; exists {
-		val := m.GetServicePolicyChoice()
-		vOpts := append(opts,
-			db.WithValidateField("service_policy_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetServicePolicyChoice().(type) {
@@ -16725,16 +16219,6 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["user_id_choice"]; exists {
-		val := m.GetUserIdChoice()
-		vOpts := append(opts,
-			db.WithValidateField("user_id_choice"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetUserIdChoice().(type) {
@@ -16875,17 +16359,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["bot_defense_choice"] = vFn
 
-	vrhChallengeType := v.ChallengeTypeValidationRuleHandler
-	rulesChallengeType := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhChallengeType(rulesChallengeType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.challenge_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["challenge_type"] = vFn
-
 	vrhClientSideDefenseChoice := v.ClientSideDefenseChoiceValidationRuleHandler
 	rulesClientSideDefenseChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -16919,28 +16392,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["loadbalancer_type"] = vFn
 
-	vrhMaliciousUserDetectionChoice := v.MaliciousUserDetectionChoiceValidationRuleHandler
-	rulesMaliciousUserDetectionChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhMaliciousUserDetectionChoice(rulesMaliciousUserDetectionChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.malicious_user_detection_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["malicious_user_detection_choice"] = vFn
-
-	vrhRateLimitChoice := v.RateLimitChoiceValidationRuleHandler
-	rulesRateLimitChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhRateLimitChoice(rulesRateLimitChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.rate_limit_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["rate_limit_choice"] = vFn
-
 	vrhSensitiveDataPolicyChoice := v.SensitiveDataPolicyChoiceValidationRuleHandler
 	rulesSensitiveDataPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -16951,17 +16402,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["sensitive_data_policy_choice"] = vFn
-
-	vrhServicePolicyChoice := v.ServicePolicyChoiceValidationRuleHandler
-	rulesServicePolicyChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhServicePolicyChoice(rulesServicePolicyChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.service_policy_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["service_policy_choice"] = vFn
 
 	vrhSlowDdosMitigationChoice := v.SlowDdosMitigationChoiceValidationRuleHandler
 	rulesSlowDdosMitigationChoice := map[string]string{
@@ -16984,17 +16424,6 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["threat_mesh_choice"] = vFn
-
-	vrhUserIdChoice := v.UserIdChoiceValidationRuleHandler
-	rulesUserIdChoice := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhUserIdChoice(rulesUserIdChoice)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.user_id_choice: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["user_id_choice"] = vFn
 
 	vrhWafChoice := v.WafChoiceValidationRuleHandler
 	rulesWafChoice := map[string]string{

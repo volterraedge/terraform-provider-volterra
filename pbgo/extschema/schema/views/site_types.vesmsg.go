@@ -5149,14 +5149,6 @@ type ValidateGCPVPCNetworkType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateGCPVPCNetworkType) RoutingTypeValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
-	if err != nil {
-		return nil, errors.Wrap(err, "ValidationRuleHandler for routing_type")
-	}
-	return validatorFn, nil
-}
-
 func (v *ValidateGCPVPCNetworkType) NameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -5188,16 +5180,6 @@ func (v *ValidateGCPVPCNetworkType) Validate(ctx context.Context, pm interface{}
 			return err
 		}
 
-	}
-
-	if fv, exists := v.FldValidators["routing_type"]; exists {
-		val := m.GetRoutingType()
-		vOpts := append(opts,
-			db.WithValidateField("routing_type"),
-		)
-		if err := fv(ctx, val, vOpts...); err != nil {
-			return err
-		}
 	}
 
 	switch m.GetRoutingType().(type) {
@@ -5240,17 +5222,6 @@ var DefaultGCPVPCNetworkTypeValidator = func() *ValidateGCPVPCNetworkType {
 	_, _ = err, vFn
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
-
-	vrhRoutingType := v.RoutingTypeValidationRuleHandler
-	rulesRoutingType := map[string]string{
-		"ves.io.schema.rules.message.required_oneof": "true",
-	}
-	vFn, err = vrhRoutingType(rulesRoutingType)
-	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCNetworkType.routing_type: %s", err)
-		panic(errMsg)
-	}
-	v.FldValidators["routing_type"] = vFn
 
 	vrhName := v.NameValidationRuleHandler
 	rulesName := map[string]string{

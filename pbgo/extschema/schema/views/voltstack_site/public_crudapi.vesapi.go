@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.voltstack_site.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.voltstack_site.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2237,53 +2237,129 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bgpBFD": {
+            "type": "object",
+            "description": "BFD parameters.",
+            "title": "BFD",
+            "x-displayname": "BFD",
+            "x-ves-proto-message": "ves.io.schema.bgp.BFD",
+            "properties": {
+                "multiplier": {
+                    "type": "integer",
+                    "description": " Specify Number of missed packets to bring session down\"\n\nExample: - \"3\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 255\n",
+                    "title": "Multiplier",
+                    "format": "int64",
+                    "x-displayname": "Multiplier",
+                    "x-ves-example": "3",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "255"
+                    }
+                },
+                "receive_interval_milliseconds": {
+                    "type": "integer",
+                    "description": " BFD receive interval timer, in milliseconds\n\nExample: - \"3000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 255000\n",
+                    "title": "Receive Interval in milliseconds",
+                    "format": "int64",
+                    "x-displayname": "Minimum Receive Interval",
+                    "x-ves-example": "3000",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "255000"
+                    }
+                },
+                "transmit_interval_milliseconds": {
+                    "type": "integer",
+                    "description": " BFD transmit interval timer, in milliseconds\n\nExample: - \"3000\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 255000\n",
+                    "title": "Transmit Interval in milliseconds",
+                    "format": "int64",
+                    "x-displayname": "Transmit Interval",
+                    "x-ves-example": "3000",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "255000"
+                    }
+                }
+            }
+        },
         "bgpBgpRoutePolicies": {
             "type": "object",
-            "description": "x-displayName: \"BGP Routing Policy\"\nList of rules which can be applied on all or particular nodes",
+            "description": "List of rules which can be applied on all or particular nodes",
             "title": "BGP Routing policies",
+            "x-displayname": "BGP Routing Policy",
+            "x-ves-proto-message": "ves.io.schema.bgp.BgpRoutePolicies",
             "properties": {
                 "route_policy": {
                     "type": "array",
-                    "description": "x-displayName: \"BGP Routing policy\"\nRoute policy to be applied",
+                    "description": " Route policy to be applied\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4\n",
                     "title": "route_policy",
+                    "maxItems": 4,
                     "items": {
                         "$ref": "#/definitions/bgpBgpRoutePolicy"
+                    },
+                    "x-displayname": "BGP Routing policy",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "4"
                     }
                 }
             }
         },
         "bgpBgpRoutePolicy": {
             "type": "object",
-            "description": "x-displayName: \"BGP Routing Policy\"\nList of filter rules which can be applied on all or particular nodes",
+            "description": "List of filter rules which can be applied on all or particular nodes",
             "title": "BGP Route policy",
+            "x-displayname": "BGP Routing Policy",
+            "x-ves-displayorder": "7,4,1",
+            "x-ves-oneof-field-direction": "[\"inbound\",\"outbound\"]",
+            "x-ves-oneof-field-node_choice": "[\"all_nodes\",\"node_name\"]",
+            "x-ves-proto-message": "ves.io.schema.bgp.BgpRoutePolicy",
             "properties": {
                 "all_nodes": {
-                    "description": "x-displayName: \"All nodes\"\nApply filter on all nodes where Peer is valid",
+                    "description": "Exclusive with [node_name]\n Apply filter on all nodes where Peer is valid",
                     "title": "all",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "All nodes"
                 },
                 "inbound": {
-                    "description": "x-displayName: \"Inbound\"\nApply policy on routes being imported",
+                    "description": "Exclusive with [outbound]\n Apply policy on routes being imported",
                     "title": "inbound",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Inbound"
                 },
                 "node_name": {
-                    "description": "x-displayName: \"Node name\"\nSelect nodes where BGP routing policy has to be applied",
+                    "description": "Exclusive with [all_nodes]\n Select nodes where BGP routing policy has to be applied",
                     "title": "node_name",
-                    "$ref": "#/definitions/bgpNodes"
+                    "$ref": "#/definitions/bgpNodes",
+                    "x-displayname": "Node name"
                 },
                 "object_refs": {
                     "type": "array",
-                    "description": "x-displayName: \"BGP routing policy\"\nx-required\nSelect route policy to apply.",
+                    "description": " Select route policy to apply.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n  ves.io.schema.rules.repeated.min_items: 1\n",
                     "title": "Policy to apply",
+                    "minItems": 1,
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "BGP routing policy",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1",
+                        "ves.io.schema.rules.repeated.min_items": "1"
                     }
                 },
                 "outbound": {
-                    "description": "x-displayName: \"Outbound\"\nApply policy on routes being exported",
+                    "description": "Exclusive with [inbound]\n Apply policy on routes being exported",
                     "title": "outbound",
-                    "$ref": "#/definitions/ioschemaEmpty"
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Outbound"
                 }
             }
         },
@@ -2445,16 +2521,19 @@ var APISwaggerJSON string = `{
         },
         "bgpNodes": {
             "type": "object",
-            "description": "x-displayName: \"Nodes\"\nList of nodes on which BGP routing policy has to be applied",
+            "description": "List of nodes on which BGP routing policy has to be applied",
             "title": "Nodes",
+            "x-displayname": "Nodes",
+            "x-ves-proto-message": "ves.io.schema.bgp.Nodes",
             "properties": {
                 "node": {
                     "type": "array",
-                    "description": "x-displayName: \"Node of choice\"\nSelect BGP Session on which policy will be applied.",
+                    "description": " Select BGP Session on which policy will be applied.",
                     "title": "Node",
                     "items": {
                         "type": "string"
-                    }
+                    },
+                    "x-displayname": "Node of choice"
                 }
             }
         },
@@ -2464,13 +2543,26 @@ var APISwaggerJSON string = `{
             "title": "Peer",
             "x-displayname": "BGP Peer",
             "x-ves-displayorder": "1,2,5",
-            "x-ves-oneof-field-enable_choice": "[\"disable\"]",
+            "x-ves-oneof-field-bfd_choice": "[\"bfd_disabled\",\"bfd_enabled\"]",
+            "x-ves-oneof-field-enable_choice": "[\"disable\",\"routing_policies\"]",
             "x-ves-oneof-field-passive_choice": "[\"passive_mode_disabled\",\"passive_mode_enabled\"]",
             "x-ves-oneof-field-type_choice": "[\"external\"]",
             "x-ves-proto-message": "ves.io.schema.bgp.Peer",
             "properties": {
+                "bfd_disabled": {
+                    "description": "Exclusive with [bfd_enabled]\n",
+                    "title": "bfd_disabled",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disabled"
+                },
+                "bfd_enabled": {
+                    "description": "Exclusive with [bfd_disabled]\n",
+                    "title": "bfd_enabled",
+                    "$ref": "#/definitions/bgpBFD",
+                    "x-displayname": "Enabled"
+                },
                 "disable": {
-                    "description": "Exclusive with []\n Disables the BGP routing policy",
+                    "description": "Exclusive with [routing_policies]\n Disables the BGP routing policy",
                     "title": "disable",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disabled"
@@ -2507,6 +2599,12 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [passive_mode_disabled]\n",
                     "title": "passive_mode_enabled",
                     "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enabled"
+                },
+                "routing_policies": {
+                    "description": "Exclusive with [disable]\n BGP Routing policies are enabled, created policies need to be referenced with\n a direction inbound or outbound and specify the node or nodes that this\n policy applies to",
+                    "title": "routing_policies",
+                    "$ref": "#/definitions/bgpBgpRoutePolicies",
                     "x-displayname": "Enabled"
                 }
             }
@@ -6234,6 +6332,57 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaNodeInterfaceInfo": {
+            "type": "object",
+            "description": "On a multinode site, this list holds the nodes and corresponding tunnel transport interface",
+            "title": "NodeInterfaceInfo",
+            "x-displayname": "NodeInterfaceInfo",
+            "x-ves-proto-message": "ves.io.schema.NodeInterfaceInfo",
+            "properties": {
+                "interface": {
+                    "type": "array",
+                    "description": " Interface reference on this node\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Interface",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Interface",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "node": {
+                    "type": "string",
+                    "description": " Node name on this site\n\nExample: - \"master-0\"-",
+                    "title": "Node",
+                    "x-displayname": "Node",
+                    "x-ves-example": "master-0"
+                }
+            }
+        },
+        "schemaNodeInterfaceType": {
+            "type": "object",
+            "description": "On multinode site, this type holds the information about per node interfaces",
+            "title": "NodeInterfaceType",
+            "x-displayname": "NodeInterfaceType",
+            "x-ves-proto-message": "ves.io.schema.NodeInterfaceType",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "description": " On a multinode site, this list holds the nodes and corresponding networking_interface\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n",
+                    "title": "NodeInterfaceInfo",
+                    "maxItems": 8,
+                    "items": {
+                        "$ref": "#/definitions/schemaNodeInterfaceInfo"
+                    },
+                    "x-displayname": "Node Interface Info",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8"
+                    }
+                }
+            }
+        },
         "schemaObjectCreateMetaType": {
             "type": "object",
             "description": "ObjectCreateMetaType is metadata that can be specified in Create request of an object.",
@@ -7368,7 +7517,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Site's geographical address that can be used to determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
                     "x-displayname": "Geographical Address",
                     "x-ves-example": "123 Street, city, country, postal code",
@@ -7592,7 +7741,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Site's geographical address that can be used to determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
                     "x-displayname": "Geographical Address",
                     "x-ves-example": "123 Street, city, country, postal code",
@@ -7830,7 +7979,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Site's geographical address that can be used to determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
                     "x-displayname": "Geographical Address",
                     "x-ves-example": "123 Street, city, country, postal code",
@@ -8037,7 +8186,7 @@ var APISwaggerJSON string = `{
             "description": "Defines a static route, configuring a list of prefixes and a next-hop to be used for them",
             "title": "Static Route",
             "x-displayname": "Static Route",
-            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"interface\",\"ip_address\"]",
+            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"ip_address\",\"node_interface\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.StaticRouteViewType",
             "properties": {
                 "attrs": {
@@ -8055,20 +8204,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to the default gateway",
+                    "description": "Exclusive with [ip_address node_interface]\n Traffic matching the ip prefixes is sent to the default gateway",
                     "title": "Default Gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
-                "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
-                    "title": "Interface",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Interface"
-                },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [default_gateway node_interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP Address",
                     "x-displayname": "IP Address",
                     "x-ves-validation-rules": {
@@ -8094,6 +8237,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "node_interface": {
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
+                    "title": "Node Interface",
+                    "$ref": "#/definitions/schemaNodeInterfaceType",
+                    "x-displayname": "Node Interface"
                 }
             }
         },
@@ -8102,7 +8251,7 @@ var APISwaggerJSON string = `{
             "description": "Defines a static route of IPv6 prefixes, configuring a list of prefixes and a next-hop to be used for them",
             "title": "Static IPv6 Route",
             "x-displayname": "Static IPv6 Route",
-            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"interface\",\"ip_address\"]",
+            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"ip_address\",\"node_interface\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.StaticV6RouteViewType",
             "properties": {
                 "attrs": {
@@ -8120,20 +8269,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to the default gateway",
+                    "description": "Exclusive with [ip_address node_interface]\n Traffic matching the ip prefixes is sent to the default gateway",
                     "title": "Default Gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
-                "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
-                    "title": "Interface",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Interface"
-                },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": "Exclusive with [default_gateway node_interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IP Address",
                     "x-displayname": "IP Address",
                     "x-ves-validation-rules": {
@@ -8159,6 +8302,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "node_interface": {
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
+                    "title": "Node Interface",
+                    "$ref": "#/definitions/schemaNodeInterfaceType",
+                    "x-displayname": "Node Interface"
                 }
             }
         },

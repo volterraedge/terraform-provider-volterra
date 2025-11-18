@@ -1157,6 +1157,75 @@ func InputSecondsValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *LeakyBucketRateLimiter) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *LeakyBucketRateLimiter) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *LeakyBucketRateLimiter) DeepCopy() *LeakyBucketRateLimiter {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &LeakyBucketRateLimiter{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *LeakyBucketRateLimiter) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *LeakyBucketRateLimiter) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return LeakyBucketRateLimiterValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateLeakyBucketRateLimiter struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateLeakyBucketRateLimiter) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*LeakyBucketRateLimiter)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *LeakyBucketRateLimiter got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultLeakyBucketRateLimiterValidator = func() *ValidateLeakyBucketRateLimiter {
+	v := &ValidateLeakyBucketRateLimiter{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func LeakyBucketRateLimiterValidator() db.Validator {
+	return DefaultLeakyBucketRateLimiterValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *RateLimitBlockAction) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1384,6 +1453,32 @@ func (v *ValidateRateLimitValue) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("action_choice"),
 				db.WithValidateField("action_block"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	switch m.GetAlgorithm().(type) {
+	case *RateLimitValue_LeakyBucket:
+		if fv, exists := v.FldValidators["algorithm.leaky_bucket"]; exists {
+			val := m.GetAlgorithm().(*RateLimitValue_LeakyBucket).LeakyBucket
+			vOpts := append(opts,
+				db.WithValidateField("algorithm"),
+				db.WithValidateField("leaky_bucket"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *RateLimitValue_TokenBucket:
+		if fv, exists := v.FldValidators["algorithm.token_bucket"]; exists {
+			val := m.GetAlgorithm().(*RateLimitValue_TokenBucket).TokenBucket
+			vOpts := append(opts,
+				db.WithValidateField("algorithm"),
+				db.WithValidateField("token_bucket"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -1763,6 +1858,75 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *TokenBucketRateLimiter) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *TokenBucketRateLimiter) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *TokenBucketRateLimiter) DeepCopy() *TokenBucketRateLimiter {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &TokenBucketRateLimiter{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *TokenBucketRateLimiter) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *TokenBucketRateLimiter) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return TokenBucketRateLimiterValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateTokenBucketRateLimiter struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateTokenBucketRateLimiter) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*TokenBucketRateLimiter)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *TokenBucketRateLimiter got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultTokenBucketRateLimiterValidator = func() *ValidateTokenBucketRateLimiter {
+	v := &ValidateTokenBucketRateLimiter{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func TokenBucketRateLimiterValidator() db.Validator {
+	return DefaultTokenBucketRateLimiterValidator
 }
 
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {

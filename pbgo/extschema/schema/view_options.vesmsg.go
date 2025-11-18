@@ -2174,6 +2174,15 @@ func (v *ValidateHiddenConditions) Validate(ctx context.Context, pm interface{},
 
 	}
 
+	if fv, exists := v.FldValidators["value_at_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value_at_path"))
+		if err := fv(ctx, m.GetValueAtPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["workspaces_in"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("workspaces_in"))
@@ -2630,6 +2639,96 @@ var DefaultMapOptionsValidator = func() *ValidateMapOptions {
 
 func MapOptionsValidator() db.Validator {
 	return DefaultMapOptionsValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *MatchPath) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *MatchPath) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *MatchPath) DeepCopy() *MatchPath {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &MatchPath{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *MatchPath) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *MatchPath) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return MatchPathValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateMatchPath struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateMatchPath) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*MatchPath)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *MatchPath got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("path"))
+		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["value_in"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("value_in"))
+		for idx, item := range m.GetValueIn() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultMatchPathValidator = func() *ValidateMatchPath {
+	v := &ValidateMatchPath{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func MatchPathValidator() db.Validator {
+	return DefaultMatchPathValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -3152,6 +3251,15 @@ func (v *ValidateTile) Validate(ctx context.Context, pm interface{}, opts ...db.
 
 	}
 
+	if fv, exists := v.FldValidators["preview_feature_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("preview_feature_name"))
+		if err := fv(ctx, m.GetPreviewFeatureName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["title"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("title"))
@@ -3254,4 +3362,97 @@ var DefaultTilesValidator = func() *ValidateTiles {
 
 func TilesValidator() db.Validator {
 	return DefaultTilesValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ValueAtPath) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ValueAtPath) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ValueAtPath) DeepCopy() *ValueAtPath {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ValueAtPath{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ValueAtPath) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ValueAtPath) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ValueAtPathValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateValueAtPath struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateValueAtPath) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ValueAtPath)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ValueAtPath got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["match_all"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("match_all"))
+		for idx, item := range m.GetMatchAll() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["match_any"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("match_any"))
+		for idx, item := range m.GetMatchAny() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultValueAtPathValidator = func() *ValidateValueAtPath {
+	v := &ValidateValueAtPath{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ValueAtPathValidator() db.Validator {
+	return DefaultValueAtPathValidator
 }

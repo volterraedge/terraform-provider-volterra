@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.virtual_host.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.virtual_host.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -4480,6 +4480,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -4962,13 +4969,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [app_firewall inherit_waf]\n No App Firewall enforcement",
                     "title": "disable app firewall",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable App Firewall"
+                    "x-displayname": "Disable"
                 },
                 "inherit_waf": {
                     "description": "Exclusive with [app_firewall disable_waf]\n Any App Firewall configuration that was configured on a higher level will be enforced",
                     "title": "inherit app firewall",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Inherit App Firewall"
+                    "x-displayname": "Inherit"
                 }
             }
         },
@@ -5054,7 +5061,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-authentication_choice": "[\"authentication\",\"no_authentication\"]",
             "x-ves-oneof-field-bot_defense_choice": "[]",
             "x-ves-oneof-field-challenge_type": "[\"captcha_challenge\",\"js_challenge\",\"no_challenge\"]",
-            "x-ves-oneof-field-ddos_auto_mitigation_action": "[\"block\",\"ddos_js_challenge\",\"l7_ddos_action_default\"]",
+            "x-ves-oneof-field-ddos_auto_mitigation_action": "[\"block\",\"ddos_js_challenge\",\"l7_ddos_action_default\",\"l7_ddos_captcha_challenge\"]",
             "x-ves-oneof-field-default_lb_choice": "[\"default_loadbalancer\",\"non_default_loadbalancer\"]",
             "x-ves-oneof-field-dns_zone_state_choice": "[\"not_ready\",\"ready\"]",
             "x-ves-oneof-field-path_normalize_choice": "[\"disable_path_normalize\",\"enable_path_normalize\"]",
@@ -5124,7 +5131,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Auto Cert State"
                 },
                 "block": {
-                    "description": "Exclusive with [ddos_js_challenge l7_ddos_action_default]\n Block all suspicious sources",
+                    "description": "Exclusive with [ddos_js_challenge l7_ddos_action_default l7_ddos_captcha_challenge]\n Block all suspicious sources",
                     "title": "Block",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Block"
@@ -5197,7 +5204,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "ddos_js_challenge": {
-                    "description": "Exclusive with [block l7_ddos_action_default]\n Serve JavaScript challenge to all suspicious sources",
+                    "description": "Exclusive with [block l7_ddos_action_default l7_ddos_captcha_challenge]\n Serve JavaScript challenge to all suspicious sources",
                     "title": "JavaScript Challenge",
                     "$ref": "#/definitions/virtual_hostJavascriptChallengeType",
                     "x-displayname": "JavaScript Challenge"
@@ -5286,8 +5293,8 @@ var APISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to this virtual host.\n Wildcard hosts are supported in the suffix or prefix form\n\n Domain search order:\n  1. Exact domain names: www.foo.com.\n  2. Prefix domain wildcards: *.foo.com or *-bar.foo.com.\n  3. Special wildcard * matching any domain.\n\n Wildcard will not match empty string.\n e.g. *-bar.foo.com will match baz-bar.foo.com but not -bar.foo.com.\n The longest wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the virtual host proxy type is TCP_PROXY_WITH_SNI/HTTPS_PROXY\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 33\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "domains",
+                    "description": " A list of Domains (host/authority header) that will be matched to this Virtual Host.\n Wildcard hosts are supported in the suffix or prefix form\n\n Supported Domains and search order:\n  1. Exact Domain names: www.foo.com.\n  2. Domains starting with a Wildcard: *.foo.com.\n\n Not supported Domains:\n - Just a Wildcard: *\n - A Wildcard and TLD with no root Domain: *.com.\n - A Wildcard not matching a whole DNS label.\n e.g. *.foo.com and *.bar.foo.com are valid Wildcards however *bar.foo.com, *-bar.foo.com, and bar*.foo.com are all invalid.\n\n Additional notes:\n A Wildcard will not match empty string.\n e.g. *.foo.com will match bar.foo.com and baz-bar.foo.com but not .foo.com.\n The longest Wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a Domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if the virtual host proxy type is TCP_PROXY_WITH_SNI/HTTPS_PROXY\n Domains also indicate the list of names for which DNS resolution will be automatically resolved to IP addresses by the system.\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 33\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Domains",
                     "maxItems": 33,
                     "items": {
                         "type": "string"
@@ -5361,10 +5368,16 @@ var APISwaggerJSON string = `{
                     "x-displayname": "JWT Config"
                 },
                 "l7_ddos_action_default": {
-                    "description": "Exclusive with [block ddos_js_challenge]\n Block suspicious sources",
+                    "description": "Exclusive with [block ddos_js_challenge l7_ddos_captcha_challenge]\n Block suspicious sources",
                     "title": "Default",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Default"
+                },
+                "l7_ddos_captcha_challenge": {
+                    "description": "Exclusive with [block ddos_js_challenge l7_ddos_action_default]\n Serve CAPTCHA challenge to suspicious sources",
+                    "title": "CAPTCHA Challenge",
+                    "$ref": "#/definitions/virtual_hostCaptchaChallengeType",
+                    "x-displayname": "CAPTCHA Challenge"
                 },
                 "max_request_header_size": {
                     "type": "integer",
@@ -6592,8 +6605,14 @@ var APISwaggerJSON string = `{
             "properties": {
                 "disable_byte_range_request": {
                     "type": "boolean",
-                    "description": "x-displayName: \"Disable Origin Byte Range Requests\"\nx-example: \"true/false\"\nChoice to enable/disable origin byte range requrests towards origin",
+                    "description": "x-displayName: \"Disable Origin Byte Range Requests\"\nx-example: \"true/false\"\nChoice to enable/disable origin byte range requests towards origin",
                     "title": "Disable Origin Byte Range Requests",
+                    "format": "boolean"
+                },
+                "enable_byte_range_request": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Enable Origin Byte Range Requests\"\nx-example: \"true/false\"\nChoice to enable/disable byte range requests towards origin",
+                    "title": "Enable Origin Byte Range Requests",
                     "format": "boolean"
                 },
                 "websocket_proxy": {
@@ -6937,7 +6956,7 @@ var APISwaggerJSON string = `{
         },
         "virtual_hostVirtualHostType": {
             "type": "string",
-            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block\n - BIGIP_VIRTUAL_SERVER: BIG-IP Virtual Server\n\nVirtual Host representing a BIG-IP Virtual Server\n - UDP_LOAD_BALANCER: UDP LoadBalancer\n\nVirtual Host used as Load Balancer",
+            "description": "VirtualHostType tells the type of virtual_host. Functionally, all types are same,\nthis is mainly used for categorizing metrics.\n\n - VIRTUAL_SERVICE: VirtualService\n\nVirtual Host used Virtual Service\n - HTTP_LOAD_BALANCER: HTTP LoadBalancer\n\nVirtual Host used as Load Balancer\n - API_GATEWAY: APIGateway\n\nVirtual Host used API Gateway\n - TCP_LOAD_BALANCER: TCP LoadBalancer\n\nVirtual Host used as Load Balancer\n - PROXY: Proxy\n\nVirtual Host used as Proxy\n - LOCAL_K8S_API_GATEWAY: LOCAL_K8S_API_GATEWAY\n\nInternal use only, used for k8s cluster api gateway on the site.\n - CDN_LOAD_BALANCER: CDN LoadBalancer\n\n Virtual Host used as Load Balancer\n - NGINX_SERVER: NGINX Server\n\nVirtual Host representing an NGINX Server block\n - BIGIP_VIRTUAL_SERVER: BIG-IP Virtual Server\n\nVirtual Host representing a BIG-IP Virtual Server\n - UDP_LOAD_BALANCER: UDP LoadBalancer\n\nVirtual Host used as Load Balancer\n - THIRD_PARTY_APPLICATION: THIRD PARTY Virtual Server\n\nVirtual Host representing a Third Party Application",
             "title": "VirtualHostType",
             "enum": [
                 "VIRTUAL_SERVICE",

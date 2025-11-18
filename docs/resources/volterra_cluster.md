@@ -56,6 +56,8 @@ Argument Reference
 
 `fallback_policy` - (Optional) metadata defined as default_set (`String`).
 
+`header_transformation_type` - (Optional) Settings to normalize the headers of upstream requests.. See [Header Transformation Type ](#header-transformation-type) below for details.(Deprecated)
+
 `health_checks` - (Optional) List of references to healthcheck object for this cluster.. See [ref](#ref) below for details.
 
 `http_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 5 minutes. (`Int`).
@@ -109,6 +111,20 @@ allows to apply back pressure on downstream quickly..
 .
 
 `keys` - (Required) List of keys that define a cluster subset class. (`String`).
+
+### Header Transformation Type
+
+Settings to normalize the headers of upstream requests..
+
+###### One of the arguments from this list "default_header_transformation, legacy_header_transformation, preserve_case_header_transformation, proper_case_header_transformation" must be set
+
+`default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+
+`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
+
+`preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
+
+`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
 
 ### Outlier Detection
 
@@ -172,6 +188,8 @@ and list of Subject Alt Names for verification.
 
 `trusted_ca_url` - (Optional) Inline Root CA Certificate (`String`).
 
+`use_volterra_trusted_ca_url` - (Optional) Use the F5XC default Root CA URL from the global config for hostname verification. (`Bool`).(Deprecated)
+
 `verify_subject_alt_names` - (Optional) the hostname of the peer will be used for matching against SAN/CN of peer's certificate (`String`).
 
 ### Common Params Tls Certificates
@@ -203,6 +221,8 @@ and list of Subject Alt Names for verification.
 `trusted_ca` - (Optional) Root CA Certificate. See [Trusted Ca Choice Trusted Ca ](#trusted-ca-choice-trusted-ca) below for details.
 
 `trusted_ca_url` - (Optional) Inline Root CA Certificate (`String`).
+
+`use_volterra_trusted_ca_url` - (Optional) Use the F5XC default Root CA URL from the global config for hostname verification. (`Bool`).(Deprecated)
 
 `verify_subject_alt_names` - (Optional) the hostname of the peer will be used for matching against SAN/CN of peer's certificate (`String`).
 
@@ -278,6 +298,16 @@ This is the default behavior if no choice is selected..
 
 F5XC will try to fetch OCSPResponse with sha256 and sha1 as HashAlgorithm, in that order..
 
+### Private Key Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
 ### Ref
 
 Reference to another volterra object is shown like below
@@ -306,6 +336,26 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Secret Info Oneof Vault Secret Info
+
+Vault Secret is used for the secrets managed by Hashicorp Vault.
+
+`key` - (Optional) If not provided entire secret will be returned. (`String`).
+
+`location` - (Required) Path to secret in Vault. (`String`).
+
+`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
+
+`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
+
+`version` - (Optional) If not provided latest version will be returned. (`Int`).
+
+### Secret Info Oneof Wingman Secret Info
+
+Secret is given as bootstrap secret in F5XC Security Sidecar.
+
+`name` - (Required) Name of the secret. (`String`).
+
 ### Sni Choice Disable Sni
 
 Do not use SNI..
@@ -318,11 +368,19 @@ Use the host header as SNI.
 
 TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Private Key Blindfold Secret Info Internal ](#private-key-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Tls Params Choice Cert Params
 
@@ -349,6 +407,8 @@ Common TLS parameters used in upstream connections.
 `minimum_protocol_version` - (Optional) Minimum TLS protocol version. (`String`).
 
 `tls_certificates` - (Optional) Set of TLS certificates. See [Common Params Tls Certificates ](#common-params-tls-certificates) below for details.
+
+`trusted_ca_url` - (Optional) Certificates in PEM format including the PEM headers. (`String`).(Deprecated)
 
 `validation_params` - (Optional) and list of Subject Alt Names for verification. See [Common Params Validation Params ](#common-params-validation-params) below for details.
 

@@ -22,11 +22,14 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_credential.ValidateTokenResponse"] = ValidateTokenResponseValidator()
 
 	vr["ves.io.schema.api_credential.ApiCertificateType"] = ApiCertificateTypeValidator()
+	vr["ves.io.schema.api_credential.BulkRevokeRequest"] = BulkRevokeRequestValidator()
+	vr["ves.io.schema.api_credential.BulkRevokeResponse"] = BulkRevokeResponseValidator()
 	vr["ves.io.schema.api_credential.CreateRequest"] = CreateRequestValidator()
 	vr["ves.io.schema.api_credential.CreateResponse"] = CreateResponseValidator()
 	vr["ves.io.schema.api_credential.CreateServiceCredentialsRequest"] = CreateServiceCredentialsRequestValidator()
 	vr["ves.io.schema.api_credential.CustomCreateSpecType"] = CustomCreateSpecTypeValidator()
 	vr["ves.io.schema.api_credential.DeleteRequest"] = DeleteRequestValidator()
+	vr["ves.io.schema.api_credential.ExpiredSelector"] = ExpiredSelectorValidator()
 	vr["ves.io.schema.api_credential.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.api_credential.GetResponse"] = GetResponseValidator()
 	vr["ves.io.schema.api_credential.GetServiceCredentialsResponse"] = GetServiceCredentialsResponseValidator()
@@ -35,6 +38,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.api_credential.ListResponseItem"] = ListResponseItemValidator()
 	vr["ves.io.schema.api_credential.ListServiceCredentialsResponse"] = ListServiceCredentialsResponseValidator()
 	vr["ves.io.schema.api_credential.ListServiceCredentialsResponseItem"] = ListServiceCredentialsResponseItemValidator()
+	vr["ves.io.schema.api_credential.NameSelector"] = NameSelectorValidator()
 	vr["ves.io.schema.api_credential.RecreateScimTokenRequest"] = RecreateScimTokenRequestValidator()
 	vr["ves.io.schema.api_credential.RenewRequest"] = RenewRequestValidator()
 	vr["ves.io.schema.api_credential.ReplaceServiceCredentialsRequest"] = ReplaceServiceCredentialsRequestValidator()
@@ -61,6 +65,8 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
+
+	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_credential.CustomPrivateAPI.ValidateToken"] = "ves.io.schema.api_credential.ValidateTokenRequest"
 
 	mdr.RPCConfidentialRequestRegistry["ves.io.schema.api_credential.CustomAPI.Create"] = "ves.io.schema.api_credential.CreateRequest"
 
@@ -131,11 +137,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

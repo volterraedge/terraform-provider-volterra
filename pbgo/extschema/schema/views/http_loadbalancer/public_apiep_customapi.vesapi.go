@@ -772,7 +772,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
         "/public/namespaces/{namespace}/http_loadbalancers/{name}/api_endpoints": {
             "post": {
                 "summary": "Get API Endpoints",
-                "description": "Get list of all API Endpoints associated with the HTTP loadbalancer in format suitable for API Groups management.",
+                "description": "Get list of all API Endpoints associated with the HTTP loadbalancer in format suitable for API Groups management.\nDeprecated: instead use GetAPIEndpoints in ves.io.schema.virtual_host.ApiepCustomAPI",
                 "operationId": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsForGroups",
                 "responses": {
                     "200": {
@@ -863,6 +863,7 @@ var ApiepLBCustomAPISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-http_loadbalancer-apieplbcustomapi-getapiendpointsforgroups"
                 },
+                "x-ves-deprecated": "Use GetAPIEndpoints in virtual_host.ApiepCustomAPI",
                 "x-ves-proto-rpc": "ves.io.schema.views.http_loadbalancer.ApiepLBCustomAPI.GetAPIEndpointsForGroups"
             },
             "x-displayname": "HTTP Load Balancer Custom API",

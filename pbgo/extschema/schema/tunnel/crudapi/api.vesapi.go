@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.tunnel.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.tunnel.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3235,7 +3235,7 @@ var APISwaggerJSON string = `{
         },
         "schemaNodeInterfaceInfo": {
             "type": "object",
-            "description": "x-displayName: \"Node Interface Info\"\nOn a multinode site, this list holds the nodes and corresponding tunnel transport interface",
+            "description": "x-displayName: \"NodeInterfaceInfo\"\nOn a multinode site, this list holds the nodes and corresponding tunnel transport interface",
             "title": "NodeInterfaceInfo",
             "properties": {
                 "interface": {
@@ -3260,7 +3260,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "list": {
                     "type": "array",
-                    "description": "x-displayName: \"NodeInterfaceInfo\"\nOn a multinode site, this list holds the nodes and corresponding networking_interface",
+                    "description": "x-displayName: \"Node Interface Info\"\nOn a multinode site, this list holds the nodes and corresponding networking_interface",
                     "title": "NodeInterfaceInfo",
                     "items": {
                         "$ref": "#/definitions/schemaNodeInterfaceInfo"
@@ -3594,6 +3594,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

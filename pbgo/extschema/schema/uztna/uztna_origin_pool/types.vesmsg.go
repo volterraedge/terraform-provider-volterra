@@ -1355,7 +1355,7 @@ var DefaultOriginServerPrivateNameValidator = func() *ValidateOriginServerPrivat
 
 	vrhRefreshInterval := v.RefreshIntervalValidationRuleHandler
 	rulesRefreshInterval := map[string]string{
-		"ves.io.schema.rules.uint32.lte": "604800",
+		"ves.io.schema.rules.uint32.ranges": "0,10-604800",
 	}
 	vFn, err = vrhRefreshInterval(rulesRefreshInterval)
 	if err != nil {

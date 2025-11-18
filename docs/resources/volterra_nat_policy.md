@@ -42,10 +42,10 @@ resource "volterra_nat_policy" "example" {
       destination_port {
         // One of the arguments from this list "no_port_match port port_ranges" can be set
 
-        no_port_match = true
+        port = "6443"
       }
 
-      // One of the arguments from this list "segment virtual_network" can be set
+      // One of the arguments from this list "segment site_local_inside_network site_local_network virtual_network" can be set
 
       virtual_network {
         refs {
@@ -55,11 +55,15 @@ resource "volterra_nat_policy" "example" {
         }
       }
       protocol = "ALL"
+
+      // One of the arguments from this list "any icmp tcp udp" can be set
+
+      any = true
       source_cidr = ["1.1.1.0/24 or 2001:10/64"]
       source_port {
         // One of the arguments from this list "no_port_match port port_ranges" can be set
 
-        no_port_match = true
+        port = "6443"
       }
     }
 
@@ -68,17 +72,13 @@ resource "volterra_nat_policy" "example" {
     enable = true
     name = "NAT to Internet"
 
-    // One of the arguments from this list "cloud_connect node_interface segment virtual_network" must be set
+    // One of the arguments from this list "cloud_connect network_interface node_interface segment virtual_network" must be set
 
-    node_interface {
-      list {
-        interface {
-          name      = "test1"
-          namespace = "staging"
-          tenant    = "acmecorp"
-        }
-
-        node = "master-0"
+    network_interface {
+      refs {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
       }
     }
   }
@@ -127,11 +127,13 @@ List of rules to apply under the NAT Policy. Rule that matches first would be ap
 
 `name` - (Required) Name of the Rule (`String`).
 
-###### One of the arguments from this list "cloud_connect, node_interface, segment, virtual_network" must be set
+###### One of the arguments from this list "cloud_connect, network_interface, node_interface, segment, virtual_network" must be set
 
 `cloud_connect` - (Optional) NAT rule is applied to packet coming from cloud connect. See [Scope Choice Cloud Connect ](#scope-choice-cloud-connect) below for details.
 
-`node_interface` - (Optional) NAT rule is applied to packet coming from one or more interfaces of nodes. See [Scope Choice Node Interface ](#scope-choice-node-interface) below for details.
+`network_interface` - (Optional) NAT rule is applied to packet coming from interface. See [Scope Choice Network Interface ](#scope-choice-network-interface) below for details.
+
+`node_interface` - (Optional) NAT rule is applied to packet coming from one or more interfaces of nodes. See [Scope Choice Node Interface ](#scope-choice-node-interface) below for details.(Deprecated)
 
 `segment` - (Optional) NAT rule is applied to packet in the segment. See [Scope Choice Segment ](#scope-choice-segment) below for details.
 
@@ -181,6 +183,16 @@ When there is no segment connector, this field need not be specified. When there
 
 `refs` - (Required) Reference to Segment Object. See [ref](#ref) below for details.
 
+`virtual_networks` - (Optional) Internally used to resolve segment ref to networks.. See [ref](#ref) below for details.(Deprecated)
+
+### Network Choice Site Local Inside Network
+
+x-displayName: "Site Local Inside Virtual Network".
+
+### Network Choice Site Local Network
+
+x-displayName: "Site Local Outside Virtual Network".
+
 ### Network Choice Virtual Network
 
 When there is no network connector, this field need not be specified. When there is network connector configured and if packet is destined to destination network, destination network needs to be configured here.
@@ -213,6 +225,30 @@ Use the configured Pool as SNAT Pool.
 
 Disable matching of ports.
 
+### Protocol Choice Any
+
+Match Any Protocol.
+
+### Protocol Choice Icmp
+
+Match ICMP Protocol.
+
+### Protocol Choice Tcp
+
+Match TCP Protocol.
+
+`destination_port` - (Optional) Destination port of the packet to match. See [Tcp Destination Port ](#tcp-destination-port) below for details.
+
+`source_port` - (Optional) Source port of the packet to match. See [Tcp Source Port ](#tcp-source-port) below for details.
+
+### Protocol Choice Udp
+
+Match UDP Protocol.
+
+`destination_port` - (Optional) Destination port of the packet to match. See [Udp Destination Port ](#udp-destination-port) below for details.
+
+`source_port` - (Optional) Source port of the packet to match. See [Udp Source Port ](#udp-source-port) below for details.
+
 ### Ref
 
 Reference to another volterra object is shown like below
@@ -229,9 +265,9 @@ Action to apply if rule is applied.
 
 ###### One of the arguments from this list "dynamic, virtual_cidr" can be set
 
-`dynamic` - (Optional) Source NAT by using SNAT Pool or Cloud Elastic IP Object. See [Source Nat Choice Dynamic ](#source-nat-choice-dynamic) below for details.
+`dynamic` - (Optional) Note that for a 3-node cluster the IPv4 prefix list should provide a minimum of 3 addresses to ensure each node gets an IP address from the pool.. See [Source Nat Choice Dynamic ](#source-nat-choice-dynamic) below for details.
 
-`virtual_cidr` - (Optional) Virtual Subnet NAT is static NAT that gets applied bidirectionally by using both Source & Destination NAT (`String`).
+`virtual_cidr` - (Optional) The range of the real CIDR and virtual CIDRs should be the same (e.g. if the real CIDR has the CIDR 10.10.10.0/24, the virtual CIDR has 100.100.100.0/24. (`String`).
 
 ### Rules Criteria
 
@@ -241,13 +277,27 @@ Criteria to match on the packet to apply the Action.
 
 `destination_port` - (Optional) Destination port of the packet to match. See [Criteria Destination Port ](#criteria-destination-port) below for details.
 
-###### One of the arguments from this list "segment, virtual_network" can be set
+###### One of the arguments from this list "segment, site_local_inside_network, site_local_network, virtual_network" can be set
 
 `segment` - (Optional) When there is no segment connector, this field need not be specified. When there is segment connector configured and if packet is destined to destination segment, destination segment needs to be configured here. See [Network Choice Segment ](#network-choice-segment) below for details.
+
+`site_local_inside_network` - (Optional) x-displayName: "Site Local Inside Virtual Network" (`Bool`).(Deprecated)
+
+`site_local_network` - (Optional) x-displayName: "Site Local Outside Virtual Network" (`Bool`).(Deprecated)
 
 `virtual_network` - (Optional) When there is no network connector, this field need not be specified. When there is network connector configured and if packet is destined to destination network, destination network needs to be configured here. See [Network Choice Virtual Network ](#network-choice-virtual-network) below for details.
 
 `protocol` - (Optional) Protocol of the packet to match (`String`).
+
+###### One of the arguments from this list "any, icmp, tcp, udp" can be set
+
+`any` - (Optional) Match Any Protocol (`Bool`).(Deprecated)
+
+`icmp` - (Optional) Match ICMP Protocol (`Bool`).(Deprecated)
+
+`tcp` - (Optional) Match TCP Protocol. See [Protocol Choice Tcp ](#protocol-choice-tcp) below for details.(Deprecated)
+
+`udp` - (Optional) Match UDP Protocol. See [Protocol Choice Udp ](#protocol-choice-udp) below for details.(Deprecated)
 
 `source_cidr` - (Optional) Source IP of the packet to match (`String`).
 
@@ -258,6 +308,12 @@ Criteria to match on the packet to apply the Action.
 NAT rule is applied to packet coming from cloud connect.
 
 `refs` - (Required) Reference to Cloud Connect Object. See [ref](#ref) below for details.
+
+### Scope Choice Network Interface
+
+NAT rule is applied to packet coming from interface.
+
+`refs` - (Required) Reference to Network Interface Object. See [ref](#ref) below for details.
 
 ### Scope Choice Node Interface
 
@@ -271,6 +327,8 @@ NAT rule is applied to packet in the segment.
 
 `refs` - (Required) Reference to Segment Object. See [ref](#ref) below for details.
 
+`virtual_networks` - (Optional) Internally used to resolve segment ref to networks.. See [ref](#ref) below for details.(Deprecated)
+
 ### Scope Choice Virtual Network
 
 NAT rule is applied to packet in the virtual network.
@@ -279,13 +337,61 @@ NAT rule is applied to packet in the virtual network.
 
 ### Source Nat Choice Dynamic
 
-Source NAT by using SNAT Pool or Cloud Elastic IP Object.
+Note that for a 3-node cluster the IPv4 prefix list should provide a minimum of 3 addresses to ensure each node gets an IP address from the pool..
 
 ###### One of the arguments from this list "elastic_ips, pools" must be set
 
 `elastic_ips` - (Optional) Use Cloud Elastic IP Object as SNAT Pool that is routable in Internet in Cloud Environments. See [Pool Choice Elastic Ips ](#pool-choice-elastic-ips) below for details.
 
 `pools` - (Optional) Use the configured Pool as SNAT Pool. See [Pool Choice Pools ](#pool-choice-pools) below for details.
+
+### Tcp Destination Port
+
+Destination port of the packet to match.
+
+###### One of the arguments from this list "no_port_match, port, port_ranges" can be set
+
+`no_port_match` - (Optional) Disable matching of ports (`Bool`).
+
+`port` - (Optional) Exact Port to match (`Int`).
+
+`port_ranges` - (Optional) Port range to match (`String`).
+
+### Tcp Source Port
+
+Source port of the packet to match.
+
+###### One of the arguments from this list "no_port_match, port, port_ranges" can be set
+
+`no_port_match` - (Optional) Disable matching of ports (`Bool`).
+
+`port` - (Optional) Exact Port to match (`Int`).
+
+`port_ranges` - (Optional) Port range to match (`String`).
+
+### Udp Destination Port
+
+Destination port of the packet to match.
+
+###### One of the arguments from this list "no_port_match, port, port_ranges" can be set
+
+`no_port_match` - (Optional) Disable matching of ports (`Bool`).
+
+`port` - (Optional) Exact Port to match (`Int`).
+
+`port_ranges` - (Optional) Port range to match (`String`).
+
+### Udp Source Port
+
+Source port of the packet to match.
+
+###### One of the arguments from this list "no_port_match, port, port_ranges" can be set
+
+`no_port_match` - (Optional) Disable matching of ports (`Bool`).
+
+`port` - (Optional) Exact Port to match (`Int`).
+
+`port_ranges` - (Optional) Port range to match (`String`).
 
 Attribute Reference
 -------------------

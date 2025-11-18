@@ -85,6 +85,192 @@ func resourceVolterraExternalConnector() *schema.Resource {
 				},
 			},
 
+			"direct_connection": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{},
+				},
+			},
+
+			"gre": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"gre_parameters": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"peer_ip_address": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"addr": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"tunnel_eps": {
+
+										Type:       schema.TypeList,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"interface": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"local_tunnel_ip": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"node": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"remote_tunnel_ip": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"tunnel_mtu": {
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"segment": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"refs": {
+
+													Type:       schema.TypeList,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:       schema.TypeString,
+																Computed:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"namespace": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"tenant": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"virtual_networks": {
+
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:       schema.TypeString,
+																Computed:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"namespace": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"tenant": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"site_local_inside_network": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"site_local_network": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"ipsec": {
 
 				Type:     schema.TypeList,
@@ -166,6 +352,61 @@ func resourceVolterraExternalConnector() *schema.Resource {
 												"tenant": {
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+											},
+										},
+									},
+
+									"lc_hostname": {
+
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"lc_ip_address": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ipv4": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"addr": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"ipv6": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"addr": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
 												},
 											},
 										},
@@ -346,6 +587,39 @@ func resourceVolterraExternalConnector() *schema.Resource {
 														},
 													},
 												},
+
+												"virtual_networks": {
+
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:       schema.TypeString,
+																Computed:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"namespace": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+															"tenant": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
 											},
 										},
 									},
@@ -452,6 +726,210 @@ func resourceVolterraExternalConnectorCreate(d *schema.ResourceData, meta interf
 	//connection_type
 
 	connectionTypeTypeFound := false
+
+	if _, ok := d.GetOk("direct_connection"); ok && !connectionTypeTypeFound {
+
+		connectionTypeTypeFound = true
+		connectionTypeInt := &ves_io_schema_views_external_connector.CreateSpecType_DirectConnection{}
+		connectionTypeInt.DirectConnection = &ves_io_schema_views_external_connector.ConnectionTypeDirect{}
+		createSpec.ConnectionType = connectionTypeInt
+
+	}
+
+	if v, ok := d.GetOk("gre"); ok && !isIntfNil(v) && !connectionTypeTypeFound {
+
+		connectionTypeTypeFound = true
+		connectionTypeInt := &ves_io_schema_views_external_connector.CreateSpecType_Gre{}
+		connectionTypeInt.Gre = &ves_io_schema_views_external_connector.ConnectionTypeGRE{}
+		createSpec.ConnectionType = connectionTypeInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["gre_parameters"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					greParameters := &ves_io_schema_views_external_connector.GRETunnelParameters{}
+					connectionTypeInt.Gre.GreParameters = greParameters
+					for _, set := range sl {
+						if set != nil {
+							greParametersMapStrToI := set.(map[string]interface{})
+
+							if v, ok := greParametersMapStrToI["peer_ip_address"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								peerIpAddress := &ves_io_schema.Ipv4AddressType{}
+								greParameters.PeerIpAddress = peerIpAddress
+								for _, set := range sl {
+									if set != nil {
+										peerIpAddressMapStrToI := set.(map[string]interface{})
+
+										if w, ok := peerIpAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
+											peerIpAddress.Addr = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := greParametersMapStrToI["tunnel_eps"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								tunnelEps := make([]*ves_io_schema_views_external_connector.TunnelEndpoint, len(sl))
+								greParameters.TunnelEps = tunnelEps
+								for i, set := range sl {
+									if set != nil {
+										tunnelEps[i] = &ves_io_schema_views_external_connector.TunnelEndpoint{}
+										tunnelEpsMapStrToI := set.(map[string]interface{})
+
+										if w, ok := tunnelEpsMapStrToI["interface"]; ok && !isIntfNil(w) {
+											tunnelEps[i].Interface = w.(string)
+										}
+
+										if w, ok := tunnelEpsMapStrToI["local_tunnel_ip"]; ok && !isIntfNil(w) {
+											tunnelEps[i].LocalTunnelIp = w.(string)
+										}
+
+										if w, ok := tunnelEpsMapStrToI["node"]; ok && !isIntfNil(w) {
+											tunnelEps[i].Node = w.(string)
+										}
+
+										if w, ok := tunnelEpsMapStrToI["remote_tunnel_ip"]; ok && !isIntfNil(w) {
+											tunnelEps[i].RemoteTunnelIp = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if w, ok := greParametersMapStrToI["tunnel_mtu"]; ok && !isIntfNil(w) {
+								greParameters.TunnelMtu = uint32(w.(int))
+							}
+
+							tunnelSourceVnTypeFound := false
+
+							if v, ok := greParametersMapStrToI["segment"]; ok && !isIntfNil(v) && !tunnelSourceVnTypeFound {
+
+								tunnelSourceVnTypeFound = true
+								tunnelSourceVnInt := &ves_io_schema_views_external_connector.GRETunnelParameters_Segment{}
+								tunnelSourceVnInt.Segment = &ves_io_schema.SegmentRefType{}
+								greParameters.TunnelSourceVn = tunnelSourceVnInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											tunnelSourceVnInt.Segment.Refs = refsInt
+											for i, ps := range sl {
+												if ps != nil {
+
+													rMapToStrVal := ps.(map[string]interface{})
+													refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+													refsInt[i].Kind = "segment"
+
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refsInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refsInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refsInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refsInt[i].Uid = v.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["virtual_networks"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											virtualNetworksInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											tunnelSourceVnInt.Segment.VirtualNetworks = virtualNetworksInt
+											for i, ps := range sl {
+												if ps != nil {
+
+													vnMapToStrVal := ps.(map[string]interface{})
+													virtualNetworksInt[i] = &ves_io_schema.ObjectRefType{}
+
+													virtualNetworksInt[i].Kind = "virtual_network"
+
+													if v, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Name = v.(string)
+													}
+
+													if v, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := vnMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Uid = v.(string)
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := greParametersMapStrToI["site_local_inside_network"]; ok && !isIntfNil(v) && !tunnelSourceVnTypeFound {
+
+								tunnelSourceVnTypeFound = true
+
+								if v.(bool) {
+									tunnelSourceVnInt := &ves_io_schema_views_external_connector.GRETunnelParameters_SiteLocalInsideNetwork{}
+									tunnelSourceVnInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
+									greParameters.TunnelSourceVn = tunnelSourceVnInt
+								}
+
+							}
+
+							if v, ok := greParametersMapStrToI["site_local_network"]; ok && !isIntfNil(v) && !tunnelSourceVnTypeFound {
+
+								tunnelSourceVnTypeFound = true
+
+								if v.(bool) {
+									tunnelSourceVnInt := &ves_io_schema_views_external_connector.GRETunnelParameters_SiteLocalNetwork{}
+									tunnelSourceVnInt.SiteLocalNetwork = &ves_io_schema.Empty{}
+									greParameters.TunnelSourceVn = tunnelSourceVnInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
 
 	if v, ok := d.GetOk("ipsec"); ok && !isIntfNil(v) && !connectionTypeTypeFound {
 
@@ -560,6 +1038,82 @@ func resourceVolterraExternalConnectorCreate(d *schema.ResourceData, meta interf
 							}
 
 							localIkeIdTypeFound := false
+
+							if v, ok := ikeParametersMapStrToI["lc_hostname"]; ok && !isIntfNil(v) && !localIkeIdTypeFound {
+
+								localIkeIdTypeFound = true
+								localIkeIdInt := &ves_io_schema_views_external_connector.IkeParameters_LcHostname{}
+
+								ikeParameters.LocalIkeId = localIkeIdInt
+
+								localIkeIdInt.LcHostname = v.(string)
+
+							}
+
+							if v, ok := ikeParametersMapStrToI["lc_ip_address"]; ok && !isIntfNil(v) && !localIkeIdTypeFound {
+
+								localIkeIdTypeFound = true
+								localIkeIdInt := &ves_io_schema_views_external_connector.IkeParameters_LcIpAddress{}
+								localIkeIdInt.LcIpAddress = &ves_io_schema.IpAddressType{}
+								ikeParameters.LocalIkeId = localIkeIdInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										verTypeFound := false
+
+										if v, ok := cs["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+											verTypeFound = true
+											verInt := &ves_io_schema.IpAddressType_Ipv4{}
+											verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+											localIkeIdInt.LcIpAddress.Ver = verInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+														verInt.Ipv4.Addr = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+											verTypeFound = true
+											verInt := &ves_io_schema.IpAddressType_Ipv6{}
+											verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+											localIkeIdInt.LcIpAddress.Ver = verInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+														verInt.Ipv6.Addr = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
 
 							if v, ok := ikeParametersMapStrToI["use_default_local_ike_id"]; ok && !isIntfNil(v) && !localIkeIdTypeFound {
 
@@ -780,28 +1334,64 @@ func resourceVolterraExternalConnectorCreate(d *schema.ResourceData, meta interf
 											refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											tunnelSourceVnInt.Segment.Refs = refsInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refsInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refsInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refsInt[i].Kind = "segment"
+													refsInt[i].Kind = "segment"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refsInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refsInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refsInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refsInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refsInt[i].Uid = v.(string)
+													}
+
 												}
+											}
 
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := cs["virtual_networks"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											virtualNetworksInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											tunnelSourceVnInt.Segment.VirtualNetworks = virtualNetworksInt
+											for i, ps := range sl {
+												if ps != nil {
+
+													vnMapToStrVal := ps.(map[string]interface{})
+													virtualNetworksInt[i] = &ves_io_schema.ObjectRefType{}
+
+													virtualNetworksInt[i].Kind = "virtual_network"
+
+													if v, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Name = v.(string)
+													}
+
+													if v, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := vnMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refsInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refsInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -970,6 +1560,210 @@ func resourceVolterraExternalConnectorUpdate(d *schema.ResourceData, meta interf
 
 	connectionTypeTypeFound := false
 
+	if _, ok := d.GetOk("direct_connection"); ok && !connectionTypeTypeFound {
+
+		connectionTypeTypeFound = true
+		connectionTypeInt := &ves_io_schema_views_external_connector.ReplaceSpecType_DirectConnection{}
+		connectionTypeInt.DirectConnection = &ves_io_schema_views_external_connector.ConnectionTypeDirect{}
+		updateSpec.ConnectionType = connectionTypeInt
+
+	}
+
+	if v, ok := d.GetOk("gre"); ok && !isIntfNil(v) && !connectionTypeTypeFound {
+
+		connectionTypeTypeFound = true
+		connectionTypeInt := &ves_io_schema_views_external_connector.ReplaceSpecType_Gre{}
+		connectionTypeInt.Gre = &ves_io_schema_views_external_connector.ConnectionTypeGRE{}
+		updateSpec.ConnectionType = connectionTypeInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["gre_parameters"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					greParameters := &ves_io_schema_views_external_connector.GRETunnelParameters{}
+					connectionTypeInt.Gre.GreParameters = greParameters
+					for _, set := range sl {
+						if set != nil {
+							greParametersMapStrToI := set.(map[string]interface{})
+
+							if v, ok := greParametersMapStrToI["peer_ip_address"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								peerIpAddress := &ves_io_schema.Ipv4AddressType{}
+								greParameters.PeerIpAddress = peerIpAddress
+								for _, set := range sl {
+									if set != nil {
+										peerIpAddressMapStrToI := set.(map[string]interface{})
+
+										if w, ok := peerIpAddressMapStrToI["addr"]; ok && !isIntfNil(w) {
+											peerIpAddress.Addr = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := greParametersMapStrToI["tunnel_eps"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								tunnelEps := make([]*ves_io_schema_views_external_connector.TunnelEndpoint, len(sl))
+								greParameters.TunnelEps = tunnelEps
+								for i, set := range sl {
+									if set != nil {
+										tunnelEps[i] = &ves_io_schema_views_external_connector.TunnelEndpoint{}
+										tunnelEpsMapStrToI := set.(map[string]interface{})
+
+										if w, ok := tunnelEpsMapStrToI["interface"]; ok && !isIntfNil(w) {
+											tunnelEps[i].Interface = w.(string)
+										}
+
+										if w, ok := tunnelEpsMapStrToI["local_tunnel_ip"]; ok && !isIntfNil(w) {
+											tunnelEps[i].LocalTunnelIp = w.(string)
+										}
+
+										if w, ok := tunnelEpsMapStrToI["node"]; ok && !isIntfNil(w) {
+											tunnelEps[i].Node = w.(string)
+										}
+
+										if w, ok := tunnelEpsMapStrToI["remote_tunnel_ip"]; ok && !isIntfNil(w) {
+											tunnelEps[i].RemoteTunnelIp = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if w, ok := greParametersMapStrToI["tunnel_mtu"]; ok && !isIntfNil(w) {
+								greParameters.TunnelMtu = uint32(w.(int))
+							}
+
+							tunnelSourceVnTypeFound := false
+
+							if v, ok := greParametersMapStrToI["segment"]; ok && !isIntfNil(v) && !tunnelSourceVnTypeFound {
+
+								tunnelSourceVnTypeFound = true
+								tunnelSourceVnInt := &ves_io_schema_views_external_connector.GRETunnelParameters_Segment{}
+								tunnelSourceVnInt.Segment = &ves_io_schema.SegmentRefType{}
+								greParameters.TunnelSourceVn = tunnelSourceVnInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											tunnelSourceVnInt.Segment.Refs = refsInt
+											for i, ps := range sl {
+												if ps != nil {
+
+													rMapToStrVal := ps.(map[string]interface{})
+													refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+													refsInt[i].Kind = "segment"
+
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refsInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refsInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refsInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refsInt[i].Uid = v.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["virtual_networks"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											virtualNetworksInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											tunnelSourceVnInt.Segment.VirtualNetworks = virtualNetworksInt
+											for i, ps := range sl {
+												if ps != nil {
+
+													vnMapToStrVal := ps.(map[string]interface{})
+													virtualNetworksInt[i] = &ves_io_schema.ObjectRefType{}
+
+													virtualNetworksInt[i].Kind = "virtual_network"
+
+													if v, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Name = v.(string)
+													}
+
+													if v, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := vnMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Uid = v.(string)
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := greParametersMapStrToI["site_local_inside_network"]; ok && !isIntfNil(v) && !tunnelSourceVnTypeFound {
+
+								tunnelSourceVnTypeFound = true
+
+								if v.(bool) {
+									tunnelSourceVnInt := &ves_io_schema_views_external_connector.GRETunnelParameters_SiteLocalInsideNetwork{}
+									tunnelSourceVnInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
+									greParameters.TunnelSourceVn = tunnelSourceVnInt
+								}
+
+							}
+
+							if v, ok := greParametersMapStrToI["site_local_network"]; ok && !isIntfNil(v) && !tunnelSourceVnTypeFound {
+
+								tunnelSourceVnTypeFound = true
+
+								if v.(bool) {
+									tunnelSourceVnInt := &ves_io_schema_views_external_connector.GRETunnelParameters_SiteLocalNetwork{}
+									tunnelSourceVnInt.SiteLocalNetwork = &ves_io_schema.Empty{}
+									greParameters.TunnelSourceVn = tunnelSourceVnInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
 	if v, ok := d.GetOk("ipsec"); ok && !isIntfNil(v) && !connectionTypeTypeFound {
 
 		connectionTypeTypeFound = true
@@ -1077,6 +1871,82 @@ func resourceVolterraExternalConnectorUpdate(d *schema.ResourceData, meta interf
 							}
 
 							localIkeIdTypeFound := false
+
+							if v, ok := ikeParametersMapStrToI["lc_hostname"]; ok && !isIntfNil(v) && !localIkeIdTypeFound {
+
+								localIkeIdTypeFound = true
+								localIkeIdInt := &ves_io_schema_views_external_connector.IkeParameters_LcHostname{}
+
+								ikeParameters.LocalIkeId = localIkeIdInt
+
+								localIkeIdInt.LcHostname = v.(string)
+
+							}
+
+							if v, ok := ikeParametersMapStrToI["lc_ip_address"]; ok && !isIntfNil(v) && !localIkeIdTypeFound {
+
+								localIkeIdTypeFound = true
+								localIkeIdInt := &ves_io_schema_views_external_connector.IkeParameters_LcIpAddress{}
+								localIkeIdInt.LcIpAddress = &ves_io_schema.IpAddressType{}
+								ikeParameters.LocalIkeId = localIkeIdInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										verTypeFound := false
+
+										if v, ok := cs["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+											verTypeFound = true
+											verInt := &ves_io_schema.IpAddressType_Ipv4{}
+											verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+											localIkeIdInt.LcIpAddress.Ver = verInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+														verInt.Ipv4.Addr = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+											verTypeFound = true
+											verInt := &ves_io_schema.IpAddressType_Ipv6{}
+											verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+											localIkeIdInt.LcIpAddress.Ver = verInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+														verInt.Ipv6.Addr = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
 
 							if v, ok := ikeParametersMapStrToI["use_default_local_ike_id"]; ok && !isIntfNil(v) && !localIkeIdTypeFound {
 
@@ -1297,28 +2167,64 @@ func resourceVolterraExternalConnectorUpdate(d *schema.ResourceData, meta interf
 											refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											tunnelSourceVnInt.Segment.Refs = refsInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refsInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refsInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refsInt[i].Kind = "segment"
+													refsInt[i].Kind = "segment"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refsInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refsInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refsInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refsInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refsInt[i].Uid = v.(string)
+													}
+
 												}
+											}
 
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := cs["virtual_networks"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											virtualNetworksInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+											tunnelSourceVnInt.Segment.VirtualNetworks = virtualNetworksInt
+											for i, ps := range sl {
+												if ps != nil {
+
+													vnMapToStrVal := ps.(map[string]interface{})
+													virtualNetworksInt[i] = &ves_io_schema.ObjectRefType{}
+
+													virtualNetworksInt[i].Kind = "virtual_network"
+
+													if v, ok := vnMapToStrVal["name"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Name = v.(string)
+													}
+
+													if v, ok := vnMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := vnMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := vnMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														virtualNetworksInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refsInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refsInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}

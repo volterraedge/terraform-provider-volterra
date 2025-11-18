@@ -12,6 +12,7 @@ import (
 	"strings"
 
 	"github.com/gogo/protobuf/proto"
+	google_protobuf "github.com/gogo/protobuf/types"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	google_api "google.golang.org/genproto/googleapis/api/httpbody"
 	"google.golang.org/grpc"
@@ -50,6 +51,15 @@ func (c *ApiepCustomAPIGrpcClient) doRPCGetAPICallSummary(ctx context.Context, y
 		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.GetAPICallSummaryReq", yamlReq)
 	}
 	rsp, err := c.grpcClient.GetAPICallSummary(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *ApiepCustomAPIGrpcClient) doRPCGetAPIEPSourceOpenApiSchema(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &APIEPSourceOpenApiSchemaReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.APIEPSourceOpenApiSchemaReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.GetAPIEPSourceOpenApiSchema(ctx, req, opts...)
 	return rsp, err
 }
 
@@ -152,6 +162,15 @@ func (c *ApiepCustomAPIGrpcClient) doRPCUnlinkTickets(ctx context.Context, yamlR
 	return rsp, err
 }
 
+func (c *ApiepCustomAPIGrpcClient) doRPCUnmergeAPIEPSourceOpenApiSchema(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &UnmergeAPIEPSourceOpenApiSchemaReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.UnmergeAPIEPSourceOpenApiSchemaReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.UnmergeAPIEPSourceOpenApiSchema(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *ApiepCustomAPIGrpcClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &UpdateAPIEndpointsSchemasReq{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -204,6 +223,8 @@ func NewApiepCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 
 	rpcFns["GetAPICallSummary"] = ccl.doRPCGetAPICallSummary
 
+	rpcFns["GetAPIEPSourceOpenApiSchema"] = ccl.doRPCGetAPIEPSourceOpenApiSchema
+
 	rpcFns["GetAPIEndpoint"] = ccl.doRPCGetAPIEndpoint
 
 	rpcFns["GetAPIEndpointLearntSchema"] = ccl.doRPCGetAPIEndpointLearntSchema
@@ -225,6 +246,8 @@ func NewApiepCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["GetVulnerabilities"] = ccl.doRPCGetVulnerabilities
 
 	rpcFns["UnlinkTickets"] = ccl.doRPCUnlinkTickets
+
+	rpcFns["UnmergeAPIEPSourceOpenApiSchema"] = ccl.doRPCUnmergeAPIEPSourceOpenApiSchema
 
 	rpcFns["UpdateAPIEndpointsSchemas"] = ccl.doRPCUpdateAPIEndpointsSchemas
 
@@ -406,6 +429,94 @@ func (c *ApiepCustomAPIRestClient) doRPCGetAPICallSummary(ctx context.Context, c
 	pbRsp := &GetAPICallSummaryRsp{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.GetAPICallSummaryRsp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *ApiepCustomAPIRestClient) doRPCGetAPIEPSourceOpenApiSchema(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &APIEPSourceOpenApiSchemaReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.APIEPSourceOpenApiSchemaReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		for _, item := range req.DiscoverySourceTypes {
+			q.Add("discovery_source_types", fmt.Sprintf("%v", item))
+		}
+		q.Add("id", fmt.Sprintf("%v", req.Id))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &APIEPSourceOpenApiSchemaRsp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.virtual_host.APIEPSourceOpenApiSchemaRsp", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1392,6 +1503,92 @@ func (c *ApiepCustomAPIRestClient) doRPCUnlinkTickets(ctx context.Context, callO
 	return pbRsp, nil
 }
 
+func (c *ApiepCustomAPIRestClient) doRPCUnmergeAPIEPSourceOpenApiSchema(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &UnmergeAPIEPSourceOpenApiSchemaReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.virtual_host.UnmergeAPIEPSourceOpenApiSchemaReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("discovery_source_type", fmt.Sprintf("%v", req.DiscoverySourceType))
+		q.Add("id", fmt.Sprintf("%v", req.Id))
+		q.Add("name", fmt.Sprintf("%v", req.Name))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &google_protobuf.Empty{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *google.protobuf.Empty", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *ApiepCustomAPIRestClient) doRPCUpdateAPIEndpointsSchemas(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
 	if callOpts.URI == "" {
 		return nil, fmt.Errorf("Error, URI should be specified, got empty")
@@ -1595,6 +1792,8 @@ func NewApiepCustomAPIRestClient(baseURL string, hc http.Client) server.CustomCl
 
 	rpcFns["GetAPICallSummary"] = ccl.doRPCGetAPICallSummary
 
+	rpcFns["GetAPIEPSourceOpenApiSchema"] = ccl.doRPCGetAPIEPSourceOpenApiSchema
+
 	rpcFns["GetAPIEndpoint"] = ccl.doRPCGetAPIEndpoint
 
 	rpcFns["GetAPIEndpointLearntSchema"] = ccl.doRPCGetAPIEndpointLearntSchema
@@ -1616,6 +1815,8 @@ func NewApiepCustomAPIRestClient(baseURL string, hc http.Client) server.CustomCl
 	rpcFns["GetVulnerabilities"] = ccl.doRPCGetVulnerabilities
 
 	rpcFns["UnlinkTickets"] = ccl.doRPCUnlinkTickets
+
+	rpcFns["UnmergeAPIEPSourceOpenApiSchema"] = ccl.doRPCUnmergeAPIEPSourceOpenApiSchema
 
 	rpcFns["UpdateAPIEndpointsSchemas"] = ccl.doRPCUpdateAPIEndpointsSchemas
 
@@ -1640,6 +1841,10 @@ func (c *apiepCustomAPIInprocClient) CreateTicket(ctx context.Context, in *Creat
 func (c *apiepCustomAPIInprocClient) GetAPICallSummary(ctx context.Context, in *GetAPICallSummaryReq, opts ...grpc.CallOption) (*GetAPICallSummaryRsp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPICallSummary")
 	return c.ApiepCustomAPIServer.GetAPICallSummary(ctx, in)
+}
+func (c *apiepCustomAPIInprocClient) GetAPIEPSourceOpenApiSchema(ctx context.Context, in *APIEPSourceOpenApiSchemaReq, opts ...grpc.CallOption) (*APIEPSourceOpenApiSchemaRsp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEPSourceOpenApiSchema")
+	return c.ApiepCustomAPIServer.GetAPIEPSourceOpenApiSchema(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) GetAPIEndpoint(ctx context.Context, in *APIEndpointReq, opts ...grpc.CallOption) (*APIEndpointRsp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpoint")
@@ -1684,6 +1889,10 @@ func (c *apiepCustomAPIInprocClient) GetVulnerabilities(ctx context.Context, in 
 func (c *apiepCustomAPIInprocClient) UnlinkTickets(ctx context.Context, in *UnlinkTicketsRequest, opts ...grpc.CallOption) (*UnlinkTicketsResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.UnlinkTickets")
 	return c.ApiepCustomAPIServer.UnlinkTickets(ctx, in)
+}
+func (c *apiepCustomAPIInprocClient) UnmergeAPIEPSourceOpenApiSchema(ctx context.Context, in *UnmergeAPIEPSourceOpenApiSchemaReq, opts ...grpc.CallOption) (*google_protobuf.Empty, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.UnmergeAPIEPSourceOpenApiSchema")
+	return c.ApiepCustomAPIServer.UnmergeAPIEPSourceOpenApiSchema(ctx, in)
 }
 func (c *apiepCustomAPIInprocClient) UpdateAPIEndpointsSchemas(ctx context.Context, in *UpdateAPIEndpointsSchemasReq, opts ...grpc.CallOption) (*UpdateAPIEndpointsSchemasResp, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.virtual_host.ApiepCustomAPI.UpdateAPIEndpointsSchemas")
@@ -1810,6 +2019,55 @@ func (s *apiepCustomAPISrv) GetAPICallSummary(ctx context.Context, in *GetAPICal
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.GetAPICallSummaryRsp", rsp)...)
+
+	return rsp, nil
+}
+func (s *apiepCustomAPISrv) GetAPIEPSourceOpenApiSchema(ctx context.Context, in *APIEPSourceOpenApiSchemaReq) (*APIEPSourceOpenApiSchemaRsp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
+	cah, ok := ah.(ApiepCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *APIEPSourceOpenApiSchemaRsp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.APIEPSourceOpenApiSchemaReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepCustomAPI.GetAPIEPSourceOpenApiSchema' operation on 'virtual_host'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEPSourceOpenApiSchema"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.GetAPIEPSourceOpenApiSchema(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.APIEPSourceOpenApiSchemaRsp", rsp)...)
 
 	return rsp, nil
 }
@@ -2352,6 +2610,55 @@ func (s *apiepCustomAPISrv) UnlinkTickets(ctx context.Context, in *UnlinkTickets
 
 	return rsp, nil
 }
+func (s *apiepCustomAPISrv) UnmergeAPIEPSourceOpenApiSchema(ctx context.Context, in *UnmergeAPIEPSourceOpenApiSchemaReq) (*google_protobuf.Empty, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
+	cah, ok := ah.(ApiepCustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *ApiepCustomAPIServer", ah)
+	}
+
+	var (
+		rsp *google_protobuf.Empty
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.virtual_host.UnmergeAPIEPSourceOpenApiSchemaReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'ApiepCustomAPI.UnmergeAPIEPSourceOpenApiSchema' operation on 'virtual_host'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.virtual_host.ApiepCustomAPI.UnmergeAPIEPSourceOpenApiSchema"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.UnmergeAPIEPSourceOpenApiSchema(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "google.protobuf.Empty", rsp)...)
+
+	return rsp, nil
+}
 func (s *apiepCustomAPISrv) UpdateAPIEndpointsSchemas(ctx context.Context, in *UpdateAPIEndpointsSchemasReq) (*UpdateAPIEndpointsSchemasResp, error) {
 	ah := s.svc.GetAPIHandler("ves.io.schema.virtual_host.ApiepCustomAPI")
 	cah, ok := ah.(ApiepCustomAPIServer)
@@ -2813,6 +3120,222 @@ var ApiepCustomAPISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-getapiendpointpdf"
                 },
                 "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEndpointPDF"
+            },
+            "x-displayname": "API Endpoints by Virtual Host Custom API",
+            "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint/sources_openapi_schema": {
+            "get": {
+                "summary": "Get relevant source OpenApi schema per API endpoint",
+                "description": "Get openapi schema per API endpoint for a given source types and Virtual Host",
+                "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEPSourceOpenApiSchema",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostAPIEPSourceOpenApiSchemaRsp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"blogging-app\"\nNamespace of the App type for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Virtual Host\n\nx-example: \"blogging-app-vhost\"\nVirtual Host Name for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
+                    },
+                    {
+                        "name": "id",
+                        "description": "Endpoint ID.",
+                        "in": "query",
+                        "required": false,
+                        "type": "string",
+                        "x-displayname": "Endpoint ID"
+                    },
+                    {
+                        "name": "discovery_source_types",
+                        "description": "List of wanted discovery source types\n\nMerging all source types to one spec\nDiscovery spec from traffic data\nDiscovery spec from crawler engine\nDiscovery spec from code scan",
+                        "in": "query",
+                        "required": false,
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "enum": [
+                                "MERGED",
+                                "TRAFFIC",
+                                "CRAWLER",
+                                "CODE_SCAN"
+                            ]
+                        },
+                        "collectionFormat": "multi",
+                        "x-displayname": "Code Scan"
+                    }
+                ],
+                "tags": [
+                    "ApiepCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-getapiepsourceopenapischema"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEPSourceOpenApiSchema"
+            },
+            "x-displayname": "API Endpoints by Virtual Host Custom API",
+            "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint/unmerge_sources_openapi_schema": {
+            "post": {
+                "summary": "Unmerge Source from Api Endpoint",
+                "description": "Unmerge Source Discovered schema from Api Endpoint merged schema",
+                "operationId": "ves.io.schema.virtual_host.ApiepCustomAPI.UnmergeAPIEPSourceOpenApiSchema",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "Namespace\n\nx-example: \"blogging-app\"\nNamespace of the virtual host for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "name",
+                        "description": "Virtual Host Name\n\nx-example: \"blogging-app-vhost\"\nVirtual Host name for current request",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Virtual Host Name"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/virtual_hostUnmergeAPIEPSourceOpenApiSchemaReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "ApiepCustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-virtual_host-apiepcustomapi-unmergeapiepsourceopenapischema"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.virtual_host.ApiepCustomAPI.UnmergeAPIEPSourceOpenApiSchema"
             },
             "x-displayname": "API Endpoints by Virtual Host Custom API",
             "x-ves-proto-service": "ves.io.schema.virtual_host.ApiepCustomAPI",
@@ -4505,14 +5028,14 @@ var ApiepCustomAPISwaggerJSON string = `{
         },
         "app_typeAPIEPPIILevel": {
             "type": "string",
-            "description": "x-displayName: API EP PII Level\nAPI Endpoint's PII Level.\n\n - APIEP_PII_NOT_DETECTED: x-displayName: API EP PII Level\nNo PII data detected for the given API Endpoint.\n - APIEP_PII_DETECTED: x-displayName: API EP PII Level Detected\nDetected PII data for a given API Endpoint.",
+            "description": "API Endpoint's PII Level.\n\nNo PII data detected for the given API Endpoint.\nDetected PII data for a given API Endpoint.",
             "title": "APIEP PII Level",
             "enum": [
                 "APIEP_PII_NOT_DETECTED",
                 "APIEP_PII_DETECTED"
             ],
             "default": "APIEP_PII_NOT_DETECTED",
-            "x-displayname": "",
+            "x-displayname": "API EP PII Level",
             "x-ves-proto-enum": "ves.io.schema.app_type.APIEPPIILevel"
         },
         "app_typeAPIEPSecurityRisk": {
@@ -4595,7 +5118,7 @@ var ApiepCustomAPISwaggerJSON string = `{
         },
         "app_typeAuthenticationLocation": {
             "type": "string",
-            "description": "x-displayName: API EP Authentication Location\nAPI Endpoint's Authentication Location.\n\nThe API Endpoint authentication location is header.\nThe API Endpoint authentication location is query parameter.\nThe API Endpoint authentication location is request body.\nThe API Endpoint authentication location is cookie.",
+            "description": "API Endpoint's Authentication Location.\n\nThe API Endpoint authentication location is header.\nThe API Endpoint authentication location is query parameter.\nThe API Endpoint authentication location is request body.\nThe API Endpoint authentication location is cookie.",
             "title": "APIEP Authentication Location",
             "enum": [
                 "AUTH_LOCATION_HEADER",
@@ -4604,7 +5127,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "AUTH_LOCATION_COOKIE"
             ],
             "default": "AUTH_LOCATION_HEADER",
-            "x-displayname": "",
+            "x-displayname": "API EP Authentication Location",
             "x-ves-proto-enum": "ves.io.schema.app_type.AuthenticationLocation"
         },
         "app_typeAuthenticationState": {
@@ -4622,7 +5145,7 @@ var ApiepCustomAPISwaggerJSON string = `{
         },
         "app_typeAuthenticationType": {
             "type": "string",
-            "description": "x-displayName: API EP Authentication Type\nAPI Endpoint's Authentication Type.\n\nThe API Endpoint authentication type is Basic.\nThe API Endpoint authentication type is Bearer.\nThe API Endpoint authentication type is JWT.\nThe API Endpoint authentication type is API Key.\nThe API Endpoint authentication type is OAuth 2.0.\nThe API Endpoint authentication type is OpenID Connect Discovery.\nThe API Endpoint authentication type is HTTP.\nThe API Endpoint authentication type is OAuth 1.0.\nThe API Endpoint authentication type is Digest.\nThe API Endpoint authentication type is Negotiate.",
+            "description": "API Endpoint's Authentication Type.\n\nThe API Endpoint authentication type is Basic.\nThe API Endpoint authentication type is Bearer.\nThe API Endpoint authentication type is JWT.\nThe API Endpoint authentication type is API Key.\nThe API Endpoint authentication type is OAuth 2.0.\nThe API Endpoint authentication type is OpenID Connect Discovery.\nThe API Endpoint authentication type is HTTP.\nThe API Endpoint authentication type is OAuth 1.0.\nThe API Endpoint authentication type is Digest.\nThe API Endpoint authentication type is Negotiate.",
             "title": "APIEP Authentication Type",
             "enum": [
                 "AUTH_TYPE_BASIC",
@@ -4637,7 +5160,7 @@ var ApiepCustomAPISwaggerJSON string = `{
                 "AUTH_TYPE_NEGOTIATE"
             ],
             "default": "AUTH_TYPE_BASIC",
-            "x-displayname": "",
+            "x-displayname": "API EP Authentication Type",
             "x-ves-proto-enum": "ves.io.schema.app_type.AuthenticationType"
         },
         "app_typeAuthenticationTypeLocPair": {
@@ -5401,6 +5924,35 @@ var ApiepCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "virtual_hostAPIEPDiscoverySource": {
+            "type": "string",
+            "description": "API Endpoint Discovery Source\n\nMerging all source types to one spec\nDiscovery spec from traffic data\nDiscovery spec from crawler engine\nDiscovery spec from code scan",
+            "title": "APIEPDiscoverySource",
+            "enum": [
+                "MERGED",
+                "TRAFFIC",
+                "CRAWLER",
+                "CODE_SCAN"
+            ],
+            "default": "MERGED",
+            "x-displayname": "API Endpoint Discovery Source",
+            "x-ves-proto-enum": "ves.io.schema.virtual_host.APIEPDiscoverySource"
+        },
+        "virtual_hostAPIEPSourceOpenApiSchemaRsp": {
+            "type": "object",
+            "description": "shape of response to get API endpoint Open API Schema request for specific sources",
+            "title": "APIEPSourceOpenApiSchemaRsp GET response",
+            "x-displayname": "API endpoint Open API Schema per sources response",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.APIEPSourceOpenApiSchemaRsp",
+            "properties": {
+                "api_specs": {
+                    "type": "object",
+                    "description": " Discovered API Specifications based on discovery Source.",
+                    "title": "API Specifications",
+                    "x-displayname": "API Specifications"
+                }
+            }
+        },
         "virtual_hostAPIEPSummaryFilter": {
             "type": "object",
             "description": "Filter object for summary block.",
@@ -5625,6 +6177,13 @@ var ApiepCustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/app_typeAPIEPInfo"
                     },
                     "x-displayname": "API Endpoints"
+                },
+                "last_update": {
+                    "type": "string",
+                    "description": " The API endpoints Last Update timestamp indicates most recent update of API endpoints happened\n The API Discovery periodically updates the API endpoints list based on application's traffic",
+                    "title": "last_update",
+                    "format": "date-time",
+                    "x-displayname": "Last Update"
                 }
             }
         },
@@ -6315,6 +6874,41 @@ var ApiepCustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaErrorType"
                     },
                     "x-displayname": "Errors"
+                }
+            }
+        },
+        "virtual_hostUnmergeAPIEPSourceOpenApiSchemaReq": {
+            "type": "object",
+            "description": "Unmerge Source from endpoint",
+            "title": "Unmerge certain endpoint source",
+            "x-displayname": "Unmerge Source from endpoint",
+            "x-ves-proto-message": "ves.io.schema.virtual_host.UnmergeAPIEPSourceOpenApiSchemaReq",
+            "properties": {
+                "discovery_source_type": {
+                    "description": " Wanted discovery source type",
+                    "title": "Discovery Source Type",
+                    "$ref": "#/definitions/virtual_hostAPIEPDiscoverySource",
+                    "x-displayname": "Discovery Source Type"
+                },
+                "id": {
+                    "type": "string",
+                    "description": " Endpoint ID.",
+                    "title": "id",
+                    "x-displayname": "Endpoint ID"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Virtual Host name for current request\n\nExample: - \"blogging-app-vhost\"-",
+                    "title": "Virtual Host Name",
+                    "x-displayname": "Virtual Host Name",
+                    "x-ves-example": "blogging-app-vhost"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace of the virtual host for current request\n\nExample: - \"blogging-app\"-",
+                    "title": "Namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "blogging-app"
                 }
             }
         },

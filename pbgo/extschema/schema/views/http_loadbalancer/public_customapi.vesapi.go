@@ -2207,7 +2207,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "rps_threshold": {
                     "type": "integer",
-                    "description": " The new RPS threshold to set\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 10000\n",
+                    "description": " The new RPS threshold to set\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 20000\n",
                     "title": "RPS Threshold",
                     "format": "int64",
                     "x-displayname": "RPS Threshold",
@@ -2215,7 +2215,7 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.uint32.gte": "0",
-                        "ves.io.schema.rules.uint32.lte": "10000"
+                        "ves.io.schema.rules.uint32.lte": "20000"
                     }
                 }
             }

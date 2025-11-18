@@ -123,6 +123,29 @@ func resourceVolterraSecretPolicyRule() *schema.Resource {
 					},
 				},
 			},
+
+			"label_matcher": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"keys": {
+
+							Type: schema.TypeList,
+
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -274,6 +297,34 @@ func resourceVolterraSecretPolicyRuleCreate(d *schema.ResourceData, meta interfa
 					}
 					clientChoiceInt.ClientSelector.Expressions = ls
 
+				}
+
+			}
+		}
+
+	}
+
+	//label_matcher
+	if v, ok := d.GetOk("label_matcher"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		labelMatcher := &ves_io_schema.LabelMatcherType{}
+		createSpec.LabelMatcher = labelMatcher
+		for _, set := range sl {
+			if set != nil {
+				labelMatcherMapStrToI := set.(map[string]interface{})
+
+				if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+					ls := make([]string, len(w.([]interface{})))
+					for i, v := range w.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field keys")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					labelMatcher.Keys = ls
 				}
 
 			}
@@ -471,6 +522,33 @@ func resourceVolterraSecretPolicyRuleUpdate(d *schema.ResourceData, meta interfa
 					}
 					clientChoiceInt.ClientSelector.Expressions = ls
 
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("label_matcher"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		labelMatcher := &ves_io_schema.LabelMatcherType{}
+		updateSpec.LabelMatcher = labelMatcher
+		for _, set := range sl {
+			if set != nil {
+				labelMatcherMapStrToI := set.(map[string]interface{})
+
+				if w, ok := labelMatcherMapStrToI["keys"]; ok && !isIntfNil(w) {
+					ls := make([]string, len(w.([]interface{})))
+					for i, v := range w.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field keys")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					labelMatcher.Keys = ls
 				}
 
 			}

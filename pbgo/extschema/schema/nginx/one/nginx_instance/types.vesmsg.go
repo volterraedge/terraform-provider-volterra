@@ -218,6 +218,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["host_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("host_name"))
+		if err := fv(ctx, m.GetHostName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["object_id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("object_id"))
@@ -313,6 +322,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("api_discovery_spec"))
 		if err := fv(ctx, m.GetApiDiscoverySpec(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["host_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("host_name"))
+		if err := fv(ctx, m.GetHostName(), vOpts...); err != nil {
 			return err
 		}
 
@@ -421,6 +439,16 @@ func (v *ValidateWAFSpec) PolicyFileNameValidationRuleHandler(rules map[string]s
 	return validatorFn, nil
 }
 
+func (v *ValidateWAFSpec) PolicyNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for policy_name")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateWAFSpec) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*WAFSpec)
 	if !ok {
@@ -476,6 +504,15 @@ func (v *ValidateWAFSpec) Validate(ctx context.Context, pm interface{}, opts ...
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["policy_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("policy_name"))
+		if err := fv(ctx, m.GetPolicyName(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -596,6 +633,17 @@ var DefaultWAFSpecValidator = func() *ValidateWAFSpec {
 	}
 	v.FldValidators["policy_file_name"] = vFn
 
+	vrhPolicyName := v.PolicyNameValidationRuleHandler
+	rulesPolicyName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhPolicyName(rulesPolicyName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for WAFSpec.policy_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["policy_name"] = vFn
+
 	return v
 }()
 
@@ -608,6 +656,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.ApiDiscoverySpec = f.GetApiDiscoverySpec()
+	m.HostName = f.GetHostName()
 	m.ObjectId = f.GetObjectId()
 	m.WafSpec = f.GetWafSpec()
 }
@@ -628,6 +677,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.ApiDiscoverySpec = m1.ApiDiscoverySpec
+	f.HostName = m1.HostName
 	f.ObjectId = m1.ObjectId
 	f.WafSpec = m1.WafSpec
 }

@@ -25,6 +25,8 @@ resource "volterra_dns_lb_health_check" "example" {
   tcp_hex_health_check {
     health_check_port = "80"
 
+    health_check_secondary_port = "443"
+
     receive = "00000034"
 
     send = "000000FF"
@@ -72,6 +74,8 @@ HTTP Health Check.
 
 `health_check_port` - (Required) x-example: "80" (`Int`).
 
+`health_check_secondary_port` - (Optional) x-example: "443" (`Int`).
+
 `receive` - (Optional) Regular expression used to match against the response to the health check's request. Mark node up upon receipt of a successful regular expression match. Uses re2 regular expression syntax. (`String`).
 
 `send` - (Optional) HTTP payload to send to the target (`String`).
@@ -81,6 +85,8 @@ HTTP Health Check.
 HTTPS Health Check.
 
 `health_check_port` - (Required) x-example: "80" (`Int`).
+
+`health_check_secondary_port` - (Optional) x-example: "443" (`Int`).
 
 `receive` - (Optional) Regular expression used to match against the response to the health check's request. Mark node up upon receipt of a successful regular expression match. Uses re2 regular expression syntax. (`String`).
 
@@ -92,6 +98,8 @@ TCP Health Check.
 
 `health_check_port` - (Required) x-example: "80" (`Int`).
 
+`health_check_secondary_port` - (Optional) x-example: "443" (`Int`).
+
 `receive` - (Optional) Regular expression used to match against the response to the monitor's request. Mark node up upon receipt of a successful regular expression match. Uses re2 regular expression syntax. (`String`).
 
 `send` - (Optional) Send this string to target (default empty. When send and receive are both empty, monitor just tests 3WHS) (`String`).
@@ -102,6 +110,8 @@ TCP Health Check with Hex Encoded Payload.
 
 `health_check_port` - (Required) x-example: "80" (`Int`).
 
+`health_check_secondary_port` - (Optional) x-example: "443" (`Int`).
+
 `receive` - (Optional) Hex encoded raw bytes expected in the response. (`String`).
 
 `send` - (Optional) Hex encoded raw bytes sent in the request. Empty payloads imply a connect-only health check. (`String`).
@@ -111,6 +121,8 @@ TCP Health Check with Hex Encoded Payload.
 UDP Health Check.
 
 `health_check_port` - (Required) x-example: "80" (`Int`).
+
+`health_check_secondary_port` - (Optional) x-example: "443" (`Int`).
 
 `receive` - (Required) UDP response to be matched. It can be a regex. (`String`).
 

@@ -25,12 +25,12 @@ resource "volterra_rate_limiter" "example" {
 
     disabled = true
 
+    // One of the arguments from this list "leaky_bucket token_bucket" can be set
+
+    leaky_bucket {}
     burst_multiplier = "1"
-
     period_multiplier = "1"
-
     total_number = "1"
-
     unit = "unit"
   }
 }
@@ -70,6 +70,12 @@ A list of RateLimitValues that specifies the total number of allowed requests fo
 
 `disabled` - (Optional) x-displayName: "Disabled" (`Bool`).
 
+###### One of the arguments from this list "leaky_bucket, token_bucket" can be set
+
+`leaky_bucket` - (Optional) Leaky-Bucket is the default rate limiter algorithm for F5. See [Algorithm Leaky Bucket ](#algorithm-leaky-bucket) below for details.
+
+`token_bucket` - (Optional) Token-Bucket is a rate limiter algorithm that is stricter with enforcing limits. See [Algorithm Token Bucket ](#algorithm-token-bucket) below for details.
+
 `burst_multiplier` - (Optional) The maximum burst of requests to accommodate, expressed as a multiple of the rate. (`Int`).
 
 `period_multiplier` - (Optional) This setting, combined with Per Period units, provides a duration (`Int`).
@@ -93,6 +99,14 @@ Blocks the user for a specified duration of time.
 ### Action Choice Disabled
 
 x-displayName: "Disabled".
+
+### Algorithm Leaky Bucket
+
+Leaky-Bucket is the default rate limiter algorithm for F5.
+
+### Algorithm Token Bucket
+
+Token-Bucket is a rate limiter algorithm that is stricter with enforcing limits.
 
 ### Block Duration Choice Hours
 

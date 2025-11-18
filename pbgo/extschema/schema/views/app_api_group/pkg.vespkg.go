@@ -39,6 +39,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.app_api_group.GetApiGroupsStatsRsp"] = GetApiGroupsStatsRspValidator()
 
 	vr["ves.io.schema.views.app_api_group.ApiGroupScopeApiDefinition"] = ApiGroupScopeApiDefinitionValidator()
+	vr["ves.io.schema.views.app_api_group.ApiGroupScopeBIGIPVirtualServer"] = ApiGroupScopeBIGIPVirtualServerValidator()
+	vr["ves.io.schema.views.app_api_group.ApiGroupScopeCDNLoadbalancer"] = ApiGroupScopeCDNLoadbalancerValidator()
 	vr["ves.io.schema.views.app_api_group.ApiGroupScopeHttpLoadbalancer"] = ApiGroupScopeHttpLoadbalancerValidator()
 	vr["ves.io.schema.views.app_api_group.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.views.app_api_group.GetSpecType"] = GetSpecTypeValidator()
@@ -148,11 +150,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

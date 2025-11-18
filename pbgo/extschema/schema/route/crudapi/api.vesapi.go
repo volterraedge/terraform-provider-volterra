@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.route.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.route.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2955,9 +2955,9 @@ var APISwaggerJSON string = `{
                 "path": {
                     "type": "string",
                     "description": "Exclusive with [prefix regex]\n Exact path value to match\n\nExample: - \"/logout\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.http_path: true\n  ves.io.schema.rules.string.max_len: 256\n",
-                    "title": "path",
+                    "title": "exact",
                     "maxLength": 256,
-                    "x-displayname": "Path",
+                    "x-displayname": "Exact",
                     "x-ves-example": "/logout",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.http_path": "true",
@@ -3649,17 +3649,16 @@ var APISwaggerJSON string = `{
             "x-displayname": "Direct Response",
             "x-ves-proto-message": "ves.io.schema.route.RouteDirectResponse",
             "properties": {
-                "response_body": {
+                "response_body_encoded": {
                     "type": "string",
-                    "description": " response body to send\n\nExample: - \"OK\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 65536\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "description": " Response body to send. Currently supported URL schemes is string:///\n for which message should be encoded in Base64 format.\n The message can be either plain text or html.\n E.g. \"\u003cp\u003e Access Denied \u003c/p\u003e\". Base64 encoded string url for this is string:///PHA+IEFjY2VzcyBEZW5pZWQgPC9wPg==\n\nExample: - \"OK\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 65536\n  ves.io.schema.rules.string.uri_ref: true\n",
                     "title": "response_body",
-                    "minLength": 1,
                     "maxLength": 65536,
                     "x-displayname": "Response Body",
                     "x-ves-example": "OK",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "65536",
-                        "ves.io.schema.rules.string.min_bytes": "1"
+                        "ves.io.schema.rules.string.uri_ref": "true"
                     }
                 },
                 "response_code": {
@@ -3979,10 +3978,14 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Service Policy"
                 },
                 "waf_exclusion_policy": {
-                    "description": "Exclusive with [inherited_waf_exclusion]\n A direct reference to a WAF Exclusion Policy configuration object",
+                    "description": "Exclusive with [inherited_waf_exclusion]\n A direct reference to a WAF Exclusion Policy configuration object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Custom Policy",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Custom Policy"
+                    "x-displayname": "WAF Exclusion Policy",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 },
                 "waf_type": {
                     "description": " WAF can be used to analyze inbound and outbound HTTP/HTTPS traffic.\n WAF can be configured either in BLOCKing Mode or ALERTing Mode.\n In BLOCKing mode if WAF detects suspicious inbound/outbound traffic it blocks the request or response.\n In ALERTing mode if suspicious traffic is detected, WAF generates ALERTs with details on the\n suspicious traffic (instead of blocking traffic).\n\n waf_type is the App Firewall profile to use.\n\n waf_type specified at route level overrides waf configuration at VirtualHost level",
@@ -5460,6 +5463,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -5592,13 +5602,13 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with [app_firewall inherit_waf]\n No App Firewall enforcement",
                     "title": "disable app firewall",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Disable App Firewall"
+                    "x-displayname": "Disable"
                 },
                 "inherit_waf": {
                     "description": "Exclusive with [app_firewall disable_waf]\n Any App Firewall configuration that was configured on a higher level will be enforced",
                     "title": "inherit app firewall",
                     "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Inherit App Firewall"
+                    "x-displayname": "Inherit"
                 }
             }
         },

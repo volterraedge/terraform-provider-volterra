@@ -26,17 +26,29 @@ resource "volterra_app_firewall" "example" {
 
   // One of the arguments from this list "custom_anonymization default_anonymization disable_anonymization" must be set
 
-  disable_anonymization = true
+  custom_anonymization {
+    anonymization_config {
+      // One of the arguments from this list "cookie http_header query_parameter" must be set
+
+      http_header {
+        header_name = "value"
+      }
+    }
+  }
 
   // One of the arguments from this list "blocking_page use_default_blocking_page" must be set
 
   use_default_blocking_page = true
 
+  // One of the arguments from this list "bot_protection_setting default_bot_setting" must be set
+
+  default_bot_setting = true
+
   // One of the arguments from this list "ai_risk_based_blocking default_detection_settings detection_settings" must be set
 
   default_detection_settings = true
 
-  // One of the arguments from this list "blocking monitoring" must be set
+  // One of the arguments from this list "blocking monitoring use_loadbalancer_setting" must be set
 
   blocking = true
 }
@@ -82,6 +94,12 @@ Argument Reference
 
 `use_default_blocking_page` - (Optional) The system returns the system-supplied response page in HTML. No further configuration is needed. (`Bool`).
 
+###### One of the arguments from this list "bot_protection_setting, default_bot_setting" must be set
+
+`bot_protection_setting` - (Optional) Define custom Bot Protection settings. See [Bot Protection Choice Bot Protection Setting ](#bot-protection-choice-bot-protection-setting) below for details.(Deprecated)
+
+`default_bot_setting` - (Optional) Malicious bots will be blocked, Suspicious and Good bots will be reported. (`Bool`).(Deprecated)
+
 ###### One of the arguments from this list "ai_risk_based_blocking, default_detection_settings, detection_settings" must be set
 
 `ai_risk_based_blocking` - (Optional) only high-risk requests will be blocked by default. This feature is in preview mode.. See [Detection Setting Choice Ai Risk Based Blocking ](#detection-setting-choice-ai-risk-based-blocking) below for details.
@@ -90,11 +108,13 @@ Argument Reference
 
 `detection_settings` - (Optional) Define Custom Security Policy settings. See [Detection Setting Choice Detection Settings ](#detection-setting-choice-detection-settings) below for details.
 
-###### One of the arguments from this list "blocking, monitoring" must be set
+###### One of the arguments from this list "blocking, monitoring, use_loadbalancer_setting" must be set
 
 `blocking` - (Optional) Log and block threats (`Bool`).
 
 `monitoring` - (Optional) Log threats (`Bool`).
+
+`use_loadbalancer_setting` - (Optional) Use the mode as specified in the load balancer (`Bool`).(Deprecated)
 
 ### Allowed Response Codes Choice Allowed Response Codes
 
@@ -156,7 +176,7 @@ Define custom Bot Protection settings.
 
 ### Bot Protection Choice Default Bot Setting
 
-Malicious bots will be blocked, Suspicious and Good bots will be reported..
+Malicious bots will be blocked, Suspicious and Good bots will be ignored..
 
 ### Custom Anonymization Anonymization Config
 
@@ -188,7 +208,7 @@ Define Custom Security Policy settings.
 
 `bot_protection_setting` - (Optional) Define custom Bot Protection settings. See [Bot Protection Choice Bot Protection Setting ](#bot-protection-choice-bot-protection-setting) below for details.
 
-`default_bot_setting` - (Optional) Malicious bots will be blocked, Suspicious and Good bots will be reported. (`Bool`).
+`default_bot_setting` - (Optional) Malicious bots will be blocked, Suspicious and Good bots will be ignored. (`Bool`).
 
 ###### One of the arguments from this list "disable_suppression, enable_suppression" must be set
 

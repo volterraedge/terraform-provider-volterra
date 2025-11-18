@@ -17,17 +17,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_healthcheck.Object"] = ObjectValidator()
 	vr["ves.io.schema.uztna.uztna_healthcheck.StatusObject"] = StatusObjectValidator()
 
-	vr["ves.io.schema.uztna.uztna_healthcheck.CreateRequest"] = CreateRequestValidator()
-	vr["ves.io.schema.uztna.uztna_healthcheck.CreateResponse"] = CreateResponseValidator()
-	vr["ves.io.schema.uztna.uztna_healthcheck.DeleteRequest"] = DeleteRequestValidator()
-	vr["ves.io.schema.uztna.uztna_healthcheck.GetRequest"] = GetRequestValidator()
-	vr["ves.io.schema.uztna.uztna_healthcheck.GetResponse"] = GetResponseValidator()
-	vr["ves.io.schema.uztna.uztna_healthcheck.ListRequest"] = ListRequestValidator()
-	vr["ves.io.schema.uztna.uztna_healthcheck.ListResponse"] = ListResponseValidator()
-	vr["ves.io.schema.uztna.uztna_healthcheck.ListResponseItem"] = ListResponseItemValidator()
-	vr["ves.io.schema.uztna.uztna_healthcheck.ReplaceRequest"] = ReplaceRequestValidator()
-	vr["ves.io.schema.uztna.uztna_healthcheck.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.uztna.uztna_healthcheck.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_healthcheck.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_healthcheck.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -53,36 +42,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_healthcheck.API.Create"] = []string{
-		"spec.http_health_check.host_header.password.blindfold_secret_info_internal",
-		"spec.http_health_check.host_header.password.secret_encoding_type",
-		"spec.http_health_check.host_header.password.vault_secret_info",
-		"spec.http_health_check.host_header.password.wingman_secret_info",
-		"spec.https_health_check.host_header.password.blindfold_secret_info_internal",
-		"spec.https_health_check.host_header.password.secret_encoding_type",
-		"spec.https_health_check.host_header.password.vault_secret_info",
-		"spec.https_health_check.host_header.password.wingman_secret_info",
-	}
-
-	mdr.RPCConfidentialRequestRegistry["ves.io.schema.uztna.uztna_healthcheck.API.Create"] = "ves.io.schema.uztna.uztna_healthcheck.CreateRequest"
-
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_healthcheck.API.Replace"] = []string{
-		"spec.http_health_check.host_header.password.blindfold_secret_info_internal",
-		"spec.http_health_check.host_header.password.secret_encoding_type",
-		"spec.http_health_check.host_header.password.vault_secret_info",
-		"spec.http_health_check.host_header.password.wingman_secret_info",
-		"spec.https_health_check.host_header.password.blindfold_secret_info_internal",
-		"spec.https_health_check.host_header.password.secret_encoding_type",
-		"spec.https_health_check.host_header.password.vault_secret_info",
-		"spec.https_health_check.host_header.password.wingman_secret_info",
-	}
-
-	mdr.RPCConfidentialRequestRegistry["ves.io.schema.uztna.uztna_healthcheck.API.Replace"] = "ves.io.schema.uztna.uztna_healthcheck.ReplaceRequest"
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-	sm["ves.io.schema.uztna.uztna_healthcheck.API"] = "config"
 
 }
 
@@ -102,24 +64,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 
-	csr = mdr.PubCRUDServiceRegistry
-
-	func() {
-		// set swagger jsons for our and external schemas
-		csr.CRUDSwaggerRegistry["ves.io.schema.uztna.uztna_healthcheck.Object"] = APISwaggerJSON
-		csr.CRUDGrpcClientRegistry["ves.io.schema.uztna.uztna_healthcheck.Object"] = NewCRUDAPIGrpcClient
-		csr.CRUDRestClientRegistry["ves.io.schema.uztna.uztna_healthcheck.Object"] = NewCRUDAPIRestClient
-		csr.CRUDInprocClientRegistry["ves.io.schema.uztna.uztna_healthcheck.Object"] = NewCRUDAPIInprocClient
-		if isExternal {
-			return
-		}
-		// registration of api handlers if our own schema
-		mdr.SvcRegisterHandlers["ves.io.schema.uztna.uztna_healthcheck.API"] = RegisterAPIServer
-		mdr.SvcGwRegisterHandlers["ves.io.schema.uztna.uztna_healthcheck.API"] = RegisterGwAPIHandler
-		csr.CRUDServerRegistry["ves.io.schema.uztna.uztna_healthcheck.Object"] = NewCRUDAPIServer
-
-	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -127,11 +71,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

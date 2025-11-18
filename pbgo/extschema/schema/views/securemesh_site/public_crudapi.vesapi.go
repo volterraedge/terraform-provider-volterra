@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.securemesh_site.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.securemesh_site.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3827,6 +3827,57 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaNodeInterfaceInfo": {
+            "type": "object",
+            "description": "On a multinode site, this list holds the nodes and corresponding tunnel transport interface",
+            "title": "NodeInterfaceInfo",
+            "x-displayname": "NodeInterfaceInfo",
+            "x-ves-proto-message": "ves.io.schema.NodeInterfaceInfo",
+            "properties": {
+                "interface": {
+                    "type": "array",
+                    "description": " Interface reference on this node\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Interface",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Interface",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "node": {
+                    "type": "string",
+                    "description": " Node name on this site\n\nExample: - \"master-0\"-",
+                    "title": "Node",
+                    "x-displayname": "Node",
+                    "x-ves-example": "master-0"
+                }
+            }
+        },
+        "schemaNodeInterfaceType": {
+            "type": "object",
+            "description": "On multinode site, this type holds the information about per node interfaces",
+            "title": "NodeInterfaceType",
+            "x-displayname": "NodeInterfaceType",
+            "x-ves-proto-message": "ves.io.schema.NodeInterfaceType",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "description": " On a multinode site, this list holds the nodes and corresponding networking_interface\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n",
+                    "title": "NodeInterfaceInfo",
+                    "maxItems": 8,
+                    "items": {
+                        "$ref": "#/definitions/schemaNodeInterfaceInfo"
+                    },
+                    "x-displayname": "Node Interface Info",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8"
+                    }
+                }
+            }
+        },
         "schemaObjectCreateMetaType": {
             "type": "object",
             "description": "ObjectCreateMetaType is metadata that can be specified in Create request of an object.",
@@ -5621,7 +5672,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Site's geographical address that can be used to determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
                     "x-displayname": "Geographical Address",
                     "x-ves-example": "123 Street, city, country, postal code",
@@ -5756,7 +5807,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Site's geographical address that can be used to determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
                     "x-displayname": "Geographical Address",
                     "x-ves-example": "123 Street, city, country, postal code",
@@ -5907,7 +5958,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Site's geographical address that can be used to determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
                     "x-displayname": "Geographical Address",
                     "x-ves-example": "123 Street, city, country, postal code",
@@ -6034,7 +6085,7 @@ var APISwaggerJSON string = `{
             "description": "Defines a static route, configuring a list of prefixes and a next-hop to be used for them",
             "title": "Static Route",
             "x-displayname": "Static Route",
-            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"interface\",\"ip_address\"]",
+            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"ip_address\",\"node_interface\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.StaticRouteViewType",
             "properties": {
                 "attrs": {
@@ -6052,20 +6103,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to the default gateway",
+                    "description": "Exclusive with [ip_address node_interface]\n Traffic matching the ip prefixes is sent to the default gateway",
                     "title": "Default Gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
-                "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
-                    "title": "Interface",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Interface"
-                },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [default_gateway node_interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP Address",
                     "x-displayname": "IP Address",
                     "x-ves-validation-rules": {
@@ -6091,6 +6136,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "node_interface": {
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
+                    "title": "Node Interface",
+                    "$ref": "#/definitions/schemaNodeInterfaceType",
+                    "x-displayname": "Node Interface"
                 }
             }
         },
@@ -6099,7 +6150,7 @@ var APISwaggerJSON string = `{
             "description": "Defines a static route of IPv6 prefixes, configuring a list of prefixes and a next-hop to be used for them",
             "title": "Static IPv6 Route",
             "x-displayname": "Static IPv6 Route",
-            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"interface\",\"ip_address\"]",
+            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"ip_address\",\"node_interface\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.StaticV6RouteViewType",
             "properties": {
                 "attrs": {
@@ -6117,20 +6168,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to the default gateway",
+                    "description": "Exclusive with [ip_address node_interface]\n Traffic matching the ip prefixes is sent to the default gateway",
                     "title": "Default Gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
-                "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
-                    "title": "Interface",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Interface"
-                },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": "Exclusive with [default_gateway node_interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IP Address",
                     "x-displayname": "IP Address",
                     "x-ves-validation-rules": {
@@ -6156,6 +6201,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "node_interface": {
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
+                    "title": "Node Interface",
+                    "$ref": "#/definitions/schemaNodeInterfaceType",
+                    "x-displayname": "Node Interface"
                 }
             }
         },

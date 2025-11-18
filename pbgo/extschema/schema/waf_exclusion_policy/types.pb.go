@@ -38,6 +38,7 @@ type GlobalSpecType struct {
 	// WAF Exclusion Rules
 	//
 	// x-displayName: "WAF Exclusion Rules"
+	// x-required
 	// An ordered list of rules.
 	WafExclusionRules []*policy.SimpleWafExclusionRule `protobuf:"bytes,1,rep,name=waf_exclusion_rules,json=wafExclusionRules,proto3" json:"waf_exclusion_rules,omitempty"`
 	// view_internal

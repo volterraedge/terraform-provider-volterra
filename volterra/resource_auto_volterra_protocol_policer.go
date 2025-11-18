@@ -244,28 +244,30 @@ func resourceVolterraProtocolPolicerCreate(d *schema.ResourceData, meta interfac
 					policerInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 					protocolPolicer[i].Policer = policerInt
 					for i, ps := range sl {
+						if ps != nil {
 
-						pMapToStrVal := ps.(map[string]interface{})
-						policerInt[i] = &ves_io_schema.ObjectRefType{}
+							pMapToStrVal := ps.(map[string]interface{})
+							policerInt[i] = &ves_io_schema.ObjectRefType{}
 
-						policerInt[i].Kind = "policer"
+							policerInt[i].Kind = "policer"
 
-						if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
-							policerInt[i].Name = v.(string)
+							if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
+								policerInt[i].Name = v.(string)
+							}
+
+							if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								policerInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								policerInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := pMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								policerInt[i].Uid = v.(string)
+							}
+
 						}
-
-						if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							policerInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							policerInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := pMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							policerInt[i].Uid = v.(string)
-						}
-
 					}
 
 				}
@@ -484,28 +486,30 @@ func resourceVolterraProtocolPolicerUpdate(d *schema.ResourceData, meta interfac
 					policerInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 					protocolPolicer[i].Policer = policerInt
 					for i, ps := range sl {
+						if ps != nil {
 
-						pMapToStrVal := ps.(map[string]interface{})
-						policerInt[i] = &ves_io_schema.ObjectRefType{}
+							pMapToStrVal := ps.(map[string]interface{})
+							policerInt[i] = &ves_io_schema.ObjectRefType{}
 
-						policerInt[i].Kind = "policer"
+							policerInt[i].Kind = "policer"
 
-						if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
-							policerInt[i].Name = v.(string)
+							if v, ok := pMapToStrVal["name"]; ok && !isIntfNil(v) {
+								policerInt[i].Name = v.(string)
+							}
+
+							if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								policerInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								policerInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := pMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								policerInt[i].Uid = v.(string)
+							}
+
 						}
-
-						if v, ok := pMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							policerInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := pMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							policerInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := pMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							policerInt[i].Uid = v.(string)
-						}
-
 					}
 
 				}

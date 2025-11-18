@@ -860,6 +860,16 @@ func (v *ValidateHttpHealthCheck) HealthCheckPortValidationRuleHandler(rules map
 	return validatorFn, nil
 }
 
+func (v *ValidateHttpHealthCheck) HealthCheckSecondaryPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_secondary_port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateHttpHealthCheck) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*HttpHealthCheck)
 	if !ok {
@@ -878,6 +888,15 @@ func (v *ValidateHttpHealthCheck) Validate(ctx context.Context, pm interface{}, 
 
 		vOpts := append(opts, db.WithValidateField("health_check_port"))
 		if err := fv(ctx, m.GetHealthCheckPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["health_check_secondary_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_check_secondary_port"))
+		if err := fv(ctx, m.GetHealthCheckSecondaryPort(), vOpts...); err != nil {
 			return err
 		}
 
@@ -951,6 +970,18 @@ var DefaultHttpHealthCheckValidator = func() *ValidateHttpHealthCheck {
 		panic(errMsg)
 	}
 	v.FldValidators["health_check_port"] = vFn
+
+	vrhHealthCheckSecondaryPort := v.HealthCheckSecondaryPortValidationRuleHandler
+	rulesHealthCheckSecondaryPort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhHealthCheckSecondaryPort(rulesHealthCheckSecondaryPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for HttpHealthCheck.health_check_secondary_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["health_check_secondary_port"] = vFn
 
 	return v
 }()
@@ -1212,6 +1243,16 @@ func (v *ValidateTcpHealthCheck) HealthCheckPortValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateTcpHealthCheck) HealthCheckSecondaryPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_secondary_port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateTcpHealthCheck) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*TcpHealthCheck)
 	if !ok {
@@ -1230,6 +1271,15 @@ func (v *ValidateTcpHealthCheck) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("health_check_port"))
 		if err := fv(ctx, m.GetHealthCheckPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["health_check_secondary_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_check_secondary_port"))
+		if err := fv(ctx, m.GetHealthCheckSecondaryPort(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1303,6 +1353,18 @@ var DefaultTcpHealthCheckValidator = func() *ValidateTcpHealthCheck {
 		panic(errMsg)
 	}
 	v.FldValidators["health_check_port"] = vFn
+
+	vrhHealthCheckSecondaryPort := v.HealthCheckSecondaryPortValidationRuleHandler
+	rulesHealthCheckSecondaryPort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhHealthCheckSecondaryPort(rulesHealthCheckSecondaryPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TcpHealthCheck.health_check_secondary_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["health_check_secondary_port"] = vFn
 
 	return v
 }()
@@ -1382,6 +1444,16 @@ func (v *ValidateTcpHexHealthCheck) HealthCheckPortValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateTcpHexHealthCheck) HealthCheckSecondaryPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_secondary_port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateTcpHexHealthCheck) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*TcpHexHealthCheck)
 	if !ok {
@@ -1400,6 +1472,15 @@ func (v *ValidateTcpHexHealthCheck) Validate(ctx context.Context, pm interface{}
 
 		vOpts := append(opts, db.WithValidateField("health_check_port"))
 		if err := fv(ctx, m.GetHealthCheckPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["health_check_secondary_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_check_secondary_port"))
+		if err := fv(ctx, m.GetHealthCheckSecondaryPort(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1474,6 +1555,18 @@ var DefaultTcpHexHealthCheckValidator = func() *ValidateTcpHexHealthCheck {
 		panic(errMsg)
 	}
 	v.FldValidators["health_check_port"] = vFn
+
+	vrhHealthCheckSecondaryPort := v.HealthCheckSecondaryPortValidationRuleHandler
+	rulesHealthCheckSecondaryPort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhHealthCheckSecondaryPort(rulesHealthCheckSecondaryPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for TcpHexHealthCheck.health_check_secondary_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["health_check_secondary_port"] = vFn
 
 	return v
 }()
@@ -1553,6 +1646,16 @@ func (v *ValidateUdpHealthCheck) HealthCheckPortValidationRuleHandler(rules map[
 	return validatorFn, nil
 }
 
+func (v *ValidateUdpHealthCheck) HealthCheckSecondaryPortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for health_check_secondary_port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateUdpHealthCheck) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*UdpHealthCheck)
 	if !ok {
@@ -1571,6 +1674,15 @@ func (v *ValidateUdpHealthCheck) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("health_check_port"))
 		if err := fv(ctx, m.GetHealthCheckPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["health_check_secondary_port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("health_check_secondary_port"))
+		if err := fv(ctx, m.GetHealthCheckSecondaryPort(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1648,6 +1760,18 @@ var DefaultUdpHealthCheckValidator = func() *ValidateUdpHealthCheck {
 		panic(errMsg)
 	}
 	v.FldValidators["health_check_port"] = vFn
+
+	vrhHealthCheckSecondaryPort := v.HealthCheckSecondaryPortValidationRuleHandler
+	rulesHealthCheckSecondaryPort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhHealthCheckSecondaryPort(rulesHealthCheckSecondaryPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UdpHealthCheck.health_check_secondary_port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["health_check_secondary_port"] = vFn
 
 	return v
 }()

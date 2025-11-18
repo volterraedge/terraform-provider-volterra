@@ -135,6 +135,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.site.VerInstanceRunningStateStatusType"] = VerInstanceRunningStateStatusTypeValidator()
 	vr["ves.io.schema.site.VerMasterStatusType"] = VerMasterStatusTypeValidator()
 	vr["ves.io.schema.site.VerStatusType"] = VerStatusTypeValidator()
+	vr["ves.io.schema.site.VirtualNetworkDnsServerConfigurationType"] = VirtualNetworkDnsServerConfigurationTypeValidator()
 	vr["ves.io.schema.site.VnetGatewayStatusType"] = VnetGatewayStatusTypeValidator()
 	vr["ves.io.schema.site.VolterraSoftwareStatus"] = VolterraSoftwareStatusValidator()
 
@@ -497,11 +498,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

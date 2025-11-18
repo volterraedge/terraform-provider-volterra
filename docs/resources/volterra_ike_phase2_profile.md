@@ -26,7 +26,9 @@ resource "volterra_ike_phase2_profile" "example" {
 
   // One of the arguments from this list "ike_keylifetime_hours ike_keylifetime_minutes use_default_keylifetime" must be set
 
-  use_default_keylifetime = true
+  ike_keylifetime_hours {
+    duration = "duration"
+  }
 }
 
 ```
@@ -84,7 +86,7 @@ Set IKE Key Lifetime in minutes.
 
 Choose the acceptable Diffie Hellman(DH) Group or Groups that you are willing to accept as part of this profile..
 
-`dh_groups` - (Optional) x-displayName: "Diffie Hellman Groups" (`List of Strings`).
+`dh_groups` - (Required) Choose the acceptable Diffie Hellman(DH) Group or Groups that you are willing to accept as part of this profile. (`List of Strings`).
 
 Attribute Reference
 -------------------

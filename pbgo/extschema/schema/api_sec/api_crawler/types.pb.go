@@ -7,6 +7,7 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
@@ -14,6 +15,7 @@ import (
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
+	strconv "strconv"
 	strings "strings"
 )
 
@@ -28,6 +30,55 @@ var _ = math.Inf
 // A compilation error at this line likely means your copy of the
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
+
+// Scan Status
+//
+// x-displayName: "Scan Status"
+// Represents the current status of an API crawling scan
+type ScanStatus int32
+
+const (
+	// x-displayName: "Unspecified"
+	// Default unspecified status
+	UNSPECIFIED ScanStatus = 0
+	// x-displayName: "Completed"
+	// Scan has successfully completed
+	COMPLETED ScanStatus = 1
+	// x-displayName: "Running"
+	// Scan is currently in progress
+	RUNNING ScanStatus = 2
+	// x-displayName: "Started"
+	// Scan has been initiated and is beginning execution
+	STARTED ScanStatus = 4
+	// x-displayName: "Pending"
+	// Scan is queued and waiting to start
+	PENDING ScanStatus = 5
+	// x-displayName: "Error"
+	// Scan encountered an error
+	ERROR ScanStatus = 6
+)
+
+var ScanStatus_name = map[int32]string{
+	0: "UNSPECIFIED",
+	1: "COMPLETED",
+	2: "RUNNING",
+	4: "STARTED",
+	5: "PENDING",
+	6: "ERROR",
+}
+
+var ScanStatus_value = map[string]int32{
+	"UNSPECIFIED": 0,
+	"COMPLETED":   1,
+	"RUNNING":     2,
+	"STARTED":     4,
+	"PENDING":     5,
+	"ERROR":       6,
+}
+
+func (ScanStatus) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_a0418c9a54fa0606, []int{0}
+}
 
 // API Crawling
 //
@@ -321,7 +372,179 @@ func (m *GetSpecType) GetDomains() []*DomainConfiguration {
 	return nil
 }
 
+// API Crawling Status Type
+//
+// x-displayName: "API Crawling Status"
+// Contains status information for API crawling configuration
+type ApiCrawlingStatus struct {
+	// last_updated
+	//
+	// x-displayName: "Last Updated"
+	// Timestamp of the most recent change for the API Crawling configuration
+	LastUpdated *types.Timestamp `protobuf:"bytes,1,opt,name=last_updated,json=lastUpdated,proto3" json:"last_updated,omitempty"`
+}
+
+func (m *ApiCrawlingStatus) Reset()      { *m = ApiCrawlingStatus{} }
+func (*ApiCrawlingStatus) ProtoMessage() {}
+func (*ApiCrawlingStatus) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a0418c9a54fa0606, []int{6}
+}
+func (m *ApiCrawlingStatus) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ApiCrawlingStatus) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ApiCrawlingStatus) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ApiCrawlingStatus.Merge(m, src)
+}
+func (m *ApiCrawlingStatus) XXX_Size() int {
+	return m.Size()
+}
+func (m *ApiCrawlingStatus) XXX_DiscardUnknown() {
+	xxx_messageInfo_ApiCrawlingStatus.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ApiCrawlingStatus proto.InternalMessageInfo
+
+func (m *ApiCrawlingStatus) GetLastUpdated() *types.Timestamp {
+	if m != nil {
+		return m.LastUpdated
+	}
+	return nil
+}
+
+// Scan Information
+//
+// x-displayName: "Scan Information"
+// scanInfo represents the status and metadata of an API scan
+type ScanInfo struct {
+	// domain
+	//
+	// x-displayName: "Domain"
+	// x-example: "example1.com"
+	// The domain being scanned
+	Domain string `protobuf:"bytes,1,opt,name=domain,proto3" json:"domain,omitempty"`
+	// status
+	//
+	// x-displayName: "Status"
+	// x-example: "Running"
+	// Current status of the scan
+	Status ScanStatus `protobuf:"varint,2,opt,name=status,proto3,enum=ves.io.schema.api_sec.api_crawler.ScanStatus" json:"status,omitempty"`
+	// error
+	//
+	// x-displayName: "Error Message"
+	// x-example: "Authentication failed"
+	// Error message if the scan encountered any issues
+	Error string `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
+	// Number of endpoints discovered
+	//
+	// x-displayName: "Number of EndPoints"
+	// x-example: 42
+	// The total count of unique API endpoints discovered during the crawling process
+	EndpointCount uint32 `protobuf:"varint,4,opt,name=endpoint_count,json=endpointCount,proto3" json:"endpoint_count,omitempty"`
+	// last_status_update
+	//
+	// x-displayName: "Last Status Updated"
+	// Timestamp of the last status update
+	LastStatusUpdate *types.Timestamp `protobuf:"bytes,5,opt,name=last_status_update,json=lastStatusUpdate,proto3" json:"last_status_update,omitempty"`
+	// added_to_queue
+	//
+	// x-displayName: "Added To Queue"
+	// Timestamp when scan was added to the queue
+	AddedToQueue *types.Timestamp `protobuf:"bytes,6,opt,name=added_to_queue,json=addedToQueue,proto3" json:"added_to_queue,omitempty"`
+	// kafka_message_created_at
+	//
+	// x-displayName: "Kafka Message Created At"
+	// Timestamp when the message was created in Kafka
+	KafkaMessageCreatedAt *types.Timestamp `protobuf:"bytes,7,opt,name=kafka_message_created_at,json=kafkaMessageCreatedAt,proto3" json:"kafka_message_created_at,omitempty"`
+}
+
+func (m *ScanInfo) Reset()      { *m = ScanInfo{} }
+func (*ScanInfo) ProtoMessage() {}
+func (*ScanInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_a0418c9a54fa0606, []int{7}
+}
+func (m *ScanInfo) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ScanInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ScanInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ScanInfo.Merge(m, src)
+}
+func (m *ScanInfo) XXX_Size() int {
+	return m.Size()
+}
+func (m *ScanInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_ScanInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ScanInfo proto.InternalMessageInfo
+
+func (m *ScanInfo) GetDomain() string {
+	if m != nil {
+		return m.Domain
+	}
+	return ""
+}
+
+func (m *ScanInfo) GetStatus() ScanStatus {
+	if m != nil {
+		return m.Status
+	}
+	return UNSPECIFIED
+}
+
+func (m *ScanInfo) GetError() string {
+	if m != nil {
+		return m.Error
+	}
+	return ""
+}
+
+func (m *ScanInfo) GetEndpointCount() uint32 {
+	if m != nil {
+		return m.EndpointCount
+	}
+	return 0
+}
+
+func (m *ScanInfo) GetLastStatusUpdate() *types.Timestamp {
+	if m != nil {
+		return m.LastStatusUpdate
+	}
+	return nil
+}
+
+func (m *ScanInfo) GetAddedToQueue() *types.Timestamp {
+	if m != nil {
+		return m.AddedToQueue
+	}
+	return nil
+}
+
+func (m *ScanInfo) GetKafkaMessageCreatedAt() *types.Timestamp {
+	if m != nil {
+		return m.KafkaMessageCreatedAt
+	}
+	return nil
+}
+
 func init() {
+	proto.RegisterEnum("ves.io.schema.api_sec.api_crawler.ScanStatus", ScanStatus_name, ScanStatus_value)
+	golang_proto.RegisterEnum("ves.io.schema.api_sec.api_crawler.ScanStatus", ScanStatus_name, ScanStatus_value)
 	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.api_sec.api_crawler.GlobalSpecType")
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.api_sec.api_crawler.GlobalSpecType")
 	proto.RegisterType((*DomainConfiguration)(nil), "ves.io.schema.api_sec.api_crawler.DomainConfiguration")
@@ -334,6 +557,10 @@ func init() {
 	golang_proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.api_sec.api_crawler.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.api_sec.api_crawler.GetSpecType")
 	golang_proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.api_sec.api_crawler.GetSpecType")
+	proto.RegisterType((*ApiCrawlingStatus)(nil), "ves.io.schema.api_sec.api_crawler.ApiCrawlingStatus")
+	golang_proto.RegisterType((*ApiCrawlingStatus)(nil), "ves.io.schema.api_sec.api_crawler.ApiCrawlingStatus")
+	proto.RegisterType((*ScanInfo)(nil), "ves.io.schema.api_sec.api_crawler.ScanInfo")
+	golang_proto.RegisterType((*ScanInfo)(nil), "ves.io.schema.api_sec.api_crawler.ScanInfo")
 }
 
 func init() {
@@ -344,42 +571,73 @@ func init() {
 }
 
 var fileDescriptor_a0418c9a54fa0606 = []byte{
-	// 521 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x94, 0xb1, 0x6f, 0xd3, 0x40,
-	0x14, 0xc6, 0x7d, 0x4e, 0x09, 0xf4, 0x82, 0x4a, 0x31, 0x0c, 0x69, 0x80, 0x23, 0x64, 0xca, 0x40,
-	0xce, 0x52, 0x11, 0x0c, 0x1d, 0x10, 0x4a, 0x91, 0xba, 0x30, 0x80, 0x83, 0x84, 0x84, 0x90, 0xa2,
-	0x8b, 0xf3, 0xe2, 0x9e, 0x70, 0x72, 0xa7, 0xbb, 0x73, 0x42, 0xb7, 0x8e, 0x8c, 0x08, 0x89, 0x95,
-	0x99, 0xbf, 0x01, 0x96, 0x8e, 0xa8, 0x53, 0xc6, 0x8c, 0xc4, 0x59, 0x60, 0xeb, 0x9f, 0x80, 0x72,
-	0x71, 0x43, 0x12, 0x40, 0x30, 0x54, 0x9d, 0x7c, 0xcf, 0xef, 0xf7, 0xbd, 0xf7, 0xe9, 0xb3, 0xce,
-	0xb8, 0xd6, 0x07, 0x4d, 0xb9, 0xf0, 0x75, 0xb8, 0x0f, 0x5d, 0xe6, 0x33, 0xc9, 0x9b, 0x1a, 0x42,
-	0xfb, 0x0c, 0x15, 0x1b, 0xc4, 0xa0, 0x7c, 0x73, 0x20, 0x41, 0x53, 0xa9, 0x84, 0x11, 0xde, 0x9d,
-	0x19, 0x4e, 0x67, 0x38, 0xcd, 0x70, 0xba, 0x80, 0x97, 0x6a, 0x11, 0x37, 0xfb, 0x49, 0x8b, 0x86,
-	0xa2, 0xeb, 0x47, 0x22, 0x12, 0xbe, 0x55, 0xb6, 0x92, 0x8e, 0xad, 0x6c, 0x61, 0x4f, 0xb3, 0x89,
-	0xa5, 0x1b, 0xcb, 0x06, 0x84, 0x34, 0x5c, 0xf4, 0xb2, 0x75, 0xa5, 0xad, 0xe5, 0xe6, 0x82, 0x93,
-	0xd2, 0xcd, 0xe5, 0x56, 0x9f, 0xc5, 0xbc, 0xcd, 0x0c, 0x64, 0xdd, 0xf2, 0x4a, 0x97, 0xc3, 0xa0,
-	0xb9, 0x3c, 0xfa, 0xf6, 0xef, 0x84, 0x5e, 0x5c, 0x50, 0xe9, 0xe1, 0x8d, 0xbd, 0x58, 0xb4, 0x58,
-	0xdc, 0x90, 0x10, 0x3e, 0x3f, 0x90, 0xe0, 0xbd, 0xc2, 0x17, 0xdb, 0xa2, 0xcb, 0x78, 0x4f, 0x17,
-	0x51, 0x39, 0x57, 0x2d, 0x6c, 0x3f, 0xa0, 0xff, 0x8c, 0x83, 0x3e, 0xb6, 0x8a, 0x5d, 0xd1, 0xeb,
-	0xf0, 0x28, 0x51, 0x6c, 0x6a, 0xa1, 0x8e, 0x3f, 0xff, 0x38, 0xca, 0x5d, 0x78, 0x8f, 0xdc, 0xcd,
-	0x72, 0x70, 0x3a, 0xb2, 0xf2, 0x11, 0xe1, 0x6b, 0x7f, 0x80, 0xbd, 0xbb, 0x38, 0x3f, 0x43, 0x8a,
-	0xa8, 0x8c, 0xaa, 0xeb, 0xf5, 0xeb, 0x56, 0xac, 0x72, 0xc5, 0x43, 0x37, 0x3b, 0xbd, 0x75, 0x51,
-	0x90, 0x31, 0xde, 0x33, 0x7c, 0x59, 0xf3, 0xae, 0x8c, 0xa1, 0x19, 0x8b, 0x88, 0xf7, 0x8a, 0x6e,
-	0x19, 0x55, 0x0b, 0xdb, 0xf4, 0x3f, 0x8c, 0x36, 0xac, 0xec, 0xc9, 0x54, 0x15, 0x14, 0xf4, 0xaf,
-	0x62, 0x27, 0x7f, 0xfc, 0x05, 0xb9, 0x9b, 0xa8, 0x12, 0xe2, 0xc2, 0x02, 0xe3, 0xdd, 0xc2, 0x6b,
-	0x89, 0x06, 0x95, 0xb9, 0x5a, 0x9f, 0x7a, 0x59, 0x53, 0x6e, 0xf1, 0x51, 0x60, 0x5f, 0x7b, 0xf7,
-	0xf1, 0x25, 0xc9, 0xb4, 0x1e, 0x08, 0xd5, 0xce, 0x4c, 0x6c, 0xad, 0x98, 0x68, 0x40, 0xa8, 0xc0,
-	0x4c, 0x93, 0x0d, 0xe6, 0x68, 0x25, 0xc1, 0x1b, 0xbb, 0x0a, 0x98, 0x81, 0x79, 0xea, 0x4f, 0xcf,
-	0x28, 0xf5, 0x79, 0xd2, 0x3b, 0x57, 0x8f, 0x1f, 0xae, 0x7c, 0xda, 0x4a, 0x1f, 0x5f, 0x09, 0x40,
-	0xc6, 0x2c, 0x3c, 0xe7, 0xbd, 0x0a, 0x17, 0xf6, 0xc0, 0x9c, 0xeb, 0xce, 0xfa, 0x07, 0x34, 0x1c,
-	0x13, 0x67, 0x34, 0x26, 0xce, 0xc9, 0x98, 0xa0, 0xc3, 0x94, 0xa0, 0x4f, 0x29, 0x41, 0x5f, 0x53,
-	0x82, 0x86, 0x29, 0x41, 0xa3, 0x94, 0xa0, 0x6f, 0x29, 0x41, 0xdf, 0x53, 0xe2, 0x9c, 0xa4, 0x04,
-	0xbd, 0x9b, 0x10, 0xe7, 0x68, 0x42, 0xd0, 0x70, 0x42, 0x9c, 0xd1, 0x84, 0x38, 0x2f, 0x5f, 0x44,
-	0x42, 0xbe, 0x8e, 0x68, 0x5f, 0xc4, 0x06, 0x94, 0x62, 0x34, 0xd1, 0xbe, 0x3d, 0x74, 0x84, 0xea,
-	0xd6, 0xa4, 0x12, 0x7d, 0xde, 0x06, 0x55, 0x3b, 0x6d, 0xfb, 0xb2, 0x15, 0x09, 0x1f, 0xde, 0x98,
-	0xec, 0x9e, 0xfd, 0xfd, 0x3f, 0xd3, 0xca, 0xdb, 0x7b, 0x77, 0xef, 0x67, 0x00, 0x00, 0x00, 0xff,
-	0xff, 0x86, 0x41, 0xe7, 0xe6, 0x93, 0x04, 0x00, 0x00,
+	// 908 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x55, 0x41, 0x6f, 0xe3, 0x44,
+	0x14, 0xce, 0xa4, 0x49, 0xda, 0xbe, 0xb4, 0xd9, 0xec, 0x50, 0x90, 0xd7, 0x80, 0xd7, 0x44, 0x42,
+	0xaa, 0x56, 0xc4, 0x91, 0x8a, 0xe0, 0x50, 0x09, 0xb4, 0x6d, 0x1a, 0x4a, 0xa5, 0x6e, 0xb6, 0xeb,
+	0xa4, 0x42, 0x42, 0x48, 0xd6, 0xc4, 0x9e, 0x78, 0xad, 0x3a, 0x1e, 0x33, 0x33, 0x4e, 0xd9, 0xdb,
+	0x1e, 0x39, 0x22, 0x24, 0xae, 0x9c, 0xf9, 0x09, 0x88, 0x0a, 0xa9, 0x37, 0x50, 0x4f, 0x3d, 0xf6,
+	0x48, 0xd3, 0x0b, 0xdc, 0xf6, 0x27, 0x20, 0x8f, 0x9d, 0xb6, 0x29, 0x8b, 0xba, 0x87, 0xd5, 0x9e,
+	0x3c, 0x6f, 0xde, 0xf7, 0xbe, 0xf9, 0xe6, 0x7b, 0x6f, 0x64, 0x68, 0x8e, 0xa9, 0xb0, 0x02, 0xd6,
+	0x12, 0xee, 0x53, 0x3a, 0x22, 0x2d, 0x12, 0x07, 0x8e, 0xa0, 0xae, 0xfa, 0xba, 0x9c, 0x1c, 0x86,
+	0x94, 0xb7, 0xe4, 0xb3, 0x98, 0x0a, 0x2b, 0xe6, 0x4c, 0x32, 0xfc, 0x41, 0x06, 0xb7, 0x32, 0xb8,
+	0x95, 0xc3, 0xad, 0x6b, 0x70, 0xbd, 0xe9, 0x07, 0xf2, 0x69, 0x32, 0xb0, 0x5c, 0x36, 0x6a, 0xf9,
+	0xcc, 0x67, 0x2d, 0x55, 0x39, 0x48, 0x86, 0x2a, 0x52, 0x81, 0x5a, 0x65, 0x8c, 0xfa, 0x7d, 0x9f,
+	0x31, 0x3f, 0xa4, 0x57, 0x28, 0x19, 0x8c, 0xa8, 0x90, 0x64, 0x14, 0xe7, 0x80, 0x77, 0x67, 0x15,
+	0xb2, 0x58, 0x06, 0x2c, 0xca, 0xf5, 0xe8, 0xf7, 0x66, 0x93, 0xd7, 0xa4, 0xea, 0xef, 0xcd, 0xa6,
+	0xc6, 0x24, 0x0c, 0x3c, 0x22, 0x69, 0x9e, 0x35, 0x6f, 0x64, 0x03, 0x7a, 0xe8, 0xcc, 0x52, 0xdf,
+	0xff, 0x2f, 0x42, 0x5c, 0x3f, 0xa0, 0x11, 0x41, 0x6d, 0x3b, 0x64, 0x03, 0x12, 0xf6, 0x62, 0xea,
+	0xf6, 0x9f, 0xc5, 0x14, 0x7f, 0x03, 0xf3, 0x1e, 0x1b, 0x91, 0x20, 0x12, 0x1a, 0x32, 0xe7, 0x56,
+	0xab, 0x6b, 0x9f, 0x5a, 0xb7, 0xfa, 0x65, 0x6d, 0xa9, 0x8a, 0x36, 0x8b, 0x86, 0x81, 0x9f, 0x70,
+	0x92, 0x4a, 0xd8, 0x84, 0xdf, 0xfe, 0x39, 0x9e, 0x2b, 0xff, 0x88, 0x8a, 0x75, 0xd3, 0x9e, 0x52,
+	0x36, 0x7e, 0x46, 0xf0, 0xd6, 0x4b, 0xc0, 0xf8, 0x23, 0xa8, 0x64, 0x10, 0x0d, 0x99, 0x68, 0x75,
+	0x71, 0x73, 0x45, 0x15, 0xf3, 0x39, 0xed, 0x79, 0x31, 0x5f, 0x7d, 0x5f, 0x44, 0x76, 0x8e, 0xc1,
+	0x4f, 0x60, 0x49, 0x04, 0xa3, 0x38, 0xa4, 0x4e, 0xc8, 0xfc, 0x20, 0xd2, 0x8a, 0x26, 0x5a, 0xad,
+	0xae, 0x59, 0xaf, 0x20, 0xb4, 0xa7, 0xca, 0x76, 0xd3, 0x2a, 0xbb, 0x2a, 0xae, 0x82, 0xf5, 0xca,
+	0xc9, 0x11, 0x2a, 0xd6, 0x51, 0xc3, 0x85, 0xea, 0x35, 0x0c, 0x7e, 0x1f, 0x4a, 0x89, 0xa0, 0x3c,
+	0x57, 0xb5, 0x98, 0x6a, 0x29, 0xf1, 0xa2, 0xf6, 0xd0, 0x56, 0xdb, 0xf8, 0x13, 0x58, 0x88, 0x89,
+	0x10, 0x87, 0x8c, 0x7b, 0xb9, 0x88, 0x7b, 0x37, 0x44, 0xf4, 0xa8, 0xcb, 0xa9, 0x4c, 0x9d, 0xb5,
+	0x2f, 0xa1, 0x8d, 0x04, 0x6a, 0x6d, 0x4e, 0x89, 0xa4, 0x97, 0xae, 0xef, 0xbd, 0x26, 0xd7, 0x2f,
+	0x9d, 0x5e, 0xbf, 0x7b, 0xf2, 0xf9, 0x8d, 0xd6, 0x36, 0xc6, 0x70, 0xc7, 0xa6, 0x71, 0x48, 0xdc,
+	0x37, 0x7c, 0x2e, 0x87, 0xea, 0x36, 0x95, 0x6f, 0xf6, 0x4c, 0x1b, 0xee, 0x6e, 0xc4, 0x41, 0x3b,
+	0xad, 0x0e, 0x22, 0xbf, 0x27, 0x89, 0x4c, 0x04, 0xfe, 0x0c, 0x96, 0x42, 0x22, 0xa4, 0x93, 0xc4,
+	0xe9, 0x2b, 0xf2, 0x54, 0x57, 0xab, 0x6b, 0xba, 0x95, 0x3d, 0x5f, 0x6b, 0xfa, 0x7c, 0xad, 0xfe,
+	0xf4, 0xf9, 0xda, 0xd5, 0x14, 0xbf, 0x9f, 0xc1, 0x1b, 0x7f, 0x94, 0x60, 0xa1, 0xe7, 0x92, 0x68,
+	0x27, 0x1a, 0x32, 0xfc, 0xce, 0xec, 0xc4, 0x5e, 0xce, 0x66, 0x07, 0x2a, 0x42, 0x9d, 0xa6, 0x06,
+	0xa2, 0xb6, 0xd6, 0x7c, 0x95, 0xa9, 0x74, 0x49, 0x94, 0x49, 0xb4, 0xf3, 0x62, 0xbc, 0x02, 0x65,
+	0xca, 0x39, 0xe3, 0xda, 0x9c, 0x62, 0xcf, 0x02, 0xfc, 0x21, 0xd4, 0x68, 0xe4, 0xc5, 0x2c, 0x88,
+	0xa4, 0xe3, 0xb2, 0x24, 0x92, 0x5a, 0xc9, 0x44, 0xab, 0xcb, 0xf6, 0xf2, 0x74, 0xb7, 0x9d, 0x6e,
+	0xe2, 0x2f, 0x01, 0xab, 0x7b, 0x66, 0x5c, 0xf9, 0x75, 0xb5, 0xf2, 0xad, 0xb7, 0xad, 0xa7, 0x55,
+	0x99, 0x90, 0xec, 0xce, 0xf8, 0x21, 0xd4, 0x88, 0xe7, 0x51, 0xcf, 0x91, 0xcc, 0xf9, 0x36, 0xa1,
+	0x09, 0xd5, 0x2a, 0xb7, 0xb2, 0x2c, 0xa9, 0x8a, 0x3e, 0x7b, 0x92, 0xe2, 0x71, 0x0f, 0xb4, 0x03,
+	0x32, 0x3c, 0x20, 0xce, 0x88, 0x0a, 0x41, 0x7c, 0xea, 0xb8, 0x6a, 0xf2, 0x3d, 0x87, 0x48, 0x6d,
+	0xfe, 0x56, 0xae, 0xb7, 0x55, 0xed, 0xa3, 0xac, 0x34, 0x7b, 0x33, 0xde, 0x86, 0x5c, 0xff, 0x1d,
+	0x9d, 0x1c, 0xa1, 0x5f, 0x11, 0x60, 0xa8, 0x64, 0x83, 0xa1, 0x2f, 0x4c, 0xdb, 0x01, 0x2b, 0x50,
+	0xc9, 0xae, 0xa0, 0xc3, 0xb4, 0x15, 0x26, 0x02, 0x0d, 0x96, 0x3b, 0xa9, 0x85, 0x66, 0xce, 0xa5,
+	0xcf, 0xe7, 0x06, 0x43, 0x03, 0x6a, 0x9d, 0xdc, 0x3d, 0x53, 0xd9, 0xa7, 0xd7, 0x6f, 0xba, 0x0c,
+	0x0f, 0x00, 0xef, 0x12, 0x21, 0xcd, 0x8c, 0xd8, 0xcc, 0xcc, 0xd1, 0x57, 0x5e, 0x66, 0x73, 0xca,
+	0xb7, 0x91, 0x1a, 0x60, 0xf6, 0x99, 0xa9, 0x2c, 0x48, 0xf9, 0x66, 0x4d, 0x7c, 0xe0, 0x01, 0x5c,
+	0xf5, 0x1c, 0xdf, 0x81, 0xea, 0x7e, 0xb7, 0xb7, 0xd7, 0x69, 0xef, 0x7c, 0xb1, 0xd3, 0xd9, 0xaa,
+	0x17, 0xf0, 0x32, 0x2c, 0xb6, 0x1f, 0x3f, 0xda, 0xdb, 0xed, 0xf4, 0x3b, 0x5b, 0x75, 0x84, 0xab,
+	0x30, 0x6f, 0xef, 0x77, 0xbb, 0x3b, 0xdd, 0xed, 0x7a, 0x31, 0x0d, 0x7a, 0xfd, 0x0d, 0x3b, 0xcd,
+	0x94, 0xd2, 0x60, 0xaf, 0xd3, 0xdd, 0x4a, 0x33, 0x65, 0xbc, 0x08, 0xe5, 0x8e, 0x6d, 0x3f, 0xb6,
+	0xeb, 0x15, 0xbd, 0x74, 0x7c, 0x84, 0x0a, 0x9b, 0x3f, 0xa1, 0xd3, 0x73, 0xa3, 0x70, 0x76, 0x6e,
+	0x14, 0x5e, 0x9c, 0x1b, 0xe8, 0xf9, 0xc4, 0x40, 0xbf, 0x4c, 0x0c, 0xf4, 0xe7, 0xc4, 0x40, 0xa7,
+	0x13, 0x03, 0x9d, 0x4d, 0x0c, 0xf4, 0xd7, 0xc4, 0x40, 0x7f, 0x4f, 0x8c, 0xc2, 0x8b, 0x89, 0x81,
+	0x7e, 0xb8, 0x30, 0x0a, 0xc7, 0x17, 0x06, 0x3a, 0xbd, 0x30, 0x0a, 0x67, 0x17, 0x46, 0xe1, 0xeb,
+	0xaf, 0x7c, 0x16, 0x1f, 0xf8, 0xd6, 0x98, 0x85, 0x92, 0x72, 0x4e, 0xac, 0x44, 0xb4, 0xd4, 0x62,
+	0xc8, 0xf8, 0xa8, 0x19, 0x73, 0x36, 0x0e, 0x3c, 0xca, 0x9b, 0xd3, 0x74, 0x2b, 0x1e, 0xf8, 0xac,
+	0x45, 0xbf, 0x93, 0xf9, 0xbf, 0xe6, 0xff, 0x7f, 0xc6, 0x83, 0x8a, 0x6a, 0xf4, 0xc7, 0xff, 0x06,
+	0x00, 0x00, 0xff, 0xff, 0x18, 0x94, 0x17, 0xf0, 0xb8, 0x07, 0x00, 0x00,
 }
 
+func (x ScanStatus) String() string {
+	s, ok := ScanStatus_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -550,6 +808,72 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ApiCrawlingStatus) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ApiCrawlingStatus)
+	if !ok {
+		that2, ok := that.(ApiCrawlingStatus)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.LastUpdated.Equal(that1.LastUpdated) {
+		return false
+	}
+	return true
+}
+func (this *ScanInfo) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ScanInfo)
+	if !ok {
+		that2, ok := that.(ScanInfo)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Domain != that1.Domain {
+		return false
+	}
+	if this.Status != that1.Status {
+		return false
+	}
+	if this.Error != that1.Error {
+		return false
+	}
+	if this.EndpointCount != that1.EndpointCount {
+		return false
+	}
+	if !this.LastStatusUpdate.Equal(that1.LastStatusUpdate) {
+		return false
+	}
+	if !this.AddedToQueue.Equal(that1.AddedToQueue) {
+		return false
+	}
+	if !this.KafkaMessageCreatedAt.Equal(that1.KafkaMessageCreatedAt) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -620,6 +944,40 @@ func (this *GetSpecType) GoString() string {
 	s = append(s, "&api_crawler.GetSpecType{")
 	if this.Domains != nil {
 		s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ApiCrawlingStatus) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&api_crawler.ApiCrawlingStatus{")
+	if this.LastUpdated != nil {
+		s = append(s, "LastUpdated: "+fmt.Sprintf("%#v", this.LastUpdated)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ScanInfo) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 11)
+	s = append(s, "&api_crawler.ScanInfo{")
+	s = append(s, "Domain: "+fmt.Sprintf("%#v", this.Domain)+",\n")
+	s = append(s, "Status: "+fmt.Sprintf("%#v", this.Status)+",\n")
+	s = append(s, "Error: "+fmt.Sprintf("%#v", this.Error)+",\n")
+	s = append(s, "EndpointCount: "+fmt.Sprintf("%#v", this.EndpointCount)+",\n")
+	if this.LastStatusUpdate != nil {
+		s = append(s, "LastStatusUpdate: "+fmt.Sprintf("%#v", this.LastStatusUpdate)+",\n")
+	}
+	if this.AddedToQueue != nil {
+		s = append(s, "AddedToQueue: "+fmt.Sprintf("%#v", this.AddedToQueue)+",\n")
+	}
+	if this.KafkaMessageCreatedAt != nil {
+		s = append(s, "KafkaMessageCreatedAt: "+fmt.Sprintf("%#v", this.KafkaMessageCreatedAt)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -864,6 +1222,124 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ApiCrawlingStatus) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ApiCrawlingStatus) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ApiCrawlingStatus) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.LastUpdated != nil {
+		{
+			size, err := m.LastUpdated.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ScanInfo) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ScanInfo) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ScanInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.KafkaMessageCreatedAt != nil {
+		{
+			size, err := m.KafkaMessageCreatedAt.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	if m.AddedToQueue != nil {
+		{
+			size, err := m.AddedToQueue.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.LastStatusUpdate != nil {
+		{
+			size, err := m.LastStatusUpdate.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if m.EndpointCount != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.EndpointCount))
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.Error) > 0 {
+		i -= len(m.Error)
+		copy(dAtA[i:], m.Error)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Error)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Status != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Status))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.Domain) > 0 {
+		i -= len(m.Domain)
+		copy(dAtA[i:], m.Domain)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.Domain)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -969,6 +1445,54 @@ func (m *GetSpecType) Size() (n int) {
 	return n
 }
 
+func (m *ApiCrawlingStatus) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.LastUpdated != nil {
+		l = m.LastUpdated.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *ScanInfo) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Domain)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Status != 0 {
+		n += 1 + sovTypes(uint64(m.Status))
+	}
+	l = len(m.Error)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.EndpointCount != 0 {
+		n += 1 + sovTypes(uint64(m.EndpointCount))
+	}
+	if m.LastStatusUpdate != nil {
+		l = m.LastStatusUpdate.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.AddedToQueue != nil {
+		l = m.AddedToQueue.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.KafkaMessageCreatedAt != nil {
+		l = m.KafkaMessageCreatedAt.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
@@ -1053,6 +1577,32 @@ func (this *GetSpecType) String() string {
 	repeatedStringForDomains += "}"
 	s := strings.Join([]string{`&GetSpecType{`,
 		`Domains:` + repeatedStringForDomains + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ApiCrawlingStatus) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ApiCrawlingStatus{`,
+		`LastUpdated:` + strings.Replace(fmt.Sprintf("%v", this.LastUpdated), "Timestamp", "types.Timestamp", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ScanInfo) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ScanInfo{`,
+		`Domain:` + fmt.Sprintf("%v", this.Domain) + `,`,
+		`Status:` + fmt.Sprintf("%v", this.Status) + `,`,
+		`Error:` + fmt.Sprintf("%v", this.Error) + `,`,
+		`EndpointCount:` + fmt.Sprintf("%v", this.EndpointCount) + `,`,
+		`LastStatusUpdate:` + strings.Replace(fmt.Sprintf("%v", this.LastStatusUpdate), "Timestamp", "types.Timestamp", 1) + `,`,
+		`AddedToQueue:` + strings.Replace(fmt.Sprintf("%v", this.AddedToQueue), "Timestamp", "types.Timestamp", 1) + `,`,
+		`KafkaMessageCreatedAt:` + strings.Replace(fmt.Sprintf("%v", this.KafkaMessageCreatedAt), "Timestamp", "types.Timestamp", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1628,6 +2178,358 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.Domains = append(m.Domains, &DomainConfiguration{})
 			if err := m.Domains[len(m.Domains)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ApiCrawlingStatus) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ApiCrawlingStatus: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ApiCrawlingStatus: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LastUpdated", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.LastUpdated == nil {
+				m.LastUpdated = &types.Timestamp{}
+			}
+			if err := m.LastUpdated.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ScanInfo) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ScanInfo: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ScanInfo: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Domain", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Domain = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
+			}
+			m.Status = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Status |= ScanStatus(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Error = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EndpointCount", wireType)
+			}
+			m.EndpointCount = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.EndpointCount |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field LastStatusUpdate", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.LastStatusUpdate == nil {
+				m.LastStatusUpdate = &types.Timestamp{}
+			}
+			if err := m.LastStatusUpdate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AddedToQueue", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.AddedToQueue == nil {
+				m.AddedToQueue = &types.Timestamp{}
+			}
+			if err := m.AddedToQueue.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field KafkaMessageCreatedAt", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.KafkaMessageCreatedAt == nil {
+				m.KafkaMessageCreatedAt = &types.Timestamp{}
+			}
+			if err := m.KafkaMessageCreatedAt.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

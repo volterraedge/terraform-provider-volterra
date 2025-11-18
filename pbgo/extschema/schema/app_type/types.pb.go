@@ -202,15 +202,15 @@ func (SensitiveDataType) EnumDescriptor() ([]byte, []int) {
 
 // APIEP PII Level
 //
-// x-displayName: API EP PII Level
+// x-displayName: "API EP PII Level"
 // API Endpoint's PII Level.
 type APIEPPIILevel int32
 
 const (
-	// x-displayName: API EP PII Level
+	// x-displayName: "API EP PII Level"
 	// No PII data detected for the given API Endpoint.
 	APIEP_PII_NOT_DETECTED APIEPPIILevel = 0
-	// x-displayName: API EP PII Level Detected
+	// x-displayName: "API EP PII Level Detected"
 	// Detected PII data for a given API Endpoint.
 	APIEP_PII_DETECTED APIEPPIILevel = 1
 )
@@ -358,7 +358,7 @@ func (AuthenticationState) EnumDescriptor() ([]byte, []int) {
 
 // APIEP Authentication Type
 //
-// x-displayName: API EP Authentication Type
+// x-displayName: "API EP Authentication Type"
 // API Endpoint's Authentication Type.
 type AuthenticationType int32
 
@@ -427,7 +427,7 @@ func (AuthenticationType) EnumDescriptor() ([]byte, []int) {
 
 // APIEP Authentication Location
 //
-// x-displayName: API EP Authentication Location
+// x-displayName: "API EP Authentication Location"
 // API Endpoint's Authentication Location.
 type AuthenticationLocation int32
 

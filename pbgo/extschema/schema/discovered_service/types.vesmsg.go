@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_discovery "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovery"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
@@ -24,6 +25,316 @@ var (
 	_ = errors.Wrap
 	_ = strings.Split
 )
+
+// augmented methods on protoc/std generated struct
+
+func (m *ConsulService) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ConsulService) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ConsulService) DeepCopy() *ConsulService {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ConsulService{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ConsulService) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ConsulService) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ConsulServiceValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ConsulService) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryObjectDRefInfo()
+
+}
+
+func (m *ConsulService) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetDiscoveryObject()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "discovery_object",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetDiscoveryObjectDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ConsulService) GetDiscoveryObjectDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "discovery.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: discovery")
+	}
+
+	vref := m.GetDiscoveryObject()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "discovery.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateConsulService struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateConsulService) ServiceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateConsulService) PodsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for pods")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_discovery.PodInfoType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_discovery.PodInfoTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for pods")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_discovery.PodInfoType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_discovery.PodInfoType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated pods")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items pods")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateConsulService) PortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ports")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_discovery.PortInfoType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_discovery.PortInfoTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ports")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_discovery.PortInfoType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_discovery.PortInfoType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ports")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ports")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateConsulService) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ConsulService)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ConsulService got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["discovery_object"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("discovery_object"))
+		if err := fv(ctx, m.GetDiscoveryObject(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pods"]; exists {
+		vOpts := append(opts, db.WithValidateField("pods"))
+		if err := fv(ctx, m.GetPods(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ports"]; exists {
+		vOpts := append(opts, db.WithValidateField("ports"))
+		if err := fv(ctx, m.GetPorts(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_name"))
+		if err := fv(ctx, m.GetServiceName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultConsulServiceValidator = func() *ValidateConsulService {
+	v := &ValidateConsulService{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhServiceName := v.ServiceNameValidationRuleHandler
+	rulesServiceName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhServiceName(rulesServiceName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ConsulService.service_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_name"] = vFn
+
+	vrhPods := v.PodsValidationRuleHandler
+	rulesPods := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "50",
+	}
+	vFn, err = vrhPods(rulesPods)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ConsulService.pods: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["pods"] = vFn
+
+	vrhPorts := v.PortsValidationRuleHandler
+	rulesPorts := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "50",
+	}
+	vFn, err = vrhPorts(rulesPorts)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ConsulService.ports: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ports"] = vFn
+
+	v.FldValidators["discovery_object"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func ConsulServiceValidator() db.Validator {
+	return DefaultConsulServiceValidator
+}
 
 // augmented methods on protoc/std generated struct
 
@@ -163,6 +474,54 @@ func (m *CreateSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *CreateSpecType_K8SService:
+
+		drInfos, err := m.GetK8SService().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "k8s_service." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_ConsulService:
+
+		drInfos, err := m.GetConsulService().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "consul_service." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_N1DiscoveredServer:
+
+		drInfos, err := m.GetN1DiscoveredServer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetN1DiscoveredServer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "n1_discovered_server." + dri.DRField
+		}
+		return drInfos, err
+
+	case *CreateSpecType_ThirdParty:
+
+		drInfos, err := m.GetThirdParty().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetThirdParty().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "third_party." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -292,6 +651,50 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_K8SService:
+		if fv, exists := v.FldValidators["service_type.k8s_service"]; exists {
+			val := m.GetServiceType().(*CreateSpecType_K8SService).K8SService
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("k8s_service"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ConsulService:
+		if fv, exists := v.FldValidators["service_type.consul_service"]; exists {
+			val := m.GetServiceType().(*CreateSpecType_ConsulService).ConsulService
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("consul_service"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_N1DiscoveredServer:
+		if fv, exists := v.FldValidators["service_type.n1_discovered_server"]; exists {
+			val := m.GetServiceType().(*CreateSpecType_N1DiscoveredServer).N1DiscoveredServer
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("n1_discovered_server"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_ThirdParty:
+		if fv, exists := v.FldValidators["service_type.third_party"]; exists {
+			val := m.GetServiceType().(*CreateSpecType_ThirdParty).ThirdParty
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("third_party"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -381,6 +784,10 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["visibility_action_choice"] = vFn
 
 	v.FldValidators["service_type.virtual_server"] = VirtualServerValidator().Validate
+	v.FldValidators["service_type.k8s_service"] = K8SServiceValidator().Validate
+	v.FldValidators["service_type.consul_service"] = ConsulServiceValidator().Validate
+	v.FldValidators["service_type.n1_discovered_server"] = NginxOneDiscoveredServerValidator().Validate
+	v.FldValidators["service_type.third_party"] = ThirdPartyApplicationDiscoveryValidator().Validate
 
 	v.FldValidators["http_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -531,6 +938,54 @@ func (m *GetSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *GetSpecType_K8SService:
+
+		drInfos, err := m.GetK8SService().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "k8s_service." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_ConsulService:
+
+		drInfos, err := m.GetConsulService().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "consul_service." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_N1DiscoveredServer:
+
+		drInfos, err := m.GetN1DiscoveredServer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetN1DiscoveredServer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "n1_discovered_server." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GetSpecType_ThirdParty:
+
+		drInfos, err := m.GetThirdParty().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetThirdParty().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "third_party." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -660,6 +1115,50 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_K8SService:
+		if fv, exists := v.FldValidators["service_type.k8s_service"]; exists {
+			val := m.GetServiceType().(*GetSpecType_K8SService).K8SService
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("k8s_service"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ConsulService:
+		if fv, exists := v.FldValidators["service_type.consul_service"]; exists {
+			val := m.GetServiceType().(*GetSpecType_ConsulService).ConsulService
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("consul_service"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_N1DiscoveredServer:
+		if fv, exists := v.FldValidators["service_type.n1_discovered_server"]; exists {
+			val := m.GetServiceType().(*GetSpecType_N1DiscoveredServer).N1DiscoveredServer
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("n1_discovered_server"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_ThirdParty:
+		if fv, exists := v.FldValidators["service_type.third_party"]; exists {
+			val := m.GetServiceType().(*GetSpecType_ThirdParty).ThirdParty
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("third_party"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -749,6 +1248,10 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["visibility_action_choice"] = vFn
 
 	v.FldValidators["service_type.virtual_server"] = VirtualServerValidator().Validate
+	v.FldValidators["service_type.k8s_service"] = K8SServiceValidator().Validate
+	v.FldValidators["service_type.consul_service"] = ConsulServiceValidator().Validate
+	v.FldValidators["service_type.n1_discovered_server"] = NginxOneDiscoveredServerValidator().Validate
+	v.FldValidators["service_type.third_party"] = ThirdPartyApplicationDiscoveryValidator().Validate
 
 	v.FldValidators["http_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -960,6 +1463,54 @@ func (m *GlobalSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *GlobalSpecType_K8SService:
+
+		drInfos, err := m.GetK8SService().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "k8s_service." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_ConsulService:
+
+		drInfos, err := m.GetConsulService().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "consul_service." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_N1DiscoveredServer:
+
+		drInfos, err := m.GetN1DiscoveredServer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetN1DiscoveredServer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "n1_discovered_server." + dri.DRField
+		}
+		return drInfos, err
+
+	case *GlobalSpecType_ThirdParty:
+
+		drInfos, err := m.GetThirdParty().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetThirdParty().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "third_party." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -1147,6 +1698,50 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_K8SService:
+		if fv, exists := v.FldValidators["service_type.k8s_service"]; exists {
+			val := m.GetServiceType().(*GlobalSpecType_K8SService).K8SService
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("k8s_service"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ConsulService:
+		if fv, exists := v.FldValidators["service_type.consul_service"]; exists {
+			val := m.GetServiceType().(*GlobalSpecType_ConsulService).ConsulService
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("consul_service"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_N1DiscoveredServer:
+		if fv, exists := v.FldValidators["service_type.n1_discovered_server"]; exists {
+			val := m.GetServiceType().(*GlobalSpecType_N1DiscoveredServer).N1DiscoveredServer
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("n1_discovered_server"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_ThirdParty:
+		if fv, exists := v.FldValidators["service_type.third_party"]; exists {
+			val := m.GetServiceType().(*GlobalSpecType_ThirdParty).ThirdParty
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("third_party"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1245,6 +1840,10 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["visibility_action_choice"] = vFn
 
 	v.FldValidators["service_type.virtual_server"] = VirtualServerValidator().Validate
+	v.FldValidators["service_type.k8s_service"] = K8SServiceValidator().Validate
+	v.FldValidators["service_type.consul_service"] = ConsulServiceValidator().Validate
+	v.FldValidators["service_type.n1_discovered_server"] = NginxOneDiscoveredServerValidator().Validate
+	v.FldValidators["service_type.third_party"] = ThirdPartyApplicationDiscoveryValidator().Validate
 
 	v.FldValidators["http_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -1259,6 +1858,629 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 func GlobalSpecTypeValidator() db.Validator {
 	return DefaultGlobalSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *K8SService) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *K8SService) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *K8SService) DeepCopy() *K8SService {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &K8SService{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *K8SService) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *K8SService) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return K8SServiceValidator().Validate(ctx, m, opts...)
+}
+
+func (m *K8SService) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryObjectDRefInfo()
+
+}
+
+func (m *K8SService) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetDiscoveryObject()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "discovery_object",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetDiscoveryObjectDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *K8SService) GetDiscoveryObjectDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "discovery.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: discovery")
+	}
+
+	vref := m.GetDiscoveryObject()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "discovery.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateK8SService struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateK8SService) ServiceNameValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for service_name")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateK8SService) PodsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for pods")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_discovery.PodInfoType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_discovery.PodInfoTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for pods")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_discovery.PodInfoType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_discovery.PodInfoType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated pods")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items pods")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateK8SService) PortsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for ports")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema_discovery.PortInfoType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema_discovery.PortInfoTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for ports")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema_discovery.PortInfoType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema_discovery.PortInfoType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated ports")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items ports")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateK8SService) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*K8SService)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *K8SService got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["discovery_object"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("discovery_object"))
+		if err := fv(ctx, m.GetDiscoveryObject(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["pods"]; exists {
+		vOpts := append(opts, db.WithValidateField("pods"))
+		if err := fv(ctx, m.GetPods(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["ports"]; exists {
+		vOpts := append(opts, db.WithValidateField("ports"))
+		if err := fv(ctx, m.GetPorts(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["service_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("service_name"))
+		if err := fv(ctx, m.GetServiceName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultK8SServiceValidator = func() *ValidateK8SService {
+	v := &ValidateK8SService{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhServiceName := v.ServiceNameValidationRuleHandler
+	rulesServiceName := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhServiceName(rulesServiceName)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for K8SService.service_name: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["service_name"] = vFn
+
+	vrhPods := v.PodsValidationRuleHandler
+	rulesPods := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "50",
+	}
+	vFn, err = vrhPods(rulesPods)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for K8SService.pods: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["pods"] = vFn
+
+	vrhPorts := v.PortsValidationRuleHandler
+	rulesPorts := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "50",
+	}
+	vFn, err = vrhPorts(rulesPorts)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for K8SService.ports: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["ports"] = vFn
+
+	v.FldValidators["discovery_object"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func K8SServiceValidator() db.Validator {
+	return DefaultK8SServiceValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NginxOneDiscoveredServer) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NginxOneDiscoveredServer) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NginxOneDiscoveredServer) DeepCopy() *NginxOneDiscoveredServer {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NginxOneDiscoveredServer{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NginxOneDiscoveredServer) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NginxOneDiscoveredServer) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NginxOneDiscoveredServerValidator().Validate(ctx, m, opts...)
+}
+
+func (m *NginxOneDiscoveredServer) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetNginxServiceDiscoveryRefDRefInfo()
+
+}
+
+func (m *NginxOneDiscoveredServer) GetNginxServiceDiscoveryRefDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetNginxServiceDiscoveryRef()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("nginx_service_discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "nginx_service_discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "nginx_service_discovery_ref",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetNginxServiceDiscoveryRefDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *NginxOneDiscoveredServer) GetNginxServiceDiscoveryRefDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "nginx_service_discovery.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: nginx_service_discovery")
+	}
+
+	vref := m.GetNginxServiceDiscoveryRef()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "nginx_service_discovery.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateNginxOneDiscoveredServer struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNginxOneDiscoveredServer) ServerBlockValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for server_block")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNginxOneDiscoveredServer) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNginxOneDiscoveredServer) NginxOneObjectIdValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nginx_one_object_id")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNginxOneDiscoveredServer) DomainsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for domains")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for domains")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated domains")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items domains")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNginxOneDiscoveredServer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NginxOneDiscoveredServer)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NginxOneDiscoveredServer got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["domains"]; exists {
+		vOpts := append(opts, db.WithValidateField("domains"))
+		if err := fv(ctx, m.GetDomains(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nginx_one_object_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_one_object_id"))
+		if err := fv(ctx, m.GetNginxOneObjectId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nginx_one_object_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_one_object_name"))
+		if err := fv(ctx, m.GetNginxOneObjectName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nginx_service_discovery_ref"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_service_discovery_ref"))
+		if err := fv(ctx, m.GetNginxServiceDiscoveryRef(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["server_block"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("server_block"))
+		if err := fv(ctx, m.GetServerBlock(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNginxOneDiscoveredServerValidator = func() *ValidateNginxOneDiscoveredServer {
+	v := &ValidateNginxOneDiscoveredServer{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhServerBlock := v.ServerBlockValidationRuleHandler
+	rulesServerBlock := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "256",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFn, err = vrhServerBlock(rulesServerBlock)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NginxOneDiscoveredServer.server_block: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["server_block"] = vFn
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NginxOneDiscoveredServer.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
+
+	vrhNginxOneObjectId := v.NginxOneObjectIdValidationRuleHandler
+	rulesNginxOneObjectId := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.string.max_bytes": "256",
+		"ves.io.schema.rules.string.not_empty": "true",
+	}
+	vFn, err = vrhNginxOneObjectId(rulesNginxOneObjectId)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NginxOneDiscoveredServer.nginx_one_object_id: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["nginx_one_object_id"] = vFn
+
+	vrhDomains := v.DomainsValidationRuleHandler
+	rulesDomains := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "32",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhDomains(rulesDomains)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NginxOneDiscoveredServer.domains: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["domains"] = vFn
+
+	v.FldValidators["nginx_service_discovery_ref"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func NginxOneDiscoveredServerValidator() db.Validator {
+	return DefaultNginxOneDiscoveredServerValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1399,6 +2621,54 @@ func (m *ReplaceSpecType) GetServiceTypeDRefInfo() ([]db.DRefInfo, error) {
 		}
 		return drInfos, err
 
+	case *ReplaceSpecType_K8SService:
+
+		drInfos, err := m.GetK8SService().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetK8SService().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "k8s_service." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_ConsulService:
+
+		drInfos, err := m.GetConsulService().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetConsulService().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "consul_service." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_N1DiscoveredServer:
+
+		drInfos, err := m.GetN1DiscoveredServer().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetN1DiscoveredServer().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "n1_discovered_server." + dri.DRField
+		}
+		return drInfos, err
+
+	case *ReplaceSpecType_ThirdParty:
+
+		drInfos, err := m.GetThirdParty().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetThirdParty().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "third_party." + dri.DRField
+		}
+		return drInfos, err
+
 	default:
 		return nil, nil
 	}
@@ -1528,6 +2798,50 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_K8SService:
+		if fv, exists := v.FldValidators["service_type.k8s_service"]; exists {
+			val := m.GetServiceType().(*ReplaceSpecType_K8SService).K8SService
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("k8s_service"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ConsulService:
+		if fv, exists := v.FldValidators["service_type.consul_service"]; exists {
+			val := m.GetServiceType().(*ReplaceSpecType_ConsulService).ConsulService
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("consul_service"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_N1DiscoveredServer:
+		if fv, exists := v.FldValidators["service_type.n1_discovered_server"]; exists {
+			val := m.GetServiceType().(*ReplaceSpecType_N1DiscoveredServer).N1DiscoveredServer
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("n1_discovered_server"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_ThirdParty:
+		if fv, exists := v.FldValidators["service_type.third_party"]; exists {
+			val := m.GetServiceType().(*ReplaceSpecType_ThirdParty).ThirdParty
+			vOpts := append(opts,
+				db.WithValidateField("service_type"),
+				db.WithValidateField("third_party"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1617,6 +2931,10 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	v.FldValidators["visibility_action_choice"] = vFn
 
 	v.FldValidators["service_type.virtual_server"] = VirtualServerValidator().Validate
+	v.FldValidators["service_type.k8s_service"] = K8SServiceValidator().Validate
+	v.FldValidators["service_type.consul_service"] = ConsulServiceValidator().Validate
+	v.FldValidators["service_type.n1_discovered_server"] = NginxOneDiscoveredServerValidator().Validate
+	v.FldValidators["service_type.third_party"] = ThirdPartyApplicationDiscoveryValidator().Validate
 
 	v.FldValidators["http_load_balancers"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
@@ -1627,6 +2945,144 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ThirdPartyApplicationDiscovery) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ThirdPartyApplicationDiscovery) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ThirdPartyApplicationDiscovery) DeepCopy() *ThirdPartyApplicationDiscovery {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ThirdPartyApplicationDiscovery{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ThirdPartyApplicationDiscovery) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ThirdPartyApplicationDiscovery) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ThirdPartyApplicationDiscoveryValidator().Validate(ctx, m, opts...)
+}
+
+func (m *ThirdPartyApplicationDiscovery) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetDiscoveryObjectDRefInfo()
+
+}
+
+func (m *ThirdPartyApplicationDiscovery) GetDiscoveryObjectDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetDiscoveryObject()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("discovery.Object")
+	dri := db.DRefInfo{
+		RefdType:   "discovery.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "discovery_object",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetDiscoveryObjectDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *ThirdPartyApplicationDiscovery) GetDiscoveryObjectDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "discovery.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: discovery")
+	}
+
+	vref := m.GetDiscoveryObject()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "discovery.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateThirdPartyApplicationDiscovery struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateThirdPartyApplicationDiscovery) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ThirdPartyApplicationDiscovery)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ThirdPartyApplicationDiscovery got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["discovery_object"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("discovery_object"))
+		if err := fv(ctx, m.GetDiscoveryObject(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultThirdPartyApplicationDiscoveryValidator = func() *ValidateThirdPartyApplicationDiscovery {
+	v := &ValidateThirdPartyApplicationDiscovery{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["discovery_object"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	return v
+}()
+
+func ThirdPartyApplicationDiscoveryValidator() db.Validator {
+	return DefaultThirdPartyApplicationDiscoveryValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1840,6 +3296,16 @@ func (v *ValidateVirtualServer) ServerNameValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
+func (v *ValidateVirtualServer) SubPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sub_path")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateVirtualServer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*VirtualServer)
 	if !ok {
@@ -1957,6 +3423,15 @@ func (v *ValidateVirtualServer) Validate(ctx context.Context, pm interface{}, op
 
 		vOpts := append(opts, db.WithValidateField("status"))
 		if err := fv(ctx, m.GetStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["sub_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sub_path"))
+		if err := fv(ctx, m.GetSubPath(), vOpts...); err != nil {
 			return err
 		}
 
@@ -2093,6 +3568,17 @@ var DefaultVirtualServerValidator = func() *ValidateVirtualServer {
 	}
 	v.FldValidators["server_name"] = vFn
 
+	vrhSubPath := v.SubPathValidationRuleHandler
+	rulesSubPath := map[string]string{
+		"ves.io.schema.rules.string.max_len": "1024",
+	}
+	vFn, err = vrhSubPath(rulesSubPath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualServer.sub_path: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sub_path"] = vFn
+
 	v.FldValidators["discovery_object"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -2108,6 +3594,18 @@ func (r *CreateSpecType) SetServiceTypeToGlobalSpecType(o *GlobalSpecType) error
 	case nil:
 		o.ServiceType = nil
 
+	case *CreateSpecType_ConsulService:
+		o.ServiceType = &GlobalSpecType_ConsulService{ConsulService: of.ConsulService}
+
+	case *CreateSpecType_K8SService:
+		o.ServiceType = &GlobalSpecType_K8SService{K8SService: of.K8SService}
+
+	case *CreateSpecType_N1DiscoveredServer:
+		o.ServiceType = &GlobalSpecType_N1DiscoveredServer{N1DiscoveredServer: of.N1DiscoveredServer}
+
+	case *CreateSpecType_ThirdParty:
+		o.ServiceType = &GlobalSpecType_ThirdParty{ThirdParty: of.ThirdParty}
+
 	case *CreateSpecType_VirtualServer:
 		o.ServiceType = &GlobalSpecType_VirtualServer{VirtualServer: of.VirtualServer}
 
@@ -2121,6 +3619,18 @@ func (r *CreateSpecType) GetServiceTypeFromGlobalSpecType(o *GlobalSpecType) err
 	switch of := o.ServiceType.(type) {
 	case nil:
 		r.ServiceType = nil
+
+	case *GlobalSpecType_ConsulService:
+		r.ServiceType = &CreateSpecType_ConsulService{ConsulService: of.ConsulService}
+
+	case *GlobalSpecType_K8SService:
+		r.ServiceType = &CreateSpecType_K8SService{K8SService: of.K8SService}
+
+	case *GlobalSpecType_N1DiscoveredServer:
+		r.ServiceType = &CreateSpecType_N1DiscoveredServer{N1DiscoveredServer: of.N1DiscoveredServer}
+
+	case *GlobalSpecType_ThirdParty:
+		r.ServiceType = &CreateSpecType_ThirdParty{ThirdParty: of.ThirdParty}
 
 	case *GlobalSpecType_VirtualServer:
 		r.ServiceType = &CreateSpecType_VirtualServer{VirtualServer: of.VirtualServer}
@@ -2211,6 +3721,18 @@ func (r *GetSpecType) SetServiceTypeToGlobalSpecType(o *GlobalSpecType) error {
 	case nil:
 		o.ServiceType = nil
 
+	case *GetSpecType_ConsulService:
+		o.ServiceType = &GlobalSpecType_ConsulService{ConsulService: of.ConsulService}
+
+	case *GetSpecType_K8SService:
+		o.ServiceType = &GlobalSpecType_K8SService{K8SService: of.K8SService}
+
+	case *GetSpecType_N1DiscoveredServer:
+		o.ServiceType = &GlobalSpecType_N1DiscoveredServer{N1DiscoveredServer: of.N1DiscoveredServer}
+
+	case *GetSpecType_ThirdParty:
+		o.ServiceType = &GlobalSpecType_ThirdParty{ThirdParty: of.ThirdParty}
+
 	case *GetSpecType_VirtualServer:
 		o.ServiceType = &GlobalSpecType_VirtualServer{VirtualServer: of.VirtualServer}
 
@@ -2224,6 +3746,18 @@ func (r *GetSpecType) GetServiceTypeFromGlobalSpecType(o *GlobalSpecType) error 
 	switch of := o.ServiceType.(type) {
 	case nil:
 		r.ServiceType = nil
+
+	case *GlobalSpecType_ConsulService:
+		r.ServiceType = &GetSpecType_ConsulService{ConsulService: of.ConsulService}
+
+	case *GlobalSpecType_K8SService:
+		r.ServiceType = &GetSpecType_K8SService{K8SService: of.K8SService}
+
+	case *GlobalSpecType_N1DiscoveredServer:
+		r.ServiceType = &GetSpecType_N1DiscoveredServer{N1DiscoveredServer: of.N1DiscoveredServer}
+
+	case *GlobalSpecType_ThirdParty:
+		r.ServiceType = &GetSpecType_ThirdParty{ThirdParty: of.ThirdParty}
 
 	case *GlobalSpecType_VirtualServer:
 		r.ServiceType = &GetSpecType_VirtualServer{VirtualServer: of.VirtualServer}
@@ -2314,6 +3848,18 @@ func (r *ReplaceSpecType) SetServiceTypeToGlobalSpecType(o *GlobalSpecType) erro
 	case nil:
 		o.ServiceType = nil
 
+	case *ReplaceSpecType_ConsulService:
+		o.ServiceType = &GlobalSpecType_ConsulService{ConsulService: of.ConsulService}
+
+	case *ReplaceSpecType_K8SService:
+		o.ServiceType = &GlobalSpecType_K8SService{K8SService: of.K8SService}
+
+	case *ReplaceSpecType_N1DiscoveredServer:
+		o.ServiceType = &GlobalSpecType_N1DiscoveredServer{N1DiscoveredServer: of.N1DiscoveredServer}
+
+	case *ReplaceSpecType_ThirdParty:
+		o.ServiceType = &GlobalSpecType_ThirdParty{ThirdParty: of.ThirdParty}
+
 	case *ReplaceSpecType_VirtualServer:
 		o.ServiceType = &GlobalSpecType_VirtualServer{VirtualServer: of.VirtualServer}
 
@@ -2327,6 +3873,18 @@ func (r *ReplaceSpecType) GetServiceTypeFromGlobalSpecType(o *GlobalSpecType) er
 	switch of := o.ServiceType.(type) {
 	case nil:
 		r.ServiceType = nil
+
+	case *GlobalSpecType_ConsulService:
+		r.ServiceType = &ReplaceSpecType_ConsulService{ConsulService: of.ConsulService}
+
+	case *GlobalSpecType_K8SService:
+		r.ServiceType = &ReplaceSpecType_K8SService{K8SService: of.K8SService}
+
+	case *GlobalSpecType_N1DiscoveredServer:
+		r.ServiceType = &ReplaceSpecType_N1DiscoveredServer{N1DiscoveredServer: of.N1DiscoveredServer}
+
+	case *GlobalSpecType_ThirdParty:
+		r.ServiceType = &ReplaceSpecType_ThirdParty{ThirdParty: of.ThirdParty}
 
 	case *GlobalSpecType_VirtualServer:
 		r.ServiceType = &ReplaceSpecType_VirtualServer{VirtualServer: of.VirtualServer}

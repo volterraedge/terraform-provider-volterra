@@ -65,7 +65,7 @@ func resourceVolterraWafExclusionPolicy() *schema.Resource {
 			"waf_exclusion_rules": {
 
 				Type:     schema.TypeList,
-				Optional: true,
+				Required: true,
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 
@@ -103,6 +103,12 @@ func resourceVolterraWafExclusionPolicy() *schema.Resource {
 									"description": {
 										Type:     schema.TypeString,
 										Optional: true,
+									},
+
+									"disable": {
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"name": {
@@ -373,6 +379,10 @@ func resourceVolterraWafExclusionPolicyCreate(d *schema.ResourceData, meta inter
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
 							}
 
 							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -743,6 +753,10 @@ func resourceVolterraWafExclusionPolicyUpdate(d *schema.ResourceData, meta inter
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
 							}
 
 							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {

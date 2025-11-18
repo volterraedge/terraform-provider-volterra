@@ -17,17 +17,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_policy_template.Object"] = ObjectValidator()
 	vr["ves.io.schema.uztna.uztna_policy_template.StatusObject"] = StatusObjectValidator()
 
-	vr["ves.io.schema.uztna.uztna_policy_template.CreateRequest"] = CreateRequestValidator()
-	vr["ves.io.schema.uztna.uztna_policy_template.CreateResponse"] = CreateResponseValidator()
-	vr["ves.io.schema.uztna.uztna_policy_template.DeleteRequest"] = DeleteRequestValidator()
-	vr["ves.io.schema.uztna.uztna_policy_template.GetRequest"] = GetRequestValidator()
-	vr["ves.io.schema.uztna.uztna_policy_template.GetResponse"] = GetResponseValidator()
-	vr["ves.io.schema.uztna.uztna_policy_template.ListRequest"] = ListRequestValidator()
-	vr["ves.io.schema.uztna.uztna_policy_template.ListResponse"] = ListResponseValidator()
-	vr["ves.io.schema.uztna.uztna_policy_template.ListResponseItem"] = ListResponseItemValidator()
-	vr["ves.io.schema.uztna.uztna_policy_template.ReplaceRequest"] = ReplaceRequestValidator()
-	vr["ves.io.schema.uztna.uztna_policy_template.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.uztna.uztna_policy_template.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_policy_template.Flows"] = FlowsValidator()
 	vr["ves.io.schema.uztna.uztna_policy_template.GeoLocationMatch"] = GeoLocationMatchValidator()
@@ -54,22 +43,9 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_policy_template.API.Create"] = []string{
-		"spec.continuous_flow",
-		"spec.on_start_flow.deny_all",
-		"spec.on_start_flow.simple.flows.#.allow_all",
-	}
-
-	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.uztna.uztna_policy_template.API.Replace"] = []string{
-		"spec.continuous_flow",
-		"spec.on_start_flow.deny_all",
-		"spec.on_start_flow.simple.flows.#.allow_all",
-	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-	sm["ves.io.schema.uztna.uztna_policy_template.API"] = "config"
 
 }
 
@@ -89,24 +65,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 
-	csr = mdr.PubCRUDServiceRegistry
-
-	func() {
-		// set swagger jsons for our and external schemas
-		csr.CRUDSwaggerRegistry["ves.io.schema.uztna.uztna_policy_template.Object"] = APISwaggerJSON
-		csr.CRUDGrpcClientRegistry["ves.io.schema.uztna.uztna_policy_template.Object"] = NewCRUDAPIGrpcClient
-		csr.CRUDRestClientRegistry["ves.io.schema.uztna.uztna_policy_template.Object"] = NewCRUDAPIRestClient
-		csr.CRUDInprocClientRegistry["ves.io.schema.uztna.uztna_policy_template.Object"] = NewCRUDAPIInprocClient
-		if isExternal {
-			return
-		}
-		// registration of api handlers if our own schema
-		mdr.SvcRegisterHandlers["ves.io.schema.uztna.uztna_policy_template.API"] = RegisterAPIServer
-		mdr.SvcGwRegisterHandlers["ves.io.schema.uztna.uztna_policy_template.API"] = RegisterGwAPIHandler
-		csr.CRUDServerRegistry["ves.io.schema.uztna.uztna_policy_template.Object"] = NewCRUDAPIServer
-
-	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -114,11 +72,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

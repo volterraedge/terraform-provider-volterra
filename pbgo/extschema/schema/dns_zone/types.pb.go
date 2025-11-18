@@ -640,8 +640,8 @@ type PrimaryDNSConfig struct {
 	SoaRecordParametersChoice isPrimaryDNSConfig_SoaRecordParametersChoice `protobuf_oneof:"soa_record_parameters_choice"`
 	// Record Sets Group
 	//
-	// x-displayName: "Additional Resource Record Sets"
-	// Collection of additional DNS resource record sets
+	// x-displayName: "Set Groups and F5-Managed"
+	// Create and manage set groups, and resource record sets within them, x-ves-io-managed set is managed by F5.
 	RrSetGroup []*RRSetGroup `protobuf:"bytes,8,rep,name=rr_set_group,json=rrSetGroup,proto3" json:"rr_set_group,omitempty"`
 	// Serial number
 	//
@@ -654,8 +654,8 @@ type PrimaryDNSConfig struct {
 	Admin string `protobuf:"bytes,10,opt,name=admin,proto3" json:"admin,omitempty"`
 	// Default DNS Record Sets
 	//
-	// x-displayName: "Resource Record Sets"
-	// Collection of DNS record sets in the default group.
+	// x-displayName: "Default Resource Record Sets"
+	// Add and manage DNS resource record sets part of Default set group.
 	DefaultRrSetGroup []*RRSet `protobuf:"bytes,11,rep,name=default_rr_set_group,json=defaultRrSetGroup,proto3" json:"default_rr_set_group,omitempty"`
 	// DNSSEC Mode
 	//

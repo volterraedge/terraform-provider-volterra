@@ -27,6 +27,179 @@ var (
 
 // augmented methods on protoc/std generated struct
 
+func (m *BFD) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BFD) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BFD) DeepCopy() *BFD {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BFD{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BFD) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BFD) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BFDValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBFD struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBFD) TransmitIntervalMillisecondsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for transmit_interval_milliseconds")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBFD) ReceiveIntervalMillisecondsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for receive_interval_milliseconds")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBFD) MultiplierValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for multiplier")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateBFD) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BFD)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BFD got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["multiplier"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("multiplier"))
+		if err := fv(ctx, m.GetMultiplier(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["receive_interval_milliseconds"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("receive_interval_milliseconds"))
+		if err := fv(ctx, m.GetReceiveIntervalMilliseconds(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["transmit_interval_milliseconds"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("transmit_interval_milliseconds"))
+		if err := fv(ctx, m.GetTransmitIntervalMilliseconds(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBFDValidator = func() *ValidateBFD {
+	v := &ValidateBFD{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhTransmitIntervalMilliseconds := v.TransmitIntervalMillisecondsValidationRuleHandler
+	rulesTransmitIntervalMilliseconds := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "255000",
+	}
+	vFn, err = vrhTransmitIntervalMilliseconds(rulesTransmitIntervalMilliseconds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BFD.transmit_interval_milliseconds: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["transmit_interval_milliseconds"] = vFn
+
+	vrhReceiveIntervalMilliseconds := v.ReceiveIntervalMillisecondsValidationRuleHandler
+	rulesReceiveIntervalMilliseconds := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "255000",
+	}
+	vFn, err = vrhReceiveIntervalMilliseconds(rulesReceiveIntervalMilliseconds)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BFD.receive_interval_milliseconds: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["receive_interval_milliseconds"] = vFn
+
+	vrhMultiplier := v.MultiplierValidationRuleHandler
+	rulesMultiplier := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+		"ves.io.schema.rules.uint32.gte":       "1",
+		"ves.io.schema.rules.uint32.lte":       "255",
+	}
+	vFn, err = vrhMultiplier(rulesMultiplier)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BFD.multiplier: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["multiplier"] = vFn
+
+	return v
+}()
+
+func BFDValidator() db.Validator {
+	return DefaultBFDValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *BgpParameters) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -427,6 +600,14 @@ type ValidateBgpPeer struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateBgpPeer) BfdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bfd_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidateBgpPeer) AsnValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
@@ -630,6 +811,42 @@ func (v *ValidateBgpPeer) Validate(ctx context.Context, pm interface{}, opts ...
 
 	}
 
+	if fv, exists := v.FldValidators["bfd_choice"]; exists {
+		val := m.GetBfdChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bfd_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBfdChoice().(type) {
+	case *BgpPeer_BfdDisabled:
+		if fv, exists := v.FldValidators["bfd_choice.bfd_disabled"]; exists {
+			val := m.GetBfdChoice().(*BgpPeer_BfdDisabled).BfdDisabled
+			vOpts := append(opts,
+				db.WithValidateField("bfd_choice"),
+				db.WithValidateField("bfd_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BgpPeer_BfdEnabled:
+		if fv, exists := v.FldValidators["bfd_choice.bfd_enabled"]; exists {
+			val := m.GetBfdChoice().(*BgpPeer_BfdEnabled).BfdEnabled
+			vOpts := append(opts,
+				db.WithValidateField("bfd_choice"),
+				db.WithValidateField("bfd_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["bgp_peer_address"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("bgp_peer_address"))
@@ -724,6 +941,17 @@ var DefaultBgpPeerValidator = func() *ValidateBgpPeer {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBfdChoice := v.BfdChoiceValidationRuleHandler
+	rulesBfdChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBfdChoice(rulesBfdChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BgpPeer.bfd_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bfd_choice"] = vFn
+
 	vrhAsn := v.AsnValidationRuleHandler
 	rulesAsn := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "1",
@@ -791,6 +1019,8 @@ var DefaultBgpPeerValidator = func() *ValidateBgpPeer {
 		panic(errMsg)
 	}
 	v.FldValidators["interface_refs"] = vFn
+
+	v.FldValidators["bfd_choice.bfd_enabled"] = BFDValidator().Validate
 
 	v.FldValidators["bgp_peer_address"] = ves_io_schema.IpAddressTypeValidator().Validate
 
@@ -4315,6 +4545,14 @@ type ValidatePeer struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidatePeer) BfdChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bfd_choice")
+	}
+	return validatorFn, nil
+}
+
 func (v *ValidatePeer) EnableChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
@@ -4372,6 +4610,42 @@ func (v *ValidatePeer) Validate(ctx context.Context, pm interface{}, opts ...db.
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["bfd_choice"]; exists {
+		val := m.GetBfdChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bfd_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBfdChoice().(type) {
+	case *Peer_BfdDisabled:
+		if fv, exists := v.FldValidators["bfd_choice.bfd_disabled"]; exists {
+			val := m.GetBfdChoice().(*Peer_BfdDisabled).BfdDisabled
+			vOpts := append(opts,
+				db.WithValidateField("bfd_choice"),
+				db.WithValidateField("bfd_disabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *Peer_BfdEnabled:
+		if fv, exists := v.FldValidators["bfd_choice.bfd_enabled"]; exists {
+			val := m.GetBfdChoice().(*Peer_BfdEnabled).BfdEnabled
+			vOpts := append(opts,
+				db.WithValidateField("bfd_choice"),
+				db.WithValidateField("bfd_enabled"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["enable_choice"]; exists {
@@ -4524,6 +4798,17 @@ var DefaultPeerValidator = func() *ValidatePeer {
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
+	vrhBfdChoice := v.BfdChoiceValidationRuleHandler
+	rulesBfdChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBfdChoice(rulesBfdChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Peer.bfd_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bfd_choice"] = vFn
+
 	vrhEnableChoice := v.EnableChoiceValidationRuleHandler
 	rulesEnableChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4567,6 +4852,8 @@ var DefaultPeerValidator = func() *ValidatePeer {
 		panic(errMsg)
 	}
 	v.FldValidators["metadata"] = vFn
+
+	v.FldValidators["bfd_choice.bfd_enabled"] = BFDValidator().Validate
 
 	v.FldValidators["enable_choice.routing_policies"] = BgpRoutePoliciesValidator().Validate
 

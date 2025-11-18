@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.healthcheck.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.healthcheck.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2942,7 +2942,7 @@ var APISwaggerJSON string = `{
             "description": "Configuration specification for HealthCheck",
             "title": "GlobalSpecType",
             "x-displayname": "Global Configuration Specification",
-            "x-ves-oneof-field-health_check": "[\"http_health_check\",\"tcp_health_check\"]",
+            "x-ves-oneof-field-health_check": "[\"http_health_check\",\"tcp_health_check\",\"udp_icmp_health_check\"]",
             "x-ves-proto-message": "ves.io.schema.healthcheck.GlobalSpecType",
             "properties": {
                 "healthy_threshold": {
@@ -2960,7 +2960,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "http_health_check": {
-                    "description": "Exclusive with [tcp_health_check]\n Specifies the following details for HTTP health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
+                    "description": "Exclusive with [tcp_health_check udp_icmp_health_check]\n Specifies the following details for HTTP health check requests\n 1. Host header\n 2. Path\n 3. Request headers to add\n 4. Request headers to remove",
                     "title": "http_health_check",
                     "$ref": "#/definitions/healthcheckHttpHealthCheck",
                     "x-displayname": "HTTP HealthCheck"
@@ -2991,7 +2991,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "tcp_health_check": {
-                    "description": "Exclusive with [http_health_check]\n Specifies send payload and expected response payload",
+                    "description": "Exclusive with [http_health_check udp_icmp_health_check]\n Specifies send payload and expected response payload",
                     "title": "tcp_health_check",
                     "$ref": "#/definitions/healthcheckTcpHealthCheck",
                     "x-displayname": "TCP HealthCheck"
@@ -3009,6 +3009,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.uint32.gte": "1",
                         "ves.io.schema.rules.uint32.lte": "600"
                     }
+                },
+                "udp_icmp_health_check": {
+                    "description": "Exclusive with [http_health_check tcp_health_check]\n Specifies ICMP HealthCheck for UDP Loadbalancer",
+                    "title": "udp_icmp_health_check",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "ICMP HealthCheck for UDP Loadbalancer"
                 },
                 "unhealthy_threshold": {
                     "type": "integer",
@@ -3692,6 +3698,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

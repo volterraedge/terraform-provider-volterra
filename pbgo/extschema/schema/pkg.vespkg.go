@@ -243,12 +243,14 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.LabelKeyClassList"] = LabelKeyClassListValidator()
 	vr["ves.io.schema.LabelSelectorOperatorList"] = LabelSelectorOperatorListValidator()
 	vr["ves.io.schema.MapOptions"] = MapOptionsValidator()
+	vr["ves.io.schema.MatchPath"] = MatchPathValidator()
 	vr["ves.io.schema.RepeatedOptions"] = RepeatedOptionsValidator()
 	vr["ves.io.schema.StoredObjectURL"] = StoredObjectURLValidator()
 	vr["ves.io.schema.SuffixText"] = SuffixTextValidator()
 	vr["ves.io.schema.SuggestedValues"] = SuggestedValuesValidator()
 	vr["ves.io.schema.Tile"] = TileValidator()
 	vr["ves.io.schema.Tiles"] = TilesValidator()
+	vr["ves.io.schema.ValueAtPath"] = ValueAtPathValidator()
 
 }
 
@@ -282,11 +284,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

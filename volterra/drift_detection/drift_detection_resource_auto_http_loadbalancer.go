@@ -5,7 +5,6 @@ import (
 
 	"github.com/gogo/protobuf/types"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	"gopkg.volterra.us/stdlib/client/vesapi"
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
@@ -14,12 +13,14 @@ import (
 	ves_io_schema_route "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
 	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_cache_rule"
 	ves_io_schema_views_common_security "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_security"
 	ves_io_schema_views_common_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
 	ves_io_schema_views_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 	ves_io_schema_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
 	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
+	"gopkg.volterra.us/stdlib/client/vesapi"
 )
 
 func FlattenVk8s(x *ves_io_schema_views.WhereVK8SService) []interface{} {
@@ -3821,19 +3822,6 @@ func FlattenBotDefenseAdvancedPolicy(x *ves_io_schema_views_common_security.BotD
 	return pValue
 }
 
-func FlattenBotDefenseAdvanced(x *ves_io_schema_views_common_security.BotDefenseAdvancedType) []interface{} {
-	rslt := make([]interface{}, 0)
-	if x != nil {
-		mapValue := map[string]interface{}{
-			"mobile": FlattenObjectRefTypeSet(x.GetMobile()),
-			"policy": FlattenBotDefenseAdvancedPolicy(x.GetPolicy()),
-			"web":    FlattenObjectRefTypeSet(x.GetWeb()),
-		}
-		rslt = append(rslt, mapValue)
-	}
-	return rslt
-}
-
 func FlattenBody(x *ves_io_schema_views_http_loadbalancer.BodySectionMaskingOptions) []interface{} {
 	rslt := make([]interface{}, 0)
 	if x != nil {
@@ -4038,6 +4026,55 @@ func FlattenApiTesting(x *ves_io_schema_views_http_loadbalancer.ApiTesting) []in
 	return rslt
 }
 
+func FlattenCdnCacheRules(x []*ves_io_schema_views.ObjectRefType) []interface{} {
+	rslt := make([]interface{}, 0)
+	for _, v := range x {
+		t := map[string]interface{}{
+			"name":      v.GetName(),
+			"namespace": v.GetNamespace(),
+			"tenant":    v.GetTenant(),
+		}
+		rslt = append(rslt, t)
+	}
+	return rslt
+}
+
+func FlattenCustomCacheRules(x *common_cache_rule.CustomCacheRule) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"cdn_cache_rules": FlattenCdnCacheRules(x.GetCdnCacheRules()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+}
+
+func FlattenDefaultCacheAction(x *common_cache_rule.DefaultCacheAction) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"cache_disabled":     x.GetCacheDisabled(),
+			"cache_ttl_default":  x.GetCacheTtlDefault(),
+			"cache_ttl_override": x.GetCacheTtlOverride(),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+}
+
+func FlattenCachingPolicy(x *ves_io_schema_views_http_loadbalancer.CachingPolicy) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"custom_cache_rule":    FlattenCustomCacheRules(x.GetCustomCacheRule()),
+			"default_cache_action": FlattenDefaultCacheAction(x.GetDefaultCacheAction()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+}
+
 func DriftDetectionSpec(d *schema.ResourceData, resp vesapi.GetObjectResponse) {
 	spec := resp.GetObjSpec().(*ves_io_schema_views_http_loadbalancer.SpecType)
 
@@ -4182,4 +4219,8 @@ func DriftDetectionSpec(d *schema.ResourceData, resp vesapi.GetObjectResponse) {
 	d.Set("disable_waf", isEmpty(spec.GcSpec.GetDisableWaf()))
 
 	d.Set("waf_exclusion_rules", FlattenWafExclusionRules(spec.GcSpec.GetWafExclusionRules()))
+
+	d.Set("caching_policy", FlattenCachingPolicy(spec.GcSpec.GetCachingPolicy()))
+
+	d.Set("disable_caching", isEmpty(spec.GcSpec.GetDisableCaching()))
 }

@@ -267,70 +267,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.advertise_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ai_assistant", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant", false)
-	mdr.PkgsInfo["ves.io.schema.ai_assistant"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/ai_assistant/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/ai_assistant/public_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("SahayaAPI", "CUSTOM_PUBLIC", "", false)
-
-	rpcInfo = svcfw.NewRPCInfo("AIAssistantFeedback", "ves.io.schema.ai_assistant.AIAssistantQueryFeedbackRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/query_feedback"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("AIAssistantFeedback")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.ai_assistant.SahayaAPI.AIAssistantFeedback"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("AIAssistantQuery", "ves.io.schema.ai_assistant.AIAssistantQueryRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/query"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("AIAssistantQuery")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.ai_assistant.SahayaAPI.AIAssistantQuery"] = rpcInfo
-
-	fInfo.APIsInfo["SahayaAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.ai_assistant.SahayaAPI"] = aInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ai_assistant.common", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/common", false)
-	mdr.PkgsInfo["ves.io.schema.ai_assistant.common"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/ai_assistant/common/generic_response.proto")
-	pInfo.FilesInfo["ves.io/schema/ai_assistant/common/generic_response.proto"] = fInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/ai_assistant/common/link.proto")
-	pInfo.FilesInfo["ves.io/schema/ai_assistant/common/link.proto"] = fInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/ai_assistant/common/types.proto")
-	pInfo.FilesInfo["ves.io/schema/ai_assistant/common/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ai_assistant.explain_log_record", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/explain_log_record", false)
-	mdr.PkgsInfo["ves.io.schema.ai_assistant.explain_log_record"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/ai_assistant/explain_log_record/explain_log_record.proto")
-	pInfo.FilesInfo["ves.io/schema/ai_assistant/explain_log_record/explain_log_record.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ai_assistant.gen_dashboard_filter", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/gen_dashboard_filter", false)
-	mdr.PkgsInfo["ves.io.schema.ai_assistant.gen_dashboard_filter"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/ai_assistant/gen_dashboard_filter/gen_dashboard_filter.proto")
-	pInfo.FilesInfo["ves.io/schema/ai_assistant/gen_dashboard_filter/gen_dashboard_filter.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ai_assistant.list", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/list", false)
-	mdr.PkgsInfo["ves.io.schema.ai_assistant.list"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/ai_assistant/list/list.proto")
-	pInfo.FilesInfo["ves.io/schema/ai_assistant/list/list.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ai_assistant.site_analysis", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/site_analysis", false)
-	mdr.PkgsInfo["ves.io.schema.ai_assistant.site_analysis"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/ai_assistant/site_analysis/site_analysis.proto")
-	pInfo.FilesInfo["ves.io/schema/ai_assistant/site_analysis/site_analysis.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ai_assistant.widget", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ai_assistant/widget", false)
-	mdr.PkgsInfo["ves.io.schema.ai_assistant.widget"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/ai_assistant/widget/widget.proto")
-	pInfo.FilesInfo["ves.io/schema/ai_assistant/widget/widget.proto"] = fInfo
-
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.alert_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy", false)
 	mdr.PkgsInfo["ves.io.schema.alert_policy"] = pInfo
 
@@ -716,6 +652,16 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	aInfo.RPCsInfo[svcfw.RPCName("ActivateServiceCredentials")] = rpcInfo
 	mdr.RPCIdx["ves.io.schema.api_credential.CustomAPI.ActivateServiceCredentials"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("BulkRevoke", "ves.io.schema.api_credential.BulkRevokeRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/bulk_revoke/api_credentials"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("BulkRevoke")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.api_credential.CustomAPI.BulkRevoke"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("BulkRevokeServiceCredentials", "ves.io.schema.api_credential.BulkRevokeRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/bulk_revoke/service_credentials"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("BulkRevokeServiceCredentials")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.api_credential.CustomAPI.BulkRevokeServiceCredentials"] = rpcInfo
 	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.api_credential.CreateRequest", false, false)
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/api_credentials"}}
 
@@ -847,6 +793,91 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.api_credential.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_group", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group", false)
+	mdr.PkgsInfo["ves.io.schema.api_group"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/api_group/object.proto")
+	pInfo.FilesInfo["ves.io/schema/api_group/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.api_group.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.api_group.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/api_group/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/api_group/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.api_group.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.api_group.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/api_groups/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.api_group.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.api_group.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/api_groups"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.api_group.API.List"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.api_group.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.api_group.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.api_group.ListRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/api_group/types.proto")
+	pInfo.FilesInfo["ves.io/schema/api_group/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_group.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.api_group.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/api_group/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/api_group/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.api_group.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.api_group.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.api_group/Objects", "/ves.io.schema.api_group/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.api_group.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.api_group.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.api_group/Object/{object_uid}", "/ves.io.schema.api_group/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.api_group.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.api_group.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.api_group/Object/{object_uid}", "/ves.io.schema.api_group/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.api_group.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.api_group.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.api_group/Objects", "/ves.io.schema.api_group/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.api_group.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.api_group.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.api_group/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.api_group.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.api_group.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.api_group/Object/{object_uid}", "/ves.io.schema.api_group/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.api_group.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.api_group.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_group_element", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group_element", false)
 	mdr.PkgsInfo["ves.io.schema.api_group_element"] = pInfo
 
@@ -951,6 +982,25 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.api_sec.api_crawler.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/api_crawler/private_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/api_sec/api_crawler/private_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("PrivateCustomAPI", "CUSTOM_PRIVATE", "ves.io.schema.api_sec.api_crawler.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("RemoveScanStatus", "ves.io.schema.api_sec.api_crawler.RemoveScanStatusReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/namespaces/{namespace}/api_crawler/{name}/scan/remove"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("RemoveScanStatus")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.api_sec.api_crawler.PrivateCustomAPI.RemoveScanStatus"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("UpdateScanStatus", "ves.io.schema.api_sec.api_crawler.UpdateScanStatusReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/namespaces/{namespace}/api_crawler/{name}/scan/update"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateScanStatus")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.api_sec.api_crawler.PrivateCustomAPI.UpdateScanStatus"] = rpcInfo
+
+	fInfo.APIsInfo["PrivateCustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.api_sec.api_crawler.PrivateCustomAPI"] = aInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/api_crawler/public_crudapi.proto")
 	pInfo.FilesInfo["ves.io/schema/api_sec/api_crawler/public_crudapi.proto"] = fInfo
@@ -1592,6 +1642,237 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.app_firewall.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_security", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_security", false)
+	mdr.PkgsInfo["ves.io.schema.app_security"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/public_api_endpoint_protection_api.proto")
+	pInfo.FilesInfo["ves.io/schema/app_security/public_api_endpoint_protection_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("APIEndpointProtectionRuleSuggestionAPI", "CUSTOM_PUBLIC", "ves.io.schema.app_security.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetSuggestedAPIEndpointProtectionRule", "ves.io.schema.app_security.GetSuggestedAPIEndpointProtectionRuleReq", true, true)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/api_endpoint_protection/suggestion"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSuggestedAPIEndpointProtectionRule")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.APIEndpointProtectionRuleSuggestionAPI.GetSuggestedAPIEndpointProtectionRule"] = rpcInfo
+
+	fInfo.APIsInfo["APIEndpointProtectionRuleSuggestionAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.app_security.APIEndpointProtectionRuleSuggestionAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/public_api_rate_limit_api.proto")
+	pInfo.FilesInfo["ves.io/schema/app_security/public_api_rate_limit_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("APIRateLimitRuleSuggestionAPI", "CUSTOM_PUBLIC", "ves.io.schema.app_security.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetSuggestedRateLimitRule", "ves.io.schema.app_security.GetSuggestedRateLimitRuleReq", true, true)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/rate_limit/suggestion"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSuggestedRateLimitRule")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.APIRateLimitRuleSuggestionAPI.GetSuggestedRateLimitRule"] = rpcInfo
+
+	fInfo.APIsInfo["APIRateLimitRuleSuggestionAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.app_security.APIRateLimitRuleSuggestionAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/public_api_sensitive_data_api.proto")
+	pInfo.FilesInfo["ves.io/schema/app_security/public_api_sensitive_data_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("APISensitiveDataRuleSuggestionAPI", "CUSTOM_PUBLIC", "ves.io.schema.app_security.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetSuggestedSensitiveDataRule", "ves.io.schema.app_security.GetSuggestedSensitiveDataRuleReq", true, true)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/data_exposure/suggestion"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSuggestedSensitiveDataRule")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.APISensitiveDataRuleSuggestionAPI.GetSuggestedSensitiveDataRule"] = rpcInfo
+
+	fInfo.APIsInfo["APISensitiveDataRuleSuggestionAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.app_security.APISensitiveDataRuleSuggestionAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/public_client_rule_suggestions_api.proto")
+	pInfo.FilesInfo["ves.io/schema/app_security/public_client_rule_suggestions_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("AppSecurityClientRuleAPI", "CUSTOM_PUBLIC", "ves.io.schema.app_security.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetSuggestedBlockClientRule", "ves.io.schema.app_security.GetSuggestedBlockClientRuleReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/block_client/suggestion"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSuggestedBlockClientRule")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityClientRuleAPI.GetSuggestedBlockClientRule"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetSuggestedBlockClientRuleForCDN", "ves.io.schema.app_security.GetSuggestedBlockClientRuleReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/cdn_loadbalancers/{name}/block_client/suggestion"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSuggestedBlockClientRuleForCDN")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityClientRuleAPI.GetSuggestedBlockClientRuleForCDN"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetSuggestedDDoSMitigationRule", "ves.io.schema.app_security.GetSuggestedDDoSMitigtionRuleReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/ddos_mitigation/suggestion"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSuggestedDDoSMitigationRule")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityClientRuleAPI.GetSuggestedDDoSMitigationRule"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetSuggestedDDoSMitigationRuleForCDN", "ves.io.schema.app_security.GetSuggestedDDoSMitigtionRuleReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/cdn_loadbalancers/{name}/ddos_mitigation/suggestion"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSuggestedDDoSMitigationRuleForCDN")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityClientRuleAPI.GetSuggestedDDoSMitigationRuleForCDN"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetSuggestedTrustClientRule", "ves.io.schema.app_security.GetSuggestedTrustClientRuleReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/trust_client/suggestion"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSuggestedTrustClientRule")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityClientRuleAPI.GetSuggestedTrustClientRule"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetSuggestedTrustClientRuleForCDN", "ves.io.schema.app_security.GetSuggestedTrustClientRuleReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/cdn_loadbalancers/{name}/trust_client/suggestion"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSuggestedTrustClientRuleForCDN")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityClientRuleAPI.GetSuggestedTrustClientRuleForCDN"] = rpcInfo
+
+	fInfo.APIsInfo["AppSecurityClientRuleAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.app_security.AppSecurityClientRuleAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/public_monitoring_api.proto")
+	pInfo.FilesInfo["ves.io/schema/app_security/public_monitoring_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("AppSecurityMonitoringAPI", "CUSTOM_PUBLIC", "ves.io.schema.app_security.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("SearchLoadBalancers", "ves.io.schema.app_security.SearchLoadBalancersRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_security/search/loadbalancers"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SearchLoadBalancers")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SearchLoadBalancers"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SearchLoadBalancersAllNamespaces", "ves.io.schema.app_security.SearchLoadBalancersRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/app_security/all_ns_search/loadbalancers"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SearchLoadBalancersAllNamespaces")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SearchLoadBalancersAllNamespaces"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SecurityEventsAggregationQuery", "ves.io.schema.app_security.SecurityEventsAggregationRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_security/events/aggregation"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SecurityEventsAggregationQuery")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SecurityEventsAggregationQuery"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SecurityEventsAggregationQueryAllNamespaces", "ves.io.schema.app_security.SecurityEventsAggregationRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/app_security/all_ns_events/aggregation"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SecurityEventsAggregationQueryAllNamespaces")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SecurityEventsAggregationQueryAllNamespaces"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SecurityEventsMetrics", "ves.io.schema.app_security.SecurityEventsCountRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_security/metrics"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SecurityEventsMetrics")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SecurityEventsMetrics"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SecurityEventsQuery", "ves.io.schema.app_security.SecurityEventsRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_security/events"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SecurityEventsQuery")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SecurityEventsQuery"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SecurityEventsQueryAllNamespaces", "ves.io.schema.app_security.SecurityEventsRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/app_security/all_ns_events"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SecurityEventsQueryAllNamespaces")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SecurityEventsQueryAllNamespaces"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SecurityEventsScrollQuery", "ves.io.schema.app_security.SecurityEventsScrollRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_security/events/scroll"}, "POST": []string{"/public/namespaces/{namespace}/app_security/events/scroll"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SecurityEventsScrollQuery")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SecurityEventsScrollQuery"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SecurityIncidentsAggregationQuery", "ves.io.schema.app_security.SecurityIncidentsAggregationRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_security/incidents/aggregation"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SecurityIncidentsAggregationQuery")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SecurityIncidentsAggregationQuery"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SecurityIncidentsQuery", "ves.io.schema.app_security.SecurityIncidentsRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_security/incidents"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SecurityIncidentsQuery")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SecurityIncidentsQuery"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SecurityIncidentsScrollQuery", "ves.io.schema.app_security.SecurityIncidentsScrollRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_security/incidents/scroll"}, "POST": []string{"/public/namespaces/{namespace}/app_security/incidents/scroll"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SecurityIncidentsScrollQuery")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SecurityIncidentsScrollQuery"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SuspiciousUserLogsAggregationQuery", "ves.io.schema.app_security.SuspiciousUserLogsAggregationRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_security/suspicious_user_logs/aggregation"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SuspiciousUserLogsAggregationQuery")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SuspiciousUserLogsAggregationQuery"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SuspiciousUserLogsQuery", "ves.io.schema.app_security.SuspiciousUserLogsRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/app_security/suspicious_user_logs"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SuspiciousUserLogsQuery")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SuspiciousUserLogsQuery"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SuspiciousUserLogsScrollQuery", "ves.io.schema.app_security.SuspiciousUserLogsScrollRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/app_security/suspicious_user_logs/scroll"}, "POST": []string{"/public/namespaces/{namespace}/app_security/suspicious_user_logs/scroll"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SuspiciousUserLogsScrollQuery")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI.SuspiciousUserLogsScrollQuery"] = rpcInfo
+
+	fInfo.APIsInfo["AppSecurityMonitoringAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.app_security.AppSecurityMonitoringAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/public_oas_validation_api.proto")
+	pInfo.FilesInfo["ves.io/schema/app_security/public_oas_validation_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("OasValidationSuggestionAPI", "CUSTOM_PUBLIC", "ves.io.schema.app_security.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetSuggestedOasValidationRule", "ves.io.schema.app_security.GetSuggestedOasValidationRuleReq", true, true)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/oas_validation/suggestion"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSuggestedOasValidationRule")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.OasValidationSuggestionAPI.GetSuggestedOasValidationRule"] = rpcInfo
+
+	fInfo.APIsInfo["OasValidationSuggestionAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.app_security.OasValidationSuggestionAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/public_threat_campaign_api.proto")
+	pInfo.FilesInfo["ves.io/schema/app_security/public_threat_campaign_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("ThreatCampaignAPI", "CUSTOM_PUBLIC", "ves.io.schema.app_security.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetThreatCampaignById", "ves.io.schema.app_security.ThreatCampaignRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/threat_campaign/{id}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetThreatCampaignById")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.ThreatCampaignAPI.GetThreatCampaignById"] = rpcInfo
+
+	fInfo.APIsInfo["ThreatCampaignAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.app_security.ThreatCampaignAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/public_waf_exclusion_api.proto")
+	pInfo.FilesInfo["ves.io/schema/app_security/public_waf_exclusion_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("AppSecurityWafExclusionAPI", "CUSTOM_PUBLIC", "ves.io.schema.app_security.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetSuggestedWAFExclusionRule", "ves.io.schema.app_security.GetSuggestedWAFExclusionRuleReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/waf_exclusion/suggestion"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSuggestedWAFExclusionRule")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityWafExclusionAPI.GetSuggestedWAFExclusionRule"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetSuggestedWAFExclusionRuleForCDN", "ves.io.schema.app_security.GetSuggestedWAFExclusionRuleReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/cdn_loadbalancers/{name}/waf_exclusion/suggestion"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSuggestedWAFExclusionRuleForCDN")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.app_security.AppSecurityWafExclusionAPI.GetSuggestedWAFExclusionRuleForCDN"] = rpcInfo
+
+	fInfo.APIsInfo["AppSecurityWafExclusionAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.app_security.AppSecurityWafExclusionAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/types.proto")
+	pInfo.FilesInfo["ves.io/schema/app_security/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_security.incidents", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_security/incidents", false)
+	mdr.PkgsInfo["ves.io.schema.app_security.incidents"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/incidents/types.proto")
+	pInfo.FilesInfo["ves.io/schema/app_security/incidents/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_security.metrics", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_security/metrics", false)
+	mdr.PkgsInfo["ves.io.schema.app_security.metrics"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/metrics/types.proto")
+	pInfo.FilesInfo["ves.io/schema/app_security/metrics/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_security.suspicious_user_log", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_security/suspicious_user_log", false)
+	mdr.PkgsInfo["ves.io.schema.app_security.suspicious_user_log"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/suspicious_user_log/types.proto")
+	pInfo.FilesInfo["ves.io/schema/app_security/suspicious_user_log/types.proto"] = fInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_setting", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_setting", false)
 	mdr.PkgsInfo["ves.io.schema.app_setting"] = pInfo
@@ -2325,133 +2606,347 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.bgp_routing_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigip.apm", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigip/apm", false)
-	mdr.PkgsInfo["ves.io.schema.bigip.apm"] = pInfo
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigcne.irule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigcne/irule", false)
+	mdr.PkgsInfo["ves.io.schema.bigcne.irule"] = pInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/bigip/apm/object.proto")
-	pInfo.FilesInfo["ves.io/schema/bigip/apm/object.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/bigcne/irule/object.proto")
+	pInfo.FilesInfo["ves.io/schema/bigcne/irule/object.proto"] = fInfo
 
 	oInfo = svcfw.NewObjInfo("Object", true)
 
-	oInfo.ReEncryptSecrets["ves.io.schema.bigip.apm.Object.spec.gc_spec.site_type_choice.aws_site_type_choice.apm_aws_site.admin_password"] = &svcfw.ReEncryptBFSecretInfo{
-		PolicyID:       uint64(1000014),
-		WKTenantPrefix: "",
-	}
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.bigcne.irule.Object"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/bigcne/irule/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/bigcne/irule/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.bigcne.irule.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.bigcne.irule.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/irules"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.bigcne.irule.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.bigcne.irule.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/irules/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.bigcne.irule.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.bigcne.irule.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/irules/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.bigcne.irule.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.bigcne.irule.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/irules"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.bigcne.irule.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.bigcne.irule.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/irules/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.bigcne.irule.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.bigcne.irule.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.bigcne.irule.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.bigcne.irule.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.bigcne.irule.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.bigcne.irule.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.bigcne.irule.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/bigcne/irule/types.proto")
+	pInfo.FilesInfo["ves.io/schema/bigcne/irule/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigcne.irule.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigcne/irule/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.bigcne.irule.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/bigcne/irule/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/bigcne/irule/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.bigcne.irule.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.bigcne.irule.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.bigcne.irule/Objects", "/ves.io.schema.bigcne.irule/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.bigcne.irule.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.bigcne.irule.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.bigcne.irule/Object/{object_uid}", "/ves.io.schema.bigcne.irule/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.bigcne.irule.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.bigcne.irule.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bigcne.irule/Object/{object_uid}", "/ves.io.schema.bigcne.irule/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.bigcne.irule.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.bigcne.irule.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bigcne.irule/Objects", "/ves.io.schema.bigcne.irule/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.bigcne.irule.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.bigcne.irule.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bigcne.irule/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.bigcne.irule.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.bigcne.irule.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.bigcne.irule/Object/{object_uid}", "/ves.io.schema.bigcne.irule/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.bigcne.irule.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.bigcne.irule.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigip_irule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigip_irule", false)
+	mdr.PkgsInfo["ves.io.schema.bigip_irule"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/bigip_irule/object.proto")
+	pInfo.FilesInfo["ves.io/schema/bigip_irule/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
 
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.bigip.apm.Object"] = oInfo
+	mdr.ObjIdx["ves.io.schema.bigip_irule.Object"] = oInfo
 	oInfo = svcfw.NewObjInfo("StatusObject", false)
 
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
-	mdr.ObjIdx["ves.io.schema.bigip.apm.StatusObject"] = oInfo
+	mdr.ObjIdx["ves.io.schema.bigip_irule.StatusObject"] = oInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/bigip/apm/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/bigip/apm/public_crudapi.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/bigip_irule/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/bigip_irule/public_crudapi.proto"] = fInfo
 
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.bigip.apm.Object", false)
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.bigip_irule.Object", false)
 
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.bigip.apm.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/apms"}}
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.bigip_irule.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/bigip_irules"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.bigip.apm.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.bigip.apm.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/apms/{name}"}}
+	mdr.RPCIdx["ves.io.schema.bigip_irule.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.bigip_irule.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/bigip_irules/{name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.bigip.apm.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.bigip.apm.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/apms/{name}"}}
+	mdr.RPCIdx["ves.io.schema.bigip_irule.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.bigip_irule.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bigip_irules/{name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.bigip.apm.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.bigip.apm.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/apms"}}
+	mdr.RPCIdx["ves.io.schema.bigip_irule.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.bigip_irule.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bigip_irules"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.bigip.apm.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.bigip.apm.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/apms/{metadata.name}"}}
+	mdr.RPCIdx["ves.io.schema.bigip_irule.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.bigip_irule.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/bigip_irules/{metadata.name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.bigip.apm.API.Replace"] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.bigip_irule.API.Replace"] = rpcInfo
 
 	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.bigip.apm.API"] = aInfo
+	mdr.APIIdx["ves.io.schema.bigip_irule.API"] = aInfo
 
 	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.bigip.apm.CreateRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.bigip_irule.CreateRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.bigip.apm.DeleteRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.bigip_irule.DeleteRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.bigip.apm.GetRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.bigip_irule.GetRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.bigip.apm.ListRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.bigip_irule.ListRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.bigip.apm.ReplaceRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.bigip_irule.ReplaceRequest"] = mInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/bigip/apm/public_custom_data_api.proto")
-	pInfo.FilesInfo["ves.io/schema/bigip/apm/public_custom_data_api.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/bigip_irule/types.proto")
+	pInfo.FilesInfo["ves.io/schema/bigip_irule/types.proto"] = fInfo
 
-	aInfo = svcfw.NewAPIInfo("CustomDataAPI", "CUSTOM_PUBLIC", "ves.io.schema.bigip.apm.Object", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigip_irule.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigip_irule/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.bigip_irule.crudapi"] = pInfo
 
-	rpcInfo = svcfw.NewRPCInfo("Metrics", "ves.io.schema.bigip.apm.MetricsRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/bigip/apm/metrics"}}
+	fInfo = svcfw.NewFileInfo("ves.io/schema/bigip_irule/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/bigip_irule/crudapi/api.proto"] = fInfo
 
-	aInfo.RPCsInfo[svcfw.RPCName("Metrics")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.bigip.apm.CustomDataAPI.Metrics"] = rpcInfo
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.bigip_irule.Object", true)
 
-	fInfo.APIsInfo["CustomDataAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.bigip.apm.CustomDataAPI"] = aInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/bigip/apm/types.proto")
-	pInfo.FilesInfo["ves.io/schema/bigip/apm/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigip.apm.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigip/apm/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.bigip.apm.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/bigip/apm/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/bigip/apm/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.bigip.apm.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.bigip.apm.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.bigip.apm/Objects", "/ves.io.schema.bigip.apm/introspect/write/Objects"}}
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.bigip_irule.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.bigip_irule/Objects", "/ves.io.schema.bigip_irule/introspect/write/Objects"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.bigip.apm.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.bigip.apm.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.bigip.apm/Object/{object_uid}", "/ves.io.schema.bigip.apm/introspect/write/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.bigip_irule.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.bigip_irule.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.bigip_irule/Object/{object_uid}", "/ves.io.schema.bigip_irule/introspect/write/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.bigip.apm.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.bigip.apm.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bigip.apm/Object/{object_uid}", "/ves.io.schema.bigip.apm/introspect/read/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.bigip_irule.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.bigip_irule.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bigip_irule/Object/{object_uid}", "/ves.io.schema.bigip_irule/introspect/read/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.bigip.apm.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.bigip.apm.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bigip.apm/Objects", "/ves.io.schema.bigip.apm/introspect/read/Objects"}}
+	mdr.RPCIdx["ves.io.schema.bigip_irule.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.bigip_irule.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bigip_irule/Objects", "/ves.io.schema.bigip_irule/introspect/read/Objects"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.bigip.apm.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.bigip.apm.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bigip.apm/Objects/stream"}}
+	mdr.RPCIdx["ves.io.schema.bigip_irule.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.bigip_irule.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.bigip_irule/Objects/stream"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.bigip.apm.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.bigip.apm.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.bigip.apm/Object/{object_uid}", "/ves.io.schema.bigip.apm/introspect/write/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.bigip_irule.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.bigip_irule.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.bigip_irule/Object/{object_uid}", "/ves.io.schema.bigip_irule/introspect/write/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.bigip.apm.crudapi.API.Replace"] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.bigip_irule.crudapi.API.Replace"] = rpcInfo
 
 	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.bigip.apm.crudapi.API"] = aInfo
+	mdr.APIIdx["ves.io.schema.bigip_irule.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.billing", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/billing", false)
+	mdr.PkgsInfo["ves.io.schema.billing"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/billing/private_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/billing/private_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomPrivateAPI", "CUSTOM_PRIVATE", "ves.io.schema.billing.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("BillingFeature", "ves.io.schema.billing.BillingFeatureRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/read/namespaces/{namespace}/billing/feature"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("BillingFeature")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.CustomPrivateAPI.BillingFeature"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("BillingUsage", "ves.io.schema.billing.BillingUsageRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/read/namespaces/{namespace}/billing/usage"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("BillingUsage")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.CustomPrivateAPI.BillingUsage"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("RELoadBalancerMetrics", "ves.io.schema.billing.LoadBalancerMetricsRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/read/namespaces/{namespace}/billing/re_loadbalancer_metrics"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("RELoadBalancerMetrics")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.CustomPrivateAPI.RELoadBalancerMetrics"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SecretManagement", "ves.io.schema.billing.SecretManagementRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/read/namespaces/{namespace}/billing/secret_management"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SecretManagement")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.CustomPrivateAPI.SecretManagement"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SiteTraffic", "ves.io.schema.billing.SiteTrafficRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/read/namespaces/{namespace}/billing/site_traffic"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SiteTraffic")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.CustomPrivateAPI.SiteTraffic"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SyntheticMonitorInvocations", "ves.io.schema.billing.SyntheticMonitorInvocationsRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/read/namespaces/{namespace}/billing/synthetic_monitor_invocations"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SyntheticMonitorInvocations")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.CustomPrivateAPI.SyntheticMonitorInvocations"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("UsageCount", "ves.io.schema.billing.UsageCountRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/read/namespaces/{namespace}/billing/usage_count"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("UsageCount")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.CustomPrivateAPI.UsageCount"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("VolterraNetworkTraffic", "ves.io.schema.billing.VolterraNetworkTrafficRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/read/namespaces/{namespace}/billing/volterra_traffic"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("VolterraNetworkTraffic")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.CustomPrivateAPI.VolterraNetworkTraffic"] = rpcInfo
+
+	fInfo.APIsInfo["CustomPrivateAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.billing.CustomPrivateAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/billing/private_customapi_cdn_usage.proto")
+	pInfo.FilesInfo["ves.io/schema/billing/private_customapi_cdn_usage.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomPrivateCDNUsageAPI", "CUSTOM_PRIVATE", "ves.io.schema.billing.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("LilacCDNUsage", "ves.io.schema.billing.LilacCDNMetricsRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/read/namespaces/{namespace}/billing/lilac_cdn_usage"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("LilacCDNUsage")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.CustomPrivateCDNUsageAPI.LilacCDNUsage"] = rpcInfo
+
+	fInfo.APIsInfo["CustomPrivateCDNUsageAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.billing.CustomPrivateCDNUsageAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/billing/types.proto")
+	pInfo.FilesInfo["ves.io/schema/billing/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.billing.payment_method", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/billing/payment_method", false)
+	mdr.PkgsInfo["ves.io.schema.billing.payment_method"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/billing/payment_method/custom_api.proto")
+	pInfo.FilesInfo["ves.io/schema/billing/payment_method/custom_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.billing.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.billing.payment_method.CreatePaymentMethodRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/billing/payment_methods"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.payment_method.CustomAPI.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.billing.payment_method.DeletePaymentMethodRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/billing/payment_methods/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.payment_method.CustomAPI.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("MakePaymentMethodPrimary", "ves.io.schema.billing.payment_method.PaymentMethodPrimaryReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/billing/payment_method/{name}/primary"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("MakePaymentMethodPrimary")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.payment_method.CustomAPI.MakePaymentMethodPrimary"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("MakePaymentMethodSecondary", "ves.io.schema.billing.payment_method.PaymentMethodSecondaryReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/billing/payment_method/{name}/secondary"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("MakePaymentMethodSecondary")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.payment_method.CustomAPI.MakePaymentMethodSecondary"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SwapPaymentMethodRole", "ves.io.schema.billing.payment_method.PaymentMethodRoleSwapReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/billing/payment_method/{name}/swap-primary"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SwapPaymentMethodRole")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.payment_method.CustomAPI.SwapPaymentMethodRole"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.billing.payment_method.CustomAPI"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.billing.plan_transition", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/billing/plan_transition", false)
+	mdr.PkgsInfo["ves.io.schema.billing.plan_transition"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/billing/plan_transition/custom_api.proto")
+	pInfo.FilesInfo["ves.io/schema/billing/plan_transition/custom_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.billing.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetPlanTransition", "ves.io.schema.billing.plan_transition.GetPlanTransitionReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/no_auth/namespaces/system/billing/plan_transition"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetPlanTransition")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.plan_transition.CustomAPI.GetPlanTransition"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("InitiatePlanTransition", "ves.io.schema.billing.plan_transition.InitiatePlanTransitionReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/billing/plan_transition"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("InitiatePlanTransition")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.billing.plan_transition.CustomAPI.InitiatePlanTransition"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.billing.plan_transition.CustomAPI"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.cdn_cache_rule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cdn_cache_rule", false)
 	mdr.PkgsInfo["ves.io.schema.cdn_cache_rule"] = pInfo
@@ -2557,172 +3052,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.cdn_cache_rule.crudapi.API"] = aInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.central_manager", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/central_manager", false)
-	mdr.PkgsInfo["ves.io.schema.central_manager"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/central_manager/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/central_manager/public_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
-
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.central_manager.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/central_manager/managers"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.CustomAPI.List"] = rpcInfo
-
-	fInfo.APIsInfo["CustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.central_manager.CustomAPI"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.central_manager.ListRequest"] = mInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.central_manager.application", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/central_manager/application", false)
-	mdr.PkgsInfo["ves.io.schema.central_manager.application"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/central_manager/application/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/central_manager/application/public_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.central_manager.application.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/central_manager/applications/{cm_id}/{application_id}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.application.CustomAPI.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.central_manager.application.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/central_manager/applications/{cm_id}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.application.CustomAPI.List"] = rpcInfo
-
-	fInfo.APIsInfo["CustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.central_manager.application.CustomAPI"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.central_manager.application.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.central_manager.application.ListRequest"] = mInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.central_manager.provider", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/central_manager/provider", false)
-	mdr.PkgsInfo["ves.io.schema.central_manager.provider"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/central_manager/provider/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/central_manager/provider/public_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.central_manager.provider.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/central_manager/providers/{cm_id}/{provider_id}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.provider.CustomAPI.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("GetDeployment", "ves.io.schema.central_manager.provider.GetDeploymentRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/central_manager/providers/{cm_id}/{provider_id}/deployments"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("GetDeployment")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.provider.CustomAPI.GetDeployment"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.central_manager.provider.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/central_manager/providers/{cm_id}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.provider.CustomAPI.List"] = rpcInfo
-
-	fInfo.APIsInfo["CustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.central_manager.provider.CustomAPI"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.central_manager.provider.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.central_manager.provider.ListRequest"] = mInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.central_manager.registration", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/central_manager/registration", false)
-	mdr.PkgsInfo["ves.io.schema.central_manager.registration"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/central_manager/registration/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/central_manager/registration/public_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.central_manager.registration.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/central_manager/registrations/{cm_id}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.registration.CustomAPI.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.central_manager.registration.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/central_manager/registrations/{cm_id}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.registration.CustomAPI.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.central_manager.registration.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/central_manager/registrations"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.registration.CustomAPI.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("UpdateStatus", "ves.io.schema.central_manager.registration.UpdateStatusReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/central_manager/registrations/{cm_id}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("UpdateStatus")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.registration.CustomAPI.UpdateStatus"] = rpcInfo
-
-	fInfo.APIsInfo["CustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.central_manager.registration.CustomAPI"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.central_manager.registration.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.central_manager.registration.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.central_manager.registration.ListRequest"] = mInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.central_manager.token", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/central_manager/token", false)
-	mdr.PkgsInfo["ves.io.schema.central_manager.token"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/central_manager/token/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/central_manager/token/public_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.central_manager.token.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/central_manager/tokens"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.token.CustomAPI.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.central_manager.token.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/central_manager/tokens/{reg_token}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.token.CustomAPI.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.central_manager.token.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/central_manager/tokens/{reg_token}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.token.CustomAPI.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.central_manager.token.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/central_manager/tokens"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.central_manager.token.CustomAPI.List"] = rpcInfo
-
-	fInfo.APIsInfo["CustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.central_manager.token.CustomAPI"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.central_manager.token.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.central_manager.token.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.central_manager.token.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.central_manager.token.ListRequest"] = mInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.certificate", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate", false)
 	mdr.PkgsInfo["ves.io.schema.certificate"] = pInfo
@@ -3645,6 +3974,99 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.cloud_re_region.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_region", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_region", false)
+	mdr.PkgsInfo["ves.io.schema.cloud_region"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_region/object.proto")
+	pInfo.FilesInfo["ves.io/schema/cloud_region/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.cloud_region.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.cloud_region.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_region/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/cloud_region/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.cloud_region.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.cloud_region.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/cloud_regions/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.cloud_region.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.cloud_region.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/cloud_regions"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.cloud_region.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.cloud_region.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/cloud_regions/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.cloud_region.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.cloud_region.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.cloud_region.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.cloud_region.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.cloud_region.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_region/types.proto")
+	pInfo.FilesInfo["ves.io/schema/cloud_region/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_region.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_region/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.cloud_region.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_region/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/cloud_region/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.cloud_region.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.cloud_region.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.cloud_region/Objects", "/ves.io.schema.cloud_region/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.cloud_region.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.cloud_region.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.cloud_region/Object/{object_uid}", "/ves.io.schema.cloud_region/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.cloud_region.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.cloud_region.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cloud_region/Object/{object_uid}", "/ves.io.schema.cloud_region/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.cloud_region.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.cloud_region.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cloud_region/Objects", "/ves.io.schema.cloud_region/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.cloud_region.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.cloud_region.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.cloud_region/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.cloud_region.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.cloud_region.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.cloud_region/Object/{object_uid}", "/ves.io.schema.cloud_region/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.cloud_region.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.cloud_region.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_transit_gateway", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_transit_gateway", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_transit_gateway"] = pInfo
 
@@ -4313,6 +4735,153 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.crl.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.customer_support", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/customer_support", false)
+	mdr.PkgsInfo["ves.io.schema.customer_support"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/customer_support/object.proto")
+	pInfo.FilesInfo["ves.io/schema/customer_support/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.customer_support.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.customer_support.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/customer_support/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/customer_support/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.customer_support.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.customer_support.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/customer_supports"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.customer_support.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/customer_supports/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.customer_support.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/customer_supports"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.API.List"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.customer_support.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.customer_support.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.customer_support.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.customer_support.ListRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/customer_support/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/customer_support/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.customer_support.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("AdminList", "ves.io.schema.customer_support.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/admin/customer_supports"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("AdminList")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.CustomAPI.AdminList"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Close", "ves.io.schema.customer_support.CloseRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/customer_support/{name}/close"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Close")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.CustomAPI.Close"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Comment", "ves.io.schema.customer_support.CommentRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/customer_support/{name}/comment"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Comment")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.CustomAPI.Comment"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Escalate", "ves.io.schema.customer_support.EscalationRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/customer_support/{name}/escalate"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Escalate")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.CustomAPI.Escalate"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetAttachment", "ves.io.schema.customer_support.GetAttachmentRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/customer_support/{name}/comment/{comment_id}/attachment/{attachment_id}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetAttachment")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.CustomAPI.GetAttachment"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListCTSupportTickets", "ves.io.schema.customer_support.ListSupportRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/child_tenant/support_tickets"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListCTSupportTickets")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.CustomAPI.ListCTSupportTickets"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Priority", "ves.io.schema.customer_support.PriorityRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/customer_support/{name}/priority"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Priority")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.CustomAPI.Priority"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("RaiseTaxExemptVerificationSupportTicket", "ves.io.schema.customer_support.RaiseTaxExemptVerificationSupportTicketRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/customer_support/tax_exempt_request"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("RaiseTaxExemptVerificationSupportTicket")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.CustomAPI.RaiseTaxExemptVerificationSupportTicket"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Reopen", "ves.io.schema.customer_support.ReopenRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/customer_support/{name}/reopen"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Reopen")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.CustomAPI.Reopen"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.customer_support.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/customer_support/types.proto")
+	pInfo.FilesInfo["ves.io/schema/customer_support/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.customer_support.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/customer_support/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.customer_support.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/customer_support/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/customer_support/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.customer_support.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.customer_support.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.customer_support/Objects", "/ves.io.schema.customer_support/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.customer_support.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.customer_support/Object/{object_uid}", "/ves.io.schema.customer_support/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.customer_support.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.customer_support/Object/{object_uid}", "/ves.io.schema.customer_support/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.customer_support.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.customer_support/Objects", "/ves.io.schema.customer_support/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.customer_support.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.customer_support/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.customer_support.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.customer_support/Object/{object_uid}", "/ves.io.schema.customer_support/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.customer_support.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.customer_support.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.data_privacy.geo_config", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/data_privacy/geo_config", false)
 	mdr.PkgsInfo["ves.io.schema.data_privacy.geo_config"] = pInfo
 
@@ -4791,6 +5360,11 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	aInfo.RPCsInfo[svcfw.RPCName("ListDiscoveredServices")] = rpcInfo
 	mdr.RPCIdx["ves.io.schema.discovered_service.CustomAPI.ListDiscoveredServices"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SuggestValues", "ves.io.schema.discovered_service.SuggestValuesReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/suggest-values"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SuggestValues")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.discovered_service.CustomAPI.SuggestValues"] = rpcInfo
 
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.discovered_service.CustomAPI"] = aInfo
@@ -4848,7 +5422,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	oInfo = svcfw.NewObjInfo("Object", true)
 
-	oInfo.ReEncryptSecrets["ves.io.schema.discovery.Object.spec.gc_spec.discovery_choice.discovery_cbip.cbip_clusters.cbip_devices.admin_credentials.password"] = &svcfw.ReEncryptBFSecretInfo{
+	oInfo.ReEncryptSecrets["ves.io.schema.discovery.Object.spec.gc_spec.discovery_choice.discovery_cbip.cbip_clusters.admin_credentials.password"] = &svcfw.ReEncryptBFSecretInfo{
 		PolicyID:       uint64(1000027),
 		WKTenantPrefix: "",
 	}
@@ -4908,6 +5482,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
 	mdr.MsgIdx["ves.io.schema.discovery.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/discovery/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/discovery/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.discovery.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("DownloadCertificates", "ves.io.schema.discovery.DownloadCertificatesRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/discovery/{name}/download_certificates"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("DownloadCertificates")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.discovery.CustomAPI.DownloadCertificates"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.discovery.CustomAPI"] = aInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/discovery/types.proto")
 	pInfo.FilesInfo["ves.io/schema/discovery/types.proto"] = fInfo
@@ -5561,6 +6149,115 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.dns_load_balancer.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_proxy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_proxy", false)
+	mdr.PkgsInfo["ves.io.schema.dns_proxy"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_proxy/object.proto")
+	pInfo.FilesInfo["ves.io/schema/dns_proxy/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.dns_proxy.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.dns_proxy.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_proxy/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/dns_proxy/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.dns_proxy.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.dns_proxy.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/dns_proxys"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.dns_proxy.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.dns_proxy.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/dns_proxys/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.dns_proxy.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.dns_proxy.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/dns_proxys/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.dns_proxy.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.dns_proxy.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/dns_proxys"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.dns_proxy.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.dns_proxy.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/dns_proxys/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.dns_proxy.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.dns_proxy.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.dns_proxy.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.dns_proxy.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.dns_proxy.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.dns_proxy.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.dns_proxy.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_proxy/types.proto")
+	pInfo.FilesInfo["ves.io/schema/dns_proxy/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_proxy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_proxy/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.dns_proxy.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_proxy/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/dns_proxy/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.dns_proxy.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.dns_proxy.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.dns_proxy/Objects", "/ves.io.schema.dns_proxy/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.dns_proxy.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.dns_proxy.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.dns_proxy/Object/{object_uid}", "/ves.io.schema.dns_proxy/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.dns_proxy.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.dns_proxy.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dns_proxy/Object/{object_uid}", "/ves.io.schema.dns_proxy/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.dns_proxy.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.dns_proxy.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dns_proxy/Objects", "/ves.io.schema.dns_proxy/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.dns_proxy.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.dns_proxy.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.dns_proxy/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.dns_proxy.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.dns_proxy.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.dns_proxy/Object/{object_uid}", "/ves.io.schema.dns_proxy/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.dns_proxy.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.dns_proxy.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_zone", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone", false)
 	mdr.PkgsInfo["ves.io.schema.dns_zone"] = pInfo
 
@@ -5784,6 +6481,28 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
 	mdr.MsgIdx["ves.io.schema.dns_zone.rrset.ReplaceRequest"] = mInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_zone.subscription", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/subscription", false)
+	mdr.PkgsInfo["ves.io.schema.dns_zone.subscription"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_zone/subscription/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/dns_zone/subscription/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Subscribe", "ves.io.schema.dns_zone.subscription.SubscribeRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/dns_management/addon/subscribe"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Subscribe")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.dns_zone.subscription.CustomAPI.Subscribe"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Unsubscribe", "ves.io.schema.dns_zone.subscription.UnsubscribeRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/dns_management/addon/unsubscribe"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Unsubscribe")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.dns_zone.subscription.CustomAPI.Unsubscribe"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.dns_zone.subscription.CustomAPI"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.dos_mitigation", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation", false)
 	mdr.PkgsInfo["ves.io.schema.dos_mitigation"] = pInfo
@@ -6388,6 +7107,66 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.fast_acl_rule.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl_set", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_set", false)
+	mdr.PkgsInfo["ves.io.schema.fast_acl_set"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/fast_acl_set/object.proto")
+	pInfo.FilesInfo["ves.io/schema/fast_acl_set/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.fast_acl_set.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.fast_acl_set.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/fast_acl_set/types.proto")
+	pInfo.FilesInfo["ves.io/schema/fast_acl_set/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl_set.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_set/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.fast_acl_set.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/fast_acl_set/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/fast_acl_set/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.fast_acl_set.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.fast_acl_set.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.fast_acl_set/Objects", "/ves.io.schema.fast_acl_set/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fast_acl_set.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.fast_acl_set.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.fast_acl_set/Object/{object_uid}", "/ves.io.schema.fast_acl_set/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fast_acl_set.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.fast_acl_set.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl_set/Object/{object_uid}", "/ves.io.schema.fast_acl_set/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fast_acl_set.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.fast_acl_set.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl_set/Objects", "/ves.io.schema.fast_acl_set/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fast_acl_set.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.fast_acl_set.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fast_acl_set/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fast_acl_set.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.fast_acl_set.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.fast_acl_set/Object/{object_uid}", "/ves.io.schema.fast_acl_set/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fast_acl_set.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.fast_acl_set.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.filter_set", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/filter_set", false)
 	mdr.PkgsInfo["ves.io.schema.filter_set"] = pInfo
 
@@ -6620,6 +7399,132 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.fleet.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fleet_default_config", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet_default_config", false)
+	mdr.PkgsInfo["ves.io.schema.fleet_default_config"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/fleet_default_config/object.proto")
+	pInfo.FilesInfo["ves.io/schema/fleet_default_config/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.fleet_default_config.Object"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/fleet_default_config/private_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/fleet_default_config/private_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PRIVATE", "ves.io.akar.fleet_default_config.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("FleetDefaultConfigDependencyMap", "ves.io.schema.fleet_default_config.FleetDefaultConfigDependencyMapReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.akar/introspect/fleet-default-config-dependency-map", "/ves.io.schema/introspect/read/ves.io.akar/introspect/fleet-default-config-dependency-map"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("FleetDefaultConfigDependencyMap")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fleet_default_config.CustomAPI.FleetDefaultConfigDependencyMap"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetDefaultFleetConfig", "ves.io.schema.fleet_default_config.GetDefaultFleetConfigRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/private/namespaces/{namespace}/fleet_default_configs/{name}/get-default-fleet-config", "/ves.io.schema/introspect/read/private/namespaces/{namespace}/fleet_default_configs/{name}/get-default-fleet-config"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetDefaultFleetConfig")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fleet_default_config.CustomAPI.GetDefaultFleetConfig"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.fleet_default_config.CustomAPI"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fleet_default_config.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet_default_config/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.fleet_default_config.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/fleet_default_config/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/fleet_default_config/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.fleet_default_config.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.fleet_default_config.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.fleet_default_config/Objects", "/ves.io.schema.fleet_default_config/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fleet_default_config.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.fleet_default_config.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.fleet_default_config/Object/{object_uid}", "/ves.io.schema.fleet_default_config/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fleet_default_config.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.fleet_default_config.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fleet_default_config/Object/{object_uid}", "/ves.io.schema.fleet_default_config/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fleet_default_config.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.fleet_default_config.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fleet_default_config/Objects", "/ves.io.schema.fleet_default_config/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fleet_default_config.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.fleet_default_config.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.fleet_default_config/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fleet_default_config.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.fleet_default_config.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.fleet_default_config/Object/{object_uid}", "/ves.io.schema.fleet_default_config/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.fleet_default_config.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.fleet_default_config.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.flow", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/flow", false)
+	mdr.PkgsInfo["ves.io.schema.flow"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/flow/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/flow/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.flow.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("FlowCollection", "ves.io.schema.flow.TopTalkersRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/flows/flow_collection"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("FlowCollection")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.flow.CustomAPI.FlowCollection"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("TopFlowAnomalies", "ves.io.schema.flow.TopFlowAnomaliesRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/flows/top_flow_anomalies"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("TopFlowAnomalies")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.flow.CustomAPI.TopFlowAnomalies"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("TopTalkers", "ves.io.schema.flow.TopTalkersRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/flows/top_talkers"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("TopTalkers")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.flow.CustomAPI.TopTalkers"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.flow.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/flow/public_customapi_akar.proto")
+	pInfo.FilesInfo["ves.io/schema/flow/public_customapi_akar.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomFlowConnectionAPI", "CUSTOM_PUBLIC", "", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetSubscriptionStatus", "ves.io.schema.flow.SubscriptionStatusRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/flow-collection/addon/subscription-status"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSubscriptionStatus")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.flow.CustomFlowConnectionAPI.GetSubscriptionStatus"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Subscribe", "ves.io.schema.flow.SubscribeRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/flow-collection/addon/subscribe"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Subscribe")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.flow.CustomFlowConnectionAPI.Subscribe"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Unsubscribe", "ves.io.schema.flow.UnsubscribeRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/flow-collection/addon/unsubscribe"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Unsubscribe")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.flow.CustomFlowConnectionAPI.Unsubscribe"] = rpcInfo
+
+	fInfo.APIsInfo["CustomFlowConnectionAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.flow.CustomFlowConnectionAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/flow/types.proto")
+	pInfo.FilesInfo["ves.io/schema/flow/types.proto"] = fInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.flow_anomaly", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/flow_anomaly", false)
 	mdr.PkgsInfo["ves.io.schema.flow_anomaly"] = pInfo
 
@@ -6705,65 +7610,114 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.flow_anomaly.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.flow_exporter", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/flow_exporter", false)
-	mdr.PkgsInfo["ves.io.schema.flow_exporter"] = pInfo
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.forwarding_class", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/forwarding_class", false)
+	mdr.PkgsInfo["ves.io.schema.forwarding_class"] = pInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/flow_exporter/object.proto")
-	pInfo.FilesInfo["ves.io/schema/flow_exporter/object.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/forwarding_class/object.proto")
+	pInfo.FilesInfo["ves.io/schema/forwarding_class/object.proto"] = fInfo
 
 	oInfo = svcfw.NewObjInfo("Object", true)
 
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.flow_exporter.Object"] = oInfo
+	mdr.ObjIdx["ves.io.schema.forwarding_class.Object"] = oInfo
 	oInfo = svcfw.NewObjInfo("StatusObject", false)
 
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
-	mdr.ObjIdx["ves.io.schema.flow_exporter.StatusObject"] = oInfo
+	mdr.ObjIdx["ves.io.schema.forwarding_class.StatusObject"] = oInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/flow_exporter/types.proto")
-	pInfo.FilesInfo["ves.io/schema/flow_exporter/types.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/forwarding_class/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/forwarding_class/public_crudapi.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.flow_exporter.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/flow_exporter/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.flow_exporter.crudapi"] = pInfo
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.forwarding_class.Object", false)
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/flow_exporter/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/flow_exporter/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.flow_exporter.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.flow_exporter.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.flow_exporter/Objects", "/ves.io.schema.flow_exporter/introspect/write/Objects"}}
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.forwarding_class.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/forwarding_classs"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.flow_exporter.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.flow_exporter.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.flow_exporter/Object/{object_uid}", "/ves.io.schema.flow_exporter/introspect/write/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.forwarding_class.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.forwarding_class.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/forwarding_classs/{name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.flow_exporter.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.flow_exporter.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.flow_exporter/Object/{object_uid}", "/ves.io.schema.flow_exporter/introspect/read/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.forwarding_class.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.forwarding_class.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/forwarding_classs/{name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.flow_exporter.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.flow_exporter.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.flow_exporter/Objects", "/ves.io.schema.flow_exporter/introspect/read/Objects"}}
+	mdr.RPCIdx["ves.io.schema.forwarding_class.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.forwarding_class.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/forwarding_classs"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.flow_exporter.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.flow_exporter.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.flow_exporter/Objects/stream"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.flow_exporter.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.flow_exporter.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.flow_exporter/Object/{object_uid}", "/ves.io.schema.flow_exporter/introspect/write/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.forwarding_class.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.forwarding_class.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/forwarding_classs/{metadata.name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.flow_exporter.crudapi.API.Replace"] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.forwarding_class.API.Replace"] = rpcInfo
 
 	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.flow_exporter.crudapi.API"] = aInfo
+	mdr.APIIdx["ves.io.schema.forwarding_class.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.forwarding_class.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.forwarding_class.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.forwarding_class.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.forwarding_class.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.forwarding_class.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/forwarding_class/types.proto")
+	pInfo.FilesInfo["ves.io/schema/forwarding_class/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.forwarding_class.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/forwarding_class/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.forwarding_class.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/forwarding_class/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/forwarding_class/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.forwarding_class.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.forwarding_class.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.forwarding_class/Objects", "/ves.io.schema.forwarding_class/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.forwarding_class.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.forwarding_class.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.forwarding_class/Object/{object_uid}", "/ves.io.schema.forwarding_class/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.forwarding_class.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.forwarding_class.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.forwarding_class/Object/{object_uid}", "/ves.io.schema.forwarding_class/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.forwarding_class.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.forwarding_class.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.forwarding_class/Objects", "/ves.io.schema.forwarding_class/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.forwarding_class.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.forwarding_class.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.forwarding_class/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.forwarding_class.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.forwarding_class.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.forwarding_class/Object/{object_uid}", "/ves.io.schema.forwarding_class/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.forwarding_class.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.forwarding_class.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.gia", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/gia", false)
 	mdr.PkgsInfo["ves.io.schema.gia"] = pInfo
@@ -6786,6 +7740,70 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.gia.CustomAPI"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.global_config", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/global_config", false)
+	mdr.PkgsInfo["ves.io.schema.global_config"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/global_config/ddos_types.proto")
+	pInfo.FilesInfo["ves.io/schema/global_config/ddos_types.proto"] = fInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/global_config/object.proto")
+	pInfo.FilesInfo["ves.io/schema/global_config/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	oInfo.ReEncryptSecrets["ves.io.schema.global_config.Object.spec.gc_spec.captcha_secret"] = &svcfw.ReEncryptBFSecretInfo{
+		PolicyID:       uint64(1000008),
+		WKTenantPrefix: "ves-io-cdn-",
+	}
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.global_config.Object"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/global_config/types.proto")
+	pInfo.FilesInfo["ves.io/schema/global_config/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.global_config.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/global_config/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.global_config.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/global_config/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/global_config/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.global_config.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.global_config.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.global_config/Objects", "/ves.io.schema.global_config/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.global_config.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.global_config.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.global_config/Object/{object_uid}", "/ves.io.schema.global_config/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.global_config.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.global_config.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.global_config/Object/{object_uid}", "/ves.io.schema.global_config/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.global_config.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.global_config.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.global_config/Objects", "/ves.io.schema.global_config/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.global_config.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.global_config.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.global_config/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.global_config.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.global_config.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.global_config/Object/{object_uid}", "/ves.io.schema.global_config/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.global_config.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.global_config.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.global_log_receiver", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/global_log_receiver", false)
 	mdr.PkgsInfo["ves.io.schema.global_log_receiver"] = pInfo
@@ -6911,6 +7929,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
 	mdr.MsgIdx["ves.io.schema.global_log_receiver.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/global_log_receiver/public_custom_data_api.proto")
+	pInfo.FilesInfo["ves.io/schema/global_log_receiver/public_custom_data_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomDataAPI", "CUSTOM_PUBLIC", "ves.io.schema.global_log_receiver.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GlobalLogReceiverStatus", "ves.io.schema.global_log_receiver.GlobalLogReceiverStatusRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/global_log_receiver/status"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GlobalLogReceiverStatus")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.global_log_receiver.CustomDataAPI.GlobalLogReceiverStatus"] = rpcInfo
+
+	fInfo.APIsInfo["CustomDataAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.global_log_receiver.CustomDataAPI"] = aInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/global_log_receiver/public_customapi.proto")
 	pInfo.FilesInfo["ves.io/schema/global_log_receiver/public_customapi.proto"] = fInfo
@@ -7298,223 +8330,309 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.ike2.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_deny_list_rule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_deny_list_rule", false)
-	mdr.PkgsInfo["ves.io.schema.infraprotect_deny_list_rule"] = pInfo
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.implicit_label", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/implicit_label", false)
+	mdr.PkgsInfo["ves.io.schema.implicit_label"] = pInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_deny_list_rule/object.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_deny_list_rule/object.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/implicit_label/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/implicit_label/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.implicit_label.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/implicit_labels"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.implicit_label.CustomAPI.Get"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.implicit_label.CustomAPI"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.implicit_label.GetRequest"] = mInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_asn", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn", false)
+	mdr.PkgsInfo["ves.io.schema.infraprotect_asn"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn/object.proto")
+	pInfo.FilesInfo["ves.io/schema/infraprotect_asn/object.proto"] = fInfo
 
 	oInfo = svcfw.NewObjInfo("Object", true)
 
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.infraprotect_deny_list_rule.Object"] = oInfo
+	mdr.ObjIdx["ves.io.schema.infraprotect_asn.Object"] = oInfo
 	oInfo = svcfw.NewObjInfo("StatusObject", false)
 
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
-	mdr.ObjIdx["ves.io.schema.infraprotect_deny_list_rule.StatusObject"] = oInfo
+	mdr.ObjIdx["ves.io.schema.infraprotect_asn.StatusObject"] = oInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_deny_list_rule/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_deny_list_rule/public_crudapi.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn/private_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/infraprotect_asn/private_customapi.proto"] = fInfo
 
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.infraprotect_deny_list_rule.Object", false)
+	aInfo = svcfw.NewAPIInfo("CustomPrivateAPI", "CUSTOM_PRIVATE", "ves.io.schema.infraprotect_asn.Object", false)
 
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.infraprotect_deny_list_rule.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/infraprotect_deny_list_rules"}}
+	rpcInfo = svcfw.NewRPCInfo("UpdateASNReviewStatus", "ves.io.schema.infraprotect_asn.UpdateASNReviewStatusRequestPrivate", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.infraprotect_asn/introspect/write/update-asn-review-status", "/ves.io.schema.infraprotect_asns/update-asn-review-status"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateASNReviewStatus")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn.CustomPrivateAPI.UpdateASNReviewStatus"] = rpcInfo
+
+	fInfo.APIsInfo["CustomPrivateAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.infraprotect_asn.CustomPrivateAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/infraprotect_asn/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.infraprotect_asn.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.infraprotect_asn.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/infraprotect_asns"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_deny_list_rule.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.infraprotect_deny_list_rule.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/infraprotect_deny_list_rules/{name}"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.infraprotect_asn.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/infraprotect_asns/{name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_deny_list_rule.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.infraprotect_deny_list_rule.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/infraprotect_deny_list_rules/{name}"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.infraprotect_asn.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/infraprotect_asns/{name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_deny_list_rule.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.infraprotect_deny_list_rule.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/infraprotect_deny_list_rules"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.infraprotect_asn.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/infraprotect_asns"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_deny_list_rule.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.infraprotect_deny_list_rule.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/infraprotect_deny_list_rules/{metadata.name}"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.infraprotect_asn.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/infraprotect_asns/{metadata.name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_deny_list_rule.API.Replace"] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn.API.Replace"] = rpcInfo
 
 	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.infraprotect_deny_list_rule.API"] = aInfo
+	mdr.APIIdx["ves.io.schema.infraprotect_asn.API"] = aInfo
 
 	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_deny_list_rule.CreateRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.infraprotect_asn.CreateRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_deny_list_rule.DeleteRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.infraprotect_asn.DeleteRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_deny_list_rule.GetRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.infraprotect_asn.GetRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_deny_list_rule.ListRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.infraprotect_asn.ListRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_deny_list_rule.ReplaceRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.infraprotect_asn.ReplaceRequest"] = mInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_deny_list_rule/types.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_deny_list_rule/types.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/infraprotect_asn/public_customapi.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_deny_list_rule.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_deny_list_rule/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.infraprotect_deny_list_rule.crudapi"] = pInfo
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.infraprotect_asn.Object", false)
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_deny_list_rule/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_deny_list_rule/crudapi/api.proto"] = fInfo
+	rpcInfo = svcfw.NewRPCInfo("UpdateASNReviewStatus", "ves.io.schema.infraprotect_asn.UpdateASNReviewStatusRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/infraprotect_asns/update-asn-review-status"}}
 
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.infraprotect_deny_list_rule.Object", true)
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateASNReviewStatus")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn.CustomAPI.UpdateASNReviewStatus"] = rpcInfo
 
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.infraprotect_deny_list_rule.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.infraprotect_deny_list_rule/Objects", "/ves.io.schema.infraprotect_deny_list_rule/introspect/write/Objects"}}
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.infraprotect_asn.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn/types.proto")
+	pInfo.FilesInfo["ves.io/schema/infraprotect_asn/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_asn.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.infraprotect_asn.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/infraprotect_asn/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.infraprotect_asn.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.infraprotect_asn.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.infraprotect_asn/Objects", "/ves.io.schema.infraprotect_asn/introspect/write/Objects"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_deny_list_rule.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.infraprotect_deny_list_rule.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.infraprotect_deny_list_rule/Object/{object_uid}", "/ves.io.schema.infraprotect_deny_list_rule/introspect/write/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.infraprotect_asn.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.infraprotect_asn/Object/{object_uid}", "/ves.io.schema.infraprotect_asn/introspect/write/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_deny_list_rule.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.infraprotect_deny_list_rule.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_deny_list_rule/Object/{object_uid}", "/ves.io.schema.infraprotect_deny_list_rule/introspect/read/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.infraprotect_asn.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_asn/Object/{object_uid}", "/ves.io.schema.infraprotect_asn/introspect/read/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_deny_list_rule.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.infraprotect_deny_list_rule.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_deny_list_rule/Objects", "/ves.io.schema.infraprotect_deny_list_rule/introspect/read/Objects"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.infraprotect_asn.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_asn/Objects", "/ves.io.schema.infraprotect_asn/introspect/read/Objects"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_deny_list_rule.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.infraprotect_deny_list_rule.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_deny_list_rule/Objects/stream"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.infraprotect_asn.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_asn/Objects/stream"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_deny_list_rule.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.infraprotect_deny_list_rule.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.infraprotect_deny_list_rule/Object/{object_uid}", "/ves.io.schema.infraprotect_deny_list_rule/introspect/write/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.infraprotect_asn.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.infraprotect_asn/Object/{object_uid}", "/ves.io.schema.infraprotect_asn/introspect/write/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_deny_list_rule.crudapi.API.Replace"] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn.crudapi.API.Replace"] = rpcInfo
 
 	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.infraprotect_deny_list_rule.crudapi.API"] = aInfo
+	mdr.APIIdx["ves.io.schema.infraprotect_asn.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_firewall_rule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_rule", false)
-	mdr.PkgsInfo["ves.io.schema.infraprotect_firewall_rule"] = pInfo
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_asn_prefix", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn_prefix", false)
+	mdr.PkgsInfo["ves.io.schema.infraprotect_asn_prefix"] = pInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_firewall_rule/object.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_firewall_rule/object.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn_prefix/object.proto")
+	pInfo.FilesInfo["ves.io/schema/infraprotect_asn_prefix/object.proto"] = fInfo
 
 	oInfo = svcfw.NewObjInfo("Object", true)
 
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.infraprotect_firewall_rule.Object"] = oInfo
+	mdr.ObjIdx["ves.io.schema.infraprotect_asn_prefix.Object"] = oInfo
 	oInfo = svcfw.NewObjInfo("StatusObject", false)
 
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
-	mdr.ObjIdx["ves.io.schema.infraprotect_firewall_rule.StatusObject"] = oInfo
+	mdr.ObjIdx["ves.io.schema.infraprotect_asn_prefix.StatusObject"] = oInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_firewall_rule/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_firewall_rule/public_crudapi.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn_prefix/private_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/infraprotect_asn_prefix/private_customapi.proto"] = fInfo
 
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.infraprotect_firewall_rule.Object", false)
+	aInfo = svcfw.NewAPIInfo("CustomPrivateAPI", "CUSTOM_PRIVATE", "ves.io.schema.infraprotect_asn_prefix.Object", false)
 
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.infraprotect_firewall_rule.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/infraprotect_firewall_rules"}}
+	rpcInfo = svcfw.NewRPCInfo("UpdateASNPrefixIRROverride", "ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixIRROverrideRequestPrivate", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.infraprotect_asn_prefix/introspect/write/update-asn-prefix-irr-override", "/ves.io.schema.infraprotect_asn_prefixes/update-asn-prefix-irr-override"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateASNPrefixIRROverride")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.CustomPrivateAPI.UpdateASNPrefixIRROverride"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("UpdateASNPrefixReviewStatus", "ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixReviewStatusRequestPrivate", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.infraprotect_asn_prefix/introspect/write/update-asn-prefix-review-status", "/ves.io.schema.infraprotect_asn_prefixes/update-asn-prefix-review-status"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateASNPrefixReviewStatus")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.CustomPrivateAPI.UpdateASNPrefixReviewStatus"] = rpcInfo
+
+	fInfo.APIsInfo["CustomPrivateAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.infraprotect_asn_prefix.CustomPrivateAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn_prefix/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/infraprotect_asn_prefix/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.infraprotect_asn_prefix.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.infraprotect_asn_prefix.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/infraprotect_asn_prefixs"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_rule.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.infraprotect_firewall_rule.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/infraprotect_firewall_rules/{name}"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.infraprotect_asn_prefix.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/infraprotect_asn_prefixs/{name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_rule.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.infraprotect_firewall_rule.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/infraprotect_firewall_rules/{name}"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.infraprotect_asn_prefix.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/infraprotect_asn_prefixs/{name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_rule.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.infraprotect_firewall_rule.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/infraprotect_firewall_rules"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.infraprotect_asn_prefix.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/infraprotect_asn_prefixs"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_rule.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.infraprotect_firewall_rule.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/infraprotect_firewall_rules/{metadata.name}"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.infraprotect_asn_prefix.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/infraprotect_asn_prefixs/{metadata.name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_rule.API.Replace"] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.API.Replace"] = rpcInfo
 
 	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.infraprotect_firewall_rule.API"] = aInfo
+	mdr.APIIdx["ves.io.schema.infraprotect_asn_prefix.API"] = aInfo
 
 	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_firewall_rule.CreateRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.infraprotect_asn_prefix.CreateRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_firewall_rule.DeleteRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.infraprotect_asn_prefix.DeleteRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_firewall_rule.GetRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.infraprotect_asn_prefix.GetRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_firewall_rule.ListRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.infraprotect_asn_prefix.ListRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_firewall_rule.ReplaceRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.infraprotect_asn_prefix.ReplaceRequest"] = mInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_firewall_rule/types.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_firewall_rule/types.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn_prefix/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/infraprotect_asn_prefix/public_customapi.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_firewall_rule.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_rule/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.infraprotect_firewall_rule.crudapi"] = pInfo
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.infraprotect_asn_prefix.Object", false)
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_firewall_rule/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_firewall_rule/crudapi/api.proto"] = fInfo
+	rpcInfo = svcfw.NewRPCInfo("UpdateASNPrefixIRROverride", "ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixIRROverrideRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/infraprotect_asn_prefixes/update-asn-prefix-irr-override"}}
 
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.infraprotect_firewall_rule.Object", true)
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateASNPrefixIRROverride")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.CustomAPI.UpdateASNPrefixIRROverride"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("UpdateASNPrefixReviewStatus", "ves.io.schema.infraprotect_asn_prefix.UpdateASNPrefixReviewStatusRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/infraprotect_asn_prefixes/update-asn-prefix-review-status"}}
 
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.infraprotect_firewall_rule.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.infraprotect_firewall_rule/Objects", "/ves.io.schema.infraprotect_firewall_rule/introspect/write/Objects"}}
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateASNPrefixReviewStatus")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.CustomAPI.UpdateASNPrefixReviewStatus"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.infraprotect_asn_prefix.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn_prefix/types.proto")
+	pInfo.FilesInfo["ves.io/schema/infraprotect_asn_prefix/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_asn_prefix.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn_prefix/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.infraprotect_asn_prefix.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn_prefix/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/infraprotect_asn_prefix/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.infraprotect_asn_prefix.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.infraprotect_asn_prefix.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.infraprotect_asn_prefix/Objects", "/ves.io.schema.infraprotect_asn_prefix/introspect/write/Objects"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_rule.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.infraprotect_firewall_rule.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.infraprotect_firewall_rule/Object/{object_uid}", "/ves.io.schema.infraprotect_firewall_rule/introspect/write/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.infraprotect_asn_prefix.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.infraprotect_asn_prefix/Object/{object_uid}", "/ves.io.schema.infraprotect_asn_prefix/introspect/write/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_rule.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.infraprotect_firewall_rule.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_firewall_rule/Object/{object_uid}", "/ves.io.schema.infraprotect_firewall_rule/introspect/read/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.infraprotect_asn_prefix.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_asn_prefix/Object/{object_uid}", "/ves.io.schema.infraprotect_asn_prefix/introspect/read/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_rule.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.infraprotect_firewall_rule.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_firewall_rule/Objects", "/ves.io.schema.infraprotect_firewall_rule/introspect/read/Objects"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.infraprotect_asn_prefix.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_asn_prefix/Objects", "/ves.io.schema.infraprotect_asn_prefix/introspect/read/Objects"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_rule.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.infraprotect_firewall_rule.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_firewall_rule/Objects/stream"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.infraprotect_asn_prefix.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_asn_prefix/Objects/stream"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_rule.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.infraprotect_firewall_rule.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.infraprotect_firewall_rule/Object/{object_uid}", "/ves.io.schema.infraprotect_firewall_rule/introspect/write/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.infraprotect_asn_prefix.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.infraprotect_asn_prefix/Object/{object_uid}", "/ves.io.schema.infraprotect_asn_prefix/introspect/write/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_rule.crudapi.API.Replace"] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.infraprotect_asn_prefix.crudapi.API.Replace"] = rpcInfo
 
 	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.infraprotect_firewall_rule.crudapi.API"] = aInfo
+	mdr.APIIdx["ves.io.schema.infraprotect_asn_prefix.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_firewall_rule_group", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_rule_group", false)
 	mdr.PkgsInfo["ves.io.schema.infraprotect_firewall_rule_group"] = pInfo
@@ -7625,374 +8743,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.infraprotect_firewall_rule_group.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_firewall_ruleset", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_ruleset", false)
-	mdr.PkgsInfo["ves.io.schema.infraprotect_firewall_ruleset"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_firewall_ruleset/object.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_firewall_ruleset/object.proto"] = fInfo
-
-	oInfo = svcfw.NewObjInfo("Object", true)
-
-	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.infraprotect_firewall_ruleset.Object"] = oInfo
-	oInfo = svcfw.NewObjInfo("StatusObject", false)
-
-	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
-	mdr.ObjIdx["ves.io.schema.infraprotect_firewall_ruleset.StatusObject"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_firewall_ruleset/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_firewall_ruleset/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.infraprotect_firewall_ruleset.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.infraprotect_firewall_ruleset.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/infraprotect_firewall_rulesets/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_ruleset.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.infraprotect_firewall_ruleset.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/infraprotect_firewall_rulesets"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_ruleset.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.infraprotect_firewall_ruleset.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/infraprotect_firewall_rulesets/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_ruleset.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.infraprotect_firewall_ruleset.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_firewall_ruleset.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_firewall_ruleset.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_firewall_ruleset.ReplaceRequest"] = mInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_firewall_ruleset/types.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_firewall_ruleset/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_firewall_ruleset.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_ruleset/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.infraprotect_firewall_ruleset.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_firewall_ruleset/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_firewall_ruleset/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.infraprotect_firewall_ruleset.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.infraprotect_firewall_ruleset.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.infraprotect_firewall_ruleset/Objects", "/ves.io.schema.infraprotect_firewall_ruleset/introspect/write/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_ruleset.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.infraprotect_firewall_ruleset.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.infraprotect_firewall_ruleset/Object/{object_uid}", "/ves.io.schema.infraprotect_firewall_ruleset/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_ruleset.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.infraprotect_firewall_ruleset.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_firewall_ruleset/Object/{object_uid}", "/ves.io.schema.infraprotect_firewall_ruleset/introspect/read/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_ruleset.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.infraprotect_firewall_ruleset.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_firewall_ruleset/Objects", "/ves.io.schema.infraprotect_firewall_ruleset/introspect/read/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_ruleset.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.infraprotect_firewall_ruleset.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_firewall_ruleset/Objects/stream"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_ruleset.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.infraprotect_firewall_ruleset.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.infraprotect_firewall_ruleset/Object/{object_uid}", "/ves.io.schema.infraprotect_firewall_ruleset/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_firewall_ruleset.crudapi.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.infraprotect_firewall_ruleset.crudapi.API"] = aInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_information", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_information", false)
-	mdr.PkgsInfo["ves.io.schema.infraprotect_information"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_information/object.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_information/object.proto"] = fInfo
-
-	oInfo = svcfw.NewObjInfo("Object", true)
-
-	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.infraprotect_information.Object"] = oInfo
-	oInfo = svcfw.NewObjInfo("StatusObject", false)
-
-	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
-	mdr.ObjIdx["ves.io.schema.infraprotect_information.StatusObject"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_information/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_information/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.infraprotect_information.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.infraprotect_information.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/infraprotect_informations/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_information.API.Get"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.infraprotect_information.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.infraprotect_information.GetRequest"] = mInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_information/types.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_information/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_information.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_information/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.infraprotect_information.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_information/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/infraprotect_information/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.infraprotect_information.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.infraprotect_information.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.infraprotect_information/Objects", "/ves.io.schema.infraprotect_information/introspect/write/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_information.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.infraprotect_information.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.infraprotect_information/Object/{object_uid}", "/ves.io.schema.infraprotect_information/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_information.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.infraprotect_information.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_information/Object/{object_uid}", "/ves.io.schema.infraprotect_information/introspect/read/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_information.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.infraprotect_information.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_information/Objects", "/ves.io.schema.infraprotect_information/introspect/read/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_information.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.infraprotect_information.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.infraprotect_information/Objects/stream"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_information.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.infraprotect_information.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.infraprotect_information/Object/{object_uid}", "/ves.io.schema.infraprotect_information/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.infraprotect_information.crudapi.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.infraprotect_information.crudapi.API"] = aInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.instance_management.auth", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/instance_management/auth", false)
-	mdr.PkgsInfo["ves.io.schema.instance_management.auth"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/instance_management/auth/private_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/instance_management/auth/private_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomPrivateAPI", "CUSTOM_PRIVATE", "", false)
-
-	rpcInfo = svcfw.NewRPCInfo("LookupAuthConfig", "ves.io.schema.instance_management.auth.LookupAuthConfigRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/private/custom/namespaces/system/tenant/auth_config", "/ves.io.schema/introspect/read/namespaces/system/tenant/auth_config"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("LookupAuthConfig")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.auth.CustomPrivateAPI.LookupAuthConfig"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("LookupUserStatus", "ves.io.schema.instance_management.auth.LookupUserStatusRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema/introspect/read/namespaces/system/tenant/user_status"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("LookupUserStatus")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.auth.CustomPrivateAPI.LookupUserStatus"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ValidateAPICredential", "ves.io.schema.instance_management.auth.ValidateAPICredentialRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/private/custom/namespaces/system/api_credentials/validation", "/ves.io.schema/introspect/read/namespaces/system/api_credentials/validation"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ValidateAPICredential")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.auth.CustomPrivateAPI.ValidateAPICredential"] = rpcInfo
-
-	fInfo.APIsInfo["CustomPrivateAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.instance_management.auth.CustomPrivateAPI"] = aInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/instance_management/auth/types.proto")
-	pInfo.FilesInfo["ves.io/schema/instance_management/auth/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.instance_management.f5xc_instance", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/instance_management/f5xc_instance", false)
-	mdr.PkgsInfo["ves.io.schema.instance_management.f5xc_instance"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/instance_management/f5xc_instance/objects.proto")
-	pInfo.FilesInfo["ves.io/schema/instance_management/f5xc_instance/objects.proto"] = fInfo
-
-	oInfo = svcfw.NewObjInfo("Object", true)
-
-	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.instance_management.f5xc_instance.Object"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/instance_management/f5xc_instance/types.proto")
-	pInfo.FilesInfo["ves.io/schema/instance_management/f5xc_instance/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.instance_management.f5xc_instance.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/instance_management/f5xc_instance/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.instance_management.f5xc_instance.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/instance_management/f5xc_instance/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/instance_management/f5xc_instance/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.instance_management.f5xc_instance.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.instance_management.f5xc_instance.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.instance_management.f5xc_instance/Objects", "/ves.io.schema.instance_management.f5xc_instance/introspect/write/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.f5xc_instance.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.instance_management.f5xc_instance.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.instance_management.f5xc_instance/Object/{object_uid}", "/ves.io.schema.instance_management.f5xc_instance/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.f5xc_instance.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.instance_management.f5xc_instance.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.instance_management.f5xc_instance/Object/{object_uid}", "/ves.io.schema.instance_management.f5xc_instance/introspect/read/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.f5xc_instance.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.instance_management.f5xc_instance.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.instance_management.f5xc_instance/Objects", "/ves.io.schema.instance_management.f5xc_instance/introspect/read/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.f5xc_instance.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.instance_management.f5xc_instance.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.instance_management.f5xc_instance/Objects/stream"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.f5xc_instance.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.instance_management.f5xc_instance.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.instance_management.f5xc_instance/Object/{object_uid}", "/ves.io.schema.instance_management.f5xc_instance/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.f5xc_instance.crudapi.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.instance_management.f5xc_instance.crudapi.API"] = aInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.instance_management.tenant_allocation", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/instance_management/tenant_allocation", false)
-	mdr.PkgsInfo["ves.io.schema.instance_management.tenant_allocation"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/instance_management/tenant_allocation/objects.proto")
-	pInfo.FilesInfo["ves.io/schema/instance_management/tenant_allocation/objects.proto"] = fInfo
-
-	oInfo = svcfw.NewObjInfo("Object", true)
-
-	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.instance_management.tenant_allocation.Object"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/instance_management/tenant_allocation/types.proto")
-	pInfo.FilesInfo["ves.io/schema/instance_management/tenant_allocation/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.instance_management.tenant_allocation.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/instance_management/tenant_allocation/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.instance_management.tenant_allocation.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/instance_management/tenant_allocation/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/instance_management/tenant_allocation/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.instance_management.tenant_allocation.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.instance_management.tenant_allocation.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.instance_management.tenant_allocation/Objects", "/ves.io.schema.instance_management.tenant_allocation/introspect/write/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.tenant_allocation.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.instance_management.tenant_allocation.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.instance_management.tenant_allocation/Object/{object_uid}", "/ves.io.schema.instance_management.tenant_allocation/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.tenant_allocation.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.instance_management.tenant_allocation.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.instance_management.tenant_allocation/Object/{object_uid}", "/ves.io.schema.instance_management.tenant_allocation/introspect/read/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.tenant_allocation.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.instance_management.tenant_allocation.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.instance_management.tenant_allocation/Objects", "/ves.io.schema.instance_management.tenant_allocation/introspect/read/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.tenant_allocation.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.instance_management.tenant_allocation.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.instance_management.tenant_allocation/Objects/stream"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.tenant_allocation.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.instance_management.tenant_allocation.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.instance_management.tenant_allocation/Object/{object_uid}", "/ves.io.schema.instance_management.tenant_allocation/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.tenant_allocation.crudapi.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.instance_management.tenant_allocation.crudapi.API"] = aInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.instance_management.v2_signup", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/instance_management/v2_signup", false)
-	mdr.PkgsInfo["ves.io.schema.instance_management.v2_signup"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/instance_management/v2_signup/object.proto")
-	pInfo.FilesInfo["ves.io/schema/instance_management/v2_signup/object.proto"] = fInfo
-
-	oInfo = svcfw.NewObjInfo("Object", true)
-
-	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.instance_management.v2_signup.Object"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/instance_management/v2_signup/types.proto")
-	pInfo.FilesInfo["ves.io/schema/instance_management/v2_signup/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.instance_management.v2_signup.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/instance_management/v2_signup/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.instance_management.v2_signup.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/instance_management/v2_signup/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/instance_management/v2_signup/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.instance_management.v2_signup.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.instance_management.v2_signup.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.instance_management.v2_signup/Objects", "/ves.io.schema.instance_management.v2_signup/introspect/write/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.v2_signup.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.instance_management.v2_signup.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.instance_management.v2_signup/Object/{object_uid}", "/ves.io.schema.instance_management.v2_signup/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.v2_signup.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.instance_management.v2_signup.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.instance_management.v2_signup/Object/{object_uid}", "/ves.io.schema.instance_management.v2_signup/introspect/read/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.v2_signup.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.instance_management.v2_signup.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.instance_management.v2_signup/Objects", "/ves.io.schema.instance_management.v2_signup/introspect/read/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.v2_signup.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.instance_management.v2_signup.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.instance_management.v2_signup/Objects/stream"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.v2_signup.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.instance_management.v2_signup.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.instance_management.v2_signup/Object/{object_uid}", "/ves.io.schema.instance_management.v2_signup/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.instance_management.v2_signup.crudapi.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.instance_management.v2_signup.crudapi.API"] = aInfo
-
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.ip_prefix_set", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set", false)
 	mdr.PkgsInfo["ves.io.schema.ip_prefix_set"] = pInfo
 
@@ -8101,6 +8851,126 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.ip_prefix_set.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.jwt", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/jwt", false)
+	mdr.PkgsInfo["ves.io.schema.jwt"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/jwt/object.proto")
+	pInfo.FilesInfo["ves.io/schema/jwt/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.jwt.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.jwt.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/jwt/types.proto")
+	pInfo.FilesInfo["ves.io/schema/jwt/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.jwt.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/jwt/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.jwt.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/jwt/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/jwt/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.jwt.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.jwt.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.jwt/Objects", "/ves.io.schema.jwt/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.jwt.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.jwt.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.jwt/Object/{object_uid}", "/ves.io.schema.jwt/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.jwt.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.jwt.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.jwt/Object/{object_uid}", "/ves.io.schema.jwt/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.jwt.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.jwt.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.jwt/Objects", "/ves.io.schema.jwt/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.jwt.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.jwt.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.jwt/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.jwt.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.jwt.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.jwt/Object/{object_uid}", "/ves.io.schema.jwt/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.jwt.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.jwt.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.jwt_provider", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/jwt_provider", false)
+	mdr.PkgsInfo["ves.io.schema.jwt_provider"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/jwt_provider/object.proto")
+	pInfo.FilesInfo["ves.io/schema/jwt_provider/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.jwt_provider.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.jwt_provider.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/jwt_provider/types.proto")
+	pInfo.FilesInfo["ves.io/schema/jwt_provider/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.jwt_provider.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/jwt_provider/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.jwt_provider.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/jwt_provider/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/jwt_provider/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.jwt_provider.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.jwt_provider.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.jwt_provider/Objects", "/ves.io.schema.jwt_provider/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.jwt_provider.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.jwt_provider.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.jwt_provider/Object/{object_uid}", "/ves.io.schema.jwt_provider/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.jwt_provider.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.jwt_provider.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.jwt_provider/Object/{object_uid}", "/ves.io.schema.jwt_provider/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.jwt_provider.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.jwt_provider.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.jwt_provider/Objects", "/ves.io.schema.jwt_provider/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.jwt_provider.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.jwt_provider.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.jwt_provider/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.jwt_provider.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.jwt_provider.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.jwt_provider/Object/{object_uid}", "/ves.io.schema.jwt_provider/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.jwt_provider.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.jwt_provider.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_cluster", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster", false)
 	mdr.PkgsInfo["ves.io.schema.k8s_cluster"] = pInfo
@@ -8894,6 +9764,66 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.l7_acl.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.learnt_models", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/learnt_models", false)
+	mdr.PkgsInfo["ves.io.schema.learnt_models"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/learnt_models/object.proto")
+	pInfo.FilesInfo["ves.io/schema/learnt_models/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.learnt_models.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.learnt_models.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/learnt_models/types.proto")
+	pInfo.FilesInfo["ves.io/schema/learnt_models/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.learnt_models.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/learnt_models/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.learnt_models.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/learnt_models/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/learnt_models/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.learnt_models.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.learnt_models.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.learnt_models/Objects", "/ves.io.schema.learnt_models/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.learnt_models.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.learnt_models.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.learnt_models/Object/{object_uid}", "/ves.io.schema.learnt_models/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.learnt_models.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.learnt_models.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.learnt_models/Object/{object_uid}", "/ves.io.schema.learnt_models/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.learnt_models.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.learnt_models.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.learnt_models/Objects", "/ves.io.schema.learnt_models/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.learnt_models.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.learnt_models.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.learnt_models/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.learnt_models.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.learnt_models.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.learnt_models/Object/{object_uid}", "/ves.io.schema.learnt_models/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.learnt_models.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.learnt_models.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.log", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log", false)
 	mdr.PkgsInfo["ves.io.schema.log"] = pInfo
 
@@ -8932,6 +9862,11 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	aInfo.RPCsInfo[svcfw.RPCName("AuditLogScrollQuery")] = rpcInfo
 	mdr.RPCIdx["ves.io.schema.log.CustomAPI.AuditLogScrollQuery"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ExternalConnectorLogQuery", "ves.io.schema.log.ExternalConnectorRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/site/{site}/external_connector/{external_connector}/logs"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ExternalConnectorLogQuery")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.log.CustomAPI.ExternalConnectorLogQuery"] = rpcInfo
 	rpcInfo = svcfw.NewRPCInfo("FirewallLogAggregationQuery", "ves.io.schema.log.FirewallLogAggregationRequest", true, false)
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/firewall_logs/aggregation"}}
 
@@ -9200,23 +10135,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.log_receiver.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.maintenance_status", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/maintenance_status", false)
-	mdr.PkgsInfo["ves.io.schema.maintenance_status"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/maintenance_status/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/maintenance_status/public_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
-
-	rpcInfo = svcfw.NewRPCInfo("GetUpgradeStatus", "ves.io.schema.maintenance_status.GetUpgradeStatusRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/upgrade_status"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("GetUpgradeStatus")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.maintenance_status.CustomAPI.GetUpgradeStatus"] = rpcInfo
-
-	fInfo.APIsInfo["CustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.maintenance_status.CustomAPI"] = aInfo
-
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.malicious_user_mitigation", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation", false)
 	mdr.PkgsInfo["ves.io.schema.malicious_user_mitigation"] = pInfo
 
@@ -9347,248 +10265,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.malware_protection.subscription.CustomAPI"] = aInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.marketplace.aws_account", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/marketplace/aws_account", false)
-	mdr.PkgsInfo["ves.io.schema.marketplace.aws_account"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/marketplace/aws_account/object.proto")
-	pInfo.FilesInfo["ves.io/schema/marketplace/aws_account/object.proto"] = fInfo
-
-	oInfo = svcfw.NewObjInfo("Object", true)
-
-	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.marketplace.aws_account.Object"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/marketplace/aws_account/public_onboard_customeapi.proto")
-	pInfo.FilesInfo["ves.io/schema/marketplace/aws_account/public_onboard_customeapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("OnboardCustomAPI", "CUSTOM_PUBLIC", "", false)
-
-	rpcInfo = svcfw.NewRPCInfo("RegisterNewAWSAccount", "ves.io.schema.marketplace.aws_account.RegistrationRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/no_auth/namespaces/system/aws/f5xc-saas/register"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("RegisterNewAWSAccount")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.aws_account.OnboardCustomAPI.RegisterNewAWSAccount"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("SignupAWSAccount", "ves.io.schema.marketplace.aws_account.AWSAccountSignupRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/no_auth/namespaces/system/aws/f5xc-saas/signup"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("SignupAWSAccount")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.aws_account.OnboardCustomAPI.SignupAWSAccount"] = rpcInfo
-
-	fInfo.APIsInfo["OnboardCustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.marketplace.aws_account.OnboardCustomAPI"] = aInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/marketplace/aws_account/types.proto")
-	pInfo.FilesInfo["ves.io/schema/marketplace/aws_account/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.marketplace.aws_account.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/marketplace/aws_account/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.marketplace.aws_account.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/marketplace/aws_account/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/marketplace/aws_account/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.marketplace.aws_account.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.marketplace.aws_account.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.marketplace.aws_account/Objects", "/ves.io.schema.marketplace.aws_account/introspect/write/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.aws_account.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.marketplace.aws_account.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.marketplace.aws_account/Object/{object_uid}", "/ves.io.schema.marketplace.aws_account/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.aws_account.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.marketplace.aws_account.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.marketplace.aws_account/Object/{object_uid}", "/ves.io.schema.marketplace.aws_account/introspect/read/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.aws_account.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.marketplace.aws_account.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.marketplace.aws_account/Objects", "/ves.io.schema.marketplace.aws_account/introspect/read/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.aws_account.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.marketplace.aws_account.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.marketplace.aws_account/Objects/stream"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.aws_account.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.marketplace.aws_account.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.marketplace.aws_account/Object/{object_uid}", "/ves.io.schema.marketplace.aws_account/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.aws_account.crudapi.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.marketplace.aws_account.crudapi.API"] = aInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.marketplace.xc_saas", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/marketplace/xc_saas", false)
-	mdr.PkgsInfo["ves.io.schema.marketplace.xc_saas"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/marketplace/xc_saas/private_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/marketplace/xc_saas/private_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomPrivateAPI", "CUSTOM_PRIVATE", "ves.io.schema.marketplace.xc_saas.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("SendSignupEmail", "ves.io.schema.marketplace.xc_saas.SendInternalSignupEmailRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/restricted/write/f5xc-saas/signup/send_email"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("SendSignupEmail")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.CustomPrivateAPI.SendSignupEmail"] = rpcInfo
-
-	fInfo.APIsInfo["CustomPrivateAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.marketplace.xc_saas.CustomPrivateAPI"] = aInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/marketplace/xc_saas/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/marketplace/xc_saas/public_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
-
-	rpcInfo = svcfw.NewRPCInfo("GetRegistrationDetails", "ves.io.schema.marketplace.xc_saas.GetRegistrationDetailsRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/no_auth/namespaces/system/f5xc-saas/signup/registration_details"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("GetRegistrationDetails")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.CustomAPI.GetRegistrationDetails"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("SendSignupEmail", "ves.io.schema.marketplace.xc_saas.SendSignupEmailRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/no_auth/namespaces/system/f5xc-saas/signup/send_email"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("SendSignupEmail")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.CustomAPI.SendSignupEmail"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("SignupXCSaaS", "ves.io.schema.marketplace.xc_saas.XCSaaSSignupRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/no_auth/namespaces/system/f5xc-saas/signup"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("SignupXCSaaS")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.CustomAPI.SignupXCSaaS"] = rpcInfo
-
-	fInfo.APIsInfo["CustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.marketplace.xc_saas.CustomAPI"] = aInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.marketplace.xc_saas.asb.asb_message", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/marketplace/xc_saas/asb/asb_message", false)
-	mdr.PkgsInfo["ves.io.schema.marketplace.xc_saas.asb.asb_message"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/marketplace/xc_saas/asb/asb_message/object.proto")
-	pInfo.FilesInfo["ves.io/schema/marketplace/xc_saas/asb/asb_message/object.proto"] = fInfo
-
-	oInfo = svcfw.NewObjInfo("Object", true)
-
-	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.marketplace.xc_saas.asb.asb_message.Object"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/marketplace/xc_saas/asb/asb_message/private_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/marketplace/xc_saas/asb/asb_message/private_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomPrivateAPI", "CUSTOM_PRIVATE", "ves.io.schema.marketplace.xc_saas.asb.asb_message.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("RegisterXCSaaS", "ves.io.schema.marketplace.xc_saas.asb.asb_message.RegisterXCSaaSRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.marketplace.xc_saas.asb.asb_message/register"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("RegisterXCSaaS")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.asb.asb_message.CustomPrivateAPI.RegisterXCSaaS"] = rpcInfo
-
-	fInfo.APIsInfo["CustomPrivateAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.marketplace.xc_saas.asb.asb_message.CustomPrivateAPI"] = aInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/marketplace/xc_saas/asb/asb_message/types.proto")
-	pInfo.FilesInfo["ves.io/schema/marketplace/xc_saas/asb/asb_message/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/marketplace/xc_saas/asb/asb_message/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/marketplace/xc_saas/asb/asb_message/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/marketplace/xc_saas/asb/asb_message/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.marketplace.xc_saas.asb.asb_message.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.marketplace.xc_saas.asb.asb_message/Objects", "/ves.io.schema.marketplace.xc_saas.asb.asb_message/introspect/write/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.marketplace.xc_saas.asb.asb_message/Object/{object_uid}", "/ves.io.schema.marketplace.xc_saas.asb.asb_message/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.marketplace.xc_saas.asb.asb_message/Object/{object_uid}", "/ves.io.schema.marketplace.xc_saas.asb.asb_message/introspect/read/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.marketplace.xc_saas.asb.asb_message/Objects", "/ves.io.schema.marketplace.xc_saas.asb.asb_message/introspect/read/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.marketplace.xc_saas.asb.asb_message/Objects/stream"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.marketplace.xc_saas.asb.asb_message/Object/{object_uid}", "/ves.io.schema.marketplace.xc_saas.asb.asb_message/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.marketplace.xc_saas.asb.asb_message.crudapi.API"] = aInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.marketplace.xc_saas.asb.message", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/marketplace/xc_saas/asb/message", false)
-	mdr.PkgsInfo["ves.io.schema.marketplace.xc_saas.asb.message"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/marketplace/xc_saas/asb/message/object.proto")
-	pInfo.FilesInfo["ves.io/schema/marketplace/xc_saas/asb/message/object.proto"] = fInfo
-
-	oInfo = svcfw.NewObjInfo("Object", true)
-
-	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.marketplace.xc_saas.asb.message.Object"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/marketplace/xc_saas/asb/message/types.proto")
-	pInfo.FilesInfo["ves.io/schema/marketplace/xc_saas/asb/message/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.marketplace.xc_saas.asb.message.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/marketplace/xc_saas/asb/message/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.marketplace.xc_saas.asb.message.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/marketplace/xc_saas/asb/message/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/marketplace/xc_saas/asb/message/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.marketplace.xc_saas.asb.message.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.marketplace.xc_saas.asb.message/Objects", "/ves.io.schema.marketplace.xc_saas.asb.message/introspect/write/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.marketplace.xc_saas.asb.message/Object/{object_uid}", "/ves.io.schema.marketplace.xc_saas.asb.message/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.marketplace.xc_saas.asb.message/Object/{object_uid}", "/ves.io.schema.marketplace.xc_saas.asb.message/introspect/read/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.marketplace.xc_saas.asb.message/Objects", "/ves.io.schema.marketplace.xc_saas.asb.message/introspect/read/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.marketplace.xc_saas.asb.message/Objects/stream"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.marketplace.xc_saas.asb.message.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.marketplace.xc_saas.asb.message/Object/{object_uid}", "/ves.io.schema.marketplace.xc_saas.asb.message/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.marketplace.xc_saas.asb.message.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.module_management", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/module_management", false)
 	mdr.PkgsInfo["ves.io.schema.module_management"] = pInfo
@@ -10308,6 +10984,66 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.network_interface.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_loadbalancer", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_loadbalancer", false)
+	mdr.PkgsInfo["ves.io.schema.network_loadbalancer"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/network_loadbalancer/object.proto")
+	pInfo.FilesInfo["ves.io/schema/network_loadbalancer/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.network_loadbalancer.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.network_loadbalancer.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/network_loadbalancer/types.proto")
+	pInfo.FilesInfo["ves.io/schema/network_loadbalancer/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_loadbalancer.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_loadbalancer/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.network_loadbalancer.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/network_loadbalancer/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/network_loadbalancer/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.network_loadbalancer.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.network_loadbalancer.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.network_loadbalancer/Objects", "/ves.io.schema.network_loadbalancer/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.network_loadbalancer.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.network_loadbalancer.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.network_loadbalancer/Object/{object_uid}", "/ves.io.schema.network_loadbalancer/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.network_loadbalancer.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.network_loadbalancer.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_loadbalancer/Object/{object_uid}", "/ves.io.schema.network_loadbalancer/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.network_loadbalancer.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.network_loadbalancer.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_loadbalancer/Objects", "/ves.io.schema.network_loadbalancer/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.network_loadbalancer.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.network_loadbalancer.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.network_loadbalancer/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.network_loadbalancer.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.network_loadbalancer.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.network_loadbalancer/Object/{object_uid}", "/ves.io.schema.network_loadbalancer/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.network_loadbalancer.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.network_loadbalancer.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy", false)
 	mdr.PkgsInfo["ves.io.schema.network_policy"] = pInfo
 
@@ -10787,56 +11523,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.nfv_service.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.nms.agent_certs", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/nms/agent_certs", false)
-	mdr.PkgsInfo["ves.io.schema.nginx.nms.agent_certs"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/nms/agent_certs/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/nginx/nms/agent_certs/public_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
-
-	rpcInfo = svcfw.NewRPCInfo("GenerateAgentCert", "ves.io.schema.nginx.nms.agent_certs.GenerateAgentCertRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/agent-certs"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("GenerateAgentCert")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.nginx.nms.agent_certs.CustomAPI.GenerateAgentCert"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("RevokeAgentCert", "ves.io.schema.nginx.nms.agent_certs.RevokeAgentCertRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/agent-certs/revoke"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("RevokeAgentCert")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.nginx.nms.agent_certs.CustomAPI.RevokeAgentCert"] = rpcInfo
-
-	fInfo.APIsInfo["CustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.nginx.nms.agent_certs.CustomAPI"] = aInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/nms/agent_certs/types.proto")
-	pInfo.FilesInfo["ves.io/schema/nginx/nms/agent_certs/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.nms.subscription", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/nms/subscription", false)
-	mdr.PkgsInfo["ves.io.schema.nginx.nms.subscription"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/nms/subscription/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/nginx/nms/subscription/public_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Subscribe", "ves.io.schema.nginx.nms.subscription.SubscribeRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/nms/namespaces/system/subscribe"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Subscribe")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.nginx.nms.subscription.CustomAPI.Subscribe"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Unsubscribe", "ves.io.schema.nginx.nms.subscription.UnsubscribeRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/nms/namespaces/system/unsubscribe"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Unsubscribe")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.nginx.nms.subscription.CustomAPI.Unsubscribe"] = rpcInfo
-
-	fInfo.APIsInfo["CustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.nginx.nms.subscription.CustomAPI"] = aInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/nms/subscription/types.proto")
-	pInfo.FilesInfo["ves.io/schema/nginx/nms/subscription/types.proto"] = fInfo
-
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_csg", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_csg", false)
 	mdr.PkgsInfo["ves.io.schema.nginx.one.nginx_csg"] = pInfo
 
@@ -11009,6 +11695,10 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	mdr.ObjIdx["ves.io.schema.nginx.one.nginx_server.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.nginx.one.nginx_server.StatusObject"] = oInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_server/public_crudapi.proto")
 	pInfo.FilesInfo["ves.io/schema/nginx/one/nginx_server/public_crudapi.proto"] = fInfo
@@ -11094,27 +11784,313 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.nginx.one.nginx_server.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.subscription", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/subscription", false)
-	mdr.PkgsInfo["ves.io.schema.nginx.one.subscription"] = pInfo
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_service_discovery", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_service_discovery", false)
+	mdr.PkgsInfo["ves.io.schema.nginx.one.nginx_service_discovery"] = pInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/subscription/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/nginx/one/subscription/public_customapi.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_service_discovery/object.proto")
+	pInfo.FilesInfo["ves.io/schema/nginx/one/nginx_service_discovery/object.proto"] = fInfo
 
-	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
+	oInfo = svcfw.NewObjInfo("Object", true)
 
-	rpcInfo = svcfw.NewRPCInfo("Subscribe", "ves.io.schema.nginx.one.subscription.SubscribeRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/n1/subscribe"}}
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.nginx.one.nginx_service_discovery.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
 
-	aInfo.RPCsInfo[svcfw.RPCName("Subscribe")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.nginx.one.subscription.CustomAPI.Subscribe"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Unsubscribe", "ves.io.schema.nginx.one.subscription.UnsubscribeRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/n1/unsubscribe"}}
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.nginx.one.nginx_service_discovery.StatusObject"] = oInfo
 
-	aInfo.RPCsInfo[svcfw.RPCName("Unsubscribe")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.nginx.one.subscription.CustomAPI.Unsubscribe"] = rpcInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_service_discovery/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/nginx/one/nginx_service_discovery/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.nginx.one.nginx_service_discovery.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.nginx.one.nginx_service_discovery.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/nginx_service_discoverys"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.nginx.one.nginx_service_discovery.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.nginx.one.nginx_service_discovery.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/nginx_service_discoverys/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.nginx.one.nginx_service_discovery.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.nginx.one.nginx_service_discovery.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/nginx_service_discoverys/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.nginx.one.nginx_service_discovery.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.nginx.one.nginx_service_discovery.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/nginx_service_discoverys"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.nginx.one.nginx_service_discovery.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.nginx.one.nginx_service_discovery.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/nginx_service_discoverys/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.nginx.one.nginx_service_discovery.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.nginx.one.nginx_service_discovery.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.nginx.one.nginx_service_discovery.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.nginx.one.nginx_service_discovery.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.nginx.one.nginx_service_discovery.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.nginx.one.nginx_service_discovery.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.nginx.one.nginx_service_discovery.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_service_discovery/types.proto")
+	pInfo.FilesInfo["ves.io/schema/nginx/one/nginx_service_discovery/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_service_discovery.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_service_discovery/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.nginx.one.nginx_service_discovery.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_service_discovery/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/nginx/one/nginx_service_discovery/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.nginx.one.nginx_service_discovery.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.nginx.one.nginx_service_discovery.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.nginx.one.nginx_service_discovery/Objects", "/ves.io.schema.nginx.one.nginx_service_discovery/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.nginx.one.nginx_service_discovery.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.nginx.one.nginx_service_discovery.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.nginx.one.nginx_service_discovery/Object/{object_uid}", "/ves.io.schema.nginx.one.nginx_service_discovery/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.nginx.one.nginx_service_discovery.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.nginx.one.nginx_service_discovery.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.nginx.one.nginx_service_discovery/Object/{object_uid}", "/ves.io.schema.nginx.one.nginx_service_discovery/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.nginx.one.nginx_service_discovery.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.nginx.one.nginx_service_discovery.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.nginx.one.nginx_service_discovery/Objects", "/ves.io.schema.nginx.one.nginx_service_discovery/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.nginx.one.nginx_service_discovery.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.nginx.one.nginx_service_discovery.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.nginx.one.nginx_service_discovery/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.nginx.one.nginx_service_discovery.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.nginx.one.nginx_service_discovery.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.nginx.one.nginx_service_discovery/Object/{object_uid}", "/ves.io.schema.nginx.one.nginx_service_discovery/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.nginx.one.nginx_service_discovery.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.nginx.one.nginx_service_discovery.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ocsp_response", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ocsp_response", false)
+	mdr.PkgsInfo["ves.io.schema.ocsp_response"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/ocsp_response/object.proto")
+	pInfo.FilesInfo["ves.io/schema/ocsp_response/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.ocsp_response.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.ocsp_response.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/ocsp_response/types.proto")
+	pInfo.FilesInfo["ves.io/schema/ocsp_response/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ocsp_response.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ocsp_response/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.ocsp_response.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/ocsp_response/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/ocsp_response/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.ocsp_response.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.ocsp_response.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.ocsp_response/Objects", "/ves.io.schema.ocsp_response/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.ocsp_response.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.ocsp_response.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.ocsp_response/Object/{object_uid}", "/ves.io.schema.ocsp_response/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.ocsp_response.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.ocsp_response.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.ocsp_response/Object/{object_uid}", "/ves.io.schema.ocsp_response/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.ocsp_response.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.ocsp_response.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.ocsp_response/Objects", "/ves.io.schema.ocsp_response/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.ocsp_response.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.ocsp_response.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.ocsp_response/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.ocsp_response.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.ocsp_response.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.ocsp_response/Object/{object_uid}", "/ves.io.schema.ocsp_response/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.ocsp_response.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.ocsp_response.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.pbac", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/pbac", false)
+	mdr.PkgsInfo["ves.io.schema.pbac"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/pbac/types.proto")
+	pInfo.FilesInfo["ves.io/schema/pbac/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.pbac.addon_service", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/pbac/addon_service", false)
+	mdr.PkgsInfo["ves.io.schema.pbac.addon_service"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/pbac/addon_service/object.proto")
+	pInfo.FilesInfo["ves.io/schema/pbac/addon_service/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.pbac.addon_service.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.pbac.addon_service.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/pbac/addon_service/private_customapi_uam.proto")
+	pInfo.FilesInfo["ves.io/schema/pbac/addon_service/private_customapi_uam.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomPrivateAPI", "CUSTOM_PRIVATE", "ves.io.schema.addon_service.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("CanSubscribe", "ves.io.schema.pbac.addon_service.CanSubscribeReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/read/namespaces/system/addon_services/{addon_service}/can-subscribe"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("CanSubscribe")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.CustomPrivateAPI.CanSubscribe"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SetSubscription", "ves.io.schema.pbac.addon_service.SetSubscriptionReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/write/namespaces/system/addon_services/{addon_service}/set-subscription"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SetSubscription")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.CustomPrivateAPI.SetSubscription"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SetSubscriptionRestricted", "ves.io.schema.pbac.addon_service.SetSubscriptionReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/restricted/write/namespaces/system/addon_services/{addon_service}/set-subscription-restricted"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SetSubscriptionRestricted")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.CustomPrivateAPI.SetSubscriptionRestricted"] = rpcInfo
+
+	fInfo.APIsInfo["CustomPrivateAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.pbac.addon_service.CustomPrivateAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/pbac/addon_service/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/pbac/addon_service/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.pbac.addon_service.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.pbac.addon_service.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/addon_services/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.pbac.addon_service.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/addon_services"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.API.List"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.pbac.addon_service.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.pbac.addon_service.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.pbac.addon_service.ListRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/pbac/addon_service/public_customapi_uam.proto")
+	pInfo.FilesInfo["ves.io/schema/pbac/addon_service/public_customapi_uam.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.addon_service.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetActivationStatus", "ves.io.schema.pbac.addon_service.GetActivationStatusReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/addon_services/{addon_service}/activation-status"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetActivationStatus")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.CustomAPI.GetActivationStatus"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetAddonServiceDetails", "ves.io.schema.pbac.addon_service.GetAddonServiceDetailsReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/shared/addon_services/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetAddonServiceDetails")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.CustomAPI.GetAddonServiceDetails"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetAllServiceTiersActivationStatus", "ves.io.schema.pbac.addon_service.GetAllServiceTiersActivationStatusReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/addon_services/{addon_service}/all-activation-status"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetAllServiceTiersActivationStatus")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.CustomAPI.GetAllServiceTiersActivationStatus"] = rpcInfo
 
 	fInfo.APIsInfo["CustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.nginx.one.subscription.CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.pbac.addon_service.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/pbac/addon_service/types.proto")
+	pInfo.FilesInfo["ves.io/schema/pbac/addon_service/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.pbac.addon_service.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/pbac/addon_service/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.pbac.addon_service.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/pbac/addon_service/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/pbac/addon_service/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.pbac.addon_service.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.pbac.addon_service.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.pbac.addon_service/Objects", "/ves.io.schema.pbac.addon_service/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.pbac.addon_service.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.pbac.addon_service/Object/{object_uid}", "/ves.io.schema.pbac.addon_service/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.pbac.addon_service.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.pbac.addon_service/Object/{object_uid}", "/ves.io.schema.pbac.addon_service/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.pbac.addon_service.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.pbac.addon_service/Objects", "/ves.io.schema.pbac.addon_service/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.pbac.addon_service.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.pbac.addon_service/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.pbac.addon_service.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.pbac.addon_service/Object/{object_uid}", "/ves.io.schema.pbac.addon_service/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.pbac.addon_service.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.pbac.addon_service.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.policer", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policer", false)
 	mdr.PkgsInfo["ves.io.schema.policer"] = pInfo
@@ -11542,6 +12518,134 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.public_ip.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.quota", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/quota", false)
+	mdr.PkgsInfo["ves.io.schema.quota"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/quota/object.proto")
+	pInfo.FilesInfo["ves.io/schema/quota/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.quota.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.quota.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/quota/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/quota/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.quota.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.quota.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/quotas"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.quota.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.quota.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/quotas/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.quota.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.quota.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/quotas/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.quota.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.quota.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/quotas"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.quota.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.quota.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/quotas/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.quota.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.quota.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.quota.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.quota.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.quota.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.quota.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.quota.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/quota/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/quota/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.quota.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("CustomGetQuotaLimits", "ves.io.schema.quota.GetQuotaLimitsRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/quota/limits"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("CustomGetQuotaLimits")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.quota.CustomAPI.CustomGetQuotaLimits"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetQuotaUsage", "ves.io.schema.quota.GetRequestType", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/quota/usage"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetQuotaUsage")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.quota.CustomAPI.GetQuotaUsage"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.quota.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/quota/types.proto")
+	pInfo.FilesInfo["ves.io/schema/quota/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.quota.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/quota/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.quota.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/quota/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/quota/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.quota.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.quota.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.quota/Objects", "/ves.io.schema.quota/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.quota.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.quota.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.quota/Object/{object_uid}", "/ves.io.schema.quota/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.quota.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.quota.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.quota/Object/{object_uid}", "/ves.io.schema.quota/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.quota.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.quota.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.quota/Objects", "/ves.io.schema.quota/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.quota.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.quota.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.quota/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.quota.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.quota.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.quota/Object/{object_uid}", "/ves.io.schema.quota/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.quota.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.quota.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.rate_limiter", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter", false)
 	mdr.PkgsInfo["ves.io.schema.rate_limiter"] = pInfo
 
@@ -11804,6 +12908,300 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.registration.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.report", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/report", false)
+	mdr.PkgsInfo["ves.io.schema.report"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/report/atb.proto")
+	pInfo.FilesInfo["ves.io/schema/report/atb.proto"] = fInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/report/object.proto")
+	pInfo.FilesInfo["ves.io/schema/report/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.report.Object"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/report/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/report/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.report.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.report.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/reports/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report.API.Get"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.report.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.report.GetRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/report/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/report/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.report.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("DownloadReport", "ves.io.schema.report.DownloadReportRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/reports/{name}/download"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("DownloadReport")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report.CustomAPI.DownloadReport"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.report.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/report/report.proto")
+	pInfo.FilesInfo["ves.io/schema/report/report.proto"] = fInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/report/types.proto")
+	pInfo.FilesInfo["ves.io/schema/report/types.proto"] = fInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/report/waap.proto")
+	pInfo.FilesInfo["ves.io/schema/report/waap.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.report.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/report/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.report.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/report/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/report/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.report.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.report.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.report/Objects", "/ves.io.schema.report/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.report.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.report/Object/{object_uid}", "/ves.io.schema.report/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.report.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.report/Object/{object_uid}", "/ves.io.schema.report/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.report.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.report/Objects", "/ves.io.schema.report/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.report.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.report/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.report.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.report/Object/{object_uid}", "/ves.io.schema.report/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.report.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.report_config", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/report_config", false)
+	mdr.PkgsInfo["ves.io.schema.report_config"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/report_config/object.proto")
+	pInfo.FilesInfo["ves.io/schema/report_config/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.report_config.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.report_config.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/report_config/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/report_config/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.report_config.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.report_config.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/report_configs"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.report_config.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/report_configs/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.report_config.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/report_configs/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.report_config.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/report_configs"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.report_config.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/report_configs/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.report_config.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.report_config.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.report_config.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.report_config.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.report_config.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.report_config.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/report_config/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/report_config/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.report_config.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GenerateReport", "ves.io.schema.report_config.GenerateReportRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/report_configs/{name}/generate"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GenerateReport")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.CustomAPI.GenerateReport"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListReportsHistory", "ves.io.schema.report_config.ListReportsHistoryRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/report_configs/list-reports-history"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListReportsHistory")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.CustomAPI.ListReportsHistory"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListReportsHistoryBotDefence", "ves.io.schema.report_config.ListReportsHistoryRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/report_configs/list-reports-history-bot-defence"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListReportsHistoryBotDefence")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.CustomAPI.ListReportsHistoryBotDefence"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListReportsHistoryWaap", "ves.io.schema.report_config.ListReportsHistoryRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/report_configs/list-reports-history-waap"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListReportsHistoryWaap")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.CustomAPI.ListReportsHistoryWaap"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.report_config.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/report_config/types.proto")
+	pInfo.FilesInfo["ves.io/schema/report_config/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.report_config.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/report_config/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.report_config.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/report_config/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/report_config/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.report_config.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.report_config.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.report_config/Objects", "/ves.io.schema.report_config/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.report_config.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.report_config/Object/{object_uid}", "/ves.io.schema.report_config/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.report_config.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.report_config/Object/{object_uid}", "/ves.io.schema.report_config/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.report_config.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.report_config/Objects", "/ves.io.schema.report_config/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.report_config.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.report_config/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.report_config.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.report_config/Object/{object_uid}", "/ves.io.schema.report_config/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.report_config.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.report_config.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.resource_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/resource_policy", false)
+	mdr.PkgsInfo["ves.io.schema.resource_policy"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/resource_policy/object.proto")
+	pInfo.FilesInfo["ves.io/schema/resource_policy/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.resource_policy.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.resource_policy.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/resource_policy/types.proto")
+	pInfo.FilesInfo["ves.io/schema/resource_policy/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.resource_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/resource_policy/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.resource_policy.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/resource_policy/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/resource_policy/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.resource_policy.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.resource_policy.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.resource_policy/Objects", "/ves.io.schema.resource_policy/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.resource_policy.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.resource_policy.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.resource_policy/Object/{object_uid}", "/ves.io.schema.resource_policy/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.resource_policy.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.resource_policy.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.resource_policy/Object/{object_uid}", "/ves.io.schema.resource_policy/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.resource_policy.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.resource_policy.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.resource_policy/Objects", "/ves.io.schema.resource_policy/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.resource_policy.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.resource_policy.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.resource_policy/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.resource_policy.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.resource_policy.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.resource_policy/Object/{object_uid}", "/ves.io.schema.resource_policy/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.resource_policy.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.resource_policy.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.role", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/role", false)
 	mdr.PkgsInfo["ves.io.schema.role"] = pInfo
@@ -12108,6 +13506,137 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.saas_config.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_management", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_management", false)
+	mdr.PkgsInfo["ves.io.schema.secret_management"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_management/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/secret_management/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetPolicyDocument", "ves.io.schema.secret_management.GetPolicyDocumentRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/secret_policys/{name}/get_policy_document"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetPolicyDocument")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.secret_management.CustomAPI.GetPolicyDocument"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetPublicKey", "ves.io.schema.secret_management.GetPublicKeyRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/get_public_key"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetPublicKey")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.secret_management.CustomAPI.GetPublicKey"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.secret_management.CustomAPI"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_management_access", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_management_access", false)
+	mdr.PkgsInfo["ves.io.schema.secret_management_access"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_management_access/object.proto")
+	pInfo.FilesInfo["ves.io/schema/secret_management_access/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.secret_management_access.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.secret_management_access.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_management_access/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/secret_management_access/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.secret_management_access.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.secret_management_access.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/secret_management_accesss"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.secret_management_access.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.secret_management_access.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/secret_management_accesss/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.secret_management_access.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.secret_management_access.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/secret_management_accesss/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.secret_management_access.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.secret_management_access.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/secret_management_accesss"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.secret_management_access.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.secret_management_access.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/secret_management_accesss/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.secret_management_access.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.secret_management_access.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.secret_management_access.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.secret_management_access.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.secret_management_access.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.secret_management_access.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.secret_management_access.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_management_access/types.proto")
+	pInfo.FilesInfo["ves.io/schema/secret_management_access/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_management_access.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_management_access/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.secret_management_access.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_management_access/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/secret_management_access/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.secret_management_access.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.secret_management_access.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.secret_management_access/Objects", "/ves.io.schema.secret_management_access/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.secret_management_access.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.secret_management_access.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.secret_management_access/Object/{object_uid}", "/ves.io.schema.secret_management_access/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.secret_management_access.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.secret_management_access.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_management_access/Object/{object_uid}", "/ves.io.schema.secret_management_access/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.secret_management_access.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.secret_management_access.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_management_access/Objects", "/ves.io.schema.secret_management_access/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.secret_management_access.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.secret_management_access.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.secret_management_access/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.secret_management_access.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.secret_management_access.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.secret_management_access/Object/{object_uid}", "/ves.io.schema.secret_management_access/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.secret_management_access.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.secret_management_access.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy", false)
 	mdr.PkgsInfo["ves.io.schema.secret_policy"] = pInfo
 
@@ -12350,6 +13879,222 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.secret_policy_rule.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.segment", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/segment", false)
+	mdr.PkgsInfo["ves.io.schema.segment"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/segment/object.proto")
+	pInfo.FilesInfo["ves.io/schema/segment/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.segment.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.segment.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/segment/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/segment/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.segment.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.segment.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/segments"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.segment.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/segments/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.segment.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/segments/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.segment.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/segments"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.segment.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/segments/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.segment.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.segment.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.segment.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.segment.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.segment.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.segment.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/segment/public_custom_data_api.proto")
+	pInfo.FilesInfo["ves.io/schema/segment/public_custom_data_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomDataAPI", "CUSTOM_PUBLIC", "ves.io.schema.segment.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("SegmentsGraph", "ves.io.schema.segment.SegmentsRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/segments/graph"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SegmentsGraph")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment.CustomDataAPI.SegmentsGraph"] = rpcInfo
+
+	fInfo.APIsInfo["CustomDataAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.segment.CustomDataAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/segment/types.proto")
+	pInfo.FilesInfo["ves.io/schema/segment/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.segment.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/segment/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.segment.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/segment/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/segment/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.segment.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.segment.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.segment/Objects", "/ves.io.schema.segment/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.segment.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.segment/Object/{object_uid}", "/ves.io.schema.segment/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.segment.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.segment/Object/{object_uid}", "/ves.io.schema.segment/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.segment.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.segment/Objects", "/ves.io.schema.segment/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.segment.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.segment/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.segment.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.segment/Object/{object_uid}", "/ves.io.schema.segment/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.segment.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.segment_connection", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/segment_connection", false)
+	mdr.PkgsInfo["ves.io.schema.segment_connection"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/segment_connection/object.proto")
+	pInfo.FilesInfo["ves.io/schema/segment_connection/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.segment_connection.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.segment_connection.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/segment_connection/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/segment_connection/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.segment_connection.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.segment_connection.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/segment_connections/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment_connection.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.segment_connection.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/segment_connections"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment_connection.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.segment_connection.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/segment_connections/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment_connection.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.segment_connection.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.segment_connection.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.segment_connection.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.segment_connection.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/segment_connection/types.proto")
+	pInfo.FilesInfo["ves.io/schema/segment_connection/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.segment_connection.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/segment_connection/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.segment_connection.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/segment_connection/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/segment_connection/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.segment_connection.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.segment_connection.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.segment_connection/Objects", "/ves.io.schema.segment_connection/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment_connection.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.segment_connection.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.segment_connection/Object/{object_uid}", "/ves.io.schema.segment_connection/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment_connection.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.segment_connection.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.segment_connection/Object/{object_uid}", "/ves.io.schema.segment_connection/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment_connection.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.segment_connection.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.segment_connection/Objects", "/ves.io.schema.segment_connection/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment_connection.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.segment_connection.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.segment_connection/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment_connection.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.segment_connection.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.segment_connection/Object/{object_uid}", "/ves.io.schema.segment_connection/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.segment_connection.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.segment_connection.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.sensitive_data_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/sensitive_data_policy", false)
 	mdr.PkgsInfo["ves.io.schema.sensitive_data_policy"] = pInfo
 
@@ -12458,62 +14203,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.sensitive_data_policy.crudapi.API"] = aInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_catalog", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_catalog", false)
-	mdr.PkgsInfo["ves.io.schema.service_catalog"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/service_catalog/object.proto")
-	pInfo.FilesInfo["ves.io/schema/service_catalog/object.proto"] = fInfo
-
-	oInfo = svcfw.NewObjInfo("Object", true)
-
-	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.service_catalog.Object"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/service_catalog/types.proto")
-	pInfo.FilesInfo["ves.io/schema/service_catalog/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_catalog.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_catalog/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.service_catalog.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/service_catalog/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/service_catalog/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.service_catalog.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.service_catalog.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.service_catalog/Objects", "/ves.io.schema.service_catalog/introspect/write/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.service_catalog.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.service_catalog.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.service_catalog/Object/{object_uid}", "/ves.io.schema.service_catalog/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.service_catalog.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.service_catalog.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_catalog/Object/{object_uid}", "/ves.io.schema.service_catalog/introspect/read/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.service_catalog.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.service_catalog.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_catalog/Objects", "/ves.io.schema.service_catalog/introspect/read/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.service_catalog.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.service_catalog.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_catalog/Objects/stream"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.service_catalog.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.service_catalog.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.service_catalog/Object/{object_uid}", "/ves.io.schema.service_catalog/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.service_catalog.crudapi.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.service_catalog.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy", false)
 	mdr.PkgsInfo["ves.io.schema.service_policy"] = pInfo
@@ -12752,134 +14441,1455 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.service_policy_rule.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.signup", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/signup", false)
-	mdr.PkgsInfo["ves.io.schema.signup"] = pInfo
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy_set", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_set", false)
+	mdr.PkgsInfo["ves.io.schema.service_policy_set"] = pInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/signup/object.proto")
-	pInfo.FilesInfo["ves.io/schema/signup/object.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/service_policy_set/object.proto")
+	pInfo.FilesInfo["ves.io/schema/service_policy_set/object.proto"] = fInfo
 
 	oInfo = svcfw.NewObjInfo("Object", true)
 
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.signup.Object"] = oInfo
+	mdr.ObjIdx["ves.io.schema.service_policy_set.Object"] = oInfo
 	oInfo = svcfw.NewObjInfo("StatusObject", false)
 
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
-	mdr.ObjIdx["ves.io.schema.signup.StatusObject"] = oInfo
+	mdr.ObjIdx["ves.io.schema.service_policy_set.StatusObject"] = oInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/signup/private_customapi_eywaprime.proto")
-	pInfo.FilesInfo["ves.io/schema/signup/private_customapi_eywaprime.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/service_policy_set/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/service_policy_set/public_crudapi.proto"] = fInfo
 
-	aInfo = svcfw.NewAPIInfo("CustomPrivateAPIEywaprime", "CUSTOM_PRIVATE", "ves.io.schema.signup.Object", false)
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.service_policy_set.Object", false)
 
-	rpcInfo = svcfw.NewRPCInfo("CreateV2", "ves.io.schema.signup.CreateV2Request", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/write/v2/signup"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("CreateV2")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.CustomPrivateAPIEywaprime.CreateV2"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("RestrictedCreateV2", "ves.io.schema.signup.CreateV2Request", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema/introspect/restricted/write/v2/signup"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("RestrictedCreateV2")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.CustomPrivateAPIEywaprime.RestrictedCreateV2"] = rpcInfo
-
-	fInfo.APIsInfo["CustomPrivateAPIEywaprime"] = aInfo
-	mdr.APIIdx["ves.io.schema.signup.CustomPrivateAPIEywaprime"] = aInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/signup/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/signup/public_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.signup.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.signup.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/no_auth/signup/{name}"}}
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.service_policy_set.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/service_policy_sets/{name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.CustomAPI.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListCities", "ves.io.schema.signup.ListCitiesRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/no_auth/countries/{country_code}/states/{state_code}/cities/{prefix}", "/public/custom/countries/{country_code}/states/{state_code}/cities/{prefix}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListCities")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.CustomAPI.ListCities"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListCountries", "ves.io.schema.signup.ListCountriesRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/no_auth/countries/{prefix}", "/public/custom/countries/{prefix}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListCountries")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.CustomAPI.ListCountries"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStates", "ves.io.schema.signup.ListStatesRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/no_auth/countries/{country_code}/states/{prefix}", "/public/custom/countries/{country_code}/states/{prefix}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListStates")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.CustomAPI.ListStates"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("SendPasswordEmail", "ves.io.schema.signup.SendPasswordEmailRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/no_auth/send_password_email"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("SendPasswordEmail")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.CustomAPI.SendPasswordEmail"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ValidateContact", "ves.io.schema.signup.ValidateContactRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/no_auth/validate_contact"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ValidateContact")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.CustomAPI.ValidateContact"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ValidateRegistration", "ves.io.schema.signup.ValidateRegistrationRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/no_auth/login/validate_registration"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ValidateRegistration")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.CustomAPI.ValidateRegistration"] = rpcInfo
-
-	fInfo.APIsInfo["CustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.signup.CustomAPI"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.signup.GetRequest"] = mInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/signup/types.proto")
-	pInfo.FilesInfo["ves.io/schema/signup/types.proto"] = fInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/signup/types_v2.proto")
-	pInfo.FilesInfo["ves.io/schema/signup/types_v2.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.signup.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/signup/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.signup.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/signup/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/signup/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.signup.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.signup.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.signup/Objects", "/ves.io.schema.signup/introspect/write/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.signup.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.signup/Object/{object_uid}", "/ves.io.schema.signup/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.signup.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.signup/Object/{object_uid}", "/ves.io.schema.signup/introspect/read/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.signup.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.signup/Objects", "/ves.io.schema.signup/introspect/read/Objects"}}
+	mdr.RPCIdx["ves.io.schema.service_policy_set.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.service_policy_set.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/service_policy_sets"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.signup.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.signup/Objects/stream"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.signup.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.signup/Object/{object_uid}", "/ves.io.schema.signup/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.signup.crudapi.API.Replace"] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.service_policy_set.API.List"] = rpcInfo
 
 	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.signup.crudapi.API"] = aInfo
+	mdr.APIIdx["ves.io.schema.service_policy_set.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.service_policy_set.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.service_policy_set.ListRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/service_policy_set/types.proto")
+	pInfo.FilesInfo["ves.io/schema/service_policy_set/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy_set.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_set/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.service_policy_set.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/service_policy_set/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/service_policy_set/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.service_policy_set.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.service_policy_set.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.service_policy_set/Objects", "/ves.io.schema.service_policy_set/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.service_policy_set.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.service_policy_set.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.service_policy_set/Object/{object_uid}", "/ves.io.schema.service_policy_set/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.service_policy_set.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.service_policy_set.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy_set/Object/{object_uid}", "/ves.io.schema.service_policy_set/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.service_policy_set.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.service_policy_set.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy_set/Objects", "/ves.io.schema.service_policy_set/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.service_policy_set.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.service_policy_set.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.service_policy_set/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.service_policy_set.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.service_policy_set.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.service_policy_set/Object/{object_uid}", "/ves.io.schema.service_policy_set/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.service_policy_set.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.service_policy_set.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_policy.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_policy.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_allowlist_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_allowlist_policy", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_allowlist_policy"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_allowlist_policy/object.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_allowlist_policy/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_allowlist_policy/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_allowlist_policy/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_allowlist_policys/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_allowlist_policys"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/bot_allowlist_policys/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_allowlist_policy/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_allowlist_policy/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
+
+	rpcInfo = svcfw.NewRPCInfo("CustomReplace", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/custom/namespaces/{namespace}/bot_allowlist_policys/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("CustomReplace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI.CustomReplace"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetAllowlistPoliciesAndVersionsList", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.GetPoliciesAndVersionsListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/{namespace}/bot_allowlist_policies"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetAllowlistPoliciesAndVersionsList")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI.GetAllowlistPoliciesAndVersionsList"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetAllowlistPolicyVersions", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.PolicyVersionsRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_allowlist_policy/{name}/versions"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetAllowlistPolicyVersions")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI.GetAllowlistPolicyVersions"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetContent", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.GetContentRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_allowlist_policys/{name}/versions/{number}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetContent")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI.GetContent"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_allowlist_policy/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_allowlist_policy/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_allowlist_policy/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_allowlist_policy/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_allowlist_policy/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.shape.bot_defense.bot_allowlist_policy/Objects", "/ves.io.schema.shape.bot_defense.bot_allowlist_policy/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.shape.bot_defense.bot_allowlist_policy/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_allowlist_policy/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_allowlist_policy/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_allowlist_policy/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_allowlist_policy/Objects", "/ves.io.schema.shape.bot_defense.bot_allowlist_policy/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_allowlist_policy/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.shape.bot_defense.bot_allowlist_policy/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_allowlist_policy/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_endpoint_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_endpoint_policy", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_endpoint_policy"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_endpoint_policy/object.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_endpoint_policy/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_endpoint_policy/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_endpoint_policy/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_endpoint_policys/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_endpoint_policys"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/bot_endpoint_policys/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_endpoint_policy/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_endpoint_policy/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
+
+	rpcInfo = svcfw.NewRPCInfo("CustomReplace", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/custom/namespaces/{namespace}/bot_endpoint_policys/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("CustomReplace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.CustomReplace"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetContent", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetContentRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_endpoint_policys/{name}/versions/{number}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetContent")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.GetContent"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetEndpointPoliciesAndVersionsList", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.GetPoliciesAndVersionsListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/{namespace}/bot_endpoint_policies"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetEndpointPoliciesAndVersionsList")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.GetEndpointPoliciesAndVersionsList"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetEndpointPolicyVersions", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.PolicyVersionsRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_endpoint_policy/{name}/versions"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetEndpointPolicyVersions")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI.GetEndpointPolicyVersions"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_endpoint_policy/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_endpoint_policy/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_endpoint_policy/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_endpoint_policy/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_endpoint_policy/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.shape.bot_defense.bot_endpoint_policy/Objects", "/ves.io.schema.shape.bot_defense.bot_endpoint_policy/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.shape.bot_defense.bot_endpoint_policy/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_endpoint_policy/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_endpoint_policy/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_endpoint_policy/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_endpoint_policy/Objects", "/ves.io.schema.shape.bot_defense.bot_endpoint_policy/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_endpoint_policy/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.shape.bot_defense.bot_endpoint_policy/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_endpoint_policy/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_infrastructure", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_infrastructure", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_infrastructure"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_infrastructure/object.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_infrastructure/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_infrastructure/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_infrastructure/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.shape.bot_defense.bot_infrastructure.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.bot_defense.bot_infrastructure.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/bot_infrastructures"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.bot_defense.bot_infrastructure.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_infrastructures/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.bot_defense.bot_infrastructure.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_infrastructures"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.bot_defense.bot_infrastructure.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/bot_infrastructures/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_infrastructure/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_infrastructure/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
+
+	rpcInfo = svcfw.NewRPCInfo("DeployPoliciesToBotInfra", "ves.io.schema.shape.bot_defense.bot_infrastructure.DeployPoliciesRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/bot_infrastructures/{name}/policies"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("DeployPoliciesToBotInfra")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomAPI.DeployPoliciesToBotInfra"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("DeploymentHistory", "ves.io.schema.shape.bot_defense.bot_infrastructure.DeploymentHistoryRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_infrastructures/{name}/deployment_history"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("DeploymentHistory")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomAPI.DeploymentHistory"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("DeploymentStatusOverview", "ves.io.schema.shape.bot_defense.bot_infrastructure.DeploymentStatusRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_infrastructures/{name}/deployment_status"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("DeploymentStatusOverview")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomAPI.DeploymentStatusOverview"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("SuggestValues", "ves.io.schema.shape.bot_defense.bot_infrastructure.SuggestValuesReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/suggest-values"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("SuggestValues")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomAPI.SuggestValues"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_infrastructure/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_infrastructure/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_infrastructure/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_infrastructure/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_infrastructure/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.shape.bot_defense.bot_infrastructure.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.shape.bot_defense.bot_infrastructure/Objects", "/ves.io.schema.shape.bot_defense.bot_infrastructure/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.shape.bot_defense.bot_infrastructure/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_infrastructure/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_infrastructure/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_infrastructure/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_infrastructure/Objects", "/ves.io.schema.shape.bot_defense.bot_infrastructure/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_infrastructure/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.shape.bot_defense.bot_infrastructure/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_infrastructure/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_network_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_network_policy", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_network_policy"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_network_policy/object.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_network_policy/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.bot_defense.bot_network_policy.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.bot_defense.bot_network_policy.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_network_policy/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_network_policy/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.shape.bot_defense.bot_network_policy.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.bot_defense.bot_network_policy.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_network_policys/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_network_policy.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.bot_defense.bot_network_policy.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_network_policys"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_network_policy.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.bot_defense.bot_network_policy.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/bot_network_policys/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_network_policy.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_network_policy.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.bot_network_policy.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.bot_network_policy.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.bot_network_policy.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_network_policy/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_network_policy/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
+
+	rpcInfo = svcfw.NewRPCInfo("CustomReplace", "ves.io.schema.shape.bot_defense.bot_network_policy.CustomReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/custom/namespaces/{namespace}/bot_network_policys/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("CustomReplace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_network_policy.CustomAPI.CustomReplace"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetContent", "ves.io.schema.shape.bot_defense.bot_network_policy.GetContentRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_network_policys/{name}/versions/{number}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetContent")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_network_policy.CustomAPI.GetContent"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetNetworkPoliciesAndVersionsList", "ves.io.schema.shape.bot_defense.bot_network_policy.GetPoliciesAndVersionsListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/custom/namespaces/{namespace}/bot_network_policies"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetNetworkPoliciesAndVersionsList")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_network_policy.CustomAPI.GetNetworkPoliciesAndVersionsList"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetNetworkPolicyVersions", "ves.io.schema.shape.bot_defense.bot_network_policy.PolicyVersionsRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bot_network_policy/{name}/versions"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetNetworkPolicyVersions")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_network_policy.CustomAPI.GetNetworkPolicyVersions"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_network_policy.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_network_policy/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_network_policy/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_network_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_network_policy/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_network_policy.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_network_policy/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_network_policy/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.shape.bot_defense.bot_network_policy.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.shape.bot_defense.bot_network_policy/Objects", "/ves.io.schema.shape.bot_defense.bot_network_policy/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.shape.bot_defense.bot_network_policy/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_network_policy/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_network_policy/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_network_policy/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_network_policy/Objects", "/ves.io.schema.shape.bot_defense.bot_network_policy/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_network_policy/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.shape.bot_defense.bot_network_policy/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_network_policy/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_policy_version", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_policy_version", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_policy_version"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_policy_version/object.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_policy_version/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.bot_defense.bot_policy_version.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.bot_defense.bot_policy_version.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_policy_version/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_policy_version/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_policy_version.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_policy_version/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_policy_version.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_policy_version/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_policy_version/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.shape.bot_defense.bot_policy_version.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.shape.bot_defense.bot_policy_version/Objects", "/ves.io.schema.shape.bot_defense.bot_policy_version/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.shape.bot_defense.bot_policy_version/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_policy_version/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_policy_version/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_policy_version/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_policy_version/Objects", "/ves.io.schema.shape.bot_defense.bot_policy_version/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.bot_policy_version/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.shape.bot_defense.bot_policy_version/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.bot_policy_version/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.mobile_base_config", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/mobile_base_config", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.mobile_base_config"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/mobile_base_config/object.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/mobile_base_config/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.bot_defense.mobile_base_config.Object"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/mobile_base_config/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/mobile_base_config/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.shape.bot_defense.mobile_base_config.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.bot_defense.mobile_base_config.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/mobile_base_configs"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.mobile_base_config.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.bot_defense.mobile_base_config.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/mobile_base_configs/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.mobile_base_config.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.bot_defense.mobile_base_config.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/mobile_base_configs/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.mobile_base_config.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.bot_defense.mobile_base_config.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/mobile_base_configs"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.mobile_base_config.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.bot_defense.mobile_base_config.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/mobile_base_configs/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.mobile_base_config.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.mobile_base_config.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.mobile_base_config.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.mobile_base_config.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.mobile_base_config.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.mobile_base_config.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.mobile_base_config.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/mobile_base_config/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/mobile_base_config/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetMobileBaseConfigurationFile", "ves.io.schema.shape.bot_defense.mobile_base_config.MobileBaseConfigurationFileRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/mobile_base_config_file/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetMobileBaseConfigurationFile")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.mobile_base_config.CustomAPI.GetMobileBaseConfigurationFile"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.mobile_base_config.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/mobile_base_config/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/mobile_base_config/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.mobile_base_config.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/mobile_base_config/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.mobile_base_config.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/mobile_base_config/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/mobile_base_config/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.shape.bot_defense.mobile_base_config.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.shape.bot_defense.mobile_base_config/Objects", "/ves.io.schema.shape.bot_defense.mobile_base_config/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.shape.bot_defense.mobile_base_config/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.mobile_base_config/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.mobile_base_config/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.mobile_base_config/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.mobile_base_config/Objects", "/ves.io.schema.shape.bot_defense.mobile_base_config/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.mobile_base_config/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.shape.bot_defense.mobile_base_config/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.mobile_base_config/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.protected_application", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.protected_application"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/protected_application/object.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/protected_application/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.bot_defense.protected_application.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.bot_defense.protected_application.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/protected_application/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/protected_application/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.shape.bot_defense.protected_application.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.bot_defense.protected_application.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/protected_applications"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.bot_defense.protected_application.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/protected_applications/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.bot_defense.protected_application.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/protected_applications/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.bot_defense.protected_application.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/protected_applications"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.bot_defense.protected_application.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/protected_applications/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.protected_application.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.protected_application.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.protected_application.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.protected_application.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.protected_application.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.shape.bot_defense.protected_application.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/protected_application/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/protected_application/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
+
+	rpcInfo = svcfw.NewRPCInfo("ApiKey", "ves.io.schema.shape.bot_defense.protected_application.ApiKeyRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/apikey"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ApiKey")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.CustomAPI.ApiKey"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ConnectorConfig", "ves.io.schema.shape.bot_defense.protected_application.ConnectorConfigRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/protected_applications/{name}/config"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ConnectorConfig")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.CustomAPI.ConnectorConfig"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("RegionsList", "ves.io.schema.shape.bot_defense.protected_application.RegionsListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/regions"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("RegionsList")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.CustomAPI.RegionsList"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("TemplateConnector", "ves.io.schema.shape.bot_defense.protected_application.TemplateConnectorRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/protected_applications/{name}/template"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("TemplateConnector")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.CustomAPI.TemplateConnector"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.protected_application.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/protected_application/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/protected_application/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.protected_application.cloudflare", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application/cloudflare", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.protected_application.cloudflare"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/protected_application/cloudflare/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/protected_application/cloudflare/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.protected_application.cloudfront", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application/cloudfront", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.protected_application.cloudfront"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/protected_application/cloudfront/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/protected_application/cloudfront/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.protected_application.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.protected_application.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/protected_application/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/protected_application/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.shape.bot_defense.protected_application.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.bot_defense.protected_application.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.shape.bot_defense.protected_application/Objects", "/ves.io.schema.shape.bot_defense.protected_application/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.bot_defense.protected_application.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.shape.bot_defense.protected_application/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.protected_application/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.bot_defense.protected_application.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.protected_application/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.protected_application/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.bot_defense.protected_application.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.protected_application/Objects", "/ves.io.schema.shape.bot_defense.protected_application/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.shape.bot_defense.protected_application.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.bot_defense.protected_application/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.bot_defense.protected_application.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.shape.bot_defense.protected_application/Object/{object_uid}", "/ves.io.schema.shape.bot_defense.protected_application/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.bot_defense.protected_application.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.bot_defense.protected_application.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense", false)
+	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
+
+	rpcInfo = svcfw.NewRPCInfo("DeleteScriptJustification", "ves.io.schema.shape.client_side_defense.DeleteScriptJustificationRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/script/justification/{justification_id}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("DeleteScriptJustification")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.DeleteScriptJustification"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetDetectedDomains", "ves.io.schema.shape.client_side_defense.GetDetectedDomainsRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/detected_domains"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetDetectedDomains")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.GetDetectedDomains"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetDomainDetails", "ves.io.schema.shape.client_side_defense.GetDomainDetailsRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/domain_details"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetDomainDetails")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.GetDomainDetails"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetFormField", "ves.io.schema.shape.client_side_defense.GetFormFieldRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/formFields/{id}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetFormField")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.GetFormField"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetJsInjectionConfiguration", "ves.io.schema.shape.client_side_defense.GetJsInjectionConfigurationRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/js_configuration"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetJsInjectionConfiguration")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.GetJsInjectionConfiguration"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetScriptOverview", "ves.io.schema.shape.client_side_defense.GetScriptOverviewRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/scripts/{id}/dashboard"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetScriptOverview")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.GetScriptOverview"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetStatus", "ves.io.schema.shape.client_side_defense.GetStatusRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/status"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetStatus")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.GetStatus"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetSummary", "ves.io.schema.shape.client_side_defense.GetSummaryRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/summary"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSummary")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.GetSummary"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Init", "ves.io.schema.shape.client_side_defense.InitRequest", false, true)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/init"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Init")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.Init"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListAffectedUsers", "ves.io.schema.shape.client_side_defense.ListAffectedUsersRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/scripts/{script_id}/affectedUsers"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListAffectedUsers")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.ListAffectedUsers"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListBehaviorsByScript", "ves.io.schema.shape.client_side_defense.ListBehaviorsByScriptRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/scripts/{id}/behaviors"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListBehaviorsByScript")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.ListBehaviorsByScript"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListFormFields", "ves.io.schema.shape.client_side_defense.ListFormFieldsRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/formFields"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListFormFields")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.ListFormFields"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListFormFieldsByScript", "ves.io.schema.shape.client_side_defense.ListFormFieldsByScriptRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/scripts/{id}/formFields"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListFormFieldsByScript")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.ListFormFieldsByScript"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListFormFieldsGet", "ves.io.schema.shape.client_side_defense.ListFormFieldsGetRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/formFields"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListFormFieldsGet")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.ListFormFieldsGet"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListNetworkInteractionsByScript", "ves.io.schema.shape.client_side_defense.ListNetworkInteractionsByScriptRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/scripts/{id}/networkInteractions"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListNetworkInteractionsByScript")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.ListNetworkInteractionsByScript"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListScripts", "ves.io.schema.shape.client_side_defense.ListScriptsRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/scripts"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListScripts")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.ListScripts"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListScriptsLegacy", "ves.io.schema.shape.client_side_defense.ListScriptsLegacyRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/scripts"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListScriptsLegacy")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.ListScriptsLegacy"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("TestJS", "ves.io.schema.shape.client_side_defense.TestJSRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/testjs"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("TestJS")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.TestJS"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("UpdateDomains", "ves.io.schema.shape.client_side_defense.UpdateDomainsRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/update_domains"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateDomains")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.UpdateDomains"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("UpdateFieldAnalysis", "ves.io.schema.shape.client_side_defense.UpdateFieldAnalysisRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/formFields/analysis"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateFieldAnalysis")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.UpdateFieldAnalysis"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("UpdateScriptJustification", "ves.io.schema.shape.client_side_defense.UpdateScriptJustificationRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/scripts/{script_id}/justification"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateScriptJustification")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.UpdateScriptJustification"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("UpdateScriptReadStatus", "ves.io.schema.shape.client_side_defense.UpdateScriptReadStatusRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/scripts/{id}/readStatus"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("UpdateScriptReadStatus")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.CustomAPI.UpdateScriptReadStatus"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.client_side_defense.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.allowed_domain", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/allowed_domain", false)
+	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.allowed_domain"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/allowed_domain/object.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/allowed_domain/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.client_side_defense.allowed_domain.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.client_side_defense.allowed_domain.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/allowed_domain/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/allowed_domain/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.shape.client_side_defense.allowed_domain.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.client_side_defense.allowed_domain.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/allowed_domains"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.allowed_domain.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.client_side_defense.allowed_domain.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/allowed_domains/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.allowed_domain.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.client_side_defense.allowed_domain.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/allowed_domains/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.allowed_domain.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.client_side_defense.allowed_domain.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/allowed_domains"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.allowed_domain.API.List"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.client_side_defense.allowed_domain.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.shape.client_side_defense.allowed_domain.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.shape.client_side_defense.allowed_domain.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.shape.client_side_defense.allowed_domain.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.shape.client_side_defense.allowed_domain.ListRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/allowed_domain/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/allowed_domain/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.allowed_domain.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/allowed_domain/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.allowed_domain.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/allowed_domain/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/allowed_domain/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.shape.client_side_defense.allowed_domain.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.shape.client_side_defense.allowed_domain/Objects", "/ves.io.schema.shape.client_side_defense.allowed_domain/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.shape.client_side_defense.allowed_domain/Object/{object_uid}", "/ves.io.schema.shape.client_side_defense.allowed_domain/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.client_side_defense.allowed_domain/Object/{object_uid}", "/ves.io.schema.shape.client_side_defense.allowed_domain/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.client_side_defense.allowed_domain/Objects", "/ves.io.schema.shape.client_side_defense.allowed_domain/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.client_side_defense.allowed_domain/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.shape.client_side_defense.allowed_domain/Object/{object_uid}", "/ves.io.schema.shape.client_side_defense.allowed_domain/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.mitigated_domain", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/mitigated_domain", false)
+	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.mitigated_domain"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/mitigated_domain/object.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/mitigated_domain/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/mitigated_domain/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/mitigated_domain/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.shape.client_side_defense.mitigated_domain.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.client_side_defense.mitigated_domain.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/mitigated_domains"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.client_side_defense.mitigated_domain.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/mitigated_domains/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.client_side_defense.mitigated_domain.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/mitigated_domains/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.client_side_defense.mitigated_domain.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/mitigated_domains"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.API.List"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.ListRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/mitigated_domain/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/mitigated_domain/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/mitigated_domain/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/mitigated_domain/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/mitigated_domain/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.shape.client_side_defense.mitigated_domain.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.shape.client_side_defense.mitigated_domain/Objects", "/ves.io.schema.shape.client_side_defense.mitigated_domain/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.shape.client_side_defense.mitigated_domain/Object/{object_uid}", "/ves.io.schema.shape.client_side_defense.mitigated_domain/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.client_side_defense.mitigated_domain/Object/{object_uid}", "/ves.io.schema.shape.client_side_defense.mitigated_domain/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.client_side_defense.mitigated_domain/Objects", "/ves.io.schema.shape.client_side_defense.mitigated_domain/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.client_side_defense.mitigated_domain/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.shape.client_side_defense.mitigated_domain/Object/{object_uid}", "/ves.io.schema.shape.client_side_defense.mitigated_domain/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.protected_domain", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/protected_domain", false)
+	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.protected_domain"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/protected_domain/object.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/protected_domain/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.client_side_defense.protected_domain.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape.client_side_defense.protected_domain.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/protected_domain/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/protected_domain/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.shape.client_side_defense.protected_domain.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.client_side_defense.protected_domain.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/protected_domains"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.protected_domain.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.client_side_defense.protected_domain.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/protected_domains/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.protected_domain.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.client_side_defense.protected_domain.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/protected_domains/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.protected_domain.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.client_side_defense.protected_domain.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/protected_domains"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.protected_domain.API.List"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.client_side_defense.protected_domain.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.shape.client_side_defense.protected_domain.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.shape.client_side_defense.protected_domain.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.shape.client_side_defense.protected_domain.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.shape.client_side_defense.protected_domain.ListRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/protected_domain/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/protected_domain/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.protected_domain.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/protected_domain/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.protected_domain.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/protected_domain/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/protected_domain/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.shape.client_side_defense.protected_domain.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape.client_side_defense.protected_domain.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.shape.client_side_defense.protected_domain/Objects", "/ves.io.schema.shape.client_side_defense.protected_domain/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.protected_domain.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape.client_side_defense.protected_domain.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.shape.client_side_defense.protected_domain/Object/{object_uid}", "/ves.io.schema.shape.client_side_defense.protected_domain/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.protected_domain.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape.client_side_defense.protected_domain.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.client_side_defense.protected_domain/Object/{object_uid}", "/ves.io.schema.shape.client_side_defense.protected_domain/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.protected_domain.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape.client_side_defense.protected_domain.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.client_side_defense.protected_domain/Objects", "/ves.io.schema.shape.client_side_defense.protected_domain/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.protected_domain.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.shape.client_side_defense.protected_domain.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape.client_side_defense.protected_domain/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.protected_domain.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape.client_side_defense.protected_domain.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.shape.client_side_defense.protected_domain/Object/{object_uid}", "/ves.io.schema.shape.client_side_defense.protected_domain/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.protected_domain.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.client_side_defense.protected_domain.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.subscription", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/subscription", false)
+	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.subscription"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/subscription/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/subscription/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Subscribe", "ves.io.schema.shape.client_side_defense.subscription.SubscribeRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/subscribe"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Subscribe")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.subscription.CustomAPI.Subscribe"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Unsubscribe", "ves.io.schema.shape.client_side_defense.subscription.UnsubscribeRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/unsubscribe"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Unsubscribe")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape.client_side_defense.subscription.CustomAPI.Unsubscribe"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape.client_side_defense.subscription.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/subscription/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/subscription/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape_bot_defense_instance", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape_bot_defense_instance", false)
+	mdr.PkgsInfo["ves.io.schema.shape_bot_defense_instance"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape_bot_defense_instance/object.proto")
+	pInfo.FilesInfo["ves.io/schema/shape_bot_defense_instance/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.shape_bot_defense_instance.Object"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape_bot_defense_instance/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/shape_bot_defense_instance/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.shape_bot_defense_instance.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape_bot_defense_instance.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/shape_bot_defense_instances/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape_bot_defense_instance.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape_bot_defense_instance.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/shape_bot_defense_instances"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape_bot_defense_instance.API.List"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape_bot_defense_instance.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.shape_bot_defense_instance.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.shape_bot_defense_instance.ListRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape_bot_defense_instance/types.proto")
+	pInfo.FilesInfo["ves.io/schema/shape_bot_defense_instance/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape_bot_defense_instance.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape_bot_defense_instance/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.shape_bot_defense_instance.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/shape_bot_defense_instance/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/shape_bot_defense_instance/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.shape_bot_defense_instance.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.shape_bot_defense_instance.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.shape_bot_defense_instance/Objects", "/ves.io.schema.shape_bot_defense_instance/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape_bot_defense_instance.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.shape_bot_defense_instance.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.shape_bot_defense_instance/Object/{object_uid}", "/ves.io.schema.shape_bot_defense_instance/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape_bot_defense_instance.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.shape_bot_defense_instance.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape_bot_defense_instance/Object/{object_uid}", "/ves.io.schema.shape_bot_defense_instance/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape_bot_defense_instance.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.shape_bot_defense_instance.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape_bot_defense_instance/Objects", "/ves.io.schema.shape_bot_defense_instance/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape_bot_defense_instance.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.shape_bot_defense_instance.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.shape_bot_defense_instance/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape_bot_defense_instance.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.shape_bot_defense_instance.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.shape_bot_defense_instance/Object/{object_uid}", "/ves.io.schema.shape_bot_defense_instance/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.shape_bot_defense_instance.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.shape_bot_defense_instance.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site", false)
 	mdr.PkgsInfo["ves.io.schema.site"] = pInfo
@@ -13305,6 +16315,224 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.site_mesh_group.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.site_segment_static_routes", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_segment_static_routes", false)
+	mdr.PkgsInfo["ves.io.schema.site_segment_static_routes"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/site_segment_static_routes/object.proto")
+	pInfo.FilesInfo["ves.io/schema/site_segment_static_routes/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.site_segment_static_routes.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.site_segment_static_routes.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/site_segment_static_routes/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/site_segment_static_routes/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.site_segment_static_routes.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.site_segment_static_routes.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/site_segment_static_routess"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.site_segment_static_routes.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.site_segment_static_routes.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/site_segment_static_routess/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.site_segment_static_routes.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.site_segment_static_routes.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/site_segment_static_routess/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.site_segment_static_routes.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.site_segment_static_routes.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/site_segment_static_routess"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.site_segment_static_routes.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.site_segment_static_routes.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/site_segment_static_routess/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.site_segment_static_routes.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.site_segment_static_routes.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.site_segment_static_routes.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.site_segment_static_routes.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.site_segment_static_routes.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.site_segment_static_routes.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.site_segment_static_routes.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/site_segment_static_routes/types.proto")
+	pInfo.FilesInfo["ves.io/schema/site_segment_static_routes/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.site_segment_static_routes.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_segment_static_routes/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.site_segment_static_routes.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/site_segment_static_routes/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/site_segment_static_routes/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.site_segment_static_routes.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.site_segment_static_routes.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.site_segment_static_routes/Objects", "/ves.io.schema.site_segment_static_routes/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.site_segment_static_routes.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.site_segment_static_routes.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.site_segment_static_routes/Object/{object_uid}", "/ves.io.schema.site_segment_static_routes/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.site_segment_static_routes.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.site_segment_static_routes.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site_segment_static_routes/Object/{object_uid}", "/ves.io.schema.site_segment_static_routes/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.site_segment_static_routes.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.site_segment_static_routes.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site_segment_static_routes/Objects", "/ves.io.schema.site_segment_static_routes/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.site_segment_static_routes.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.site_segment_static_routes.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.site_segment_static_routes/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.site_segment_static_routes.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.site_segment_static_routes.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.site_segment_static_routes/Object/{object_uid}", "/ves.io.schema.site_segment_static_routes/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.site_segment_static_routes.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.site_segment_static_routes.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.srv6_network_slice", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/srv6_network_slice", false)
+	mdr.PkgsInfo["ves.io.schema.srv6_network_slice"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/srv6_network_slice/object.proto")
+	pInfo.FilesInfo["ves.io/schema/srv6_network_slice/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.srv6_network_slice.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.srv6_network_slice.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/srv6_network_slice/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/srv6_network_slice/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.srv6_network_slice.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.srv6_network_slice.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/srv6_network_slices"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.srv6_network_slice.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.srv6_network_slice.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/srv6_network_slices/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.srv6_network_slice.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.srv6_network_slice.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/srv6_network_slices/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.srv6_network_slice.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.srv6_network_slice.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/srv6_network_slices"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.srv6_network_slice.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.srv6_network_slice.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/srv6_network_slices/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.srv6_network_slice.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.srv6_network_slice.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.srv6_network_slice.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.srv6_network_slice.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.srv6_network_slice.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.srv6_network_slice.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.srv6_network_slice.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/srv6_network_slice/types.proto")
+	pInfo.FilesInfo["ves.io/schema/srv6_network_slice/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.srv6_network_slice.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/srv6_network_slice/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.srv6_network_slice.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/srv6_network_slice/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/srv6_network_slice/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.srv6_network_slice.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.srv6_network_slice.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.srv6_network_slice/Objects", "/ves.io.schema.srv6_network_slice/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.srv6_network_slice.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.srv6_network_slice.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.srv6_network_slice/Object/{object_uid}", "/ves.io.schema.srv6_network_slice/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.srv6_network_slice.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.srv6_network_slice.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.srv6_network_slice/Object/{object_uid}", "/ves.io.schema.srv6_network_slice/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.srv6_network_slice.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.srv6_network_slice.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.srv6_network_slice/Objects", "/ves.io.schema.srv6_network_slice/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.srv6_network_slice.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.srv6_network_slice.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.srv6_network_slice/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.srv6_network_slice.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.srv6_network_slice.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.srv6_network_slice/Object/{object_uid}", "/ves.io.schema.srv6_network_slice/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.srv6_network_slice.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.srv6_network_slice.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.stored_object", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/stored_object", false)
 	mdr.PkgsInfo["ves.io.schema.stored_object"] = pInfo
 
@@ -13464,65 +16692,114 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.stored_object.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.subscription", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/subscription", false)
-	mdr.PkgsInfo["ves.io.schema.subscription"] = pInfo
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.subnet", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/subnet", false)
+	mdr.PkgsInfo["ves.io.schema.subnet"] = pInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/subscription/object.proto")
-	pInfo.FilesInfo["ves.io/schema/subscription/object.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/subnet/object.proto")
+	pInfo.FilesInfo["ves.io/schema/subnet/object.proto"] = fInfo
 
 	oInfo = svcfw.NewObjInfo("Object", true)
 
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.subscription.Object"] = oInfo
+	mdr.ObjIdx["ves.io.schema.subnet.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/subscription/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/subscription/public_customapi.proto"] = fInfo
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.subnet.StatusObject"] = oInfo
 
-	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
+	fInfo = svcfw.NewFileInfo("ves.io/schema/subnet/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/subnet/public_crudapi.proto"] = fInfo
 
-	rpcInfo = svcfw.NewRPCInfo("Subscribe", "ves.io.schema.subscription.SubscribeRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/addon/subscribe"}}
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.subnet.Object", false)
 
-	aInfo.RPCsInfo[svcfw.RPCName("Subscribe")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.subscription.CustomAPI.Subscribe"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Unsubscribe", "ves.io.schema.subscription.UnsubscribeRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/system/addon/unsubscribe"}}
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.subnet.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/subnets"}}
 
-	aInfo.RPCsInfo[svcfw.RPCName("Unsubscribe")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.subscription.CustomAPI.Unsubscribe"] = rpcInfo
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.subnet.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.subnet.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/subnets/{name}"}}
 
-	fInfo.APIsInfo["CustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.subscription.CustomAPI"] = aInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/subscription/types.proto")
-	pInfo.FilesInfo["ves.io/schema/subscription/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.subscription.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/subscription/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.subscription.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/subscription/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/subscription/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.subscription.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.subscription.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.subscription/Object/{object_uid}", "/ves.io.schema.subscription/introspect/read/Object/{object_uid}"}}
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.subnet.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.subnet.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/subnets/{name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.subscription.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.subscription.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.subscription/Objects", "/ves.io.schema.subscription/introspect/read/Objects"}}
+	mdr.RPCIdx["ves.io.schema.subnet.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.subnet.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/subnets"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.subscription.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.subscription.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.subscription/Objects/stream"}}
+	mdr.RPCIdx["ves.io.schema.subnet.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.subnet.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/subnets/{metadata.name}"}}
 
-	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.subscription.crudapi.API.ListStream"] = rpcInfo
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.subnet.API.Replace"] = rpcInfo
 
 	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.subscription.crudapi.API"] = aInfo
+	mdr.APIIdx["ves.io.schema.subnet.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.subnet.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.subnet.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.subnet.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.subnet.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.subnet.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/subnet/types.proto")
+	pInfo.FilesInfo["ves.io/schema/subnet/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.subnet.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/subnet/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.subnet.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/subnet/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/subnet/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.subnet.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.subnet.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.subnet/Objects", "/ves.io.schema.subnet/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.subnet.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.subnet.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.subnet/Object/{object_uid}", "/ves.io.schema.subnet/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.subnet.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.subnet.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.subnet/Object/{object_uid}", "/ves.io.schema.subnet/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.subnet.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.subnet.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.subnet/Objects", "/ves.io.schema.subnet/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.subnet.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.subnet.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.subnet/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.subnet.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.subnet.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.subnet/Object/{object_uid}", "/ves.io.schema.subnet/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.subnet.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.subnet.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.tenant", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant", false)
 	mdr.PkgsInfo["ves.io.schema.tenant"] = pInfo
@@ -13677,6 +16954,20 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomPrivateAPIEywaprime"] = aInfo
 	mdr.APIIdx["ves.io.schema.tenant.CustomPrivateAPIEywaprime"] = aInfo
 
+	fInfo = svcfw.NewFileInfo("ves.io/schema/tenant/public_custom_api_akar.proto")
+	pInfo.FilesInfo["ves.io/schema/tenant/public_custom_api_akar.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("TenantSummaryCustomAPI", "CUSTOM_PUBLIC", "", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Summary", "ves.io.schema.tenant.SummaryRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/tenants/{tenant}/summary"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Summary")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.tenant.TenantSummaryCustomAPI.Summary"] = rpcInfo
+
+	fInfo.APIsInfo["TenantSummaryCustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.tenant.TenantSummaryCustomAPI"] = aInfo
+
 	fInfo = svcfw.NewFileInfo("ves.io/schema/tenant/public_custom_api_eywaprime.proto")
 	pInfo.FilesInfo["ves.io/schema/tenant/public_custom_api_eywaprime.proto"] = fInfo
 
@@ -13735,6 +17026,66 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.tenant.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.terraform_container_version", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/terraform_container_version", false)
+	mdr.PkgsInfo["ves.io.schema.terraform_container_version"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/terraform_container_version/object.proto")
+	pInfo.FilesInfo["ves.io/schema/terraform_container_version/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.terraform_container_version.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.terraform_container_version.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/terraform_container_version/types.proto")
+	pInfo.FilesInfo["ves.io/schema/terraform_container_version/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.terraform_container_version.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/terraform_container_version/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.terraform_container_version.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/terraform_container_version/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/terraform_container_version/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.terraform_container_version.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.terraform_container_version.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.terraform_container_version/Objects", "/ves.io.schema.terraform_container_version/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.terraform_container_version.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.terraform_container_version.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.terraform_container_version/Object/{object_uid}", "/ves.io.schema.terraform_container_version/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.terraform_container_version.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.terraform_container_version.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.terraform_container_version/Object/{object_uid}", "/ves.io.schema.terraform_container_version/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.terraform_container_version.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.terraform_container_version.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.terraform_container_version/Objects", "/ves.io.schema.terraform_container_version/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.terraform_container_version.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.terraform_container_version.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.terraform_container_version/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.terraform_container_version.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.terraform_container_version.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.terraform_container_version/Object/{object_uid}", "/ves.io.schema.terraform_container_version/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.terraform_container_version.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.terraform_container_version.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.ticket_management", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ticket_management", false)
 	mdr.PkgsInfo["ves.io.schema.ticket_management"] = pInfo
@@ -15053,161 +18404,273 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.tunnel.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ui.static_component", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ui/static_component", false)
-	mdr.PkgsInfo["ves.io.schema.ui.static_component"] = pInfo
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.unified_policy_group", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/unified_policy_group", false)
+	mdr.PkgsInfo["ves.io.schema.unified_policy_group"] = pInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/ui/static_component/object.proto")
-	pInfo.FilesInfo["ves.io/schema/ui/static_component/object.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/unified_policy_group/object.proto")
+	pInfo.FilesInfo["ves.io/schema/unified_policy_group/object.proto"] = fInfo
 
 	oInfo = svcfw.NewObjInfo("Object", true)
 
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.ui.static_component.Object"] = oInfo
+	mdr.ObjIdx["ves.io.schema.unified_policy_group.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/ui/static_component/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/ui/static_component/public_crudapi.proto"] = fInfo
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.unified_policy_group.StatusObject"] = oInfo
 
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.ui.static_component.Object", false)
+	fInfo = svcfw.NewFileInfo("ves.io/schema/unified_policy_group/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/unified_policy_group/public_crudapi.proto"] = fInfo
 
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.ui.static_component.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/static_components/{name}"}}
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.unified_policy_group.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.unified_policy_group.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/unified_policy_groups"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.unified_policy_group.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.unified_policy_group.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/unified_policy_groups/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.unified_policy_group.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.unified_policy_group.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/unified_policy_groups/{name}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.ui.static_component.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.ui.static_component.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/static_components"}}
+	mdr.RPCIdx["ves.io.schema.unified_policy_group.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.unified_policy_group.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/unified_policy_groups"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.ui.static_component.API.List"] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.unified_policy_group.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.unified_policy_group.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/unified_policy_groups/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.unified_policy_group.API.Replace"] = rpcInfo
 
 	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.ui.static_component.API"] = aInfo
+	mdr.APIIdx["ves.io.schema.unified_policy_group.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.unified_policy_group.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.unified_policy_group.DeleteRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.ui.static_component.GetRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.unified_policy_group.GetRequest"] = mInfo
 
 	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.ui.static_component.ListRequest"] = mInfo
+	mdr.MsgIdx["ves.io.schema.unified_policy_group.ListRequest"] = mInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/ui/static_component/types.proto")
-	pInfo.FilesInfo["ves.io/schema/ui/static_component/types.proto"] = fInfo
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.unified_policy_group.ReplaceRequest"] = mInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ui.static_component.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ui/static_component/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.ui.static_component.crudapi"] = pInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/unified_policy_group/types.proto")
+	pInfo.FilesInfo["ves.io/schema/unified_policy_group/types.proto"] = fInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/ui/static_component/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/ui/static_component/crudapi/api.proto"] = fInfo
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.unified_policy_group.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/unified_policy_group/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.unified_policy_group.crudapi"] = pInfo
 
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.ui.static_component.Object", true)
+	fInfo = svcfw.NewFileInfo("ves.io/schema/unified_policy_group/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/unified_policy_group/crudapi/api.proto"] = fInfo
 
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.ui.static_component.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.ui.static_component/Objects", "/ves.io.schema.ui.static_component/introspect/write/Objects"}}
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.unified_policy_group.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.unified_policy_group.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.unified_policy_group/Objects", "/ves.io.schema.unified_policy_group/introspect/write/Objects"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.ui.static_component.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.ui.static_component.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.ui.static_component/Object/{object_uid}", "/ves.io.schema.ui.static_component/introspect/write/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.unified_policy_group.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.unified_policy_group.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.unified_policy_group/Object/{object_uid}", "/ves.io.schema.unified_policy_group/introspect/write/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.ui.static_component.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.ui.static_component.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.ui.static_component/Object/{object_uid}", "/ves.io.schema.ui.static_component/introspect/read/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.unified_policy_group.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.unified_policy_group.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.unified_policy_group/Object/{object_uid}", "/ves.io.schema.unified_policy_group/introspect/read/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.ui.static_component.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.ui.static_component.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.ui.static_component/Objects", "/ves.io.schema.ui.static_component/introspect/read/Objects"}}
+	mdr.RPCIdx["ves.io.schema.unified_policy_group.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.unified_policy_group.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.unified_policy_group/Objects", "/ves.io.schema.unified_policy_group/introspect/read/Objects"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.ui.static_component.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.ui.static_component.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.ui.static_component/Objects/stream"}}
+	mdr.RPCIdx["ves.io.schema.unified_policy_group.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.unified_policy_group.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.unified_policy_group/Objects/stream"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.ui.static_component.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.ui.static_component.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.ui.static_component/Object/{object_uid}", "/ves.io.schema.ui.static_component/introspect/write/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.unified_policy_group.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.unified_policy_group.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.unified_policy_group/Object/{object_uid}", "/ves.io.schema.unified_policy_group/introspect/write/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.ui.static_component.crudapi.API.Replace"] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.unified_policy_group.crudapi.API.Replace"] = rpcInfo
 
 	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.ui.static_component.crudapi.API"] = aInfo
+	mdr.APIIdx["ves.io.schema.unified_policy_group.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.upgrade_status", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/upgrade_status", false)
-	mdr.PkgsInfo["ves.io.schema.upgrade_status"] = pInfo
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usage", false)
+	mdr.PkgsInfo["ves.io.schema.usage"] = pInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/upgrade_status/object.proto")
-	pInfo.FilesInfo["ves.io/schema/upgrade_status/object.proto"] = fInfo
+	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/custom_aggregated_api.proto")
+	pInfo.FilesInfo["ves.io/schema/usage/custom_aggregated_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAggregatedUsageAPI", "CUSTOM_PUBLIC", "ves.io.schema.usage.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("ListHourlyUsageDetails", "ves.io.schema.usage.ListHourlyUsageDetailsReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/hourly_usage_details"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListHourlyUsageDetails")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.usage.CustomAggregatedUsageAPI.ListHourlyUsageDetails"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListUsageDetails", "ves.io.schema.usage.ListUsageDetailsReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/usage_details"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListUsageDetails")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.usage.CustomAggregatedUsageAPI.ListUsageDetails"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAggregatedUsageAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.usage.CustomAggregatedUsageAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/custom_calculated_api.proto")
+	pInfo.FilesInfo["ves.io/schema/usage/custom_calculated_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomCalculatedUsageAPI", "CUSTOM_PUBLIC", "ves.io.schema.usage.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("ListCurrentUsage", "ves.io.schema.usage.ListCurrentUsageReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/current_usage"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListCurrentUsage")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.usage.CustomCalculatedUsageAPI.ListCurrentUsage"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListMonthlyUsage", "ves.io.schema.usage.ListMonthlyUsageReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/monthly_usage"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListMonthlyUsage")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.usage.CustomCalculatedUsageAPI.ListMonthlyUsage"] = rpcInfo
+
+	fInfo.APIsInfo["CustomCalculatedUsageAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.usage.CustomCalculatedUsageAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/object.proto")
+	pInfo.FilesInfo["ves.io/schema/usage/object.proto"] = fInfo
 
 	oInfo = svcfw.NewObjInfo("Object", true)
 
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.upgrade_status.Object"] = oInfo
+	mdr.ObjIdx["ves.io.schema.usage.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/upgrade_status/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/upgrade_status/public_customapi.proto"] = fInfo
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.usage.StatusObject"] = oInfo
 
-	aInfo = svcfw.NewAPIInfo("UpgradeStatusCustomApi", "CUSTOM_PUBLIC", "ves.io.schema.upgrade_status.Object", false)
+	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/types.proto")
+	pInfo.FilesInfo["ves.io/schema/usage/types.proto"] = fInfo
 
-	rpcInfo = svcfw.NewRPCInfo("GetUpgradableSWVersions", "ves.io.schema.upgrade_status.GetUpgradableSWVersionsRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/upgradable_sw_versions"}}
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usage/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.usage.crudapi"] = pInfo
 
-	aInfo.RPCsInfo[svcfw.RPCName("GetUpgradableSWVersions")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.upgrade_status.UpgradeStatusCustomApi.GetUpgradableSWVersions"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("GetUpgradeStatus", "ves.io.schema.upgrade_status.GetUpgradeStatusRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/sites/{name}/upgrade_status"}}
+	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/usage/crudapi/api.proto"] = fInfo
 
-	aInfo.RPCsInfo[svcfw.RPCName("GetUpgradeStatus")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.upgrade_status.UpgradeStatusCustomApi.GetUpgradeStatus"] = rpcInfo
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.usage.Object", true)
 
-	fInfo.APIsInfo["UpgradeStatusCustomApi"] = aInfo
-	mdr.APIIdx["ves.io.schema.upgrade_status.UpgradeStatusCustomApi"] = aInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/upgrade_status/types.proto")
-	pInfo.FilesInfo["ves.io/schema/upgrade_status/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.upgrade_status.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/upgrade_status/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.upgrade_status.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/upgrade_status/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/upgrade_status/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.upgrade_status.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.upgrade_status.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.upgrade_status/Objects", "/ves.io.schema.upgrade_status/introspect/write/Objects"}}
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.usage.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.usage/Objects", "/ves.io.schema.usage/introspect/write/Objects"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.upgrade_status.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.upgrade_status.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.upgrade_status/Object/{object_uid}", "/ves.io.schema.upgrade_status/introspect/write/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.usage.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.usage.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.usage/Object/{object_uid}", "/ves.io.schema.usage/introspect/write/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.upgrade_status.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.upgrade_status.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.upgrade_status/Object/{object_uid}", "/ves.io.schema.upgrade_status/introspect/read/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.usage.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.usage.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.usage/Object/{object_uid}", "/ves.io.schema.usage/introspect/read/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.upgrade_status.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.upgrade_status.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.upgrade_status/Objects", "/ves.io.schema.upgrade_status/introspect/read/Objects"}}
+	mdr.RPCIdx["ves.io.schema.usage.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.usage.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.usage/Objects", "/ves.io.schema.usage/introspect/read/Objects"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.upgrade_status.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.upgrade_status.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.upgrade_status/Objects/stream"}}
+	mdr.RPCIdx["ves.io.schema.usage.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.usage.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.usage/Objects/stream"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.upgrade_status.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.upgrade_status.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.upgrade_status/Object/{object_uid}", "/ves.io.schema.upgrade_status/introspect/write/Object/{object_uid}"}}
+	mdr.RPCIdx["ves.io.schema.usage.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.usage.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.usage/Object/{object_uid}", "/ves.io.schema.usage/introspect/write/Object/{object_uid}"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.upgrade_status.crudapi.API.Replace"] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.usage.crudapi.API.Replace"] = rpcInfo
 
 	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.upgrade_status.crudapi.API"] = aInfo
+	mdr.APIIdx["ves.io.schema.usage.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage.invoice", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usage/invoice", false)
+	mdr.PkgsInfo["ves.io.schema.usage.invoice"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/invoice/custom_api.proto")
+	pInfo.FilesInfo["ves.io/schema/usage/invoice/custom_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.usage.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("DownloadInvoicePdf", "ves.io.schema.usage.invoice.DownloadInvoicePdfReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/usage/invoice_pdf"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("DownloadInvoicePdf")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.usage.invoice.CustomAPI.DownloadInvoicePdf"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListInvoices", "ves.io.schema.usage.invoice.ListInvoicesReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/usage/invoices/custom_list"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListInvoices")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.usage.invoice.CustomAPI.ListInvoices"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.usage.invoice.CustomAPI"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage.plan", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usage/plan", false)
+	mdr.PkgsInfo["ves.io.schema.usage.plan"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/plan/custom_api.proto")
+	pInfo.FilesInfo["ves.io/schema/usage/plan/custom_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.usage.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetCurrentPlan", "ves.io.schema.Empty", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/usage_plans/current"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetCurrentPlan")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.usage.plan.CustomAPI.GetCurrentPlan"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListUsagePlans", "ves.io.schema.usage.plan.ListUsagePlansReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/system/usage_plans/custom_list"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListUsagePlans")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.usage.plan.CustomAPI.ListUsagePlans"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.usage.plan.CustomAPI"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage.subscription", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usage/subscription", false)
+	mdr.PkgsInfo["ves.io.schema.usage.subscription"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/subscription/custom_api.proto")
+	pInfo.FilesInfo["ves.io/schema/usage/subscription/custom_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.usage.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("ListSubscriptions", "ves.io.schema.usage.subscription.ListSubscriptionsReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/subscriptions/custom_list"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListSubscriptions")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.usage.subscription.CustomAPI.ListSubscriptions"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.usage.subscription.CustomAPI"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.usb_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy", false)
 	mdr.PkgsInfo["ves.io.schema.usb_policy"] = pInfo
@@ -15707,79 +19170,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.user_identification.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.discovered", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/discovered", false)
-	mdr.PkgsInfo["ves.io.schema.uztna.application.discovered"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/discovered/object.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/application/discovered/object.proto"] = fInfo
-
-	oInfo = svcfw.NewObjInfo("Object", true)
-
-	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
-	mdr.ObjIdx["ves.io.schema.uztna.application.discovered.Object"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/discovered/public_customapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/application/discovered/public_customapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "", false)
-
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.application.discovered.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna/applications/discovered"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.discovered.CustomAPI.List"] = rpcInfo
-
-	fInfo.APIsInfo["CustomAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.application.discovered.CustomAPI"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.discovered.ListRequest"] = mInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/discovered/types.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/application/discovered/types.proto"] = fInfo
-
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.discovered.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/discovered/crudapi", false)
-	mdr.PkgsInfo["ves.io.schema.uztna.application.discovered.crudapi"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/discovered/crudapi/api.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/application/discovered/crudapi/api.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.uztna.application.discovered.Object", true)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.application.discovered.crudapi.ObjectCreateReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.uztna.application.discovered/Objects", "/ves.io.schema.uztna.application.discovered/introspect/write/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.discovered.crudapi.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.application.discovered.crudapi.ObjectDeleteReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.uztna.application.discovered/Object/{object_uid}", "/ves.io.schema.uztna.application.discovered/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.discovered.crudapi.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.application.discovered.crudapi.ObjectGetReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.uztna.application.discovered/Object/{object_uid}", "/ves.io.schema.uztna.application.discovered/introspect/read/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.discovered.crudapi.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.application.discovered.crudapi.ObjectListReq", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.uztna.application.discovered/Objects", "/ves.io.schema.uztna.application.discovered/introspect/read/Objects"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.discovered.crudapi.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.uztna.application.discovered.crudapi.ObjectListReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.uztna.application.discovered/Objects/stream"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.discovered.crudapi.API.ListStream"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.application.discovered.crudapi.ObjectReplaceReq", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.uztna.application.discovered/Object/{object_uid}", "/ves.io.schema.uztna.application.discovered/introspect/write/Object/{object_uid}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.discovered.crudapi.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.application.discovered.crudapi.API"] = aInfo
-
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_application", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.application.uztna_application"] = pInfo
 
@@ -15794,55 +19184,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.uztna.application.uztna_application.StatusObject"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/application/uztna_application/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.application.uztna_application.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.application.uztna_application.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_applications"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.application.uztna_application.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_applications/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.application.uztna_application.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_applications/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.application.uztna_application.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_applications"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.application.uztna_application.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_applications/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.application.uztna_application.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application.ReplaceRequest"] = mInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/application/uztna_application/types.proto"] = fInfo
@@ -15904,55 +19245,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.uztna.application.uztna_application_group.StatusObject"] = oInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application_group/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/application/uztna_application_group/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.application.uztna_application_group.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.application.uztna_application_group.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_application_groups"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application_group.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.application.uztna_application_group.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_application_groups/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application_group.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.application.uztna_application_group.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_application_groups/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application_group.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.application.uztna_application_group.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_application_groups"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application_group.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.application.uztna_application_group.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_application_groups/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application_group.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.application.uztna_application_group.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application_group.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application_group.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application_group.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application_group.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application_group.ReplaceRequest"] = mInfo
-
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application_group/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/application/uztna_application_group/types.proto"] = fInfo
 
@@ -16012,55 +19304,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.uztna.application.uztna_application_tag.StatusObject"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application_tag/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/application/uztna_application_tag/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.application.uztna_application_tag.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.application.uztna_application_tag.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_application_tags"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application_tag.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.application.uztna_application_tag.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_application_tags/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application_tag.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.application.uztna_application_tag.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_application_tags/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application_tag.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.application.uztna_application_tag.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_application_tags"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application_tag.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.application.uztna_application_tag.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_application_tags/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_application_tag.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.application.uztna_application_tag.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application_tag.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application_tag.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application_tag.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application_tag.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_application_tag.ReplaceRequest"] = mInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application_tag/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/application/uztna_application_tag/types.proto"] = fInfo
@@ -16122,55 +19365,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.uztna.application.uztna_snat_pool.StatusObject"] = oInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_snat_pool/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/application/uztna_snat_pool/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.application.uztna_snat_pool.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.application.uztna_snat_pool.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_snat_pools"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_snat_pool.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.application.uztna_snat_pool.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_snat_pools/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_snat_pool.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.application.uztna_snat_pool.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_snat_pools/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_snat_pool.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.application.uztna_snat_pool.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_snat_pools"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_snat_pool.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.application.uztna_snat_pool.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_snat_pools/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.application.uztna_snat_pool.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.application.uztna_snat_pool.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_snat_pool.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_snat_pool.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_snat_pool.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_snat_pool.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.application.uztna_snat_pool.ReplaceRequest"] = mInfo
-
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_snat_pool/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/application/uztna_snat_pool/types.proto"] = fInfo
 
@@ -16216,42 +19410,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.application.uztna_snat_pool.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_active_sessions", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_active_sessions", false)
-	mdr.PkgsInfo["ves.io.schema.uztna.uztna_active_sessions"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_active_sessions/public_uztna_active_sessions.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/uztna_active_sessions/public_uztna_active_sessions.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("ActiveSessionsAPI", "CUSTOM_PUBLIC", "ves.io.schema.uztna.uztna_active_sessions.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("GetActiveSession", "ves.io.schema.uztna.uztna_active_sessions.GetActiveSessionRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna/active-sessions/{id}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("GetActiveSession")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_active_sessions.ActiveSessionsAPI.GetActiveSession"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ListActiveSessions", "ves.io.schema.uztna.uztna_active_sessions.ListActiveSessionsRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna/active-sessions"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ListActiveSessions")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_active_sessions.ActiveSessionsAPI.ListActiveSessions"] = rpcInfo
-
-	fInfo.APIsInfo["ActiveSessionsAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.uztna_active_sessions.ActiveSessionsAPI"] = aInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_active_sessions/public_uztna_terminate_sessions.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/uztna_active_sessions/public_uztna_terminate_sessions.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("TerminateSessionsAPI", "CUSTOM_PUBLIC", "ves.io.schema.uztna.uztna_active_sessions.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("TerminateSessions", "ves.io.schema.uztna.uztna_active_sessions.TerminateSessionsRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna/delete_access_session/{session_id}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("TerminateSessions")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_active_sessions.TerminateSessionsAPI.TerminateSessions"] = rpcInfo
-
-	fInfo.APIsInfo["TerminateSessionsAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.uztna_active_sessions.TerminateSessionsAPI"] = aInfo
-
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_app_vip_pool", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_app_vip_pool", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_app_vip_pool"] = pInfo
 
@@ -16266,55 +19424,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.uztna.uztna_app_vip_pool.StatusObject"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_app_vip_pool/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/uztna_app_vip_pool/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.uztna_app_vip_pool.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.uztna_app_vip_pool.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_app_vip_pools"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_app_vip_pool.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.uztna_app_vip_pool.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_app_vip_pools/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_app_vip_pool.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.uztna_app_vip_pool.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_app_vip_pools/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_app_vip_pool.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.uztna_app_vip_pool.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_app_vip_pools"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_app_vip_pool.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.uztna_app_vip_pool.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_app_vip_pools/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_app_vip_pool.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.uztna_app_vip_pool.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_app_vip_pool.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_app_vip_pool.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_app_vip_pool.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_app_vip_pool.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_app_vip_pool.ReplaceRequest"] = mInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_app_vip_pool/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_app_vip_pool/types.proto"] = fInfo
@@ -16375,55 +19484,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.uztna.uztna_domain.StatusObject"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_domain/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/uztna_domain/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.uztna_domain.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.uztna_domain.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_domains"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_domain.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.uztna_domain.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_domains/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_domain.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.uztna_domain.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_domains/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_domain.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.uztna_domain.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_domains"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_domain.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.uztna_domain.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_domains/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_domain.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.uztna_domain.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_domain.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_domain.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_domain.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_domain.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_domain.ReplaceRequest"] = mInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_domain/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_domain/types.proto"] = fInfo
@@ -16488,55 +19548,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.uztna.uztna_flow.StatusObject"] = oInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_flow/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/uztna_flow/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.uztna_flow.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.uztna_flow.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_flows"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_flow.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.uztna_flow.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_flows/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_flow.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.uztna_flow.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_flows/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_flow.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.uztna_flow.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_flows"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_flow.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.uztna_flow.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_flows/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_flow.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.uztna_flow.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_flow.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_flow.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_flow.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_flow.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_flow.ReplaceRequest"] = mInfo
-
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_flow/saml.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_flow/saml.proto"] = fInfo
 
@@ -16600,55 +19611,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.uztna.uztna_gateway.StatusObject"] = oInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_gateway/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/uztna_gateway/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.uztna_gateway.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.uztna_gateway.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_gateways"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_gateway.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.uztna_gateway.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_gateways/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_gateway.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.uztna_gateway.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_gateways/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_gateway.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.uztna_gateway.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_gateways"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_gateway.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.uztna_gateway.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_gateways/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_gateway.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.uztna_gateway.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_gateway.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_gateway.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_gateway.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_gateway.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_gateway.ReplaceRequest"] = mInfo
-
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_gateway/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_gateway/types.proto"] = fInfo
 
@@ -16708,55 +19670,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.uztna.uztna_healthcheck.StatusObject"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_healthcheck/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/uztna_healthcheck/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.uztna_healthcheck.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.uztna_healthcheck.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_healthchecks"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_healthcheck.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.uztna_healthcheck.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_healthchecks/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_healthcheck.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.uztna_healthcheck.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_healthchecks/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_healthcheck.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.uztna_healthcheck.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_healthchecks"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_healthcheck.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.uztna_healthcheck.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_healthchecks/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_healthcheck.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.uztna_healthcheck.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_healthcheck.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_healthcheck.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_healthcheck.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_healthcheck.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_healthcheck.ReplaceRequest"] = mInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_healthcheck/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_healthcheck/types.proto"] = fInfo
@@ -16818,55 +19731,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.uztna.uztna_leasepool.StatusObject"] = oInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_leasepool/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/uztna_leasepool/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.uztna_leasepool.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.uztna_leasepool.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_leasepools"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_leasepool.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.uztna_leasepool.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_leasepools/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_leasepool.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.uztna_leasepool.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_leasepools/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_leasepool.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.uztna_leasepool.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_leasepools"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_leasepool.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.uztna_leasepool.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_leasepools/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_leasepool.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.uztna_leasepool.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_leasepool.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_leasepool.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_leasepool.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_leasepool.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_leasepool.ReplaceRequest"] = mInfo
-
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_leasepool/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_leasepool/types.proto"] = fInfo
 
@@ -16927,55 +19791,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.uztna.uztna_origin_pool.StatusObject"] = oInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_origin_pool/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/uztna_origin_pool/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.uztna_origin_pool.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.uztna_origin_pool.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_origin_pools"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_origin_pool.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.uztna_origin_pool.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_origin_pools/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_origin_pool.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.uztna_origin_pool.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_origin_pools/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_origin_pool.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.uztna_origin_pool.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_origin_pools"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_origin_pool.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.uztna_origin_pool.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_origin_pools/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_origin_pool.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.uztna_origin_pool.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_origin_pool.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_origin_pool.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_origin_pool.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_origin_pool.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_origin_pool.ReplaceRequest"] = mInfo
-
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_origin_pool/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_origin_pool/types.proto"] = fInfo
 
@@ -17035,55 +19850,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.uztna.uztna_policy_template.StatusObject"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_policy_template/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/uztna_policy_template/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.uztna_policy_template.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.uztna_policy_template.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_policy_templates"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_policy_template.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.uztna_policy_template.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_policy_templates/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_policy_template.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.uztna_policy_template.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_policy_templates/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_policy_template.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.uztna_policy_template.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_policy_templates"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_policy_template.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.uztna_policy_template.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_policy_templates/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.uztna_policy_template.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.uztna_policy_template.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_policy_template.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_policy_template.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_policy_template.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_policy_template.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.uztna_policy_template.ReplaceRequest"] = mInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_policy_template/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_policy_template/types.proto"] = fInfo
@@ -17169,55 +19935,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomPrivateAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.views.uztna_application_view.CustomPrivateAPI"] = aInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/views/uztna_application_view/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/views/uztna_application_view/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.views.uztna_application_view.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.views.uztna_application_view.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_application_views"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.views.uztna_application_view.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.views.uztna_application_view.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_application_views/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.views.uztna_application_view.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.views.uztna_application_view.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_application_views/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.views.uztna_application_view.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.views.uztna_application_view.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_application_views"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.views.uztna_application_view.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.views.uztna_application_view.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_application_views/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.views.uztna_application_view.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.views.uztna_application_view.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.views.uztna_application_view.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.views.uztna_application_view.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.views.uztna_application_view.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.views.uztna_application_view.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.views.uztna_application_view.ReplaceRequest"] = mInfo
-
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/views/uztna_application_view/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/views/uztna_application_view/types.proto"] = fInfo
 
@@ -17277,55 +19994,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.uztna.views.uztna_domain_view.StatusObject"] = oInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/views/uztna_domain_view/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/uztna/views/uztna_domain_view/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.uztna.views.uztna_domain_view.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.uztna.views.uztna_domain_view.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/uztna_domain_views"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.views.uztna_domain_view.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.uztna.views.uztna_domain_view.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/uztna_domain_views/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.views.uztna_domain_view.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.uztna.views.uztna_domain_view.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_domain_views/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.views.uztna_domain_view.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.uztna.views.uztna_domain_view.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/uztna_domain_views"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.views.uztna_domain_view.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.uztna.views.uztna_domain_view.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/uztna_domain_views/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.uztna.views.uztna_domain_view.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.uztna.views.uztna_domain_view.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.views.uztna_domain_view.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.views.uztna_domain_view.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.views.uztna_domain_view.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.views.uztna_domain_view.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.uztna.views.uztna_domain_view.ReplaceRequest"] = mInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/views/uztna_domain_view/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/views/uztna_domain_view/types.proto"] = fInfo
@@ -18305,55 +20973,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.views.bigip_centralmanager_site.StatusObject"] = oInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_centralmanager_site/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/views/bigip_centralmanager_site/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.views.bigip_centralmanager_site.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.views.bigip_centralmanager_site.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/bigip_centralmanager_sites"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.views.bigip_centralmanager_site.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.views.bigip_centralmanager_site.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/bigip_centralmanager_sites/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.views.bigip_centralmanager_site.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.bigip_centralmanager_site.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bigip_centralmanager_sites/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.views.bigip_centralmanager_site.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.views.bigip_centralmanager_site.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bigip_centralmanager_sites"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.views.bigip_centralmanager_site.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.views.bigip_centralmanager_site.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/bigip_centralmanager_sites/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.views.bigip_centralmanager_site.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.views.bigip_centralmanager_site.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.views.bigip_centralmanager_site.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.views.bigip_centralmanager_site.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.views.bigip_centralmanager_site.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.views.bigip_centralmanager_site.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.views.bigip_centralmanager_site.ReplaceRequest"] = mInfo
-
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_centralmanager_site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/bigip_centralmanager_site/types.proto"] = fInfo
 
@@ -18414,55 +21033,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
 	mdr.ObjIdx["ves.io.schema.views.bigip_instance_site.StatusObject"] = oInfo
 
-	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_instance_site/public_crudapi.proto")
-	pInfo.FilesInfo["ves.io/schema/views/bigip_instance_site/public_crudapi.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.views.bigip_instance_site.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.views.bigip_instance_site.CreateRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/bigip_instance_sites"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.views.bigip_instance_site.API.Create"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.views.bigip_instance_site.DeleteRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/bigip_instance_sites/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.views.bigip_instance_site.API.Delete"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.bigip_instance_site.GetRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bigip_instance_sites/{name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.views.bigip_instance_site.API.Get"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.views.bigip_instance_site.ListRequest", true, false)
-	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bigip_instance_sites"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.views.bigip_instance_site.API.List"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.views.bigip_instance_site.ReplaceRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/bigip_instance_sites/{metadata.name}"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.views.bigip_instance_site.API.Replace"] = rpcInfo
-
-	fInfo.APIsInfo["API"] = aInfo
-	mdr.APIIdx["ves.io.schema.views.bigip_instance_site.API"] = aInfo
-
-	mInfo = svcfw.NewMsgInfo("CreateRequest")
-	mdr.MsgIdx["ves.io.schema.views.bigip_instance_site.CreateRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("DeleteRequest")
-	mdr.MsgIdx["ves.io.schema.views.bigip_instance_site.DeleteRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("GetRequest")
-	mdr.MsgIdx["ves.io.schema.views.bigip_instance_site.GetRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ListRequest")
-	mdr.MsgIdx["ves.io.schema.views.bigip_instance_site.ListRequest"] = mInfo
-
-	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
-	mdr.MsgIdx["ves.io.schema.views.bigip_instance_site.ReplaceRequest"] = mInfo
-
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_instance_site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/bigip_instance_site/types.proto"] = fInfo
 
@@ -18507,6 +21077,115 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.bigip_instance_site.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_site", false)
+	mdr.PkgsInfo["ves.io.schema.views.bigip_site"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_site/object.proto")
+	pInfo.FilesInfo["ves.io/schema/views/bigip_site/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.views.bigip_site.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.views.bigip_site.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_site/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/views/bigip_site/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.views.bigip_site.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.views.bigip_site.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/bigip_sites"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.bigip_site.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.views.bigip_site.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/bigip_sites/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.bigip_site.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.bigip_site.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bigip_sites/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.bigip_site.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.views.bigip_site.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/bigip_sites"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.bigip_site.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.views.bigip_site.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/bigip_sites/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.bigip_site.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.bigip_site.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.views.bigip_site.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.views.bigip_site.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.views.bigip_site.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.views.bigip_site.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.views.bigip_site.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_site/types.proto")
+	pInfo.FilesInfo["ves.io/schema/views/bigip_site/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_site.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_site/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.views.bigip_site.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_site/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/views/bigip_site/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.views.bigip_site.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.views.bigip_site.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.bigip_site/Objects", "/ves.io.schema.views.bigip_site/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.bigip_site.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.views.bigip_site.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.bigip_site/Object/{object_uid}", "/ves.io.schema.views.bigip_site/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.bigip_site.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.bigip_site.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.bigip_site/Object/{object_uid}", "/ves.io.schema.views.bigip_site/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.bigip_site.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.views.bigip_site.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.bigip_site/Objects", "/ves.io.schema.views.bigip_site/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.bigip_site.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.views.bigip_site.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.bigip_site/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.bigip_site.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.views.bigip_site.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.bigip_site/Object/{object_uid}", "/ves.io.schema.views.bigip_site/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.bigip_site.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.bigip_site.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_virtual_server", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_virtual_server", false)
 	mdr.PkgsInfo["ves.io.schema.views.bigip_virtual_server"] = pInfo
@@ -19391,7 +22070,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	aInfo = svcfw.NewAPIInfo("ApiepLBCustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.views.http_loadbalancer.Object", false)
 
-	rpcInfo = svcfw.NewRPCInfo("GetAPIEndpointsForGroups", "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsReq", true, false)
+	rpcInfo = svcfw.NewRPCInfo("GetAPIEndpointsForGroups", "ves.io.schema.views.http_loadbalancer.GetAPIEndpointsForGroupsReq", true, true)
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/http_loadbalancers/{name}/api_endpoints"}}
 
 	aInfo.RPCsInfo[svcfw.RPCName("GetAPIEndpointsForGroups")] = rpcInfo
@@ -20082,6 +22761,238 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.origin_pool.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.policy_based_routing", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/policy_based_routing", false)
+	mdr.PkgsInfo["ves.io.schema.views.policy_based_routing"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/policy_based_routing/object.proto")
+	pInfo.FilesInfo["ves.io/schema/views/policy_based_routing/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.views.policy_based_routing.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.views.policy_based_routing.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/policy_based_routing/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/views/policy_based_routing/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.views.policy_based_routing.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.views.policy_based_routing.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/policy_based_routings"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.policy_based_routing.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.views.policy_based_routing.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/policy_based_routings/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.policy_based_routing.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.policy_based_routing.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/policy_based_routings/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.policy_based_routing.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.views.policy_based_routing.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/policy_based_routings"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.policy_based_routing.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.views.policy_based_routing.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/policy_based_routings/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.policy_based_routing.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.policy_based_routing.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.views.policy_based_routing.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.views.policy_based_routing.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.views.policy_based_routing.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.views.policy_based_routing.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.views.policy_based_routing.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/policy_based_routing/types.proto")
+	pInfo.FilesInfo["ves.io/schema/views/policy_based_routing/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.policy_based_routing.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/policy_based_routing/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.views.policy_based_routing.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/policy_based_routing/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/views/policy_based_routing/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.views.policy_based_routing.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.views.policy_based_routing.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.policy_based_routing/Objects", "/ves.io.schema.views.policy_based_routing/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.policy_based_routing.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.views.policy_based_routing.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.policy_based_routing/Object/{object_uid}", "/ves.io.schema.views.policy_based_routing/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.policy_based_routing.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.policy_based_routing.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.policy_based_routing/Object/{object_uid}", "/ves.io.schema.views.policy_based_routing/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.policy_based_routing.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.views.policy_based_routing.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.policy_based_routing/Objects", "/ves.io.schema.views.policy_based_routing/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.policy_based_routing.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.views.policy_based_routing.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.policy_based_routing/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.policy_based_routing.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.views.policy_based_routing.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.policy_based_routing/Object/{object_uid}", "/ves.io.schema.views.policy_based_routing/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.policy_based_routing.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.policy_based_routing.crudapi.API"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.proxy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/proxy", false)
+	mdr.PkgsInfo["ves.io.schema.views.proxy"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/proxy/object.proto")
+	pInfo.FilesInfo["ves.io/schema/views/proxy/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.views.proxy.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.views.proxy.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/proxy/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/views/proxy/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.views.proxy.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.views.proxy.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/proxys"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.proxy.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.views.proxy.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/proxys/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.proxy.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.proxy.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/proxys/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.proxy.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.views.proxy.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/proxys"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.proxy.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.views.proxy.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/proxys/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.proxy.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.proxy.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.views.proxy.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.views.proxy.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.views.proxy.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.views.proxy.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.views.proxy.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/proxy/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/views/proxy/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.views.proxy.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GetProxyServerCACert", "ves.io.schema.views.proxy.GetProxyServerCACertRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/proxys/{name}/ca_certificate"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetProxyServerCACert")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.proxy.CustomAPI.GetProxyServerCACert"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.proxy.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/proxy/types.proto")
+	pInfo.FilesInfo["ves.io/schema/views/proxy/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.proxy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/proxy/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.views.proxy.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/proxy/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/views/proxy/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.views.proxy.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.views.proxy.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.proxy/Objects", "/ves.io.schema.views.proxy/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.proxy.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.views.proxy.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.proxy/Object/{object_uid}", "/ves.io.schema.views.proxy/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.proxy.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.proxy.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.proxy/Object/{object_uid}", "/ves.io.schema.views.proxy/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.proxy.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.views.proxy.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.proxy/Objects", "/ves.io.schema.views.proxy/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.proxy.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.views.proxy.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.proxy/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.proxy.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.views.proxy.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.proxy/Object/{object_uid}", "/ves.io.schema.views.proxy/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.proxy.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.proxy.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.rate_limiter_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy", false)
 	mdr.PkgsInfo["ves.io.schema.views.rate_limiter_policy"] = pInfo
@@ -20791,6 +23702,118 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["StatusAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.terraform_parameters.crudapi.StatusAPI"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.third_party_application", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/third_party_application", false)
+	mdr.PkgsInfo["ves.io.schema.views.third_party_application"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/third_party_application/object.proto")
+	pInfo.FilesInfo["ves.io/schema/views/third_party_application/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.views.third_party_application.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.views.third_party_application.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/third_party_application/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/views/third_party_application/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.views.third_party_application.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.third_party_application.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/third_party_applications/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.third_party_application.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.views.third_party_application.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/third_party_applications"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.third_party_application.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.views.third_party_application.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/third_party_applications/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.third_party_application.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.third_party_application.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.views.third_party_application.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.views.third_party_application.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.views.third_party_application.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/third_party_application/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/views/third_party_application/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.views.third_party_application.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("GenerateToken", "ves.io.schema.views.third_party_application.GenerateTokenRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/third_party_applications/{name}/generate_token"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GenerateToken")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.third_party_application.CustomAPI.GenerateToken"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetSecurityConfig", "ves.io.schema.views.third_party_application.GetSecurityConfigReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/third_party_application/get_security_config"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetSecurityConfig")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.third_party_application.CustomAPI.GetSecurityConfig"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.third_party_application.CustomAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/third_party_application/types.proto")
+	pInfo.FilesInfo["ves.io/schema/views/third_party_application/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.third_party_application.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/third_party_application/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.views.third_party_application.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/third_party_application/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/views/third_party_application/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.views.third_party_application.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.views.third_party_application.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.third_party_application/Objects", "/ves.io.schema.views.third_party_application/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.third_party_application.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.views.third_party_application.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.third_party_application/Object/{object_uid}", "/ves.io.schema.views.third_party_application/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.third_party_application.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.third_party_application.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.third_party_application/Object/{object_uid}", "/ves.io.schema.views.third_party_application/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.third_party_application.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.views.third_party_application.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.third_party_application/Objects", "/ves.io.schema.views.third_party_application/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.third_party_application.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.views.third_party_application.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.third_party_application/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.third_party_application.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.views.third_party_application.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.third_party_application/Object/{object_uid}", "/ves.io.schema.views.third_party_application/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.third_party_application.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.third_party_application.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.udp_loadbalancer", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/udp_loadbalancer", false)
 	mdr.PkgsInfo["ves.io.schema.views.udp_loadbalancer"] = pInfo
 
@@ -20914,6 +23937,79 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.udp_loadbalancer.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.view_internal", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/view_internal", false)
+	mdr.PkgsInfo["ves.io.schema.views.view_internal"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/view_internal/object.proto")
+	pInfo.FilesInfo["ves.io/schema/views/view_internal/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.views.view_internal.Object"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/view_internal/public_customapi.proto")
+	pInfo.FilesInfo["ves.io/schema/views/view_internal/public_customapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomAPI", "CUSTOM_PUBLIC", "ves.io.schema.views.view_internal.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.view_internal.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/view_internal/{view_kind}/{view_name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.view_internal.CustomAPI.Get"] = rpcInfo
+
+	fInfo.APIsInfo["CustomAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.view_internal.CustomAPI"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.views.view_internal.GetRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/view_internal/types.proto")
+	pInfo.FilesInfo["ves.io/schema/views/view_internal/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.view_internal.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/view_internal/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.views.view_internal.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/view_internal/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/views/view_internal/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.views.view_internal.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.views.view_internal.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.view_internal/Objects", "/ves.io.schema.views.view_internal/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.view_internal.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.views.view_internal.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.view_internal/Object/{object_uid}", "/ves.io.schema.views.view_internal/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.view_internal.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.view_internal.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.view_internal/Object/{object_uid}", "/ves.io.schema.views.view_internal/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.view_internal.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.views.view_internal.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.view_internal/Objects", "/ves.io.schema.views.view_internal/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.view_internal.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.views.view_internal.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.view_internal/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.view_internal.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.views.view_internal.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.view_internal/Object/{object_uid}", "/ves.io.schema.views.view_internal/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.view_internal.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.view_internal.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.voltstack_site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site", false)
 	mdr.PkgsInfo["ves.io.schema.views.voltstack_site"] = pInfo
 
@@ -21023,6 +24119,129 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.voltstack_site.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.workload", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/workload", false)
+	mdr.PkgsInfo["ves.io.schema.views.workload"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/workload/object.proto")
+	pInfo.FilesInfo["ves.io/schema/views/workload/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.views.workload.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.views.workload.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/workload/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/views/workload/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.views.workload.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.views.workload.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/workloads"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.workload.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.views.workload.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/workloads/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.workload.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.workload.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/workloads/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.workload.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.views.workload.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/workloads"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.workload.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.views.workload.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/workloads/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.workload.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.workload.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.views.workload.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.views.workload.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.views.workload.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.views.workload.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.views.workload.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/workload/public_custom_data_api.proto")
+	pInfo.FilesInfo["ves.io/schema/views/workload/public_custom_data_api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("CustomDataAPI", "CUSTOM_PUBLIC", "ves.io.schema.views.workload.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Usage", "ves.io.schema.views.workload.UsageRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/workloads/usage"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Usage")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.workload.CustomDataAPI.Usage"] = rpcInfo
+
+	fInfo.APIsInfo["CustomDataAPI"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.workload.CustomDataAPI"] = aInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/workload/types.proto")
+	pInfo.FilesInfo["ves.io/schema/views/workload/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.workload.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/workload/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.views.workload.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/views/workload/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/views/workload/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.views.workload.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.views.workload.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.views.workload/Objects", "/ves.io.schema.views.workload/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.workload.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.views.workload.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.views.workload/Object/{object_uid}", "/ves.io.schema.views.workload/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.workload.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.views.workload.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.workload/Object/{object_uid}", "/ves.io.schema.views.workload/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.workload.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.views.workload.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.workload/Objects", "/ves.io.schema.views.workload/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.workload.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.views.workload.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.views.workload/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.workload.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.views.workload.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.views.workload/Object/{object_uid}", "/ves.io.schema.views.workload/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.views.workload.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.views.workload.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_host", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_host"] = pInfo
 
@@ -21053,6 +24272,11 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	aInfo.RPCsInfo[svcfw.RPCName("GetAPICallSummary")] = rpcInfo
 	mdr.RPCIdx["ves.io.schema.virtual_host.ApiepCustomAPI.GetAPICallSummary"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("GetAPIEPSourceOpenApiSchema", "ves.io.schema.virtual_host.APIEPSourceOpenApiSchemaReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint/sources_openapi_schema"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("GetAPIEPSourceOpenApiSchema")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.virtual_host.ApiepCustomAPI.GetAPIEPSourceOpenApiSchema"] = rpcInfo
 	rpcInfo = svcfw.NewRPCInfo("GetAPIEndpoint", "ves.io.schema.virtual_host.APIEndpointReq", true, false)
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint"}}
 
@@ -21108,6 +24332,11 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	aInfo.RPCsInfo[svcfw.RPCName("UnlinkTickets")] = rpcInfo
 	mdr.RPCIdx["ves.io.schema.virtual_host.ApiepCustomAPI.UnlinkTickets"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("UnmergeAPIEPSourceOpenApiSchema", "ves.io.schema.virtual_host.UnmergeAPIEPSourceOpenApiSchemaReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/api_endpoint/unmerge_sources_openapi_schema"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("UnmergeAPIEPSourceOpenApiSchema")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.virtual_host.ApiepCustomAPI.UnmergeAPIEPSourceOpenApiSchema"] = rpcInfo
 	rpcInfo = svcfw.NewRPCInfo("UpdateAPIEndpointsSchemas", "ves.io.schema.virtual_host.UpdateAPIEndpointsSchemasReq", false, false)
 	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/virtual_hosts/{name}/api_inventory/api_endpoints/update_schemas"}}
 
@@ -21411,6 +24640,66 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.virtual_k8s.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_k8s_quota", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s_quota", false)
+	mdr.PkgsInfo["ves.io.schema.virtual_k8s_quota"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_k8s_quota/object.proto")
+	pInfo.FilesInfo["ves.io/schema/virtual_k8s_quota/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.virtual_k8s_quota.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.virtual_k8s_quota.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_k8s_quota/types.proto")
+	pInfo.FilesInfo["ves.io/schema/virtual_k8s_quota/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_k8s_quota.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s_quota/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.virtual_k8s_quota.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_k8s_quota/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/virtual_k8s_quota/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.virtual_k8s_quota.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.virtual_k8s_quota.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.virtual_k8s_quota/Objects", "/ves.io.schema.virtual_k8s_quota/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.virtual_k8s_quota.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.virtual_k8s_quota.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.virtual_k8s_quota/Object/{object_uid}", "/ves.io.schema.virtual_k8s_quota/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.virtual_k8s_quota.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.virtual_k8s_quota.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_k8s_quota/Object/{object_uid}", "/ves.io.schema.virtual_k8s_quota/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.virtual_k8s_quota.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.virtual_k8s_quota.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_k8s_quota/Objects", "/ves.io.schema.virtual_k8s_quota/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.virtual_k8s_quota.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.virtual_k8s_quota.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.virtual_k8s_quota/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.virtual_k8s_quota.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.virtual_k8s_quota.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.virtual_k8s_quota/Object/{object_uid}", "/ves.io.schema.virtual_k8s_quota/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.virtual_k8s_quota.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.virtual_k8s_quota.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_network", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_network", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_network"] = pInfo
 
@@ -21657,38 +24946,6 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.virtual_site.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf", false)
-	mdr.PkgsInfo["ves.io.schema.waf"] = pInfo
-
-	fInfo = svcfw.NewFileInfo("ves.io/schema/waf/public_waf_monitoring.proto")
-	pInfo.FilesInfo["ves.io/schema/waf/public_waf_monitoring.proto"] = fInfo
-
-	aInfo = svcfw.NewAPIInfo("WAFMonitoringAPI", "CUSTOM_PUBLIC", "ves.io.schema.waf.Object", false)
-
-	rpcInfo = svcfw.NewRPCInfo("ClientRuleHitsMetrics", "ves.io.schema.waf.RuleHitsCountRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/wafs/metrics/client/rule_hits"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ClientRuleHitsMetrics")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.waf.WAFMonitoringAPI.ClientRuleHitsMetrics"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ClientSecurityEventsMetrics", "ves.io.schema.waf.SecurityEventsCountRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/wafs/metrics/client/security_events"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ClientSecurityEventsMetrics")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.waf.WAFMonitoringAPI.ClientSecurityEventsMetrics"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ServerRuleHitsMetrics", "ves.io.schema.waf.RuleHitsCountRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/wafs/metrics/server/rule_hits"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ServerRuleHitsMetrics")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.waf.WAFMonitoringAPI.ServerRuleHitsMetrics"] = rpcInfo
-	rpcInfo = svcfw.NewRPCInfo("ServerSecurityEventsMetrics", "ves.io.schema.waf.SecurityEventsCountRequest", false, false)
-	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{namespace}/wafs/metrics/server/security_events"}}
-
-	aInfo.RPCsInfo[svcfw.RPCName("ServerSecurityEventsMetrics")] = rpcInfo
-	mdr.RPCIdx["ves.io.schema.waf.WAFMonitoringAPI.ServerSecurityEventsMetrics"] = rpcInfo
-
-	fInfo.APIsInfo["WAFMonitoringAPI"] = aInfo
-	mdr.APIIdx["ves.io.schema.waf.WAFMonitoringAPI"] = aInfo
-
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_exclusion_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_exclusion_policy", false)
 	mdr.PkgsInfo["ves.io.schema.waf_exclusion_policy"] = pInfo
 
@@ -21891,6 +25148,66 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.waf_signatures_changelog.crudapi.API"] = aInfo
 
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_suppression_rule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_suppression_rule", false)
+	mdr.PkgsInfo["ves.io.schema.waf_suppression_rule"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_suppression_rule/object.proto")
+	pInfo.FilesInfo["ves.io/schema/waf_suppression_rule/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.waf_suppression_rule.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.waf_suppression_rule.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_suppression_rule/types.proto")
+	pInfo.FilesInfo["ves.io/schema/waf_suppression_rule/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_suppression_rule.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_suppression_rule/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.waf_suppression_rule.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_suppression_rule/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/waf_suppression_rule/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.waf_suppression_rule.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.waf_suppression_rule.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.waf_suppression_rule/Objects", "/ves.io.schema.waf_suppression_rule/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.waf_suppression_rule.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.waf_suppression_rule.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.waf_suppression_rule/Object/{object_uid}", "/ves.io.schema.waf_suppression_rule/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.waf_suppression_rule.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.waf_suppression_rule.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_suppression_rule/Object/{object_uid}", "/ves.io.schema.waf_suppression_rule/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.waf_suppression_rule.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.waf_suppression_rule.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_suppression_rule/Objects", "/ves.io.schema.waf_suppression_rule/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.waf_suppression_rule.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.waf_suppression_rule.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.waf_suppression_rule/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.waf_suppression_rule.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.waf_suppression_rule.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.waf_suppression_rule/Object/{object_uid}", "/ves.io.schema.waf_suppression_rule/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.waf_suppression_rule.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.waf_suppression_rule.crudapi.API"] = aInfo
+
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_violations", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_violations", false)
 	mdr.PkgsInfo["ves.io.schema.waf_violations"] = pInfo
 
@@ -21967,6 +25284,115 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.was.user_token.CustomAPI"] = aInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.workload_flavor", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/workload_flavor", false)
+	mdr.PkgsInfo["ves.io.schema.workload_flavor"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/workload_flavor/object.proto")
+	pInfo.FilesInfo["ves.io/schema/workload_flavor/object.proto"] = fInfo
+
+	oInfo = svcfw.NewObjInfo("Object", true)
+
+	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
+	mdr.ObjIdx["ves.io.schema.workload_flavor.Object"] = oInfo
+	oInfo = svcfw.NewObjInfo("StatusObject", false)
+
+	fInfo.ObjsInfo[svcfw.ObjType("StatusObject")] = oInfo
+	mdr.ObjIdx["ves.io.schema.workload_flavor.StatusObject"] = oInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/workload_flavor/public_crudapi.proto")
+	pInfo.FilesInfo["ves.io/schema/workload_flavor/public_crudapi.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD_PUBLIC", "ves.io.schema.workload_flavor.Object", false)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.workload_flavor.CreateRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/public/namespaces/{metadata.namespace}/workload_flavors"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.workload_flavor.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.workload_flavor.DeleteRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/public/namespaces/{namespace}/workload_flavors/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.workload_flavor.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.workload_flavor.GetRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/workload_flavors/{name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.workload_flavor.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.workload_flavor.ListRequest", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/public/namespaces/{namespace}/workload_flavors"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.workload_flavor.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.workload_flavor.ReplaceRequest", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/public/namespaces/{metadata.namespace}/workload_flavors/{metadata.name}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.workload_flavor.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.workload_flavor.API"] = aInfo
+
+	mInfo = svcfw.NewMsgInfo("CreateRequest")
+	mdr.MsgIdx["ves.io.schema.workload_flavor.CreateRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("DeleteRequest")
+	mdr.MsgIdx["ves.io.schema.workload_flavor.DeleteRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("GetRequest")
+	mdr.MsgIdx["ves.io.schema.workload_flavor.GetRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ListRequest")
+	mdr.MsgIdx["ves.io.schema.workload_flavor.ListRequest"] = mInfo
+
+	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
+	mdr.MsgIdx["ves.io.schema.workload_flavor.ReplaceRequest"] = mInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/workload_flavor/types.proto")
+	pInfo.FilesInfo["ves.io/schema/workload_flavor/types.proto"] = fInfo
+
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.workload_flavor.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/workload_flavor/crudapi", false)
+	mdr.PkgsInfo["ves.io.schema.workload_flavor.crudapi"] = pInfo
+
+	fInfo = svcfw.NewFileInfo("ves.io/schema/workload_flavor/crudapi/api.proto")
+	pInfo.FilesInfo["ves.io/schema/workload_flavor/crudapi/api.proto"] = fInfo
+
+	aInfo = svcfw.NewAPIInfo("API", "AUTO_CRUD", "ves.io.schema.workload_flavor.Object", true)
+
+	rpcInfo = svcfw.NewRPCInfo("Create", "ves.io.schema.workload_flavor.crudapi.ObjectCreateReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"POST": []string{"/ves.io.schema.workload_flavor/Objects", "/ves.io.schema.workload_flavor/introspect/write/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Create")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.workload_flavor.crudapi.API.Create"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Delete", "ves.io.schema.workload_flavor.crudapi.ObjectDeleteReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"DELETE": []string{"/ves.io.schema.workload_flavor/Object/{object_uid}", "/ves.io.schema.workload_flavor/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Delete")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.workload_flavor.crudapi.API.Delete"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Get", "ves.io.schema.workload_flavor.crudapi.ObjectGetReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.workload_flavor/Object/{object_uid}", "/ves.io.schema.workload_flavor/introspect/read/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Get")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.workload_flavor.crudapi.API.Get"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("List", "ves.io.schema.workload_flavor.crudapi.ObjectListReq", true, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.workload_flavor/Objects", "/ves.io.schema.workload_flavor/introspect/read/Objects"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("List")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.workload_flavor.crudapi.API.List"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("ListStream", "ves.io.schema.workload_flavor.crudapi.ObjectListReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"GET": []string{"/ves.io.schema.workload_flavor/Objects/stream"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("ListStream")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.workload_flavor.crudapi.API.ListStream"] = rpcInfo
+	rpcInfo = svcfw.NewRPCInfo("Replace", "ves.io.schema.workload_flavor.crudapi.ObjectReplaceReq", false, false)
+	rpcInfo.RestMappings = map[string][]string{"PUT": []string{"/ves.io.schema.workload_flavor/Object/{object_uid}", "/ves.io.schema.workload_flavor/introspect/write/Object/{object_uid}"}}
+
+	aInfo.RPCsInfo[svcfw.RPCName("Replace")] = rpcInfo
+	mdr.RPCIdx["ves.io.schema.workload_flavor.crudapi.API.Replace"] = rpcInfo
+
+	fInfo.APIsInfo["API"] = aInfo
+	mdr.APIIdx["ves.io.schema.workload_flavor.crudapi.API"] = aInfo
 
 	pInfo = svcfw.NewPkgInfo("ves.io.schema.ztna", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ztna", false)
 	mdr.PkgsInfo["ves.io.schema.ztna"] = pInfo

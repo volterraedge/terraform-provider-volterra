@@ -85,6 +85,13 @@ func resourceVolterraEndpoint() *schema.Resource {
 							Type:     schema.TypeInt,
 							Optional: true,
 						},
+
+						"strict_ttl": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
 					},
 				},
 			},
@@ -261,6 +268,39 @@ func resourceVolterraEndpoint() *schema.Resource {
 											},
 										},
 									},
+
+									"refs": {
+
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:       schema.TypeString,
+													Computed:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"namespace": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"tenant": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
 								},
 							},
 						},
@@ -352,6 +392,39 @@ func resourceVolterraEndpoint() *schema.Resource {
 												"tenant": {
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+											},
+										},
+									},
+
+									"refs": {
+
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:       schema.TypeString,
+													Computed:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"namespace": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"tenant": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -462,6 +535,18 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 					endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
 
 					ttlChoiceInt.RefreshInterval = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["strict_ttl"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
+
+					ttlChoiceTypeFound = true
+
+					if v.(bool) {
+						ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_StrictTtl{}
+						ttlChoiceInt.StrictTtl = &ves_io_schema.Empty{}
+						endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
+					}
 
 				}
 
@@ -711,28 +796,64 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
 								refOrSelectorInt.Site.Ref = refIntNew
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-									refIntNew[i].Kind = "site"
+										refIntNew[i].Kind = "site"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refIntNew[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refIntNew[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refIntNew[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refIntNew[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refIntNew[i].Uid = v.(string)
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refIntNew[i].Namespace = v.(string)
+							}
+
+							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.Site.Refs = refsInt
+								for i, ps := range sl {
+									if ps != nil {
+
+										rMapToStrVal := ps.(map[string]interface{})
+										refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+										refsInt[i].Kind = "virtual_network"
+
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refsInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refsInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refsInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refIntNew[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refIntNew[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -760,28 +881,30 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
 								refOrSelectorInt.VirtualNetwork.Ref = refIntNew
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-									refIntNew[i].Kind = "virtual_network"
+										refIntNew[i].Kind = "virtual_network"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refIntNew[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refIntNew[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refIntNew[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refIntNew[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refIntNew[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refIntNew[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refIntNew[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refIntNew[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -841,28 +964,64 @@ func resourceVolterraEndpointCreate(d *schema.ResourceData, meta interface{}) er
 								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
 								refOrSelectorInt.VirtualSite.Ref = refIntNew
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-									refIntNew[i].Kind = "virtual_site"
+										refIntNew[i].Kind = "virtual_site"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refIntNew[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refIntNew[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refIntNew[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refIntNew[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refIntNew[i].Uid = v.(string)
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refIntNew[i].Namespace = v.(string)
+							}
+
+							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.VirtualSite.Refs = refsInt
+								for i, ps := range sl {
+									if ps != nil {
+
+										rMapToStrVal := ps.(map[string]interface{})
+										refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+										refsInt[i].Kind = "virtual_network"
+
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refsInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refsInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refsInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refIntNew[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refIntNew[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -1017,6 +1176,18 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 					endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
 
 					ttlChoiceInt.RefreshInterval = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["strict_ttl"]; ok && !isIntfNil(v) && !ttlChoiceTypeFound {
+
+					ttlChoiceTypeFound = true
+
+					if v.(bool) {
+						ttlChoiceInt := &ves_io_schema_endpoint.DnsNameAdvancedType_StrictTtl{}
+						ttlChoiceInt.StrictTtl = &ves_io_schema.Empty{}
+						endpointAddressInt.DnsNameAdvanced.TtlChoice = ttlChoiceInt
+					}
 
 				}
 
@@ -1261,28 +1432,64 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
 								refOrSelectorInt.Site.Ref = refIntNew
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-									refIntNew[i].Kind = "site"
+										refIntNew[i].Kind = "site"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refIntNew[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refIntNew[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refIntNew[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refIntNew[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refIntNew[i].Uid = v.(string)
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refIntNew[i].Namespace = v.(string)
+							}
+
+							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.Site.Refs = refsInt
+								for i, ps := range sl {
+									if ps != nil {
+
+										rMapToStrVal := ps.(map[string]interface{})
+										refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+										refsInt[i].Kind = "virtual_network"
+
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refsInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refsInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refsInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refIntNew[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refIntNew[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -1310,28 +1517,30 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
 								refOrSelectorInt.VirtualNetwork.Ref = refIntNew
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-									refIntNew[i].Kind = "virtual_network"
+										refIntNew[i].Kind = "virtual_network"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refIntNew[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refIntNew[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refIntNew[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refIntNew[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refIntNew[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refIntNew[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refIntNew[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refIntNew[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -1391,28 +1600,64 @@ func resourceVolterraEndpointUpdate(d *schema.ResourceData, meta interface{}) er
 								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
 								refOrSelectorInt.VirtualSite.Ref = refIntNew
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-									refIntNew[i].Kind = "virtual_site"
+										refIntNew[i].Kind = "virtual_site"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refIntNew[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refIntNew[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refIntNew[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refIntNew[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refIntNew[i].Uid = v.(string)
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refIntNew[i].Namespace = v.(string)
+							}
+
+							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.VirtualSite.Refs = refsInt
+								for i, ps := range sl {
+									if ps != nil {
+
+										rMapToStrVal := ps.(map[string]interface{})
+										refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+										refsInt[i].Kind = "virtual_network"
+
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refsInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refsInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refsInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refIntNew[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refIntNew[i].Uid = v.(string)
-									}
-
 								}
 
 							}

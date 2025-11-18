@@ -5180,6 +5180,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetVirtualNetworkDnsServerConfigurationDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetVirtualNetworkDnsServerConfigurationDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -5317,6 +5323,28 @@ func (m *GlobalSpecType) GetK8SClusterApiGwDBEntries(ctx context.Context, d db.I
 	}
 
 	return entries, nil
+}
+
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetVirtualNetworkDnsServerConfigurationDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetVirtualNetworkDnsServerConfiguration() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetVirtualNetworkDnsServerConfiguration() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetVirtualNetworkDnsServerConfiguration() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("virtual_network_dns_server_configuration[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
 }
 
 type ValidateGlobalSpecType struct {
@@ -6587,6 +6615,18 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["virtual_network_dns_server_configuration"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("virtual_network_dns_server_configuration"))
+		for idx, item := range m.GetVirtualNetworkDnsServerConfiguration() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["vm_enabled"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("vm_enabled"))
@@ -6980,6 +7020,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["re_select"] = ves_io_schema_views.RegionalEdgeSelectionValidator().Validate
 
 	v.FldValidators["admin_user_credentials"] = ves_io_schema_views.AdminUserCredentialsTypeValidator().Validate
+
+	v.FldValidators["virtual_network_dns_server_configuration"] = VirtualNetworkDnsServerConfigurationTypeValidator().Validate
 
 	return v
 }()
@@ -12310,6 +12352,265 @@ func VerStatusTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *VirtualNetworkDnsServerConfigurationType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *VirtualNetworkDnsServerConfigurationType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *VirtualNetworkDnsServerConfigurationType) DeepCopy() *VirtualNetworkDnsServerConfigurationType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &VirtualNetworkDnsServerConfigurationType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *VirtualNetworkDnsServerConfigurationType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *VirtualNetworkDnsServerConfigurationType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return VirtualNetworkDnsServerConfigurationTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *VirtualNetworkDnsServerConfigurationType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	return m.GetVirtualNetworkDRefInfo()
+
+}
+
+func (m *VirtualNetworkDnsServerConfigurationType) GetVirtualNetworkDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetVirtualNetwork()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("VirtualNetworkDnsServerConfigurationType.virtual_network[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "virtual_network.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "virtual_network",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetVirtualNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *VirtualNetworkDnsServerConfigurationType) GetVirtualNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "virtual_network.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: virtual_network")
+	}
+	for _, ref := range m.GetVirtualNetwork() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
+type ValidateVirtualNetworkDnsServerConfigurationType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateVirtualNetworkDnsServerConfigurationType) VirtualNetworkValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for virtual_network")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for virtual_network")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated virtual_network")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items virtual_network")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVirtualNetworkDnsServerConfigurationType) NameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVirtualNetworkDnsServerConfigurationType) NameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateVirtualNetworkDnsServerConfigurationType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*VirtualNetworkDnsServerConfigurationType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *VirtualNetworkDnsServerConfigurationType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["nameserver"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nameserver"))
+		if err := fv(ctx, m.GetNameserver(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nameserver_v6"))
+		if err := fv(ctx, m.GetNameserverV6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["virtual_network"]; exists {
+		vOpts := append(opts, db.WithValidateField("virtual_network"))
+		if err := fv(ctx, m.GetVirtualNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultVirtualNetworkDnsServerConfigurationTypeValidator = func() *ValidateVirtualNetworkDnsServerConfigurationType {
+	v := &ValidateVirtualNetworkDnsServerConfigurationType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhVirtualNetwork := v.VirtualNetworkValidationRuleHandler
+	rulesVirtualNetwork := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhVirtualNetwork(rulesVirtualNetwork)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualNetworkDnsServerConfigurationType.virtual_network: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["virtual_network"] = vFn
+
+	vrhNameserver := v.NameserverValidationRuleHandler
+	rulesNameserver := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFn, err = vrhNameserver(rulesNameserver)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualNetworkDnsServerConfigurationType.nameserver: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["nameserver"] = vFn
+
+	vrhNameserverV6 := v.NameserverV6ValidationRuleHandler
+	rulesNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhNameserverV6(rulesNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for VirtualNetworkDnsServerConfigurationType.nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["nameserver_v6"] = vFn
+
+	return v
+}()
+
+func VirtualNetworkDnsServerConfigurationTypeValidator() db.Validator {
+	return DefaultVirtualNetworkDnsServerConfigurationTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *VnetGatewayStatusType) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -12521,6 +12822,15 @@ func (v *ValidateVolterraSoftwareStatus) Validate(ctx context.Context, pm interf
 
 		vOpts := append(opts, db.WithValidateField("nonconforming_state"))
 		if err := fv(ctx, m.GetNonconformingState(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["software_version_expiry_date"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("software_version_expiry_date"))
+		if err := fv(ctx, m.GetSoftwareVersionExpiryDate(), vOpts...); err != nil {
 			return err
 		}
 

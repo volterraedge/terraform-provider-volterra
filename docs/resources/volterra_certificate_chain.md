@@ -17,9 +17,8 @@ Example Usage
 
 ```hcl
 resource "volterra_certificate_chain" "example" {
-  name      = "acmecorp-web"
-  namespace = "staging"
-
+  name            = "acmecorp-web"
+  namespace       = "staging"
   certificate_url = ["value"]
 }
 

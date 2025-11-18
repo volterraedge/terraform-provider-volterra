@@ -24,14 +24,24 @@ resource "volterra_discovery" "example" {
 
   no_cluster_id = true
 
-  // One of the arguments from this list "discovery_cbip discovery_consul discovery_k8s" must be set
+  // One of the arguments from this list "discovery_cbip discovery_consul discovery_k8s discovery_third_party" must be set
 
   discovery_k8s {
     access_info {
-      // One of the arguments from this list "connection_info kubeconfig_url" must be set
+      // One of the arguments from this list "connection_info in_cluster kubeconfig_url" must be set
 
       kubeconfig_url {
-        // One of the arguments from this list "blindfold_secret_info clear_secret_info" must be set
+        blindfold_secret_info_internal {
+          decryption_provider = "value"
+
+          location = "string:///U2VjcmV0SW5mb3JtYXRpb24="
+
+          store_provider = "value"
+        }
+
+        secret_encoding_type = "secret_encoding_type"
+
+        // One of the arguments from this list "blindfold_secret_info clear_secret_info vault_secret_info wingman_secret_info" must be set
 
         blindfold_secret_info {
           decryption_provider = "value"
@@ -47,13 +57,14 @@ resource "volterra_discovery" "example" {
       isolated = true
     }
 
+    // One of the arguments from this list "default_all namespace_mapping" can be set
+
+    default_all = true
     publish_info {
       // One of the arguments from this list "disable dns_delegation publish publish_fqdns" must be set
 
-      dns_delegation {
-        dns_mode = "dns_mode"
-
-        subdomain = "value"
+      publish {
+        namespace = "default"
       }
     }
   }
@@ -63,11 +74,17 @@ resource "volterra_discovery" "example" {
     virtual_site {
       // One of the arguments from this list "disable_internet_vip enable_internet_vip" must be set
 
-      enable_internet_vip = true
+      disable_internet_vip = true
 
       network_type = "network_type"
 
       ref {
+        name      = "test1"
+        namespace = "staging"
+        tenant    = "acmecorp"
+      }
+
+      refs {
         name      = "test1"
         namespace = "staging"
         tenant    = "acmecorp"
@@ -103,7 +120,7 @@ Argument Reference
 
 `no_cluster_id` - (Optional) of the site will discover from this discovery object. (`Bool`).
 
-###### One of the arguments from this list "discovery_cbip, discovery_consul, discovery_k8s" must be set
+###### One of the arguments from this list "discovery_cbip, discovery_consul, discovery_k8s, discovery_third_party" must be set
 
 `discovery_cbip` - (Optional) Discovery configuration for Classic BIG-IP. See [Discovery Choice Discovery Cbip ](#discovery-choice-discovery-cbip) below for details.
 
@@ -111,11 +128,13 @@ Argument Reference
 
 `discovery_k8s` - (Optional) Discovery configuration for K8s.. See [Discovery Choice Discovery K8s ](#discovery-choice-discovery-k8s) below for details.
 
-`where` - (Required) All the sites where this discovery config is valid.. See [Where ](#where) below for details.
+`discovery_third_party` - (Optional) Discovery configuration for Third Party. See [Discovery Choice Discovery Third Party ](#discovery-choice-discovery-third-party) below for details.
+
+`where` - (Required) Site for which discovery is valid.. See [Where ](#where) below for details.
 
 ### Where
 
-All the sites where this discovery config is valid..
+Site for which discovery is valid..
 
 ###### One of the arguments from this list "site, virtual_network, virtual_site" must be set
 
@@ -145,29 +164,65 @@ Username and password used for HTTP/HTTPS access.
 
 Password used to log into an admin account on the BIG-IP device.
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
 
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Ca Certificate Url Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Cbip Clusters Admin Credentials
+
+x-required.
+
+`password` - (Required) Password used to log into an admin account on the BIG-IP device. See [Admin Credentials Password ](#admin-credentials-password) below for details.
+
+`username` - (Required) Username used to log into an admin account on the BIG-IP device (`String`).
+
+### Cbip Clusters Cbip Certificate Authority
+
+x-required.
+
+###### One of the arguments from this list "skip_server_verification, trusted_ca" must be set
+
+`skip_server_verification` - (Optional) Skip origin server verification (`Bool`).
+
+`trusted_ca` - (Optional) Select/Add a Root CA Certificate object to associate with this Origin Pool for verification of server's certificate. See [ref](#ref) below for details.
+
 ### Cbip Clusters Cbip Devices
 
 List of Classic BIG-IP devices..
 
-`admin_credentials` - (Required) x-required. See [Cbip Devices Admin Credentials ](#cbip-devices-admin-credentials) below for details.
+`admin_credentials` - (Required) x-required. See [Cbip Devices Admin Credentials ](#cbip-devices-admin-credentials) below for details.(Deprecated)
 
-`cbip_certificate_authority` - (Required) x-required. See [Cbip Devices Cbip Certificate Authority ](#cbip-devices-cbip-certificate-authority) below for details.
+`cbip_certificate_authority` - (Required) x-required. See [Cbip Devices Cbip Certificate Authority ](#cbip-devices-cbip-certificate-authority) below for details.(Deprecated)
 
-`cbip_mgmt_ip` - (Required) IP Address of the Classic BIG-IP device. Hostname is not supported. (`String`).
+`cbip_mgmt_ip` - (Required) IP Address of the Classic BIG-IP device. Hostname is not supported. (`String`).(Deprecated)
 
 ###### One of the arguments from this list "default_all, namespace_mapping" can be set
 
-`default_all` - (Optional) If configuring in an App Namespace, discovered services across all BIG-IP partitions will be discovered in the current Namespace (`Bool`).
+`default_all` - (Optional) If configuring in an App Namespace, discovered services across all BIG-IP partitions will be discovered in the current Namespace (`Bool`).(Deprecated)
 
-`namespace_mapping` - (Optional) Select the BIG-IP partitions from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace.. See [Namespace Mapping Choice Namespace Mapping ](#namespace-mapping-choice-namespace-mapping) below for details.
+`namespace_mapping` - (Optional) Select the BIG-IP partitions from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace.. See [Namespace Mapping Choice Namespace Mapping ](#namespace-mapping-choice-namespace-mapping) below for details.(Deprecated)
 
-`virtual_server_filter` - (Optional) Filters to discover only required BIG-IP Virtual Servers. The Virtual Server will be discovered only if it matches all criteria specified below. A blank criteria will be treated as match all.. See [Cbip Devices Virtual Server Filter ](#cbip-devices-virtual-server-filter) below for details.
+`virtual_server_filter` - (Optional) Filters to discover only required BIG-IP Virtual Servers. The Virtual Server will be discovered only if it matches all criteria specified below. A blank criteria will be treated as match all.. See [Cbip Devices Virtual Server Filter ](#cbip-devices-virtual-server-filter) below for details.(Deprecated)
 
 ### Cbip Clusters Metadata
 
@@ -175,7 +230,29 @@ Common attributes for the device configuration including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
 
+`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
+
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
+
+### Cbip Clusters Mgmt Port
+
+x-displayName: "Management Port".
+
+`port` - (Optional) Management Port of the BIGIP HA cluster (`Int`).
+
+### Cbip Clusters Virtual Server Filter
+
+Filters to discover only required BIG-IP Virtual Servers. The Virtual Server will be discovered only if it matches all criteria specified below. A blank criteria will be treated as match all..
+
+`description_regex` - (Optional) Regex to match Virtual Server description (`String`).
+
+`discover_disabled_virtual_servers` - (Optional) When checked, disabled virtual servers will be included (`Bool`).
+
+`name_regex` - (Optional) Regex to match Virtual Server name (`String`).
+
+`port_ranges` - (Optional) Maximum number of ports allowed is 1024. (`String`).
+
+`protocols` - (Optional) Filter by protocol(s) (`String`).(Deprecated)
 
 ### Cbip Devices Admin Credentials
 
@@ -207,6 +284,18 @@ Filters to discover only required BIG-IP Virtual Servers. The Virtual Server wil
 
 `port_ranges` - (Optional) Maximum number of ports allowed is 1024. (`String`).
 
+`protocols` - (Optional) Filter by protocol(s) (`String`).(Deprecated)
+
+### Certificate Url Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
 ### Config Type Connection Info
 
 Provide API server access details (endpoint and TLS parameters).
@@ -219,17 +308,29 @@ Provide API server access details (endpoint and TLS parameters).
 
 Provide kubeconfig file to connect to K8s cluster.
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Kubeconfig Url Blindfold Secret Info Internal ](#kubeconfig-url-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
 
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
 ### Connection Info Tls Info
 
 TLS settings to enable transport layer security.
 
+`ca_certificate_url` - (Optional) F5XC Secret. URL to fetch the server CA certificate file. See [Tls Info Ca Certificate Url ](#tls-info-ca-certificate-url) below for details.(Deprecated)
+
 `certificate` - (Optional) Client certificate is PEM-encoded certificate or certificate-chain. (`String`).
+
+`certificate_url` - (Optional) F5XC Secret. URL to fetch the client certificate file. See [Tls Info Certificate Url ](#tls-info-certificate-url) below for details.(Deprecated)
 
 `key_url` - (Optional) The data may be optionally secured using BlindFold.. See [Tls Info Key Url ](#tls-info-key-url) below for details.
 
@@ -241,9 +342,25 @@ TLS settings to enable transport layer security.
 
 are in an Active-Active or Active-Standby setup or even a standalone BIG-IP device..
 
-`cbip_devices` - (Required) List of Classic BIG-IP devices.. See [Cbip Clusters Cbip Devices ](#cbip-clusters-cbip-devices) below for details.
+`admin_credentials` - (Required) x-required. See [Cbip Clusters Admin Credentials ](#cbip-clusters-admin-credentials) below for details.
+
+`cbip_certificate_authority` - (Required) x-required. See [Cbip Clusters Cbip Certificate Authority ](#cbip-clusters-cbip-certificate-authority) below for details.
+
+`cbip_devices` - (Required) List of Classic BIG-IP devices.. See [Cbip Clusters Cbip Devices ](#cbip-clusters-cbip-devices) below for details.(Deprecated)
+
+`cbip_mgmt_ips` - (Required) IP Addresses of Classic BIG-IP devices. Hostname is not supported. (`String`).
 
 `metadata` - (Required) Common attributes for the device configuration including name and description.. See [Cbip Clusters Metadata ](#cbip-clusters-metadata) below for details.
+
+`mgmt_port` - (Optional) x-displayName: "Management Port". See [Cbip Clusters Mgmt Port ](#cbip-clusters-mgmt-port) below for details.
+
+###### One of the arguments from this list "default_all, namespace_mapping" can be set
+
+`default_all` - (Optional) If configuring in an App Namespace, discovered services across all BIG-IP partitions will be discovered in the current Namespace (`Bool`).
+
+`namespace_mapping` - (Optional) Select the BIG-IP partitions from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace.. See [Namespace Mapping Choice Namespace Mapping ](#namespace-mapping-choice-namespace-mapping) below for details.
+
+`virtual_server_filter` - (Optional) Filters to discover only required BIG-IP Virtual Servers. The Virtual Server will be discovered only if it matches all criteria specified below. A blank criteria will be treated as match all.. See [Cbip Clusters Virtual Server Filter ](#cbip-clusters-virtual-server-filter) below for details.
 
 ### Discovery Choice Discovery Cbip
 
@@ -251,11 +368,21 @@ Discovery configuration for Classic BIG-IP.
 
 `cbip_clusters` - (Required) are in an Active-Active or Active-Standby setup or even a standalone BIG-IP device.. See [Discovery Cbip Cbip Clusters ](#discovery-cbip-cbip-clusters) below for details.
 
+`internal_lb_domain` - (Optional) Domain name of the internal LB (`String`).(Deprecated)
+
+`server_ca` - (Optional) Server CA certificate to connect to LB. See [ref](#ref) below for details.(Deprecated)
+
 ### Discovery Choice Discovery Consul
 
 Discovery configuration for Hashicorp Consul.
 
 `access_info` - (Required) Credentials to access Hashicorp Consul service discovery. See [Discovery Consul Access Info ](#discovery-consul-access-info) below for details.
+
+###### One of the arguments from this list "default_all, namespace_mapping" can be set
+
+`default_all` - (Optional) If configuring in an App Namespace, discovered services across all Consul namespaces will be discovered in the current Namespace (`Bool`).(Deprecated)
+
+`namespace_mapping` - (Optional) Select the Consul namespaces from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace.. See [Namespace Mapping Choice Namespace Mapping ](#namespace-mapping-choice-namespace-mapping) below for details.(Deprecated)
 
 `publish_info` - (Required) Configuration to publish VIPs. See [Discovery Consul Publish Info ](#discovery-consul-publish-info) below for details.
 
@@ -265,7 +392,23 @@ Discovery configuration for K8s..
 
 `access_info` - (Required) Credentials can be kubeconfig file or mTLS using PKI certificates. See [Discovery K8s Access Info ](#discovery-k8s-access-info) below for details.
 
+###### One of the arguments from this list "default_all, namespace_mapping" can be set
+
+`default_all` - (Optional) If configuring in an App Namespace, discovered services across all K8s namespaces will be discovered in the current Namespace (`Bool`).
+
+`namespace_mapping` - (Optional) Select the K8s namespaces from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace.. See [Namespace Mapping Choice Namespace Mapping ](#namespace-mapping-choice-namespace-mapping) below for details.
+
 `publish_info` - (Required) Configuration to publish VIPs. See [Discovery K8s Publish Info ](#discovery-k8s-publish-info) below for details.
+
+### Discovery Choice Discovery Third Party
+
+Discovery configuration for Third Party.
+
+`applications` - (Required) Defines names to identify and distingish log source system or platforms (`String`).
+
+`expiration_timestamp` - (Optional) This discovery service expiration timestamp (`String`).(Deprecated)
+
+`source_cidr` - (Required) Source IP of the packet to match (`String`).
 
 ### Discovery Consul Access Info
 
@@ -274,6 +417,8 @@ Credentials to access Hashicorp Consul service discovery.
 `connection_info` - (Optional) Configuration details to access Hashicorp Consul API service using REST.. See [Access Info Connection Info ](#access-info-connection-info) below for details.
 
 `http_basic_auth_info` - (Optional) Username and password used for HTTP/HTTPS access. See [Access Info Http Basic Auth Info ](#access-info-http-basic-auth-info) below for details.
+
+`scheme` - (Optional) scheme (`String`).(Deprecated)
 
 ### Discovery Consul Publish Info
 
@@ -289,9 +434,11 @@ Configuration to publish VIPs.
 
 Credentials can be kubeconfig file or mTLS using PKI certificates.
 
-###### One of the arguments from this list "connection_info, kubeconfig_url" must be set
+###### One of the arguments from this list "connection_info, in_cluster, kubeconfig_url" must be set
 
 `connection_info` - (Optional) Provide API server access details (endpoint and TLS parameters). See [Config Type Connection Info ](#config-type-connection-info) below for details.
+
+`in_cluster` - (Optional) VER is POD running in the same K8s cluster. (`Bool`).(Deprecated)
 
 `kubeconfig_url` - (Optional) Provide kubeconfig file to connect to K8s cluster. See [Config Type Kubeconfig Url ](#config-type-kubeconfig-url) below for details.
 
@@ -319,11 +466,19 @@ Configuration to publish VIPs.
 
 F5XC Secret. URL for password, needs to be fetched from this path.
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Passwd Url Blindfold Secret Info Internal ](#passwd-url-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Internet Vip Choice Disable Internet Vip
 
@@ -341,6 +496,42 @@ discovered when Kubernetes cluster is in InCluster mode..
 
 always discovers POD IP Address for configured endpoints..
 
+### Key Url Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Kubeconfig Url Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Namespace Mapping Items
+
+Map Consul namespace(s) to App Namespaces.
+
+`namespace` - (Optional) Select a namespace (`String`).
+
+`namespace_regex` - (Optional) The regex here will be used to match Consul namespace(s). (`String`).
+
+### Namespace Mapping Items
+
+Map K8s namespace(s) to App Namespaces. In Shared Configuration, Discovered Services can only be mapped to a single App Namespace, which is determined by the first matched regex..
+
+`namespace` - (Optional) Select a namespace (`String`).
+
+`namespace_regex` - (Optional) The regex here will be used to match K8s namespace(s). (`String`).
+
 ### Namespace Mapping Items
 
 Map BIG-IP partition(s) to App Namespaces.
@@ -355,9 +546,41 @@ If configuring in an App Namespace, discovered services across all BIG-IP partit
 
 ### Namespace Mapping Choice Namespace Mapping
 
+Select the Consul namespaces from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace..
+
+`items` - (Required) Map Consul namespace(s) to App Namespaces. See [Namespace Mapping Items ](#namespace-mapping-items) below for details.
+
+### Namespace Mapping Choice Namespace Mapping
+
+Select the K8s namespaces from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace..
+
+`items` - (Required) Map K8s namespace(s) to App Namespaces. In Shared Configuration, Discovered Services can only be mapped to a single App Namespace, which is determined by the first matched regex.. See [Namespace Mapping Items ](#namespace-mapping-items) below for details.
+
+### Namespace Mapping Choice Namespace Mapping
+
 Select the BIG-IP partitions from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace..
 
-`items` - (Optional) Map BIG-IP partition(s) to App Namespaces. See [Namespace Mapping Items ](#namespace-mapping-items) below for details.
+`items` - (Required) Map BIG-IP partition(s) to App Namespaces. See [Namespace Mapping Items ](#namespace-mapping-items) below for details.
+
+### Passwd Url Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
+### Password Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Publish Choice Disable
 
@@ -409,6 +632,8 @@ Direct reference to site object.
 
 `ref` - (Required) A site direct reference. See [ref](#ref) below for details.
 
+`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
+
 ### Ref Or Selector Virtual Network
 
 Direct reference to virtual network object.
@@ -429,6 +654,8 @@ Direct reference to virtual site object.
 
 `ref` - (Required) A virtual_site direct reference. See [ref](#ref) below for details.
 
+`refs` - (Optional) Reference to virtual network. See [ref](#ref) below for details.(Deprecated)
+
 ### Secret Info Oneof Blindfold Secret Info
 
 Blindfold Secret is used for the secrets managed by F5XC Secret Management Service.
@@ -447,19 +674,83 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Secret Info Oneof Vault Secret Info
+
+Vault Secret is used for the secrets managed by Hashicorp Vault.
+
+`key` - (Optional) If not provided entire secret will be returned. (`String`).
+
+`location` - (Required) Path to secret in Vault. (`String`).
+
+`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
+
+`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
+
+`version` - (Optional) If not provided latest version will be returned. (`Int`).
+
+### Secret Info Oneof Wingman Secret Info
+
+Secret is given as bootstrap secret in F5XC Security Sidecar.
+
+`name` - (Required) Name of the secret. (`String`).
+
 ### Server Validation Choice Skip Server Verification
 
 Skip origin server verification.
+
+### Tls Info Ca Certificate Url
+
+F5XC Secret. URL to fetch the server CA certificate file.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Ca Certificate Url Blindfold Secret Info Internal ](#ca-certificate-url-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Tls Info Certificate Url
+
+F5XC Secret. URL to fetch the client certificate file.
+
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Certificate Url Blindfold Secret Info Internal ](#certificate-url-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
+
+`blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
+
+`clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Tls Info Key Url
 
 The data may be optionally secured using BlindFold..
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Key Url Blindfold Secret Info Internal ](#key-url-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 Attribute Reference
 -------------------

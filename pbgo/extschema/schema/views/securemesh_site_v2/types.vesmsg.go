@@ -612,6 +612,12 @@ func (m *CreateSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSegmentVrfDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentVrfDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -1010,6 +1016,28 @@ func (m *CreateSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, e
 
 }
 
+// GetDRefInfo for the field's type
+func (m *CreateSpecType) GetSegmentVrfDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentVrf() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSegmentVrf() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegmentVrf() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("segment_vrf[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
 type ValidateCreateSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -1043,6 +1071,54 @@ func (v *ValidateCreateSpecType) TunnelDeadTimeoutValidationRuleHandler(rules ma
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tunnel_dead_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateCreateSpecType) SegmentVrfValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for segment_vrf")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*SegmentVRFSettingType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := SegmentVRFSettingTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for segment_vrf")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SegmentVRFSettingType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SegmentVRFSettingType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated segment_vrf")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items segment_vrf")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -1525,6 +1601,14 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["segment_vrf"]; exists {
+		vOpts := append(opts, db.WithValidateField("segment_vrf"))
+		if err := fv(ctx, m.GetSegmentVrf(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["software_settings"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("software_settings"))
@@ -1557,6 +1641,32 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("upgrade_settings"))
 		if err := fv(ctx, m.GetUpgradeSettings(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetUrlCategorizationChoice().(type) {
+	case *CreateSpecType_DisableUrlCategorization:
+		if fv, exists := v.FldValidators["url_categorization_choice.disable_url_categorization"]; exists {
+			val := m.GetUrlCategorizationChoice().(*CreateSpecType_DisableUrlCategorization).DisableUrlCategorization
+			vOpts := append(opts,
+				db.WithValidateField("url_categorization_choice"),
+				db.WithValidateField("disable_url_categorization"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *CreateSpecType_EnableUrlCategorization:
+		if fv, exists := v.FldValidators["url_categorization_choice.enable_url_categorization"]; exists {
+			val := m.GetUrlCategorizationChoice().(*CreateSpecType_EnableUrlCategorization).EnableUrlCategorization
+			vOpts := append(opts,
+				db.WithValidateField("url_categorization_choice"),
+				db.WithValidateField("enable_url_categorization"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1620,6 +1730,17 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["tunnel_dead_timeout"] = vFn
+
+	vrhSegmentVrf := v.SegmentVrfValidationRuleHandler
+	rulesSegmentVrf := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhSegmentVrf(rulesSegmentVrf)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for CreateSpecType.segment_vrf: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment_vrf"] = vFn
 
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
@@ -2958,6 +3079,12 @@ func (m *GetSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSegmentVrfDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentVrfDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -3356,6 +3483,28 @@ func (m *GetSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, erro
 
 }
 
+// GetDRefInfo for the field's type
+func (m *GetSpecType) GetSegmentVrfDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentVrf() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSegmentVrf() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegmentVrf() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("segment_vrf[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
 type ValidateGetSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -3409,6 +3558,54 @@ func (v *ValidateGetSpecType) OperatingSystemVersionValidationRuleHandler(rules 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for operating_system_version")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateGetSpecType) SegmentVrfValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for segment_vrf")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*SegmentVRFSettingType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := SegmentVRFSettingTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for segment_vrf")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SegmentVRFSettingType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SegmentVRFSettingType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated segment_vrf")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items segment_vrf")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -3900,6 +4097,14 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["segment_vrf"]; exists {
+		vOpts := append(opts, db.WithValidateField("segment_vrf"))
+		if err := fv(ctx, m.GetSegmentVrf(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_errors"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_errors"))
@@ -3953,6 +4158,32 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 		vOpts := append(opts, db.WithValidateField("upgrade_settings"))
 		if err := fv(ctx, m.GetUpgradeSettings(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetUrlCategorizationChoice().(type) {
+	case *GetSpecType_DisableUrlCategorization:
+		if fv, exists := v.FldValidators["url_categorization_choice.disable_url_categorization"]; exists {
+			val := m.GetUrlCategorizationChoice().(*GetSpecType_DisableUrlCategorization).DisableUrlCategorization
+			vOpts := append(opts,
+				db.WithValidateField("url_categorization_choice"),
+				db.WithValidateField("disable_url_categorization"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GetSpecType_EnableUrlCategorization:
+		if fv, exists := v.FldValidators["url_categorization_choice.enable_url_categorization"]; exists {
+			val := m.GetUrlCategorizationChoice().(*GetSpecType_EnableUrlCategorization).EnableUrlCategorization
+			vOpts := append(opts,
+				db.WithValidateField("url_categorization_choice"),
+				db.WithValidateField("enable_url_categorization"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -4047,6 +4278,17 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["operating_system_version"] = vFn
+
+	vrhSegmentVrf := v.SegmentVrfValidationRuleHandler
+	rulesSegmentVrf := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhSegmentVrf(rulesSegmentVrf)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GetSpecType.segment_vrf: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment_vrf"] = vFn
 
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
@@ -4199,6 +4441,12 @@ func (m *GlobalSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 
 	if fdrInfos, err := m.GetS2SConnectivitySloChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetS2SConnectivitySloChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentVrfDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentVrfDRefInfo() FAILED")
 	} else {
 		drInfos = append(drInfos, fdrInfos...)
 	}
@@ -4607,6 +4855,28 @@ func (m *GlobalSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, e
 
 }
 
+// GetDRefInfo for the field's type
+func (m *GlobalSpecType) GetSegmentVrfDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentVrf() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSegmentVrf() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegmentVrf() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("segment_vrf[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
 func (m *GlobalSpecType) GetViewInternalDRefInfo() ([]db.DRefInfo, error) {
 
 	vref := m.GetViewInternal()
@@ -4714,6 +4984,54 @@ func (v *ValidateGlobalSpecType) OperatingSystemVersionValidationRuleHandler(rul
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) SegmentVrfValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for segment_vrf")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*SegmentVRFSettingType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := SegmentVRFSettingTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for segment_vrf")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SegmentVRFSettingType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SegmentVRFSettingType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated segment_vrf")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items segment_vrf")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) AddressValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	validatorFn, err := db.NewStringValidationRuleHandler(rules)
@@ -4797,6 +5115,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("coordinates"))
 		if err := fv(ctx, m.GetCoordinates(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetDiscoveryMode().(type) {
+	case *GlobalSpecType_Discovered:
+		if fv, exists := v.FldValidators["discovery_mode.discovered"]; exists {
+			val := m.GetDiscoveryMode().(*GlobalSpecType_Discovered).Discovered
+			vOpts := append(opts,
+				db.WithValidateField("discovery_mode"),
+				db.WithValidateField("discovered"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_Manual:
+		if fv, exists := v.FldValidators["discovery_mode.manual"]; exists {
+			val := m.GetDiscoveryMode().(*GlobalSpecType_Manual).Manual
+			vOpts := append(opts,
+				db.WithValidateField("discovery_mode"),
+				db.WithValidateField("manual"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -5237,6 +5581,14 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["segment_vrf"]; exists {
+		vOpts := append(opts, db.WithValidateField("segment_vrf"))
+		if err := fv(ctx, m.GetSegmentVrf(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["site_errors"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("site_errors"))
@@ -5290,6 +5642,32 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 		vOpts := append(opts, db.WithValidateField("upgrade_settings"))
 		if err := fv(ctx, m.GetUpgradeSettings(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetUrlCategorizationChoice().(type) {
+	case *GlobalSpecType_DisableUrlCategorization:
+		if fv, exists := v.FldValidators["url_categorization_choice.disable_url_categorization"]; exists {
+			val := m.GetUrlCategorizationChoice().(*GlobalSpecType_DisableUrlCategorization).DisableUrlCategorization
+			vOpts := append(opts,
+				db.WithValidateField("url_categorization_choice"),
+				db.WithValidateField("disable_url_categorization"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_EnableUrlCategorization:
+		if fv, exists := v.FldValidators["url_categorization_choice.enable_url_categorization"]; exists {
+			val := m.GetUrlCategorizationChoice().(*GlobalSpecType_EnableUrlCategorization).EnableUrlCategorization
+			vOpts := append(opts,
+				db.WithValidateField("url_categorization_choice"),
+				db.WithValidateField("enable_url_categorization"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -5393,6 +5771,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["operating_system_version"] = vFn
+
+	vrhSegmentVrf := v.SegmentVrfValidationRuleHandler
+	rulesSegmentVrf := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhSegmentVrf(rulesSegmentVrf)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.segment_vrf: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment_vrf"] = vFn
 
 	vrhAddress := v.AddressValidationRuleHandler
 	rulesAddress := map[string]string{
@@ -7604,6 +7993,12 @@ func (m *ReplaceSpecType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetSegmentVrfDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentVrfDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	return drInfos, nil
 
 }
@@ -8002,6 +8397,28 @@ func (m *ReplaceSpecType) GetS2SConnectivitySloChoiceDRefInfo() ([]db.DRefInfo, 
 
 }
 
+// GetDRefInfo for the field's type
+func (m *ReplaceSpecType) GetSegmentVrfDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentVrf() == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	for idx, e := range m.GetSegmentVrf() {
+		driSet, err := e.GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetSegmentVrf() GetDRefInfo() FAILED")
+		}
+		for i := range driSet {
+			dri := &driSet[i]
+			dri.DRField = fmt.Sprintf("segment_vrf[%v].%s", idx, dri.DRField)
+		}
+		drInfos = append(drInfos, driSet...)
+	}
+	return drInfos, nil
+
+}
+
 type ValidateReplaceSpecType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
@@ -8035,6 +8452,54 @@ func (v *ValidateReplaceSpecType) TunnelDeadTimeoutValidationRuleHandler(rules m
 	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for tunnel_dead_timeout")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateReplaceSpecType) SegmentVrfValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for segment_vrf")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*SegmentVRFSettingType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := SegmentVRFSettingTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for segment_vrf")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*SegmentVRFSettingType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*SegmentVRFSettingType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated segment_vrf")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items segment_vrf")
+		}
+		return nil
 	}
 
 	return validatorFn, nil
@@ -8517,6 +8982,14 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["segment_vrf"]; exists {
+		vOpts := append(opts, db.WithValidateField("segment_vrf"))
+		if err := fv(ctx, m.GetSegmentVrf(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["software_settings"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("software_settings"))
@@ -8549,6 +9022,32 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 		vOpts := append(opts, db.WithValidateField("upgrade_settings"))
 		if err := fv(ctx, m.GetUpgradeSettings(), vOpts...); err != nil {
 			return err
+		}
+
+	}
+
+	switch m.GetUrlCategorizationChoice().(type) {
+	case *ReplaceSpecType_DisableUrlCategorization:
+		if fv, exists := v.FldValidators["url_categorization_choice.disable_url_categorization"]; exists {
+			val := m.GetUrlCategorizationChoice().(*ReplaceSpecType_DisableUrlCategorization).DisableUrlCategorization
+			vOpts := append(opts,
+				db.WithValidateField("url_categorization_choice"),
+				db.WithValidateField("disable_url_categorization"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ReplaceSpecType_EnableUrlCategorization:
+		if fv, exists := v.FldValidators["url_categorization_choice.enable_url_categorization"]; exists {
+			val := m.GetUrlCategorizationChoice().(*ReplaceSpecType_EnableUrlCategorization).EnableUrlCategorization
+			vOpts := append(opts,
+				db.WithValidateField("url_categorization_choice"),
+				db.WithValidateField("enable_url_categorization"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -8613,6 +9112,17 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 	}
 	v.FldValidators["tunnel_dead_timeout"] = vFn
 
+	vrhSegmentVrf := v.SegmentVrfValidationRuleHandler
+	rulesSegmentVrf := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhSegmentVrf(rulesSegmentVrf)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ReplaceSpecType.segment_vrf: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["segment_vrf"] = vFn
+
 	v.FldValidators["blocked_services_choice.blocked_services"] = ves_io_schema_fleet.BlockedServicesListTypeValidator().Validate
 
 	v.FldValidators["enterprise_proxy_choice.custom_proxy"] = CustomProxyValidator().Validate
@@ -8663,6 +9173,515 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SegmentNetworkConfiguration) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SegmentNetworkConfiguration) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SegmentNetworkConfiguration) DeepCopy() *SegmentNetworkConfiguration {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SegmentNetworkConfiguration{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SegmentNetworkConfiguration) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SegmentNetworkConfiguration) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SegmentNetworkConfigurationValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SegmentNetworkConfiguration) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetStaticRouteChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetStaticRouteChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetStaticV6RouteChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetStaticV6RouteChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SegmentNetworkConfiguration) GetStaticRouteChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetStaticRouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetStaticRouteChoice().(type) {
+	case *SegmentNetworkConfiguration_NoStaticRoutes:
+
+		return nil, nil
+
+	case *SegmentNetworkConfiguration_StaticRoutes:
+
+		drInfos, err := m.GetStaticRoutes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticRoutes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "static_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SegmentNetworkConfiguration) GetStaticV6RouteChoiceDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetStaticV6RouteChoice() == nil {
+		return nil, nil
+	}
+	switch m.GetStaticV6RouteChoice().(type) {
+	case *SegmentNetworkConfiguration_NoV6StaticRoutes:
+
+		return nil, nil
+
+	case *SegmentNetworkConfiguration_StaticV6Routes:
+
+		drInfos, err := m.GetStaticV6Routes().GetDRefInfo()
+		if err != nil {
+			return nil, errors.Wrap(err, "GetStaticV6Routes().GetDRefInfo() FAILED")
+		}
+		for i := range drInfos {
+			dri := &drInfos[i]
+			dri.DRField = "static_v6_routes." + dri.DRField
+		}
+		return drInfos, err
+
+	default:
+		return nil, nil
+	}
+
+}
+
+type ValidateSegmentNetworkConfiguration struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSegmentNetworkConfiguration) StaticRouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for static_route_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateSegmentNetworkConfiguration) StaticV6RouteChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for static_v6_route_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateSegmentNetworkConfiguration) NameserverValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSegmentNetworkConfiguration) NameserverV6ValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for nameserver_v6")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateSegmentNetworkConfiguration) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SegmentNetworkConfiguration)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SegmentNetworkConfiguration got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["nameserver"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nameserver"))
+		if err := fv(ctx, m.GetNameserver(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nameserver_v6"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nameserver_v6"))
+		if err := fv(ctx, m.GetNameserverV6(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["static_route_choice"]; exists {
+		val := m.GetStaticRouteChoice()
+		vOpts := append(opts,
+			db.WithValidateField("static_route_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetStaticRouteChoice().(type) {
+	case *SegmentNetworkConfiguration_NoStaticRoutes:
+		if fv, exists := v.FldValidators["static_route_choice.no_static_routes"]; exists {
+			val := m.GetStaticRouteChoice().(*SegmentNetworkConfiguration_NoStaticRoutes).NoStaticRoutes
+			vOpts := append(opts,
+				db.WithValidateField("static_route_choice"),
+				db.WithValidateField("no_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SegmentNetworkConfiguration_StaticRoutes:
+		if fv, exists := v.FldValidators["static_route_choice.static_routes"]; exists {
+			val := m.GetStaticRouteChoice().(*SegmentNetworkConfiguration_StaticRoutes).StaticRoutes
+			vOpts := append(opts,
+				db.WithValidateField("static_route_choice"),
+				db.WithValidateField("static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["static_v6_route_choice"]; exists {
+		val := m.GetStaticV6RouteChoice()
+		vOpts := append(opts,
+			db.WithValidateField("static_v6_route_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetStaticV6RouteChoice().(type) {
+	case *SegmentNetworkConfiguration_NoV6StaticRoutes:
+		if fv, exists := v.FldValidators["static_v6_route_choice.no_v6_static_routes"]; exists {
+			val := m.GetStaticV6RouteChoice().(*SegmentNetworkConfiguration_NoV6StaticRoutes).NoV6StaticRoutes
+			vOpts := append(opts,
+				db.WithValidateField("static_v6_route_choice"),
+				db.WithValidateField("no_v6_static_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *SegmentNetworkConfiguration_StaticV6Routes:
+		if fv, exists := v.FldValidators["static_v6_route_choice.static_v6_routes"]; exists {
+			val := m.GetStaticV6RouteChoice().(*SegmentNetworkConfiguration_StaticV6Routes).StaticV6Routes
+			vOpts := append(opts,
+				db.WithValidateField("static_v6_route_choice"),
+				db.WithValidateField("static_v6_routes"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSegmentNetworkConfigurationValidator = func() *ValidateSegmentNetworkConfiguration {
+	v := &ValidateSegmentNetworkConfiguration{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhStaticRouteChoice := v.StaticRouteChoiceValidationRuleHandler
+	rulesStaticRouteChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhStaticRouteChoice(rulesStaticRouteChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SegmentNetworkConfiguration.static_route_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["static_route_choice"] = vFn
+
+	vrhStaticV6RouteChoice := v.StaticV6RouteChoiceValidationRuleHandler
+	rulesStaticV6RouteChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhStaticV6RouteChoice(rulesStaticV6RouteChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SegmentNetworkConfiguration.static_v6_route_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["static_v6_route_choice"] = vFn
+
+	vrhNameserver := v.NameserverValidationRuleHandler
+	rulesNameserver := map[string]string{
+		"ves.io.schema.rules.string.ipv4": "true",
+	}
+	vFn, err = vrhNameserver(rulesNameserver)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SegmentNetworkConfiguration.nameserver: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["nameserver"] = vFn
+
+	vrhNameserverV6 := v.NameserverV6ValidationRuleHandler
+	rulesNameserverV6 := map[string]string{
+		"ves.io.schema.rules.string.ipv6": "true",
+	}
+	vFn, err = vrhNameserverV6(rulesNameserverV6)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for SegmentNetworkConfiguration.nameserver_v6: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["nameserver_v6"] = vFn
+
+	v.FldValidators["static_route_choice.static_routes"] = StaticRoutesListTypeValidator().Validate
+
+	v.FldValidators["static_v6_route_choice.static_v6_routes"] = ves_io_schema_virtual_network.StaticV6RoutesListTypeValidator().Validate
+
+	return v
+}()
+
+func SegmentNetworkConfigurationValidator() db.Validator {
+	return DefaultSegmentNetworkConfigurationValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SegmentVRFSettingType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SegmentVRFSettingType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SegmentVRFSettingType) DeepCopy() *SegmentVRFSettingType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SegmentVRFSettingType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SegmentVRFSettingType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SegmentVRFSettingType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SegmentVRFSettingTypeValidator().Validate(ctx, m, opts...)
+}
+
+func (m *SegmentVRFSettingType) GetDRefInfo() ([]db.DRefInfo, error) {
+	if m == nil {
+		return nil, nil
+	}
+
+	var drInfos []db.DRefInfo
+	if fdrInfos, err := m.GetSegmentConfigDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentConfigDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	if fdrInfos, err := m.GetSegmentNetworkDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetSegmentNetworkDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
+	return drInfos, nil
+
+}
+
+// GetDRefInfo for the field's type
+func (m *SegmentVRFSettingType) GetSegmentConfigDRefInfo() ([]db.DRefInfo, error) {
+	if m.GetSegmentConfig() == nil {
+		return nil, nil
+	}
+
+	drInfos, err := m.GetSegmentConfig().GetDRefInfo()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetSegmentConfig().GetDRefInfo() FAILED")
+	}
+	for i := range drInfos {
+		dri := &drInfos[i]
+		dri.DRField = "segment_config." + dri.DRField
+	}
+	return drInfos, err
+
+}
+
+func (m *SegmentVRFSettingType) GetSegmentNetworkDRefInfo() ([]db.DRefInfo, error) {
+
+	vref := m.GetSegmentNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	vdRef := db.NewDirectRefForView(vref)
+	vdRef.SetKind("segment.Object")
+	dri := db.DRefInfo{
+		RefdType:   "segment.Object",
+		RefdTenant: vref.Tenant,
+		RefdNS:     vref.Namespace,
+		RefdName:   vref.Name,
+		DRField:    "segment_network",
+		Ref:        vdRef,
+	}
+	return []db.DRefInfo{dri}, nil
+
+}
+
+// GetSegmentNetworkDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *SegmentVRFSettingType) GetSegmentNetworkDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "segment.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: segment")
+	}
+
+	vref := m.GetSegmentNetwork()
+	if vref == nil {
+		return nil, nil
+	}
+	ref := &ves_io_schema.ObjectRefType{
+		Kind:      "segment.Object",
+		Tenant:    vref.Tenant,
+		Namespace: vref.Namespace,
+		Name:      vref.Name,
+	}
+	refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+	if err != nil {
+		return nil, errors.Wrap(err, "Getting referred entry")
+	}
+	if refdEnt != nil {
+		entries = append(entries, refdEnt)
+	}
+
+	return entries, nil
+}
+
+type ValidateSegmentVRFSettingType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSegmentVRFSettingType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SegmentVRFSettingType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SegmentVRFSettingType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["segment_config"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_config"))
+		if err := fv(ctx, m.GetSegmentConfig(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["segment_network"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("segment_network"))
+		if err := fv(ctx, m.GetSegmentNetwork(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSegmentVRFSettingTypeValidator = func() *ValidateSegmentVRFSettingType {
+	v := &ValidateSegmentVRFSettingType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["segment_network"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
+
+	v.FldValidators["segment_config"] = SegmentNetworkConfigurationValidator().Validate
+
+	return v
+}()
+
+func SegmentVRFSettingTypeValidator() db.Validator {
+	return DefaultSegmentVRFSettingTypeValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -10403,6 +11422,41 @@ func (r *CreateSpecType) GetS2SConnectivitySloChoiceFromGlobalSpecType(o *Global
 	return nil
 }
 
+// create setters in CreateSpecType from GlobalSpecType for oneof fields
+func (r *CreateSpecType) SetUrlCategorizationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.UrlCategorizationChoice.(type) {
+	case nil:
+		o.UrlCategorizationChoice = nil
+
+	case *CreateSpecType_DisableUrlCategorization:
+		o.UrlCategorizationChoice = &GlobalSpecType_DisableUrlCategorization{DisableUrlCategorization: of.DisableUrlCategorization}
+
+	case *CreateSpecType_EnableUrlCategorization:
+		o.UrlCategorizationChoice = &GlobalSpecType_EnableUrlCategorization{EnableUrlCategorization: of.EnableUrlCategorization}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *CreateSpecType) GetUrlCategorizationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.UrlCategorizationChoice.(type) {
+	case nil:
+		r.UrlCategorizationChoice = nil
+
+	case *GlobalSpecType_DisableUrlCategorization:
+		r.UrlCategorizationChoice = &CreateSpecType_DisableUrlCategorization{DisableUrlCategorization: of.DisableUrlCategorization}
+
+	case *GlobalSpecType_EnableUrlCategorization:
+		r.UrlCategorizationChoice = &CreateSpecType_EnableUrlCategorization{EnableUrlCategorization: of.EnableUrlCategorization}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -10424,10 +11478,12 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.ReSelect = f.GetReSelect()
 	m.GetS2SConnectivitySliChoiceFromGlobalSpecType(f)
 	m.GetS2SConnectivitySloChoiceFromGlobalSpecType(f)
+	m.SegmentVrf = f.GetSegmentVrf()
 	m.SoftwareSettings = f.GetSoftwareSettings()
 	m.TunnelDeadTimeout = f.GetTunnelDeadTimeout()
 	m.TunnelType = f.GetTunnelType()
 	m.UpgradeSettings = f.GetUpgradeSettings()
+	m.GetUrlCategorizationChoiceFromGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -10462,10 +11518,12 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.ReSelect = m1.ReSelect
 	m1.SetS2SConnectivitySliChoiceToGlobalSpecType(f)
 	m1.SetS2SConnectivitySloChoiceToGlobalSpecType(f)
+	f.SegmentVrf = m1.SegmentVrf
 	f.SoftwareSettings = m1.SoftwareSettings
 	f.TunnelDeadTimeout = m1.TunnelDeadTimeout
 	f.TunnelType = m1.TunnelType
 	f.UpgradeSettings = m1.UpgradeSettings
+	m1.SetUrlCategorizationChoiceToGlobalSpecType(f)
 }
 
 func (m *CreateSpecType) ToGlobalSpecType(f *GlobalSpecType) {
@@ -10886,6 +11944,41 @@ func (r *GetSpecType) GetS2SConnectivitySloChoiceFromGlobalSpecType(o *GlobalSpe
 	return nil
 }
 
+// create setters in GetSpecType from GlobalSpecType for oneof fields
+func (r *GetSpecType) SetUrlCategorizationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.UrlCategorizationChoice.(type) {
+	case nil:
+		o.UrlCategorizationChoice = nil
+
+	case *GetSpecType_DisableUrlCategorization:
+		o.UrlCategorizationChoice = &GlobalSpecType_DisableUrlCategorization{DisableUrlCategorization: of.DisableUrlCategorization}
+
+	case *GetSpecType_EnableUrlCategorization:
+		o.UrlCategorizationChoice = &GlobalSpecType_EnableUrlCategorization{EnableUrlCategorization: of.EnableUrlCategorization}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GetSpecType) GetUrlCategorizationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.UrlCategorizationChoice.(type) {
+	case nil:
+		r.UrlCategorizationChoice = nil
+
+	case *GlobalSpecType_DisableUrlCategorization:
+		r.UrlCategorizationChoice = &GetSpecType_DisableUrlCategorization{DisableUrlCategorization: of.DisableUrlCategorization}
+
+	case *GlobalSpecType_EnableUrlCategorization:
+		r.UrlCategorizationChoice = &GetSpecType_EnableUrlCategorization{EnableUrlCategorization: of.EnableUrlCategorization}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -10908,12 +12001,14 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.ReSelect = f.GetReSelect()
 	m.GetS2SConnectivitySliChoiceFromGlobalSpecType(f)
 	m.GetS2SConnectivitySloChoiceFromGlobalSpecType(f)
+	m.SegmentVrf = f.GetSegmentVrf()
 	m.SiteErrors = f.GetSiteErrors()
 	m.SiteState = f.GetSiteState()
 	m.SoftwareSettings = f.GetSoftwareSettings()
 	m.TunnelDeadTimeout = f.GetTunnelDeadTimeout()
 	m.TunnelType = f.GetTunnelType()
 	m.UpgradeSettings = f.GetUpgradeSettings()
+	m.GetUrlCategorizationChoiceFromGlobalSpecType(f)
 	m.VolterraSoftwareVersion = f.GetVolterraSoftwareVersion()
 }
 
@@ -10950,12 +12045,14 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.ReSelect = m1.ReSelect
 	m1.SetS2SConnectivitySliChoiceToGlobalSpecType(f)
 	m1.SetS2SConnectivitySloChoiceToGlobalSpecType(f)
+	f.SegmentVrf = m1.SegmentVrf
 	f.SiteErrors = m1.SiteErrors
 	f.SiteState = m1.SiteState
 	f.SoftwareSettings = m1.SoftwareSettings
 	f.TunnelDeadTimeout = m1.TunnelDeadTimeout
 	f.TunnelType = m1.TunnelType
 	f.UpgradeSettings = m1.UpgradeSettings
+	m1.SetUrlCategorizationChoiceToGlobalSpecType(f)
 	f.VolterraSoftwareVersion = m1.VolterraSoftwareVersion
 }
 
@@ -11377,6 +12474,41 @@ func (r *ReplaceSpecType) GetS2SConnectivitySloChoiceFromGlobalSpecType(o *Globa
 	return nil
 }
 
+// create setters in ReplaceSpecType from GlobalSpecType for oneof fields
+func (r *ReplaceSpecType) SetUrlCategorizationChoiceToGlobalSpecType(o *GlobalSpecType) error {
+	switch of := r.UrlCategorizationChoice.(type) {
+	case nil:
+		o.UrlCategorizationChoice = nil
+
+	case *ReplaceSpecType_DisableUrlCategorization:
+		o.UrlCategorizationChoice = &GlobalSpecType_DisableUrlCategorization{DisableUrlCategorization: of.DisableUrlCategorization}
+
+	case *ReplaceSpecType_EnableUrlCategorization:
+		o.UrlCategorizationChoice = &GlobalSpecType_EnableUrlCategorization{EnableUrlCategorization: of.EnableUrlCategorization}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *ReplaceSpecType) GetUrlCategorizationChoiceFromGlobalSpecType(o *GlobalSpecType) error {
+	switch of := o.UrlCategorizationChoice.(type) {
+	case nil:
+		r.UrlCategorizationChoice = nil
+
+	case *GlobalSpecType_DisableUrlCategorization:
+		r.UrlCategorizationChoice = &ReplaceSpecType_DisableUrlCategorization{DisableUrlCategorization: of.DisableUrlCategorization}
+
+	case *GlobalSpecType_EnableUrlCategorization:
+		r.UrlCategorizationChoice = &ReplaceSpecType_EnableUrlCategorization{EnableUrlCategorization: of.EnableUrlCategorization}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
 func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	if f == nil {
 		return
@@ -11398,10 +12530,12 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.ReSelect = f.GetReSelect()
 	m.GetS2SConnectivitySliChoiceFromGlobalSpecType(f)
 	m.GetS2SConnectivitySloChoiceFromGlobalSpecType(f)
+	m.SegmentVrf = f.GetSegmentVrf()
 	m.SoftwareSettings = f.GetSoftwareSettings()
 	m.TunnelDeadTimeout = f.GetTunnelDeadTimeout()
 	m.TunnelType = f.GetTunnelType()
 	m.UpgradeSettings = f.GetUpgradeSettings()
+	m.GetUrlCategorizationChoiceFromGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) FromGlobalSpecType(f *GlobalSpecType) {
@@ -11436,10 +12570,12 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.ReSelect = m1.ReSelect
 	m1.SetS2SConnectivitySliChoiceToGlobalSpecType(f)
 	m1.SetS2SConnectivitySloChoiceToGlobalSpecType(f)
+	f.SegmentVrf = m1.SegmentVrf
 	f.SoftwareSettings = m1.SoftwareSettings
 	f.TunnelDeadTimeout = m1.TunnelDeadTimeout
 	f.TunnelType = m1.TunnelType
 	f.UpgradeSettings = m1.UpgradeSettings
+	m1.SetUrlCategorizationChoiceToGlobalSpecType(f)
 }
 
 func (m *ReplaceSpecType) ToGlobalSpecType(f *GlobalSpecType) {

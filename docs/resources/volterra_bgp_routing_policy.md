@@ -24,7 +24,7 @@ resource "volterra_bgp_routing_policy" "example" {
     action {
       // One of the arguments from this list "aggregate allow as_path community deny local_preference metric" can be set
 
-      as_path = "as_path"
+      allow = true
     }
 
     match {
@@ -36,7 +36,7 @@ resource "volterra_bgp_routing_policy" "example" {
 
           // One of the arguments from this list "equal_or_longer_than exact_match longer_than" can be set
 
-          exact_match = true
+          longer_than = true
         }
       }
     }

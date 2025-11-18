@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.cloud_connect.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.cloud_connect.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2804,49 +2804,31 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectAWSCloudTransitGatewayType": {
             "type": "object",
-            "description": "Cloud Transit Gateway Type",
+            "description": "x-displayName: \"Cloud Transit Gateway Type\"\nCloud Transit Gateway Type",
             "title": "Cloud Transit Gateway Type",
-            "x-displayname": "Cloud Transit Gateway Type",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSCloudTransitGatewayType",
             "properties": {
                 "cloud_transit_gateway": {
-                    "description": " Cloud Transit Gateway Reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Cloud Transit Gateway\"\nCloud Transit Gateway Reference\nx-required",
                     "title": "Cloud Transit Gateway",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Cloud Transit Gateway",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "cred": {
-                    "description": " Reference to cloud credential to deploy resources\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Credential Reference\"\nReference to cloud credential to deploy resources\nx-required",
                     "title": "Cloud Credential",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Credential Reference",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "peers": {
                     "type": "array",
-                    "description": " Peers",
+                    "description": "x-displayName: \"Peers\"\nPeers",
                     "title": "Peers",
                     "items": {
                         "$ref": "#/definitions/cloud_connectPeerType"
-                    },
-                    "x-displayname": "Peers"
+                    }
                 },
                 "vpc_attachments": {
-                    "description": " Spoke VPCs to be attached to the Cloud Transit Gateway \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Spoke VPCs\"\nSpoke VPCs to be attached to the Cloud Transit Gateway \nx-required",
                     "title": "Spoke VPCs",
-                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
-                    "x-displayname": "Spoke VPCs",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType"
                 }
             }
         },
@@ -4697,6 +4679,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -4787,11 +4776,6 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.GlobalSpecType",
             "properties": {
-                "aws_cloud_transit_gateway": {
-                    "title": "AWS Cloud Transit Gateway",
-                    "$ref": "#/definitions/cloud_connectAWSCloudTransitGatewayType",
-                    "x-displayname": "Cloud Transit Gateway"
-                },
                 "aws_tgw_site": {
                     "description": "Exclusive with [azure_vnet_site]\n",
                     "title": "AWS",

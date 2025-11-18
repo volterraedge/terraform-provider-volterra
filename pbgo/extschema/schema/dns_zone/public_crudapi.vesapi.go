@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.dns_zone.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.dns_zone.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3987,7 +3987,7 @@ var APISwaggerJSON string = `{
                 },
                 "default_rr_set_group": {
                     "type": "array",
-                    "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
+                    "description": " Add and manage DNS resource record sets part of Default set group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
                     "maxItems": 50000,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSet"
@@ -4005,7 +4005,7 @@ var APISwaggerJSON string = `{
                 },
                 "rr_set_group": {
                     "type": "array",
-                    "description": " Collection of additional DNS resource record sets\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Create and manage set groups, and resource record sets within them, x-ves-io-managed set is managed by F5.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 50,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSetGroup"
@@ -4039,7 +4039,7 @@ var APISwaggerJSON string = `{
                 },
                 "default_rr_set_group": {
                     "type": "array",
-                    "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
+                    "description": " Add and manage DNS resource record sets part of Default set group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
                     "maxItems": 50000,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSet"
@@ -4057,7 +4057,7 @@ var APISwaggerJSON string = `{
                 },
                 "rr_set_group": {
                     "type": "array",
-                    "description": " Collection of additional DNS resource record sets\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Create and manage set groups, and resource record sets within them, x-ves-io-managed set is managed by F5.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 50,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSetGroup"

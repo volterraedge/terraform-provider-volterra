@@ -28,12 +28,67 @@ resource "volterra_securemesh_site_v2" "example" {
 
   logs_streaming_disabled = true
 
-  // One of the arguments from this list "aws azure equinix gcp kvm nutanix oci openstack rseries vmware" must be set
+  // One of the arguments from this list "aws azure baremetal equinix gcp kvm nutanix oci openstack rseries vmware" must be set
 
-  aws {
-    // One of the arguments from this list "not_managed" can be set
+  azure {
+    // One of the arguments from this list "managed not_managed" must be set
 
     not_managed {
+      node_list {
+        hostname = "Control"
+
+        interface_list {
+          // One of the arguments from this list "dhcp_client dhcp_server no_ipv4_address static_ip" must be set
+
+          no_ipv4_address = true
+
+          description = "value"
+
+          // One of the arguments from this list "bond_interface ethernet_interface vlan_interface" must be set
+
+          bond_interface {
+            devices = ["eth0"]
+
+            // One of the arguments from this list "active_backup lacp" must be set
+
+            lacp {
+              rate = "30"
+            }
+            link_polling_interval = "1000"
+            link_up_delay = "200"
+            name = "bond0"
+          }
+
+          // One of the arguments from this list "ipv6_auto_config no_ipv6_address static_ipv6_address" can be set
+
+          no_ipv6_address = true
+          is_management = true
+          is_primary = true
+          labels = {
+            "key1" = "value1"
+          }
+
+          // One of the arguments from this list "monitor monitor_disabled" can be set
+
+          monitor_disabled = true
+          mtu = "1450"
+          name = "value"
+          network_option {
+            // One of the arguments from this list "segment_network site_local_inside_network site_local_network" can be set
+
+            site_local_network = true
+          }
+          priority = "42"
+
+          // One of the arguments from this list "site_to_site_connectivity_interface_disabled site_to_site_connectivity_interface_enabled" can be set
+
+          site_to_site_connectivity_interface_disabled = true
+        }
+
+        public_ip = "1.1.1.1"
+
+        type = "Control"
+      }
     }
   }
 }
@@ -107,27 +162,27 @@ Argument Reference
 
 `performance_enhancement_mode` - (Optional) Optimize the site for L3 or L7 traffic processing. By default, the site is optimized for L7 traffic processing.. See [Performance Enhancement Mode ](#performance-enhancement-mode) below for details.
 
-`proactive_monitoring` - (Optional) Note: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted.. See [Proactive Monitoring ](#proactive-monitoring) below for details.
-
-###### One of the arguments from this list "aws, azure, equinix, gcp, kvm, nutanix, oci, openstack, rseries, vmware" must be set
+###### One of the arguments from this list "aws, azure, baremetal, equinix, gcp, kvm, nutanix, oci, openstack, rseries, vmware" must be set
 
 `aws` - (Optional) x-displayName: "AWS". See [Provider Choice Aws ](#provider-choice-aws) below for details.
 
 `azure` - (Optional) x-displayName: "Azure". See [Provider Choice Azure ](#provider-choice-azure) below for details.
 
-`equinix` - (Optional) x-displayName: "Equinix (EA)". See [Provider Choice Equinix ](#provider-choice-equinix) below for details.
+`baremetal` - (Optional) x-displayName: "Baremetal". See [Provider Choice Baremetal ](#provider-choice-baremetal) below for details.
+
+`equinix` - (Optional) x-displayName: "Equinix". See [Provider Choice Equinix ](#provider-choice-equinix) below for details.
 
 `gcp` - (Optional) x-displayName: "GCP". See [Provider Choice Gcp ](#provider-choice-gcp) below for details.
 
 `kvm` - (Optional) x-displayName: "KVM (EA)". See [Provider Choice Kvm ](#provider-choice-kvm) below for details.
 
-`nutanix` - (Optional) x-displayName: "Nutanix (EA)". See [Provider Choice Nutanix ](#provider-choice-nutanix) below for details.
+`nutanix` - (Optional) x-displayName: "Nutanix". See [Provider Choice Nutanix ](#provider-choice-nutanix) below for details.
 
 `oci` - (Optional) x-displayName: "OCI". See [Provider Choice Oci ](#provider-choice-oci) below for details.
 
 `openstack` - (Optional) x-displayName: "OpenStack". See [Provider Choice Openstack ](#provider-choice-openstack) below for details.
 
-`rseries` - (Optional) x-displayName: "F5 rSeries (EA)". See [Provider Choice Rseries ](#provider-choice-rseries) below for details.
+`rseries` - (Optional) x-displayName: "F5 rSeries (EA)". See [Provider Choice Rseries ](#provider-choice-rseries) below for details.(Deprecated)
 
 `vmware` - (Optional) x-displayName: "VMWare". See [Provider Choice Vmware ](#provider-choice-vmware) below for details.
 
@@ -153,6 +208,8 @@ Argument Reference
 
 `site_mesh_group_on_slo` - (Optional) Use a Site Mesh Group to connect to other sites.. See [S2s Connectivity Slo Choice Site Mesh Group On Slo ](#s2s-connectivity-slo-choice-site-mesh-group-on-slo) below for details.
 
+`segment_vrf` - (Optional) per Site that can be configured here. See [Segment Vrf ](#segment-vrf) below for details.(Deprecated)
+
 `software_settings` - (Optional) Select OS and Software version for the site. All nodes in the site will run the same OS and Software version. These settings cannot be changed after the site is created.. See [Software Settings ](#software-settings) below for details.
 
 `tunnel_dead_timeout` - (Optional) When not set (== 0), a default value of 10000 msec will be used. (`Int`).
@@ -160,6 +217,12 @@ Argument Reference
 `tunnel_type` - (Optional) Select the type of tunnel to be used for traffic between the site and REs. By default, IPsec will be preferred with SSL as backup. (`String`).
 
 `upgrade_settings` - (Optional) Specify how a site will be upgraded.. See [Upgrade Settings ](#upgrade-settings) below for details.
+
+###### One of the arguments from this list "disable_url_categorization, enable_url_categorization" can be set
+
+`disable_url_categorization` - (Optional) x-displayName: "Disable" (`Bool`).
+
+`enable_url_categorization` - (Optional) x-displayName: "Enable" (`Bool`).
 
 ### Admin User Credentials
 
@@ -227,25 +290,25 @@ Optimize the site for L3 or L7 traffic processing. By default, the site is optim
 
 `perf_mode_l7_enhanced` - (Optional) Site optimized for L7 traffic processing (`Bool`).
 
-### Proactive Monitoring
-
-Note: Only the relevant F5 Distributed Cloud software service logs will be transmitted. No customer sensitive data will be transmitted..
-
-###### One of the arguments from this list "proactive_monitoring_disable, proactive_monitoring_enable" can be set
-
-`proactive_monitoring_disable` - (Optional) Disable Proactive Monitoring (`Bool`).
-
-`proactive_monitoring_enable` - (Optional) Enable Proactive Monitoring (`Bool`).
-
 ### Re Select
 
 Selection criteria to connect the site with F5 Distributed Cloud Regional Edge(s)..
 
-###### One of the arguments from this list "geo_proximity, specific_re" can be set
+###### One of the arguments from this list "geo_proximity, specific_geography, specific_re" can be set
 
 `geo_proximity` - (Optional) Select REs in closest proximity to the site based on the public IP address of the control nodes of the site. (`Bool`).
 
+`specific_geography` - (Optional) Select a list of specific REs. This is useful when a site needs to deterministically connect to a set of REs. A site will always be connected to 2 REs. If >2 REs are chosen, then 2 REs from these will be selected. (`String`).(Deprecated)
+
 `specific_re` - (Optional) Select specific REs. This is useful when a site needs to deterministically connect to a set of REs. A site will always be connected to 2 REs.. See [Re Selection Choice Specific Re ](#re-selection-choice-specific-re) below for details.
+
+### Segment Vrf
+
+per Site that can be configured here.
+
+`segment_config` - (Optional) Configure properties such as static routes, DNS and common VIP for Load Balancing on the segment VRF.. See [Segment Vrf Segment Config ](#segment-vrf-segment-config) below for details.
+
+`segment_network` - (Optional) x-displayName: "Segment (Global VRF)". See [ref](#ref) below for details.
 
 ### Software Settings
 
@@ -261,9 +324,35 @@ Specify how a site will be upgraded..
 
 `kubernetes_upgrade_drain` - (Optional) Specify how worker nodes within a site will be upgraded.. See [Upgrade Settings Kubernetes Upgrade Drain ](#upgrade-settings-kubernetes-upgrade-drain) below for details.
 
+### Accelerated Networking Disable
+
+infrastructure..
+
+### Accelerated Networking Enable
+
+improving networking performance.
+
 ### Address Choice Dhcp Client
 
 Interface gets it's IP address from an external DHCP server..
+
+### Address Choice Dhcp Server
+
+DHCP Server is configured for this interface, Interface IP is derived from DHCP server configuration..
+
+`dhcp_networks` - (Required) List of networks from which DHCP Server can allocate IPv4 Addresses. See [Dhcp Server Dhcp Networks ](#dhcp-server-dhcp-networks) below for details.
+
+`dhcp_option82_tag` - (Optional) Optional tag that can be given to this configuration (`String`).(Deprecated)
+
+`fixed_ip_map` - (Optional) Assign fixed IPv4 addresses based on the MAC Address of the DHCP Client. (`String`).
+
+###### One of the arguments from this list "automatic_from_end, automatic_from_start, interface_ip_map" must be set
+
+`automatic_from_end` - (Optional) Assign automatically from end of the first network in the DHCP Network list (`Bool`).
+
+`automatic_from_start` - (Optional) Assign automatically from start of the first network in the DHCP Network list (`Bool`).
+
+`interface_ip_map` - (Optional) Statically configure a IPv4 address for every node. See [Interfaces Addressing Choice Interface Ip Map ](#interfaces-addressing-choice-interface-ip-map) below for details.
 
 ### Address Choice No Ipv4 Address
 
@@ -291,17 +380,49 @@ Interface IP address is configured statically..
 
 `default_gw` - (Optional) IP address of the default gateway. (`String`).
 
+`dns_server` - (Optional) IP address of the DNS server (`String`).(Deprecated)
+
 `ip_address` - (Required) IP address of the interface and prefix length (`String`).
+
+### Admin Password Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Admin User Credentials Admin Password
 
 When provided, customers can either ssh to the nodes of this Customer Edge site or use the node local WebUI by using admin as the user..
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Admin Password Blindfold Secret Info Internal ](#admin-password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Asn Choice System Generated
+
+F5XC will automatically assign a private ASN for TGW and F5XC Site.
+
+### Asn Choice User Assigned
+
+User is managing the ASN for TGW and F5XC Site..
+
+`tgw_asn` - (Optional) TGW ASN. Allowed range for 16-bit private ASNs include 64512 to 65534. (`Int`).
+
+`volterra_site_asn` - (Optional) F5XC Site ASN. (`Int`).
 
 ### Autoconfig Choice Host
 
@@ -351,11 +472,111 @@ x-displayName: "SSH".
 
 x-displayName: "Web UI".
 
+### Choice Existing Subnet
+
+Information about existing subnet..
+
+###### One of the arguments from this list "vnet_resource_group" can be set
+
+`vnet_resource_group` - (Optional) Use the same Resource Group as the Vnet (`Bool`).
+
+`subnet_name` - (Required) Name of existing subnet. (`String`).
+
+### Choice Existing Vnet
+
+Information about existing Vnet.
+
+`resource_group` - (Required) Resource group of existing Vnet (`String`).
+
+###### One of the arguments from this list "f5_orchestrated_routing, manual_routing" must be set
+
+`f5_orchestrated_routing` - (Optional) F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE. (`Bool`).
+
+`manual_routing` - (Optional) In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. (`Bool`).
+
+`vnet_name` - (Required) Name of existing Vnet (`String`).
+
+### Choice New Vnet
+
+Parameters for creating new Vnet.
+
+###### One of the arguments from this list "autogenerate, name" must be set
+
+`autogenerate` - (Optional) Autogenerate the Vnet Name (`Bool`).
+
+`name` - (Optional) Specify the Vnet Name (`String`).
+
+`primary_ipv4` - (Required) IPv4 CIDR block for this Vnet. It has to be private address space. (`String`).
+
+### Choice Subnet Param
+
+Parameters for creating new subnet.
+
+`ipv4` - (Required) IPv4 subnet prefix for this subnet (`String`).
+
+`ipv6` - (Optional) IPv6 subnet prefix for this subnet (`String`).(Deprecated)
+
+###### One of the arguments from this list "autogenerate, name" can be set
+
+`autogenerate` - (Optional) Autogenerate Subnet Name (`Bool`).
+
+`name` - (Optional) Specify the Subnet Name (`String`).
+
+### Choice Subnet Param
+
+Parameters for creating new subnet..
+
+`ipv4` - (Required) IPv4 subnet prefix for this subnet (`String`).
+
+###### One of the arguments from this list "autogenerate, name" can be set
+
+`autogenerate` - (Optional) Autogenerate Subnet Name (`Bool`).
+
+`name` - (Optional) Specify the Subnet Name (`String`).
+
+### Choice Subnet Param
+
+Select this option when you want a new subnet to be created.
+
+`ipv4` - (Required) Enter an IPv4 prefix for this subnet. The IP address must be in a private address space. (`String`).
+
+###### One of the arguments from this list "autogenerate, name" can be set
+
+`autogenerate` - (Optional) This options auto generates a subnet name for your subnet (`Bool`).
+
+`name` - (Optional) This options allows you to enter subnet name. (`String`).
+
+### Cloud Connect Attachments Disabled
+
+Disable Cloud Connect for this site.
+
+### Cloud Connect Attachments Enabled
+
+Enable Cloud Connect for this site.
+
+### Cloud Connect Attachments Tgw
+
+Enable Cloud Connect for this site.
+
+###### One of the arguments from this list "existing_tgw, new_tgw" must be set
+
+`existing_tgw` - (Optional) Information about existing TGW. See [Tgw Choice Existing Tgw ](#tgw-choice-existing-tgw) below for details.
+
+`new_tgw` - (Optional) Details needed to create new TGW. See [Tgw Choice New Tgw ](#tgw-choice-new-tgw) below for details.
+
+###### One of the arguments from this list "reserved_tgw_cidr, tgw_cidr" must be set
+
+`reserved_tgw_cidr` - (Optional) Autogenerate and reserve a TGW CIDR Block from the Primary CIDR (`Bool`).
+
+`tgw_cidr` - (Optional) Specify TGW CIDR block. See [Tgw Cidr Choice Tgw Cidr ](#tgw-cidr-choice-tgw-cidr) below for details.
+
 ### Cluster Static Ip Interface Ip Map
 
 Map of Node to Static ip configuration value, Key:Node, Value:IP Address.
 
 `default_gw` - (Optional) IP address of the default gateway. (`String`).
+
+`dns_server` - (Optional) IP address of the DNS server (`String`).(Deprecated)
 
 `ip_address` - (Required) IP address of the interface and prefix length (`String`).
 
@@ -363,11 +584,19 @@ Map of Node to Static ip configuration value, Key:Node, Value:IP Address.
 
 Note: To protect the password, it is recommended to blindfold it..
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Password Blindfold Secret Info Internal ](#password-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Dhcp Networks Pools
 
@@ -375,7 +604,47 @@ List of non overlapping ip address ranges..
 
 `end_ip` - (Optional) In case of address allocator, offset is derived based on network prefix. (`String`).
 
+`exclude` - (Optional) If exclude is true, IP addresses are not assigned from this range. (`Bool`).(Deprecated)
+
 `start_ip` - (Optional) 2001::1 with prefix length of 64, start offset is 5 (`String`).
+
+### Dhcp Networks Pools
+
+List of non overlapping ip address ranges..
+
+`end_ip` - (Optional) 10.1.1.200 with prefix length of 24, end offset is 0.0.0.200 (`String`).
+
+`exclude` - (Optional) If exclude is true, IP addresses are not assigned from this range. (`Bool`).(Deprecated)
+
+`start_ip` - (Optional) 10.1.1.5 with prefix length of 24, start offset is 0.0.0.5 (`String`).
+
+### Dhcp Server Dhcp Networks
+
+List of networks from which DHCP Server can allocate IPv4 Addresses.
+
+###### One of the arguments from this list "dns_address, same_as_dgw" must be set
+
+`dns_address` - (Optional) Enter a IPv4 address from the network prefix to be used as the DNS server. (`String`).
+
+`same_as_dgw` - (Optional) DNS server address is same as default gateway address (`Bool`).
+
+###### One of the arguments from this list "dgw_address, first_address, last_address" must be set
+
+`dgw_address` - (Optional) Enter a IPv4 address from the network prefix to be used as the default gateway. (`String`).
+
+`first_address` - (Optional) First usable address from the network prefix is chosen as default gateway (`Bool`).
+
+`last_address` - (Optional) Last usable address from the network prefix is chosen as default gateway (`Bool`).
+
+###### One of the arguments from this list "network_prefix, network_prefix_allocator" must be set
+
+`network_prefix` - (Optional) Set the network prefix for the site. ex: 10.1.1.0/24 (`String`).
+
+`network_prefix_allocator` - (Optional) Prefix length from address allocator scheme is used to calculate offsets. See [ref](#ref) below for details.(Deprecated)
+
+`pool_settings` - (Required) Controls how DHCP pools are handled (`String`).
+
+`pools` - (Optional) List of non overlapping ip address ranges.. See [Dhcp Networks Pools ](#dhcp-networks-pools) below for details.
 
 ### Dns Choice Configured List
 
@@ -395,6 +664,10 @@ Choose the address from the network prefix range as dns server.
 
 `last_address` - (Optional) Last usable address from the network prefix is chosen as dns server (`Bool`).
 
+### Dns Choice Same As Dgw
+
+DNS server address is same as default gateway address.
+
 ### Dns Server Choice Custom Dns
 
 User specified DNS Servers.
@@ -404,6 +677,26 @@ User specified DNS Servers.
 ### Dns Server Choice F5 Dns Default
 
 F5 defaults will use 8.8.8.8, 8.8.4.4.
+
+### Egress Gateway Choice Egress Gateway Default
+
+With this option, egress site traffic will be routed through an Internet Gateway..
+
+### Egress Gateway Choice Egress Nat Gw
+
+With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway..
+
+###### One of the arguments from this list "nat_gw_id" must be set
+
+`nat_gw_id` - (Optional) x-displayName: "Existing NAT Gateway ID" (`String`).
+
+### Egress Gateway Choice Egress Virtual Private Gateway
+
+With this option, egress site traffic will be routed through an Virtual Private Gateway..
+
+###### One of the arguments from this list "vgw_id" must be set
+
+`vgw_id` - (Optional) x-displayName: "Existing Virtual Private Gateway ID" (`String`).
 
 ### Enterprise Proxy Choice Custom Proxy
 
@@ -428,6 +721,14 @@ Use the customer provided internal Enterprise Proxy.
 Enable Forward Proxy for this site. Traffic will be processed in the order that Forward Proxy Policies are added..
 
 `forward_proxy_policies` - (Required) Ordered List of Forward Proxy Policies active. See [ref](#ref) below for details.
+
+### Gateway Choice First Address
+
+First usable address from the network prefix is chosen as default gateway.
+
+### Gateway Choice Last Address
+
+Last usable address from the network prefix is chosen as default gateway.
 
 ### Interface Choice Bond Interface
 
@@ -465,7 +766,7 @@ x-displayName: "VLAN Interface".
 
 ### Interface List Network Option
 
-Global VRFs are configured via Networking > Segments. A site can have multple Network Segments (global VRFs)..
+Global VRFs are configured via Networking > Segments. A site can have multiple Network Segments (global VRFs)..
 
 ###### One of the arguments from this list "segment_network, site_local_inside_network, site_local_network" can be set
 
@@ -475,13 +776,59 @@ Global VRFs are configured via Networking > Segments. A site can have multple Ne
 
 `site_local_network` - (Optional) x-displayName: "Site Local Outside (Local VRF)" (`Bool`).
 
+### Interface List Subnet
+
+Select Existing Subnet or Create New.
+
+###### One of the arguments from this list "existing_subnet_id, subnet_param" must be set
+
+`existing_subnet_id` - (Optional) Information about existing subnet ID (`String`).
+
+`subnet_param` - (Optional) Parameters for creating new subnet. See [Choice Subnet Param ](#choice-subnet-param) below for details.
+
+### Interface List Subnet
+
+Select Existing Subnet or Create New.
+
+###### One of the arguments from this list "existing_subnet, subnet_param" must be set
+
+`existing_subnet` - (Optional) Information about existing subnet.. See [Choice Existing Subnet ](#choice-existing-subnet) below for details.
+
+`subnet_param` - (Optional) Parameters for creating new subnet.. See [Choice Subnet Param ](#choice-subnet-param) below for details.
+
+### Interface List Subnet
+
+Provide Subnet details. User can either create a new subnet or use an existing subnet..
+
+###### One of the arguments from this list "existing_subnet_id, subnet_param" must be set
+
+`existing_subnet_id` - (Optional) Select this option when you want to use an existing subnet (`String`).
+
+`subnet_param` - (Optional) Select this option when you want a new subnet to be created. See [Choice Subnet Param ](#choice-subnet-param) below for details.
+
+### Interface List Vpc
+
+Provide VPC details. User can either create a new VPC or use an existing VPC.
+
+###### One of the arguments from this list "existing_vpc_id, new_vpc" must be set
+
+`existing_vpc_id` - (Optional) Select this option when you want to use an existing VPC. (`String`).
+
+`new_vpc` - (Optional) Select this option when you want a new VPC to be created.. See [Service Vpc Choice New Vpc ](#service-vpc-choice-new-vpc) below for details.
+
 ### Interfaces Addressing Choice Automatic From End
 
-Assign automatically from End of the first network in the list.
+Assign automatically from end of the first network in the DHCP Network list.
 
 ### Interfaces Addressing Choice Automatic From Start
 
-Assign automatically from start of the first network in the list.
+Assign automatically from start of the first network in the DHCP Network list.
+
+### Interfaces Addressing Choice Interface Ip Map
+
+Statically configure a IPv4 address for every node.
+
+`interface_ip_map` - (Optional) Specify static IPv4 addresses per site:node. (`String`).
 
 ### Interfaces Addressing Choice Interface Ip Map
 
@@ -507,9 +854,11 @@ Interface does not have an IPv6 Address..
 
 Interface IPv6 address is configured statically..
 
-###### One of the arguments from this list "cluster_static_ip, node_static_ip" must be set
+###### One of the arguments from this list "cluster_static_ip, fleet_static_ip, node_static_ip" must be set
 
 `cluster_static_ip` - (Optional) Static IP configuration for a specific node. See [Network Prefix Choice Cluster Static Ip ](#network-prefix-choice-cluster-static-ip) below for details.
+
+`fleet_static_ip` - (Optional) Static IP configuration for the fleet. See [Network Prefix Choice Fleet Static Ip ](#network-prefix-choice-fleet-static-ip) below for details.(Deprecated)
 
 `node_static_ip` - (Optional) Static IP configuration for the Node. See [Network Prefix Choice Node Static Ip ](#network-prefix-choice-node-static-ip) below for details.
 
@@ -521,11 +870,19 @@ x-displayName: "Disable".
 
 x-displayName: "Enable".
 
-###### One of the arguments from this list "drain_max_unavailable_node_count" must be set
+###### One of the arguments from this list "drain_max_unavailable_node_count, drain_max_unavailable_node_percentage" must be set
 
 `drain_max_unavailable_node_count` - (Optional) x-example: "1" (`Int`).
 
+`drain_max_unavailable_node_percentage` - (Optional) Max number of worker nodes to be upgraded in parallel by percentage. Note: 1% would mean batch size of 1 worker node. (`Int`).(Deprecated)
+
 `drain_node_timeout` - (Required) (Warning: It may block upgrade if services on a node cannot be gracefully upgraded. It is recommended to use the default value). (`Int`).
+
+###### One of the arguments from this list "disable_vega_upgrade_mode, enable_vega_upgrade_mode" must be set
+
+`disable_vega_upgrade_mode` - (Optional) Disable Vega Upgrade Mode (`Bool`).(Deprecated)
+
+`enable_vega_upgrade_mode` - (Optional) When enabled, vega will inform RE to stop traffic to the specific node. (`Bool`).(Deprecated)
 
 ### Lacp Choice Active Backup
 
@@ -545,6 +902,26 @@ First usable address from the network prefix is chosen as dns server.
 
 Last usable address from the network prefix is chosen as dns server.
 
+### Managed Accelerated Networking
+
+disruption will be seen.
+
+###### One of the arguments from this list "disable, enable" must be set
+
+`disable` - (Optional) infrastructure. (`Bool`).
+
+`enable` - (Optional) improving networking performance (`Bool`).
+
+### Managed Vnet
+
+Choice of using existing VNet or create new VNet.
+
+###### One of the arguments from this list "existing_vnet, new_vnet" must be set
+
+`existing_vnet` - (Optional) Information about existing Vnet. See [Choice Existing Vnet ](#choice-existing-vnet) below for details.
+
+`new_vnet` - (Optional) Parameters for creating new Vnet. See [Choice New Vnet ](#choice-new-vnet) below for details.
+
 ### Monitoring Choice Monitor
 
 x-displayName: "Enabled".
@@ -553,6 +930,28 @@ x-displayName: "Enabled".
 
 x-displayName: "Disabled".
 
+### Multiple Interface Node List
+
+This section will show nodes associated with this site..
+
+`node_list` - (Required) This section will show nodes associated with this site.. See [Node List Node List ](#node-list-node-list) below for details.
+
+### Multiple Interface Node List
+
+This section will show nodes associated with this site..
+
+`node_list` - (Required) This section will show nodes associated with this site.. See [Node List Node List ](#node-list-node-list) below for details.
+
+### Multiple Interface Node List
+
+This section will show nodes associated with this site..
+
+`node_list` - (Required) This section will show nodes associated with this site.. See [Node List Node List ](#node-list-node-list) below for details.
+
+### Name Choice Autogenerate
+
+Autogenerate the VPC Name.
+
 ### Network Choice Site Local Inside Network
 
 x-displayName: "Site Local Inside (Local VRF)".
@@ -560,6 +959,14 @@ x-displayName: "Site Local Inside (Local VRF)".
 ### Network Choice Site Local Network
 
 x-displayName: "Site Local Outside (Local VRF)".
+
+### Network Options Inside
+
+CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site.
+
+### Network Options Outside
+
+CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site.
 
 ### Network Policy Choice Active Enhanced Firewall Policies
 
@@ -573,11 +980,23 @@ Static IP configuration for a specific node.
 
 `interface_ip_map` - (Optional) Map of Node to Static ip configuration value, Key:Node, Value:IP Address. See [Cluster Static Ip Interface Ip Map ](#cluster-static-ip-interface-ip-map) below for details.
 
+### Network Prefix Choice Fleet Static Ip
+
+Static IP configuration for the fleet.
+
+`default_gw` - (Optional) IP address offset of the default gateway, prefix len is used to calculate offset (`String`).
+
+`dns_server` - (Optional) IP address offset of the DNS server, prefix len is used to calculate offset (`String`).
+
+`network_prefix_allocator` - (Optional) Static IP configuration for the fleet. See [ref](#ref) below for details.
+
 ### Network Prefix Choice Node Static Ip
 
 Static IP configuration for the Node.
 
 `default_gw` - (Optional) IP address of the default gateway. (`String`).
+
+`dns_server` - (Optional) IP address of the DNS server (`String`).(Deprecated)
 
 `ip_address` - (Required) IP address of the interface and prefix length (`String`).
 
@@ -585,13 +1004,79 @@ Static IP configuration for the Node.
 
 Traffic matching the ip prefixes is sent to the default gateway.
 
+### Next Hop Choice Node Interface
+
+Traffic matching the ip prefixes is sent to this interface.
+
+`list` - (Optional) On a multinode site, this list holds the nodes and corresponding networking_interface. See [Node Interface List ](#node-interface-list) below for details.
+
+### Node Interface List
+
+On a multinode site, this list holds the nodes and corresponding networking_interface.
+
+`interface` - (Optional) Interface reference on this node. See [ref](#ref) below for details.
+
+`node` - (Optional) Node name on this site (`String`).
+
+### Node List Interface List
+
+Interfaces belonging to this node.
+
+`mtu` - (Optional) When configured, mtu must be between 512 and 16384 (`Int`).
+
+`network_option` - (Required) Global VRFs are configured via Networking > Segments. A site can have multiple Network Segments (global VRFs).. See [Interface List Network Option ](#interface-list-network-option) below for details.
+
+###### One of the arguments from this list "site_to_site_connectivity_interface_disabled, site_to_site_connectivity_interface_enabled" can be set
+
+`site_to_site_connectivity_interface_disabled` - (Optional) Do not use this interface for site to site connectivity. (`Bool`).
+
+`site_to_site_connectivity_interface_enabled` - (Optional) Use this this interface for site to site connectivity. (`Bool`).
+
+`subnet` - (Optional) Select Existing Subnet or Create New. See [Interface List Subnet ](#interface-list-subnet) below for details.
+
+### Node List Interface List
+
+Interfaces belonging to this node.
+
+`mtu` - (Optional) When configured, mtu must be between 512 and 16384 (`Int`).
+
+`network_option` - (Required) Global VRFs are configured via Networking > Segments. A site can have multple Network Segments (global VRFs).. See [Interface List Network Option ](#interface-list-network-option) below for details.
+
+###### One of the arguments from this list "site_to_site_connectivity_interface_disabled, site_to_site_connectivity_interface_enabled" can be set
+
+`site_to_site_connectivity_interface_disabled` - (Optional) Do not use this interface for site to site connectivity. (`Bool`).
+
+`site_to_site_connectivity_interface_enabled` - (Optional) Use this this interface for site to site connectivity. (`Bool`).
+
+`subnet` - (Optional) Select Existing Subnet or Create New. See [Interface List Subnet ](#interface-list-subnet) below for details.
+
+### Node List Interface List
+
+Configure Interfaces for this node.
+
+`mtu` - (Optional) When configured, mtu must be between 512 and 16384 (`Int`).
+
+`network_option` - (Required) Global VRFs are configured via Networking > Segments. A site can have multple Network Segments (global VRFs).. See [Interface List Network Option ](#interface-list-network-option) below for details.
+
+###### One of the arguments from this list "site_to_site_connectivity_interface_disabled, site_to_site_connectivity_interface_enabled" can be set
+
+`site_to_site_connectivity_interface_disabled` - (Optional) Do not use this interface for site to site connectivity. (`Bool`).
+
+`site_to_site_connectivity_interface_enabled` - (Optional) Use this this interface for site to site connectivity. (`Bool`).
+
+`subnet` - (Optional) Provide Subnet details. User can either create a new subnet or use an existing subnet.. See [Interface List Subnet ](#interface-list-subnet) below for details.
+
+`vpc` - (Optional) Provide VPC details. User can either create a new VPC or use an existing VPC. See [Interface List Vpc ](#interface-list-vpc) below for details.
+
 ### Node List Interface List
 
 Manage interfaces belonging to this node.
 
-###### One of the arguments from this list "dhcp_client, no_ipv4_address, static_ip" must be set
+###### One of the arguments from this list "dhcp_client, dhcp_server, no_ipv4_address, static_ip" must be set
 
 `dhcp_client` - (Optional) Interface gets it's IP address from an external DHCP server. (`Bool`).
+
+`dhcp_server` - (Optional) DHCP Server is configured for this interface, Interface IP is derived from DHCP server configuration.. See [Address Choice Dhcp Server ](#address-choice-dhcp-server) below for details.(Deprecated)
 
 `no_ipv4_address` - (Optional) Interface does not have an IPv4 Address. (`Bool`).
 
@@ -615,6 +1100,10 @@ Manage interfaces belonging to this node.
 
 `static_ipv6_address` - (Optional) Interface IPv6 address is configured statically.. See [Ipv6 Address Choice Static Ipv6 Address ](#ipv6-address-choice-static-ipv6-address) below for details.
 
+`is_management` - (Optional) To be used internally to set an interface as management interface (`Bool`).(Deprecated)
+
+`is_primary` - (Optional) Use for Primary Interface (`Bool`).(Deprecated)
+
 `labels` - (Optional) Add Labels for this Interface, these labels can be used in firewall policy (`String`).
 
 ###### One of the arguments from this list "monitor, monitor_disabled" can be set
@@ -636,6 +1125,40 @@ Manage interfaces belonging to this node.
 `site_to_site_connectivity_interface_disabled` - (Optional) Do not use this interface for site to site connectivity. (`Bool`).
 
 `site_to_site_connectivity_interface_enabled` - (Optional) Use this this interface for site to site connectivity. (`Bool`).
+
+### Node List Node List
+
+This section will show nodes associated with this site..
+
+`aws_az_name` - (Required) AWS availability zone, must be consistent with the selected AWS region. (`String`).
+
+`hostname` - (Optional) Hostname for this Node (`String`).
+
+`interface_list` - (Required) Interfaces belonging to this node. See [Node List Interface List ](#node-list-interface-list) below for details.
+
+`type` - (Required) Type for this Node, can be Control (`String`).
+
+### Node List Node List
+
+This section will show nodes associated with this site..
+
+`azure_az` - (Required) A zone depicting a grouping of datacenters within an Azure region. Expecting numeric input (`String`).
+
+`hostname` - (Optional) Hostname for this Node (`String`).
+
+`interface_list` - (Required) Interfaces belonging to this node. See [Node List Interface List ](#node-list-interface-list) below for details.
+
+`type` - (Required) Type for this Node, can be Control (`String`).
+
+### Node List Node List
+
+This section will show nodes associated with this site..
+
+`gcp_az_name` - (Required) Select the GCP availability zone. This must be consistent with the selected GCP region. (`String`).
+
+`hostname` - (Optional) Hostname for this Node (`String`).
+
+`interface_list` - (Required) Configure Interfaces for this node. See [Node List Interface List ](#node-list-interface-list) below for details.
 
 ### Not Managed Node List
 
@@ -671,11 +1194,131 @@ x-displayName: "Disabled".
 
 Will assign latest available OS version.
 
+### Orchestration Choice Managed
+
+F5 Distributed Cloud will automate provisioning (ex: node bringup) for this site..
+
+`aws_cred` - (Required) Reference to AWS cloud credential object used to deploy cloud resources. See [ref](#ref) below for details.
+
+`aws_region` - (Required) AWS Region of your services vpc, where F5XC site will be deployed. (`String`).
+
+###### One of the arguments from this list "disabled, tgw" must be set
+
+`disabled` - (Optional) Disable Cloud Connect for this site (`Bool`).
+
+`tgw` - (Optional) Enable Cloud Connect for this site. See [Cloud Connect Attachments Tgw ](#cloud-connect-attachments-tgw) below for details.
+
+`disk_size` - (Optional) Node disk size for all node in the F5XC site. Unit is GiB (`Int`).
+
+###### One of the arguments from this list "egress_gateway_default, egress_nat_gw, egress_virtual_private_gateway" can be set
+
+`egress_gateway_default` - (Optional) With this option, egress site traffic will be routed through an Internet Gateway. (`Bool`).
+
+`egress_nat_gw` - (Optional) With this option, egress site traffic will be routed through an Network Address Translation(NAT) Gateway.. See [Egress Gateway Choice Egress Nat Gw ](#egress-gateway-choice-egress-nat-gw) below for details.
+
+`egress_virtual_private_gateway` - (Optional) With this option, egress site traffic will be routed through an Virtual Private Gateway.. See [Egress Gateway Choice Egress Virtual Private Gateway ](#egress-gateway-choice-egress-virtual-private-gateway) below for details.
+
+`instance_type` - (Required) Instance size based on the performance. (`String`).
+
+###### One of the arguments from this list "private_connectivity, private_connectivity_disabled" can be set
+
+`private_connectivity` - (Optional) Enable Private Connectivity to Site via CloudLink. See [Private Connectivity Choice Private Connectivity ](#private-connectivity-choice-private-connectivity) below for details.
+
+`private_connectivity_disabled` - (Optional) Disable Private Connectivity to Site (`Bool`).
+
+###### One of the arguments from this list "custom_security_group, f5xc_security_group" can be set
+
+`custom_security_group` - (Optional) With this option, ingress and egress traffic will be controlled via security group ids.. See [Security Group Choice Custom Security Group ](#security-group-choice-custom-security-group) below for details.
+
+`f5xc_security_group` - (Optional) With this option, ingress and egress traffic will be controlled via f5xc created security group. (`Bool`).
+
+###### One of the arguments from this list "new_vpc, vpc_id" must be set
+
+`new_vpc` - (Optional) Details needed to create new VPC. See [Service Vpc Choice New Vpc ](#service-vpc-choice-new-vpc) below for details.
+
+`vpc_id` - (Optional) Existing VPC ID (`String`).
+
+###### One of the arguments from this list "multiple_interface, single_interface" must be set
+
+`multiple_interface` - (Optional) Multiple interface site is useful when site is used as ingress/egress gateway to the VPC.. See [Site Type Multiple Interface ](#site-type-multiple-interface) below for details.
+
+`single_interface` - (Optional) One interface site is useful when site is only used as ingress gateway to the VPC.. See [Site Type Single Interface ](#site-type-single-interface) below for details.
+
+`tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in AWS console. (`String`).
+
+### Orchestration Choice Managed
+
+F5 Distributed Cloud will automate provisioning (ex: node bringup) for this site..
+
+`accelerated_networking` - (Optional) disruption will be seen. See [Managed Accelerated Networking ](#managed-accelerated-networking) below for details.
+
+`azure_cred` - (Required) Reference to Azure credentials for automatic deployment. See [ref](#ref) below for details.
+
+`azure_region` - (Required) Name of the azure region which supports availability zones. (`String`).
+
+###### One of the arguments from this list "disabled, enabled" must be set
+
+`disabled` - (Optional) Disable Cloud Connect for this site (`Bool`).
+
+`enabled` - (Optional) Enable Cloud Connect for this site (`Bool`).
+
+`disk_size` - (Optional) Disk size to be used for this instance in GiB. 80 is 80 GiB (`Int`).
+
+`machine_type` - (Required) > advanced options. (`String`).
+
+`resource_group` - (Required) Azure resource group for resources that will be created (`String`).
+
+###### One of the arguments from this list "multiple_interface, single_interface" must be set
+
+`multiple_interface` - (Optional) Multiple interface site is useful when site is used as ingress/egress gateway to the VNET.. See [Site Type Multiple Interface ](#site-type-multiple-interface) below for details.
+
+`single_interface` - (Optional) One interface site is useful when site is only used as ingress gateway to the VNET.. See [Site Type Single Interface ](#site-type-single-interface) below for details.
+
+`tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in Azure console. (`String`).
+
+`vnet` - (Required) Choice of using existing VNet or create new VNet. See [Managed Vnet ](#managed-vnet) below for details.
+
+### Orchestration Choice Managed
+
+F5 Distributed Cloud will automate provisioning (ex: node bringup) for this site..
+
+`disk_size` - (Optional) Select the disk size of the node. The default value is 80GB. (`Int`).
+
+`gcp_cred` - (Required) Select the GCP cloud credential object using which GCP cloud resources are to be deployed.. See [ref](#ref) below for details.
+
+`gcp_region` - (Required) Select the GCP Region where you want to deploy F5 Distributed Cloud Customer Edge site. (`String`).
+
+`instance_type` - (Required) Select the GCP instance type for deploying nodes of CE (customer edge) site. (`String`).
+
+###### One of the arguments from this list "private_connectivity, private_connectivity_disabled" can be set
+
+`private_connectivity` - (Optional) This option enables private connectivity for this site using Cloudlink.. See [Private Connectivity Choice Private Connectivity ](#private-connectivity-choice-private-connectivity) below for details.
+
+`private_connectivity_disabled` - (Optional) This option disables private connectivity for this site. (`Bool`).
+
+###### One of the arguments from this list "multiple_interface, single_interface" must be set
+
+`multiple_interface` - (Optional) This option deploys the CE (Customer Edge) Site as an ingress/egress gateway.. See [Site Type Multiple Interface ](#site-type-multiple-interface) below for details.
+
+`single_interface` - (Optional) This option deploys the CE (Customer Edge) Site as an ingress gateway.. See [Site Type Single Interface ](#site-type-single-interface) below for details.
+
+`tags` - (Optional) It helps to manage, identify, organize, search for, and filter resources in GCP console. (`String`).
+
 ### Orchestration Choice Not Managed
 
 or by using automation tools such as Terraform..
 
 `node_list` - (Optional) Once a node is created and registers with the site, it will be shown in this section.. See [Not Managed Node List ](#not-managed-node-list) below for details.
+
+### Password Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
 
 ### Perf Mode Choice Jumbo
 
@@ -699,19 +1342,29 @@ Site optimized for L3 traffic processing.
 
 Site optimized for L7 traffic processing.
 
-### Proactive Monitoring Choice Proactive Monitoring Disable
+### Private Connectivity Choice Private Connectivity
 
-Disable Proactive Monitoring.
+Enable Private Connectivity to Site via CloudLink.
 
-### Proactive Monitoring Choice Proactive Monitoring Enable
+`cloud_link` - (Required) Reference to Cloud Link. See [ref](#ref) below for details.
 
-Enable Proactive Monitoring.
+###### One of the arguments from this list "inside, outside" can be set
+
+`inside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Inside Network of this Site (`Bool`).
+
+`outside` - (Optional) CloudLink will be associated, and routes will be propagated with the Site Local Outside Network of this Site (`Bool`).
+
+### Private Connectivity Choice Private Connectivity Disabled
+
+Disable Private Connectivity to Site.
 
 ### Provider Choice Aws
 
 x-displayName: "AWS".
 
-###### One of the arguments from this list "not_managed" must be set
+###### One of the arguments from this list "managed, not_managed" must be set
+
+`managed` - (Optional) F5 Distributed Cloud will automate provisioning (ex: node bringup) for this site.. See [Orchestration Choice Managed ](#orchestration-choice-managed) below for details.
 
 `not_managed` - (Optional) or by using automation tools such as Terraform.. See [Orchestration Choice Not Managed ](#orchestration-choice-not-managed) below for details.
 
@@ -719,13 +1372,23 @@ x-displayName: "AWS".
 
 x-displayName: "Azure".
 
-###### One of the arguments from this list "not_managed" must be set
+###### One of the arguments from this list "managed, not_managed" must be set
+
+`managed` - (Optional) F5 Distributed Cloud will automate provisioning (ex: node bringup) for this site.. See [Orchestration Choice Managed ](#orchestration-choice-managed) below for details.
+
+`not_managed` - (Optional) or by using automation tools such as Terraform.. See [Orchestration Choice Not Managed ](#orchestration-choice-not-managed) below for details.
+
+### Provider Choice Baremetal
+
+x-displayName: "Baremetal".
+
+###### One of the arguments from this list "not_managed" can be set
 
 `not_managed` - (Optional) or by using automation tools such as Terraform.. See [Orchestration Choice Not Managed ](#orchestration-choice-not-managed) below for details.
 
 ### Provider Choice Equinix
 
-x-displayName: "Equinix (EA)".
+x-displayName: "Equinix".
 
 ###### One of the arguments from this list "not_managed" can be set
 
@@ -735,7 +1398,9 @@ x-displayName: "Equinix (EA)".
 
 x-displayName: "GCP".
 
-###### One of the arguments from this list "not_managed" must be set
+###### One of the arguments from this list "managed, not_managed" must be set
+
+`managed` - (Optional) F5 Distributed Cloud will automate provisioning (ex: node bringup) for this site.. See [Orchestration Choice Managed ](#orchestration-choice-managed) below for details.
 
 `not_managed` - (Optional) or by using automation tools such as Terraform.. See [Orchestration Choice Not Managed ](#orchestration-choice-not-managed) below for details.
 
@@ -749,7 +1414,7 @@ x-displayName: "KVM (EA)".
 
 ### Provider Choice Nutanix
 
-x-displayName: "Nutanix (EA)".
+x-displayName: "Nutanix".
 
 ###### One of the arguments from this list "not_managed" can be set
 
@@ -801,6 +1466,8 @@ Select REs in closest proximity to the site based on the public IP address of th
 
 Select specific REs. This is useful when a site needs to deterministically connect to a set of REs. A site will always be connected to 2 REs..
 
+`backup_re` - (Optional) Select backup RE for this site. (`String`).(Deprecated)
+
 `primary_re` - (Optional) Select primary RE for this site. (`String`).
 
 ### Ref
@@ -813,6 +1480,10 @@ namespace - (Optional) then namespace will hold the referred object's(e.g. route
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
+### Resource Group Choice Vnet Resource Group
+
+Use the same Resource Group as the Vnet.
+
 ### Router Dns Config
 
 Dns information that needs to added in the RouterAdvetisement.
@@ -823,9 +1494,23 @@ Dns information that needs to added in the RouterAdvetisement.
 
 `local_dns` - (Optional) Choose the address from the network prefix range as dns server. See [Dns Choice Local Dns ](#dns-choice-local-dns) below for details.
 
+### Routing Type F5 Orchestrated Routing
+
+F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE..
+
+### Routing Type Manual Routing
+
+In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. .
+
 ### S2s Connectivity Slo Choice Site Mesh Group On Slo
 
 Use a Site Mesh Group to connect to other sites..
+
+###### One of the arguments from this list "no_site_mesh_group, site_mesh_group" must be set
+
+`no_site_mesh_group` - (Optional) This site is not a member of Site Mesh group (`Bool`).(Deprecated)
+
+`site_mesh_group` - (Optional) This site is member of Site Mesh Group via network. See [ref](#ref) below for details.(Deprecated)
 
 ###### One of the arguments from this list "sm_connection_public_ip, sm_connection_pvt_ip" must be set
 
@@ -851,6 +1536,104 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Secret Info Oneof Vault Secret Info
+
+Vault Secret is used for the secrets managed by Hashicorp Vault.
+
+`key` - (Optional) If not provided entire secret will be returned. (`String`).
+
+`location` - (Required) Path to secret in Vault. (`String`).
+
+`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
+
+`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
+
+`version` - (Optional) If not provided latest version will be returned. (`Int`).
+
+### Secret Info Oneof Wingman Secret Info
+
+Secret is given as bootstrap secret in F5XC Security Sidecar.
+
+`name` - (Required) Name of the secret. (`String`).
+
+### Security Group Choice Custom Security Group
+
+With this option, ingress and egress traffic will be controlled via security group ids..
+
+`inside_security_group_id` - (Optional) Security Group ID to be attached to SLI(Site Local Inside) Interface (`String`).
+
+`outside_security_group_id` - (Optional) Security Group ID to be attached to SLO(Site Local Outside) Interface (`String`).
+
+### Security Group Choice F5xc Security Group
+
+With this option, ingress and egress traffic will be controlled via f5xc created security group..
+
+### Segment Vrf Segment Config
+
+Configure properties such as static routes, DNS and common VIP for Load Balancing on the segment VRF..
+
+`nameserver` - (Optional) Optional DNS V4 server IP to be used for name resolution (`String`).
+
+`nameserver_v6` - (Optional) Optional DNS V6 server IP to be used for name resolution (`String`).
+
+###### One of the arguments from this list "no_static_routes, static_routes" must be set
+
+`no_static_routes` - (Optional) Static IPv4 Routes disabled for this Segment Network (VRF). (`Bool`).
+
+`static_routes` - (Optional) Manage IPv4 static routes for this Segment Network (VRF).. See [Static Route Choice Static Routes ](#static-route-choice-static-routes) below for details.
+
+###### One of the arguments from this list "no_v6_static_routes, static_v6_routes" must be set
+
+`no_v6_static_routes` - (Optional) Static IPv6 Routes disabled for this segment Network (VRF). (`Bool`).
+
+`static_v6_routes` - (Optional) Manage IPv6 static routes for this Segment Nework(VRF).. See [Static V6 Route Choice Static V6 Routes ](#static-v6-route-choice-static-v6-routes) below for details.
+
+### Service Vpc Choice New Vpc
+
+Details needed to create new VPC.
+
+`allocate_ipv6` - (Optional) Allocate IPv6 CIDR block from AWS (`Bool`).(Deprecated)
+
+###### One of the arguments from this list "autogenerate, name_tag" must be set
+
+`autogenerate` - (Optional) Autogenerate the VPC Name (`Bool`).
+
+`name_tag` - (Optional) Specify the VPC Name (`String`).
+
+`primary_ipv4` - (Required) The Primary IPv4 block cannot be modified. All subnets prefixes in this VPC must be part of this CIDR block. (`String`).
+
+### Service Vpc Choice New Vpc
+
+Select this option when you want a new VPC to be created..
+
+###### One of the arguments from this list "autogenerate, name_tag" must be set
+
+`autogenerate` - (Optional) With this option the VPC Name is auto generated by F5 Distributed Cloud (`Bool`).
+
+`name_tag` - (Optional) With this option, user can specify a unique name for VPC. (`String`).
+
+### Single Interface Node List
+
+This section will show nodes associated with this site..
+
+`node_list` - (Required) This section will show nodes associated with this site.. See [Node List Node List ](#node-list-node-list) below for details.
+
+### Single Interface Node List
+
+This section will show nodes associated with this site..
+
+`node_list` - (Required) This section will show nodes associated with this site.. See [Node List Node List ](#node-list-node-list) below for details.
+
+### Single Interface Node List
+
+This section will show nodes associated with this site.
+
+`node_list` - (Required) This section will show nodes associated with this site.. See [Node List Node List ](#node-list-node-list) below for details.
+
+### Site Mesh Group Choice No Site Mesh Group
+
+This site is not a member of Site Mesh group.
+
 ### Site Mesh Group Ip Choice Sm Connection Public Ip
 
 tunnels to other sites which are part of the site mesh group..
@@ -866,6 +1649,42 @@ Do not use this interface for site to site connectivity..
 ### Site To Site Connectivity Interface Choice Site To Site Connectivity Interface Enabled
 
 Use this this interface for site to site connectivity..
+
+### Site Type Multiple Interface
+
+Multiple interface site is useful when site is used as ingress/egress gateway to the VNET..
+
+`node_list` - (Optional) This section will show nodes associated with this site.. See [Multiple Interface Node List ](#multiple-interface-node-list) below for details.
+
+### Site Type Multiple Interface
+
+This option deploys the CE (Customer Edge) Site as an ingress/egress gateway..
+
+`node_list` - (Optional) This section will show nodes associated with this site.. See [Multiple Interface Node List ](#multiple-interface-node-list) below for details.
+
+### Site Type Multiple Interface
+
+Multiple interface site is useful when site is used as ingress/egress gateway to the VPC..
+
+`node_list` - (Optional) This section will show nodes associated with this site.. See [Multiple Interface Node List ](#multiple-interface-node-list) below for details.
+
+### Site Type Single Interface
+
+One interface site is useful when site is only used as ingress gateway to the VNET..
+
+`node_list` - (Optional) This section will show nodes associated with this site.. See [Single Interface Node List ](#single-interface-node-list) below for details.
+
+### Site Type Single Interface
+
+This option deploys the CE (Customer Edge) Site as an ingress gateway..
+
+`node_list` - (Optional) This section will show nodes associated with this site. See [Single Interface Node List ](#single-interface-node-list) below for details.
+
+### Site Type Single Interface
+
+One interface site is useful when site is only used as ingress gateway to the VPC..
+
+`node_list` - (Optional) This section will show nodes associated with this site.. See [Single Interface Node List ](#single-interface-node-list) below for details.
 
 ### Sli Choice Default Sli Config
 
@@ -951,9 +1770,11 @@ Refer to release notes to find required released SW versions..
 
 List of networks from which DHCP server can allocate ip addresses.
 
-###### One of the arguments from this list "network_prefix" must be set
+###### One of the arguments from this list "network_prefix, network_prefix_allocator" must be set
 
 `network_prefix` - (Optional) Network Prefix to be used for IPV6 address auto configuration (`String`).
+
+`network_prefix_allocator` - (Optional) Prefix length from address allocator scheme is used to calculate offsets. See [ref](#ref) below for details.(Deprecated)
 
 `pool_settings` - (Required) Controls how DHCPV6 pools are handled (`String`).
 
@@ -977,13 +1798,15 @@ x-required.
 
 `ip_prefixes` - (Required) List of route prefixes that have common next hop and attributes (`String`).
 
-###### One of the arguments from this list "default_gateway, interface, ip_address" must be set
+###### One of the arguments from this list "default_gateway, interface, ip_address, node_interface" must be set
 
 `default_gateway` - (Optional) Traffic matching the ip prefixes is sent to the default gateway (`Bool`).
 
-`interface` - (Optional) Traffic matching the ip prefixes is sent to this interface. See [ref](#ref) below for details.
+`interface` - (Optional) Traffic matching the ip prefixes is sent to this interface. See [ref](#ref) below for details.(Deprecated)
 
 `ip_address` - (Optional) Traffic matching the ip prefixes is sent to this IP Address (`String`).
+
+`node_interface` - (Optional) Traffic matching the ip prefixes is sent to this interface. See [Next Hop Choice Node Interface ](#next-hop-choice-node-interface) below for details.
 
 ### Static V6 Route Choice No V6 Static Routes
 
@@ -1003,13 +1826,47 @@ List of IPv6 static routes.
 
 `ip_prefixes` - (Required) List of IPv6 route prefixes that have common next hop and attributes (`String`).
 
-###### One of the arguments from this list "default_gateway, interface, ip_address" must be set
+###### One of the arguments from this list "default_gateway, interface, ip_address, node_interface" must be set
 
 `default_gateway` - (Optional) Traffic matching the ip prefixes is sent to the default gateway (`Bool`).
 
-`interface` - (Optional) Traffic matching the ip prefixes is sent to this interface. See [ref](#ref) below for details.
+`interface` - (Optional) Traffic matching the ip prefixes is sent to this interface. See [ref](#ref) below for details.(Deprecated)
 
 `ip_address` - (Optional) Traffic matching the ip prefixes is sent to this IP Address (`String`).
+
+`node_interface` - (Optional) Traffic matching the ip prefixes is sent to this interface. See [Next Hop Choice Node Interface ](#next-hop-choice-node-interface) below for details.
+
+### Tgw Choice Existing Tgw
+
+Information about existing TGW.
+
+`tgw_asn` - (Optional) TGW ASN. (`Int`).
+
+`tgw_id` - (Optional) Existing TGW ID (`String`).
+
+`volterra_site_asn` - (Optional) F5XC Site ASN. (`Int`).
+
+### Tgw Choice New Tgw
+
+Details needed to create new TGW.
+
+###### One of the arguments from this list "system_generated, user_assigned" must be set
+
+`system_generated` - (Optional) F5XC will automatically assign a private ASN for TGW and F5XC Site (`Bool`).
+
+`user_assigned` - (Optional) User is managing the ASN for TGW and F5XC Site.. See [Asn Choice User Assigned ](#asn-choice-user-assigned) below for details.
+
+### Tgw Cidr Choice Reserved Tgw Cidr
+
+Autogenerate and reserve a TGW CIDR Block from the Primary CIDR.
+
+### Tgw Cidr Choice Tgw Cidr
+
+Specify TGW CIDR block.
+
+`ipv4` - (Required) IPv4 subnet prefix for this subnet (`String`).
+
+`ipv6` - (Optional) IPv6 subnet prefix for this subnet (`String`).
 
 ### Upgrade Settings Kubernetes Upgrade Drain
 
@@ -1028,6 +1885,14 @@ Do not use the internal Enterprise Proxy for RE Tunnels.
 ### Use For Re Tunnel Choice Enable Re Tunnel
 
 Use the internal Enterprise Proxy for RE Tunnels.
+
+### Vega Upgrade Mode Toggle Choice Disable Vega Upgrade Mode
+
+Disable Vega Upgrade Mode.
+
+### Vega Upgrade Mode Toggle Choice Enable Vega Upgrade Mode
+
+When enabled, vega will inform RE to stop traffic to the specific node..
 
 ### Volterra Sw Version Choice Default Sw Version
 

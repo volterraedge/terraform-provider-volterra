@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.ike_phase2_profile.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.ike_phase2_profile.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2331,11 +2331,16 @@ var APISwaggerJSON string = `{
             "properties": {
                 "dh_groups": {
                     "type": "array",
+                    "description": " Choose the acceptable Diffie Hellman(DH) Group or Groups that you are willing to accept as part of this profile.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Diffie Hellman Groups",
                     "items": {
                         "$ref": "#/definitions/schemaDHGroup"
                     },
-                    "x-displayname": "Diffie Hellman Groups"
+                    "x-displayname": "Diffie Hellman Groups",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },

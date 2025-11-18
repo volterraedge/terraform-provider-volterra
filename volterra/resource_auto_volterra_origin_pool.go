@@ -18,8 +18,10 @@ import (
 	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
+
 	statemigration "github.com/volterraedge/terraform-provider-volterra/volterra/state_migration"
 	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
+
 )
 
 // resourceVolterraOriginPool is implementation of Volterra's OriginPool resources
@@ -123,6 +125,46 @@ func resourceVolterraOriginPool() *schema.Resource {
 						"connection_timeout": {
 							Type:     schema.TypeInt,
 							Optional: true,
+						},
+
+						"header_transformation_type": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"default_header_transformation": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"legacy_header_transformation": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"preserve_case_header_transformation": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"proper_case_header_transformation": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
 						},
 
 						"http_idle_timeout": {
@@ -635,6 +677,29 @@ func resourceVolterraOriginPool() *schema.Resource {
 										Optional: true,
 									},
 
+									"service_selector": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"expressions": {
+
+													Type: schema.TypeList,
+
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
 									"site_locator": {
 
 										Type:     schema.TypeList,
@@ -779,7 +844,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 										Type:     schema.TypeList,
 										MaxItems: 1,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -960,7 +1025,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 										Type:     schema.TypeList,
 										MaxItems: 1,
-										Optional: true,
+										Required: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1374,6 +1439,42 @@ func resourceVolterraOriginPool() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
+															"blindfold_secret_info_internal": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"decryption_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"store_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"secret_encoding_type": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -1416,6 +1517,66 @@ func resourceVolterraOriginPool() *schema.Resource {
 																		"url": {
 																			Type:     schema.TypeString,
 																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"vault_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"key": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"provider": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"secret_encoding": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"version": {
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"wingman_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1760,6 +1921,70 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 
 				if w, ok := advancedOptionsMapStrToI["connection_timeout"]; ok && !isIntfNil(w) {
 					advancedOptions.ConnectionTimeout = uint32(w.(int))
+				}
+
+				if v, ok := advancedOptionsMapStrToI["header_transformation_type"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					headerTransformationType := &ves_io_schema.HeaderTransformationType{}
+					advancedOptions.HeaderTransformationType = headerTransformationType
+					for _, set := range sl {
+						if set != nil {
+							headerTransformationTypeMapStrToI := set.(map[string]interface{})
+
+							headerTransformationChoiceTypeFound := false
+
+							if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+									headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+									headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+									headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+									headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+						}
+					}
+
 				}
 
 				if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
@@ -2191,22 +2416,24 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 		healthcheckInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 		createSpec.Healthcheck = healthcheckInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			hMapToStrVal := ps.(map[string]interface{})
-			healthcheckInt[i] = &ves_io_schema_views.ObjectRefType{}
+				hMapToStrVal := ps.(map[string]interface{})
+				healthcheckInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-			if v, ok := hMapToStrVal["name"]; ok && !isIntfNil(v) {
-				healthcheckInt[i].Name = v.(string)
+				if v, ok := hMapToStrVal["name"]; ok && !isIntfNil(v) {
+					healthcheckInt[i].Name = v.(string)
+				}
+
+				if v, ok := hMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					healthcheckInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := hMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					healthcheckInt[i].Tenant = v.(string)
+				}
+
 			}
-
-			if v, ok := hMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				healthcheckInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := hMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				healthcheckInt[i].Tenant = v.(string)
-			}
-
 		}
 
 	}
@@ -2571,6 +2798,38 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 								choiceInt.K8SService.ServiceInfo = serviceInfoInt
 
 								serviceInfoInt.ServiceName = v.(string)
+
+							}
+
+							if v, ok := cs["service_selector"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+
+								serviceInfoTypeFound = true
+								serviceInfoInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceSelector{}
+								serviceInfoInt.ServiceSelector = &ves_io_schema.LabelSelectorType{}
+								choiceInt.K8SService.ServiceInfo = serviceInfoInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field expressions")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											serviceInfoInt.ServiceSelector.Expressions = ls
+
+										}
+
+									}
+								}
 
 							}
 
@@ -3656,6 +3915,38 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
 
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -3714,6 +4005,76 @@ func resourceVolterraOriginPoolCreate(d *schema.ResourceData, meta interface{}) 
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -4229,6 +4590,70 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 					advancedOptions.ConnectionTimeout = uint32(w.(int))
 				}
 
+				if v, ok := advancedOptionsMapStrToI["header_transformation_type"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					headerTransformationType := &ves_io_schema.HeaderTransformationType{}
+					advancedOptions.HeaderTransformationType = headerTransformationType
+					for _, set := range sl {
+						if set != nil {
+							headerTransformationTypeMapStrToI := set.(map[string]interface{})
+
+							headerTransformationChoiceTypeFound := false
+
+							if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+									headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+									headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+									headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+							if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+								headerTransformationChoiceTypeFound = true
+
+								if v.(bool) {
+									headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+									headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+									headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
 				if w, ok := advancedOptionsMapStrToI["http_idle_timeout"]; ok && !isIntfNil(w) {
 					advancedOptions.HttpIdleTimeout = uint32(w.(int))
 				}
@@ -4654,22 +5079,24 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 		healthcheckInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 		updateSpec.Healthcheck = healthcheckInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			hMapToStrVal := ps.(map[string]interface{})
-			healthcheckInt[i] = &ves_io_schema_views.ObjectRefType{}
+				hMapToStrVal := ps.(map[string]interface{})
+				healthcheckInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-			if v, ok := hMapToStrVal["name"]; ok && !isIntfNil(v) {
-				healthcheckInt[i].Name = v.(string)
+				if v, ok := hMapToStrVal["name"]; ok && !isIntfNil(v) {
+					healthcheckInt[i].Name = v.(string)
+				}
+
+				if v, ok := hMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					healthcheckInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := hMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					healthcheckInt[i].Tenant = v.(string)
+				}
+
 			}
-
-			if v, ok := hMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				healthcheckInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := hMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				healthcheckInt[i].Tenant = v.(string)
-			}
-
 		}
 
 	}
@@ -5032,6 +5459,38 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 								choiceInt.K8SService.ServiceInfo = serviceInfoInt
 
 								serviceInfoInt.ServiceName = v.(string)
+
+							}
+
+							if v, ok := cs["service_selector"]; ok && !isIntfNil(v) && !serviceInfoTypeFound {
+
+								serviceInfoTypeFound = true
+								serviceInfoInt := &ves_io_schema_views_origin_pool.OriginServerK8SService_ServiceSelector{}
+								serviceInfoInt.ServiceSelector = &ves_io_schema.LabelSelectorType{}
+								choiceInt.K8SService.ServiceInfo = serviceInfoInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field expressions")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											serviceInfoInt.ServiceSelector.Expressions = ls
+
+										}
+
+									}
+								}
 
 							}
 
@@ -6113,6 +6572,38 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
 
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -6171,6 +6662,76 @@ func resourceVolterraOriginPoolUpdate(d *schema.ResourceData, meta interface{}) 
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 

@@ -278,7 +278,7 @@ var CustomPrivateAPISwaggerJSON string = `{
     "swagger": "2.0",
     "info": {
         "title": "API credential custom private API",
-        "description": "API credential custom private API supports request that can be made by other internal services\ncurrently for example validate API is being exposed to prism to validate an incoming request with \nan API credential.",
+        "description": "API credential custom private API supports request that can be made by other internal services\ncurrently for example validate API is being exposed to prism to validate an incoming request with\nan API credential.",
         "version": "version not set"
     },
     "schemes": [
@@ -296,7 +296,7 @@ var CustomPrivateAPISwaggerJSON string = `{
         "/private/custom/namespaces/{namespace}/validate/api_credentials": {
             "post": {
                 "summary": "Validate API credential",
-                "description": "For API credential validation from APIGW. \nTo determine the validity of the credential, token in the request is the unique identifier to\nlookup corresponding API credential object in eywa.",
+                "description": "For API credential validation from APIGW.\nTo determine the validity of the credential, token in the request is the unique identifier to\nlookup corresponding API credential object in eywa.",
                 "operationId": "ves.io.schema.api_credential.CustomPrivateAPI.ValidateToken",
                 "responses": {
                     "200": {
@@ -388,7 +388,7 @@ var CustomPrivateAPISwaggerJSON string = `{
         "/ves.io.schema/introspect/read/private/custom/namespaces/{namespace}/validate/api_credentials": {
             "post": {
                 "summary": "Validate API credential",
-                "description": "For API credential validation from APIGW. \nTo determine the validity of the credential, token in the request is the unique identifier to\nlookup corresponding API credential object in eywa.",
+                "description": "For API credential validation from APIGW.\nTo determine the validity of the credential, token in the request is the unique identifier to\nlookup corresponding API credential object in eywa.",
                 "operationId": "ves.io.schema.api_credential.CustomPrivateAPI.ValidateToken",
                 "responses": {
                     "200": {
@@ -513,7 +513,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 },
                 "token": {
                     "type": "string",
-                    "description": " unique identifier of for the type of credential.\n in case of API token, its the token itself and in case of \n API certificate its the serial number.",
+                    "description": " unique identifier of for the type of credential.\n in case of API token, its the token itself and in case of\n API certificate its the serial number.",
                     "title": "Token",
                     "x-displayname": "Token"
                 }
@@ -546,7 +546,7 @@ var CustomPrivateAPISwaggerJSON string = `{
                 },
                 "valid": {
                     "type": "boolean",
-                    "description": " Result of validation. ",
+                    "description": " Result of validation.",
                     "title": "Valid",
                     "format": "boolean",
                     "x-displayname": "valid"

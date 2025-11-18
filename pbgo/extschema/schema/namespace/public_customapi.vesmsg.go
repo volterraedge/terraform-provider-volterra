@@ -24,15 +24,15 @@ var (
 
 // augmented methods on protoc/std generated struct
 
-func (m *APIItem) ToJSON() (string, error) {
+func (m *APIItemListReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *APIItem) ToYAML() (string, error) {
+func (m *APIItemListReq) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *APIItem) DeepCopy() *APIItem {
+func (m *APIItemListReq) DeepCopy() *APIItemListReq {
 	if m == nil {
 		return nil
 	}
@@ -40,7 +40,7 @@ func (m *APIItem) DeepCopy() *APIItem {
 	if err != nil {
 		return nil
 	}
-	c := &APIItem{}
+	c := &APIItemListReq{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -48,57 +48,95 @@ func (m *APIItem) DeepCopy() *APIItem {
 	return c
 }
 
-func (m *APIItem) DeepCopyProto() proto.Message {
+func (m *APIItemListReq) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *APIItem) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return APIItemValidator().Validate(ctx, m, opts...)
+func (m *APIItemListReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIItemListReqValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateAPIItem struct {
+type ValidateAPIItemListReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateAPIItem) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*APIItem)
+func (v *ValidateAPIItemListReq) ItemsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for items")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*APIItemReq, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := APIItemReqValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for items")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*APIItemReq)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*APIItemReq, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated items")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items items")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIItemListReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIItemListReq)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *APIItem got type %s", t)
+			return fmt.Errorf("Expected type *APIItemListReq got type %s", t)
 		}
 	}
 	if m == nil {
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["method"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("method"))
-		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["items"]; exists {
+		vOpts := append(opts, db.WithValidateField("items"))
+		if err := fv(ctx, m.GetItems(), vOpts...); err != nil {
 			return err
 		}
 
 	}
 
-	if fv, exists := v.FldValidators["path"]; exists {
+	if fv, exists := v.FldValidators["list_id"]; exists {
 
-		vOpts := append(opts, db.WithValidateField("path"))
-		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
-			return err
-		}
-
-	}
-
-	if fv, exists := v.FldValidators["result"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("result"))
-		if err := fv(ctx, m.GetResult(), vOpts...); err != nil {
+		vOpts := append(opts, db.WithValidateField("list_id"))
+		if err := fv(ctx, m.GetListId(), vOpts...); err != nil {
 			return err
 		}
 
@@ -108,27 +146,46 @@ func (v *ValidateAPIItem) Validate(ctx context.Context, pm interface{}, opts ...
 }
 
 // Well-known symbol for default validator implementation
-var DefaultAPIItemValidator = func() *ValidateAPIItem {
-	v := &ValidateAPIItem{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultAPIItemListReqValidator = func() *ValidateAPIItemListReq {
+	v := &ValidateAPIItemListReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhItems := v.ItemsValidationRuleHandler
+	rulesItems := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "100",
+	}
+	vFn, err = vrhItems(rulesItems)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIItemListReq.items: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["items"] = vFn
 
 	return v
 }()
 
-func APIItemValidator() db.Validator {
-	return DefaultAPIItemValidator
+func APIItemListReqValidator() db.Validator {
+	return DefaultAPIItemListReqValidator
 }
 
 // augmented methods on protoc/std generated struct
 
-func (m *APIItemList) ToJSON() (string, error) {
+func (m *APIItemListResp) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *APIItemList) ToYAML() (string, error) {
+func (m *APIItemListResp) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *APIItemList) DeepCopy() *APIItemList {
+func (m *APIItemListResp) DeepCopy() *APIItemListResp {
 	if m == nil {
 		return nil
 	}
@@ -136,7 +193,7 @@ func (m *APIItemList) DeepCopy() *APIItemList {
 	if err != nil {
 		return nil
 	}
-	c := &APIItemList{}
+	c := &APIItemListResp{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -144,29 +201,29 @@ func (m *APIItemList) DeepCopy() *APIItemList {
 	return c
 }
 
-func (m *APIItemList) DeepCopyProto() proto.Message {
+func (m *APIItemListResp) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *APIItemList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return APIItemListValidator().Validate(ctx, m, opts...)
+func (m *APIItemListResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIItemListRespValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateAPIItemList struct {
+type ValidateAPIItemListResp struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateAPIItemList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*APIItemList)
+func (v *ValidateAPIItemListResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIItemListResp)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *APIItemList got type %s", t)
+			return fmt.Errorf("Expected type *APIItemListResp got type %s", t)
 		}
 	}
 	if m == nil {
@@ -207,14 +264,304 @@ func (v *ValidateAPIItemList) Validate(ctx context.Context, pm interface{}, opts
 }
 
 // Well-known symbol for default validator implementation
-var DefaultAPIItemListValidator = func() *ValidateAPIItemList {
-	v := &ValidateAPIItemList{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultAPIItemListRespValidator = func() *ValidateAPIItemListResp {
+	v := &ValidateAPIItemListResp{FldValidators: map[string]db.ValidatorFunc{}}
 
 	return v
 }()
 
-func APIItemListValidator() db.Validator {
-	return DefaultAPIItemListValidator
+func APIItemListRespValidator() db.Validator {
+	return DefaultAPIItemListRespValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *APIItemReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIItemReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIItemReq) DeepCopy() *APIItemReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIItemReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIItemReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIItemReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIItemReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAPIItemReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIItemReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIItemReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIItemReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["method"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("method"))
+		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("path"))
+		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIItemReqValidator = func() *ValidateAPIItemReq {
+	v := &ValidateAPIItemReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func APIItemReqValidator() db.Validator {
+	return DefaultAPIItemReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *APIItemResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIItemResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIItemResp) DeepCopy() *APIItemResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIItemResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIItemResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIItemResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIItemRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAPIItemResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIItemResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIItemResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIItemResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	switch m.GetAccessEnablers().(type) {
+	case *APIItemResp_None:
+		if fv, exists := v.FldValidators["access_enablers.none"]; exists {
+			val := m.GetAccessEnablers().(*APIItemResp_None).None
+			vOpts := append(opts,
+				db.WithValidateField("access_enablers"),
+				db.WithValidateField("none"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *APIItemResp_AddonServices:
+		if fv, exists := v.FldValidators["access_enablers.addon_services"]; exists {
+			val := m.GetAccessEnablers().(*APIItemResp_AddonServices).AddonServices
+			vOpts := append(opts,
+				db.WithValidateField("access_enablers"),
+				db.WithValidateField("addon_services"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["method"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("method"))
+		if err := fv(ctx, m.GetMethod(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("path"))
+		if err := fv(ctx, m.GetPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["result"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("result"))
+		if err := fv(ctx, m.GetResult(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIItemRespValidator = func() *ValidateAPIItemResp {
+	v := &ValidateAPIItemResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func APIItemRespValidator() db.Validator {
+	return DefaultAPIItemRespValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *AccessEnablerAddonService) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *AccessEnablerAddonService) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *AccessEnablerAddonService) DeepCopy() *AccessEnablerAddonService {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &AccessEnablerAddonService{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *AccessEnablerAddonService) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *AccessEnablerAddonService) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return AccessEnablerAddonServiceValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAccessEnablerAddonService struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAccessEnablerAddonService) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*AccessEnablerAddonService)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *AccessEnablerAddonService got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["addon_service_names"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("addon_service_names"))
+		for idx, item := range m.GetAddonServiceNames() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAccessEnablerAddonServiceValidator = func() *ValidateAccessEnablerAddonService {
+	v := &ValidateAccessEnablerAddonService{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func AccessEnablerAddonServiceValidator() db.Validator {
+	return DefaultAccessEnablerAddonServiceValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -258,6 +605,54 @@ type ValidateEvaluateAPIAccessReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateEvaluateAPIAccessReq) ItemListsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for item_lists")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*APIItemListReq, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := APIItemListReqValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for item_lists")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*APIItemListReq)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*APIItemListReq, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated item_lists")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items item_lists")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateEvaluateAPIAccessReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*EvaluateAPIAccessReq)
 	if !ok {
@@ -272,14 +667,19 @@ func (v *ValidateEvaluateAPIAccessReq) Validate(ctx context.Context, pm interfac
 		return nil
 	}
 
-	if fv, exists := v.FldValidators["item_lists"]; exists {
+	if fv, exists := v.FldValidators["access_control_type"]; exists {
 
+		vOpts := append(opts, db.WithValidateField("access_control_type"))
+		if err := fv(ctx, m.GetAccessControlType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["item_lists"]; exists {
 		vOpts := append(opts, db.WithValidateField("item_lists"))
-		for idx, item := range m.GetItemLists() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetItemLists(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -299,6 +699,25 @@ func (v *ValidateEvaluateAPIAccessReq) Validate(ctx context.Context, pm interfac
 // Well-known symbol for default validator implementation
 var DefaultEvaluateAPIAccessReqValidator = func() *ValidateEvaluateAPIAccessReq {
 	v := &ValidateEvaluateAPIAccessReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhItemLists := v.ItemListsValidationRuleHandler
+	rulesItemLists := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1000",
+	}
+	vFn, err = vrhItemLists(rulesItemLists)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for EvaluateAPIAccessReq.item_lists: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["item_lists"] = vFn
 
 	return v
 }()
@@ -436,12 +855,12 @@ func (v *ValidateEvaluateBatchAPIAccessReq) BatchNamespaceApiListValidationRuleH
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for batch_namespace_api_list")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*NamespaceAPIList, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*NamespaceAPIListReq, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := NamespaceAPIListValidator().Validate(ctx, el, opts...); err != nil {
+			if err := NamespaceAPIListReqValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -453,9 +872,9 @@ func (v *ValidateEvaluateBatchAPIAccessReq) BatchNamespaceApiListValidationRuleH
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*NamespaceAPIList)
+		elems, ok := val.([]*NamespaceAPIListReq)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*NamespaceAPIList, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*NamespaceAPIListReq, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -605,8 +1024,6 @@ func (v *ValidateEvaluateBatchAPIAccessResp) Validate(ctx context.Context, pm in
 // Well-known symbol for default validator implementation
 var DefaultEvaluateBatchAPIAccessRespValidator = func() *ValidateEvaluateBatchAPIAccessResp {
 	v := &ValidateEvaluateBatchAPIAccessResp{FldValidators: map[string]db.ValidatorFunc{}}
-
-	v.FldValidators["batch_namespace_api_list"] = NamespaceAPIListValidator().Validate
 
 	return v
 }()
@@ -776,15 +1193,15 @@ func LookupUserRolesRespValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
-func (m *NamespaceAPIList) ToJSON() (string, error) {
+func (m *NamespaceAPIListReq) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
 
-func (m *NamespaceAPIList) ToYAML() (string, error) {
+func (m *NamespaceAPIListReq) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
-func (m *NamespaceAPIList) DeepCopy() *NamespaceAPIList {
+func (m *NamespaceAPIListReq) DeepCopy() *NamespaceAPIListReq {
 	if m == nil {
 		return nil
 	}
@@ -792,7 +1209,7 @@ func (m *NamespaceAPIList) DeepCopy() *NamespaceAPIList {
 	if err != nil {
 		return nil
 	}
-	c := &NamespaceAPIList{}
+	c := &NamespaceAPIListReq{}
 	err = c.Unmarshal(ser)
 	if err != nil {
 		return nil
@@ -800,34 +1217,34 @@ func (m *NamespaceAPIList) DeepCopy() *NamespaceAPIList {
 	return c
 }
 
-func (m *NamespaceAPIList) DeepCopyProto() proto.Message {
+func (m *NamespaceAPIListReq) DeepCopyProto() proto.Message {
 	if m == nil {
 		return nil
 	}
 	return m.DeepCopy()
 }
 
-func (m *NamespaceAPIList) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
-	return NamespaceAPIListValidator().Validate(ctx, m, opts...)
+func (m *NamespaceAPIListReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NamespaceAPIListReqValidator().Validate(ctx, m, opts...)
 }
 
-type ValidateNamespaceAPIList struct {
+type ValidateNamespaceAPIListReq struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateNamespaceAPIList) ItemListsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+func (v *ValidateNamespaceAPIListReq) ItemListsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
 
 	itemRules := db.GetRepMessageItemRules(rules)
 	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
 	if err != nil {
 		return nil, errors.Wrap(err, "Message ValidationRuleHandler for item_lists")
 	}
-	itemsValidatorFn := func(ctx context.Context, elems []*APIItemList, opts ...db.ValidateOpt) error {
+	itemsValidatorFn := func(ctx context.Context, elems []*APIItemListReq, opts ...db.ValidateOpt) error {
 		for i, el := range elems {
 			if err := itemValFn(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
-			if err := APIItemListValidator().Validate(ctx, el, opts...); err != nil {
+			if err := APIItemListReqValidator().Validate(ctx, el, opts...); err != nil {
 				return errors.Wrap(err, fmt.Sprintf("element %d", i))
 			}
 		}
@@ -839,9 +1256,9 @@ func (v *ValidateNamespaceAPIList) ItemListsValidationRuleHandler(rules map[stri
 	}
 
 	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		elems, ok := val.([]*APIItemList)
+		elems, ok := val.([]*APIItemListReq)
 		if !ok {
-			return fmt.Errorf("Repeated validation expected []*APIItemList, got %T", val)
+			return fmt.Errorf("Repeated validation expected []*APIItemListReq, got %T", val)
 		}
 		l := []string{}
 		for _, elem := range elems {
@@ -863,14 +1280,14 @@ func (v *ValidateNamespaceAPIList) ItemListsValidationRuleHandler(rules map[stri
 	return validatorFn, nil
 }
 
-func (v *ValidateNamespaceAPIList) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
-	m, ok := pm.(*NamespaceAPIList)
+func (v *ValidateNamespaceAPIListReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NamespaceAPIListReq)
 	if !ok {
 		switch t := pm.(type) {
 		case nil:
 			return nil
 		default:
-			return fmt.Errorf("Expected type *NamespaceAPIList got type %s", t)
+			return fmt.Errorf("Expected type *NamespaceAPIListReq got type %s", t)
 		}
 	}
 	if m == nil {
@@ -898,8 +1315,8 @@ func (v *ValidateNamespaceAPIList) Validate(ctx context.Context, pm interface{},
 }
 
 // Well-known symbol for default validator implementation
-var DefaultNamespaceAPIListValidator = func() *ValidateNamespaceAPIList {
-	v := &ValidateNamespaceAPIList{FldValidators: map[string]db.ValidatorFunc{}}
+var DefaultNamespaceAPIListReqValidator = func() *ValidateNamespaceAPIListReq {
+	v := &ValidateNamespaceAPIListReq{FldValidators: map[string]db.ValidatorFunc{}}
 
 	var (
 		err error
@@ -915,7 +1332,7 @@ var DefaultNamespaceAPIListValidator = func() *ValidateNamespaceAPIList {
 	}
 	vFn, err = vrhItemLists(rulesItemLists)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for NamespaceAPIList.item_lists: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NamespaceAPIListReq.item_lists: %s", err)
 		panic(errMsg)
 	}
 	v.FldValidators["item_lists"] = vFn
@@ -923,6 +1340,96 @@ var DefaultNamespaceAPIListValidator = func() *ValidateNamespaceAPIList {
 	return v
 }()
 
-func NamespaceAPIListValidator() db.Validator {
-	return DefaultNamespaceAPIListValidator
+func NamespaceAPIListReqValidator() db.Validator {
+	return DefaultNamespaceAPIListReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NamespaceAPIListResp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NamespaceAPIListResp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NamespaceAPIListResp) DeepCopy() *NamespaceAPIListResp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NamespaceAPIListResp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NamespaceAPIListResp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NamespaceAPIListResp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NamespaceAPIListRespValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNamespaceAPIListResp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNamespaceAPIListResp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NamespaceAPIListResp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NamespaceAPIListResp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["item_lists"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("item_lists"))
+		for idx, item := range m.GetItemLists() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNamespaceAPIListRespValidator = func() *ValidateNamespaceAPIListResp {
+	v := &ValidateNamespaceAPIListResp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func NamespaceAPIListRespValidator() db.Validator {
+	return DefaultNamespaceAPIListRespValidator
 }

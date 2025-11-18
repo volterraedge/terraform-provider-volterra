@@ -22,23 +22,17 @@ resource "volterra_udp_loadbalancer" "example" {
 
   // One of the arguments from this list "advertise_custom advertise_on_public advertise_on_public_default_vip do_not_advertise" must be set
 
-  advertise_on_public {
-    public_ip {
-      name      = "test1"
-      namespace = "staging"
-      tenant    = "acmecorp"
-    }
-  }
+  do_not_advertise = true
 
-  // One of the arguments from this list "hash_policy_choice_random hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness" must be set
+  // One of the arguments from this list "hash_policy_choice_least_active hash_policy_choice_random hash_policy_choice_round_robin hash_policy_choice_source_ip_stickiness" must be set
 
-  hash_policy_choice_source_ip_stickiness = true
+  hash_policy_choice_round_robin = true
 
   // One of the arguments from this list "udp" must be set
 
   udp = true
 
-  // One of the arguments from this list "listen_port" must be set
+  // One of the arguments from this list "listen_port port_ranges" must be set
 
   listen_port = "53"
 }
@@ -74,13 +68,21 @@ Argument Reference
 
 `do_not_advertise` - (Optional) Do not advertise this load balancer (`Bool`).
 
+###### One of the arguments from this list "do_not_retract_cluster, retract_cluster" can be set
+
+`do_not_retract_cluster` - (Optional) configuration. (`Bool`).(Deprecated)
+
+`retract_cluster` - (Optional) for route (`Bool`).(Deprecated)
+
 `dns_volterra_managed` - (Optional) As a prerequisite, the domain to be delegated to F5 Distributed Cloud using the Delegated Domain feature or a DNS CNAME record must be created in your DNS provider's portal. (`Bool`).
 
 `domains` - (Optional) A list of domains (host/authority header) that will be matched to this load balancer. (`List of String`).
 
 `enable_per_packet_load_balancing` - (Optional) If enabled: Each packet is directed to an upstream server as the load balancing algorithm dictates. (`Bool`).
 
-###### One of the arguments from this list "hash_policy_choice_random, hash_policy_choice_round_robin, hash_policy_choice_source_ip_stickiness" must be set
+###### One of the arguments from this list "hash_policy_choice_least_active, hash_policy_choice_random, hash_policy_choice_round_robin, hash_policy_choice_source_ip_stickiness" must be set
+
+`hash_policy_choice_least_active` - (Optional) Connections are sent to origin server that has least active connections (`Bool`).(Deprecated)
 
 `hash_policy_choice_random` - (Optional) Connections are sent to all eligible origin servers in random fashion (`Bool`).
 
@@ -96,9 +98,11 @@ Argument Reference
 
 `origin_pools_weights` - (Optional) Origin pools with weights and priorities used for this load balancer.. See [Origin Pools Weights ](#origin-pools-weights) below for details.
 
-###### One of the arguments from this list "listen_port" must be set
+###### One of the arguments from this list "listen_port, port_ranges" must be set
 
 `listen_port` - (Optional) Listen Port for this load balancer (`Int`).
+
+`port_ranges` - (Optional) Each port range consists of a single port or two ports separated by "-". (`String`).
 
 ### Origin Pools Weights
 
@@ -132,7 +136,7 @@ Advertise this load balancer on public network with a user specified public IP a
 
 Where should this load balancer be available.
 
-###### One of the arguments from this list "advertise_on_public, site, site_segment, virtual_network, virtual_site, virtual_site_segment, virtual_site_with_vip, vk8s_service" must be set
+###### One of the arguments from this list "advertise_on_public, cloud_edge_segment, segment, site, site_segment, virtual_network, virtual_site, virtual_site_segment, virtual_site_with_vip, vk8s_service" must be set
 
 `advertise_on_public` - (Optional) Advertise this load balancer on public network. See [Choice Advertise On Public ](#choice-advertise-on-public) below for details.
 

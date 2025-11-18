@@ -50,6 +50,49 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bgp_routing_policy.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.rules.#.action.aggregate",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp_routing_policy.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.rules.#.action.aggregate",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp_routing_policy.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.rules.#.action.aggregate",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.rules.#.action.aggregate",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.rules.#.action.aggregate",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.bgp_routing_policy.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.rules.#.action.aggregate",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.bgp_routing_policy.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.rules.#.action.aggregate",
+			AllowedEnvironments: []string{"demo1", "test"},
+		},
+	}
+
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
@@ -98,11 +141,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

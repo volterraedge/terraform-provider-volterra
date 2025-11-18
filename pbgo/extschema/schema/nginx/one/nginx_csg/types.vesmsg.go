@@ -88,6 +88,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 	}
 
+	if fv, exists := v.FldValidators["csg_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csg_name"))
+		if err := fv(ctx, m.GetCsgName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["object_id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("object_id"))
@@ -188,6 +197,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["csg_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("csg_name"))
+		if err := fv(ctx, m.GetCsgName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["object_id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("object_id"))
@@ -229,6 +247,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 		return
 	}
 	m.ApiDiscoverySpec = f.GetApiDiscoverySpec()
+	m.CsgName = f.GetCsgName()
 	m.ObjectId = f.GetObjectId()
 	m.WafSpec = f.GetWafSpec()
 }
@@ -249,6 +268,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	_ = m1
 
 	f.ApiDiscoverySpec = m1.ApiDiscoverySpec
+	f.CsgName = m1.CsgName
 	f.ObjectId = m1.ObjectId
 	f.WafSpec = m1.WafSpec
 }

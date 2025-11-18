@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.api_sec.api_crawler.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.api_sec.api_crawler.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2656,6 +2656,22 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "api_crawlerApiCrawlingStatus": {
+            "type": "object",
+            "description": "Contains status information for API crawling configuration",
+            "title": "API Crawling Status Type",
+            "x-displayname": "API Crawling Status",
+            "x-ves-proto-message": "ves.io.schema.api_sec.api_crawler.ApiCrawlingStatus",
+            "properties": {
+                "last_updated": {
+                    "type": "string",
+                    "description": " Timestamp of the most recent change for the API Crawling configuration",
+                    "title": "last_updated",
+                    "format": "date-time",
+                    "x-displayname": "Last Updated"
+                }
+            }
+        },
         "api_crawlerDomainConfiguration": {
             "type": "object",
             "description": "The Domain configuration message",
@@ -2708,6 +2724,80 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "api_crawlerScanInfo": {
+            "type": "object",
+            "description": "scanInfo represents the status and metadata of an API scan",
+            "title": "Scan Information",
+            "x-displayname": "Scan Information",
+            "x-ves-proto-message": "ves.io.schema.api_sec.api_crawler.ScanInfo",
+            "properties": {
+                "added_to_queue": {
+                    "type": "string",
+                    "description": " Timestamp when scan was added to the queue",
+                    "title": "added_to_queue",
+                    "format": "date-time",
+                    "x-displayname": "Added To Queue"
+                },
+                "domain": {
+                    "type": "string",
+                    "description": " The domain being scanned\n\nExample: - \"example1.com\"-",
+                    "title": "domain",
+                    "x-displayname": "Domain",
+                    "x-ves-example": "example1.com"
+                },
+                "endpoint_count": {
+                    "type": "integer",
+                    "description": " The total count of unique API endpoints discovered during the crawling process\n\nExample: - 42-",
+                    "title": "Number of endpoints discovered",
+                    "format": "int64",
+                    "x-displayname": "Number of EndPoints"
+                },
+                "error": {
+                    "type": "string",
+                    "description": " Error message if the scan encountered any issues\n\nExample: - \"Authentication failed\"-",
+                    "title": "error",
+                    "x-displayname": "Error Message",
+                    "x-ves-example": "Authentication failed"
+                },
+                "kafka_message_created_at": {
+                    "type": "string",
+                    "description": " Timestamp when the message was created in Kafka",
+                    "title": "kafka_message_created_at",
+                    "format": "date-time",
+                    "x-displayname": "Kafka Message Created At"
+                },
+                "last_status_update": {
+                    "type": "string",
+                    "description": " Timestamp of the last status update",
+                    "title": "last_status_update",
+                    "format": "date-time",
+                    "x-displayname": "Last Status Updated"
+                },
+                "status": {
+                    "description": " Current status of the scan\n\nExample: - \"Running\"-",
+                    "title": "status",
+                    "$ref": "#/definitions/api_crawlerScanStatus",
+                    "x-displayname": "Status",
+                    "x-ves-example": "Running"
+                }
+            }
+        },
+        "api_crawlerScanStatus": {
+            "type": "string",
+            "description": "Represents the current status of an API crawling scan\n\nDefault unspecified status\nScan has successfully completed\nScan is currently in progress\nScan has been initiated and is beginning execution\nScan is queued and waiting to start\nScan encountered an error",
+            "title": "Scan Status",
+            "enum": [
+                "UNSPECIFIED",
+                "COMPLETED",
+                "RUNNING",
+                "STARTED",
+                "PENDING",
+                "ERROR"
+            ],
+            "default": "UNSPECIFIED",
+            "x-displayname": "Scan Status",
+            "x-ves-proto-enum": "ves.io.schema.api_sec.api_crawler.ScanStatus"
+        },
         "api_crawlerSimpleLogin": {
             "type": "object",
             "title": "Simple Login",
@@ -2751,6 +2841,12 @@ var APISwaggerJSON string = `{
             "x-displayname": "Status Object",
             "x-ves-proto-message": "ves.io.schema.api_sec.api_crawler.StatusObject",
             "properties": {
+                "api_crawling_status": {
+                    "description": " Status information about the API Crawling service including last update timestamp",
+                    "title": "api_crawling_status",
+                    "$ref": "#/definitions/api_crawlerApiCrawlingStatus",
+                    "x-displayname": "API Crawling Status"
+                },
                 "conditions": {
                     "type": "array",
                     "description": " Conditions reported by various component of the system.",
@@ -2758,7 +2854,8 @@ var APISwaggerJSON string = `{
                     "items": {
                         "$ref": "#/definitions/schemaConditionType"
                     },
-                    "x-displayname": "Conditions"
+                    "x-displayname": "Conditions",
+                    "x-ves-deprecated": "Unused"
                 },
                 "metadata": {
                     "description": " Standard status's metadata",
@@ -2774,6 +2871,15 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                },
+                "scans": {
+                    "type": "array",
+                    "description": " List of current scanning status for all domains configured for API Crawling",
+                    "title": "scans_status",
+                    "items": {
+                        "$ref": "#/definitions/api_crawlerScanInfo"
+                    },
+                    "x-displayname": "Scans Status"
                 }
             }
         },
@@ -3534,6 +3640,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

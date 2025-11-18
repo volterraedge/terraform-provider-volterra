@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.nat_policy.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.nat_policy.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2297,14 +2297,14 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.nat_policy.ActionType",
             "properties": {
                 "dynamic": {
-                    "description": "Exclusive with [virtual_cidr]\n Source NAT by using SNAT Pool or Cloud Elastic IP Object",
+                    "description": "Exclusive with [virtual_cidr]\n Source NAT to either an SNAT Pool for East-West traffic or to a Cloud Elastic IP Object.\n Note that for a 3-node cluster the IPv4 prefix list should provide a minimum of 3 addresses to ensure each node gets an IP address from the pool.",
                     "title": "Source NAT",
                     "$ref": "#/definitions/nat_policyDynamicPool",
                     "x-displayname": "Source NAT"
                 },
                 "virtual_cidr": {
                     "type": "string",
-                    "description": "Exclusive with [dynamic]\n Virtual Subnet NAT is static NAT that gets applied bidirectionally by using both Source \u0026 Destination NAT\n\nValidation Rules:\n  ves.io.schema.rules.string.ip_prefix: true\n",
+                    "description": "Exclusive with [dynamic]\n Virtual Subnet NAT is static NAT that does a one-to-one translation between the real source IP CIDR in the policy and the virtual CIDR in a bidirectional fashion.\n The range of the real CIDR and virtual CIDRs should be the same (e.g. if the real CIDR has the CIDR 10.10.10.0/24, the virtual CIDR has 100.100.100.0/24.\n\nValidation Rules:\n  ves.io.schema.rules.string.ip_prefix: true\n",
                     "title": "Virtual Subnet NAT",
                     "x-displayname": "Virtual Subnet NAT",
                     "x-ves-validation-rules": {
@@ -2686,8 +2686,15 @@ var APISwaggerJSON string = `{
             "title": "Match Criteria",
             "x-displayname": "Match Criteria",
             "x-ves-oneof-field-network_choice": "[\"segment\",\"virtual_network\"]",
+            "x-ves-oneof-field-protocol_choice": "[\"any\",\"icmp\",\"tcp\",\"udp\"]",
             "x-ves-proto-message": "ves.io.schema.nat_policy.MatchCriteriaType",
             "properties": {
+                "any": {
+                    "description": "Exclusive with [icmp tcp udp]\n Match Any Protocol",
+                    "title": "Any Protocol",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "ANY"
+                },
                 "destination_cidr": {
                     "type": "array",
                     "description": " Destination IP of the packet to match\n\nExample: - \"1.1.1.0/24 or 2001::10/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ip_prefix: true\n",
@@ -2706,6 +2713,12 @@ var APISwaggerJSON string = `{
                     "title": "destination port",
                     "$ref": "#/definitions/schemaPortMatcherType",
                     "x-displayname": "Destination Port"
+                },
+                "icmp": {
+                    "description": "Exclusive with [any tcp udp]\n Match ICMP Protocol",
+                    "title": "ICMP Protocol",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "ICMP"
                 },
                 "protocol": {
                     "description": " Protocol of the packet to match\n\nExample: - \"ALL\"-\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n",
@@ -2742,11 +2755,44 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaPortMatcherType",
                     "x-displayname": "Source Port"
                 },
+                "tcp": {
+                    "description": "Exclusive with [any icmp udp]\n Match TCP Protocol",
+                    "title": "TCP Protocol",
+                    "$ref": "#/definitions/nat_policyPortConfiguration",
+                    "x-displayname": "TCP"
+                },
+                "udp": {
+                    "description": "Exclusive with [any icmp tcp]\n Match UDP Protocol",
+                    "title": "UDP Protocol",
+                    "$ref": "#/definitions/nat_policyPortConfiguration",
+                    "x-displayname": "UDP"
+                },
                 "virtual_network": {
                     "description": "Exclusive with [segment]\n When there is no network connector, this field need not be specified. When there is network connector configured and if packet is destined to destination network, destination network needs to be configured here",
                     "title": "Destination Virtual Network",
                     "$ref": "#/definitions/schemaVirtualNetworkReferenceType",
                     "x-displayname": "Destination Virtual Network"
+                }
+            }
+        },
+        "nat_policyPortConfiguration": {
+            "type": "object",
+            "description": "Action to apply on the packet if the NAT rule is applied",
+            "title": "Port match Configuration",
+            "x-displayname": "Port Match Configuration",
+            "x-ves-proto-message": "ves.io.schema.nat_policy.PortConfiguration",
+            "properties": {
+                "destination_port": {
+                    "description": " Destination port of the packet to match",
+                    "title": "destination port",
+                    "$ref": "#/definitions/schemaPortMatcherType",
+                    "x-displayname": "Destination Port"
+                },
+                "source_port": {
+                    "description": " Source port of the packet to match",
+                    "title": "source port",
+                    "$ref": "#/definitions/schemaPortMatcherType",
+                    "x-displayname": "Source Port"
                 }
             }
         },
@@ -2810,7 +2856,7 @@ var APISwaggerJSON string = `{
             "title": "Rule Specification",
             "x-displayname": "Rule Specification",
             "x-ves-oneof-field-enable_choice": "[\"disable\",\"enable\"]",
-            "x-ves-oneof-field-scope_choice": "[\"cloud_connect\",\"node_interface\",\"segment\",\"virtual_network\"]",
+            "x-ves-oneof-field-scope_choice": "[\"cloud_connect\",\"network_interface\",\"segment\",\"virtual_network\"]",
             "x-ves-proto-message": "ves.io.schema.nat_policy.RuleType",
             "properties": {
                 "action": {
@@ -2824,7 +2870,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "cloud_connect": {
-                    "description": "Exclusive with [node_interface segment virtual_network]\n NAT rule is applied to packet coming from cloud connect",
+                    "description": "Exclusive with [network_interface segment virtual_network]\n NAT rule is applied to packet coming from cloud connect",
                     "title": "cloud connect",
                     "$ref": "#/definitions/schemaCloudConnectRefType",
                     "x-displayname": "Cloud Connect"
@@ -2858,20 +2904,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "node_interface": {
-                    "description": "Exclusive with [cloud_connect segment virtual_network]\n NAT rule is applied to packet coming from one or more interfaces of nodes",
-                    "title": "node interface",
-                    "$ref": "#/definitions/schemaNodeInterfaceType",
-                    "x-displayname": "Node Interface"
+                "network_interface": {
+                    "description": "Exclusive with [cloud_connect segment virtual_network]\n NAT rule is applied to packet coming from interface",
+                    "title": "interface",
+                    "$ref": "#/definitions/schemaNetworkInterfaceRefType",
+                    "x-displayname": "Interface"
                 },
                 "segment": {
-                    "description": "Exclusive with [cloud_connect node_interface virtual_network]\n NAT rule is applied to packet in the segment",
+                    "description": "Exclusive with [cloud_connect network_interface virtual_network]\n NAT rule is applied to packet in the segment",
                     "title": "segment",
                     "$ref": "#/definitions/schemaSegmentRefType",
                     "x-displayname": "Segment"
                 },
                 "virtual_network": {
-                    "description": "Exclusive with [cloud_connect node_interface segment]\n NAT rule is applied to packet in the virtual network",
+                    "description": "Exclusive with [cloud_connect network_interface segment]\n NAT rule is applied to packet in the virtual network",
                     "title": "virtual network",
                     "$ref": "#/definitions/schemaVirtualNetworkReferenceType",
                     "x-displayname": "Virtual Network"
@@ -3117,66 +3163,59 @@ var APISwaggerJSON string = `{
         },
         "schemaNetworkInterfaceRefType": {
             "type": "object",
-            "description": "x-displayName: \"NetworkInterface Reference Type\"\nReference to Network Interface Object",
+            "description": "Reference to Network Interface Object",
             "title": "NetworkInterfaceRefType",
+            "x-displayname": "NetworkInterface Reference Type",
+            "x-ves-proto-message": "ves.io.schema.NetworkInterfaceRefType",
             "properties": {
                 "refs": {
                     "type": "array",
-                    "description": "x-displayName: \"Network Interface\"\nx-required\nReference to Network Interface Object",
+                    "description": " Reference to Network Interface Object\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 1\n",
                     "title": "Network Interface",
+                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Network Interface",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 }
             }
         },
         "schemaNodeInterfaceInfo": {
             "type": "object",
-            "description": "On a multinode site, this list holds the nodes and corresponding tunnel transport interface",
+            "description": "x-displayName: \"NodeInterfaceInfo\"\nOn a multinode site, this list holds the nodes and corresponding tunnel transport interface",
             "title": "NodeInterfaceInfo",
-            "x-displayname": "Node Interface Info",
-            "x-ves-proto-message": "ves.io.schema.NodeInterfaceInfo",
             "properties": {
                 "interface": {
                     "type": "array",
-                    "description": " Interface reference on this node\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "description": "x-displayName: \"Interface\"\nInterface reference on this node",
                     "title": "Interface",
-                    "maxItems": 1,
                     "items": {
                         "$ref": "#/definitions/ioschemaObjectRefType"
-                    },
-                    "x-displayname": "Interface",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "1"
                     }
                 },
                 "node": {
                     "type": "string",
-                    "description": " Node name on this site\n\nExample: - \"master-0\"-",
-                    "title": "Node",
-                    "x-displayname": "Node",
-                    "x-ves-example": "master-0"
+                    "description": "x-displayName: \"Node\"\nx-example: \"master-0\"\nNode name on this site",
+                    "title": "Node"
                 }
             }
         },
         "schemaNodeInterfaceType": {
             "type": "object",
-            "description": "On multinode site, this type holds the information about per node interfaces",
+            "description": "x-displayName: \"NodeInterfaceType\"\nOn multinode site, this type holds the information about per node interfaces",
             "title": "NodeInterfaceType",
-            "x-displayname": "NodeInterfaceType",
-            "x-ves-proto-message": "ves.io.schema.NodeInterfaceType",
             "properties": {
                 "list": {
                     "type": "array",
-                    "description": " On a multinode site, this list holds the nodes and corresponding networking_interface\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n",
+                    "description": "x-displayName: \"Node Interface Info\"\nOn a multinode site, this list holds the nodes and corresponding networking_interface",
                     "title": "NodeInterfaceInfo",
-                    "maxItems": 8,
                     "items": {
                         "$ref": "#/definitions/schemaNodeInterfaceInfo"
-                    },
-                    "x-displayname": "NodeInterfaceInfo",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "8"
                     }
                 }
             }

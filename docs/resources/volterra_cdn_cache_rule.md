@@ -50,9 +50,9 @@ Rules are evaluated in the order in which they are specified. The evaluation sto
 
 ###### One of the arguments from this list "cache_bypass, eligible_for_cache" must be set
 
-`cache_bypass` - (Optional) Bypass Caching of content from the origin (`Bool`).
+`cache_bypass` - (Optional) Do not cache content if rule match occurs (`Bool`).
 
-`eligible_for_cache` - (Optional) Eligible for caching the content. See [Cache Actions Eligible For Cache ](#cache-actions-eligible-for-cache) below for details.
+`eligible_for_cache` - (Optional) Cache content if rule match occurs. See [Cache Actions Eligible For Cache ](#cache-actions-eligible-for-cache) below for details.
 
 `rule_expression_list` - (Required) Expressions are evaluated in the order in which they are specified. The evaluation stops when the first rule match occurs... See [Cache Rules Rule Expression List ](#cache-rules-rule-expression-list) below for details.
 
@@ -60,11 +60,11 @@ Rules are evaluated in the order in which they are specified. The evaluation sto
 
 ### Cache Actions Cache Bypass
 
-Bypass Caching of content from the origin.
+Do not cache content if rule match occurs.
 
 ### Cache Actions Eligible For Cache
 
-Eligible for caching the content.
+Cache content if rule match occurs.
 
 ###### One of the arguments from this list "scheme_proxy_host_request_uri, scheme_proxy_host_uri" must be set
 
@@ -92,7 +92,7 @@ Available operators.
 
 `Equals` - (Optional) Field must exactly match (`String`).
 
-`MatchRegex` - (Optional) Field matches regular expression (`String`).
+`MatchRegex` - (Optional) Field matches PCRE 1 compliant regular expression (`String`).
 
 `Startswith` - (Optional) Field must start with (`String`).
 
@@ -154,7 +154,7 @@ x-displayName: "Operator".
 
 `Equals` - (Optional) Field must exactly match (`String`).
 
-`MatchRegex` - (Optional) Field matches regular expression (`String`).
+`MatchRegex` - (Optional) Field matches PCRE 1 compliant regular expression (`String`).
 
 `Startswith` - (Optional) Field must start with (`String`).
 
@@ -166,7 +166,7 @@ x-displayName: "Scheme + Proxy Host + Request URI".
 
 `cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
 
-`ignore_response_cookie` - (Optional) When enabled, the upstream cookie is sent to the client (`Bool`).
+`ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
 
 ### Eligible For Cache Scheme Proxy Host Uri
 
@@ -176,7 +176,7 @@ x-displayName: "Scheme + Proxy Host + URI".
 
 `cache_ttl` - (Required) Format: [0-9][smhd], where s - seconds, m - minutes, h - hours, d - days (`String`).
 
-`ignore_response_cookie` - (Optional) When enabled, the upstream cookie is sent to the client (`Bool`).
+`ignore_response_cookie` - (Optional) By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present. (`Bool`).
 
 ### Path Match Operator
 
@@ -198,7 +198,7 @@ A specification of path match.
 
 `Equals` - (Optional) Field must exactly match (`String`).
 
-`MatchRegex` - (Optional) Field matches regular expression (`String`).
+`MatchRegex` - (Optional) Field matches PCRE 1 compliant regular expression (`String`).
 
 `Startswith` - (Optional) Field must start with (`String`).
 
@@ -222,7 +222,7 @@ x-displayName: "Operator".
 
 `Equals` - (Optional) Field must exactly match (`String`).
 
-`MatchRegex` - (Optional) Field matches regular expression (`String`).
+`MatchRegex` - (Optional) Field matches PCRE 1 compliant regular expression (`String`).
 
 `Startswith` - (Optional) Field must start with (`String`).
 

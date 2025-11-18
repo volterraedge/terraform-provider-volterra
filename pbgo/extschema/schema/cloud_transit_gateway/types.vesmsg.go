@@ -364,6 +364,15 @@ func (v *ValidateAWSType) Validate(ctx context.Context, pm interface{}, opts ...
 
 	}
 
+	if fv, exists := v.FldValidators["tgw_cidr_ipv4"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("tgw_cidr_ipv4"))
+		if err := fv(ctx, m.GetTgwCidrIpv4(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volterra_site_asn"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volterra_site_asn"))

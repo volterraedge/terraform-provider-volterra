@@ -18,12 +18,13 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	io "io"
 	math "math"
 	math_bits "math/bits"
 	reflect "reflect"
+	strconv "strconv"
 	strings "strings"
 )
 
@@ -39,12 +40,51 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// APIItem
+// AccessControlType
 //
-// x-displayName: "API Item"
-// An item for which API access needs to be checked - used in request and response
-// The result field is ignored when processing requests
-type APIItem struct {
+// x-displayName: "Access Control Type"
+// Enum consists of different access control types.
+type AccessControlType int32
+
+const (
+	// RBAC
+	//
+	// x-displayName: "Role based access control"
+	// Default access control, evaluates role based access control.
+	RBAC AccessControlType = 0
+	// PBAC
+	//
+	// x-displayName: "Plan based access control"
+	// Evaluates plan based access control
+	PBAC AccessControlType = 1
+	// ALL
+	//
+	// x-displayName: "All access controls "
+	// Evaluates all access controls specified in this enum.
+	ALL AccessControlType = 2
+)
+
+var AccessControlType_name = map[int32]string{
+	0: "RBAC",
+	1: "PBAC",
+	2: "ALL",
+}
+
+var AccessControlType_value = map[string]int32{
+	"RBAC": 0,
+	"PBAC": 1,
+	"ALL":  2,
+}
+
+func (AccessControlType) EnumDescriptor() ([]byte, []int) {
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{0}
+}
+
+// APIItemReq
+//
+// x-displayName: "API Item Req"
+// A request API item.
+type APIItemReq struct {
 	// method
 	//
 	// x-displayName: "Method"
@@ -57,24 +97,19 @@ type APIItem struct {
 	// x-example: "/api/web/namespaces"
 	// HTTP request URL path
 	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
-	// result
-	//
-	// x-displayName: "Result"
-	// Result after evaluation
-	Result bool `protobuf:"varint,3,opt,name=result,proto3" json:"result,omitempty"`
 }
 
-func (m *APIItem) Reset()      { *m = APIItem{} }
-func (*APIItem) ProtoMessage() {}
-func (*APIItem) Descriptor() ([]byte, []int) {
+func (m *APIItemReq) Reset()      { *m = APIItemReq{} }
+func (*APIItemReq) ProtoMessage() {}
+func (*APIItemReq) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ae2cd67c9bbaccbd, []int{0}
 }
-func (m *APIItem) XXX_Unmarshal(b []byte) error {
+func (m *APIItemReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *APIItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *APIItemReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_APIItem.Marshal(b, m, deterministic)
+		return xxx_messageInfo_APIItemReq.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -84,74 +119,61 @@ func (m *APIItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *APIItem) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_APIItem.Merge(m, src)
+func (m *APIItemReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_APIItemReq.Merge(m, src)
 }
-func (m *APIItem) XXX_Size() int {
+func (m *APIItemReq) XXX_Size() int {
 	return m.Size()
 }
-func (m *APIItem) XXX_DiscardUnknown() {
-	xxx_messageInfo_APIItem.DiscardUnknown(m)
+func (m *APIItemReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_APIItemReq.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_APIItem proto.InternalMessageInfo
+var xxx_messageInfo_APIItemReq proto.InternalMessageInfo
 
-func (m *APIItem) GetMethod() string {
+func (m *APIItemReq) GetMethod() string {
 	if m != nil {
 		return m.Method
 	}
 	return ""
 }
 
-func (m *APIItem) GetPath() string {
+func (m *APIItemReq) GetPath() string {
 	if m != nil {
 		return m.Path
 	}
 	return ""
 }
 
-func (m *APIItem) GetResult() bool {
-	if m != nil {
-		return m.Result
-	}
-	return false
-}
-
-// APIItemList
+// APIItemListReq
 //
-// x-displayName: "API Item List"
-// An list of items for which API access needs to be checked  - used in request and response
-// result will show combined AND output from the result of individual api items.
-type APIItemList struct {
+// x-displayName: "API Item List Req"
+// A request API item list.
+type APIItemListReq struct {
 	// list_id
 	//
 	// x-displayName: "List ID"
 	// x-example: "value"
-	// Identifier group items
+	// API item list identifier
 	ListId string `protobuf:"bytes,1,opt,name=list_id,json=listId,proto3" json:"list_id,omitempty"`
 	// items
 	//
 	// x-displayName: "Items"
-	// List of APIItem entries
-	Items []*APIItem `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
-	// result
-	//
-	// x-displayName: "Result"
-	// Combined result after evaluation of items
-	Result bool `protobuf:"varint,3,opt,name=result,proto3" json:"result,omitempty"`
+	// A list of request API items.
+	Items []*APIItemReq `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
 }
 
-func (m *APIItemList) Reset()      { *m = APIItemList{} }
-func (*APIItemList) ProtoMessage() {}
-func (*APIItemList) Descriptor() ([]byte, []int) {
+func (m *APIItemListReq) Reset()      { *m = APIItemListReq{} }
+func (*APIItemListReq) ProtoMessage() {}
+func (*APIItemListReq) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ae2cd67c9bbaccbd, []int{1}
 }
-func (m *APIItemList) XXX_Unmarshal(b []byte) error {
+func (m *APIItemListReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *APIItemList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *APIItemListReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_APIItemList.Marshal(b, m, deterministic)
+		return xxx_messageInfo_APIItemListReq.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -161,43 +183,36 @@ func (m *APIItemList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) 
 		return b[:n], nil
 	}
 }
-func (m *APIItemList) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_APIItemList.Merge(m, src)
+func (m *APIItemListReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_APIItemListReq.Merge(m, src)
 }
-func (m *APIItemList) XXX_Size() int {
+func (m *APIItemListReq) XXX_Size() int {
 	return m.Size()
 }
-func (m *APIItemList) XXX_DiscardUnknown() {
-	xxx_messageInfo_APIItemList.DiscardUnknown(m)
+func (m *APIItemListReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_APIItemListReq.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_APIItemList proto.InternalMessageInfo
+var xxx_messageInfo_APIItemListReq proto.InternalMessageInfo
 
-func (m *APIItemList) GetListId() string {
+func (m *APIItemListReq) GetListId() string {
 	if m != nil {
 		return m.ListId
 	}
 	return ""
 }
 
-func (m *APIItemList) GetItems() []*APIItem {
+func (m *APIItemListReq) GetItems() []*APIItemReq {
 	if m != nil {
 		return m.Items
 	}
 	return nil
 }
 
-func (m *APIItemList) GetResult() bool {
-	if m != nil {
-		return m.Result
-	}
-	return false
-}
-
 // EvaluateAPIAccessReq
 //
-// x-displayName: "Request for EvaluateAPIAccess"
-// Request body of EvaluateAPIAccess request
+// x-displayName: "Evaluate API Access Req"
+// Request body of Evaluate API Access
 type EvaluateAPIAccessReq struct {
 	// namespace
 	//
@@ -208,8 +223,13 @@ type EvaluateAPIAccessReq struct {
 	// item_lists
 	//
 	// x-displayName: "Item Lists"
-	// List of APIItemList entries
-	ItemLists []*APIItemList `protobuf:"bytes,2,rep,name=item_lists,json=itemLists,proto3" json:"item_lists,omitempty"`
+	// A list of request API item lists.
+	ItemLists []*APIItemListReq `protobuf:"bytes,3,rep,name=item_lists,json=itemLists,proto3" json:"item_lists,omitempty"`
+	// access_control_type
+	//
+	// x-displayName: "Access Control Type"
+	// access control type to evaluate item lists on.
+	AccessControlType AccessControlType `protobuf:"varint,4,opt,name=access_control_type,json=accessControlType,proto3,enum=ves.io.schema.namespace.AccessControlType" json:"access_control_type,omitempty"`
 }
 
 func (m *EvaluateAPIAccessReq) Reset()      { *m = EvaluateAPIAccessReq{} }
@@ -251,29 +271,297 @@ func (m *EvaluateAPIAccessReq) GetNamespace() string {
 	return ""
 }
 
-func (m *EvaluateAPIAccessReq) GetItemLists() []*APIItemList {
+func (m *EvaluateAPIAccessReq) GetItemLists() []*APIItemListReq {
 	if m != nil {
 		return m.ItemLists
 	}
 	return nil
 }
 
+func (m *EvaluateAPIAccessReq) GetAccessControlType() AccessControlType {
+	if m != nil {
+		return m.AccessControlType
+	}
+	return RBAC
+}
+
+// AccessEnablerAddonService
+//
+// x-displayName: "Access Enabler Addon Service"
+// An addon service details schema
+type AccessEnablerAddonService struct {
+	// addon_service_names
+	//
+	// x-displayName: "Addon Service Names"
+	// List of addon service names.
+	AddonServiceNames []string `protobuf:"bytes,1,rep,name=addon_service_names,json=addonServiceNames,proto3" json:"addon_service_names,omitempty"`
+}
+
+func (m *AccessEnablerAddonService) Reset()      { *m = AccessEnablerAddonService{} }
+func (*AccessEnablerAddonService) ProtoMessage() {}
+func (*AccessEnablerAddonService) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{3}
+}
+func (m *AccessEnablerAddonService) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AccessEnablerAddonService) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AccessEnablerAddonService.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AccessEnablerAddonService) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AccessEnablerAddonService.Merge(m, src)
+}
+func (m *AccessEnablerAddonService) XXX_Size() int {
+	return m.Size()
+}
+func (m *AccessEnablerAddonService) XXX_DiscardUnknown() {
+	xxx_messageInfo_AccessEnablerAddonService.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AccessEnablerAddonService proto.InternalMessageInfo
+
+func (m *AccessEnablerAddonService) GetAddonServiceNames() []string {
+	if m != nil {
+		return m.AddonServiceNames
+	}
+	return nil
+}
+
+// APIItemResp
+//
+// x-displayName: "API Item Resp"
+// A response API item.
+type APIItemResp struct {
+	// method
+	//
+	// x-displayName: "Method"
+	// x-example: "GET"
+	// HTTP request method
+	Method string `protobuf:"bytes,1,opt,name=method,proto3" json:"method,omitempty"`
+	// path
+	//
+	// x-displayName: "Path"
+	// x-example: "/api/web/namespaces"
+	// HTTP request URL path
+	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	// result
+	//
+	// x-displayName: "Result"
+	// Result after evaluation
+	Result bool `protobuf:"varint,3,opt,name=result,proto3" json:"result,omitempty"`
+	// access_enablers
+	//
+	// x-displayName: "Access Enablers"
+	// List of access enablers, such as addon services in case of PBAC denial for an API.
+	// This is not applicable for Evaluate Batch API Access for now.
+	//
+	// Types that are valid to be assigned to AccessEnablers:
+	//	*APIItemResp_None
+	//	*APIItemResp_AddonServices
+	AccessEnablers isAPIItemResp_AccessEnablers `protobuf_oneof:"access_enablers"`
+}
+
+func (m *APIItemResp) Reset()      { *m = APIItemResp{} }
+func (*APIItemResp) ProtoMessage() {}
+func (*APIItemResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{4}
+}
+func (m *APIItemResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *APIItemResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_APIItemResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *APIItemResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_APIItemResp.Merge(m, src)
+}
+func (m *APIItemResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *APIItemResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_APIItemResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_APIItemResp proto.InternalMessageInfo
+
+type isAPIItemResp_AccessEnablers interface {
+	isAPIItemResp_AccessEnablers()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type APIItemResp_None struct {
+	None *schema.Empty `protobuf:"bytes,5,opt,name=none,proto3,oneof" json:"none,omitempty"`
+}
+type APIItemResp_AddonServices struct {
+	AddonServices *AccessEnablerAddonService `protobuf:"bytes,6,opt,name=addon_services,json=addonServices,proto3,oneof" json:"addon_services,omitempty"`
+}
+
+func (*APIItemResp_None) isAPIItemResp_AccessEnablers()          {}
+func (*APIItemResp_AddonServices) isAPIItemResp_AccessEnablers() {}
+
+func (m *APIItemResp) GetAccessEnablers() isAPIItemResp_AccessEnablers {
+	if m != nil {
+		return m.AccessEnablers
+	}
+	return nil
+}
+
+func (m *APIItemResp) GetMethod() string {
+	if m != nil {
+		return m.Method
+	}
+	return ""
+}
+
+func (m *APIItemResp) GetPath() string {
+	if m != nil {
+		return m.Path
+	}
+	return ""
+}
+
+func (m *APIItemResp) GetResult() bool {
+	if m != nil {
+		return m.Result
+	}
+	return false
+}
+
+func (m *APIItemResp) GetNone() *schema.Empty {
+	if x, ok := m.GetAccessEnablers().(*APIItemResp_None); ok {
+		return x.None
+	}
+	return nil
+}
+
+func (m *APIItemResp) GetAddonServices() *AccessEnablerAddonService {
+	if x, ok := m.GetAccessEnablers().(*APIItemResp_AddonServices); ok {
+		return x.AddonServices
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*APIItemResp) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*APIItemResp_None)(nil),
+		(*APIItemResp_AddonServices)(nil),
+	}
+}
+
+// APIItemListResp
+//
+// x-displayName: "API Item List Resp"
+// A response API item list.
+// result will show combined AND output from the result of individual api items.
+type APIItemListResp struct {
+	// list_id
+	//
+	// x-displayName: "List ID"
+	// x-example: "value"
+	// API item list identifier
+	ListId string `protobuf:"bytes,1,opt,name=list_id,json=listId,proto3" json:"list_id,omitempty"`
+	// items
+	//
+	// x-displayName: "Items"
+	// A list of response API item lists.
+	Items []*APIItemResp `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	// result
+	//
+	// x-displayName: "Result"
+	// Combined result after evaluation of items
+	Result bool `protobuf:"varint,3,opt,name=result,proto3" json:"result,omitempty"`
+}
+
+func (m *APIItemListResp) Reset()      { *m = APIItemListResp{} }
+func (*APIItemListResp) ProtoMessage() {}
+func (*APIItemListResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{5}
+}
+func (m *APIItemListResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *APIItemListResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_APIItemListResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *APIItemListResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_APIItemListResp.Merge(m, src)
+}
+func (m *APIItemListResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *APIItemListResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_APIItemListResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_APIItemListResp proto.InternalMessageInfo
+
+func (m *APIItemListResp) GetListId() string {
+	if m != nil {
+		return m.ListId
+	}
+	return ""
+}
+
+func (m *APIItemListResp) GetItems() []*APIItemResp {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
+func (m *APIItemListResp) GetResult() bool {
+	if m != nil {
+		return m.Result
+	}
+	return false
+}
+
 // EvaluateAPIAccessResp
 //
 // x-displayName: "Response for EvaluateAPIAccess"
-// Response body of EvaluateAPIAccess request
+// Response body of Evaluate API Access
 type EvaluateAPIAccessResp struct {
 	// item_lists
 	//
 	// x-displayName: "Item Lists"
-	// List of APIItemList entries
-	ItemLists []*APIItemList `protobuf:"bytes,1,rep,name=item_lists,json=itemLists,proto3" json:"item_lists,omitempty"`
+	// A list of request API item lists.
+	ItemLists []*APIItemListResp `protobuf:"bytes,2,rep,name=item_lists,json=itemLists,proto3" json:"item_lists,omitempty"`
 }
 
 func (m *EvaluateAPIAccessResp) Reset()      { *m = EvaluateAPIAccessResp{} }
 func (*EvaluateAPIAccessResp) ProtoMessage() {}
 func (*EvaluateAPIAccessResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{3}
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{6}
 }
 func (m *EvaluateAPIAccessResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -302,18 +590,18 @@ func (m *EvaluateAPIAccessResp) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_EvaluateAPIAccessResp proto.InternalMessageInfo
 
-func (m *EvaluateAPIAccessResp) GetItemLists() []*APIItemList {
+func (m *EvaluateAPIAccessResp) GetItemLists() []*APIItemListResp {
 	if m != nil {
 		return m.ItemLists
 	}
 	return nil
 }
 
-// NamespaceAPIList
+// NamespaceAPIListReq
 //
-// x-displayName: "NamespaceAPIList"
-// NamespaceAPIList holds the namespace and its associated APIs
-type NamespaceAPIList struct {
+// x-displayName: "Namespace API List"
+// NamespaceAPIListReq holds the namespace and its associated APIs
+type NamespaceAPIListReq struct {
 	// namespace
 	//
 	// x-displayName: "Namespace"
@@ -323,21 +611,21 @@ type NamespaceAPIList struct {
 	// item_lists
 	//
 	// x-displayName: "Item Lists"
-	// List of APIItemList entries
-	ItemLists []*APIItemList `protobuf:"bytes,2,rep,name=item_lists,json=itemLists,proto3" json:"item_lists,omitempty"`
+	// A list of request API item lists.
+	ItemLists []*APIItemListReq `protobuf:"bytes,2,rep,name=item_lists,json=itemLists,proto3" json:"item_lists,omitempty"`
 }
 
-func (m *NamespaceAPIList) Reset()      { *m = NamespaceAPIList{} }
-func (*NamespaceAPIList) ProtoMessage() {}
-func (*NamespaceAPIList) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{4}
+func (m *NamespaceAPIListReq) Reset()      { *m = NamespaceAPIListReq{} }
+func (*NamespaceAPIListReq) ProtoMessage() {}
+func (*NamespaceAPIListReq) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{7}
 }
-func (m *NamespaceAPIList) XXX_Unmarshal(b []byte) error {
+func (m *NamespaceAPIListReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *NamespaceAPIList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *NamespaceAPIListReq) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_NamespaceAPIList.Marshal(b, m, deterministic)
+		return xxx_messageInfo_NamespaceAPIListReq.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -347,26 +635,26 @@ func (m *NamespaceAPIList) XXX_Marshal(b []byte, deterministic bool) ([]byte, er
 		return b[:n], nil
 	}
 }
-func (m *NamespaceAPIList) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NamespaceAPIList.Merge(m, src)
+func (m *NamespaceAPIListReq) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NamespaceAPIListReq.Merge(m, src)
 }
-func (m *NamespaceAPIList) XXX_Size() int {
+func (m *NamespaceAPIListReq) XXX_Size() int {
 	return m.Size()
 }
-func (m *NamespaceAPIList) XXX_DiscardUnknown() {
-	xxx_messageInfo_NamespaceAPIList.DiscardUnknown(m)
+func (m *NamespaceAPIListReq) XXX_DiscardUnknown() {
+	xxx_messageInfo_NamespaceAPIListReq.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_NamespaceAPIList proto.InternalMessageInfo
+var xxx_messageInfo_NamespaceAPIListReq proto.InternalMessageInfo
 
-func (m *NamespaceAPIList) GetNamespace() string {
+func (m *NamespaceAPIListReq) GetNamespace() string {
 	if m != nil {
 		return m.Namespace
 	}
 	return ""
 }
 
-func (m *NamespaceAPIList) GetItemLists() []*APIItemList {
+func (m *NamespaceAPIListReq) GetItemLists() []*APIItemListReq {
 	if m != nil {
 		return m.ItemLists
 	}
@@ -375,20 +663,20 @@ func (m *NamespaceAPIList) GetItemLists() []*APIItemList {
 
 // EvaluateBatchAPIAccessReq
 //
-// x-displayName: "Request for EvaluateBatchAPIAccess"
-// Request body of EvaluateBatchAPIAccess request
+// x-displayName: "Evaluate Batch API Access Req"
+// Request body of Evaluate Batch API Access
 type EvaluateBatchAPIAccessReq struct {
 	// batch_namespace_api_list
 	//
-	// x-displayName: "BatchNamespaceApiList"
+	// x-displayName: "Batch Namespace Api List"
 	// List of namespaces and associated api list entries
-	BatchNamespaceApiList []*NamespaceAPIList `protobuf:"bytes,1,rep,name=batch_namespace_api_list,json=batchNamespaceApiList,proto3" json:"batch_namespace_api_list,omitempty"`
+	BatchNamespaceApiList []*NamespaceAPIListReq `protobuf:"bytes,2,rep,name=batch_namespace_api_list,json=batchNamespaceApiList,proto3" json:"batch_namespace_api_list,omitempty"`
 }
 
 func (m *EvaluateBatchAPIAccessReq) Reset()      { *m = EvaluateBatchAPIAccessReq{} }
 func (*EvaluateBatchAPIAccessReq) ProtoMessage() {}
 func (*EvaluateBatchAPIAccessReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{5}
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{8}
 }
 func (m *EvaluateBatchAPIAccessReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -417,29 +705,93 @@ func (m *EvaluateBatchAPIAccessReq) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_EvaluateBatchAPIAccessReq proto.InternalMessageInfo
 
-func (m *EvaluateBatchAPIAccessReq) GetBatchNamespaceApiList() []*NamespaceAPIList {
+func (m *EvaluateBatchAPIAccessReq) GetBatchNamespaceApiList() []*NamespaceAPIListReq {
 	if m != nil {
 		return m.BatchNamespaceApiList
 	}
 	return nil
 }
 
+// NamespaceAPIListResp
+//
+// x-displayName: "Namespace API List Resp"
+// NamespaceAPIListResp holds the namespace and its associated APIs
+type NamespaceAPIListResp struct {
+	// namespace
+	//
+	// x-displayName: "Namespace"
+	// x-example: "value"
+	// Name of the namespace under which all the URLs in item lists were evaluated
+	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+	// item_lists
+	//
+	// x-displayName: "Item Lists"
+	// A list of response API item lists.
+	ItemLists []*APIItemListResp `protobuf:"bytes,2,rep,name=item_lists,json=itemLists,proto3" json:"item_lists,omitempty"`
+}
+
+func (m *NamespaceAPIListResp) Reset()      { *m = NamespaceAPIListResp{} }
+func (*NamespaceAPIListResp) ProtoMessage() {}
+func (*NamespaceAPIListResp) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{9}
+}
+func (m *NamespaceAPIListResp) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NamespaceAPIListResp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_NamespaceAPIListResp.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *NamespaceAPIListResp) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NamespaceAPIListResp.Merge(m, src)
+}
+func (m *NamespaceAPIListResp) XXX_Size() int {
+	return m.Size()
+}
+func (m *NamespaceAPIListResp) XXX_DiscardUnknown() {
+	xxx_messageInfo_NamespaceAPIListResp.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NamespaceAPIListResp proto.InternalMessageInfo
+
+func (m *NamespaceAPIListResp) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
+func (m *NamespaceAPIListResp) GetItemLists() []*APIItemListResp {
+	if m != nil {
+		return m.ItemLists
+	}
+	return nil
+}
+
 // EvaluateBatchAPIAccessResp
 //
-// x-displayName: "Response for EvaluateBatchAPIAccess"
-// Response body of EvaluateBatchAPIAccess request
+// x-displayName: "Evaluate Batch API Access Resp"
+// Response body of Evaluate Batch API Access
 type EvaluateBatchAPIAccessResp struct {
 	// batch_namespace_api_list
 	//
-	// x-displayName: "BatchNamespaceApiList"
+	// x-displayName: "Batch Namespace Api List"
 	// List of namespaces and associated api list entries
-	BatchNamespaceApiList []*NamespaceAPIList `protobuf:"bytes,1,rep,name=batch_namespace_api_list,json=batchNamespaceApiList,proto3" json:"batch_namespace_api_list,omitempty"`
+	BatchNamespaceApiList []*NamespaceAPIListResp `protobuf:"bytes,2,rep,name=batch_namespace_api_list,json=batchNamespaceApiList,proto3" json:"batch_namespace_api_list,omitempty"`
 }
 
 func (m *EvaluateBatchAPIAccessResp) Reset()      { *m = EvaluateBatchAPIAccessResp{} }
 func (*EvaluateBatchAPIAccessResp) ProtoMessage() {}
 func (*EvaluateBatchAPIAccessResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{6}
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{10}
 }
 func (m *EvaluateBatchAPIAccessResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -468,7 +820,7 @@ func (m *EvaluateBatchAPIAccessResp) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_EvaluateBatchAPIAccessResp proto.InternalMessageInfo
 
-func (m *EvaluateBatchAPIAccessResp) GetBatchNamespaceApiList() []*NamespaceAPIList {
+func (m *EvaluateBatchAPIAccessResp) GetBatchNamespaceApiList() []*NamespaceAPIListResp {
 	if m != nil {
 		return m.BatchNamespaceApiList
 	}
@@ -491,7 +843,7 @@ type LookupUserRolesReq struct {
 func (m *LookupUserRolesReq) Reset()      { *m = LookupUserRolesReq{} }
 func (*LookupUserRolesReq) ProtoMessage() {}
 func (*LookupUserRolesReq) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{7}
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{11}
 }
 func (m *LookupUserRolesReq) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -542,7 +894,7 @@ type LookupUserRolesResp struct {
 func (m *LookupUserRolesResp) Reset()      { *m = LookupUserRolesResp{} }
 func (*LookupUserRolesResp) ProtoMessage() {}
 func (*LookupUserRolesResp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ae2cd67c9bbaccbd, []int{8}
+	return fileDescriptor_ae2cd67c9bbaccbd, []int{12}
 }
 func (m *LookupUserRolesResp) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -579,18 +931,28 @@ func (m *LookupUserRolesResp) GetRoles() []string {
 }
 
 func init() {
-	proto.RegisterType((*APIItem)(nil), "ves.io.schema.namespace.APIItem")
-	golang_proto.RegisterType((*APIItem)(nil), "ves.io.schema.namespace.APIItem")
-	proto.RegisterType((*APIItemList)(nil), "ves.io.schema.namespace.APIItemList")
-	golang_proto.RegisterType((*APIItemList)(nil), "ves.io.schema.namespace.APIItemList")
+	proto.RegisterEnum("ves.io.schema.namespace.AccessControlType", AccessControlType_name, AccessControlType_value)
+	golang_proto.RegisterEnum("ves.io.schema.namespace.AccessControlType", AccessControlType_name, AccessControlType_value)
+	proto.RegisterType((*APIItemReq)(nil), "ves.io.schema.namespace.APIItemReq")
+	golang_proto.RegisterType((*APIItemReq)(nil), "ves.io.schema.namespace.APIItemReq")
+	proto.RegisterType((*APIItemListReq)(nil), "ves.io.schema.namespace.APIItemListReq")
+	golang_proto.RegisterType((*APIItemListReq)(nil), "ves.io.schema.namespace.APIItemListReq")
 	proto.RegisterType((*EvaluateAPIAccessReq)(nil), "ves.io.schema.namespace.EvaluateAPIAccessReq")
 	golang_proto.RegisterType((*EvaluateAPIAccessReq)(nil), "ves.io.schema.namespace.EvaluateAPIAccessReq")
+	proto.RegisterType((*AccessEnablerAddonService)(nil), "ves.io.schema.namespace.AccessEnablerAddonService")
+	golang_proto.RegisterType((*AccessEnablerAddonService)(nil), "ves.io.schema.namespace.AccessEnablerAddonService")
+	proto.RegisterType((*APIItemResp)(nil), "ves.io.schema.namespace.APIItemResp")
+	golang_proto.RegisterType((*APIItemResp)(nil), "ves.io.schema.namespace.APIItemResp")
+	proto.RegisterType((*APIItemListResp)(nil), "ves.io.schema.namespace.APIItemListResp")
+	golang_proto.RegisterType((*APIItemListResp)(nil), "ves.io.schema.namespace.APIItemListResp")
 	proto.RegisterType((*EvaluateAPIAccessResp)(nil), "ves.io.schema.namespace.EvaluateAPIAccessResp")
 	golang_proto.RegisterType((*EvaluateAPIAccessResp)(nil), "ves.io.schema.namespace.EvaluateAPIAccessResp")
-	proto.RegisterType((*NamespaceAPIList)(nil), "ves.io.schema.namespace.NamespaceAPIList")
-	golang_proto.RegisterType((*NamespaceAPIList)(nil), "ves.io.schema.namespace.NamespaceAPIList")
+	proto.RegisterType((*NamespaceAPIListReq)(nil), "ves.io.schema.namespace.NamespaceAPIListReq")
+	golang_proto.RegisterType((*NamespaceAPIListReq)(nil), "ves.io.schema.namespace.NamespaceAPIListReq")
 	proto.RegisterType((*EvaluateBatchAPIAccessReq)(nil), "ves.io.schema.namespace.EvaluateBatchAPIAccessReq")
 	golang_proto.RegisterType((*EvaluateBatchAPIAccessReq)(nil), "ves.io.schema.namespace.EvaluateBatchAPIAccessReq")
+	proto.RegisterType((*NamespaceAPIListResp)(nil), "ves.io.schema.namespace.NamespaceAPIListResp")
+	golang_proto.RegisterType((*NamespaceAPIListResp)(nil), "ves.io.schema.namespace.NamespaceAPIListResp")
 	proto.RegisterType((*EvaluateBatchAPIAccessResp)(nil), "ves.io.schema.namespace.EvaluateBatchAPIAccessResp")
 	golang_proto.RegisterType((*EvaluateBatchAPIAccessResp)(nil), "ves.io.schema.namespace.EvaluateBatchAPIAccessResp")
 	proto.RegisterType((*LookupUserRolesReq)(nil), "ves.io.schema.namespace.LookupUserRolesReq")
@@ -607,78 +969,103 @@ func init() {
 }
 
 var fileDescriptor_ae2cd67c9bbaccbd = []byte{
-	// 962 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xcf, 0x6f, 0xe3, 0x44,
-	0x14, 0xce, 0xa4, 0xb4, 0x4b, 0x66, 0xb5, 0xda, 0xe2, 0xfd, 0x95, 0x0d, 0x95, 0x15, 0x19, 0x0e,
-	0xa5, 0xad, 0x6d, 0x94, 0x0a, 0x84, 0x7a, 0x4b, 0x0b, 0x87, 0x88, 0x2d, 0x5b, 0x65, 0x05, 0x07,
-	0x84, 0x14, 0x8d, 0x9d, 0x17, 0x67, 0xa8, 0xed, 0x99, 0x7a, 0xc6, 0xe9, 0x56, 0xab, 0x45, 0xab,
-	0x15, 0x12, 0x42, 0x5c, 0x10, 0xfc, 0x07, 0x9c, 0xf8, 0x13, 0x10, 0xbd, 0xf4, 0xc6, 0x8a, 0x03,
-	0xaa, 0xe0, 0xc0, 0xde, 0xa0, 0x29, 0x07, 0xb8, 0xf5, 0x00, 0x77, 0xe4, 0xb1, 0x93, 0x36, 0x69,
-	0xdc, 0x96, 0x8a, 0xdb, 0x7b, 0xf3, 0xbe, 0xf9, 0xe6, 0xfb, 0x3c, 0x7e, 0x4f, 0x83, 0xad, 0x1e,
-	0x08, 0x8b, 0x32, 0x5b, 0xb8, 0x5d, 0x08, 0x88, 0x1d, 0x92, 0x00, 0x04, 0x27, 0x2e, 0xd8, 0x3c,
-	0x76, 0x7c, 0xea, 0xb6, 0xdc, 0x58, 0x48, 0x16, 0x10, 0x4e, 0x2d, 0x1e, 0x31, 0xc9, 0xb4, 0x3b,
-	0x29, 0xde, 0x4a, 0xf1, 0xd6, 0x10, 0x5f, 0x31, 0x3d, 0x2a, 0xbb, 0xb1, 0x63, 0xb9, 0x2c, 0xb0,
-	0x3d, 0xe6, 0x31, 0x5b, 0xe1, 0x9d, 0xb8, 0xa3, 0x32, 0x95, 0xa8, 0x28, 0xe5, 0xa9, 0xcc, 0x79,
-	0x8c, 0x79, 0x3e, 0xd8, 0x84, 0x53, 0x9b, 0x84, 0x21, 0x93, 0x44, 0x52, 0x16, 0x8a, 0xac, 0xfa,
-	0x4a, 0x9e, 0x2a, 0xb9, 0xc3, 0x61, 0x00, 0x7a, 0x79, 0x14, 0xc4, 0xf8, 0x49, 0x86, 0xbb, 0xa3,
-	0xc5, 0x93, 0xfb, 0xe6, 0x46, 0x4b, 0x3d, 0xe2, 0xd3, 0x36, 0x91, 0x90, 0x55, 0x8d, 0xb1, 0x2a,
-	0x08, 0x08, 0x7b, 0x63, 0xe4, 0xd5, 0x31, 0x0c, 0x85, 0xed, 0xd6, 0x08, 0xc2, 0x58, 0xc7, 0x57,
-	0xea, 0x1b, 0x8d, 0x86, 0x84, 0x40, 0xbb, 0x8d, 0x67, 0x02, 0x90, 0x5d, 0xd6, 0x2e, 0xa3, 0x2a,
-	0x9a, 0x2f, 0x35, 0xb3, 0x4c, 0xd3, 0xf0, 0x0b, 0x9c, 0xc8, 0x6e, 0xb9, 0xa8, 0x56, 0x55, 0x9c,
-	0x60, 0x23, 0x10, 0xb1, 0x2f, 0xcb, 0x53, 0x55, 0x34, 0xff, 0x62, 0x33, 0xcb, 0x8c, 0x4f, 0xf0,
-	0xd5, 0x8c, 0xee, 0x1e, 0x15, 0x52, 0xbb, 0x83, 0xaf, 0xf8, 0x54, 0xc8, 0x16, 0x1d, 0x72, 0x26,
-	0x69, 0xa3, 0xad, 0xbd, 0x89, 0xa7, 0xa9, 0x84, 0x40, 0x94, 0x8b, 0xd5, 0xa9, 0xf9, 0xab, 0xb5,
-	0xaa, 0x95, 0x73, 0x5b, 0x56, 0xc6, 0xd6, 0x4c, 0xe1, 0x79, 0xe7, 0xae, 0xcc, 0xfc, 0xb8, 0x8b,
-	0x8a, 0xb3, 0xc8, 0xd8, 0xc1, 0x37, 0xdf, 0xe9, 0x11, 0x3f, 0x26, 0x12, 0xea, 0x1b, 0x8d, 0xba,
-	0xeb, 0x82, 0x10, 0x4d, 0xd8, 0xd2, 0xe6, 0x70, 0x69, 0xc8, 0x99, 0x49, 0x39, 0x5e, 0xd0, 0xd6,
-	0x30, 0x4e, 0xe8, 0x5b, 0x89, 0xb8, 0x81, 0xa4, 0x57, 0xcf, 0x93, 0x94, 0x18, 0x6c, 0x96, 0x68,
-	0x16, 0x09, 0xe3, 0x23, 0x7c, 0x6b, 0xc2, 0xd1, 0x82, 0x8f, 0xb1, 0xa3, 0xcb, 0xb1, 0x7f, 0x8e,
-	0xf0, 0xec, 0x7b, 0x03, 0x50, 0x7d, 0xa3, 0xa1, 0x3e, 0xef, 0xd9, 0xae, 0xee, 0x5f, 0xd6, 0xd5,
-	0x2a, 0xfe, 0xfe, 0xaf, 0xbd, 0xa9, 0xe9, 0xaf, 0x50, 0x71, 0xf6, 0xfa, 0x09, 0x0d, 0xc3, 0x8f,
-	0xfc, 0x05, 0xc2, 0x77, 0x07, 0x56, 0x57, 0x89, 0x74, 0xbb, 0x23, 0x9f, 0x3a, 0xc4, 0x65, 0x27,
-	0x59, 0x6c, 0x0d, 0xb9, 0x5b, 0x84, 0x53, 0xa5, 0x22, 0x33, 0xff, 0x5a, 0xae, 0x88, 0x71, 0x87,
-	0x27, 0x94, 0xbc, 0xdb, 0xbc, 0xa5, 0x68, 0x8f, 0x21, 0x9c, 0x26, 0x10, 0xe3, 0x09, 0xc2, 0x95,
-	0x3c, 0x35, 0x82, 0x6b, 0xce, 0xff, 0x28, 0x27, 0x4f, 0x42, 0x0d, 0x6b, 0xf7, 0x18, 0xdb, 0x8c,
-	0xf9, 0xfb, 0x02, 0xa2, 0x26, 0xf3, 0xe1, 0xfc, 0x7f, 0xce, 0x58, 0xc4, 0x37, 0x4e, 0xed, 0x11,
-	0x5c, 0xbb, 0x89, 0xa7, 0xa3, 0x24, 0x51, 0xda, 0x4a, 0xcd, 0x34, 0xa9, 0x7d, 0x53, 0xc2, 0xa5,
-	0x35, 0x35, 0xe0, 0xea, 0x1b, 0x0d, 0xed, 0x1f, 0x84, 0xaf, 0xad, 0x11, 0xe1, 0x92, 0x36, 0xbc,
-	0x0d, 0x3e, 0x48, 0xd0, 0xcc, 0x5c, 0x0b, 0x23, 0xb8, 0x26, 0x6c, 0xc5, 0x20, 0x64, 0xc5, 0xba,
-	0x28, 0x5c, 0x70, 0x16, 0x0a, 0x30, 0x3e, 0x45, 0xfd, 0x1f, 0xca, 0xeb, 0x9d, 0x37, 0x1e, 0xba,
-	0xa6, 0xcb, 0x42, 0xc1, 0x7c, 0x30, 0x1d, 0x22, 0xa8, 0x6b, 0x92, 0x76, 0x40, 0xc3, 0xa5, 0x64,
-	0xca, 0x98, 0x94, 0x99, 0x34, 0xec, 0x44, 0x44, 0xc8, 0x28, 0x76, 0x65, 0x1c, 0x81, 0xb9, 0x1d,
-	0x51, 0x09, 0xc3, 0x62, 0x4c, 0x82, 0x14, 0x9e, 0xae, 0x3f, 0xfd, 0xe5, 0x8f, 0xaf, 0x8b, 0xa6,
-	0x31, 0x9f, 0x8d, 0xef, 0xe3, 0xc9, 0x29, 0xec, 0x47, 0x49, 0xfc, 0xd8, 0x76, 0x53, 0x29, 0xad,
-	0xb6, 0xd2, 0xb2, 0x82, 0x16, 0xb4, 0xdf, 0x10, 0x7e, 0xe9, 0x54, 0x8b, 0x9d, 0xe1, 0x7d, 0xd2,
-	0x24, 0x38, 0xc3, 0xfb, 0xc4, 0xee, 0x35, 0x36, 0x9f, 0x7d, 0x57, 0x4c, 0xec, 0x2f, 0x2a, 0xfb,
-	0x6d, 0xe8, 0x90, 0xd8, 0x97, 0x26, 0x51, 0x80, 0xa1, 0xb9, 0x6d, 0x70, 0xb2, 0x25, 0x33, 0x02,
-	0xd2, 0x56, 0xe6, 0x6a, 0x86, 0x39, 0xc1, 0x9c, 0xd8, 0x11, 0x12, 0x02, 0x1b, 0xb2, 0xb3, 0x4c,
-	0xc2, 0x69, 0xb6, 0x33, 0x71, 0xf8, 0x37, 0xc2, 0xb7, 0x27, 0xff, 0xcb, 0x5a, 0xed, 0x5c, 0xdd,
-	0xa7, 0x5a, 0xb1, 0xb2, 0xfc, 0x9f, 0xf7, 0x08, 0x6e, 0x6c, 0x5d, 0xd6, 0xf0, 0x5b, 0xc6, 0xf2,
-	0x05, 0x0c, 0xab, 0x0e, 0x1a, 0xb3, 0xbd, 0x8b, 0xf0, 0xb5, 0x07, 0xb1, 0xe7, 0x81, 0x90, 0x1f,
-	0x10, 0x3f, 0x06, 0xa1, 0xe5, 0xf7, 0xe4, 0x08, 0x2e, 0x31, 0xb9, 0x70, 0x51, 0xa8, 0xe0, 0xc6,
-	0x83, 0xcc, 0xdb, 0x8d, 0x09, 0xde, 0xce, 0xb8, 0xb4, 0x47, 0xc3, 0xf8, 0xb1, 0x2d, 0x52, 0x52,
-	0xb3, 0xa7, 0x58, 0x13, 0xf5, 0xbf, 0x22, 0x7c, 0x7d, 0xac, 0x95, 0xb5, 0xc5, 0x5c, 0x51, 0xa7,
-	0x07, 0x45, 0x65, 0xe9, 0xe2, 0x60, 0xc1, 0x0d, 0x7a, 0xd9, 0xfb, 0x79, 0xdd, 0x58, 0xcc, 0xbf,
-	0x1f, 0x5f, 0x9d, 0x64, 0xc6, 0x02, 0x22, 0x53, 0xcd, 0x9c, 0x15, 0xb4, 0x50, 0x59, 0xda, 0xdb,
-	0x45, 0x53, 0x3f, 0xef, 0x22, 0x3d, 0x4f, 0xdf, 0x7d, 0xe7, 0x63, 0x70, 0xe5, 0xd3, 0x9f, 0xca,
-	0xc5, 0x2e, 0x5a, 0xfd, 0x0c, 0xed, 0x1f, 0xe8, 0x85, 0xe7, 0x07, 0x7a, 0xe1, 0xe8, 0x40, 0x47,
-	0x4f, 0xfa, 0x3a, 0xfa, 0xb6, 0xaf, 0xa3, 0x67, 0x7d, 0x1d, 0xed, 0xf7, 0x75, 0xf4, 0x7b, 0x5f,
-	0x47, 0x7f, 0xf6, 0xf5, 0xc2, 0x51, 0x5f, 0x47, 0x5f, 0x1e, 0xea, 0x85, 0xbd, 0x43, 0x1d, 0xed,
-	0x1f, 0xea, 0x85, 0xe7, 0x87, 0x7a, 0xe1, 0xc3, 0x75, 0x8f, 0xf1, 0x4d, 0xcf, 0xea, 0x31, 0x5f,
-	0x42, 0x14, 0x11, 0x2b, 0x16, 0xb6, 0x0a, 0x3a, 0x2c, 0x0a, 0x4c, 0x1e, 0xb1, 0x1e, 0x6d, 0x43,
-	0x64, 0x0e, 0xca, 0x36, 0x77, 0x3c, 0x66, 0xc3, 0x43, 0x99, 0x3d, 0x6b, 0xc6, 0x1f, 0x5f, 0xce,
-	0x8c, 0x7a, 0xdb, 0x2c, 0xff, 0x1b, 0x00, 0x00, 0xff, 0xff, 0x0f, 0x1a, 0x02, 0x9d, 0x34, 0x0a,
-	0x00, 0x00,
+	// 1251 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x57, 0xcf, 0x6f, 0x1b, 0x45,
+	0x14, 0xf6, 0xd8, 0x4e, 0x9a, 0x4c, 0xd4, 0xc6, 0xd9, 0xa4, 0xad, 0xeb, 0x56, 0x2b, 0x6b, 0x8b,
+	0x84, 0x49, 0xb2, 0xde, 0xca, 0x15, 0x52, 0x95, 0x9b, 0x13, 0x22, 0x9a, 0x36, 0x2d, 0xd1, 0x06,
+	0x38, 0x94, 0x83, 0x35, 0xde, 0x1d, 0x3b, 0x43, 0x77, 0x77, 0x26, 0x3b, 0xb3, 0x6e, 0xa3, 0xaa,
+	0x12, 0xaa, 0xf8, 0x21, 0x71, 0x01, 0x15, 0xfe, 0x02, 0x4e, 0xfc, 0x09, 0x88, 0x5c, 0x72, 0xa3,
+	0xe2, 0x80, 0x22, 0x38, 0xd0, 0x1b, 0xd4, 0xe1, 0x50, 0x6e, 0x95, 0x80, 0x23, 0x12, 0xda, 0xd9,
+	0x8d, 0x63, 0x3b, 0xde, 0xd8, 0xad, 0xb8, 0xcd, 0xcc, 0xfb, 0xde, 0x9b, 0xef, 0x7b, 0x6f, 0xde,
+	0xf3, 0x1a, 0x96, 0x5b, 0x98, 0x97, 0x09, 0x35, 0xb8, 0xb5, 0x85, 0x5d, 0x64, 0x78, 0xc8, 0xc5,
+	0x9c, 0x21, 0x0b, 0x1b, 0x2c, 0xa8, 0x3b, 0xc4, 0xaa, 0x59, 0x01, 0x17, 0xd4, 0x45, 0x8c, 0x94,
+	0x99, 0x4f, 0x05, 0x55, 0xce, 0x47, 0xf8, 0x72, 0x84, 0x2f, 0x77, 0xf0, 0x05, 0xbd, 0x49, 0xc4,
+	0x56, 0x50, 0x2f, 0x5b, 0xd4, 0x35, 0x9a, 0xb4, 0x49, 0x0d, 0x89, 0xaf, 0x07, 0x0d, 0xb9, 0x93,
+	0x1b, 0xb9, 0x8a, 0xe2, 0x14, 0x2e, 0x35, 0x29, 0x6d, 0x3a, 0xd8, 0x40, 0x8c, 0x18, 0xc8, 0xf3,
+	0xa8, 0x40, 0x82, 0x50, 0x8f, 0xc7, 0xd6, 0xcb, 0x49, 0xac, 0xc4, 0x0e, 0xc3, 0x87, 0xa0, 0x8b,
+	0xbd, 0x20, 0xca, 0xba, 0x23, 0x5c, 0xe8, 0x35, 0x76, 0xfb, 0x5d, 0xea, 0x35, 0xb5, 0x90, 0x43,
+	0x6c, 0x24, 0x70, 0x6c, 0xd5, 0xfa, 0xac, 0x98, 0x63, 0xaf, 0xd5, 0x17, 0xbc, 0xd8, 0x87, 0x21,
+	0xf8, 0x5e, 0xad, 0x07, 0xa1, 0x5d, 0x83, 0xb0, 0xba, 0xb1, 0xb6, 0x26, 0xb0, 0x6b, 0xe2, 0x6d,
+	0xe5, 0x1c, 0x1c, 0x77, 0xb1, 0xd8, 0xa2, 0x76, 0x1e, 0x14, 0x41, 0x69, 0xd2, 0x8c, 0x77, 0x8a,
+	0x02, 0xb3, 0x0c, 0x89, 0xad, 0x7c, 0x5a, 0x9e, 0xca, 0xb5, 0xc6, 0xe0, 0x99, 0xd8, 0x73, 0x9d,
+	0x70, 0x11, 0x7a, 0x9f, 0x87, 0xa7, 0x1c, 0xc2, 0x45, 0x8d, 0x74, 0xdc, 0xc3, 0xed, 0x9a, 0xad,
+	0xac, 0xc2, 0x31, 0x22, 0xb0, 0xcb, 0xf3, 0xe9, 0x62, 0xa6, 0x34, 0x55, 0xb9, 0x5c, 0x4e, 0xa8,
+	0x4d, 0xf9, 0x88, 0xca, 0x32, 0xfc, 0xfe, 0xcf, 0xbd, 0xcc, 0xd8, 0x63, 0x90, 0xce, 0xd9, 0x66,
+	0xe4, 0xad, 0xfd, 0x05, 0xe0, 0xdc, 0x6a, 0x0b, 0x39, 0x01, 0x12, 0xb8, 0xba, 0xb1, 0x56, 0xb5,
+	0x2c, 0xcc, 0x79, 0x78, 0xf1, 0x25, 0x38, 0xd9, 0x89, 0x11, 0x5f, 0x7d, 0x74, 0xa0, 0x6c, 0x42,
+	0x18, 0xfa, 0xd7, 0x42, 0x32, 0x3c, 0x9f, 0x91, 0x14, 0x5e, 0x1f, 0x46, 0x21, 0xd6, 0xb4, 0x3c,
+	0x15, 0xd2, 0x18, 0x7f, 0x0c, 0x32, 0xb9, 0xe7, 0xa7, 0xcc, 0x49, 0x12, 0x5b, 0xb8, 0x72, 0x07,
+	0xce, 0x22, 0x79, 0x7f, 0xcd, 0xa2, 0x9e, 0xf0, 0xa9, 0x53, 0x0b, 0x2b, 0x97, 0xcf, 0x16, 0x41,
+	0xe9, 0x4c, 0x65, 0x3e, 0x39, 0xba, 0xf4, 0x59, 0x89, 0x5c, 0xde, 0xdd, 0x61, 0xd8, 0x9c, 0x41,
+	0xfd, 0x47, 0x4b, 0xe3, 0x3f, 0xee, 0x82, 0x74, 0x0e, 0xdc, 0xc8, 0x4e, 0xa4, 0x73, 0x19, 0xed,
+	0x26, 0xbc, 0x10, 0x79, 0xad, 0x7a, 0xa8, 0xee, 0x60, 0xbf, 0x6a, 0xdb, 0xd4, 0xdb, 0xc4, 0x7e,
+	0x8b, 0x58, 0x58, 0x29, 0xc3, 0x59, 0x14, 0xee, 0x6b, 0x3c, 0x3a, 0xa8, 0xc9, 0xab, 0xf2, 0xa0,
+	0x98, 0x29, 0x4d, 0x9a, 0x33, 0xa8, 0x0b, 0x7a, 0x3b, 0x34, 0x68, 0xff, 0x02, 0x38, 0xd5, 0x49,
+	0x32, 0x67, 0x2f, 0x53, 0xf0, 0x10, 0xeb, 0x63, 0x1e, 0x38, 0x22, 0x9f, 0x29, 0x82, 0xd2, 0x84,
+	0x19, 0xef, 0x94, 0x79, 0x98, 0xf5, 0xa8, 0x87, 0xf3, 0x63, 0x45, 0x50, 0x9a, 0xaa, 0xcc, 0xf5,
+	0x69, 0x5f, 0x75, 0x99, 0xd8, 0xb9, 0x9e, 0x32, 0x25, 0x46, 0xf9, 0x00, 0x9e, 0xe9, 0xe1, 0xcb,
+	0xf3, 0xe3, 0xd2, 0xab, 0x32, 0x24, 0x63, 0x03, 0xb4, 0x5f, 0x4f, 0x99, 0xa7, 0xbb, 0x05, 0xf2,
+	0xe5, 0x8b, 0x70, 0x3a, 0xae, 0x09, 0x8e, 0xe0, 0x5c, 0x99, 0xd8, 0xdb, 0x05, 0x63, 0xfb, 0xbb,
+	0x20, 0x7b, 0x23, 0x3b, 0x91, 0xcd, 0x8d, 0x69, 0x9f, 0x02, 0x38, 0xdd, 0x53, 0x61, 0xce, 0x92,
+	0x9f, 0xed, 0x52, 0xef, 0xb3, 0x7d, 0x6d, 0xf8, 0xb3, 0xe5, 0x2c, 0x7e, 0xab, 0x49, 0xc9, 0x3a,
+	0xac, 0xad, 0xd6, 0x80, 0x67, 0x07, 0x3c, 0x65, 0xce, 0x94, 0xb7, 0x7b, 0x5e, 0x6b, 0x74, 0x73,
+	0x69, 0xb4, 0xd7, 0xca, 0x59, 0xd7, 0x0b, 0xbd, 0x91, 0x9d, 0x00, 0xb9, 0xb4, 0xf6, 0x05, 0x80,
+	0xb3, 0xb7, 0x0f, 0xe1, 0xd5, 0x8d, 0xb5, 0xc3, 0x5e, 0x3d, 0xb9, 0x65, 0xcc, 0x01, 0x24, 0x46,
+	0x6e, 0x99, 0xa3, 0xce, 0x9d, 0xee, 0xe2, 0xd3, 0x51, 0xfe, 0x35, 0x80, 0x17, 0x0e, 0xa5, 0x2f,
+	0x23, 0x61, 0x6d, 0xf5, 0xb4, 0xf2, 0x36, 0xcc, 0xd7, 0xc3, 0xc3, 0x5a, 0x27, 0x7c, 0x0d, 0x31,
+	0x22, 0x89, 0xc4, 0x3c, 0x16, 0x13, 0x79, 0x0c, 0xd0, 0xd9, 0x45, 0xe6, 0xa6, 0x79, 0x56, 0x46,
+	0x3e, 0x42, 0x31, 0x12, 0xa2, 0xe2, 0x44, 0x7d, 0x02, 0xe0, 0xdc, 0xf1, 0x00, 0x9c, 0x0d, 0xc9,
+	0xd4, 0xff, 0x55, 0xae, 0x4e, 0x7a, 0x3e, 0x07, 0xb0, 0x90, 0x94, 0x1e, 0xce, 0x94, 0xc6, 0xd0,
+	0xfc, 0xe8, 0x2f, 0x91, 0x1f, 0xce, 0x4e, 0x4e, 0x4a, 0x05, 0x2a, 0xeb, 0x94, 0xde, 0x0d, 0xd8,
+	0x7b, 0x1c, 0xfb, 0x26, 0x75, 0xf0, 0xf0, 0x71, 0xab, 0x2d, 0xc0, 0xd9, 0x63, 0x3e, 0x9c, 0x29,
+	0x73, 0x70, 0xcc, 0x0f, 0x37, 0xf1, 0x6c, 0x8a, 0x36, 0xf3, 0x57, 0xe0, 0xcc, 0xb1, 0x91, 0xa8,
+	0x4c, 0xc0, 0xac, 0xb9, 0x5c, 0x5d, 0xc9, 0xa5, 0xc2, 0xd5, 0x46, 0xb8, 0x02, 0xca, 0x29, 0x98,
+	0xa9, 0xae, 0xaf, 0xe7, 0xd2, 0x95, 0x6f, 0x26, 0xe1, 0xe4, 0x8a, 0xfc, 0xad, 0xaf, 0x6e, 0xac,
+	0x29, 0xff, 0x00, 0x78, 0x7a, 0x05, 0x71, 0x0b, 0xd9, 0xf8, 0x2d, 0xec, 0x60, 0x81, 0x95, 0x64,
+	0xf9, 0x3d, 0x38, 0x13, 0x6f, 0x07, 0x98, 0x8b, 0x42, 0x79, 0x54, 0x38, 0x67, 0xd4, 0xe3, 0x58,
+	0xfb, 0x18, 0xb4, 0x7f, 0xc8, 0xdf, 0x6a, 0xbc, 0x79, 0xdf, 0xd2, 0x2d, 0xea, 0x71, 0xea, 0x60,
+	0xbd, 0x8e, 0x38, 0xb1, 0x74, 0x64, 0xbb, 0xc4, 0x5b, 0x0c, 0x7f, 0x70, 0x75, 0x42, 0x75, 0xe2,
+	0x35, 0x7c, 0xc4, 0x85, 0x1f, 0x58, 0x22, 0xf0, 0xb1, 0x7e, 0xcf, 0x27, 0x02, 0x77, 0x8c, 0x01,
+	0x72, 0x23, 0x78, 0x74, 0xfe, 0xe8, 0x97, 0x3f, 0xbe, 0x4a, 0xeb, 0x5a, 0x29, 0xfe, 0x92, 0x39,
+	0xfa, 0x88, 0xe0, 0xc6, 0x83, 0x70, 0xfd, 0xd0, 0xb0, 0x22, 0x2a, 0x35, 0x5b, 0x72, 0x59, 0x02,
+	0xf3, 0xca, 0x6f, 0x00, 0xce, 0x1c, 0x9b, 0x1f, 0x27, 0x68, 0x1f, 0xf4, 0xb3, 0x79, 0x82, 0xf6,
+	0x81, 0xa3, 0x49, 0xbb, 0xfb, 0xe4, 0xbb, 0x74, 0x28, 0x7f, 0x41, 0xca, 0xb7, 0x71, 0x03, 0x05,
+	0x8e, 0xd0, 0xa3, 0x91, 0xdb, 0x11, 0x77, 0x0f, 0xd7, 0xe3, 0x23, 0xdd, 0xc7, 0xc8, 0x96, 0xe2,
+	0x2a, 0x9a, 0x3e, 0x40, 0x1c, 0xdf, 0xe1, 0x02, 0xbb, 0x06, 0x8e, 0xef, 0xd2, 0x11, 0x23, 0xb1,
+	0x67, 0xa8, 0xf0, 0x6f, 0x00, 0xcf, 0x0d, 0xee, 0x03, 0xa5, 0x32, 0x94, 0xf7, 0xb1, 0xb9, 0x52,
+	0xb8, 0xfa, 0xd2, 0x3e, 0x9c, 0x69, 0xdb, 0xaf, 0x2a, 0xf8, 0x9a, 0x76, 0x75, 0x04, 0xc1, 0xb2,
+	0xf3, 0xfa, 0x64, 0xef, 0x02, 0x78, 0x7a, 0x33, 0x68, 0x36, 0x31, 0x17, 0xef, 0x23, 0x27, 0xc0,
+	0x5c, 0x79, 0x23, 0x91, 0x79, 0x0f, 0x2e, 0x14, 0x39, 0x3f, 0x2a, 0x94, 0x33, 0x6d, 0x33, 0xd6,
+	0x36, 0x3b, 0x40, 0xdb, 0x09, 0x45, 0x7b, 0xd0, 0x59, 0x3f, 0x34, 0x78, 0x14, 0x54, 0x6f, 0xc9,
+	0xa8, 0x21, 0xfb, 0x5f, 0x01, 0x9c, 0xee, 0x6b, 0x7e, 0x65, 0x21, 0x91, 0xd4, 0xf1, 0xd1, 0x52,
+	0x58, 0x1c, 0x1d, 0xcc, 0x99, 0x46, 0x5e, 0xb5, 0x3e, 0x57, 0xb4, 0x85, 0xe4, 0xfa, 0x38, 0xf2,
+	0x26, 0x3d, 0xe0, 0xd8, 0xd7, 0xe5, 0x94, 0x5a, 0x02, 0xf3, 0x85, 0xc5, 0xbd, 0x5d, 0x90, 0xf9,
+	0x79, 0x17, 0xa8, 0x49, 0xfc, 0xde, 0xa9, 0x7f, 0x88, 0x2d, 0xf1, 0xe8, 0xa7, 0x7c, 0x7a, 0x0b,
+	0x2c, 0x7f, 0x06, 0xf6, 0x9f, 0xa9, 0xa9, 0xa7, 0xcf, 0xd4, 0xd4, 0x8b, 0x67, 0x2a, 0xf8, 0xa8,
+	0xad, 0x82, 0x6f, 0xdb, 0x2a, 0x78, 0xd2, 0x56, 0xc1, 0x7e, 0x5b, 0x05, 0xbf, 0xb7, 0x55, 0xf0,
+	0xbc, 0xad, 0xa6, 0x5e, 0xb4, 0x55, 0xf0, 0xe5, 0x81, 0x9a, 0xda, 0x3b, 0x50, 0xc1, 0xfe, 0x81,
+	0x9a, 0x7a, 0x7a, 0xa0, 0xa6, 0xee, 0xdc, 0x6a, 0x52, 0x76, 0xb7, 0x59, 0x6e, 0x51, 0x47, 0x60,
+	0xdf, 0x47, 0xe5, 0x80, 0x1b, 0x72, 0xd1, 0xa0, 0xbe, 0xab, 0x33, 0x9f, 0xb6, 0x88, 0x8d, 0x7d,
+	0xfd, 0xd0, 0x6c, 0xb0, 0x7a, 0x93, 0x1a, 0xf8, 0xbe, 0x88, 0xbf, 0xf0, 0xfb, 0xff, 0x87, 0xd4,
+	0xc7, 0xe5, 0x67, 0xfe, 0xd5, 0xff, 0x02, 0x00, 0x00, 0xff, 0xff, 0x4b, 0x72, 0x6c, 0xc1, 0x3f,
+	0x0d, 0x00, 0x00,
 }
 
-func (this *APIItem) Equal(that interface{}) bool {
+func (x AccessControlType) String() string {
+	s, ok := AccessControlType_name[int32(x)]
+	if ok {
+		return s
+	}
+	return strconv.Itoa(int(x))
+}
+func (this *APIItemReq) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*APIItem)
+	that1, ok := that.(*APIItemReq)
 	if !ok {
-		that2, ok := that.(APIItem)
+		that2, ok := that.(APIItemReq)
 		if ok {
 			that1 = &that2
 		} else {
@@ -696,19 +1083,16 @@ func (this *APIItem) Equal(that interface{}) bool {
 	if this.Path != that1.Path {
 		return false
 	}
-	if this.Result != that1.Result {
-		return false
-	}
 	return true
 }
-func (this *APIItemList) Equal(that interface{}) bool {
+func (this *APIItemListReq) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*APIItemList)
+	that1, ok := that.(*APIItemListReq)
 	if !ok {
-		that2, ok := that.(APIItemList)
+		that2, ok := that.(APIItemListReq)
 		if ok {
 			that1 = &that2
 		} else {
@@ -730,9 +1114,6 @@ func (this *APIItemList) Equal(that interface{}) bool {
 		if !this.Items[i].Equal(that1.Items[i]) {
 			return false
 		}
-	}
-	if this.Result != that1.Result {
-		return false
 	}
 	return true
 }
@@ -766,6 +1147,160 @@ func (this *EvaluateAPIAccessReq) Equal(that interface{}) bool {
 			return false
 		}
 	}
+	if this.AccessControlType != that1.AccessControlType {
+		return false
+	}
+	return true
+}
+func (this *AccessEnablerAddonService) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AccessEnablerAddonService)
+	if !ok {
+		that2, ok := that.(AccessEnablerAddonService)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.AddonServiceNames) != len(that1.AddonServiceNames) {
+		return false
+	}
+	for i := range this.AddonServiceNames {
+		if this.AddonServiceNames[i] != that1.AddonServiceNames[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *APIItemResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*APIItemResp)
+	if !ok {
+		that2, ok := that.(APIItemResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Method != that1.Method {
+		return false
+	}
+	if this.Path != that1.Path {
+		return false
+	}
+	if this.Result != that1.Result {
+		return false
+	}
+	if that1.AccessEnablers == nil {
+		if this.AccessEnablers != nil {
+			return false
+		}
+	} else if this.AccessEnablers == nil {
+		return false
+	} else if !this.AccessEnablers.Equal(that1.AccessEnablers) {
+		return false
+	}
+	return true
+}
+func (this *APIItemResp_None) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*APIItemResp_None)
+	if !ok {
+		that2, ok := that.(APIItemResp_None)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.None.Equal(that1.None) {
+		return false
+	}
+	return true
+}
+func (this *APIItemResp_AddonServices) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*APIItemResp_AddonServices)
+	if !ok {
+		that2, ok := that.(APIItemResp_AddonServices)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AddonServices.Equal(that1.AddonServices) {
+		return false
+	}
+	return true
+}
+func (this *APIItemListResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*APIItemListResp)
+	if !ok {
+		that2, ok := that.(APIItemListResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ListId != that1.ListId {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
+	}
+	if this.Result != that1.Result {
+		return false
+	}
 	return true
 }
 func (this *EvaluateAPIAccessResp) Equal(that interface{}) bool {
@@ -797,14 +1332,14 @@ func (this *EvaluateAPIAccessResp) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *NamespaceAPIList) Equal(that interface{}) bool {
+func (this *NamespaceAPIListReq) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*NamespaceAPIList)
+	that1, ok := that.(*NamespaceAPIListReq)
 	if !ok {
-		that2, ok := that.(NamespaceAPIList)
+		that2, ok := that.(NamespaceAPIListReq)
 		if ok {
 			that1 = &that2
 		} else {
@@ -853,6 +1388,38 @@ func (this *EvaluateBatchAPIAccessReq) Equal(that interface{}) bool {
 	}
 	for i := range this.BatchNamespaceApiList {
 		if !this.BatchNamespaceApiList[i].Equal(that1.BatchNamespaceApiList[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *NamespaceAPIListResp) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*NamespaceAPIListResp)
+	if !ok {
+		that2, ok := that.(NamespaceAPIListResp)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
+	if len(this.ItemLists) != len(that1.ItemLists) {
+		return false
+	}
+	for i := range this.ItemLists {
+		if !this.ItemLists[i].Equal(that1.ItemLists[i]) {
 			return false
 		}
 	}
@@ -940,29 +1507,27 @@ func (this *LookupUserRolesResp) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *APIItem) GoString() string {
+func (this *APIItemReq) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
-	s = append(s, "&namespace.APIItem{")
+	s := make([]string, 0, 6)
+	s = append(s, "&namespace.APIItemReq{")
 	s = append(s, "Method: "+fmt.Sprintf("%#v", this.Method)+",\n")
 	s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
-	s = append(s, "Result: "+fmt.Sprintf("%#v", this.Result)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *APIItemList) GoString() string {
+func (this *APIItemListReq) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 7)
-	s = append(s, "&namespace.APIItemList{")
+	s := make([]string, 0, 6)
+	s = append(s, "&namespace.APIItemListReq{")
 	s = append(s, "ListId: "+fmt.Sprintf("%#v", this.ListId)+",\n")
 	if this.Items != nil {
 		s = append(s, "Items: "+fmt.Sprintf("%#v", this.Items)+",\n")
 	}
-	s = append(s, "Result: "+fmt.Sprintf("%#v", this.Result)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -970,12 +1535,68 @@ func (this *EvaluateAPIAccessReq) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 6)
+	s := make([]string, 0, 7)
 	s = append(s, "&namespace.EvaluateAPIAccessReq{")
 	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
 	if this.ItemLists != nil {
 		s = append(s, "ItemLists: "+fmt.Sprintf("%#v", this.ItemLists)+",\n")
 	}
+	s = append(s, "AccessControlType: "+fmt.Sprintf("%#v", this.AccessControlType)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AccessEnablerAddonService) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&namespace.AccessEnablerAddonService{")
+	s = append(s, "AddonServiceNames: "+fmt.Sprintf("%#v", this.AddonServiceNames)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *APIItemResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&namespace.APIItemResp{")
+	s = append(s, "Method: "+fmt.Sprintf("%#v", this.Method)+",\n")
+	s = append(s, "Path: "+fmt.Sprintf("%#v", this.Path)+",\n")
+	s = append(s, "Result: "+fmt.Sprintf("%#v", this.Result)+",\n")
+	if this.AccessEnablers != nil {
+		s = append(s, "AccessEnablers: "+fmt.Sprintf("%#v", this.AccessEnablers)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *APIItemResp_None) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&namespace.APIItemResp_None{` +
+		`None:` + fmt.Sprintf("%#v", this.None) + `}`}, ", ")
+	return s
+}
+func (this *APIItemResp_AddonServices) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&namespace.APIItemResp_AddonServices{` +
+		`AddonServices:` + fmt.Sprintf("%#v", this.AddonServices) + `}`}, ", ")
+	return s
+}
+func (this *APIItemListResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&namespace.APIItemListResp{")
+	s = append(s, "ListId: "+fmt.Sprintf("%#v", this.ListId)+",\n")
+	if this.Items != nil {
+		s = append(s, "Items: "+fmt.Sprintf("%#v", this.Items)+",\n")
+	}
+	s = append(s, "Result: "+fmt.Sprintf("%#v", this.Result)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -991,12 +1612,12 @@ func (this *EvaluateAPIAccessResp) GoString() string {
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
-func (this *NamespaceAPIList) GoString() string {
+func (this *NamespaceAPIListReq) GoString() string {
 	if this == nil {
 		return "nil"
 	}
 	s := make([]string, 0, 6)
-	s = append(s, "&namespace.NamespaceAPIList{")
+	s = append(s, "&namespace.NamespaceAPIListReq{")
 	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
 	if this.ItemLists != nil {
 		s = append(s, "ItemLists: "+fmt.Sprintf("%#v", this.ItemLists)+",\n")
@@ -1012,6 +1633,19 @@ func (this *EvaluateBatchAPIAccessReq) GoString() string {
 	s = append(s, "&namespace.EvaluateBatchAPIAccessReq{")
 	if this.BatchNamespaceApiList != nil {
 		s = append(s, "BatchNamespaceApiList: "+fmt.Sprintf("%#v", this.BatchNamespaceApiList)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *NamespaceAPIListResp) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&namespace.NamespaceAPIListResp{")
+	s = append(s, "Namespace: "+fmt.Sprintf("%#v", this.Namespace)+",\n")
+	if this.ItemLists != nil {
+		s = append(s, "ItemLists: "+fmt.Sprintf("%#v", this.ItemLists)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1323,7 +1957,7 @@ var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	Metadata: "ves.io/schema/namespace/public_customapi.proto",
 }
 
-func (m *APIItem) Marshal() (dAtA []byte, err error) {
+func (m *APIItemReq) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1333,26 +1967,16 @@ func (m *APIItem) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *APIItem) MarshalTo(dAtA []byte) (int, error) {
+func (m *APIItemReq) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *APIItem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *APIItemReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Result {
-		i--
-		if m.Result {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x18
-	}
 	if len(m.Path) > 0 {
 		i -= len(m.Path)
 		copy(dAtA[i:], m.Path)
@@ -1370,7 +1994,7 @@ func (m *APIItem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *APIItemList) Marshal() (dAtA []byte, err error) {
+func (m *APIItemListReq) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1380,26 +2004,16 @@ func (m *APIItemList) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *APIItemList) MarshalTo(dAtA []byte) (int, error) {
+func (m *APIItemListReq) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *APIItemList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *APIItemListReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Result {
-		i--
-		if m.Result {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x18
-	}
 	if len(m.Items) > 0 {
 		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1444,6 +2058,11 @@ func (m *EvaluateAPIAccessReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.AccessControlType != 0 {
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(m.AccessControlType))
+		i--
+		dAtA[i] = 0x20
+	}
 	if len(m.ItemLists) > 0 {
 		for iNdEx := len(m.ItemLists) - 1; iNdEx >= 0; iNdEx-- {
 			{
@@ -1455,13 +2074,197 @@ func (m *EvaluateAPIAccessReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0x1a
 		}
 	}
 	if len(m.Namespace) > 0 {
 		i -= len(m.Namespace)
 		copy(dAtA[i:], m.Namespace)
 		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AccessEnablerAddonService) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AccessEnablerAddonService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AccessEnablerAddonService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AddonServiceNames) > 0 {
+		for iNdEx := len(m.AddonServiceNames) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.AddonServiceNames[iNdEx])
+			copy(dAtA[i:], m.AddonServiceNames[iNdEx])
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.AddonServiceNames[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *APIItemResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *APIItemResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *APIItemResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.AccessEnablers != nil {
+		{
+			size := m.AccessEnablers.Size()
+			i -= size
+			if _, err := m.AccessEnablers.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.Result {
+		i--
+		if m.Result {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Path) > 0 {
+		i -= len(m.Path)
+		copy(dAtA[i:], m.Path)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Path)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Method) > 0 {
+		i -= len(m.Method)
+		copy(dAtA[i:], m.Method)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Method)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *APIItemResp_None) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *APIItemResp_None) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.None != nil {
+		{
+			size, err := m.None.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *APIItemResp_AddonServices) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *APIItemResp_AddonServices) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AddonServices != nil {
+		{
+			size, err := m.AddonServices.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *APIItemListResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *APIItemListResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *APIItemListResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Result {
+		i--
+		if m.Result {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x18
+	}
+	if len(m.Items) > 0 {
+		for iNdEx := len(m.Items) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Items[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.ListId) > 0 {
+		i -= len(m.ListId)
+		copy(dAtA[i:], m.ListId)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.ListId)))
 		i--
 		dAtA[i] = 0xa
 	}
@@ -1499,13 +2302,13 @@ func (m *EvaluateAPIAccessResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x12
 		}
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *NamespaceAPIList) Marshal() (dAtA []byte, err error) {
+func (m *NamespaceAPIListReq) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1515,12 +2318,12 @@ func (m *NamespaceAPIList) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *NamespaceAPIList) MarshalTo(dAtA []byte) (int, error) {
+func (m *NamespaceAPIListReq) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *NamespaceAPIList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *NamespaceAPIListReq) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1580,8 +2383,52 @@ func (m *EvaluateBatchAPIAccessReq) MarshalToSizedBuffer(dAtA []byte) (int, erro
 				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x12
 		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *NamespaceAPIListResp) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *NamespaceAPIListResp) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NamespaceAPIListResp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ItemLists) > 0 {
+		for iNdEx := len(m.ItemLists) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.ItemLists[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x12
+		}
+	}
+	if len(m.Namespace) > 0 {
+		i -= len(m.Namespace)
+		copy(dAtA[i:], m.Namespace)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.Namespace)))
+		i--
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -1617,7 +2464,7 @@ func (m *EvaluateBatchAPIAccessResp) MarshalToSizedBuffer(dAtA []byte) (int, err
 				i = encodeVarintPublicCustomapi(dAtA, i, uint64(size))
 			}
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x12
 		}
 	}
 	return len(dAtA) - i, nil
@@ -1696,7 +2543,80 @@ func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *APIItem) Size() (n int) {
+func (m *APIItemReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Method)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.Path)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *APIItemListReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ListId)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *EvaluateAPIAccessReq) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if len(m.ItemLists) > 0 {
+		for _, e := range m.ItemLists {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	if m.AccessControlType != 0 {
+		n += 1 + sovPublicCustomapi(uint64(m.AccessControlType))
+	}
+	return n
+}
+
+func (m *AccessEnablerAddonService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.AddonServiceNames) > 0 {
+		for _, s := range m.AddonServiceNames {
+			l = len(s)
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *APIItemResp) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1713,10 +2633,37 @@ func (m *APIItem) Size() (n int) {
 	if m.Result {
 		n += 2
 	}
+	if m.AccessEnablers != nil {
+		n += m.AccessEnablers.Size()
+	}
 	return n
 }
 
-func (m *APIItemList) Size() (n int) {
+func (m *APIItemResp_None) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.None != nil {
+		l = m.None.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *APIItemResp_AddonServices) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AddonServices != nil {
+		l = m.AddonServices.Size()
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+func (m *APIItemListResp) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1738,25 +2685,6 @@ func (m *APIItemList) Size() (n int) {
 	return n
 }
 
-func (m *EvaluateAPIAccessReq) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Namespace)
-	if l > 0 {
-		n += 1 + l + sovPublicCustomapi(uint64(l))
-	}
-	if len(m.ItemLists) > 0 {
-		for _, e := range m.ItemLists {
-			l = e.Size()
-			n += 1 + l + sovPublicCustomapi(uint64(l))
-		}
-	}
-	return n
-}
-
 func (m *EvaluateAPIAccessResp) Size() (n int) {
 	if m == nil {
 		return 0
@@ -1772,7 +2700,7 @@ func (m *EvaluateAPIAccessResp) Size() (n int) {
 	return n
 }
 
-func (m *NamespaceAPIList) Size() (n int) {
+func (m *NamespaceAPIListReq) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1799,6 +2727,25 @@ func (m *EvaluateBatchAPIAccessReq) Size() (n int) {
 	_ = l
 	if len(m.BatchNamespaceApiList) > 0 {
 		for _, e := range m.BatchNamespaceApiList {
+			l = e.Size()
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *NamespaceAPIListResp) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	if len(m.ItemLists) > 0 {
+		for _, e := range m.ItemLists {
 			l = e.Size()
 			n += 1 + l + sovPublicCustomapi(uint64(l))
 		}
@@ -1855,31 +2802,29 @@ func sovPublicCustomapi(x uint64) (n int) {
 func sozPublicCustomapi(x uint64) (n int) {
 	return sovPublicCustomapi(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (this *APIItem) String() string {
+func (this *APIItemReq) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&APIItem{`,
+	s := strings.Join([]string{`&APIItemReq{`,
 		`Method:` + fmt.Sprintf("%v", this.Method) + `,`,
 		`Path:` + fmt.Sprintf("%v", this.Path) + `,`,
-		`Result:` + fmt.Sprintf("%v", this.Result) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *APIItemList) String() string {
+func (this *APIItemListReq) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForItems := "[]*APIItem{"
+	repeatedStringForItems := "[]*APIItemReq{"
 	for _, f := range this.Items {
-		repeatedStringForItems += strings.Replace(f.String(), "APIItem", "APIItem", 1) + ","
+		repeatedStringForItems += strings.Replace(f.String(), "APIItemReq", "APIItemReq", 1) + ","
 	}
 	repeatedStringForItems += "}"
-	s := strings.Join([]string{`&APIItemList{`,
+	s := strings.Join([]string{`&APIItemListReq{`,
 		`ListId:` + fmt.Sprintf("%v", this.ListId) + `,`,
 		`Items:` + repeatedStringForItems + `,`,
-		`Result:` + fmt.Sprintf("%v", this.Result) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1888,14 +2833,75 @@ func (this *EvaluateAPIAccessReq) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForItemLists := "[]*APIItemList{"
+	repeatedStringForItemLists := "[]*APIItemListReq{"
 	for _, f := range this.ItemLists {
-		repeatedStringForItemLists += strings.Replace(f.String(), "APIItemList", "APIItemList", 1) + ","
+		repeatedStringForItemLists += strings.Replace(f.String(), "APIItemListReq", "APIItemListReq", 1) + ","
 	}
 	repeatedStringForItemLists += "}"
 	s := strings.Join([]string{`&EvaluateAPIAccessReq{`,
 		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`ItemLists:` + repeatedStringForItemLists + `,`,
+		`AccessControlType:` + fmt.Sprintf("%v", this.AccessControlType) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AccessEnablerAddonService) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AccessEnablerAddonService{`,
+		`AddonServiceNames:` + fmt.Sprintf("%v", this.AddonServiceNames) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *APIItemResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&APIItemResp{`,
+		`Method:` + fmt.Sprintf("%v", this.Method) + `,`,
+		`Path:` + fmt.Sprintf("%v", this.Path) + `,`,
+		`Result:` + fmt.Sprintf("%v", this.Result) + `,`,
+		`AccessEnablers:` + fmt.Sprintf("%v", this.AccessEnablers) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *APIItemResp_None) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&APIItemResp_None{`,
+		`None:` + strings.Replace(fmt.Sprintf("%v", this.None), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *APIItemResp_AddonServices) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&APIItemResp_AddonServices{`,
+		`AddonServices:` + strings.Replace(fmt.Sprintf("%v", this.AddonServices), "AccessEnablerAddonService", "AccessEnablerAddonService", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *APIItemListResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForItems := "[]*APIItemResp{"
+	for _, f := range this.Items {
+		repeatedStringForItems += strings.Replace(f.String(), "APIItemResp", "APIItemResp", 1) + ","
+	}
+	repeatedStringForItems += "}"
+	s := strings.Join([]string{`&APIItemListResp{`,
+		`ListId:` + fmt.Sprintf("%v", this.ListId) + `,`,
+		`Items:` + repeatedStringForItems + `,`,
+		`Result:` + fmt.Sprintf("%v", this.Result) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -1904,9 +2910,9 @@ func (this *EvaluateAPIAccessResp) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForItemLists := "[]*APIItemList{"
+	repeatedStringForItemLists := "[]*APIItemListResp{"
 	for _, f := range this.ItemLists {
-		repeatedStringForItemLists += strings.Replace(f.String(), "APIItemList", "APIItemList", 1) + ","
+		repeatedStringForItemLists += strings.Replace(f.String(), "APIItemListResp", "APIItemListResp", 1) + ","
 	}
 	repeatedStringForItemLists += "}"
 	s := strings.Join([]string{`&EvaluateAPIAccessResp{`,
@@ -1915,16 +2921,16 @@ func (this *EvaluateAPIAccessResp) String() string {
 	}, "")
 	return s
 }
-func (this *NamespaceAPIList) String() string {
+func (this *NamespaceAPIListReq) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForItemLists := "[]*APIItemList{"
+	repeatedStringForItemLists := "[]*APIItemListReq{"
 	for _, f := range this.ItemLists {
-		repeatedStringForItemLists += strings.Replace(f.String(), "APIItemList", "APIItemList", 1) + ","
+		repeatedStringForItemLists += strings.Replace(f.String(), "APIItemListReq", "APIItemListReq", 1) + ","
 	}
 	repeatedStringForItemLists += "}"
-	s := strings.Join([]string{`&NamespaceAPIList{`,
+	s := strings.Join([]string{`&NamespaceAPIListReq{`,
 		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`ItemLists:` + repeatedStringForItemLists + `,`,
 		`}`,
@@ -1935,9 +2941,9 @@ func (this *EvaluateBatchAPIAccessReq) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForBatchNamespaceApiList := "[]*NamespaceAPIList{"
+	repeatedStringForBatchNamespaceApiList := "[]*NamespaceAPIListReq{"
 	for _, f := range this.BatchNamespaceApiList {
-		repeatedStringForBatchNamespaceApiList += strings.Replace(f.String(), "NamespaceAPIList", "NamespaceAPIList", 1) + ","
+		repeatedStringForBatchNamespaceApiList += strings.Replace(f.String(), "NamespaceAPIListReq", "NamespaceAPIListReq", 1) + ","
 	}
 	repeatedStringForBatchNamespaceApiList += "}"
 	s := strings.Join([]string{`&EvaluateBatchAPIAccessReq{`,
@@ -1946,13 +2952,29 @@ func (this *EvaluateBatchAPIAccessReq) String() string {
 	}, "")
 	return s
 }
+func (this *NamespaceAPIListResp) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForItemLists := "[]*APIItemListResp{"
+	for _, f := range this.ItemLists {
+		repeatedStringForItemLists += strings.Replace(f.String(), "APIItemListResp", "APIItemListResp", 1) + ","
+	}
+	repeatedStringForItemLists += "}"
+	s := strings.Join([]string{`&NamespaceAPIListResp{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
+		`ItemLists:` + repeatedStringForItemLists + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *EvaluateBatchAPIAccessResp) String() string {
 	if this == nil {
 		return "nil"
 	}
-	repeatedStringForBatchNamespaceApiList := "[]*NamespaceAPIList{"
+	repeatedStringForBatchNamespaceApiList := "[]*NamespaceAPIListResp{"
 	for _, f := range this.BatchNamespaceApiList {
-		repeatedStringForBatchNamespaceApiList += strings.Replace(f.String(), "NamespaceAPIList", "NamespaceAPIList", 1) + ","
+		repeatedStringForBatchNamespaceApiList += strings.Replace(f.String(), "NamespaceAPIListResp", "NamespaceAPIListResp", 1) + ","
 	}
 	repeatedStringForBatchNamespaceApiList += "}"
 	s := strings.Join([]string{`&EvaluateBatchAPIAccessResp{`,
@@ -1989,7 +3011,7 @@ func valueToStringPublicCustomapi(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *APIItem) Unmarshal(dAtA []byte) error {
+func (m *APIItemReq) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2012,10 +3034,469 @@ func (m *APIItem) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: APIItem: wiretype end group for non-group")
+			return fmt.Errorf("proto: APIItemReq: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: APIItem: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: APIItemReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Method", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Method = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Path = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *APIItemListReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: APIItemListReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: APIItemListReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ListId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ListId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &APIItemReq{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *EvaluateAPIAccessReq) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: EvaluateAPIAccessReq: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: EvaluateAPIAccessReq: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ItemLists", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ItemLists = append(m.ItemLists, &APIItemListReq{})
+			if err := m.ItemLists[len(m.ItemLists)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AccessControlType", wireType)
+			}
+			m.AccessControlType = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.AccessControlType |= AccessControlType(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AccessEnablerAddonService) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AccessEnablerAddonService: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AccessEnablerAddonService: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AddonServiceNames", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AddonServiceNames = append(m.AddonServiceNames, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *APIItemResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: APIItemResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: APIItemResp: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2102,6 +3583,76 @@ func (m *APIItem) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Result = bool(v != 0)
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field None", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AccessEnablers = &APIItemResp_None{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AddonServices", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AccessEnablerAddonService{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AccessEnablers = &APIItemResp_AddonServices{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
@@ -2126,7 +3677,7 @@ func (m *APIItem) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *APIItemList) Unmarshal(dAtA []byte) error {
+func (m *APIItemListResp) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2149,10 +3700,10 @@ func (m *APIItemList) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: APIItemList: wiretype end group for non-group")
+			return fmt.Errorf("proto: APIItemListResp: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: APIItemList: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: APIItemListResp: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2216,7 +3767,7 @@ func (m *APIItemList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Items = append(m.Items, &APIItem{})
+			m.Items = append(m.Items, &APIItemResp{})
 			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2241,125 +3792,6 @@ func (m *APIItemList) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Result = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *EvaluateAPIAccessReq) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPublicCustomapi
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: EvaluateAPIAccessReq: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: EvaluateAPIAccessReq: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Namespace = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ItemLists", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPublicCustomapi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPublicCustomapi
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ItemLists = append(m.ItemLists, &APIItemList{})
-			if err := m.ItemLists[len(m.ItemLists)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
@@ -2413,7 +3845,7 @@ func (m *EvaluateAPIAccessResp) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: EvaluateAPIAccessResp: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field ItemLists", wireType)
 			}
@@ -2442,7 +3874,7 @@ func (m *EvaluateAPIAccessResp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ItemLists = append(m.ItemLists, &APIItemList{})
+			m.ItemLists = append(m.ItemLists, &APIItemListResp{})
 			if err := m.ItemLists[len(m.ItemLists)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2471,7 +3903,7 @@ func (m *EvaluateAPIAccessResp) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *NamespaceAPIList) Unmarshal(dAtA []byte) error {
+func (m *NamespaceAPIListReq) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2494,10 +3926,10 @@ func (m *NamespaceAPIList) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: NamespaceAPIList: wiretype end group for non-group")
+			return fmt.Errorf("proto: NamespaceAPIListReq: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: NamespaceAPIList: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: NamespaceAPIListReq: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2561,7 +3993,7 @@ func (m *NamespaceAPIList) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ItemLists = append(m.ItemLists, &APIItemList{})
+			m.ItemLists = append(m.ItemLists, &APIItemListReq{})
 			if err := m.ItemLists[len(m.ItemLists)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -2619,7 +4051,7 @@ func (m *EvaluateBatchAPIAccessReq) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: EvaluateBatchAPIAccessReq: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BatchNamespaceApiList", wireType)
 			}
@@ -2648,8 +4080,127 @@ func (m *EvaluateBatchAPIAccessReq) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.BatchNamespaceApiList = append(m.BatchNamespaceApiList, &NamespaceAPIList{})
+			m.BatchNamespaceApiList = append(m.BatchNamespaceApiList, &NamespaceAPIListReq{})
 			if err := m.BatchNamespaceApiList[len(m.BatchNamespaceApiList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *NamespaceAPIListResp) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: NamespaceAPIListResp: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: NamespaceAPIListResp: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ItemLists", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ItemLists = append(m.ItemLists, &APIItemListResp{})
+			if err := m.ItemLists[len(m.ItemLists)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2706,7 +4257,7 @@ func (m *EvaluateBatchAPIAccessResp) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: EvaluateBatchAPIAccessResp: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
-		case 1:
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field BatchNamespaceApiList", wireType)
 			}
@@ -2735,7 +4286,7 @@ func (m *EvaluateBatchAPIAccessResp) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.BatchNamespaceApiList = append(m.BatchNamespaceApiList, &NamespaceAPIList{})
+			m.BatchNamespaceApiList = append(m.BatchNamespaceApiList, &NamespaceAPIListResp{})
 			if err := m.BatchNamespaceApiList[len(m.BatchNamespaceApiList)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
