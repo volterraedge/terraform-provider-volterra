@@ -1864,6 +1864,76 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
                 }
             }
+<<<<<<<< HEAD:pbgo/extschema/schema/nginx/one/nginx_csg/public_crudapi.vesapi.go
+========
+        },
+        "subscriptionAddonServiceStatus": {
+            "type": "object",
+            "description": "x-displayName: \"Addon Service Status\"\nDisplay current state of an addon service",
+            "title": "AddonServiceStatus",
+            "properties": {
+                "status": {
+                    "description": "x-displayName: \"Addon Subscription Status\"\nStatus of an addon subscription",
+                    "title": "Status",
+                    "$ref": "#/definitions/subscriptionStatus"
+                }
+            }
+        },
+        "subscriptionGlobalSpecType": {
+            "type": "object",
+            "description": "This is the shape of the subscription object in the database at Global Controller.",
+            "title": "GlobalSpecType",
+            "x-displayname": "Global Specification",
+            "x-ves-proto-message": "ves.io.schema.subscription.GlobalSpecType",
+            "properties": {
+                "addon_service_status": {
+                    "type": "object",
+                    "description": " Addon service status",
+                    "title": "Addon Service Status",
+                    "x-displayname": "Addon Service Status"
+                }
+            }
+        },
+        "subscriptionSpecType": {
+            "type": "object",
+            "description": "Shape of the subscription object",
+            "title": "SpecType",
+            "x-displayname": "Specification",
+            "x-ves-proto-message": "ves.io.schema.subscription.SpecType",
+            "properties": {
+                "gc_spec": {
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/subscriptionGlobalSpecType",
+                    "x-displayname": "GC Spec"
+                }
+            }
+        },
+        "subscriptionStatus": {
+            "type": "string",
+            "description": "x-displayName: \"Addon Subscription Status\"\nStatus of an addon subscription\n\n - AS_UNKNOWN: x-displayName: \"None\"\nDefault state\n - AS_SUBSCRIBED: x-displayName: \"Subscribed\"\nSuccessfully subscribed\n - AS_UNSUBSCRIBED: x-displayName: \"Unsubscribed\"\nSuccessfully unsubscribed\n - AS_ERROR: x-displayName: \"Error\"\nService subscription request ended up in error state.\n - AS_SUBSCRIBE_PENDING: x-displayName: \"Pending Subscribed\"\nRequest for subscription has been initiated and is pending approval\n - AS_UNSUBSCRIBE_PENDING: x-displayName: \"Pending Unsubscribed\"\nRequest for unsubscription has been initiated and is pending approval.",
+            "title": "Status",
+            "enum": [
+                "AS_UNKNOWN",
+                "AS_SUBSCRIBED",
+                "AS_UNSUBSCRIBED",
+                "AS_ERROR",
+                "AS_SUBSCRIBE_PENDING",
+                "AS_UNSUBSCRIBE_PENDING"
+            ],
+            "default": "AS_UNKNOWN"
+        },
+        "subscriptioncrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.subscription.crudapi.ErrorCode"
+>>>>>>>> main:pbgo/extschema/schema/subscription/crudapi/api.vesapi.go
         }
     },
     "x-displayname": "NGINX One CSG Object configuration",

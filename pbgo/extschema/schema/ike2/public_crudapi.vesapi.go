@@ -773,7 +773,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		return errors.Wrap(err, "Delete")
 	}
 
+<<<<<<<< HEAD:pbgo/extschema/schema/ike2/public_crudapi.vesapi.go
 	url := fmt.Sprintf("%s/public/namespaces/%s/ike2s/%s", c.baseURL, dReq.Namespace, dReq.Name)
+========
+	url := fmt.Sprintf("%s/public/namespaces/%s/uztna_app_vip_pools/%s", c.baseURL, dReq.Namespace, dReq.Name)
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_app_vip_pool/public_crudapi.vesapi.go
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1810,7 +1814,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ike2-api-create"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/ike2/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.ike2.API.Create"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_app_vip_pool.API.Create"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_app_vip_pool/public_crudapi.vesapi.go
             },
             "x-displayname": "IKE Phase 2  Profile",
             "x-ves-proto-service": "ves.io.schema.ike2.API",
@@ -1910,7 +1919,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ike2-api-replace"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/ike2/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.ike2.API.Replace"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_app_vip_pool.API.Replace"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_app_vip_pool/public_crudapi.vesapi.go
             },
             "x-displayname": "IKE Phase 2  Profile",
             "x-ves-proto-service": "ves.io.schema.ike2.API",
@@ -2026,7 +2040,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ike2-api-list"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/ike2/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.ike2.API.List"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_app_vip_pool.API.List"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_app_vip_pool/public_crudapi.vesapi.go
             },
             "x-displayname": "IKE Phase 2  Profile",
             "x-ves-proto-service": "ves.io.schema.ike2.API",
@@ -2136,7 +2155,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ike2-api-get"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/ike2/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.ike2.API.Get"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_app_vip_pool.API.Get"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_app_vip_pool/public_crudapi.vesapi.go
             },
             "delete": {
                 "summary": "Delete IKE Phase 2  Profile",
@@ -2229,7 +2253,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-ike2-api-delete"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/ike2/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.ike2.API.Delete"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_app_vip_pool.API.Delete"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_app_vip_pool/public_crudapi.vesapi.go
             },
             "x-displayname": "IKE Phase 2  Profile",
             "x-ves-proto-service": "ves.io.schema.ike2.API",
@@ -3339,9 +3368,294 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ike2DHGroups",
                     "x-displayname": "Enabled"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/ike2/public_crudapi.vesapi.go
                 "disable_pfs": {
                     "description": "Exclusive with [dh_group_set]\n Disable PFS for this tunnel",
                     "$ref": "#/definitions/ioschemaEmpty",
+========
+                "spec": {
+                    "description": " Specification of the desired behavior of the uztna app vip pool",
+                    "title": "spec",
+                    "$ref": "#/definitions/uztnauztna_app_vip_poolCreateSpecType",
+                    "x-displayname": "Spec"
+                }
+            }
+        },
+        "uztna_app_vip_poolCreateResponse": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_app_vip_pool.CreateResponse",
+            "properties": {
+                "metadata": {
+                    "description": " Standard object's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectGetMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "spec": {
+                    "description": " Specification of the desired behavior of the uztna app vip pool",
+                    "title": "spec",
+                    "$ref": "#/definitions/uztnauztna_app_vip_poolGetSpecType",
+                    "x-displayname": "Spec"
+                },
+                "system_metadata": {
+                    "description": " System generated object's metadata",
+                    "title": "system metadata",
+                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
+                    "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "uztna_app_vip_poolDeleteRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Delete' RPC.",
+            "title": "DeleteRequest is used to delete a uztna_app_vip_pool",
+            "x-displayname": "Delete Request",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_app_vip_pool.DeleteRequest",
+            "properties": {
+                "fail_if_referred": {
+                    "type": "boolean",
+                    "description": " Fail the delete operation if this object is being referred by other objects",
+                    "title": "fail_if_referred",
+                    "format": "boolean",
+                    "x-displayname": "Fail-If-Referred"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                }
+            }
+        },
+        "uztna_app_vip_poolGetResponse": {
+            "type": "object",
+            "description": "This is the output message of the 'Get' RPC",
+            "title": "GetResponse is the shape of a read uztna_app_vip_pool",
+            "x-displayname": "Get Response",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_app_vip_pool.GetResponse",
+            "properties": {
+                "create_form": {
+                    "description": "Format used to create a new similar object",
+                    "title": "create_form",
+                    "$ref": "#/definitions/uztna_app_vip_poolCreateRequest",
+                    "x-displayname": "CreateRequest Format"
+                },
+                "deleted_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "deleted_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Deleted Referred Objects"
+                },
+                "disabled_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "disabled_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Disabled Referred Objects"
+                },
+                "metadata": {
+                    "description": " Standard object's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectGetMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "referring_objects": {
+                    "type": "array",
+                    "description": "The set of objects that are referring to this object in their spec",
+                    "title": "referring_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Referring Objects"
+                },
+                "replace_form": {
+                    "description": "Format to replace changeable values in object",
+                    "title": "replace_form",
+                    "$ref": "#/definitions/uztna_app_vip_poolReplaceRequest",
+                    "x-displayname": "ReplaceRequest Format"
+                },
+                "spec": {
+                    "description": " Specification of the desired behavior of the uztna app vip pool",
+                    "title": "spec",
+                    "$ref": "#/definitions/uztnauztna_app_vip_poolGetSpecType",
+                    "x-displayname": "Spec"
+                },
+                "status": {
+                    "type": "array",
+                    "description": "The status reported by different services for this configuration object",
+                    "title": "status",
+                    "items": {
+                        "$ref": "#/definitions/uztna_app_vip_poolStatusObject"
+                    },
+                    "x-displayname": "Status"
+                },
+                "system_metadata": {
+                    "description": " System generated object's metadata",
+                    "title": "system metadata",
+                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
+                    "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "uztna_app_vip_poolGetResponseFormatCode": {
+            "type": "string",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
+            "title": "GetResponseFormatCode",
+            "enum": [
+                "GET_RSP_FORMAT_DEFAULT",
+                "GET_RSP_FORMAT_FOR_CREATE",
+                "GET_RSP_FORMAT_FOR_REPLACE",
+                "GET_RSP_FORMAT_STATUS",
+                "GET_RSP_FORMAT_READ",
+                "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                "GET_RSP_FORMAT_BROKEN_REFERENCES"
+            ],
+            "default": "GET_RSP_FORMAT_DEFAULT"
+        },
+        "uztna_app_vip_poolIPV4ApplicationVIP": {
+            "type": "object",
+            "description": "\nIPV4 Application VIP Pool",
+            "title": "IPV4 Application VIP Pool",
+            "x-displayname": "Application VIP Pool Network",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_app_vip_pool.IPV4ApplicationVIP",
+            "properties": {
+                "prefix": {
+                    "type": "array",
+                    "description": " IPV4 Application IP Pool Network \n\nExample: - \"['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.ipv4_prefix: true\n  ves.io.schema.rules.repeated.items.string.not_empty: true\n  ves.io.schema.rules.repeated.max_items: 200\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Application IP Pool Network",
+                    "maxItems": 200,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Application VIP Pool Network",
+                    "x-ves-example": "['10.2.1.0/24', '192.168.8.0/29', '10.7.64.160/27']",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.items.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.repeated.items.string.not_empty": "true",
+                        "ves.io.schema.rules.repeated.max_items": "200",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "vip4_range": {
+                    "type": "array",
+                    "description": " IPV4 Application VIP Pool Range\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 10\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "IPV4 Application VIP Pool Range",
+                    "maxItems": 10,
+                    "items": {
+                        "$ref": "#/definitions/uztna_app_vip_poolVIP4PoolRange"
+                    },
+                    "x-displayname": "Application VIP Pool Range",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "10",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "uztna_app_vip_poolIPV6ApplicationVIP": {
+            "type": "object",
+            "description": "x-displayName: \"IPV6 Application VIP Pool\"\n\nIPV6 Application VIP Pool",
+            "title": "IPV6 Application VIP Pool",
+            "properties": {
+                "ipv6_prefix": {
+                    "type": "array",
+                    "description": "x-displayName: \"Application VIP Pool Network\"\nx-example: \"['2001:db8:abcd:0012::0/64', 'fd48:fa09:d9d4::/48', 'fdd8:3a62:45c7:98a5::/64']\"\nIPV6 Application IP Pool Network",
+                    "title": "IPV6 Application IP Pool Network",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "vip6_range": {
+                    "type": "array",
+                    "description": "x-displayName: \"Application VIP Pool Range\"\nIPV6 Application VIP Pool Range",
+                    "title": "IPV6 Application VIP Pool Range",
+                    "items": {
+                        "$ref": "#/definitions/uztna_app_vip_poolVIP6PoolRange"
+                    }
+                }
+            }
+        },
+        "uztna_app_vip_poolIPVersion": {
+            "type": "object",
+            "description": "\nIP Version",
+            "title": "Ip Version",
+            "x-displayname": "IP Version",
+            "x-ves-oneof-field-ip_vip": "[\"ipv4_vip\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_app_vip_pool.IPVersion",
+            "properties": {
+                "ipv4_vip": {
+                    "description": "Exclusive with []\n\n IPV4 Only Appllication VIP Pool",
+                    "title": "IPV4 Only Appllication VIP Pool",
+                    "$ref": "#/definitions/uztna_app_vip_poolIPV4ApplicationVIP",
+                    "x-displayname": "IPV4 Only Appllication VIP Pool"
+                }
+            }
+        },
+        "uztna_app_vip_poolListResponse": {
+            "type": "object",
+            "description": "This is the output message of 'List' RPC.",
+            "title": "ListResponse is the collection of uztna_app_vip_pool",
+            "x-displayname": "List Response",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_app_vip_pool.ListResponse",
+            "properties": {
+                "errors": {
+                    "type": "array",
+                    "description": " Errors(if any) while listing items from collection",
+                    "title": "errors",
+                    "items": {
+                        "$ref": "#/definitions/schemaErrorType"
+                    },
+                    "x-displayname": "Errors"
+                },
+                "items": {
+                    "type": "array",
+                    "description": " items represents the collection in response",
+                    "title": "items",
+                    "items": {
+                        "$ref": "#/definitions/uztna_app_vip_poolListResponseItem"
+                    },
+                    "x-displayname": "Items"
+                }
+            }
+        },
+        "uztna_app_vip_poolListResponseItem": {
+            "type": "object",
+            "description": "By default a summary of uztna_app_vip_pool is returned in 'List'. By setting\n'report_fields' in the ListRequest more details of each item can be got.",
+            "title": "ListResponseItem is an individual item in a collection of uztna_app_vip_pool",
+            "x-displayname": "List Item",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_app_vip_pool.ListResponseItem",
+            "properties": {
+                "annotations": {
+                    "type": "object",
+                    "description": " The set of annotations present on this uztna_app_vip_pool",
+                    "title": "annotations",
+                    "x-displayname": "Annotations"
+                },
+                "description": {
+                    "type": "string",
+                    "description": " The description set for this uztna_app_vip_pool",
+                    "title": "description",
+                    "x-displayname": "Description"
+                },
+                "disabled": {
+                    "type": "boolean",
+                    "description": " A value of true indicates uztna_app_vip_pool is administratively disabled",
+                    "title": "disabled",
+                    "format": "boolean",
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_app_vip_pool/public_crudapi.vesapi.go
                     "x-displayname": "Disabled"
                 },
                 "ike_keylifetime_hours": {

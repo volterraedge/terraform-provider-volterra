@@ -773,7 +773,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		return errors.Wrap(err, "Delete")
 	}
 
+<<<<<<<< HEAD:pbgo/extschema/schema/api_sec/api_testing/public_crudapi.vesapi.go
 	url := fmt.Sprintf("%s/public/namespaces/%s/api_testings/%s", c.baseURL, dReq.Namespace, dReq.Name)
+========
+	url := fmt.Sprintf("%s/public/namespaces/%s/uztna_healthchecks/%s", c.baseURL, dReq.Namespace, dReq.Name)
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_healthcheck/public_crudapi.vesapi.go
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1809,7 +1813,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_sec-api_testing-api-create"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/api_sec/api_testing/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.api_sec.api_testing.API.Create"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_healthcheck.API.Create"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_healthcheck/public_crudapi.vesapi.go
             },
             "x-displayname": "API Testing",
             "x-ves-proto-service": "ves.io.schema.api_sec.api_testing.API",
@@ -1908,7 +1917,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_sec-api_testing-api-replace"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/api_sec/api_testing/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.api_sec.api_testing.API.Replace"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_healthcheck.API.Replace"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_healthcheck/public_crudapi.vesapi.go
             },
             "x-displayname": "API Testing",
             "x-ves-proto-service": "ves.io.schema.api_sec.api_testing.API",
@@ -2024,7 +2038,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_sec-api_testing-api-list"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/api_sec/api_testing/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.api_sec.api_testing.API.List"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_healthcheck.API.List"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_healthcheck/public_crudapi.vesapi.go
             },
             "x-displayname": "API Testing",
             "x-ves-proto-service": "ves.io.schema.api_sec.api_testing.API",
@@ -2133,7 +2152,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_sec-api_testing-api-get"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/api_sec/api_testing/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.api_sec.api_testing.API.Get"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_healthcheck.API.Get"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_healthcheck/public_crudapi.vesapi.go
             },
             "delete": {
                 "summary": "Delete API Testing",
@@ -2226,7 +2250,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_sec-api_testing-api-delete"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/api_sec/api_testing/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.api_sec.api_testing.API.Delete"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_healthcheck.API.Delete"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_healthcheck/public_crudapi.vesapi.go
             },
             "x-displayname": "API Testing",
             "x-ves-proto-service": "ves.io.schema.api_sec.api_testing.API",
@@ -2961,10 +2990,8 @@ var APISwaggerJSON string = `{
         },
         "ioschemaEmpty": {
             "type": "object",
-            "description": "This can be used for messages where no values are needed",
-            "title": "Empty",
-            "x-displayname": "Empty",
-            "x-ves-proto-message": "ves.io.schema.Empty"
+            "description": "x-displayName: \"Empty\"\nThis can be used for messages where no values are needed",
+            "title": "Empty"
         },
         "ioschemaObjectRefType": {
             "type": "object",
@@ -3027,68 +3054,40 @@ var APISwaggerJSON string = `{
         },
         "schemaBlindfoldSecretInfoType": {
             "type": "object",
-            "description": "BlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
+            "description": "x-displayName: \"Blindfold Secret\"\nBlindfoldSecretInfoType specifies information about the Secret managed by F5XC Secret Management",
             "title": "BlindfoldSecretInfoType",
-            "x-displayname": "Blindfold Secret",
-            "x-ves-displayorder": "3,1,2",
-            "x-ves-proto-message": "ves.io.schema.BlindfoldSecretInfoType",
             "properties": {
                 "decryption_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the backend Secret Management service.\n\nExample: - \"value\"-",
-                    "title": "Decryption Provider",
-                    "x-displayname": "Decryption Provider",
-                    "x-ves-example": "value"
+                    "description": "x-displayName: \"Decryption Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the backend Secret Management service.",
+                    "title": "Decryption Provider"
                 },
                 "location": {
                     "type": "string",
-                    "description": " Location is the uri_ref. It could be in url format for string:///\n Or it could be a path if the store provider is an http/https location\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.uri_ref: true\n",
-                    "title": "Location",
-                    "x-displayname": "Location",
-                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.uri_ref": "true"
-                    }
+                    "description": "x-displayName: \"Location\"\nx-required\nx-example: \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"\nLocation is the uri_ref. It could be in url format for string:///\nOr it could be a path if the store provider is an http/https location",
+                    "title": "Location"
                 },
                 "store_provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"value\"-",
-                    "title": "Store Provider",
-                    "x-displayname": "Store Provider",
-                    "x-ves-example": "value"
+                    "description": "x-displayName: \"Store Provider\"\nx-example: \"value\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
+                    "title": "Store Provider"
                 }
             }
         },
         "schemaClearSecretInfoType": {
             "type": "object",
-            "description": "ClearSecretInfoType specifies information about the Secret that is not encrypted.",
+            "description": "x-displayName: \"In-Clear Secret\"\nClearSecretInfoType specifies information about the Secret that is not encrypted.",
             "title": "ClearSecretInfoType",
-            "x-displayname": "In-Clear Secret",
-            "x-ves-displayorder": "2,1",
-            "x-ves-proto-message": "ves.io.schema.ClearSecretInfoType",
             "properties": {
                 "provider": {
                     "type": "string",
-                    "description": " Name of the Secret Management Access object that contains information about the store to get encrypted bytes\n This field needs to be provided only if the url scheme is not string:///\n\nExample: - \"box-provider\"-",
-                    "title": "Provider",
-                    "x-displayname": "Provider",
-                    "x-ves-example": "box-provider"
+                    "description": "x-displayName: \"Provider\"\nx-example: \"box-provider\"\nName of the Secret Management Access object that contains information about the store to get encrypted bytes\nThis field needs to be provided only if the url scheme is not string:///",
+                    "title": "Provider"
                 },
                 "url": {
                     "type": "string",
-                    "description": " URL of the secret. Currently supported URL schemes is string:///.\n For string:/// scheme, Secret needs to be encoded Base64 format.\n When asked for this secret, caller will get Secret bytes after Base64 decoding.\n\nExample: - \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 131072\n  ves.io.schema.rules.string.uri_ref: true\n",
-                    "title": "URL",
-                    "maxLength": 131072,
-                    "x-displayname": "URL",
-                    "x-ves-example": "string:///U2VjcmV0SW5mb3JtYXRpb24=",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.max_bytes": "131072",
-                        "ves.io.schema.rules.string.uri_ref": "true"
-                    }
+                    "description": "x-displayName: \"URL\"\nx-required\nx-example: \"string:///U2VjcmV0SW5mb3JtYXRpb24=\"\nURL of the secret. Currently supported URL schemes is string:///.\nFor string:/// scheme, Secret needs to be encoded Base64 format.\nWhen asked for this secret, caller will get Secret bytes after Base64 decoding.",
+                    "title": "URL"
                 }
             }
         },
@@ -3459,23 +3458,38 @@ var APISwaggerJSON string = `{
         },
         "schemaSecretType": {
             "type": "object",
-            "description": "SecretType is used in an object to indicate a sensitive/confidential field",
+            "description": "x-displayName: \"Secret\"\nSecretType is used in an object to indicate a sensitive/confidential field",
             "title": "SecretType",
-            "x-displayname": "Secret",
-            "x-ves-oneof-field-secret_info_oneof": "[\"blindfold_secret_info\",\"clear_secret_info\"]",
-            "x-ves-proto-message": "ves.io.schema.SecretType",
             "properties": {
                 "blindfold_secret_info": {
-                    "description": "Exclusive with [clear_secret_info]\n Blindfold Secret is used for the secrets managed by F5XC Secret Management Service",
+                    "description": "x-displayName: \"Blindfold Secret\"\nBlindfold Secret is used for the secrets managed by F5XC Secret Management Service",
                     "title": "Blindfold Secret",
-                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType",
-                    "x-displayname": "Blindfold Secret"
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
+                },
+                "blindfold_secret_info_internal": {
+                    "description": "x-displayName: \"Blindfold Secret Internal\"\nBlindfold Secret Internal is used for the putting re-encrypted blindfold secret",
+                    "title": "Blindfold Secret Internal",
+                    "$ref": "#/definitions/schemaBlindfoldSecretInfoType"
                 },
                 "clear_secret_info": {
-                    "description": "Exclusive with [blindfold_secret_info]\n Clear Secret is used for the secrets that are not encrypted",
+                    "description": "x-displayName: \"Clear Secret\"\nClear Secret is used for the secrets that are not encrypted",
                     "title": "Clear Secret",
-                    "$ref": "#/definitions/schemaClearSecretInfoType",
-                    "x-displayname": "Clear Secret"
+                    "$ref": "#/definitions/schemaClearSecretInfoType"
+                },
+                "secret_encoding_type": {
+                    "description": "x-displayName: \"Secret Encoding\"\nThis field defines the encoding type of the secret BEFORE the secret is given to any Secret Management System.\nthis will be set if the secret is encoded and not plaintext BEFORE it is encrypted and put it in SecretType.\nNote - Do NOT set this field for Clear Secret with string:/// scheme.\ne.g. if a secret is base64 encoded and then put into vault.",
+                    "title": "secret_encoding_type",
+                    "$ref": "#/definitions/schemaSecretEncodingType"
+                },
+                "vault_secret_info": {
+                    "description": "x-displayName: \"Vault Secret\"\nVault Secret is used for the secrets managed by Hashicorp Vault",
+                    "title": "Vault Secret",
+                    "$ref": "#/definitions/schemaVaultSecretInfoType"
+                },
+                "wingman_secret_info": {
+                    "description": "x-displayName: \"Bootstrap Secret\"\nSecret is given as bootstrap secret in F5XC Security Sidecar",
+                    "title": "Wingman Secret",
+                    "$ref": "#/definitions/schemaWingmanSecretInfoType"
                 }
             }
         },
@@ -3760,6 +3774,595 @@ var APISwaggerJSON string = `{
                     "title": "Name"
                 }
             }
+<<<<<<<< HEAD:pbgo/extschema/schema/api_sec/api_testing/public_crudapi.vesapi.go
+========
+        },
+        "uztna_healthcheckCreateRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Create' RPC",
+            "title": "CreateRequest is used to create an instance of uztna_healthcheck",
+            "x-displayname": "Create Request",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.CreateRequest",
+            "properties": {
+                "metadata": {
+                    "description": " Standard object's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectCreateMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "spec": {
+                    "description": " Specification of the desired behavior of the healthcheck",
+                    "title": "spec",
+                    "$ref": "#/definitions/uztna_healthcheckCreateSpecType",
+                    "x-displayname": "Spec"
+                }
+            }
+        },
+        "uztna_healthcheckCreateResponse": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.CreateResponse",
+            "properties": {
+                "metadata": {
+                    "description": " Standard object's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectGetMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "spec": {
+                    "description": " Specification of the desired behavior of the healthcheck",
+                    "title": "spec",
+                    "$ref": "#/definitions/uztna_healthcheckGetSpecType",
+                    "x-displayname": "Spec"
+                },
+                "system_metadata": {
+                    "description": " System generated object's metadata",
+                    "title": "system metadata",
+                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
+                    "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "uztna_healthcheckCreateSpecType": {
+            "type": "object",
+            "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
+            "title": "Create healthcheck",
+            "x-displayname": "Create Health Check",
+            "x-ves-oneof-field-health_check": "[\"tcp_health_check\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.CreateSpecType",
+            "properties": {
+                "interval": {
+                    "type": "integer",
+                    "description": " Time interval in seconds between two healthcheck requests.\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 600\n",
+                    "format": "int64",
+                    "x-displayname": "Interval",
+                    "x-ves-example": "10",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "600"
+                    }
+                },
+                "tcp_health_check": {
+                    "description": "Exclusive with []\n Specifies send payload and expected response payload",
+                    "$ref": "#/definitions/uztna_healthcheckTcpHealthCheck",
+                    "x-displayname": "TCP HealthCheck"
+                },
+                "timeout": {
+                    "type": "integer",
+                    "description": " Timeout in seconds to wait for successful response. In other words, it is\n the time to wait for a health check response. If the timeout is reached the\n health check attempt will be considered a failure.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 600\n",
+                    "format": "int64",
+                    "x-displayname": "Timeout",
+                    "x-ves-example": "1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "600"
+                    }
+                }
+            }
+        },
+        "uztna_healthcheckDeleteRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Delete' RPC.",
+            "title": "DeleteRequest is used to delete a uztna_healthcheck",
+            "x-displayname": "Delete Request",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.DeleteRequest",
+            "properties": {
+                "fail_if_referred": {
+                    "type": "boolean",
+                    "description": " Fail the delete operation if this object is being referred by other objects",
+                    "title": "fail_if_referred",
+                    "format": "boolean",
+                    "x-displayname": "Fail-If-Referred"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                }
+            }
+        },
+        "uztna_healthcheckGetResponse": {
+            "type": "object",
+            "description": "This is the output message of the 'Get' RPC",
+            "title": "GetResponse is the shape of a read uztna_healthcheck",
+            "x-displayname": "Get Response",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.GetResponse",
+            "properties": {
+                "create_form": {
+                    "description": "Format used to create a new similar object",
+                    "title": "create_form",
+                    "$ref": "#/definitions/uztna_healthcheckCreateRequest",
+                    "x-displayname": "CreateRequest Format"
+                },
+                "deleted_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "deleted_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Deleted Referred Objects"
+                },
+                "disabled_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "disabled_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Disabled Referred Objects"
+                },
+                "metadata": {
+                    "description": " Standard object's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectGetMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "referring_objects": {
+                    "type": "array",
+                    "description": "The set of objects that are referring to this object in their spec",
+                    "title": "referring_objects",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Referring Objects"
+                },
+                "replace_form": {
+                    "description": "Format to replace changeable values in object",
+                    "title": "replace_form",
+                    "$ref": "#/definitions/uztna_healthcheckReplaceRequest",
+                    "x-displayname": "ReplaceRequest Format"
+                },
+                "spec": {
+                    "description": " Specification of the desired behavior of the healthcheck",
+                    "title": "spec",
+                    "$ref": "#/definitions/uztna_healthcheckGetSpecType",
+                    "x-displayname": "Spec"
+                },
+                "status": {
+                    "type": "array",
+                    "description": "The status reported by different services for this configuration object",
+                    "title": "status",
+                    "items": {
+                        "$ref": "#/definitions/uztna_healthcheckStatusObject"
+                    },
+                    "x-displayname": "Status"
+                },
+                "system_metadata": {
+                    "description": " System generated object's metadata",
+                    "title": "system metadata",
+                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
+                    "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "uztna_healthcheckGetResponseFormatCode": {
+            "type": "string",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
+            "title": "GetResponseFormatCode",
+            "enum": [
+                "GET_RSP_FORMAT_DEFAULT",
+                "GET_RSP_FORMAT_FOR_CREATE",
+                "GET_RSP_FORMAT_FOR_REPLACE",
+                "GET_RSP_FORMAT_STATUS",
+                "GET_RSP_FORMAT_READ",
+                "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                "GET_RSP_FORMAT_BROKEN_REFERENCES"
+            ],
+            "default": "GET_RSP_FORMAT_DEFAULT"
+        },
+        "uztna_healthcheckGetSpecType": {
+            "type": "object",
+            "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
+            "title": "Get healthcheck",
+            "x-displayname": "Get Health Check",
+            "x-ves-oneof-field-health_check": "[\"tcp_health_check\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.GetSpecType",
+            "properties": {
+                "interval": {
+                    "type": "integer",
+                    "description": " Time interval in seconds between two healthcheck requests.\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 600\n",
+                    "format": "int64",
+                    "x-displayname": "Interval",
+                    "x-ves-example": "10",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "600"
+                    }
+                },
+                "tcp_health_check": {
+                    "description": "Exclusive with []\n Specifies send payload and expected response payload",
+                    "$ref": "#/definitions/uztna_healthcheckTcpHealthCheck",
+                    "x-displayname": "TCP HealthCheck"
+                },
+                "timeout": {
+                    "type": "integer",
+                    "description": " Timeout in seconds to wait for successful response. In other words, it is\n the time to wait for a health check response. If the timeout is reached the\n health check attempt will be considered a failure.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 600\n",
+                    "format": "int64",
+                    "x-displayname": "Timeout",
+                    "x-ves-example": "1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "600"
+                    }
+                }
+            }
+        },
+        "uztna_healthcheckHeader": {
+            "type": "object",
+            "description": "x-displayName: \"Host Header\"\n\nSpecify the value of host header in HTTPS/HTTP health check request",
+            "title": "Host Header",
+            "properties": {
+                "expected_response": {
+                    "type": "string",
+                    "description": "x-required\nx-displayName: \"Receive String\"\nx-example: \"HTTP/1\"\nRegular expression used to match against the response to the health check's request. Mark node up upon receipt of a successful regular expression match. Uses re2 regular expression syntax.",
+                    "title": "Receive String"
+                },
+                "expected_status_codes": {
+                    "type": "array",
+                    "description": "x-displayName: \"Expected Status Codes\"\nx-example: \"200-250\"\nSpecifies a list of HTTP response status codes considered healthy. To treat default HTTP expected\nstatus code 200 as healthy, user has to configure it explicitly. This is a list of strings, each\nof which is single HTTP status code or a range with start and end values separated by \"-\".",
+                    "title": "Expected Status Codes",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "headers": {
+                    "type": "object",
+                    "description": "x-displayName: \"Request Headers to Add\"\nx-example: \"value\"\nSpecifies a list of HTTP headers that should be added to each request that is sent to the\nhealth checked cluster. This is a list of key-value pairs.",
+                    "title": "Headers to add in health check request"
+                },
+                "host_header": {
+                    "type": "string",
+                    "description": "x-displayName: \"Host Header Value\"\nx-example: \"one.volterra.com\"\nThe value of the host header.",
+                    "title": "host_header"
+                },
+                "password": {
+                    "description": "x-required\nx-displayName: \"Password\"\nx-example: \"value\"",
+                    "title": "Password",
+                    "$ref": "#/definitions/schemaSecretType"
+                },
+                "path": {
+                    "type": "string",
+                    "description": "x-displayName: \"Path\"\nx-required\nx-example: \"/healthcheck\"\nSpecifies the HTTPS path that will be requested during health checking.",
+                    "title": "path"
+                },
+                "request_headers_to_remove": {
+                    "type": "array",
+                    "description": "x-displayName: \"Request Headers to Remove\"\nx-example: \"user-agent\"\nSpecifies a list of HTTP headers that should be removed from each request that is sent to the\nhealth checked cluster. This is a list of keys of headers.",
+                    "title": "Headers to be removed from health check request",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "send_payload": {
+                    "type": "string",
+                    "description": "x-required\nx-displayName: \"Send String\"\nx-example: \"HEAD / HTTP/1.0\"\nHTTP payload to send to the target",
+                    "title": "Send String"
+                },
+                "use_origin_server_name": {
+                    "description": "x-displayName: \"Origin Server Name\"\nUse the origin server name.",
+                    "title": "use origin server name",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "user_name": {
+                    "type": "string",
+                    "description": "x-required\nx-displayName: \"User Name\"\nUser Name",
+                    "title": "UserName"
+                }
+            }
+        },
+        "uztna_healthcheckHttpHealthCheck": {
+            "type": "object",
+            "description": "x-displayName: \"HTTP Health Check\"\nHealthy if \"get\" method on URL \"http://\u003chost\u003e/\u003cpath\u003e\" with optional \"\u003cheader\u003e\" returns success.\n\"host\" is not used for DNS resolution. It is used as HTTP Header in the request.",
+            "title": "HttpHealthCheck",
+            "properties": {
+                "host_header": {
+                    "description": "x-required\nx-displayName: \"Host Header\"\nHost Header",
+                    "title": "Host Header",
+                    "$ref": "#/definitions/uztna_healthcheckHeader"
+                }
+            }
+        },
+        "uztna_healthcheckHttpsHealthCheck": {
+            "type": "object",
+            "description": "x-displayName: \"HTTPS Health Check\"\nHealthy if \"get\" method on URL \"https://\u003chost\u003e/\u003cpath\u003e\" with optional \"\u003cheader\u003e\" returns success.\n\"host\" is not used for DNS resolution. It is used as HTTPS Header in the request.",
+            "title": "HttpsHealthCheck",
+            "properties": {
+                "host_header": {
+                    "description": "x-required\nx-displayName: \"Host Header\"\nHost Header for HTTPS Header",
+                    "title": "Host Header",
+                    "$ref": "#/definitions/uztna_healthcheckHeader"
+                }
+            }
+        },
+        "uztna_healthcheckListResponse": {
+            "type": "object",
+            "description": "This is the output message of 'List' RPC.",
+            "title": "ListResponse is the collection of uztna_healthcheck",
+            "x-displayname": "List Response",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.ListResponse",
+            "properties": {
+                "errors": {
+                    "type": "array",
+                    "description": " Errors(if any) while listing items from collection",
+                    "title": "errors",
+                    "items": {
+                        "$ref": "#/definitions/schemaErrorType"
+                    },
+                    "x-displayname": "Errors"
+                },
+                "items": {
+                    "type": "array",
+                    "description": " items represents the collection in response",
+                    "title": "items",
+                    "items": {
+                        "$ref": "#/definitions/uztna_healthcheckListResponseItem"
+                    },
+                    "x-displayname": "Items"
+                }
+            }
+        },
+        "uztna_healthcheckListResponseItem": {
+            "type": "object",
+            "description": "By default a summary of uztna_healthcheck is returned in 'List'. By setting\n'report_fields' in the ListRequest more details of each item can be got.",
+            "title": "ListResponseItem is an individual item in a collection of uztna_healthcheck",
+            "x-displayname": "List Item",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.ListResponseItem",
+            "properties": {
+                "annotations": {
+                    "type": "object",
+                    "description": " The set of annotations present on this uztna_healthcheck",
+                    "title": "annotations",
+                    "x-displayname": "Annotations"
+                },
+                "description": {
+                    "type": "string",
+                    "description": " The description set for this uztna_healthcheck",
+                    "title": "description",
+                    "x-displayname": "Description"
+                },
+                "disabled": {
+                    "type": "boolean",
+                    "description": " A value of true indicates uztna_healthcheck is administratively disabled",
+                    "title": "disabled",
+                    "format": "boolean",
+                    "x-displayname": "Disabled"
+                },
+                "get_spec": {
+                    "description": " If ListRequest has any specified report_fields, it will appear in object",
+                    "title": "get_spec",
+                    "$ref": "#/definitions/uztna_healthcheckGetSpecType",
+                    "x-displayname": "Get Specification"
+                },
+                "labels": {
+                    "type": "object",
+                    "description": " The set of labels present on this uztna_healthcheck",
+                    "title": "labels",
+                    "x-displayname": "Labels"
+                },
+                "metadata": {
+                    "description": " If list request has report_fields set then metadata will\n contain all the metadata associated with the object.",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectGetMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " The name of this uztna_healthcheck\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " The namespace this item belongs to\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "owner_view": {
+                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
+                    "title": "owner_view",
+                    "$ref": "#/definitions/schemaViewRefType",
+                    "x-displayname": "Owner View"
+                },
+                "status_set": {
+                    "type": "array",
+                    "description": " The status reported by different services for this configuration object",
+                    "title": "status",
+                    "items": {
+                        "$ref": "#/definitions/uztna_healthcheckStatusObject"
+                    },
+                    "x-displayname": "Status"
+                },
+                "system_metadata": {
+                    "description": " If list request has report_fields set then system_metadata will\n contain all the system generated details of this object.",
+                    "title": "system_metadata",
+                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
+                    "x-displayname": "System Metadata"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " The tenant this item belongs to\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " The unique uid of this uztna_healthcheck\n\nExample: - \"d27938ba-967e-40a7-9709-57b8627f9f75\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d27938ba-967e-40a7-9709-57b8627f9f75"
+                }
+            }
+        },
+        "uztna_healthcheckReplaceRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Replace' RPC",
+            "title": "ReplaceRequest is used to replace contents of a uztna_healthcheck",
+            "x-displayname": "Replace Request",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.ReplaceRequest",
+            "properties": {
+                "metadata": {
+                    "description": " Standard object's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectReplaceMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "spec": {
+                    "description": " Specification of the desired behavior of the healthcheck",
+                    "title": "spec",
+                    "$ref": "#/definitions/uztna_healthcheckReplaceSpecType",
+                    "x-displayname": "Spec"
+                }
+            }
+        },
+        "uztna_healthcheckReplaceResponse": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.ReplaceResponse"
+        },
+        "uztna_healthcheckReplaceSpecType": {
+            "type": "object",
+            "description": "Healthcheck object defines method to determine if the given Endpoint is healthy.\nSingle Healthcheck object can be referred to by one or many Cluster objects.",
+            "title": "replace healthcheck",
+            "x-displayname": "Replace Health Check",
+            "x-ves-oneof-field-health_check": "[\"tcp_health_check\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.ReplaceSpecType",
+            "properties": {
+                "interval": {
+                    "type": "integer",
+                    "description": " Time interval in seconds between two healthcheck requests.\n\nExample: - \"10\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 600\n",
+                    "format": "int64",
+                    "x-displayname": "Interval",
+                    "x-ves-example": "10",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "600"
+                    }
+                },
+                "tcp_health_check": {
+                    "description": "Exclusive with []\n Specifies send payload and expected response payload",
+                    "$ref": "#/definitions/uztna_healthcheckTcpHealthCheck",
+                    "x-displayname": "TCP HealthCheck"
+                },
+                "timeout": {
+                    "type": "integer",
+                    "description": " Timeout in seconds to wait for successful response. In other words, it is\n the time to wait for a health check response. If the timeout is reached the\n health check attempt will be considered a failure.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 600\n",
+                    "format": "int64",
+                    "x-displayname": "Timeout",
+                    "x-ves-example": "1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "600"
+                    }
+                }
+            }
+        },
+        "uztna_healthcheckStatusObject": {
+            "type": "object",
+            "description": "Most recently observed status of object",
+            "title": "Healthcheck Status",
+            "x-displayname": "Status",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.StatusObject",
+            "properties": {
+                "conditions": {
+                    "type": "array",
+                    "description": " Conditions",
+                    "title": "conditions",
+                    "items": {
+                        "$ref": "#/definitions/schemaConditionType"
+                    },
+                    "x-displayname": "Conditions"
+                },
+                "metadata": {
+                    "description": " Standard status's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaStatusMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "object_refs": {
+                    "type": "array",
+                    "description": " Object reference",
+                    "title": "object_refs",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Config Object"
+                }
+            }
+        },
+        "uztna_healthcheckTcpHealthCheck": {
+            "type": "object",
+            "description": "Monitor reports healthy status if TCP connection is successful and response payload matches expected response pattern",
+            "title": "TcpHealthCheck",
+            "x-displayname": "TCP Health Check",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_healthcheck.TcpHealthCheck",
+            "properties": {
+                "expected_response": {
+                    "type": "string",
+                    "description": " Specifies a regular expression pattern which will be matched against response payload\n\nExample: - \".*\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 2048\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "received response",
+                    "maxLength": 2048,
+                    "x-displayname": "Receive Response",
+                    "x-ves-example": ".*",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "2048",
+                        "ves.io.schema.rules.string.regex": "true"
+                    }
+                },
+                "send_payload": {
+                    "type": "string",
+                    "description": " Text string sent in the request \n\nExample: - \"\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 2048\n",
+                    "title": "send string",
+                    "maxLength": 2048,
+                    "x-displayname": "Send payload",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "2048"
+                    }
+                }
+            }
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_healthcheck/public_crudapi.vesapi.go
         }
     },
     "x-displayname": "API Testing",

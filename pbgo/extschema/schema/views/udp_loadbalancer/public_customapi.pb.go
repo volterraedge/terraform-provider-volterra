@@ -50,7 +50,128 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_customapi.pb.go
 // Get DNS info Request
+========
+// GetUpgradableSWVersionsRequest
+//
+// x-displayName: "Get upgradable sw versions request"
+// Request to get the list of upgradable sw versions
+type GetUpgradableSWVersionsRequest struct {
+	// current_os_version
+	//
+	// x-displayName: "Current OS Version"
+	// x-example: "9.2023.23"
+	// Fetch upgradable sw versions for site
+	CurrentOsVersion string `protobuf:"bytes,1,opt,name=current_os_version,json=currentOsVersion,proto3" json:"current_os_version,omitempty"`
+	// current_sw_version
+	//
+	// x-displayName: "Current SW Version"
+	// x-example: "crt-20241107-1123"
+	// Fetch upgradable sw versions for site
+	CurrentSwVersion string `protobuf:"bytes,2,opt,name=current_sw_version,json=currentSwVersion,proto3" json:"current_sw_version,omitempty"`
+}
+
+func (m *GetUpgradableSWVersionsRequest) Reset()      { *m = GetUpgradableSWVersionsRequest{} }
+func (*GetUpgradableSWVersionsRequest) ProtoMessage() {}
+func (*GetUpgradableSWVersionsRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_140a3d2649a346ad, []int{0}
+}
+func (m *GetUpgradableSWVersionsRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetUpgradableSWVersionsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetUpgradableSWVersionsRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetUpgradableSWVersionsRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetUpgradableSWVersionsRequest.Merge(m, src)
+}
+func (m *GetUpgradableSWVersionsRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetUpgradableSWVersionsRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetUpgradableSWVersionsRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetUpgradableSWVersionsRequest proto.InternalMessageInfo
+
+func (m *GetUpgradableSWVersionsRequest) GetCurrentOsVersion() string {
+	if m != nil {
+		return m.CurrentOsVersion
+	}
+	return ""
+}
+
+func (m *GetUpgradableSWVersionsRequest) GetCurrentSwVersion() string {
+	if m != nil {
+		return m.CurrentSwVersion
+	}
+	return ""
+}
+
+// GetUpgradableSWVersionsResponse
+//
+// x-displayName: "Get upgradable sw versions reponse"
+// Response to get the list of upgradable sw versions
+type GetUpgradableSWVersionsResponse struct {
+	// sw_versions
+	//
+	// x-displayName: "SW Versions"
+	// x-example: "[\"crt-20241107-1123\"]"
+	// Fetch upgradable sw versions for site
+	SwVersions []string `protobuf:"bytes,1,rep,name=sw_versions,json=swVersions,proto3" json:"sw_versions,omitempty"`
+}
+
+func (m *GetUpgradableSWVersionsResponse) Reset()      { *m = GetUpgradableSWVersionsResponse{} }
+func (*GetUpgradableSWVersionsResponse) ProtoMessage() {}
+func (*GetUpgradableSWVersionsResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_140a3d2649a346ad, []int{1}
+}
+func (m *GetUpgradableSWVersionsResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *GetUpgradableSWVersionsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_GetUpgradableSWVersionsResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *GetUpgradableSWVersionsResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetUpgradableSWVersionsResponse.Merge(m, src)
+}
+func (m *GetUpgradableSWVersionsResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *GetUpgradableSWVersionsResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetUpgradableSWVersionsResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetUpgradableSWVersionsResponse proto.InternalMessageInfo
+
+func (m *GetUpgradableSWVersionsResponse) GetSwVersions() []string {
+	if m != nil {
+		return m.SwVersions
+	}
+	return nil
+}
+
+// GetUpgradeStatusRequest
+>>>>>>>> main:pbgo/extschema/schema/upgrade_status/public_customapi.pb.go
 //
 // x-displayName: "Get DNS Info Request"
 // Request message for get-dns-info API
@@ -61,6 +182,7 @@ type GetDnsInfoRequest struct {
 	// x-example: "value"
 	// Namespace for the UDP load balancer
 	Namespace string `protobuf:"bytes,1,opt,name=namespace,proto3" json:"namespace,omitempty"`
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_customapi.pb.go
 	// Name
 	//
 	// x-displayName: "Name"
@@ -73,6 +195,20 @@ func (m *GetDnsInfoRequest) Reset()      { *m = GetDnsInfoRequest{} }
 func (*GetDnsInfoRequest) ProtoMessage() {}
 func (*GetDnsInfoRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_bd88b2f875e12268, []int{0}
+========
+	// name
+	//
+	// x-displayName: "Site Name"
+	// x-example: "blogging-app"
+	// Fetch upgrade status for the name of site
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+}
+
+func (m *GetUpgradeStatusRequest) Reset()      { *m = GetUpgradeStatusRequest{} }
+func (*GetUpgradeStatusRequest) ProtoMessage() {}
+func (*GetUpgradeStatusRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_140a3d2649a346ad, []int{2}
+>>>>>>>> main:pbgo/extschema/schema/upgrade_status/public_customapi.pb.go
 }
 func (m *GetDnsInfoRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -127,10 +263,17 @@ type GetDnsInfoResponse struct {
 	DnsInfo *virtual_host_dns_info.GlobalSpecType `protobuf:"bytes,1,opt,name=dns_info,json=dnsInfo,proto3" json:"dns_info,omitempty"`
 }
 
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_customapi.pb.go
 func (m *GetDnsInfoResponse) Reset()      { *m = GetDnsInfoResponse{} }
 func (*GetDnsInfoResponse) ProtoMessage() {}
 func (*GetDnsInfoResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_bd88b2f875e12268, []int{1}
+========
+func (m *GetUpgradeStatusResponse) Reset()      { *m = GetUpgradeStatusResponse{} }
+func (*GetUpgradeStatusResponse) ProtoMessage() {}
+func (*GetUpgradeStatusResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_140a3d2649a346ad, []int{3}
+>>>>>>>> main:pbgo/extschema/schema/upgrade_status/public_customapi.pb.go
 }
 func (m *GetDnsInfoResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -167,10 +310,21 @@ func (m *GetDnsInfoResponse) GetDnsInfo() *virtual_host_dns_info.GlobalSpecType 
 }
 
 func init() {
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_customapi.pb.go
 	proto.RegisterType((*GetDnsInfoRequest)(nil), "ves.io.schema.views.udp_loadbalancer.GetDnsInfoRequest")
 	golang_proto.RegisterType((*GetDnsInfoRequest)(nil), "ves.io.schema.views.udp_loadbalancer.GetDnsInfoRequest")
 	proto.RegisterType((*GetDnsInfoResponse)(nil), "ves.io.schema.views.udp_loadbalancer.GetDnsInfoResponse")
 	golang_proto.RegisterType((*GetDnsInfoResponse)(nil), "ves.io.schema.views.udp_loadbalancer.GetDnsInfoResponse")
+========
+	proto.RegisterType((*GetUpgradableSWVersionsRequest)(nil), "ves.io.schema.upgrade_status.GetUpgradableSWVersionsRequest")
+	golang_proto.RegisterType((*GetUpgradableSWVersionsRequest)(nil), "ves.io.schema.upgrade_status.GetUpgradableSWVersionsRequest")
+	proto.RegisterType((*GetUpgradableSWVersionsResponse)(nil), "ves.io.schema.upgrade_status.GetUpgradableSWVersionsResponse")
+	golang_proto.RegisterType((*GetUpgradableSWVersionsResponse)(nil), "ves.io.schema.upgrade_status.GetUpgradableSWVersionsResponse")
+	proto.RegisterType((*GetUpgradeStatusRequest)(nil), "ves.io.schema.upgrade_status.GetUpgradeStatusRequest")
+	golang_proto.RegisterType((*GetUpgradeStatusRequest)(nil), "ves.io.schema.upgrade_status.GetUpgradeStatusRequest")
+	proto.RegisterType((*GetUpgradeStatusResponse)(nil), "ves.io.schema.upgrade_status.GetUpgradeStatusResponse")
+	golang_proto.RegisterType((*GetUpgradeStatusResponse)(nil), "ves.io.schema.upgrade_status.GetUpgradeStatusResponse")
+>>>>>>>> main:pbgo/extschema/schema/upgrade_status/public_customapi.pb.go
 }
 
 func init() {
@@ -180,6 +334,7 @@ func init() {
 	golang_proto.RegisterFile("ves.io/schema/views/udp_loadbalancer/public_customapi.proto", fileDescriptor_bd88b2f875e12268)
 }
 
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_customapi.pb.go
 var fileDescriptor_bd88b2f875e12268 = []byte{
 	// 553 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x53, 0x3f, 0x6b, 0x14, 0x4f,
@@ -220,6 +375,110 @@ var fileDescriptor_bd88b2f875e12268 = []byte{
 }
 
 func (this *GetDnsInfoRequest) Equal(that interface{}) bool {
+========
+var fileDescriptor_140a3d2649a346ad = []byte{
+	// 643 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0x4f, 0x6b, 0x14, 0x4f,
+	0x10, 0xdd, 0xde, 0x84, 0x1f, 0xa4, 0xc3, 0x4f, 0xc2, 0x1c, 0x74, 0x59, 0x43, 0x27, 0xac, 0x97,
+	0x1c, 0x32, 0x33, 0x90, 0x10, 0x0f, 0x12, 0x41, 0xe3, 0x21, 0x07, 0x0f, 0x81, 0x5d, 0xff, 0x80,
+	0x97, 0xa5, 0x67, 0xb6, 0x76, 0x32, 0xba, 0xd3, 0xdd, 0x76, 0xf5, 0x4c, 0x12, 0x34, 0x20, 0x39,
+	0x78, 0x10, 0x11, 0xc1, 0x2f, 0xe1, 0x47, 0x10, 0x72, 0xc9, 0xcd, 0x9c, 0x24, 0xe8, 0x25, 0x47,
+	0x33, 0x2b, 0xe2, 0x31, 0x1f, 0x41, 0x76, 0x76, 0x76, 0xb3, 0x13, 0x63, 0xfc, 0x83, 0xb7, 0xea,
+	0xa9, 0xf7, 0x5e, 0xbd, 0xa9, 0xae, 0x2e, 0xba, 0x98, 0x00, 0x3a, 0xa1, 0x74, 0xd1, 0x5f, 0x87,
+	0x88, 0xbb, 0xb1, 0x0a, 0x34, 0x6f, 0x41, 0x13, 0x0d, 0x37, 0x31, 0xba, 0x2a, 0xf6, 0x3a, 0xa1,
+	0xdf, 0xf4, 0x63, 0x34, 0x32, 0xe2, 0x2a, 0x74, 0x94, 0x96, 0x46, 0x5a, 0xd3, 0x7d, 0x92, 0xd3,
+	0x27, 0x39, 0x45, 0x52, 0xd5, 0x0e, 0x42, 0xb3, 0x1e, 0x7b, 0x8e, 0x2f, 0x23, 0x37, 0x90, 0x81,
+	0x74, 0x33, 0x92, 0x17, 0xb7, 0xb3, 0x53, 0x76, 0xc8, 0xa2, 0xbe, 0x58, 0x75, 0x3a, 0x90, 0x32,
+	0xe8, 0x80, 0xcb, 0x55, 0xe8, 0x72, 0x21, 0xa4, 0xe1, 0x26, 0x94, 0x02, 0xf3, 0xec, 0xe5, 0xa2,
+	0x3f, 0xa9, 0x46, 0x93, 0x73, 0xe7, 0x9a, 0x37, 0x5b, 0x0a, 0x06, 0xc8, 0x5a, 0x11, 0x99, 0x00,
+	0x82, 0x48, 0x8a, 0x6a, 0xb5, 0xa7, 0x94, 0xad, 0x82, 0xb9, 0x9b, 0x89, 0x70, 0xaf, 0x03, 0x8d,
+	0xfb, 0xf7, 0x40, 0x63, 0x0f, 0x50, 0x87, 0xc7, 0x31, 0xa0, 0xb1, 0xe6, 0xa9, 0xe5, 0xc7, 0x5a,
+	0x83, 0x30, 0x4d, 0x89, 0xcd, 0xa4, 0x9f, 0xad, 0x90, 0x59, 0x32, 0x37, 0x51, 0x9f, 0xca, 0x33,
+	0x6b, 0x98, 0xb3, 0x46, 0xd1, 0xb8, 0x31, 0x44, 0x97, 0x0b, 0xe8, 0xc6, 0x46, 0x8e, 0xae, 0xad,
+	0xd0, 0x99, 0x9f, 0x56, 0x47, 0x25, 0x05, 0x82, 0x35, 0x43, 0x27, 0x4f, 0x84, 0xb0, 0x42, 0x66,
+	0xc7, 0xe6, 0x26, 0xea, 0x14, 0x07, 0x12, 0x58, 0xbb, 0x4d, 0x2f, 0x0d, 0x35, 0xa0, 0x91, 0x75,
+	0x61, 0x60, 0x7d, 0x9a, 0x4e, 0x08, 0x1e, 0x01, 0x2a, 0xee, 0x43, 0xee, 0xf8, 0xe4, 0x83, 0x65,
+	0xd1, 0xf1, 0xde, 0x21, 0x37, 0x97, 0xc5, 0x35, 0x49, 0x2b, 0x3f, 0x8a, 0xe5, 0x4e, 0x1a, 0xf4,
+	0x42, 0xb1, 0xd9, 0x99, 0xe4, 0xe4, 0xc2, 0xbc, 0x73, 0xde, 0x64, 0x38, 0xab, 0x1d, 0xe9, 0xf1,
+	0x4e, 0x43, 0x81, 0x7f, 0x67, 0x4b, 0x41, 0xfd, 0xff, 0x78, 0x54, 0x7c, 0xe1, 0xeb, 0x38, 0xbd,
+	0x58, 0x28, 0x77, 0x2b, 0x1b, 0xbb, 0x9b, 0x2a, 0xb4, 0x5e, 0x95, 0xe9, 0xd4, 0x69, 0x33, 0xd6,
+	0xd2, 0x2f, 0x8a, 0x9d, 0xdd, 0x89, 0xea, 0xd5, 0x3f, 0xa5, 0xf5, 0xff, 0xb9, 0xf6, 0x82, 0xec,
+	0xbf, 0x2b, 0x93, 0xf4, 0x7d, 0xe5, 0x46, 0x7b, 0x69, 0xd3, 0xb7, 0x31, 0x34, 0x60, 0x47, 0x5c,
+	0xf0, 0x00, 0x22, 0x10, 0xc6, 0x46, 0xc3, 0x45, 0x8b, 0xeb, 0x96, 0x1d, 0x49, 0x11, 0x1a, 0xa9,
+	0xe7, 0x13, 0x40, 0x3b, 0x94, 0x76, 0x28, 0xda, 0x9a, 0xa3, 0xd1, 0xb1, 0x6f, 0x62, 0x0d, 0xb6,
+	0x06, 0xde, 0xda, 0xf9, 0xf4, 0xe5, 0x4d, 0x79, 0xd9, 0xba, 0x96, 0x3f, 0x2f, 0x77, 0x78, 0x0f,
+	0xe8, 0x3e, 0x19, 0xc6, 0xdb, 0x6e, 0xaf, 0x42, 0xfe, 0x65, 0xfb, 0xd4, 0x6c, 0x5b, 0xcf, 0xcb,
+	0x23, 0x57, 0x5d, 0x1c, 0x17, 0x6b, 0xf9, 0x37, 0x7f, 0xf0, 0xcc, 0x19, 0xaf, 0x5e, 0xff, 0x4b,
+	0x76, 0xde, 0x25, 0xf1, 0x4f, 0x9b, 0x34, 0x6b, 0xb1, 0x41, 0x93, 0xe2, 0x61, 0xd5, 0x91, 0xd7,
+	0x84, 0xd5, 0x85, 0xbd, 0x5d, 0x32, 0xf6, 0x71, 0x97, 0x5c, 0x39, 0xd7, 0xf5, 0x9a, 0xf7, 0x10,
+	0x7c, 0xb3, 0xf3, 0xa1, 0x32, 0x76, 0x5c, 0x26, 0x2b, 0x2f, 0xc9, 0xc1, 0x11, 0x2b, 0x1d, 0x1e,
+	0xb1, 0xd2, 0xf1, 0x11, 0x23, 0xcf, 0x52, 0x46, 0xde, 0xa6, 0x8c, 0xec, 0xa7, 0x8c, 0x1c, 0xa4,
+	0x8c, 0x7c, 0x4e, 0x19, 0xf9, 0x96, 0xb2, 0xd2, 0x71, 0xca, 0xc8, 0xeb, 0x2e, 0x2b, 0xed, 0x75,
+	0x19, 0x39, 0xe8, 0xb2, 0xd2, 0x61, 0x97, 0x95, 0x1e, 0xd4, 0x03, 0xa9, 0x1e, 0x05, 0x4e, 0x22,
+	0x3b, 0x06, 0xb4, 0xe6, 0x4e, 0x6f, 0xcd, 0xf4, 0x82, 0xb6, 0xd4, 0x91, 0xad, 0xb4, 0x4c, 0xc2,
+	0x16, 0x68, 0x7b, 0x90, 0x76, 0x95, 0x17, 0x48, 0x17, 0x36, 0x4d, 0xbe, 0x76, 0xce, 0xdc, 0x53,
+	0xde, 0x7f, 0xd9, 0xfa, 0x59, 0xfc, 0x1e, 0x00, 0x00, 0xff, 0xff, 0x10, 0xc0, 0x5f, 0xb3, 0x8b,
+	0x05, 0x00, 0x00,
+}
+
+func (this *GetUpgradableSWVersionsRequest) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetUpgradableSWVersionsRequest)
+	if !ok {
+		that2, ok := that.(GetUpgradableSWVersionsRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.CurrentOsVersion != that1.CurrentOsVersion {
+		return false
+	}
+	if this.CurrentSwVersion != that1.CurrentSwVersion {
+		return false
+	}
+	return true
+}
+func (this *GetUpgradableSWVersionsResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetUpgradableSWVersionsResponse)
+	if !ok {
+		that2, ok := that.(GetUpgradableSWVersionsResponse)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.SwVersions) != len(that1.SwVersions) {
+		return false
+	}
+	for i := range this.SwVersions {
+		if this.SwVersions[i] != that1.SwVersions[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *GetUpgradeStatusRequest) Equal(that interface{}) bool {
+>>>>>>>> main:pbgo/extschema/schema/upgrade_status/public_customapi.pb.go
 	if that == nil {
 		return this == nil
 	}
@@ -270,7 +529,32 @@ func (this *GetDnsInfoResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_customapi.pb.go
 func (this *GetDnsInfoRequest) GoString() string {
+========
+func (this *GetUpgradableSWVersionsRequest) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&upgrade_status.GetUpgradableSWVersionsRequest{")
+	s = append(s, "CurrentOsVersion: "+fmt.Sprintf("%#v", this.CurrentOsVersion)+",\n")
+	s = append(s, "CurrentSwVersion: "+fmt.Sprintf("%#v", this.CurrentSwVersion)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetUpgradableSWVersionsResponse) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&upgrade_status.GetUpgradableSWVersionsResponse{")
+	s = append(s, "SwVersions: "+fmt.Sprintf("%#v", this.SwVersions)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *GetUpgradeStatusRequest) GoString() string {
+>>>>>>>> main:pbgo/extschema/schema/upgrade_status/public_customapi.pb.go
 	if this == nil {
 		return "nil"
 	}
@@ -313,12 +597,26 @@ const _ = grpc.SupportPackageIsVersion4
 // CustomAPIClient is the client API for CustomAPI service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_customapi.pb.go
 type CustomAPIClient interface {
 	// GetDnsInfo
 	//
 	// x-displayName: "Get DNS Info"
 	// GetDnsInfo is an API to get DNS information for a given UDP load balancer
 	GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest, opts ...grpc.CallOption) (*GetDnsInfoResponse, error)
+========
+type UpgradeStatusCustomApiClient interface {
+	// GetUpgradeStatus
+	//
+	// x-displayName: "Get Upgrade Status"
+	// API to get upgrade status of a site
+	GetUpgradeStatus(ctx context.Context, in *GetUpgradeStatusRequest, opts ...grpc.CallOption) (*GetUpgradeStatusResponse, error)
+	// GetUpgradableSWVersions
+	//
+	// x-displayName: "Get Upgradable SW Versions"
+	// API to get list of sw versions that can be upgraded to
+	GetUpgradableSWVersions(ctx context.Context, in *GetUpgradableSWVersionsRequest, opts ...grpc.CallOption) (*GetUpgradableSWVersionsResponse, error)
+>>>>>>>> main:pbgo/extschema/schema/upgrade_status/public_customapi.pb.go
 }
 
 type customAPIClient struct {
@@ -338,6 +636,7 @@ func (c *customAPIClient) GetDnsInfo(ctx context.Context, in *GetDnsInfoRequest,
 	return out, nil
 }
 
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_customapi.pb.go
 // CustomAPIServer is the server API for CustomAPI service.
 type CustomAPIServer interface {
 	// GetDnsInfo
@@ -345,6 +644,29 @@ type CustomAPIServer interface {
 	// x-displayName: "Get DNS Info"
 	// GetDnsInfo is an API to get DNS information for a given UDP load balancer
 	GetDnsInfo(context.Context, *GetDnsInfoRequest) (*GetDnsInfoResponse, error)
+========
+func (c *upgradeStatusCustomApiClient) GetUpgradableSWVersions(ctx context.Context, in *GetUpgradableSWVersionsRequest, opts ...grpc.CallOption) (*GetUpgradableSWVersionsResponse, error) {
+	out := new(GetUpgradableSWVersionsResponse)
+	err := c.cc.Invoke(ctx, "/ves.io.schema.upgrade_status.UpgradeStatusCustomApi/GetUpgradableSWVersions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// UpgradeStatusCustomApiServer is the server API for UpgradeStatusCustomApi service.
+type UpgradeStatusCustomApiServer interface {
+	// GetUpgradeStatus
+	//
+	// x-displayName: "Get Upgrade Status"
+	// API to get upgrade status of a site
+	GetUpgradeStatus(context.Context, *GetUpgradeStatusRequest) (*GetUpgradeStatusResponse, error)
+	// GetUpgradableSWVersions
+	//
+	// x-displayName: "Get Upgradable SW Versions"
+	// API to get list of sw versions that can be upgraded to
+	GetUpgradableSWVersions(context.Context, *GetUpgradableSWVersionsRequest) (*GetUpgradableSWVersionsResponse, error)
+>>>>>>>> main:pbgo/extschema/schema/upgrade_status/public_customapi.pb.go
 }
 
 // UnimplementedCustomAPIServer can be embedded to have forward compatible implementations.
@@ -353,6 +675,9 @@ type UnimplementedCustomAPIServer struct {
 
 func (*UnimplementedCustomAPIServer) GetDnsInfo(ctx context.Context, req *GetDnsInfoRequest) (*GetDnsInfoResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDnsInfo not implemented")
+}
+func (*UnimplementedUpgradeStatusCustomApiServer) GetUpgradableSWVersions(ctx context.Context, req *GetUpgradableSWVersionsRequest) (*GetUpgradableSWVersionsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUpgradableSWVersions not implemented")
 }
 
 func RegisterCustomAPIServer(s *grpc.Server, srv CustomAPIServer) {
@@ -377,20 +702,121 @@ func _CustomAPI_GetDnsInfo_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_customapi.pb.go
 var _CustomAPI_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "ves.io.schema.views.udp_loadbalancer.CustomAPI",
 	HandlerType: (*CustomAPIServer)(nil),
+========
+func _UpgradeStatusCustomApi_GetUpgradableSWVersions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUpgradableSWVersionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UpgradeStatusCustomApiServer).GetUpgradableSWVersions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/ves.io.schema.upgrade_status.UpgradeStatusCustomApi/GetUpgradableSWVersions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UpgradeStatusCustomApiServer).GetUpgradableSWVersions(ctx, req.(*GetUpgradableSWVersionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _UpgradeStatusCustomApi_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "ves.io.schema.upgrade_status.UpgradeStatusCustomApi",
+	HandlerType: (*UpgradeStatusCustomApiServer)(nil),
+>>>>>>>> main:pbgo/extschema/schema/upgrade_status/public_customapi.pb.go
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "GetDnsInfo",
 			Handler:    _CustomAPI_GetDnsInfo_Handler,
+		},
+		{
+			MethodName: "GetUpgradableSWVersions",
+			Handler:    _UpgradeStatusCustomApi_GetUpgradableSWVersions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "ves.io/schema/views/udp_loadbalancer/public_customapi.proto",
 }
 
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_customapi.pb.go
 func (m *GetDnsInfoRequest) Marshal() (dAtA []byte, err error) {
+========
+func (m *GetUpgradableSWVersionsRequest) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetUpgradableSWVersionsRequest) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetUpgradableSWVersionsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.CurrentSwVersion) > 0 {
+		i -= len(m.CurrentSwVersion)
+		copy(dAtA[i:], m.CurrentSwVersion)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.CurrentSwVersion)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.CurrentOsVersion) > 0 {
+		i -= len(m.CurrentOsVersion)
+		copy(dAtA[i:], m.CurrentOsVersion)
+		i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.CurrentOsVersion)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetUpgradableSWVersionsResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *GetUpgradableSWVersionsResponse) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetUpgradableSWVersionsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.SwVersions) > 0 {
+		for iNdEx := len(m.SwVersions) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.SwVersions[iNdEx])
+			copy(dAtA[i:], m.SwVersions[iNdEx])
+			i = encodeVarintPublicCustomapi(dAtA, i, uint64(len(m.SwVersions[iNdEx])))
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *GetUpgradeStatusRequest) Marshal() (dAtA []byte, err error) {
+>>>>>>>> main:pbgo/extschema/schema/upgrade_status/public_customapi.pb.go
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -473,7 +899,43 @@ func encodeVarintPublicCustomapi(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_customapi.pb.go
 func (m *GetDnsInfoRequest) Size() (n int) {
+========
+func (m *GetUpgradableSWVersionsRequest) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.CurrentOsVersion)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	l = len(m.CurrentSwVersion)
+	if l > 0 {
+		n += 1 + l + sovPublicCustomapi(uint64(l))
+	}
+	return n
+}
+
+func (m *GetUpgradableSWVersionsResponse) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.SwVersions) > 0 {
+		for _, s := range m.SwVersions {
+			l = len(s)
+			n += 1 + l + sovPublicCustomapi(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *GetUpgradeStatusRequest) Size() (n int) {
+>>>>>>>> main:pbgo/extschema/schema/upgrade_status/public_customapi.pb.go
 	if m == nil {
 		return 0
 	}
@@ -509,7 +971,32 @@ func sovPublicCustomapi(x uint64) (n int) {
 func sozPublicCustomapi(x uint64) (n int) {
 	return sovPublicCustomapi(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_customapi.pb.go
 func (this *GetDnsInfoRequest) String() string {
+========
+func (this *GetUpgradableSWVersionsRequest) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetUpgradableSWVersionsRequest{`,
+		`CurrentOsVersion:` + fmt.Sprintf("%v", this.CurrentOsVersion) + `,`,
+		`CurrentSwVersion:` + fmt.Sprintf("%v", this.CurrentSwVersion) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetUpgradableSWVersionsResponse) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetUpgradableSWVersionsResponse{`,
+		`SwVersions:` + fmt.Sprintf("%v", this.SwVersions) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetUpgradeStatusRequest) String() string {
+>>>>>>>> main:pbgo/extschema/schema/upgrade_status/public_customapi.pb.go
 	if this == nil {
 		return "nil"
 	}
@@ -538,7 +1025,213 @@ func valueToStringPublicCustomapi(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_customapi.pb.go
 func (m *GetDnsInfoRequest) Unmarshal(dAtA []byte) error {
+========
+func (m *GetUpgradableSWVersionsRequest) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetUpgradableSWVersionsRequest: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetUpgradableSWVersionsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CurrentOsVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CurrentOsVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CurrentSwVersion", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CurrentSwVersion = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetUpgradableSWVersionsResponse) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowPublicCustomapi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: GetUpgradableSWVersionsResponse: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: GetUpgradableSWVersionsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SwVersions", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowPublicCustomapi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SwVersions = append(m.SwVersions, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipPublicCustomapi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthPublicCustomapi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *GetUpgradeStatusRequest) Unmarshal(dAtA []byte) error {
+>>>>>>>> main:pbgo/extschema/schema/upgrade_status/public_customapi.pb.go
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {

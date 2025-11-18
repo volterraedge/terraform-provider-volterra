@@ -773,7 +773,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		return errors.Wrap(err, "Delete")
 	}
 
+<<<<<<<< HEAD:pbgo/extschema/schema/views/external_connector/public_crudapi.vesapi.go
 	url := fmt.Sprintf("%s/public/namespaces/%s/external_connectors/%s", c.baseURL, dReq.Namespace, dReq.Name)
+========
+	url := fmt.Sprintf("%s/public/namespaces/%s/uztna_applications/%s", c.baseURL, dReq.Namespace, dReq.Name)
+>>>>>>>> main:pbgo/extschema/schema/uztna/application/uztna_application/public_crudapi.vesapi.go
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1810,7 +1814,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-external_connector-api-create"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/views/external_connector/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.views.external_connector.API.Create"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application.API.Create"
+>>>>>>>> main:pbgo/extschema/schema/uztna/application/uztna_application/public_crudapi.vesapi.go
             },
             "x-displayname": "External Connector Configuration",
             "x-ves-proto-service": "ves.io.schema.views.external_connector.API",
@@ -1910,7 +1919,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-external_connector-api-replace"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/views/external_connector/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.views.external_connector.API.Replace"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application.API.Replace"
+>>>>>>>> main:pbgo/extschema/schema/uztna/application/uztna_application/public_crudapi.vesapi.go
             },
             "x-displayname": "External Connector Configuration",
             "x-ves-proto-service": "ves.io.schema.views.external_connector.API",
@@ -2026,7 +2040,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-external_connector-api-list"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/views/external_connector/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.views.external_connector.API.List"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application.API.List"
+>>>>>>>> main:pbgo/extschema/schema/uztna/application/uztna_application/public_crudapi.vesapi.go
             },
             "x-displayname": "External Connector Configuration",
             "x-ves-proto-service": "ves.io.schema.views.external_connector.API",
@@ -2136,7 +2155,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-external_connector-api-get"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/views/external_connector/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.views.external_connector.API.Get"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application.API.Get"
+>>>>>>>> main:pbgo/extschema/schema/uztna/application/uztna_application/public_crudapi.vesapi.go
             },
             "delete": {
                 "summary": "Delete External Connector Configuration",
@@ -2229,7 +2253,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-external_connector-api-delete"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/views/external_connector/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.views.external_connector.API.Delete"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.application.uztna_application.API.Delete"
+>>>>>>>> main:pbgo/extschema/schema/uztna/application/uztna_application/public_crudapi.vesapi.go
             },
             "x-displayname": "External Connector Configuration",
             "x-ves-proto-service": "ves.io.schema.views.external_connector.API",

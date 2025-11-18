@@ -773,7 +773,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		return errors.Wrap(err, "Delete")
 	}
 
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_crudapi.vesapi.go
 	url := fmt.Sprintf("%s/public/namespaces/%s/udp_loadbalancers/%s", c.baseURL, dReq.Namespace, dReq.Name)
+========
+	url := fmt.Sprintf("%s/public/namespaces/%s/bigip_instance_sites/%s", c.baseURL, dReq.Namespace, dReq.Name)
+>>>>>>>> main:pbgo/extschema/schema/views/bigip_instance_site/public_crudapi.vesapi.go
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -3072,6 +3076,7 @@ var APISwaggerJSON string = `{
         },
         "udp_loadbalancerGetResponseFormatCode": {
             "type": "string",
+<<<<<<<< HEAD:pbgo/extschema/schema/views/udp_loadbalancer/public_crudapi.vesapi.go
             "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
             "title": "GetResponseFormatCode",
             "enum": [
@@ -3082,6 +3087,29 @@ var APISwaggerJSON string = `{
                 "GET_RSP_FORMAT_READ",
                 "GET_RSP_FORMAT_REFERRING_OBJECTS",
                 "GET_RSP_FORMAT_BROKEN_REFERENCES"
+========
+            "description": "State of Site defines in which operational state site itself is.\n\nSite is online and operational.\nSite is in provisioning state. For instance during site deployment or switching to different connected Regional Edge.\nSite is in process of upgrade. It transition to ONLINE or FAILED state.\nSite is in Standby before goes to ONLINE. This is mainly for Regional Edge sites to do their verification before they go to ONLINE state.\nSite is in failed state. It failed during provisioning or upgrade phase. Site Status Objects contain more details.\nReregistration was requested\nReregistration is in progress and maurice is waiting for nodes\nSite deletion is in progress\nSite is waiting for registration\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources are orchestrated for F5XC managed site.\nAn Error occurred while site resource orchestration for F5XC managed site. Check Status objects for more details.\nSite resources are waiting to be orchestrated for F5XC managed site. Check Status objects for more details\nSite resources orchestrated for F5XC managed site are deleted.\nAn Error occurred while site resource delete operation for F5XC managed site. Check Status objects for more details.\nValidation for F5XC managed site is in progress. Check Status objects for more details.\nValidation for F5XC managed site succeeded. Orchestration will start for Site resources\nValidation for F5XC managed site failed. Check Status objects for more details.",
+            "title": "SiteState",
+            "enum": [
+                "ONLINE",
+                "PROVISIONING",
+                "UPGRADING",
+                "STANDBY",
+                "FAILED",
+                "REREGISTRATION",
+                "WAITINGNODES",
+                "DECOMMISSIONING",
+                "WAITING_FOR_REGISTRATION",
+                "ORCHESTRATION_IN_PROGRESS",
+                "ORCHESTRATION_COMPLETE",
+                "ERROR_IN_ORCHESTRATION",
+                "DELETING_CLOUD_RESOURCES",
+                "DELETED_CLOUD_RESOURCES",
+                "ERROR_DELETING_CLOUD_RESOURCES",
+                "VALIDATION_IN_PROGRESS",
+                "VALIDATION_SUCCESS",
+                "VALIDATION_FAILED"
+>>>>>>>> main:pbgo/extschema/schema/views/bigip_instance_site/public_crudapi.vesapi.go
             ],
             "default": "GET_RSP_FORMAT_DEFAULT"
         },

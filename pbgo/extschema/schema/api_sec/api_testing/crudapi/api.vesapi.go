@@ -3904,6 +3904,631 @@ var APISwaggerJSON string = `{
                     "title": "Name"
                 }
             }
+<<<<<<<< HEAD:pbgo/extschema/schema/api_sec/api_testing/crudapi/api.vesapi.go
+========
+        },
+        "schemacontactGlobalSpecType": {
+            "type": "object",
+            "description": "Instance of one single contact that can be used to communicate with customers.\nDepending on contact type we use these details to send general communication (regular, physical mail) or invoices.",
+            "title": "Contact",
+            "x-displayname": "Contact",
+            "x-ves-proto-message": "ves.io.schema.contact.GlobalSpecType",
+            "properties": {
+                "address1": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"1234 Main road\"-",
+                    "title": "address1",
+                    "x-displayname": "Address Line 1",
+                    "x-ves-example": "1234 Main road"
+                },
+                "address2": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"P.O BOX 56\"-",
+                    "title": "address2",
+                    "x-displayname": "Address Line 2",
+                    "x-ves-example": "P.O BOX 56"
+                },
+                "city": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"Sunnyvale\"-",
+                    "title": "city",
+                    "x-displayname": "City",
+                    "x-ves-example": "Sunnyvale"
+                },
+                "contact_type": {
+                    "description": " type of the contact (snail mail, billing)",
+                    "title": "contact_type",
+                    "$ref": "#/definitions/contactContactType",
+                    "x-displayname": "Contact Type"
+                },
+                "country": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"US\"-",
+                    "title": "country",
+                    "x-displayname": "Country",
+                    "x-ves-example": "US"
+                },
+                "county": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"Santa Clara\"-",
+                    "title": "county",
+                    "x-displayname": "County",
+                    "x-ves-example": "Santa Clara"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"+11234567890\"-",
+                    "title": "phone_number",
+                    "x-displayname": "Phone Number",
+                    "x-ves-example": "+11234567890"
+                },
+                "state": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"California\"-",
+                    "title": "state",
+                    "x-displayname": "State",
+                    "x-ves-example": "California"
+                },
+                "state_code": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"CA\"-",
+                    "title": "state code",
+                    "x-displayname": "State Code",
+                    "x-ves-example": "CA"
+                },
+                "zip_code": {
+                    "type": "string",
+                    "description": "\n\nExample: - \"95054\"-",
+                    "title": "zip_code",
+                    "x-displayname": "ZIP code",
+                    "x-ves-example": "95054"
+                }
+            }
+        },
+        "schemainfraprotect_informationGlobalSpecType": {
+            "type": "object",
+            "description": "Organisation information",
+            "title": "Information",
+            "x-displayname": "Information",
+            "x-ves-oneof-field-as_path_choice": "[\"as_path_choice_full\",\"as_path_choice_none\",\"as_path_choice_origin\"]",
+            "x-ves-oneof-field-default_tunnel_bgp_secret_choice": "[\"default_tunnel_bgp_secret\",\"default_tunnel_bgp_secret_none\"]",
+            "x-ves-oneof-field-route_advertisement_management_choice": "[\"route_advertisement_mgmt_not_specified\",\"route_advertisement_mgmt_not_using_f5xc\",\"route_advertisement_mgmt_using_f5xc\"]",
+            "x-ves-oneof-field-tunnel_f5_ip_usage_choice": "[\"reuse_ips\",\"use_dedicated_ips\"]",
+            "x-ves-proto-message": "ves.io.schema.infraprotect_information.GlobalSpecType",
+            "properties": {
+                "arbor_cid": {
+                    "type": "string",
+                    "description": " L3/L4 provider customer ID\n\nExample: - \"value\"-",
+                    "title": "L3/L4 CID",
+                    "x-displayname": "L3/L4 CID",
+                    "x-ves-example": "value"
+                },
+                "as_path_choice_full": {
+                    "description": "Exclusive with [as_path_choice_none as_path_choice_origin]\n Use Matching Clean VRF's path's AS Path",
+                    "title": "Full AS Path",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Full AS Path"
+                },
+                "as_path_choice_none": {
+                    "description": "Exclusive with [as_path_choice_full as_path_choice_origin]\n No AS Path Used",
+                    "title": "No AS Path",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "None"
+                },
+                "as_path_choice_origin": {
+                    "description": "Exclusive with [as_path_choice_full as_path_choice_none]\n Use Right-Most ASN of Clean VRF's Matching Path's AS Path",
+                    "title": "Origin AS Only",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Origin AS Only"
+                },
+                "asn": {
+                    "type": "integer",
+                    "description": " AS Number\n\nExample: - \"0\"-",
+                    "title": "asn",
+                    "format": "int32",
+                    "x-displayname": "ASN",
+                    "x-ves-example": "0"
+                },
+                "default_tunnel_bgp_secret": {
+                    "description": "Exclusive with [default_tunnel_bgp_secret_none]\n Default tunnel BGP Secret",
+                    "title": "Default tunnel BGP Secret",
+                    "$ref": "#/definitions/schemaSecretType",
+                    "x-displayname": "Default tunnel BGP Secret"
+                },
+                "default_tunnel_bgp_secret_none": {
+                    "description": "Exclusive with [default_tunnel_bgp_secret]\n No default tunnel BGP secret",
+                    "title": "No default tunnel BGP secret",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "No default tunnel BGP secret"
+                },
+                "policer": {
+                    "description": " Policer config for bandwidth restrictions",
+                    "title": "Policer Config",
+                    "$ref": "#/definitions/infraprotect_informationPolicer",
+                    "x-displayname": "Policer Config"
+                },
+                "prefixes": {
+                    "type": "array",
+                    "description": " List of tenant 'super' prefixes noted in CIDR\n\nExample: - \"value\"-",
+                    "title": "prefixes",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Super prefixes",
+                    "x-ves-example": "value"
+                },
+                "primary_network_name": {
+                    "type": "string",
+                    "description": " Name of the default customer network\n\nExample: - \"defensenet_local\"-",
+                    "title": "Primary Network Name",
+                    "x-displayname": "Primary network name",
+                    "x-ves-example": "defensenet_local"
+                },
+                "reuse_ips": {
+                    "description": "Exclusive with [use_dedicated_ips]\n Reuse IP addresses",
+                    "title": "Reuse IP addresses",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Reuse IP addresses"
+                },
+                "route_advertisement_mgmt_not_specified": {
+                    "description": "Exclusive with [route_advertisement_mgmt_not_using_f5xc route_advertisement_mgmt_using_f5xc]\n (management choice) not specified",
+                    "title": "(management choice) not specified",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Not specified"
+                },
+                "route_advertisement_mgmt_not_using_f5xc": {
+                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_using_f5xc]\n Tenant manages using F5XC Routed DDoS Always On",
+                    "title": "Tenant manages outside F5XC",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Tenant manages not using F5XC"
+                },
+                "route_advertisement_mgmt_using_f5xc": {
+                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_not_using_f5xc]\n Tenant manages using F5XC Routed DDoS Always Available",
+                    "title": "Tenant manages using F5XC",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Tenant manages using F5XC"
+                },
+                "use_dedicated_ips": {
+                    "description": "Exclusive with [reuse_ips]\n Use dedicated IP addresses",
+                    "title": "Use dedicated IP addresses",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Use dedicated IP addresses"
+                },
+                "uuid": {
+                    "type": "string",
+                    "description": " Organisation UUID\n\nExample: - \"value\"-",
+                    "title": "uuid",
+                    "x-displayname": "Uuid",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "schemasignupGlobalSpecType": {
+            "type": "object",
+            "description": "desired state of Signup",
+            "title": "Signup specification",
+            "x-displayname": "Signup",
+            "x-ves-proto-message": "ves.io.schema.signup.GlobalSpecType",
+            "properties": {
+                "billing_address": {
+                    "description": " address associated with the credit card details provided using the payment_provider_token\n if no billing address is provided then any address tokenized with payment_provider_token will be used - including an empty address.",
+                    "title": "billing_address",
+                    "$ref": "#/definitions/schemacontactGlobalSpecType",
+                    "x-displayname": "Billing Address"
+                },
+                "billing_provider_account_id": {
+                    "type": "string",
+                    "description": " Id of the billing provider account created to verify the billing info provided with this object.\n The id is then used to ensure no more duplicate billing account is created.",
+                    "title": "billing_provider_account_id",
+                    "x-displayname": "Billing provider account id"
+                },
+                "company": {
+                    "description": " company details (enterprise only), name, email",
+                    "title": "company",
+                    "$ref": "#/definitions/schemauserGlobalSpecType",
+                    "x-displayname": "Company"
+                },
+                "company_contact": {
+                    "description": " contact details of the enterprise customer",
+                    "title": "company contact",
+                    "$ref": "#/definitions/schemacontactGlobalSpecType",
+                    "x-displayname": "Company Contact"
+                },
+                "company_name": {
+                    "type": "string",
+                    "description": " company name (enterprise only)\n\nExample: - \"ACME Ltd.\"-",
+                    "title": "company name",
+                    "x-displayname": "Company Name",
+                    "x-ves-example": "ACME Ltd."
+                },
+                "contact_number": {
+                    "type": "string",
+                    "description": " phone contact number\n obsolete\n\nExample: - \"+11234567890\"-",
+                    "title": "contact_number",
+                    "x-displayname": "Contact Number",
+                    "x-ves-example": "+11234567890"
+                },
+                "crm_details": {
+                    "description": " CrmDetails message to include crm info in source pipeline.",
+                    "title": "crm_details",
+                    "$ref": "#/definitions/schemaCRMInfo",
+                    "x-displayname": "CrmDetails"
+                },
+                "currency": {
+                    "type": "string",
+                    "description": " preferred currency on the tenant level - individual billing accounts may\n override this.\n\nExample: - \"USD\"-",
+                    "title": "currency",
+                    "x-displayname": "Currency",
+                    "x-ves-example": "USD"
+                },
+                "customer": {
+                    "description": " customer details (personal/enterprise)",
+                    "title": "customer",
+                    "$ref": "#/definitions/schemauserGlobalSpecType",
+                    "x-displayname": "Customer"
+                },
+                "customer_contact": {
+                    "description": " contact details of the customer",
+                    "title": "customer contact",
+                    "$ref": "#/definitions/schemacontactGlobalSpecType",
+                    "x-displayname": "Customer Contact"
+                },
+                "domain": {
+                    "type": "string",
+                    "description": " domain the customer chose to use - enterprise customers only.\n\nExample: - \"value\"-",
+                    "title": "domain",
+                    "x-displayname": "Domain",
+                    "x-ves-example": "value"
+                },
+                "email": {
+                    "type": "string",
+                    "description": " email of the customer (ideally someone who's responsible for the company\n account)\n obsolete\n\nExample: - \"customer@email.com\"-",
+                    "title": "email",
+                    "x-displayname": "Email",
+                    "x-ves-example": "customer@email.com"
+                },
+                "first_name": {
+                    "type": "string",
+                    "description": " first name of the customer\n obsolete\n\nExample: - \"John\"-",
+                    "title": "first_name",
+                    "x-displayname": "First Name",
+                    "x-ves-example": "John"
+                },
+                "infraprotect_info": {
+                    "description": " Optional information that allows link any existing Infraprotect customer to Voltconsole",
+                    "title": "infra protect info",
+                    "$ref": "#/definitions/schemainfraprotect_informationGlobalSpecType",
+                    "x-displayname": "Infraprotect information"
+                },
+                "last_name": {
+                    "type": "string",
+                    "description": " last name of the customer (the superuser)\n obsolete\n\nExample: - \"Doe\"-",
+                    "title": "last_name",
+                    "x-displayname": "Last Name",
+                    "x-ves-example": "Doe"
+                },
+                "locale": {
+                    "type": "string",
+                    "description": " locale of this sign up\n\nExample: - \"en-us\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "locale",
+                    "x-displayname": "Locale",
+                    "x-ves-example": "en-us",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "payment_provider_token": {
+                    "type": "string",
+                    "description": " payment provider token (for credit card details)\n\nExample: - \"tok_1234567890\"-",
+                    "title": "payment_provider_token",
+                    "x-displayname": "Payment Provider Token",
+                    "x-ves-example": "tok_1234567890"
+                },
+                "support_plan_name": {
+                    "type": "string",
+                    "description": " what sort of support plan the customer will be on.\n\nExample: - \"xxxx-yyyy-zzzz-1111\"-",
+                    "title": "support_plan_name",
+                    "x-displayname": "Support Plan Name",
+                    "x-ves-example": "xxxx-yyyy-zzzz-1111"
+                },
+                "tax_exempt": {
+                    "description": " indicates the customer is tax exempt. once confirmed with the finance team the customer will not be charged taxes.\n\nExample: - \"TAX_EXEMPT\"-",
+                    "title": "tax exempt flag",
+                    "$ref": "#/definitions/schemaTaxExemptionType",
+                    "x-displayname": "Tax exemption",
+                    "x-ves-example": "TAX_EXEMPT"
+                },
+                "token": {
+                    "type": "string",
+                    "description": " token of the user requesting for.\n Valid tokens are internally generated in the system and shared with respective customers.\n Onboarding of new customers will proceed only when a valid token along with the email is provided during the signup process.\n\nExample: - \"tok_1234567890\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "token of the user",
+                    "x-displayname": "Token",
+                    "x-ves-example": "tok_1234567890",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "tos_accepted": {
+                    "type": "string",
+                    "description": " t\u0026c accepted date as millis from 01/01/1970 UTC\n\nExample: - \"1569926163000\"-",
+                    "title": "tos_accepted",
+                    "format": "int64",
+                    "x-displayname": "TOS Accepted",
+                    "x-ves-example": "1569926163000"
+                },
+                "tos_accepted_at": {
+                    "type": "string",
+                    "description": " tos accepted timestamp.\n\nExample: - \"2020-04-20T12:32:51.341959216Z\"-",
+                    "title": "tos_accepted_at",
+                    "format": "date-time",
+                    "x-displayname": "TosAcceptedAt",
+                    "x-ves-example": "2020-04-20T12:32:51.341959216Z"
+                },
+                "tos_version": {
+                    "type": "string",
+                    "description": " indicates the version of ToS customer approved during signup. Any new version will require the customer to re-approve during login.\n\nExample: - \"v1.2\"-",
+                    "title": "version of terms of services the customer accepted",
+                    "x-displayname": "TOS version",
+                    "x-ves-example": "v1.2"
+                },
+                "type": {
+                    "description": " what tenant type we're processing (FREEMIUM, ENTERPRISE ...)\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "type",
+                    "$ref": "#/definitions/schemaTenantType",
+                    "x-displayname": "Tenant Type",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "usage_plan_name": {
+                    "type": "string",
+                    "description": " what sort of usage plan the customer will be on.\n\nExample: - \"xxxx-yyyy-zzzz-1111\"-",
+                    "title": "usage_plan_name",
+                    "x-displayname": "Usage Plan Name",
+                    "x-ves-example": "xxxx-yyyy-zzzz-1111"
+                }
+            }
+        },
+        "schemauserGlobalSpecType": {
+            "type": "object",
+            "title": "GlobalSpecType",
+            "x-displayname": "Global Specification",
+            "x-ves-proto-message": "ves.io.schema.user.GlobalSpecType",
+            "properties": {
+                "contacts": {
+                    "type": "array",
+                    "description": " Contact information for user",
+                    "title": "contacts",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Contact"
+                },
+                "domain_owner": {
+                    "type": "boolean",
+                    "description": " Domain owner is the first user who registered or signed up the associated Tenant.\n User created via signup flow will have this value set to true.\n Few restrictions apply to this user w.r.t role update and deletion.\n\nExample: - \"true\"-",
+                    "title": "Domain Owner",
+                    "format": "boolean",
+                    "x-displayname": "Domain Owner",
+                    "x-ves-example": "true"
+                },
+                "email": {
+                    "type": "string",
+                    "description": " user's email\n\nExample: - \"value\"-",
+                    "title": "email",
+                    "x-displayname": "Email",
+                    "x-ves-example": "value"
+                },
+                "first_name": {
+                    "type": "string",
+                    "description": " user's first name\n\nExample: - \"value\"-",
+                    "title": "first_name",
+                    "x-displayname": "First Name",
+                    "x-ves-example": "value"
+                },
+                "groups": {
+                    "type": "array",
+                    "description": " Reference to the user groups.",
+                    "title": "Groups",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Groups"
+                },
+                "idm_type": {
+                    "description": " Type of the identity management who is managing this user.",
+                    "title": "IDM Type",
+                    "$ref": "#/definitions/userIdmType",
+                    "x-displayname": "Identity Management Type"
+                },
+                "last_login_timestamp": {
+                    "type": "string",
+                    "description": " Last successful login timestamp of the user.",
+                    "title": "last_login_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Last Login Timestamp"
+                },
+                "last_name": {
+                    "type": "string",
+                    "description": " user's last name\n\nExample: - \"value\"-",
+                    "title": "last_name",
+                    "x-displayname": "Last Name",
+                    "x-ves-example": "value"
+                },
+                "locale": {
+                    "type": "string",
+                    "description": " locale of the user (defaults to English)\n\nExample: - \"value\"-",
+                    "title": "locale",
+                    "x-displayname": "Locale",
+                    "x-ves-example": "value"
+                },
+                "state": {
+                    "description": " State of the user.",
+                    "title": "State",
+                    "$ref": "#/definitions/userFSMState",
+                    "x-displayname": "State"
+                },
+                "sync_mode": {
+                    "description": " Denotes if this is an externally managed entity imported into UAM by SCIM protocol, or self managed.\n\nExample: - \"self\"-",
+                    "title": "Sync Mode",
+                    "$ref": "#/definitions/schemaSyncMode",
+                    "x-displayname": "Sync Mode",
+                    "x-ves-example": "self"
+                },
+                "tos_accepted": {
+                    "type": "string",
+                    "description": " tos accepted version, this field is deprecated refer the fields -tos_accepted_at- and -tos_version- instead.\n\nExample: - \"1.0\"-",
+                    "title": "tos_accepted",
+                    "x-displayname": "TOS Accepted",
+                    "x-ves-example": "1.0"
+                },
+                "tos_accepted_at": {
+                    "type": "string",
+                    "description": " tos accepted timestamp.\n\nExample: - \"2020-04-20T12:32:51.341959216Z\"-",
+                    "title": "tos_accepted_at",
+                    "format": "date-time",
+                    "x-displayname": "TOS Accepted Timestamp",
+                    "x-ves-example": "2020-04-20T12:32:51.341959216Z"
+                },
+                "tos_version": {
+                    "type": "string",
+                    "description": " tos accepted version\n\nExample: - \"v1.0\"-",
+                    "title": "tos_version",
+                    "x-displayname": "TOS version",
+                    "x-ves-example": "v1.0"
+                },
+                "type": {
+                    "description": " type of the user",
+                    "title": "type",
+                    "$ref": "#/definitions/userUserType",
+                    "x-displayname": "Type"
+                }
+            }
+        },
+        "signupSpecType": {
+            "type": "object",
+            "description": "Shape of the signup specification",
+            "title": "Signup specification",
+            "x-displayname": "Signup object specification",
+            "x-ves-proto-message": "ves.io.schema.signup.SpecType",
+            "properties": {
+                "gc_spec": {
+                    "title": "gc_spec",
+                    "$ref": "#/definitions/schemasignupGlobalSpecType",
+                    "x-displayname": "GC Spec"
+                }
+            }
+        },
+        "signupStatusObject": {
+            "type": "object",
+            "description": "Most recently observed status of signup object",
+            "title": "Signup status",
+            "x-displayname": "Signup object status",
+            "x-ves-proto-message": "ves.io.schema.signup.StatusObject",
+            "properties": {
+                "billingAccount": {
+                    "type": "array",
+                    "title": "Billing account reference",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    }
+                },
+                "conditions": {
+                    "type": "array",
+                    "description": " Conditions",
+                    "title": "conditions",
+                    "items": {
+                        "$ref": "#/definitions/schemaConditionType"
+                    },
+                    "x-displayname": "Conditions"
+                },
+                "metadata": {
+                    "description": " Standard status's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaStatusMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "object_refs": {
+                    "type": "array",
+                    "description": " Object reference",
+                    "title": "object_refs",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    },
+                    "x-displayname": "Config Object"
+                },
+                "tenant": {
+                    "type": "array",
+                    "title": "Tenant reference",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    }
+                },
+                "user": {
+                    "type": "array",
+                    "title": "User reference",
+                    "items": {
+                        "$ref": "#/definitions/schemaObjectRefType"
+                    }
+                }
+            }
+        },
+        "signupcrudapiErrorCode": {
+            "type": "string",
+            "enum": [
+                "EOK",
+                "ENOTFOUND",
+                "EEXISTS",
+                "EUNKNOWN"
+            ],
+            "default": "EOK",
+            "x-displayname": "",
+            "x-ves-proto-enum": "ves.io.schema.signup.crudapi.ErrorCode"
+        },
+        "userFSMState": {
+            "type": "string",
+            "description": "States describes possible states for user.\n\n - StateUndefined: StateUndefined\n\nUser state when it was created without any state.\n - StateCreating: StateCreating\n\nUser state during initial creation. It includes registering in IDM, creating user-settings object, etc...\n - StateCreateFailed: StateCreateFailed\n\nUser state when initial creation was failed by some reason and must be retried\nafter issue is solved.\n - StateActive: StateActive\n\nUser state of completely created and available to use user.\n - StateDisabled: StateDisabled\n\nUser is currently disabled, login is not possible for this user, but it may become active again in the future.",
+            "title": "States",
+            "enum": [
+                "StateUndefined",
+                "StateCreating",
+                "StateCreateFailed",
+                "StateActive",
+                "StateDisabled"
+            ],
+            "default": "StateUndefined",
+            "x-displayname": "States",
+            "x-ves-proto-enum": "ves.io.schema.user.FSMState"
+        },
+        "userIdmType": {
+            "type": "string",
+            "description": "IdmType is to identify who is managing the user.\n\n - SSO: SSO User\nExternally managed Single Sign On based user imported into UAM.\n - VOLTERRA_MANAGED: F5XC Managed Local user\nF5XC managed local user. Full user life cycle is managed by volterra UAM and Identity.\n - UNDEFINED: Undefined\nUndefined IDM type",
+            "title": "IDM Type",
+            "enum": [
+                "SSO",
+                "VOLTERRA_MANAGED",
+                "UNDEFINED"
+            ],
+            "default": "SSO",
+            "x-displayname": "Identity Management Type",
+            "x-ves-proto-enum": "ves.io.schema.user.IdmType"
+        },
+        "userUserType": {
+            "type": "string",
+            "description": "UserType is to identify the type of user\n\n - USER: User\nRegular User\n - SERVICE: Service User\nUser for accessing only APIs/services\n - DEBUG: Debug\nUser which was created by tenant admin for volterra-support team.",
+            "title": "UserType",
+            "enum": [
+                "USER",
+                "SERVICE",
+                "DEBUG"
+            ],
+            "default": "USER",
+            "x-displayname": "User Type",
+            "x-ves-proto-enum": "ves.io.schema.user.UserType"
+>>>>>>>> main:pbgo/extschema/schema/signup/crudapi/api.vesapi.go
         }
     },
     "x-displayname": "",

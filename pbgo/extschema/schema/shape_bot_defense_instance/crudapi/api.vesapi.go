@@ -3407,11 +3407,50 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/shape_bot_defense_instanceInstance",
                     "x-displayname": "Mobile SSE Instance"
                 },
+<<<<<<< HEAD:pbgo/extschema/schema/shape_bot_defense_instance/crudapi/api.vesapi.go
                 "web": {
                     "description": " SSE Instance for Web traffic",
                     "title": "SSE Instance for Web traffic",
                     "$ref": "#/definitions/shape_bot_defense_instanceInstance",
                     "x-displayname": "Web SSE Instance"
+=======
+                "reuse_ips": {
+                    "description": "Exclusive with [use_dedicated_ips]\n Reuse IP addresses",
+                    "title": "Reuse IP addresses",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Reuse IP addresses"
+                },
+                "route_advertisement_mgmt_not_specified": {
+                    "description": "Exclusive with [route_advertisement_mgmt_not_using_f5xc route_advertisement_mgmt_using_f5xc]\n (management choice) not specified",
+                    "title": "(management choice) not specified",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Not specified"
+                },
+                "route_advertisement_mgmt_not_using_f5xc": {
+                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_using_f5xc]\n Tenant manages using F5XC Routed DDoS Always On",
+                    "title": "Tenant manages outside F5XC",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Tenant manages not using F5XC"
+                },
+                "route_advertisement_mgmt_using_f5xc": {
+                    "description": "Exclusive with [route_advertisement_mgmt_not_specified route_advertisement_mgmt_not_using_f5xc]\n Tenant manages using F5XC Routed DDoS Always Available",
+                    "title": "Tenant manages using F5XC",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Tenant manages using F5XC"
+                },
+                "use_dedicated_ips": {
+                    "description": "Exclusive with [reuse_ips]\n Use dedicated IP addresses",
+                    "title": "Use dedicated IP addresses",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Use dedicated IP addresses"
+                },
+                "uuid": {
+                    "type": "string",
+                    "description": " Organisation UUID\n\nExample: - \"value\"-",
+                    "title": "uuid",
+                    "x-displayname": "Uuid",
+                    "x-ves-example": "value"
+>>>>>>> main:pbgo/extschema/schema/instance_management/v2_signup/crudapi/api.vesapi.go
                 }
             }
         },

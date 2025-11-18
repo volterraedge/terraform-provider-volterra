@@ -773,7 +773,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		return errors.Wrap(err, "Delete")
 	}
 
+<<<<<<<< HEAD:pbgo/extschema/schema/waf_exclusion_policy/public_crudapi.vesapi.go
 	url := fmt.Sprintf("%s/public/namespaces/%s/waf_exclusion_policys/%s", c.baseURL, dReq.Namespace, dReq.Name)
+========
+	url := fmt.Sprintf("%s/public/namespaces/%s/uztna_flows/%s", c.baseURL, dReq.Namespace, dReq.Name)
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_flow/public_crudapi.vesapi.go
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1811,7 +1815,11 @@ var APISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf_exclusion_policy-api-create"
                 },
                 "x-ves-in-development": "true",
+<<<<<<<< HEAD:pbgo/extschema/schema/waf_exclusion_policy/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.waf_exclusion_policy.API.Create"
+========
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.API.Create"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_flow/public_crudapi.vesapi.go
             },
             "x-displayname": "WAF Exclusion Policy",
             "x-ves-proto-service": "ves.io.schema.waf_exclusion_policy.API",
@@ -1912,7 +1920,11 @@ var APISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf_exclusion_policy-api-replace"
                 },
                 "x-ves-in-development": "true",
+<<<<<<<< HEAD:pbgo/extschema/schema/waf_exclusion_policy/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.waf_exclusion_policy.API.Replace"
+========
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.API.Replace"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_flow/public_crudapi.vesapi.go
             },
             "x-displayname": "WAF Exclusion Policy",
             "x-ves-proto-service": "ves.io.schema.waf_exclusion_policy.API",
@@ -2029,7 +2041,11 @@ var APISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf_exclusion_policy-api-list"
                 },
                 "x-ves-in-development": "true",
+<<<<<<<< HEAD:pbgo/extschema/schema/waf_exclusion_policy/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.waf_exclusion_policy.API.List"
+========
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.API.List"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_flow/public_crudapi.vesapi.go
             },
             "x-displayname": "WAF Exclusion Policy",
             "x-ves-proto-service": "ves.io.schema.waf_exclusion_policy.API",
@@ -2140,7 +2156,11 @@ var APISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf_exclusion_policy-api-get"
                 },
                 "x-ves-in-development": "true",
+<<<<<<<< HEAD:pbgo/extschema/schema/waf_exclusion_policy/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.waf_exclusion_policy.API.Get"
+========
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.API.Get"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_flow/public_crudapi.vesapi.go
             },
             "delete": {
                 "summary": "Delete WAF Exclusion Policy",
@@ -2234,7 +2254,11 @@ var APISwaggerJSON string = `{
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf_exclusion_policy-api-delete"
                 },
                 "x-ves-in-development": "true",
+<<<<<<<< HEAD:pbgo/extschema/schema/waf_exclusion_policy/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.waf_exclusion_policy.API.Delete"
+========
+                "x-ves-proto-rpc": "ves.io.schema.uztna.uztna_flow.API.Delete"
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_flow/public_crudapi.vesapi.go
             },
             "x-displayname": "WAF Exclusion Policy",
             "x-ves-proto-service": "ves.io.schema.waf_exclusion_policy.API",
@@ -3384,7 +3408,64 @@ var APISwaggerJSON string = `{
             "x-displayname": "Create WAF Exclusion Policy",
             "x-ves-proto-message": "ves.io.schema.waf_exclusion_policy.CreateSpecType",
             "properties": {
+<<<<<<<< HEAD:pbgo/extschema/schema/waf_exclusion_policy/public_crudapi.vesapi.go
                 "waf_exclusion_rules": {
+========
+                "saml_app_tag": {
+                    "type": "string",
+                    "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "title": "Applicatin Tagging",
+                    "maxLength": 1024,
+                    "x-displayname": "Name of SAML attribute that contains application tag",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_len": "1024"
+                    }
+                }
+            }
+        },
+        "uztna_flowAssertionConsumerServiceBinding": {
+            "type": "string",
+            "description": "Binding  message\n",
+            "title": "Assertion Consumer Service Binding",
+            "enum": [
+                "POST",
+                "REDIRECT"
+            ],
+            "default": "POST",
+            "x-displayname": "Assertion Consumer Service Binding",
+            "x-ves-proto-enum": "ves.io.schema.uztna.uztna_flow.AssertionConsumerServiceBinding"
+        },
+        "uztna_flowAudienceUri": {
+            "type": "object",
+            "description": "Audience URI\nSelect Audience URI",
+            "title": "Audience URI",
+            "x-displayname": "Audience URI",
+            "x-ves-oneof-field-audience_uri_choice": "[\"uniform_resource_locator\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_flow.AudienceUri",
+            "properties": {
+                "uniform_resource_locator": {
+                    "description": "Exclusive with []\n\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Uniform Resource Locator",
+                    "$ref": "#/definitions/uztna_flowUniformResourceLocator",
+                    "x-displayname": "Uniform Resource Locator (URL)",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "uztna_flowCertificate": {
+            "type": "object",
+            "description": "This is used to import or create new certificate for tls communication",
+            "title": "TLS Certificate",
+            "x-displayname": "Certificate",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_flow.Certificate",
+            "properties": {
+                "certificate": {
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_flow/public_crudapi.vesapi.go
                     "type": "array",
                     "description": " An ordered list of rules.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 256,
@@ -3786,6 +3867,123 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Config Object"
                 }
             }
+<<<<<<<< HEAD:pbgo/extschema/schema/waf_exclusion_policy/public_crudapi.vesapi.go
+========
+        },
+        "uztna_flowUniformResourceLocator": {
+            "type": "object",
+            "title": "Uniform Resource Locator",
+            "x-displayname": "Uniform Resource Locator",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_flow.UniformResourceLocator",
+            "properties": {
+                "url": {
+                    "type": "string",
+                    "description": "\nExample: - https://sp.example.com-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 1024\n  ves.io.schema.rules.string.url_or_uri_ref: true\n",
+                    "title": "Uniform Resource Name",
+                    "maxLength": 1024,
+                    "x-displayname": "URL",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "1024",
+                        "ves.io.schema.rules.string.url_or_uri_ref": "true"
+                    }
+                }
+            }
+        },
+        "uztna_flowUniformResourceName": {
+            "type": "object",
+            "description": "x-displayName: \"Uniform Resource Name\"\nUniform Resource Name to identify the Uniform resource locator",
+            "title": "Uniform Resource Name",
+            "properties": {
+                "host_name": {
+                    "type": "string",
+                    "description": "x-displayName: \"Host Name\"\nx-required\nHost name of Uniform resource",
+                    "title": "Host Name"
+                },
+                "urn": {
+                    "type": "string",
+                    "description": "x-displayName: \"URN\"\nx-required\nName of Uniform resource",
+                    "title": "Uniform Resource Name"
+                }
+            }
+        },
+        "uztna_flowWantEncryptedRequest": {
+            "type": "object",
+            "description": "WantEncryptedRequest\nx-required",
+            "title": "Want Encrypted Request",
+            "x-displayname": "Want Encrypted Request",
+            "x-ves-oneof-field-want_encrypted_request": "[\"encrypt_req\",\"no_encrypt_req\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_flow.WantEncryptedRequest",
+            "properties": {
+                "encrypt_req": {
+                    "description": "Exclusive with [no_encrypt_req]\n Encrypt assertions",
+                    "title": "Encrypt assertions",
+                    "$ref": "#/definitions/uztna_flowCertificate",
+                    "x-displayname": "Encrypt assertions"
+                },
+                "no_encrypt_req": {
+                    "description": "Exclusive with [encrypt_req]\n Do not encrypt assertions",
+                    "title": "Do not encrypt assertions",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Do not encrypt assertions"
+                }
+            }
+        },
+        "uztnauztna_flowCreateSpecType": {
+            "type": "object",
+            "description": "Shape of the UZTNA Tenant",
+            "title": "CreateSpecType",
+            "x-displayname": "Create Specification",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_flow.CreateSpecType",
+            "properties": {
+                "flow_type": {
+                    "description": " Flow Type\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/uztna_flowFlowType",
+                    "x-displayname": "Flow Type",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "uztnauztna_flowGetSpecType": {
+            "type": "object",
+            "description": "Get a new gateways object.",
+            "title": "Get Tenant Schema",
+            "x-displayname": "Get Tenant schema",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_flow.GetSpecType",
+            "properties": {
+                "flow_type": {
+                    "description": " Flow Type\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/uztna_flowFlowType",
+                    "x-displayname": "Flow Type",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "uztnauztna_flowReplaceSpecType": {
+            "type": "object",
+            "description": "Shape of the UZTNA Tenant",
+            "title": "ReplaceSpecType",
+            "x-displayname": "Replace Specification",
+            "x-ves-proto-message": "ves.io.schema.uztna.uztna_flow.ReplaceSpecType",
+            "properties": {
+                "flow_type": {
+                    "description": " Flow Type\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/uztna_flowFlowType",
+                    "x-displayname": "Flow Type",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+>>>>>>>> main:pbgo/extschema/schema/uztna/uztna_flow/public_crudapi.vesapi.go
         }
     },
     "x-displayname": "WAF Exclusion Policy",

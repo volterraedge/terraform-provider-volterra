@@ -773,7 +773,11 @@ func (c *crudAPIRestClient) Delete(ctx context.Context, key string, opts ...serv
 		return errors.Wrap(err, "Delete")
 	}
 
+<<<<<<<< HEAD:pbgo/extschema/schema/views/ike_phase1_profile/public_crudapi.vesapi.go
 	url := fmt.Sprintf("%s/public/namespaces/%s/ike_phase1_profiles/%s", c.baseURL, dReq.Namespace, dReq.Name)
+========
+	url := fmt.Sprintf("%s/public/namespaces/%s/uztna_domain_views/%s", c.baseURL, dReq.Namespace, dReq.Name)
+>>>>>>>> main:pbgo/extschema/schema/uztna/views/uztna_domain_view/public_crudapi.vesapi.go
 	cco := server.NewCRUDCallOpts()
 	for _, opt := range opts {
 		opt(cco)
@@ -1810,7 +1814,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-ike_phase1_profile-api-create"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/views/ike_phase1_profile/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.views.ike_phase1_profile.API.Create"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.API.Create"
+>>>>>>>> main:pbgo/extschema/schema/uztna/views/uztna_domain_view/public_crudapi.vesapi.go
             },
             "x-displayname": "IKE Phase 1 Profile",
             "x-ves-proto-service": "ves.io.schema.views.ike_phase1_profile.API",
@@ -1910,7 +1919,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-ike_phase1_profile-api-replace"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/views/ike_phase1_profile/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.views.ike_phase1_profile.API.Replace"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.API.Replace"
+>>>>>>>> main:pbgo/extschema/schema/uztna/views/uztna_domain_view/public_crudapi.vesapi.go
             },
             "x-displayname": "IKE Phase 1 Profile",
             "x-ves-proto-service": "ves.io.schema.views.ike_phase1_profile.API",
@@ -2026,7 +2040,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-ike_phase1_profile-api-list"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/views/ike_phase1_profile/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.views.ike_phase1_profile.API.List"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.API.List"
+>>>>>>>> main:pbgo/extschema/schema/uztna/views/uztna_domain_view/public_crudapi.vesapi.go
             },
             "x-displayname": "IKE Phase 1 Profile",
             "x-ves-proto-service": "ves.io.schema.views.ike_phase1_profile.API",
@@ -2136,7 +2155,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-ike_phase1_profile-api-get"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/views/ike_phase1_profile/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.views.ike_phase1_profile.API.Get"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.API.Get"
+>>>>>>>> main:pbgo/extschema/schema/uztna/views/uztna_domain_view/public_crudapi.vesapi.go
             },
             "delete": {
                 "summary": "Delete IKE Phase 1 Profile",
@@ -2229,7 +2253,12 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-views-ike_phase1_profile-api-delete"
                 },
+<<<<<<<< HEAD:pbgo/extschema/schema/views/ike_phase1_profile/public_crudapi.vesapi.go
                 "x-ves-proto-rpc": "ves.io.schema.views.ike_phase1_profile.API.Delete"
+========
+                "x-ves-in-development": "true",
+                "x-ves-proto-rpc": "ves.io.schema.uztna.views.uztna_domain_view.API.Delete"
+>>>>>>>> main:pbgo/extschema/schema/uztna/views/uztna_domain_view/public_crudapi.vesapi.go
             },
             "x-displayname": "IKE Phase 1 Profile",
             "x-ves-proto-service": "ves.io.schema.views.ike_phase1_profile.API",
@@ -3612,6 +3641,741 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "f3744323-1adf-4aaa-a5dc-0707c1d1bd82"
                 }
             }
+<<<<<<<< HEAD:pbgo/extschema/schema/views/ike_phase1_profile/public_crudapi.vesapi.go
+========
+        },
+        "schemaviewsObjectRefType": {
+            "type": "object",
+            "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
+            "title": "ObjectRefType",
+            "x-displayname": "Object reference",
+            "x-ves-proto-message": "ves.io.schema.views.ObjectRefType",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then name will hold the referred object's(e.g. route's) name.\n\nExample: - \"contacts-route\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 128\n  ves.io.schema.rules.string.min_bytes: 1\n",
+                    "title": "name",
+                    "minLength": 1,
+                    "maxLength": 128,
+                    "x-displayname": "Name",
+                    "x-ves-example": "contacts-route",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "128",
+                        "ves.io.schema.rules.string.min_bytes": "1"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then namespace will hold the referred object's(e.g. route's) namespace.\n\nExample: - \"ns1\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "namespace",
+                    "maxLength": 64,
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " When a configuration object(e.g. virtual_host) refers to another(e.g route)\n then tenant will hold the referred object's(e.g. route's) tenant.\n\nExample: - \"acmecorp\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_bytes: 64\n",
+                    "title": "tenant",
+                    "maxLength": 64,
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_bytes": "64"
+                    }
+                }
+            }
+        },
+        "uztna_domain_viewCreateRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Create' RPC",
+            "title": "CreateRequest is used to create an instance of uztna_domain_view",
+            "x-displayname": "Create Request",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.CreateRequest",
+            "properties": {
+                "metadata": {
+                    "description": " Standard object's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectCreateMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "spec": {
+                    "description": " Specification of the desired behavior of the uztna ZeroTrust Domain",
+                    "title": "spec",
+                    "$ref": "#/definitions/viewsuztna_domain_viewCreateSpecType",
+                    "x-displayname": "Spec"
+                }
+            }
+        },
+        "uztna_domain_viewCreateResponse": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.CreateResponse",
+            "properties": {
+                "metadata": {
+                    "description": " Standard object's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectGetMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "spec": {
+                    "description": " Specification of the desired behavior of the uztna ZeroTrust Domain",
+                    "title": "spec",
+                    "$ref": "#/definitions/viewsuztna_domain_viewGetSpecType",
+                    "x-displayname": "Spec"
+                },
+                "system_metadata": {
+                    "description": " System generated object's metadata",
+                    "title": "system metadata",
+                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
+                    "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "uztna_domain_viewDVCloudGatewayAdvertisement": {
+            "type": "object",
+            "description": "\nGateways for Advertisement",
+            "title": "CloudGatewayAdvertisement",
+            "x-displayname": "Cloud Gateway Advertisement",
+            "x-ves-oneof-field-cloud_gateway_choice": "[\"all_cloud\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DVCloudGatewayAdvertisement",
+            "properties": {
+                "all_cloud": {
+                    "description": "Exclusive with []\n\n Advertise on all Cloud Gateways",
+                    "title": "All",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "All Gateways"
+                }
+            }
+        },
+        "uztna_domain_viewDeleteRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Delete' RPC.",
+            "title": "DeleteRequest is used to delete a uztna_domain_view",
+            "x-displayname": "Delete Request",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DeleteRequest",
+            "properties": {
+                "fail_if_referred": {
+                    "type": "boolean",
+                    "description": " Fail the delete operation if this object is being referred by other objects",
+                    "title": "fail_if_referred",
+                    "format": "boolean",
+                    "x-displayname": "Fail-If-Referred"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of the configuration object\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the configuration object is present\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                }
+            }
+        },
+        "uztna_domain_viewDomainViewAppVIPPool": {
+            "type": "object",
+            "description": "This is used to select VIP Network and VIP Range from \nVIP Pool.",
+            "title": "Application VIP Pool",
+            "x-displayname": "Application VIP Pool",
+            "x-ves-oneof-field-ipaddress_type": "[\"ipv4_app_vip_pool\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewAppVIPPool",
+            "properties": {
+                "ipv4_app_vip_pool": {
+                    "description": "Exclusive with []\n Select or create new IPv4 App VIP pools\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "IPv4 App VIP Pool",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "IPv4 App VIP Pool",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "uztna_domain_viewDomainViewCertificate": {
+            "type": "object",
+            "description": "This is used to import or create new certificate for tls communication",
+            "title": "TLS Certificate",
+            "x-displayname": "Certificate",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewCertificate",
+            "properties": {
+                "certificate": {
+                    "description": " Select/Add one or more TLS Certificate objects to associate with this ZeroTrust Domain",
+                    "title": "TLS Certificates",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "TLS Certificate"
+                }
+            }
+        },
+        "uztna_domain_viewDomainViewCloudGateways": {
+            "type": "object",
+            "description": "x-displayName: \"Cloud Gateway\"\n\nCloud Gateways",
+            "title": "Cloud Gateway",
+            "properties": {
+                "cloud_gateways": {
+                    "type": "array",
+                    "description": "x-displayName: \"Cloud Gateways\"\n\nCloud Gateways",
+                    "title": "Cloud Gateway",
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    }
+                }
+            }
+        },
+        "uztna_domain_viewDomainViewDualStackAppVipPool": {
+            "type": "object",
+            "description": "x-displayName: \"Dual Stack App VIP Pools\"\n\nThis is used to import or create new IPv4 and Ipv6 App VIP Pools",
+            "title": "Dual Stack App VIP Pool",
+            "properties": {
+                "ipv4_app_vip_pool": {
+                    "description": "x-displayName: \"IPv4 App VIP Pool\"\nx-required\nSelect or create new IPv4 App VIP pools",
+                    "title": "IPv4 App VIP Pools",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "ipv6_app_vip_pool": {
+                    "description": "x-displayName: \"IPv6 App VIP Pool\"\nx-required\nSelect or create new IPv6 App VIP Pools",
+                    "title": "IPv6 App VIP Pool",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                }
+            }
+        },
+        "uztna_domain_viewDomainViewDualStackLeasePool": {
+            "type": "object",
+            "description": "x-displayName: \"Dual Stack Lease Pools\"\n\nThis is used to import or create new IPv4 and Ipv6 Lease Pools",
+            "title": "Dual Stack Lease Pool",
+            "properties": {
+                "ipv4_leasepool": {
+                    "description": "x-displayName: \"IPv4 Lease Pool\"\nx-required\nSelect or create new IPv4 Leasepools",
+                    "title": "IPv4 Lease Pools",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                },
+                "ipv6_leasepool": {
+                    "description": "x-displayName: \"IPv6 Lease Pool\"\nx-required\nSelect or create new IPv6 Lease Pools",
+                    "title": "IPv6 Lease Pool",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                }
+            }
+        },
+        "uztna_domain_viewDomainViewGateways": {
+            "type": "object",
+            "description": "\nAccess FQDNs resolve to IP addresses on F5 Distributed Cloud or BIG-IP devices in customers' data centers. These devices, known as Gateways, establish secure connections with end users. This section allows users to specify Gateways for this ZeroTrust Domain.\nclient for the terminated tunnel",
+            "title": "Gateways",
+            "x-displayname": "Gateways",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewGateways",
+            "properties": {
+                "perimeter_re": {
+                    "description": "\n Cloud Gateways and Big-IP Edge Gateways",
+                    "title": "PerimeterREAdvertisement",
+                    "$ref": "#/definitions/uztna_domain_viewDVCloudGatewayAdvertisement",
+                    "x-displayname": "Cloud Gateways"
+                },
+                "private_gateway": {
+                    "description": " Private gateways are gateways hosted within the customer's data centers and are typically accessed by users connected to their office or corporate network.",
+                    "title": "Private Gateways",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewPrivateGateways",
+                    "x-displayname": "Private Gateways"
+                }
+            }
+        },
+        "uztna_domain_viewDomainViewLeasePoolList": {
+            "type": "object",
+            "description": "\nLease Pool For UZTNA Domain View.",
+            "title": "Lease Pools",
+            "x-displayname": "Lease Pools",
+            "x-ves-oneof-field-ipaddress_type": "[\"ipv4_leasepool\"]",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewLeasePoolList",
+            "properties": {
+                "ipv4_leasepool": {
+                    "description": "Exclusive with []\n Select or create new IPv4 leasepool\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "IPv4 Lease Pool",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "IPv4 Lease Pool",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "uztna_domain_viewDomainViewPolicy": {
+            "type": "object",
+            "title": "ZTNA Policy",
+            "x-displayname": "ZTNA Policy",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewPolicy",
+            "properties": {
+                "policy_name": {
+                    "description": " \n The ZeroTrust Domain enforces an Access policy that all end users must comply with to access private and potentially public applications. The ZTNA policy allows the admin to set up the access policy for this ZeroTrust Domain",
+                    "title": "ZTNA Policy",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "ZTNA Policy"
+                }
+            }
+        },
+        "uztna_domain_viewDomainViewPrivateGateways": {
+            "type": "object",
+            "description": "Private gateways are gateways hosted within the customer's data centers and are typically accessed by users connected to their office or corporate network.",
+            "title": "Private Gateways",
+            "x-displayname": "Private Gateways",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.DomainViewPrivateGateways",
+            "properties": {
+                "uztna_gateway": {
+                    "type": "array",
+                    "description": "\n\nExample: - \"system/alon-ge\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 4096\n",
+                    "title": "Private Gateway",
+                    "maxItems": 4096,
+                    "items": {
+                        "$ref": "#/definitions/schemaviewsObjectRefType"
+                    },
+                    "x-displayname": "Private Gateway",
+                    "x-ves-example": "system/alon-ge",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "4096"
+                    }
+                }
+            }
+        },
+        "uztna_domain_viewGetResponse": {
+            "type": "object",
+            "description": "This is the output message of the 'Get' RPC",
+            "title": "GetResponse is the shape of a read uztna_domain_view",
+            "x-displayname": "Get Response",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.GetResponse",
+            "properties": {
+                "create_form": {
+                    "description": "Format used to create a new similar object",
+                    "title": "create_form",
+                    "$ref": "#/definitions/uztna_domain_viewCreateRequest",
+                    "x-displayname": "CreateRequest Format"
+                },
+                "deleted_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "deleted_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Deleted Referred Objects"
+                },
+                "disabled_referred_objects": {
+                    "type": "array",
+                    "description": "The set of deleted objects that are referred by this object",
+                    "title": "disabled_referred_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Disabled Referred Objects"
+                },
+                "metadata": {
+                    "description": " Standard object's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectGetMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "referring_objects": {
+                    "type": "array",
+                    "description": "The set of objects that are referring to this object in their spec",
+                    "title": "referring_objects",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Referring Objects"
+                },
+                "replace_form": {
+                    "description": "Format to replace changeable values in object",
+                    "title": "replace_form",
+                    "$ref": "#/definitions/uztna_domain_viewReplaceRequest",
+                    "x-displayname": "ReplaceRequest Format"
+                },
+                "spec": {
+                    "description": " Specification of the desired behavior of the uztna ZeroTrust Domain",
+                    "title": "spec",
+                    "$ref": "#/definitions/viewsuztna_domain_viewGetSpecType",
+                    "x-displayname": "Spec"
+                },
+                "status": {
+                    "type": "array",
+                    "description": "The status reported by different services for this configuration object",
+                    "title": "status",
+                    "items": {
+                        "$ref": "#/definitions/uztna_domain_viewStatusObject"
+                    },
+                    "x-displayname": "Status"
+                },
+                "system_metadata": {
+                    "description": " System generated object's metadata",
+                    "title": "system metadata",
+                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
+                    "x-displayname": "System Metadata"
+                }
+            }
+        },
+        "uztna_domain_viewGetResponseFormatCode": {
+            "type": "string",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_FOR_CREATE: x-displayName: \"Create request Format\"\nResponse should be in CreateRequest format\n - GET_RSP_FORMAT_FOR_REPLACE: x-displayName: \"Replace request format\"\nResponse should be in ReplaceRequest format\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
+            "title": "GetResponseFormatCode",
+            "enum": [
+                "GET_RSP_FORMAT_DEFAULT",
+                "GET_RSP_FORMAT_FOR_CREATE",
+                "GET_RSP_FORMAT_FOR_REPLACE",
+                "GET_RSP_FORMAT_STATUS",
+                "GET_RSP_FORMAT_READ",
+                "GET_RSP_FORMAT_REFERRING_OBJECTS",
+                "GET_RSP_FORMAT_BROKEN_REFERENCES"
+            ],
+            "default": "GET_RSP_FORMAT_DEFAULT"
+        },
+        "uztna_domain_viewListResponse": {
+            "type": "object",
+            "description": "This is the output message of 'List' RPC.",
+            "title": "ListResponse is the collection of uztna_domain_view",
+            "x-displayname": "List Response",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.ListResponse",
+            "properties": {
+                "errors": {
+                    "type": "array",
+                    "description": " Errors(if any) while listing items from collection",
+                    "title": "errors",
+                    "items": {
+                        "$ref": "#/definitions/schemaErrorType"
+                    },
+                    "x-displayname": "Errors"
+                },
+                "items": {
+                    "type": "array",
+                    "description": " items represents the collection in response",
+                    "title": "items",
+                    "items": {
+                        "$ref": "#/definitions/uztna_domain_viewListResponseItem"
+                    },
+                    "x-displayname": "Items"
+                }
+            }
+        },
+        "uztna_domain_viewListResponseItem": {
+            "type": "object",
+            "description": "By default a summary of uztna_domain_view is returned in 'List'. By setting\n'report_fields' in the ListRequest more details of each item can be got.",
+            "title": "ListResponseItem is an individual item in a collection of uztna_domain_view",
+            "x-displayname": "List Item",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.ListResponseItem",
+            "properties": {
+                "annotations": {
+                    "type": "object",
+                    "description": " The set of annotations present on this uztna_domain_view",
+                    "title": "annotations",
+                    "x-displayname": "Annotations"
+                },
+                "description": {
+                    "type": "string",
+                    "description": " The description set for this uztna_domain_view",
+                    "title": "description",
+                    "x-displayname": "Description"
+                },
+                "disabled": {
+                    "type": "boolean",
+                    "description": " A value of true indicates uztna_domain_view is administratively disabled",
+                    "title": "disabled",
+                    "format": "boolean",
+                    "x-displayname": "Disabled"
+                },
+                "get_spec": {
+                    "description": " If ListRequest has any specified report_fields, it will appear in object",
+                    "title": "get_spec",
+                    "$ref": "#/definitions/viewsuztna_domain_viewGetSpecType",
+                    "x-displayname": "Get Specification"
+                },
+                "labels": {
+                    "type": "object",
+                    "description": " The set of labels present on this uztna_domain_view",
+                    "title": "labels",
+                    "x-displayname": "Labels"
+                },
+                "metadata": {
+                    "description": " If list request has report_fields set then metadata will\n contain all the metadata associated with the object.",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectGetMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " The name of this uztna_domain_view\n\nExample: - \"name\"-",
+                    "title": "name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "name"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " The namespace this item belongs to\n\nExample: - \"ns1\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "ns1"
+                },
+                "owner_view": {
+                    "description": " Reference to the view object that owns this object.\n If there is no view owner, this field will be nil.\n If not nil, this object can only be edited/deleted through the view",
+                    "title": "owner_view",
+                    "$ref": "#/definitions/schemaViewRefType",
+                    "x-displayname": "Owner View"
+                },
+                "status_set": {
+                    "type": "array",
+                    "description": " The status reported by different services for this configuration object",
+                    "title": "status",
+                    "items": {
+                        "$ref": "#/definitions/uztna_domain_viewStatusObject"
+                    },
+                    "x-displayname": "Status"
+                },
+                "system_metadata": {
+                    "description": " If list request has report_fields set then system_metadata will\n contain all the system generated details of this object.",
+                    "title": "system_metadata",
+                    "$ref": "#/definitions/schemaSystemObjectGetMetaType",
+                    "x-displayname": "System Metadata"
+                },
+                "tenant": {
+                    "type": "string",
+                    "description": " The tenant this item belongs to\n\nExample: - \"acmecorp\"-",
+                    "title": "tenant",
+                    "x-displayname": "Tenant",
+                    "x-ves-example": "acmecorp"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " The unique uid of this uztna_domain_view\n\nExample: - \"d27938ba-967e-40a7-9709-57b8627f9f75\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d27938ba-967e-40a7-9709-57b8627f9f75"
+                }
+            }
+        },
+        "uztna_domain_viewReplaceRequest": {
+            "type": "object",
+            "description": "This is the input message of the 'Replace' RPC",
+            "title": "ReplaceRequest is used to replace contents of a uztna_domain_view",
+            "x-displayname": "Replace Request",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.ReplaceRequest",
+            "properties": {
+                "metadata": {
+                    "description": " Standard object's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaObjectReplaceMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "spec": {
+                    "description": " Specification of the desired behavior of the uztna ZeroTrust Domain",
+                    "title": "spec",
+                    "$ref": "#/definitions/viewsuztna_domain_viewReplaceSpecType",
+                    "x-displayname": "Spec"
+                }
+            }
+        },
+        "uztna_domain_viewReplaceResponse": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.ReplaceResponse"
+        },
+        "uztna_domain_viewStatusObject": {
+            "type": "object",
+            "description": "Most recently observed status of object\nDisplays status of an object",
+            "title": "Status for User object",
+            "x-displayname": "Status",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.StatusObject",
+            "properties": {
+                "conditions": {
+                    "type": "array",
+                    "description": " Conditions",
+                    "title": "conditions",
+                    "items": {
+                        "$ref": "#/definitions/schemaConditionType"
+                    },
+                    "x-displayname": "Conditions"
+                },
+                "metadata": {
+                    "description": " Standard status's metadata",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaStatusMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "object_refs": {
+                    "type": "array",
+                    "description": " Object reference",
+                    "title": "object_refs",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Config Object"
+                }
+            }
+        },
+        "viewsuztna_domain_viewCreateSpecType": {
+            "type": "object",
+            "description": "Shape of the UZTNA ZeroTrust Domain",
+            "title": "CreateSpecType",
+            "x-displayname": "Create Specification",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.CreateSpecType",
+            "properties": {
+                "access_url": {
+                    "type": "string",
+                    "description": " The FQDN that users will configure on their Access Clients\n to connect to the ZTNA service.\n This URL would resolve to the Cloud or the Private Gateway\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Access FQDN",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "app_vip_pool": {
+                    "description": " Applications Onboarded to the ZTNA platform are assigned an IP \n address from this Pool as internal Virtual Server. \n Configure this option only if the default range is unacceptable.",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewAppVIPPool",
+                    "x-displayname": "Application VIP Pools"
+                },
+                "cert": {
+                    "description": " Select the certificate to be used for mTLS negotiation between clients\n and the server on Cloud and Private gateways\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewCertificate",
+                    "x-displayname": "TLS Certificate",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "gateways": {
+                    "description": " List of all RE prime and Big Ip edge CE\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewGateways",
+                    "x-displayname": "Gateways",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "lease_pool": {
+                    "description": " After a successful evaluation of the Access Policy,the\n end-user device is assigned private IP addressess. All \n application requests from this device will have this IP \n as their source. The admin can set up a subnet or IP address\n range using the leasepool for this assignment",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewLeasePoolList",
+                    "x-displayname": "Lease Pools"
+                },
+                "policy": {
+                    "description": "\n The name of the ZTNA profile",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewPolicy",
+                    "x-displayname": "ZTNA Profile"
+                }
+            }
+        },
+        "viewsuztna_domain_viewGetSpecType": {
+            "type": "object",
+            "description": "Shape of the UZTNA ZeroTrust Domain",
+            "title": "GetSpecType",
+            "x-displayname": "Get Specification",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.GetSpecType",
+            "properties": {
+                "access_url": {
+                    "type": "string",
+                    "description": " The FQDN that users will configure on their Access Clients\n to connect to the ZTNA service.\n This URL would resolve to the Cloud or the Private Gateway\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Access FQDN",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "app_vip_pool": {
+                    "description": " Applications Onboarded to the ZTNA platform are assigned an IP \n address from this Pool as internal Virtual Server. \n Configure this option only if the default range is unacceptable.",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewAppVIPPool",
+                    "x-displayname": "Application VIP Pools"
+                },
+                "cert": {
+                    "description": " Select the certificate to be used for mTLS negotiation between clients\n and the server on Cloud and Private gateways\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewCertificate",
+                    "x-displayname": "TLS Certificate",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "gateways": {
+                    "description": " List of all RE prime and Big Ip edge CE\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewGateways",
+                    "x-displayname": "Gateways",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "lease_pool": {
+                    "description": " After a successful evaluation of the Access Policy,the\n end-user device is assigned private IP addressess. All \n application requests from this device will have this IP \n as their source. The admin can set up a subnet or IP address\n range using the leasepool for this assignment",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewLeasePoolList",
+                    "x-displayname": "Lease Pools"
+                },
+                "policy": {
+                    "description": "\n The name of the ZTNA profile",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewPolicy",
+                    "x-displayname": "ZTNA Profile"
+                }
+            }
+        },
+        "viewsuztna_domain_viewReplaceSpecType": {
+            "type": "object",
+            "description": "Shape of the UZTNA ZeroTrust Domain",
+            "title": "ReplaceSpecType",
+            "x-displayname": "Replace Specification",
+            "x-ves-proto-message": "ves.io.schema.uztna.views.uztna_domain_view.ReplaceSpecType",
+            "properties": {
+                "access_url": {
+                    "type": "string",
+                    "description": " The FQDN that users will configure on their Access Clients\n to connect to the ZTNA service.\n This URL would resolve to the Cloud or the Private Gateway\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Access FQDN",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.hostname": "true",
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1"
+                    }
+                },
+                "cert": {
+                    "description": " Select the certificate to be used for mTLS negotiation between clients\n and the server on Cloud and Private gateways\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewCertificate",
+                    "x-displayname": "TLS Certificate",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "gateways": {
+                    "description": " List of all RE prime and Big Ip edge CE\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewGateways",
+                    "x-displayname": "Gateways",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "lease_pool": {
+                    "description": " After a successful evaluation of the Access Policy,the\n end-user device is assigned private IP addressess. All \n application requests from this device will have this IP \n as their source. The admin can set up a subnet or IP address\n range using the leasepool for this assignment",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewLeasePoolList",
+                    "x-displayname": "Lease Pools"
+                },
+                "policy": {
+                    "description": "\n The name of the ZTNA profile",
+                    "$ref": "#/definitions/uztna_domain_viewDomainViewPolicy",
+                    "x-displayname": "ZTNA Profile"
+                }
+            }
+>>>>>>>> main:pbgo/extschema/schema/uztna/views/uztna_domain_view/public_crudapi.vesapi.go
         }
     },
     "x-displayname": "IKE Phase 1 Profile",
