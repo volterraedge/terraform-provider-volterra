@@ -1947,6 +1947,15 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["mobile_identifier_matcher_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mobile_identifier_matcher_action"))
+		if err := fv(ctx, m.GetMobileIdentifierMatcherAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["mum_action"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("mum_action"))
@@ -3530,6 +3539,15 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mobile_identifier_matcher_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mobile_identifier_matcher_action"))
+		if err := fv(ctx, m.GetMobileIdentifierMatcherAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -5290,6 +5308,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("label_matcher"))
 		if err := fv(ctx, m.GetLabelMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mobile_identifier_matcher_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mobile_identifier_matcher_action"))
+		if err := fv(ctx, m.GetMobileIdentifierMatcherAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -7643,6 +7670,15 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 
 	}
 
+	if fv, exists := v.FldValidators["mobile_identifier_matcher_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mobile_identifier_matcher_action"))
+		if err := fv(ctx, m.GetMobileIdentifierMatcherAction(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["mum_action"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("mum_action"))
@@ -8580,6 +8616,7 @@ func (m *CreateSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool
 	m.IpReputationAction = f.GetIpReputationAction()
 	m.JwtClaims = f.GetJwtClaims()
 	m.LabelMatcher = f.GetLabelMatcher()
+	m.MobileIdentifierMatcherAction = f.GetMobileIdentifierMatcherAction()
 	m.MumAction = f.GetMumAction()
 	m.OriginServerSubsetsAction = f.GetOriginServerSubsetsAction()
 	m.Path = f.GetPath()
@@ -8655,6 +8692,7 @@ func (m *CreateSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) 
 	f.IpReputationAction = m1.IpReputationAction
 	f.JwtClaims = m1.JwtClaims
 	f.LabelMatcher = m1.LabelMatcher
+	f.MobileIdentifierMatcherAction = m1.MobileIdentifierMatcherAction
 	f.MumAction = m1.MumAction
 	f.OriginServerSubsetsAction = m1.OriginServerSubsetsAction
 	f.Path = m1.Path
@@ -8988,6 +9026,7 @@ func (m *GetSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	m.IpReputationAction = f.GetIpReputationAction()
 	m.JwtClaims = f.GetJwtClaims()
 	m.LabelMatcher = f.GetLabelMatcher()
+	m.MobileIdentifierMatcherAction = f.GetMobileIdentifierMatcherAction()
 	m.MumAction = f.GetMumAction()
 	m.OriginServerSubsetsAction = f.GetOriginServerSubsetsAction()
 	m.Path = f.GetPath()
@@ -9063,6 +9102,7 @@ func (m *GetSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool) {
 	f.IpReputationAction = m1.IpReputationAction
 	f.JwtClaims = m1.JwtClaims
 	f.LabelMatcher = m1.LabelMatcher
+	f.MobileIdentifierMatcherAction = m1.MobileIdentifierMatcherAction
 	f.MumAction = m1.MumAction
 	f.OriginServerSubsetsAction = m1.OriginServerSubsetsAction
 	f.Path = m1.Path
@@ -9543,6 +9583,7 @@ func (m *ReplaceSpecType) fromGlobalSpecType(f *GlobalSpecType, withDeepCopy boo
 	m.IpReputationAction = f.GetIpReputationAction()
 	m.JwtClaims = f.GetJwtClaims()
 	m.LabelMatcher = f.GetLabelMatcher()
+	m.MobileIdentifierMatcherAction = f.GetMobileIdentifierMatcherAction()
 	m.MumAction = f.GetMumAction()
 	m.OriginServerSubsetsAction = f.GetOriginServerSubsetsAction()
 	m.Path = f.GetPath()
@@ -9618,6 +9659,7 @@ func (m *ReplaceSpecType) toGlobalSpecType(f *GlobalSpecType, withDeepCopy bool)
 	f.IpReputationAction = m1.IpReputationAction
 	f.JwtClaims = m1.JwtClaims
 	f.LabelMatcher = m1.LabelMatcher
+	f.MobileIdentifierMatcherAction = m1.MobileIdentifierMatcherAction
 	f.MumAction = m1.MumAction
 	f.OriginServerSubsetsAction = m1.OriginServerSubsetsAction
 	f.Path = m1.Path

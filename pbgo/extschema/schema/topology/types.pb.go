@@ -334,39 +334,39 @@ func (InterfaceTypeEnum) EnumDescriptor() ([]byte, []int) {
 
 // RouteSourceTypeEnum
 //
-// x-displayName: RouteSourceTypeEnum
+// x-displayName: "RouteSourceTypeEnum"
 // RouteSourceTypeEnum
 type RouteSourceTypeEnum int32
 
 const (
 	// INVALID_SOURCE
 	//
-	// x-displayName: INVALID_SOURCE
+	// x-displayName: "INVALID_SOURCE"
 	// INVALID_SOURCE
 	INVALID_SOURCE RouteSourceTypeEnum = 0
 	// DEFAULT
 	//
-	// x-displayName: DEFAULT
+	// x-displayName: "DEFAULT"
 	// DEFAULT
 	DEFAULT RouteSourceTypeEnum = 1
 	// USER
 	//
-	// x-displayName: USER
+	// x-displayName: "USER"
 	// USER
 	USER RouteSourceTypeEnum = 2
 	// UNKNOWN
 	//
-	// x-displayName: UNKNOWN
+	// x-displayName: "UNKNOWN"
 	// UNKNOWN
 	UNKNOWN RouteSourceTypeEnum = 3
 	// VIRTUAL_NETWORK_GATEWAY_SOURCE
 	//
-	// x-displayName: VIRTUAL_NETWORK_GATEWAY_SOURCE
+	// x-displayName: "VIRTUAL_NETWORK_GATEWAY_SOURCE"
 	// VIRTUAL_NETWORK_GATEWAY_SOURCE
 	VIRTUAL_NETWORK_GATEWAY_SOURCE RouteSourceTypeEnum = 4
 	// SOURCE_NOT_APPLICABLE
 	//
-	// x-displayName: SOURCE_NOT_APPLICABLE
+	// x-displayName: "SOURCE_NOT_APPLICABLE"
 	// SOURCE_NOT_APPLICABLE should be used when the cloud provider does not supports this.
 	SOURCE_NOT_APPLICABLE RouteSourceTypeEnum = 5
 )
@@ -395,49 +395,49 @@ func (RouteSourceTypeEnum) EnumDescriptor() ([]byte, []int) {
 
 // RouteStateTypeEnum
 //
-// x-displayName: RouteStateTypeEnum
+// x-displayName: "RouteStateTypeEnum"
 // RouteStateTypeEnum
 type RouteStateTypeEnum int32
 
 const (
 	// ACTIVE_STATE
 	//
-	// x-displayName: ACTIVE_STATE
+	// x-displayName: "ACTIVE_STATE"
 	// ACTIVE_STATE
 	ACTIVE_STATE RouteStateTypeEnum = 0
 	// INVALID_STATE
 	//
-	// x-displayName: INVALID_STATE
+	// x-displayName: "INVALID_STATE"
 	// INVALID_STATE
 	INVALID_STATE RouteStateTypeEnum = 1
 	// STATE_NOT_APPLICABLE
 	//
-	// x-displayName: STATE_NOT_APPLICABLE
+	// x-displayName: "STATE_NOT_APPLICABLE"
 	// STATE_NOT_APPLICABLE should be used when the cloud provider doesn't supports this
 	STATE_NOT_APPLICABLE RouteStateTypeEnum = 2
 	// STATE_BLACKHOLE
 	//
-	// x-displayName: STATE_BLACKHOLE
+	// x-displayName: "STATE_BLACKHOLE"
 	// STATE_BLACKHOLE
 	STATE_BLACKHOLE RouteStateTypeEnum = 3
 	// STATE_UNAVAILABLE
 	//
-	// x-displayName: STATE_UNAVAILABLE
+	// x-displayName: "STATE_UNAVAILABLE"
 	// STATE_UNAVAILABLE
 	STATE_UNAVAILABLE RouteStateTypeEnum = 4
 	// STATE_PENDING
 	//
-	// x-displayName: STATE_PENDING
+	// x-displayName: "STATE_PENDING"
 	// STATE_PENDING
 	STATE_PENDING RouteStateTypeEnum = 5
 	// STATE_DELETING
 	//
-	// x-displayName: STATE_DELETING
+	// x-displayName: "STATE_DELETING"
 	// STATE_DELETING
 	STATE_DELETING RouteStateTypeEnum = 6
 	// STATE_DELETING
 	//
-	// x-displayName: STATE_DELETED
+	// x-displayName: "STATE_DELETED"
 	// STATE_DELETED
 	STATE_DELETED RouteStateTypeEnum = 7
 )
@@ -470,99 +470,99 @@ func (RouteStateTypeEnum) EnumDescriptor() ([]byte, []int) {
 
 // RouteNextHopTypeEnum
 //
-// x-displayName: RouteNextHopTypeEnum
+// x-displayName: "RouteNextHopTypeEnum"
 // RouteNextHopTypeEnum
 type RouteNextHopTypeEnum int32
 
 const (
 	// VIRTUAL NETWORK GATEWAY
 	//
-	// x-displayName: VIRTUAL NETWORK GATEWAY
+	// x-displayName: "VIRTUAL NETWORK GATEWAY"
 	// VIRTUAL NETWORK GATEWAY
 	VIRTUAL_NETWORK_GATEWAY RouteNextHopTypeEnum = 0
 	// VNET LOCAL
 	//
-	// x-displayName: VNET LOCAL
+	// x-displayName: "VNET LOCAL"
 	// VNET LOCAL
 	VNET_LOCAL RouteNextHopTypeEnum = 1
 	// INTERNET
 	//
-	// x-displayName: INTERNET
+	// x-displayName: "INTERNET"
 	// INTERNET
 	INTERNET RouteNextHopTypeEnum = 2
 	// VIRTUAL APPLIANCE
 	//
-	// x-displayName: VIRTUAL APPLIANCE
+	// x-displayName: "VIRTUAL APPLIANCE"
 	// VIRTUAL APPLIANCE
 	VIRTUAL_APPLIANCE RouteNextHopTypeEnum = 3
 	// NONE
 	//
-	// x-displayName: NONE
+	// x-displayName: "NONE"
 	// NONE
 	NONE RouteNextHopTypeEnum = 4
 	// VNET PEERING
 	//
-	// x-displayName: VNET PEERING
+	// x-displayName: "VNET PEERING"
 	// VNET PEERING
 	VNET_PEERING RouteNextHopTypeEnum = 5
 	// VIRTUAL NETWORK SERVICE ENDPOINT
 	//
-	// x-displayName: VIRTUAL NETWORK SERVICE ENDPOINT
+	// x-displayName: "VIRTUAL NETWORK SERVICE ENDPOINT"
 	// VIRTUAL NETWORK SERVICE ENDPOINT
 	VIRTUAL_NETWORK_SERVICE_ENDPOINT RouteNextHopTypeEnum = 6
 	// NEXT_HOP_TYPE_NOT_APPLICABLE
 	//
-	// x-displayName: NEXT_HOP_TYPE_NOT_APPLICABLE
+	// x-displayName: "NEXT_HOP_TYPE_NOT_APPLICABLE"
 	// NEXT_HOP_TYPE_NOT_APPLICABLE should be used when the cloud provider doesn't support this.
 	NEXT_HOP_TYPE_NOT_APPLICABLE RouteNextHopTypeEnum = 7
 	// LOAD BALANCER
 	//
-	// x-displayName: LOAD BALANCER
+	// x-displayName: "LOAD BALANCER"
 	// LOAD BALANCER
 	LOADBALANCER RouteNextHopTypeEnum = 8
 	// VPC NETWORK
 	//
-	// x-displayName: VPC NETWORK
+	// x-displayName: "VPC NETWORK"
 	// VPC NETWORK
 	VPC_NETWORK RouteNextHopTypeEnum = 9
 	// VPC PEERING
 	//
-	// x-displayName: VPC PEERING
+	// x-displayName: "VPC PEERING"
 	// VPC PEERING
 	VPC_PEERING RouteNextHopTypeEnum = 10
 	// INTERNAL LOAD BALANCER
 	//
-	// x-displayName: INTERNAL LOAD BALANCER
+	// x-displayName: "INTERNAL LOAD BALANCER"
 	// INTERNAL LOAD BALANCER
 	INTERNAL_LOAD_BALANCER RouteNextHopTypeEnum = 11
 	// INSTANCE
 	//
-	// x-displayName: INSTANCE
+	// x-displayName: "INSTANCE"
 	// INSTANCE
 	INSTANCE RouteNextHopTypeEnum = 12
 	// INTERCONNECT
 	//
-	// x-displayName: INTERCONNECT
+	// x-displayName: "INTERCONNECT"
 	// INTERCONNECT
 	INTERCONNECT RouteNextHopTypeEnum = 13
 	// INTERNET GATEWAY
 	//
-	// x-displayName: INTERNET GATEWAY
+	// x-displayName: "INTERNET GATEWAY"
 	// INTERNET GATEWAY
 	INTERNET_GATEWAY RouteNextHopTypeEnum = 14
 	// IP
 	//
-	// x-displayName: IP
+	// x-displayName: "IP"
 	// IP
 	IP RouteNextHopTypeEnum = 15
 	// VPN TUNNEL
 	//
-	// x-displayName: VPN TUNNEL
+	// x-displayName: "VPN TUNNEL"
 	// VPN TUNNEL
 	VPN_TUNNEL RouteNextHopTypeEnum = 16
 	// TGW ATTACHMENT
 	//
-	// x-displayName: TGW ATTACHMENT
+	// x-displayName: "TGW ATTACHMENT"
 	// TGW ATTACHMENT
 	TGW_ATTACHMENT RouteNextHopTypeEnum = 17
 )
@@ -615,19 +615,19 @@ func (RouteNextHopTypeEnum) EnumDescriptor() ([]byte, []int) {
 
 // GatewayType
 //
-// x-displayName: Gateway type
+// x-displayName: "Gateway type"
 // Gateway Type
 type GatewayTypeEnum int32
 
 const (
 	// Ingress gateway
 	//
-	// x-displayName: Ingress gateway
+	// x-displayName: "Ingress gateway"
 	// Ingress gateway (single nic)
 	INGRESS_GATEWAY GatewayTypeEnum = 0
 	// Ingress and Egress gateway
 	//
-	// x-displayName: Ingress and Egress gateway
+	// x-displayName: "Ingress and Egress gateway"
 	// Ingress and Egress gateway (dual nic)
 	INGRESS_EGRESS_GATEWAY GatewayTypeEnum = 1
 )
@@ -648,34 +648,34 @@ func (GatewayTypeEnum) EnumDescriptor() ([]byte, []int) {
 
 // GCPRouteType
 //
-// x-displayName: GCP Route type
+// x-displayName: "GCP Route type"
 // GCP Route Type
 type GCPRouteType int32
 
 const (
 	// GCP Route Type None
 	//
-	// x-displayName: GCP Route Type None
+	// x-displayName: "GCP Route Type None"
 	// GCP Route Type None
 	GCP_ROUTE_TYPE_NONE GCPRouteType = 0
 	// GCP Route Type Transit
 	//
-	// x-displayName: GCP Route Type Transit
+	// x-displayName: "GCP Route Type Transit"
 	// GCP Route Type Transit
 	GCP_ROUTE_TYPE_TRANSIT GCPRouteType = 1
 	// GCP Route Type Subnet
 	//
-	// x-displayName: GCP Route Type Subnet
+	// x-displayName: "GCP Route Type Subnet"
 	// GCP Route Type Subnet
 	GCP_ROUTE_TYPE_SUBNET GCPRouteType = 2
 	// GCP Route Type Static
 	//
-	// x-displayName: GCP Route Type Static
+	// x-displayName: "GCP Route Type Static"
 	// GCP Route Type Static
 	GCP_ROUTE_TYPE_STATIC GCPRouteType = 3
 	// GCP Route Type BGP
 	//
-	// x-displayName: GCP Route Type BGP
+	// x-displayName: "GCP Route Type BGP"
 	// GCP Route Type BGP
 	GCP_ROUTE_TYPE_BGP GCPRouteType = 4
 )
@@ -702,24 +702,24 @@ func (GCPRouteType) EnumDescriptor() ([]byte, []int) {
 
 // Site App Type
 //
-// x-displayName: Site App type
+// x-displayName: "Site App type"
 // Site App Type
 type SiteAppTypeEnum int32
 
 const (
 	// Not applicable
 	//
-	// x-displayName: Not applicable
+	// x-displayName: "Not applicable"
 	// Not applicable
 	SITE_APPTYPE_NONE SiteAppTypeEnum = 0
 	// AppStack Site
 	//
-	// x-displayName: AppStack Site
+	// x-displayName: "AppStack Site"
 	// AppStack Site
 	SITE_APPTYPE_APPSTACK SiteAppTypeEnum = 1
 	// Mesh site
 	//
-	// x-displayName: Mesh site
+	// x-displayName: "Mesh site"
 	// Mesh site
 	SITE_APPTYPE_MESH SiteAppTypeEnum = 2
 )
@@ -742,29 +742,29 @@ func (SiteAppTypeEnum) EnumDescriptor() ([]byte, []int) {
 
 // PeeringState
 //
-// x-displayName: PeeringState
+// x-displayName: "PeeringState"
 // Network Peering Status
 type PeeringStateEnum int32
 
 const (
 	// Connected
 	//
-	// x-displayName: CONNECTED
+	// x-displayName: "CONNECTED"
 	// CONNECTED Peering Status
 	CONNECTED PeeringStateEnum = 0
 	// DISCONNECTED
 	//
-	// x-displayName: DISCONNECTED
+	// x-displayName: "DISCONNECTED"
 	// DISCONNECTED Peering Status
 	DISCONNECTED PeeringStateEnum = 1
 	// PEERING_INITIATED
 	//
-	// x-displayName: PEERING_INITIATED
+	// x-displayName: "PEERING_INITIATED"
 	// PEERING_INITIATED
 	PEERING_INITIATED PeeringStateEnum = 3
 	// PEERING_STATE_NOT_APPLICABLE
 	//
-	// x-displayName: PEERING_STATE_NOT_APPLICABLE
+	// x-displayName: "PEERING_STATE_NOT_APPLICABLE"
 	// PEERING_STATE_NOT_APPLICABLE should be used when a cloud provider does not supports it.
 	PEERING_STATE_NOT_APPLICABLE PeeringStateEnum = 4
 )
@@ -2285,7 +2285,7 @@ type SiteType struct {
 	AppType SiteAppTypeEnum `protobuf:"varint,7,opt,name=app_type,json=appType,proto3,enum=ves.io.schema.topology.SiteAppTypeEnum" json:"app_type,omitempty"`
 	// Orchestration Mode
 	//
-	// x-displayName: Orchestration Mode
+	// x-displayName: "Orchestration Mode"
 	// Whether the site is managed or not managed
 	OrchestrationMode OrchestrationMode `protobuf:"varint,8,opt,name=orchestration_mode,json=orchestrationMode,proto3,enum=ves.io.schema.topology.OrchestrationMode" json:"orchestration_mode,omitempty"`
 }

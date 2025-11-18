@@ -28,15 +28,19 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.ReplaceRequest"] = ReplaceRequestValidator()
 	vr["ves.io.schema.namespace.ReplaceResponse"] = ReplaceResponseValidator()
 
-	vr["ves.io.schema.namespace.APIItem"] = APIItemValidator()
-	vr["ves.io.schema.namespace.APIItemList"] = APIItemListValidator()
+	vr["ves.io.schema.namespace.APIItemListReq"] = APIItemListReqValidator()
+	vr["ves.io.schema.namespace.APIItemListResp"] = APIItemListRespValidator()
+	vr["ves.io.schema.namespace.APIItemReq"] = APIItemReqValidator()
+	vr["ves.io.schema.namespace.APIItemResp"] = APIItemRespValidator()
+	vr["ves.io.schema.namespace.AccessEnablerAddonService"] = AccessEnablerAddonServiceValidator()
 	vr["ves.io.schema.namespace.EvaluateAPIAccessReq"] = EvaluateAPIAccessReqValidator()
 	vr["ves.io.schema.namespace.EvaluateAPIAccessResp"] = EvaluateAPIAccessRespValidator()
 	vr["ves.io.schema.namespace.EvaluateBatchAPIAccessReq"] = EvaluateBatchAPIAccessReqValidator()
 	vr["ves.io.schema.namespace.EvaluateBatchAPIAccessResp"] = EvaluateBatchAPIAccessRespValidator()
 	vr["ves.io.schema.namespace.LookupUserRolesReq"] = LookupUserRolesReqValidator()
 	vr["ves.io.schema.namespace.LookupUserRolesResp"] = LookupUserRolesRespValidator()
-	vr["ves.io.schema.namespace.NamespaceAPIList"] = NamespaceAPIListValidator()
+	vr["ves.io.schema.namespace.NamespaceAPIListReq"] = NamespaceAPIListReqValidator()
+	vr["ves.io.schema.namespace.NamespaceAPIListResp"] = NamespaceAPIListRespValidator()
 
 	vr["ves.io.schema.namespace.AllApplicationInventoryRequest"] = AllApplicationInventoryRequestValidator()
 	vr["ves.io.schema.namespace.AllApplicationInventoryWafFilterRequest"] = AllApplicationInventoryWafFilterRequestValidator()
@@ -58,6 +62,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.HTTPLoadbalancerInventoryType"] = HTTPLoadbalancerInventoryTypeValidator()
 	vr["ves.io.schema.namespace.HTTPLoadbalancerResultType"] = HTTPLoadbalancerResultTypeValidator()
 	vr["ves.io.schema.namespace.HTTPLoadbalancerWafFilterResultType"] = HTTPLoadbalancerWafFilterResultTypeValidator()
+	vr["ves.io.schema.namespace.NGINXOneServerInventoryFilterType"] = NGINXOneServerInventoryFilterTypeValidator()
+	vr["ves.io.schema.namespace.NGINXOneServerInventoryType"] = NGINXOneServerInventoryTypeValidator()
+	vr["ves.io.schema.namespace.NGINXOneServerResultType"] = NGINXOneServerResultTypeValidator()
 	vr["ves.io.schema.namespace.NetworkingInventoryRequest"] = NetworkingInventoryRequestValidator()
 	vr["ves.io.schema.namespace.NetworkingInventoryResponse"] = NetworkingInventoryResponseValidator()
 	vr["ves.io.schema.namespace.SetActiveAlertPoliciesRequest"] = SetActiveAlertPoliciesRequestValidator()
@@ -71,6 +78,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.namespace.TCPLoadbalancerInventoryFilterType"] = TCPLoadbalancerInventoryFilterTypeValidator()
 	vr["ves.io.schema.namespace.TCPLoadbalancerInventoryType"] = TCPLoadbalancerInventoryTypeValidator()
 	vr["ves.io.schema.namespace.TCPLoadbalancerResultType"] = TCPLoadbalancerResultTypeValidator()
+	vr["ves.io.schema.namespace.ThirdPartyApplicationFilterType"] = ThirdPartyApplicationFilterTypeValidator()
+	vr["ves.io.schema.namespace.ThirdPartyApplicationInventoryType"] = ThirdPartyApplicationInventoryTypeValidator()
+	vr["ves.io.schema.namespace.ThirdPartyApplicationResultType"] = ThirdPartyApplicationResultTypeValidator()
 	vr["ves.io.schema.namespace.UDPLoadbalancerInventoryFilterType"] = UDPLoadbalancerInventoryFilterTypeValidator()
 	vr["ves.io.schema.namespace.UDPLoadbalancerInventoryType"] = UDPLoadbalancerInventoryTypeValidator()
 	vr["ves.io.schema.namespace.UDPLoadbalancerResultType"] = UDPLoadbalancerResultTypeValidator()
@@ -243,11 +253,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

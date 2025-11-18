@@ -132,6 +132,26 @@ func resourceVolterraRateLimiter() *schema.Resource {
 							Optional: true,
 						},
 
+						"leaky_bucket": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
+						"token_bucket": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Optional: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
 						"burst_multiplier": {
 							Type:     schema.TypeInt,
 							Optional: true,
@@ -352,6 +372,26 @@ func resourceVolterraRateLimiterCreate(d *schema.ResourceData, meta interface{})
 
 				}
 
+				algorithmTypeFound := false
+
+				if v, ok := limitsMapStrToI["leaky_bucket"]; ok && !isIntfNil(v) && !algorithmTypeFound {
+
+					algorithmTypeFound = true
+					algorithmInt := &ves_io_schema_rate_limiter.RateLimitValue_LeakyBucket{}
+					algorithmInt.LeakyBucket = &ves_io_schema_rate_limiter.LeakyBucketRateLimiter{}
+					limits[i].Algorithm = algorithmInt
+
+				}
+
+				if v, ok := limitsMapStrToI["token_bucket"]; ok && !isIntfNil(v) && !algorithmTypeFound {
+
+					algorithmTypeFound = true
+					algorithmInt := &ves_io_schema_rate_limiter.RateLimitValue_TokenBucket{}
+					algorithmInt.TokenBucket = &ves_io_schema_rate_limiter.TokenBucketRateLimiter{}
+					limits[i].Algorithm = algorithmInt
+
+				}
+
 				if w, ok := limitsMapStrToI["burst_multiplier"]; ok && !isIntfNil(w) {
 					limits[i].BurstMultiplier = uint32(w.(int))
 				}
@@ -382,28 +422,30 @@ func resourceVolterraRateLimiterCreate(d *schema.ResourceData, meta interface{})
 		userIdentificationInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		createSpec.UserIdentification = userIdentificationInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			uiMapToStrVal := ps.(map[string]interface{})
-			userIdentificationInt[i] = &ves_io_schema.ObjectRefType{}
+				uiMapToStrVal := ps.(map[string]interface{})
+				userIdentificationInt[i] = &ves_io_schema.ObjectRefType{}
 
-			userIdentificationInt[i].Kind = "user_identification"
+				userIdentificationInt[i].Kind = "user_identification"
 
-			if v, ok := uiMapToStrVal["name"]; ok && !isIntfNil(v) {
-				userIdentificationInt[i].Name = v.(string)
+				if v, ok := uiMapToStrVal["name"]; ok && !isIntfNil(v) {
+					userIdentificationInt[i].Name = v.(string)
+				}
+
+				if v, ok := uiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					userIdentificationInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := uiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					userIdentificationInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := uiMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					userIdentificationInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := uiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				userIdentificationInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := uiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				userIdentificationInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := uiMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				userIdentificationInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -619,6 +661,26 @@ func resourceVolterraRateLimiterUpdate(d *schema.ResourceData, meta interface{})
 
 				}
 
+				algorithmTypeFound := false
+
+				if v, ok := limitsMapStrToI["leaky_bucket"]; ok && !isIntfNil(v) && !algorithmTypeFound {
+
+					algorithmTypeFound = true
+					algorithmInt := &ves_io_schema_rate_limiter.RateLimitValue_LeakyBucket{}
+					algorithmInt.LeakyBucket = &ves_io_schema_rate_limiter.LeakyBucketRateLimiter{}
+					limits[i].Algorithm = algorithmInt
+
+				}
+
+				if v, ok := limitsMapStrToI["token_bucket"]; ok && !isIntfNil(v) && !algorithmTypeFound {
+
+					algorithmTypeFound = true
+					algorithmInt := &ves_io_schema_rate_limiter.RateLimitValue_TokenBucket{}
+					algorithmInt.TokenBucket = &ves_io_schema_rate_limiter.TokenBucketRateLimiter{}
+					limits[i].Algorithm = algorithmInt
+
+				}
+
 				if w, ok := limitsMapStrToI["burst_multiplier"]; ok && !isIntfNil(w) {
 					limits[i].BurstMultiplier = uint32(w.(int))
 				}
@@ -648,28 +710,30 @@ func resourceVolterraRateLimiterUpdate(d *schema.ResourceData, meta interface{})
 		userIdentificationInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		updateSpec.UserIdentification = userIdentificationInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			uiMapToStrVal := ps.(map[string]interface{})
-			userIdentificationInt[i] = &ves_io_schema.ObjectRefType{}
+				uiMapToStrVal := ps.(map[string]interface{})
+				userIdentificationInt[i] = &ves_io_schema.ObjectRefType{}
 
-			userIdentificationInt[i].Kind = "user_identification"
+				userIdentificationInt[i].Kind = "user_identification"
 
-			if v, ok := uiMapToStrVal["name"]; ok && !isIntfNil(v) {
-				userIdentificationInt[i].Name = v.(string)
+				if v, ok := uiMapToStrVal["name"]; ok && !isIntfNil(v) {
+					userIdentificationInt[i].Name = v.(string)
+				}
+
+				if v, ok := uiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					userIdentificationInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := uiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					userIdentificationInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := uiMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					userIdentificationInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := uiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				userIdentificationInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := uiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				userIdentificationInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := uiMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				userIdentificationInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}

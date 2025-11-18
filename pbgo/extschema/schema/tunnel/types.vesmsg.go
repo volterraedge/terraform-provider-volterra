@@ -1748,7 +1748,7 @@ var DefaultIpsecTunnelParamsValidator = func() *ValidateIpsecTunnelParams {
 	vrhDpdKeepAliveTimer := v.DpdKeepAliveTimerValidationRuleHandler
 	rulesDpdKeepAliveTimer := map[string]string{
 		"ves.io.schema.rules.uint32.gte": "0",
-		"ves.io.schema.rules.uint32.lte": "3",
+		"ves.io.schema.rules.uint32.lte": "5",
 	}
 	vFn, err = vrhDpdKeepAliveTimer(rulesDpdKeepAliveTimer)
 	if err != nil {

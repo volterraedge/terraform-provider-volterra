@@ -114,6 +114,7 @@ var DefaultBasicConfigurationValidator = func() *ValidateBasicConfiguration {
 	vrhDisplayName := v.DisplayNameValidationRuleHandler
 	rulesDisplayName := map[string]string{
 		"ves.io.schema.rules.string.max_len": "255",
+		"ves.io.schema.rules.string.pattern": "^[^<>&\"]+$",
 	}
 	vFn, err = vrhDisplayName(rulesDisplayName)
 	if err != nil {

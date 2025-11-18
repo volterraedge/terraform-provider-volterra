@@ -3818,23 +3818,57 @@ func resourceVolterraSetRRSETRecordUpdate(d *schema.ResourceData, meta interface
 
 	}
 	for i, rrSetGroup := range rslt {
-		reqUp := &ves_io_schema_dns_zone_rrset.ReplaceRequest{
+		req := &ves_io_schema_dns_zone_rrset.GetRequest{
 			DnsZoneName: dnsZoneName,
 			GroupName:   groupName,
 			RecordName:  recordName[i],
 			Type:        types[i],
-			Rrset:       rrSetGroup,
 		}
-		yamlReqUp, err := codec.ToYAML(reqUp)
+		yamlReq, err := codec.ToYAML(req)
 		if err != nil {
-			log.Printf("Ignored: Error marshalling rpc response to yaml: %s", err)
+			return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
 		}
-		log.Printf("[DEBUG] setting volterra dns_zone_record resource update request value: %+v", reqUp)
-		_, err = client.CustomAPI(context.Background(), http.MethodPut, fmt.Sprintf(urirrsetall, dnsZoneName, groupName, recordName[i], types[i]), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Replace"), yamlReqUp)
+		log.Printf("[DEBUG] setting volterra dns_zone_record resource get request value: %+v", req)
+		_, err = client.CustomAPI(context.Background(), http.MethodGet, fmt.Sprintf(urirrsetall, dnsZoneName, groupName, recordName[i], types[i]), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Get"), yamlReq)
 		if err != nil {
-			log.Printf("Update: Ignored: Error encountered while updating dns_zone_record resource. Error: : %s", err)
+			fmt.Printf("Error encountered while fetching dns_zone_record resource info. Error: %s", err)
+			req := &ves_io_schema_dns_zone_rrset.CreateRequest{
+				DnsZoneName: dnsZoneName,
+				GroupName:   groupName,
+				Rrset:       rrSetGroup,
+			}
+			yamlReq, err := codec.ToYAML(req)
+			if err != nil {
+				return fmt.Errorf("error marshalling rpc response to yaml: %s", err)
+			}
+			log.Printf("[DEBUG] setting volterra record create request: %+v", req)
+			_, err = client.CustomAPI(context.Background(), http.MethodPost, fmt.Sprintf(urirrset, dnsZoneName, groupName), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Create"), yamlReq)
+			if err != nil {
+				if strings.Contains(err.Error(), "contains duplicate RR type: ") {
+					continue
+				}
+				return fmt.Errorf("Error encountered while creating a record. Error: %s", err)
+			}
+			time.Sleep(time.Duration(10 * time.Second))
+		} else {
+			reqUp := &ves_io_schema_dns_zone_rrset.ReplaceRequest{
+				DnsZoneName: dnsZoneName,
+				GroupName:   groupName,
+				RecordName:  recordName[i],
+				Type:        types[i],
+				Rrset:       rrSetGroup,
+			}
+			yamlReqUp, err := codec.ToYAML(reqUp)
+			if err != nil {
+				log.Printf("Ignored: Error marshalling rpc response to yaml: %s", err)
+			}
+			log.Printf("[DEBUG] setting volterra dns_zone_record resource update request value: %+v", reqUp)
+			_, err = client.CustomAPI(context.Background(), http.MethodPut, fmt.Sprintf(urirrsetall, dnsZoneName, groupName, recordName[i], types[i]), fmt.Sprintf("%s.%s", setRRSETRPCFQN, "Replace"), yamlReqUp)
+			if err != nil {
+				log.Printf("Update: Ignored: Error encountered while updating dns_zone_record resource. Error: : %s", err)
+			}
+			time.Sleep(time.Duration(10 * time.Second))
 		}
-		time.Sleep(time.Duration(10 * time.Second))
 	}
 	return nil
 }

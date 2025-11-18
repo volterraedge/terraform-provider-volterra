@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.udp_loadbalancer.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.udp_loadbalancer.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3310,6 +3310,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -4284,7 +4291,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cluster_retract_choice": "[]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"udp\"]",
-            "x-ves-oneof-field-port_choice": "[\"listen_port\"]",
+            "x-ves-oneof-field-port_choice": "[\"listen_port\",\"port_ranges\"]",
             "x-ves-proto-message": "ves.io.schema.views.udp_loadbalancer.GlobalSpecType",
             "properties": {
                 "advertise_custom": {
@@ -4397,7 +4404,7 @@ var APISwaggerJSON string = `{
                 },
                 "listen_port": {
                     "type": "integer",
-                    "description": "Exclusive with []\n Listen Port for this load balancer\n\nExample: - \"53\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [port_ranges]\n Listen Port for this load balancer\n\nExample: - \"53\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Port",
                     "format": "int64",
                     "x-displayname": "Listen Port",
@@ -4418,6 +4425,21 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"53,123,5000-5020\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "title": "Port_ranges",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "53,123,5000-5020",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "64",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 },
                 "udp": {

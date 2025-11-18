@@ -967,57 +967,57 @@ var CustomAPIPrivateSwaggerJSON string = `{
             "properties": {
                 "api_inventory_exclusion_list_delta_added": {
                     "type": "array",
-                    "description": " List of API Endpoints that were added to the exclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of API Endpoints that were added to the exclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "api_inventory_exclusion_list_delta_added",
-                    "maxItems": 5000,
+                    "maxItems": 1000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Exclusion List Delta Added",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "5000",
+                        "ves.io.schema.rules.repeated.max_items": "1000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "api_inventory_exclusion_list_delta_removed": {
                     "type": "array",
-                    "description": " List of API Endpoints that were removed from the exclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of API Endpoints that were removed from the exclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "api_inventory_exclusion_list_delta_removed",
-                    "maxItems": 5000,
+                    "maxItems": 1000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Exclusion List Delta Removed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "5000",
+                        "ves.io.schema.rules.repeated.max_items": "1000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "api_inventory_inclusion_list_delta_added": {
                     "type": "array",
-                    "description": " List of API Endpoints that were added to the inclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of API Endpoints that were added to the inclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "api_inventory_inclusion_list_delta_added",
-                    "maxItems": 5000,
+                    "maxItems": 1000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Inclusion List Delta Added",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "5000",
+                        "ves.io.schema.rules.repeated.max_items": "1000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "api_inventory_inclusion_list_delta_removed": {
                     "type": "array",
-                    "description": " List of API Endpoints that were removed from the inclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of API Endpoints that were removed from the inclusion list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "api_inventory_inclusion_list_delta_removed",
-                    "maxItems": 5000,
+                    "maxItems": 1000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Inventory Inclusion List Delta Removed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "5000",
+                        "ves.io.schema.rules.repeated.max_items": "1000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
@@ -1050,29 +1050,29 @@ var CustomAPIPrivateSwaggerJSON string = `{
                 },
                 "non_api_endpoints_delta_added": {
                     "type": "array",
-                    "description": " List of Non-API Endpoints that were added to the list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of Non-API Endpoints that were added to the list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "non_api_endpoints_delta_added",
-                    "maxItems": 5000,
+                    "maxItems": 1000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Discovery Exclusion List Delta Added",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "5000",
+                        "ves.io.schema.rules.repeated.max_items": "1000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "non_api_endpoints_delta_removed": {
                     "type": "array",
-                    "description": " List of Non-API Endpoints that were removed from the list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 5000\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " List of Non-API Endpoints that were removed from the list.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "non_api_endpoints_delta_removed",
-                    "maxItems": 5000,
+                    "maxItems": 1000,
                     "items": {
                         "$ref": "#/definitions/viewsApiOperation"
                     },
                     "x-displayname": "API Discovery Exclusion List Delta Removed",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.max_items": "5000",
+                        "ves.io.schema.rules.repeated.max_items": "1000",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },

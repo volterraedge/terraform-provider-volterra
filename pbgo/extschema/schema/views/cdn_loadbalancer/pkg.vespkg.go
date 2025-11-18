@@ -134,32 +134,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-waap-advanced"},
 		},
 		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.api_protection_rules.api_endpoint_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.api_protection_rules.api_groups_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense",
-			AddonServices: []string{"f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"f5xc-bot-defense-standard"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.bot_defense_choice.bot_defense_advanced",
-			AddonServices: []string{"f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.challenge_type.policy_based_challenge.rule_list.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
+			AddonServices: []string{"f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.client_side_defense_choice.client_side_defense",
 			AddonServices: []string{"f5xc-client-side-defense-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.ddos_mitigation_rules.mitigation_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.ip_reputation_choice.enable_ip_reputation",
@@ -194,18 +178,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-waap-advanced"},
 		},
 		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.api_protection.api_protection_rules.api_endpoint_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.api_protection.api_protection_rules.api_groups_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.common_security_controls.challenge_type.policy_based_challenge.rule_list.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.common_security_controls.ip_reputation_choice.enable_ip_reputation",
 			AddonServices: []string{"f5xc-waap-standard"},
 		},
@@ -222,31 +194,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-waap-advanced"},
 		},
 		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.common_security_controls.rate_limit_choice.api_rate_limit.api_endpoint_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.common_security_controls.rate_limit_choice.api_rate_limit.ip_allowed_list_choice.bypass_rate_limiting_rules.bypass_rate_limiting_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.common_security_controls.rate_limit_choice.api_rate_limit.ip_allowed_list_choice.ip_allowed_list.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.common_security_controls.rate_limit_choice.api_rate_limit.server_url_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.common_security_controls.rate_limit_choice.rate_limit.ip_allowed_list_choice.ip_allowed_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.ip_filtering.ip_filtering_type.allow_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.more_option.security_options.ip_filtering.ip_filtering_type.block_list.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -262,27 +214,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.other_settings.ip_filtering.ip_filtering_type.allow_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.other_settings.ip_filtering.ip_filtering_type.block_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.rate_limit_choice.api_rate_limit.api_endpoint_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.rate_limit_choice.api_rate_limit.ip_allowed_list_choice.bypass_rate_limiting_rules.bypass_rate_limiting_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.rate_limit_choice.api_rate_limit.ip_allowed_list_choice.ip_allowed_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.CreateRequest.spec.rate_limit_choice.api_rate_limit.server_url_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -312,6 +244,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ip_reputation_on_cache_miss",
 		"spec.jwt_validation.jwks",
 		"spec.more_option",
+		"spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.other_settings.geo_filtering",
 		"spec.other_settings.ip_filtering",
 	}
@@ -329,6 +262,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ip_reputation_on_cache_miss",
 		"spec.jwt_validation.jwks",
 		"spec.more_option",
+		"spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.other_settings.geo_filtering",
 		"spec.other_settings.ip_filtering",
 	}
@@ -468,7 +402,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.policy_based_challenge.rule_list.rules.#.spec.client_name_matcher",
 		"spec.policy_based_challenge.rule_list.rules.#.spec.ja4_tls_fingerprint",
 		"spec.trusted_clients.#.metadata.disable",
-		"spec.waf_exclusion",
+		"spec.waf_exclusion.waf_exclusion_inline_rules.rules.#.metadata.disable",
 		"spec.waf_exclusion_rules.#.metadata.disable",
 	}
 
@@ -749,6 +683,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"create_form.spec.ip_reputation_on_cache_miss",
 		"create_form.spec.jwt_validation.jwks",
 		"create_form.spec.more_option",
+		"create_form.spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"create_form.spec.other_settings.geo_filtering",
 		"create_form.spec.other_settings.ip_filtering",
 		"replace_form.spec.add_location",
@@ -763,6 +698,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"replace_form.spec.ip_reputation_on_cache_miss",
 		"replace_form.spec.jwt_validation.jwks",
 		"replace_form.spec.more_option",
+		"replace_form.spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"replace_form.spec.other_settings.geo_filtering",
 		"replace_form.spec.other_settings.ip_filtering",
 		"spec.add_location",
@@ -777,6 +713,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ip_reputation_on_cache_miss",
 		"spec.jwt_validation.jwks",
 		"spec.more_option",
+		"spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.other_settings.geo_filtering",
 		"spec.other_settings.ip_filtering",
 		"status.#.site_status",
@@ -1183,6 +1120,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.get_spec.ip_reputation_on_cache_miss",
 		"items.#.get_spec.jwt_validation.jwks",
 		"items.#.get_spec.more_option",
+		"items.#.get_spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"items.#.get_spec.other_settings.geo_filtering",
 		"items.#.get_spec.other_settings.ip_filtering",
 		"items.#.status_set.#.site_status",
@@ -1338,32 +1276,16 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-waap-advanced"},
 		},
 		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.api_protection_rules.api_endpoint_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.api_protection_rules.api_groups_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense",
-			AddonServices: []string{"f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
+			AddonServices: []string{"f5xc-bot-defense-standard"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.bot_defense_choice.bot_defense_advanced",
-			AddonServices: []string{"f5xc-bot-defense-standard,f5xc-bot-defense-advanced"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.challenge_type.policy_based_challenge.rule_list.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
+			AddonServices: []string{"f5xc-bot-defense-advanced"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.client_side_defense_choice.client_side_defense",
 			AddonServices: []string{"f5xc-client-side-defense-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.ddos_mitigation_rules.mitigation_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.ip_reputation_choice.enable_ip_reputation",
@@ -1398,18 +1320,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-waap-advanced"},
 		},
 		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.api_protection.api_protection_rules.api_endpoint_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.api_protection.api_protection_rules.api_groups_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.common_security_controls.challenge_type.policy_based_challenge.rule_list.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.common_security_controls.ip_reputation_choice.enable_ip_reputation",
 			AddonServices: []string{"f5xc-waap-standard"},
 		},
@@ -1426,31 +1336,11 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-waap-advanced"},
 		},
 		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.common_security_controls.rate_limit_choice.api_rate_limit.api_endpoint_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.common_security_controls.rate_limit_choice.api_rate_limit.ip_allowed_list_choice.bypass_rate_limiting_rules.bypass_rate_limiting_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.common_security_controls.rate_limit_choice.api_rate_limit.ip_allowed_list_choice.ip_allowed_list.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.common_security_controls.rate_limit_choice.api_rate_limit.server_url_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.common_security_controls.rate_limit_choice.rate_limit.ip_allowed_list_choice.ip_allowed_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.ip_filtering.ip_filtering_type.allow_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.more_option.security_options.ip_filtering.ip_filtering_type.block_list.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -1466,27 +1356,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.other_settings.ip_filtering.ip_filtering_type.allow_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.other_settings.ip_filtering.ip_filtering_type.block_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.rate_limit_choice.api_rate_limit.api_endpoint_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.rate_limit_choice.api_rate_limit.ip_allowed_list_choice.bypass_rate_limiting_rules.bypass_rate_limiting_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
 			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.rate_limit_choice.api_rate_limit.ip_allowed_list_choice.ip_allowed_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.views.cdn_loadbalancer.ReplaceRequest.spec.rate_limit_choice.api_rate_limit.server_url_rules.client_matcher.ip_asn_choice.ip_prefix_list.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 		{
@@ -1516,6 +1386,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.ip_reputation_on_cache_miss",
 		"spec.jwt_validation.jwks",
 		"spec.more_option",
+		"spec.origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.other_settings.geo_filtering",
 		"spec.other_settings.ip_filtering",
 	}
@@ -1655,7 +1526,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.policy_based_challenge.rule_list.rules.#.spec.client_name_matcher",
 		"spec.policy_based_challenge.rule_list.rules.#.spec.ja4_tls_fingerprint",
 		"spec.trusted_clients.#.metadata.disable",
-		"spec.waf_exclusion",
+		"spec.waf_exclusion.waf_exclusion_inline_rules.rules.#.metadata.disable",
 		"spec.waf_exclusion_rules.#.metadata.disable",
 	}
 
@@ -1902,11 +1773,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

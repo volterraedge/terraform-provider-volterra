@@ -52,6 +52,24 @@ func (c *CustomAPIGrpcClient) doRPCActivateServiceCredentials(ctx context.Contex
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCBulkRevoke(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &BulkRevokeRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.BulkRevokeRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.BulkRevoke(ctx, req, opts...)
+	return rsp, err
+}
+
+func (c *CustomAPIGrpcClient) doRPCBulkRevokeServiceCredentials(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &BulkRevokeRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.BulkRevokeRequest", yamlReq)
+	}
+	rsp, err := c.grpcClient.BulkRevokeServiceCredentials(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) doRPCCreate(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
 	req := &CreateRequest{}
 	if err := codec.FromYAML(yamlReq, req); err != nil {
@@ -211,6 +229,10 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["Activate"] = ccl.doRPCActivate
 
 	rpcFns["ActivateServiceCredentials"] = ccl.doRPCActivateServiceCredentials
+
+	rpcFns["BulkRevoke"] = ccl.doRPCBulkRevoke
+
+	rpcFns["BulkRevokeServiceCredentials"] = ccl.doRPCBulkRevokeServiceCredentials
 
 	rpcFns["Create"] = ccl.doRPCCreate
 
@@ -412,6 +434,172 @@ func (c *CustomAPIRestClient) doRPCActivateServiceCredentials(ctx context.Contex
 	pbRsp := &StatusResponse{}
 	if err := codec.FromJSON(string(body), pbRsp); err != nil {
 		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.StatusResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCBulkRevoke(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &BulkRevokeRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.BulkRevokeRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("bulkrevoke_choice", fmt.Sprintf("%v", req.BulkrevokeChoice))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &BulkRevokeResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.BulkRevokeResponse", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
+func (c *CustomAPIRestClient) doRPCBulkRevokeServiceCredentials(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &BulkRevokeRequest{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.api_credential.BulkRevokeRequest: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("bulkrevoke_choice", fmt.Sprintf("%v", req.BulkrevokeChoice))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &BulkRevokeResponse{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.api_credential.BulkRevokeResponse", body)
 
 	}
 	if callOpts.OutCallResponse != nil {
@@ -1641,6 +1829,10 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["ActivateServiceCredentials"] = ccl.doRPCActivateServiceCredentials
 
+	rpcFns["BulkRevoke"] = ccl.doRPCBulkRevoke
+
+	rpcFns["BulkRevokeServiceCredentials"] = ccl.doRPCBulkRevokeServiceCredentials
+
 	rpcFns["Create"] = ccl.doRPCCreate
 
 	rpcFns["CreateServiceCredentials"] = ccl.doRPCCreateServiceCredentials
@@ -1688,6 +1880,14 @@ func (c *customAPIInprocClient) Activate(ctx context.Context, in *GetRequest, op
 func (c *customAPIInprocClient) ActivateServiceCredentials(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*StatusResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.ActivateServiceCredentials")
 	return c.CustomAPIServer.ActivateServiceCredentials(ctx, in)
+}
+func (c *customAPIInprocClient) BulkRevoke(ctx context.Context, in *BulkRevokeRequest, opts ...grpc.CallOption) (*BulkRevokeResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.BulkRevoke")
+	return c.CustomAPIServer.BulkRevoke(ctx, in)
+}
+func (c *customAPIInprocClient) BulkRevokeServiceCredentials(ctx context.Context, in *BulkRevokeRequest, opts ...grpc.CallOption) (*BulkRevokeResponse, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.BulkRevokeServiceCredentials")
+	return c.CustomAPIServer.BulkRevokeServiceCredentials(ctx, in)
 }
 func (c *customAPIInprocClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.api_credential.CustomAPI.Create")
@@ -1862,6 +2062,104 @@ func (s *customAPISrv) ActivateServiceCredentials(ctx context.Context, in *GetRe
 	}
 
 	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.StatusResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) BulkRevoke(ctx context.Context, in *BulkRevokeRequest) (*BulkRevokeResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *BulkRevokeResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.BulkRevokeRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.BulkRevoke' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.BulkRevoke"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.BulkRevoke(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.BulkRevokeResponse", rsp)...)
+
+	return rsp, nil
+}
+func (s *customAPISrv) BulkRevokeServiceCredentials(ctx context.Context, in *BulkRevokeRequest) (*BulkRevokeResponse, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.api_credential.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *BulkRevokeResponse
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.api_credential.BulkRevokeRequest", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.BulkRevokeServiceCredentials' operation on 'api_credential'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.api_credential.CustomAPI.BulkRevokeServiceCredentials"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.BulkRevokeServiceCredentials(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.api_credential.BulkRevokeResponse", rsp)...)
 
 	return rsp, nil
 }
@@ -2575,6 +2873,174 @@ var CustomAPISwaggerJSON string = `{
     ],
     "tags": [],
     "paths": {
+        "/public/namespaces/system/bulk_revoke/api_credentials": {
+            "post": {
+                "summary": "Bulk Revoke API credentials",
+                "description": "It is used to revoke multiple API credentials. This API would disable the credentials and mark them for deletion.\nThe actual removal of objects would be done in the background.\nDepending upon if user is admin or not, following behaviour is supported:-\n* for admins : user has the access to delete their own as well as credentials created by others\n* for non-admins: user can only delete their own credentials.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.BulkRevoke",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialBulkRevokeResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialBulkRevokeRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-bulkrevoke"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.BulkRevoke"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/system/bulk_revoke/service_credentials": {
+            "post": {
+                "summary": "Bulk Revoke service credential",
+                "description": "It is used to revoke multiple service credentials. This API would disable the credentials and mark them for deletion.\nThe actual removal of objects would be done in the background. Only admins are allowed to access this API.",
+                "operationId": "ves.io.schema.api_credential.CustomAPI.BulkRevokeServiceCredentials",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialBulkRevokeResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api_credentialBulkRevokeRequest"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-api_credential-customapi-bulkrevokeservicecredentials"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.api_credential.CustomAPI.BulkRevokeServiceCredentials"
+            },
+            "x-displayname": "API Credential",
+            "x-ves-proto-service": "ves.io.schema.api_credential.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
         "/public/namespaces/{namespace}/activate/api_credentials": {
             "post": {
                 "summary": "Activate API credential",
@@ -4056,6 +4522,61 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "api_credentialBulkRevokeRequest": {
+            "type": "object",
+            "description": "request format for revoking multiple api credentials.",
+            "title": "Bulk Revoke Request",
+            "x-displayname": "Bulk Revoke Request",
+            "x-ves-oneof-field-bulkrevoke_choice": "[\"expired_selector\",\"name_selector\"]",
+            "x-ves-proto-message": "ves.io.schema.api_credential.BulkRevokeRequest",
+            "properties": {
+                "expired_selector": {
+                    "description": "Exclusive with [name_selector]\n It specifies which expired credentials needs to be deleted",
+                    "title": "Expired Selector",
+                    "$ref": "#/definitions/api_credentialExpiredSelector",
+                    "x-displayname": "Expired Selector"
+                },
+                "name_selector": {
+                    "description": "Exclusive with [expired_selector]\n revoke credentials by their names",
+                    "title": "Name Selector",
+                    "$ref": "#/definitions/api_credentialNameSelector",
+                    "x-displayname": "Name Selector"
+                }
+            }
+        },
+        "api_credentialBulkRevokeResponse": {
+            "type": "object",
+            "description": "response format for revoking multiple api credentials.",
+            "title": "Bulk Revoke Response",
+            "x-displayname": "Bulk Revoke Response",
+            "x-ves-proto-message": "ves.io.schema.api_credential.BulkRevokeResponse",
+            "properties": {
+                "credentials_failed": {
+                    "type": "array",
+                    "description": " names of credentials that are not marked as delete due to some error",
+                    "title": "Credentials Failed",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Credentials Failed"
+                },
+                "credentials_marked_for_deletion": {
+                    "type": "array",
+                    "description": " names of credentials that are successfully marked for deletion",
+                    "title": "Credentials Success",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Credentials Success"
+                },
+                "error_message": {
+                    "type": "string",
+                    "description": " error message about the failures of bulk revoke of credentials",
+                    "title": "error message",
+                    "x-displayname": "Error Message"
+                }
+            }
+        },
         "api_credentialCreateRequest": {
             "type": "object",
             "description": "CreateRequest is the request format for generating api credential.",
@@ -4275,6 +4796,28 @@ var CustomAPISwaggerJSON string = `{
                     "title": "Virtual K8s namespace",
                     "x-displayname": "vK8s Namespace",
                     "x-ves-example": "app-ns1"
+                }
+            }
+        },
+        "api_credentialExpiredSelector": {
+            "type": "object",
+            "description": "It specifies which expired credentials needs to be deleted",
+            "title": "Expired Selector",
+            "x-displayname": "Expired Selector",
+            "x-ves-oneof-field-expired_credential_choice": "[\"all\",\"credential_type\"]",
+            "x-ves-proto-message": "ves.io.schema.api_credential.ExpiredSelector",
+            "properties": {
+                "all": {
+                    "description": "Exclusive with [credential_type]\n used to delete all types of expired credentials upto a supported max limit of 200.\n Please call recurrently if there are a more credentials to be cleaned.",
+                    "title": "all expired credentials",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "All Expired Credentials"
+                },
+                "credential_type": {
+                    "description": "Exclusive with [all]\n It specifies which type of expired credentials to be revoked",
+                    "title": "credential type",
+                    "$ref": "#/definitions/api_credentialAPICredentialType",
+                    "x-displayname": "Credential Type"
                 }
             }
         },
@@ -4667,6 +5210,33 @@ var CustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "User Groups",
                     "x-ves-example": "[\"dev-group-1\"]"
+                }
+            }
+        },
+        "api_credentialNameSelector": {
+            "type": "object",
+            "description": "Revoke Credentials by their names",
+            "title": "Name Selector",
+            "x-displayname": "Name Selector",
+            "x-ves-proto-message": "ves.io.schema.api_credential.NameSelector",
+            "properties": {
+                "names": {
+                    "type": "array",
+                    "description": " It contains the names of credentials which needs to be deleted.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 200\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "name of api credential",
+                    "minItems": 1,
+                    "maxItems": 200,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Name of Api Credentials",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "200",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
                 }
             }
         },
@@ -5311,6 +5881,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

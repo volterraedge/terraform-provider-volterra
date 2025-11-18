@@ -52,6 +52,49 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.site_mesh_group.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.re_fallback",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site_mesh_group.API.Create"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.re_fallback",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site_mesh_group.API.Get"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "create_form.spec.re_fallback",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
+			FieldPath:           "replace_form.spec.re_fallback",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+		{
+			FieldPath:           "spec.re_fallback",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.site_mesh_group.API.List"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "items.#.get_spec.re_fallback",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+	}
+
+	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.site_mesh_group.API.Replace"] = []svcfw.EnvironmentField{
+		{
+			FieldPath:           "spec.re_fallback",
+			AllowedEnvironments: []string{"crt", "demo1", "test"},
+		},
+	}
+
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
@@ -100,11 +143,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

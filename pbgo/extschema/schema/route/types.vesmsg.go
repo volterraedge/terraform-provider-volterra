@@ -3191,6 +3191,16 @@ func (v *ValidateRouteDirectResponse) ResponseBodyValidationRuleHandler(rules ma
 	return validatorFn, nil
 }
 
+func (v *ValidateRouteDirectResponse) ResponseBodyEncodedValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for response_body_encoded")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRouteDirectResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*RouteDirectResponse)
 	if !ok {
@@ -3209,6 +3219,15 @@ func (v *ValidateRouteDirectResponse) Validate(ctx context.Context, pm interface
 
 		vOpts := append(opts, db.WithValidateField("response_body"))
 		if err := fv(ctx, m.GetResponseBody(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["response_body_encoded"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("response_body_encoded"))
+		if err := fv(ctx, m.GetResponseBodyEncoded(), vOpts...); err != nil {
 			return err
 		}
 
@@ -3253,7 +3272,6 @@ var DefaultRouteDirectResponseValidator = func() *ValidateRouteDirectResponse {
 	vrhResponseBody := v.ResponseBodyValidationRuleHandler
 	rulesResponseBody := map[string]string{
 		"ves.io.schema.rules.string.max_bytes": "65536",
-		"ves.io.schema.rules.string.min_bytes": "1",
 	}
 	vFn, err = vrhResponseBody(rulesResponseBody)
 	if err != nil {
@@ -3261,6 +3279,18 @@ var DefaultRouteDirectResponseValidator = func() *ValidateRouteDirectResponse {
 		panic(errMsg)
 	}
 	v.FldValidators["response_body"] = vFn
+
+	vrhResponseBodyEncoded := v.ResponseBodyEncodedValidationRuleHandler
+	rulesResponseBodyEncoded := map[string]string{
+		"ves.io.schema.rules.string.max_bytes": "65536",
+		"ves.io.schema.rules.string.uri_ref":   "true",
+	}
+	vFn, err = vrhResponseBodyEncoded(rulesResponseBodyEncoded)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteDirectResponse.response_body_encoded: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["response_body_encoded"] = vFn
 
 	return v
 }()
@@ -3819,6 +3849,12 @@ func (m *RouteType) GetDRefInfo() ([]db.DRefInfo, error) {
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetWafExclusionServicePolicyDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetWafExclusionServicePolicyDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetWafTypeDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetWafTypeDRefInfo() FAILED")
 	} else {
@@ -3926,6 +3962,51 @@ func (m *RouteType) GetWafExclusionChoiceDBEntries(ctx context.Context, d db.Int
 	return entries, nil
 }
 
+func (m *RouteType) GetWafExclusionServicePolicyDRefInfo() ([]db.DRefInfo, error) {
+	refs := m.GetWafExclusionServicePolicy()
+	if len(refs) == 0 {
+		return nil, nil
+	}
+	drInfos := make([]db.DRefInfo, 0, len(refs))
+	for i, ref := range refs {
+		if ref == nil {
+			return nil, fmt.Errorf("RouteType.waf_exclusion_service_policy[%d] has a nil value", i)
+		}
+		// resolve kind to type if needed at DBObject.GetDRefInfo()
+		drInfos = append(drInfos, db.DRefInfo{
+			RefdType:   "service_policy.Object",
+			RefdUID:    ref.Uid,
+			RefdTenant: ref.Tenant,
+			RefdNS:     ref.Namespace,
+			RefdName:   ref.Name,
+			DRField:    "waf_exclusion_service_policy",
+			Ref:        ref,
+		})
+	}
+	return drInfos, nil
+
+}
+
+// GetWafExclusionServicePolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *RouteType) GetWafExclusionServicePolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+	refdType, err := d.TypeForEntryKind("", "", "service_policy.Object")
+	if err != nil {
+		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy")
+	}
+	for _, ref := range m.GetWafExclusionServicePolicy() {
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+	}
+
+	return entries, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *RouteType) GetWafTypeDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetWafType() == nil {
@@ -3954,6 +4035,10 @@ func (v *ValidateRouteType) RouteActionValidationRuleHandler(rules map[string]st
 		return nil, errors.Wrap(err, "ValidationRuleHandler for route_action")
 	}
 	return validatorFn, nil
+}
+
+func (v *ValidateRouteType) WafExclusionChoiceWafExclusionPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ves_io_schema_views.ObjectRefTypeValidator().Validate, nil
 }
 
 func (v *ValidateRouteType) MatchValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
@@ -4364,6 +4449,64 @@ func (v *ValidateRouteType) ResponseCookiesToRemoveValidationRuleHandler(rules m
 	return validatorFn, nil
 }
 
+func (v *ValidateRouteType) WafExclusionServicePolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepMessageItemRules(rules)
+	itemValFn, err := db.NewMessageValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Message ValidationRuleHandler for waf_exclusion_service_policy")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []*ves_io_schema.ObjectRefType, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+			if err := ves_io_schema.ObjectRefTypeValidator().Validate(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for waf_exclusion_service_policy")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]*ves_io_schema.ObjectRefType)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []*ves_io_schema.ObjectRefType, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal, err := codec.ToJSON(elem, codec.ToWithUseProtoFieldName())
+			if err != nil {
+				return errors.Wrapf(err, "Converting %v to JSON", elem)
+			}
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated waf_exclusion_service_policy")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items waf_exclusion_service_policy")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateRouteType) UuidValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for uuid")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*RouteType)
 	if !ok {
@@ -4568,6 +4711,15 @@ func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts .
 
 	}
 
+	if fv, exists := v.FldValidators["uuid"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("uuid"))
+		if err := fv(ctx, m.GetUuid(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	switch m.GetWafExclusionChoice().(type) {
 	case *RouteType_InheritedWafExclusion:
 		if fv, exists := v.FldValidators["waf_exclusion_choice.inherited_waf_exclusion"]; exists {
@@ -4590,6 +4742,14 @@ func (v *ValidateRouteType) Validate(ctx context.Context, pm interface{}, opts .
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_exclusion_service_policy"]; exists {
+		vOpts := append(opts, db.WithValidateField("waf_exclusion_service_policy"))
+		if err := fv(ctx, m.GetWafExclusionServicePolicy(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -4628,6 +4788,18 @@ var DefaultRouteTypeValidator = func() *ValidateRouteType {
 		panic(errMsg)
 	}
 	v.FldValidators["route_action"] = vFn
+
+	vrhWafExclusionChoiceWafExclusionPolicy := v.WafExclusionChoiceWafExclusionPolicyValidationRuleHandler
+	rulesWafExclusionChoiceWafExclusionPolicy := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["waf_exclusion_choice.waf_exclusion_policy"], err = vrhWafExclusionChoiceWafExclusionPolicy(rulesWafExclusionChoiceWafExclusionPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field RouteType.waf_exclusion_choice_waf_exclusion_policy: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["waf_exclusion_choice.waf_exclusion_policy"] = vFnMap["waf_exclusion_choice.waf_exclusion_policy"]
 
 	vrhMatch := v.MatchValidationRuleHandler
 	rulesMatch := map[string]string{
@@ -4740,13 +4912,33 @@ var DefaultRouteTypeValidator = func() *ValidateRouteType {
 	}
 	v.FldValidators["response_cookies_to_remove"] = vFn
 
+	vrhWafExclusionServicePolicy := v.WafExclusionServicePolicyValidationRuleHandler
+	rulesWafExclusionServicePolicy := map[string]string{
+		"ves.io.schema.rules.repeated.max_items": "1",
+	}
+	vFn, err = vrhWafExclusionServicePolicy(rulesWafExclusionServicePolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteType.waf_exclusion_service_policy: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_exclusion_service_policy"] = vFn
+
+	vrhUuid := v.UuidValidationRuleHandler
+	rulesUuid := map[string]string{
+		"ves.io.schema.rules.string.pattern": "^$|^[a-fA-F0-9]{8}-([a-fA-F0-9]{4}-){3}[a-fA-F0-9]{12}$",
+	}
+	vFn, err = vrhUuid(rulesUuid)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for RouteType.uuid: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["uuid"] = vFn
+
 	v.FldValidators["bot_defense_javascript_injection_choice.bot_defense_javascript_injection"] = BotDefenseJavascriptInjectionTypeValidator().Validate
 
 	v.FldValidators["route_action.route_destination"] = RouteDestinationListValidator().Validate
 	v.FldValidators["route_action.route_redirect"] = RouteRedirectValidator().Validate
 	v.FldValidators["route_action.route_direct_response"] = RouteDirectResponseValidator().Validate
-
-	v.FldValidators["waf_exclusion_choice.waf_exclusion_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["waf_type"] = ves_io_schema.WafTypeValidator().Validate
 

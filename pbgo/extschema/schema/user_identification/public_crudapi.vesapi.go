@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.user_identification.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.user_identification.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil

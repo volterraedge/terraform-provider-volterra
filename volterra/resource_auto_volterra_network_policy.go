@@ -82,6 +82,34 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 							Optional: true,
 						},
 
+						"interface": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"namespace": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"tenant": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
 						"label_selector": {
 
 							Type:     schema.TypeList,
@@ -101,6 +129,13 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"namespace": {
+
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"outside_endpoints": {
@@ -179,6 +214,17 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 										},
 									},
 
+									"keys": {
+
+										Type: schema.TypeList,
+
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
 									"label_matcher": {
 
 										Type:     schema.TypeList,
@@ -211,6 +257,12 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 												"description": {
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+
+												"disable": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"name": {
@@ -293,6 +345,13 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 										},
 									},
 
+									"namespace": {
+
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"outside_endpoints": {
 
 										Type:     schema.TypeBool,
@@ -328,6 +387,18 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 												},
 											},
 										},
+									},
+
+									"rule_description": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"rule_name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"all_tcp_traffic": {
@@ -426,6 +497,17 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 										},
 									},
 
+									"keys": {
+
+										Type: schema.TypeList,
+
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Schema{
+											Type: schema.TypeString,
+										},
+									},
+
 									"label_matcher": {
 
 										Type:     schema.TypeList,
@@ -458,6 +540,12 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 												"description": {
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+
+												"disable": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"name": {
@@ -540,6 +628,13 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 										},
 									},
 
+									"namespace": {
+
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"outside_endpoints": {
 
 										Type:     schema.TypeBool,
@@ -575,6 +670,18 @@ func resourceVolterraNetworkPolicy() *schema.Resource {
 												},
 											},
 										},
+									},
+
+									"rule_description": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"rule_name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"all_tcp_traffic": {
@@ -740,6 +847,41 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 
 				}
 
+				if v, ok := endpointMapStrToI["interface"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+					endpointChoiceTypeFound = true
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Interface{}
+					endpointChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+					endpoint.EndpointChoice = endpointChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								endpointChoiceInt.Interface.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								endpointChoiceInt.Interface.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								endpointChoiceInt.Interface.Tenant = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
 				if v, ok := endpointMapStrToI["label_selector"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
 
 					endpointChoiceTypeFound = true
@@ -769,6 +911,17 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 
 						}
 					}
+
+				}
+
+				if v, ok := endpointMapStrToI["namespace"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+					endpointChoiceTypeFound = true
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Namespace{}
+
+					endpoint.EndpointChoice = endpointChoiceInt
+
+					endpointChoiceInt.Namespace = v.(string)
 
 				}
 
@@ -882,6 +1035,19 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 
 							}
 
+							if w, ok := egressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field keys")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								egressRules[i].Keys = ls
+							}
+
 							if v, ok := egressRulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -920,6 +1086,10 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 
 										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 											metadata.Description = w.(string)
+										}
+
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
 										}
 
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -975,28 +1145,30 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											otherEndpointInt.IpPrefixSet.Ref = refInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refInt[i].Kind = "ip_prefix_set"
+													refInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -1035,6 +1207,17 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 
 									}
 								}
+
+							}
+
+							if v, ok := egressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+								otherEndpointTypeFound = true
+								otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
+
+								egressRules[i].OtherEndpoint = otherEndpointInt
+
+								otherEndpointInt.Namespace = v.(string)
 
 							}
 
@@ -1095,6 +1278,14 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 									}
 								}
 
+							}
+
+							if w, ok := egressRulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
+								egressRules[i].RuleDescription = w.(string)
+							}
+
+							if w, ok := egressRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
+								egressRules[i].RuleName = w.(string)
 							}
 
 							trafficChoiceTypeFound := false
@@ -1244,6 +1435,19 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 
 							}
 
+							if w, ok := ingressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field keys")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								ingressRules[i].Keys = ls
+							}
+
 							if v, ok := ingressRulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -1282,6 +1486,10 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 
 										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 											metadata.Description = w.(string)
+										}
+
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
 										}
 
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -1337,28 +1545,30 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											otherEndpointInt.IpPrefixSet.Ref = refInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refInt[i].Kind = "ip_prefix_set"
+													refInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -1397,6 +1607,17 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 
 									}
 								}
+
+							}
+
+							if v, ok := ingressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+								otherEndpointTypeFound = true
+								otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
+
+								ingressRules[i].OtherEndpoint = otherEndpointInt
+
+								otherEndpointInt.Namespace = v.(string)
 
 							}
 
@@ -1457,6 +1678,14 @@ func resourceVolterraNetworkPolicyCreate(d *schema.ResourceData, meta interface{
 									}
 								}
 
+							}
+
+							if w, ok := ingressRulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
+								ingressRules[i].RuleDescription = w.(string)
+							}
+
+							if w, ok := ingressRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
+								ingressRules[i].RuleName = w.(string)
 							}
 
 							trafficChoiceTypeFound := false
@@ -1709,6 +1938,41 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 
 				}
 
+				if v, ok := endpointMapStrToI["interface"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+					endpointChoiceTypeFound = true
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Interface{}
+					endpointChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+					endpoint.EndpointChoice = endpointChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								endpointChoiceInt.Interface.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								endpointChoiceInt.Interface.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								endpointChoiceInt.Interface.Tenant = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
 				if v, ok := endpointMapStrToI["label_selector"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
 
 					endpointChoiceTypeFound = true
@@ -1738,6 +2002,17 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 
 						}
 					}
+
+				}
+
+				if v, ok := endpointMapStrToI["namespace"]; ok && !isIntfNil(v) && !endpointChoiceTypeFound {
+
+					endpointChoiceTypeFound = true
+					endpointChoiceInt := &ves_io_schema_network_policy.EndpointChoiceType_Namespace{}
+
+					endpoint.EndpointChoice = endpointChoiceInt
+
+					endpointChoiceInt.Namespace = v.(string)
 
 				}
 
@@ -1825,28 +2100,30 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 					egressRulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 					ruleChoiceInt.LegacyRules.EgressRules = egressRulesInt
 					for i, ps := range sl {
+						if ps != nil {
 
-						erMapToStrVal := ps.(map[string]interface{})
-						egressRulesInt[i] = &ves_io_schema.ObjectRefType{}
+							erMapToStrVal := ps.(map[string]interface{})
+							egressRulesInt[i] = &ves_io_schema.ObjectRefType{}
 
-						egressRulesInt[i].Kind = "network_policy_rule"
+							egressRulesInt[i].Kind = "network_policy_rule"
 
-						if v, ok := erMapToStrVal["name"]; ok && !isIntfNil(v) {
-							egressRulesInt[i].Name = v.(string)
+							if v, ok := erMapToStrVal["name"]; ok && !isIntfNil(v) {
+								egressRulesInt[i].Name = v.(string)
+							}
+
+							if v, ok := erMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								egressRulesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := erMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								egressRulesInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := erMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								egressRulesInt[i].Uid = v.(string)
+							}
+
 						}
-
-						if v, ok := erMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							egressRulesInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := erMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							egressRulesInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := erMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							egressRulesInt[i].Uid = v.(string)
-						}
-
 					}
 
 				}
@@ -1857,28 +2134,30 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 					ingressRulesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 					ruleChoiceInt.LegacyRules.IngressRules = ingressRulesInt
 					for i, ps := range sl {
+						if ps != nil {
 
-						irMapToStrVal := ps.(map[string]interface{})
-						ingressRulesInt[i] = &ves_io_schema.ObjectRefType{}
+							irMapToStrVal := ps.(map[string]interface{})
+							ingressRulesInt[i] = &ves_io_schema.ObjectRefType{}
 
-						ingressRulesInt[i].Kind = "network_policy_rule"
+							ingressRulesInt[i].Kind = "network_policy_rule"
 
-						if v, ok := irMapToStrVal["name"]; ok && !isIntfNil(v) {
-							ingressRulesInt[i].Name = v.(string)
+							if v, ok := irMapToStrVal["name"]; ok && !isIntfNil(v) {
+								ingressRulesInt[i].Name = v.(string)
+							}
+
+							if v, ok := irMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								ingressRulesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := irMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								ingressRulesInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := irMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								ingressRulesInt[i].Uid = v.(string)
+							}
+
 						}
-
-						if v, ok := irMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							ingressRulesInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := irMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							ingressRulesInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := irMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							ingressRulesInt[i].Uid = v.(string)
-						}
-
 					}
 
 				}
@@ -1936,6 +2215,19 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 
 							}
 
+							if w, ok := egressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field keys")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								egressRules[i].Keys = ls
+							}
+
 							if v, ok := egressRulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -1974,6 +2266,10 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 
 										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 											metadata.Description = w.(string)
+										}
+
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
 										}
 
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -2029,28 +2325,30 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											otherEndpointInt.IpPrefixSet.Ref = refInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refInt[i].Kind = "ip_prefix_set"
+													refInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -2089,6 +2387,17 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 
 									}
 								}
+
+							}
+
+							if v, ok := egressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+								otherEndpointTypeFound = true
+								otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
+
+								egressRules[i].OtherEndpoint = otherEndpointInt
+
+								otherEndpointInt.Namespace = v.(string)
 
 							}
 
@@ -2149,6 +2458,14 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 									}
 								}
 
+							}
+
+							if w, ok := egressRulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
+								egressRules[i].RuleDescription = w.(string)
+							}
+
+							if w, ok := egressRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
+								egressRules[i].RuleName = w.(string)
 							}
 
 							trafficChoiceTypeFound := false
@@ -2298,6 +2615,19 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 
 							}
 
+							if w, ok := ingressRulesMapStrToI["keys"]; ok && !isIntfNil(w) {
+								ls := make([]string, len(w.([]interface{})))
+								for i, v := range w.([]interface{}) {
+									if v == nil {
+										return fmt.Errorf("please provide valid non-empty string value of field keys")
+									}
+									if str, ok := v.(string); ok {
+										ls[i] = str
+									}
+								}
+								ingressRules[i].Keys = ls
+							}
+
 							if v, ok := ingressRulesMapStrToI["label_matcher"]; ok && !isIntfNil(v) {
 
 								sl := v.([]interface{})
@@ -2336,6 +2666,10 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 
 										if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 											metadata.Description = w.(string)
+										}
+
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
 										}
 
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -2391,28 +2725,30 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											otherEndpointInt.IpPrefixSet.Ref = refInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refInt[i].Kind = "ip_prefix_set"
+													refInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -2451,6 +2787,17 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 
 									}
 								}
+
+							}
+
+							if v, ok := ingressRulesMapStrToI["namespace"]; ok && !isIntfNil(v) && !otherEndpointTypeFound {
+
+								otherEndpointTypeFound = true
+								otherEndpointInt := &ves_io_schema_network_policy.NetworkPolicyRuleType_Namespace{}
+
+								ingressRules[i].OtherEndpoint = otherEndpointInt
+
+								otherEndpointInt.Namespace = v.(string)
 
 							}
 
@@ -2511,6 +2858,14 @@ func resourceVolterraNetworkPolicyUpdate(d *schema.ResourceData, meta interface{
 									}
 								}
 
+							}
+
+							if w, ok := ingressRulesMapStrToI["rule_description"]; ok && !isIntfNil(w) {
+								ingressRules[i].RuleDescription = w.(string)
+							}
+
+							if w, ok := ingressRulesMapStrToI["rule_name"]; ok && !isIntfNil(w) {
+								ingressRules[i].RuleName = w.(string)
 							}
 
 							trafficChoiceTypeFound := false

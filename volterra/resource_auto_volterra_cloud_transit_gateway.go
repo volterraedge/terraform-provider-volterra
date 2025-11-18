@@ -148,6 +148,12 @@ func resourceVolterraCloudTransitGateway() *schema.Resource {
 							},
 						},
 
+						"tgw_asn": {
+							Type:       schema.TypeInt,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
 						"existing_tgw": {
 
 							Type:     schema.TypeList,
@@ -237,6 +243,18 @@ func resourceVolterraCloudTransitGateway() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"tgw_cidr_ipv4": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"volterra_site_asn": {
+							Type:       schema.TypeInt,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},
 				},
@@ -399,6 +417,12 @@ func resourceVolterraCloudTransitGatewayCreate(d *schema.ResourceData, meta inte
 
 				}
 
+				if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
+
+					cloudChoiceInt.Aws.TgwAsn = uint32(v.(int))
+
+				}
+
 				tgwChoiceTypeFound := false
 
 				if v, ok := cs["existing_tgw"]; ok && !isIntfNil(v) && !tgwChoiceTypeFound {
@@ -536,6 +560,18 @@ func resourceVolterraCloudTransitGatewayCreate(d *schema.ResourceData, meta inte
 
 						}
 					}
+
+				}
+
+				if v, ok := cs["tgw_cidr_ipv4"]; ok && !isIntfNil(v) {
+
+					cloudChoiceInt.Aws.TgwCidrIpv4 = v.(string)
+
+				}
+
+				if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
+
+					cloudChoiceInt.Aws.VolterraSiteAsn = uint32(v.(int))
 
 				}
 
@@ -742,6 +778,12 @@ func resourceVolterraCloudTransitGatewayUpdate(d *schema.ResourceData, meta inte
 
 				}
 
+				if v, ok := cs["tgw_asn"]; ok && !isIntfNil(v) {
+
+					cloudChoiceInt.Aws.TgwAsn = uint32(v.(int))
+
+				}
+
 				tgwChoiceTypeFound := false
 
 				if v, ok := cs["existing_tgw"]; ok && !isIntfNil(v) && !tgwChoiceTypeFound {
@@ -879,6 +921,18 @@ func resourceVolterraCloudTransitGatewayUpdate(d *schema.ResourceData, meta inte
 
 						}
 					}
+
+				}
+
+				if v, ok := cs["tgw_cidr_ipv4"]; ok && !isIntfNil(v) {
+
+					cloudChoiceInt.Aws.TgwCidrIpv4 = v.(string)
+
+				}
+
+				if v, ok := cs["volterra_site_asn"]; ok && !isIntfNil(v) {
+
+					cloudChoiceInt.Aws.VolterraSiteAsn = uint32(v.(int))
 
 				}
 

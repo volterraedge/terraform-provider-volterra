@@ -225,6 +225,8 @@ type DHGroups struct {
 	// Diffie Hellman Groups
 	//
 	// x-displayName: "Diffie Hellman Groups"
+	// x-required
+	// Choose the acceptable Diffie Hellman(DH) Group or Groups that you are willing to accept as part of this profile.
 	DhGroups []schema.DHGroup `protobuf:"varint,1,rep,packed,name=dh_groups,json=dhGroups,proto3,enum=ves.io.schema.DHGroup" json:"dh_groups,omitempty"`
 }
 

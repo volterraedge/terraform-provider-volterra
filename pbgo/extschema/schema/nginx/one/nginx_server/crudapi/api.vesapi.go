@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.nginx.one.nginx_server.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.nginx.one.nginx_server.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -1424,6 +1424,15 @@ func NewObjectGetRsp(r *ObjectGetReq, rsrcRsp *server.ResourceGetResponse) (*Obj
 		return nil, err
 	}
 	rspo.EntBackrefs = entBackrefs
+	d, err := o.GetDB()
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRsp")
+	}
+	statusObjs, err := object.FindObjectStatus(context.Background(), d, o.GetObjUid())
+	if err != nil {
+		return nil, errors.Wrap(err, "GetRsp")
+	}
+	rspo.Status = statusObjs
 	return rspo, nil
 }
 
@@ -2714,6 +2723,12 @@ var APISwaggerJSON string = `{
                 "spec": {
                     "$ref": "#/definitions/nginx_serverSpecType"
                 },
+                "status": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/nginx_serverStatusObject"
+                    }
+                },
                 "system_metadata": {
                     "$ref": "#/definitions/schemaSystemObjectMetaType"
                 }
@@ -2769,6 +2784,12 @@ var APISwaggerJSON string = `{
                 },
                 "spec": {
                     "$ref": "#/definitions/nginx_serverSpecType"
+                },
+                "status": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/nginx_serverStatusObject"
+                    }
                 },
                 "system_metadata": {
                     "$ref": "#/definitions/schemaSystemObjectMetaType"
@@ -2916,6 +2937,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "policy_name": {
+                    "type": "string",
+                    "description": " Policy name configured for WAF\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "policy_name",
+                    "x-displayname": "WAF Policy Name",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
                 "security_log_enabled": {
                     "type": "boolean",
                     "description": " Specifies if security logging is enabled",
@@ -2991,6 +3022,42 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "1000"
                     }
                 },
+                "nginx_one_object_id": {
+                    "type": "string",
+                    "description": " Signifies the uniqueness identifier for NGINX One representation of\n this NGINX server",
+                    "title": "nginx_one_object_id",
+                    "x-displayname": "Instance or Config Sync Group Object ID"
+                },
+                "nginx_one_object_name": {
+                    "type": "string",
+                    "description": " Hostname value set for Instance or Name for a Config Sync Group\n in NGINX One",
+                    "title": "nginx_one_object_name",
+                    "x-displayname": "Instance or Config Sync Group Name"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Signifies the port configured for the NGINX server\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "port",
+                    "format": "int64",
+                    "x-displayname": "Port",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "server_name": {
+                    "type": "string",
+                    "description": " Signifies the combination of first element in domains array and the port\n configured for the NGINX server",
+                    "title": "server_name",
+                    "x-displayname": "ServerName"
+                },
+                "total_routes": {
+                    "type": "integer",
+                    "description": " Total locations configured in the NGINX Server",
+                    "title": "Total locations configured in the NGINX Server",
+                    "format": "int64",
+                    "x-displayname": "Routes"
+                },
                 "waf_spec": {
                     "description": " If specified, the value signifies the WAF configuration in this server context",
                     "title": "waf_spec",
@@ -3010,6 +3077,39 @@ var APISwaggerJSON string = `{
                     "title": "gc_spec",
                     "$ref": "#/definitions/onenginx_serverGlobalSpecType",
                     "x-displayname": "GC Spec"
+                }
+            }
+        },
+        "nginx_serverStatusObject": {
+            "type": "object",
+            "description": "Most recently observed status of object.",
+            "title": "StatusObject",
+            "x-displayname": "Status",
+            "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_server.StatusObject",
+            "properties": {
+                "conditions": {
+                    "type": "array",
+                    "description": " Conditions represent the normalized status values for configuration object.",
+                    "title": "Conditions",
+                    "items": {
+                        "$ref": "#/definitions/schemaConditionType"
+                    },
+                    "x-displayname": "Conditions"
+                },
+                "metadata": {
+                    "description": " Standard status's metadata.",
+                    "title": "Metadata",
+                    "$ref": "#/definitions/schemaStatusMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "object_refs": {
+                    "type": "array",
+                    "description": " A nginx_server direct reference.",
+                    "title": "ObjectRefs",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Config Object"
                 }
             }
         },
@@ -3130,6 +3230,61 @@ var APISwaggerJSON string = `{
                 },
                 "message": {
                     "type": "string"
+                }
+            }
+        },
+        "schemaConditionType": {
+            "type": "object",
+            "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
+            "title": "ConditionType",
+            "x-displayname": "Status Condition",
+            "x-ves-proto-message": "ves.io.schema.ConditionType",
+            "properties": {
+                "hostname": {
+                    "type": "string",
+                    "description": " Hostname of the instance of the site that sent the status",
+                    "title": "hostname",
+                    "x-displayname": "Hostname"
+                },
+                "last_update_time": {
+                    "type": "string",
+                    "description": " Last time the condition was updated",
+                    "title": "last_update_time",
+                    "format": "date-time",
+                    "x-displayname": "Last Updated"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "title": "reason",
+                    "x-displayname": "Reason",
+                    "x-ves-example": "value"
+                },
+                "service_name": {
+                    "type": "string",
+                    "description": " Name of the service that sent the status",
+                    "title": "service name",
+                    "x-displayname": "Service Name"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "title": "status",
+                    "x-displayname": "Status",
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
+                },
+                "type": {
+                    "type": "string",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
+                    "title": "type",
+                    "x-displayname": "Type",
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -3258,6 +3413,80 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
                 }
             }
+        },
+        "schemaStatusMetaType": {
+            "type": "object",
+            "description": "StatusMetaType is metadata that all status must have.",
+            "title": "StatusMetaType",
+            "x-displayname": "Metadata",
+            "x-ves-proto-message": "ves.io.schema.StatusMetaType",
+            "properties": {
+                "creation_timestamp": {
+                    "type": "string",
+                    "description": " creation_timestamp is when the status object was created. It is used to find/tie-break\n for latest status object from same origin",
+                    "title": "creation_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Creation Timestamp"
+                },
+                "creator_class": {
+                    "type": "string",
+                    "description": " Class of creator which created this StatusObject. This will be service's DNS FQDN.\n This will be set by the system based on client certificate information.\n\nExample: - \"ver.re1.int.ves.io\"-",
+                    "title": "creator_class",
+                    "x-displayname": "Creator Class",
+                    "x-ves-example": "ver.re1.int.ves.io"
+                },
+                "creator_id": {
+                    "type": "string",
+                    "description": " ID of creator which created this StatusObject. This will be a concrete identifier for service (e.g.\n identifying the environment also). This will be set by the system based on client certificate\n information\n\nExample: - \"ver-instance-1\"-",
+                    "title": "creator_id",
+                    "x-displayname": "Creator ID",
+                    "x-ves-example": "ver-instance-1"
+                },
+                "publish": {
+                    "description": " Decides wether this status object will be propagated to user.",
+                    "title": "publish",
+                    "$ref": "#/definitions/schemaStatusPublishType",
+                    "x-displayname": "Publish"
+                },
+                "status_id": {
+                    "type": "string",
+                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status\n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
+                    "title": "status_id",
+                    "x-displayname": "Status ID"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " uid is the unique in time and space value for a StatusObject.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Origin of this status exchanged by VTRP.",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
+                }
+            }
+        },
+        "schemaStatusPublishType": {
+            "type": "string",
+            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do Not Publish\n\nDo not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Publish\n\nPropagate this status up to user as it might be actionable",
+            "title": "StatusPublishType",
+            "enum": [
+                "STATUS_DO_NOT_PUBLISH",
+                "STATUS_PUBLISH"
+            ],
+            "default": "STATUS_DO_NOT_PUBLISH",
+            "x-displayname": "Status Publish Type",
+            "x-ves-proto-enum": "ves.io.schema.StatusPublishType"
         },
         "schemaStatusType": {
             "type": "object",
@@ -3394,6 +3623,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

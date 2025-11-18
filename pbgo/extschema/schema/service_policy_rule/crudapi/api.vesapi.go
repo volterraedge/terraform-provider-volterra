@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.service_policy_rule.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.service_policy_rule.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3781,6 +3781,31 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyMobileIdentifierMatcherAction": {
+            "type": "object",
+            "description": "x-displayName: \"Mobile Identifier Matcher Action\"\nMobile Identifier Matcher Action",
+            "title": "Mobile Identifier Matcher Action",
+            "properties": {
+                "mobile_identifier": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Mobile Identifier\"\nIf request matches mobile identifier service policy, mobile identifier is true",
+                    "title": "Mobile Identifier",
+                    "format": "boolean"
+                },
+                "mobile_traffic": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Mobile Traffic\"\nIf request matches mobile endpoint service policy, mobile traffic is true",
+                    "title": "Mobile Traffic",
+                    "format": "boolean"
+                },
+                "web_traffic": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Web Traffic\"\nIf request matches web endpoint service policy, web traffic is true",
+                    "title": "Web Traffic",
+                    "format": "boolean"
+                }
+            }
+        },
         "policyModifyAction": {
             "type": "object",
             "description": "Modify behavior for a matching request. The modification could be to entirely skip processing.",
@@ -5185,6 +5210,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

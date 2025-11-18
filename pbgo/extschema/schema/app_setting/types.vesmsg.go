@@ -1991,7 +1991,7 @@ var DefaultMaliciousUserDetectionSettingValidator = func() *ValidateMaliciousUse
 
 	vrhCoolingOffPeriodSettingCoolingOffPeriod := v.CoolingOffPeriodSettingCoolingOffPeriodValidationRuleHandler
 	rulesCoolingOffPeriodSettingCoolingOffPeriod := map[string]string{
-		"ves.io.schema.rules.uint32.gt":  "0",
+		"ves.io.schema.rules.uint32.gte": "5",
 		"ves.io.schema.rules.uint32.lte": "120",
 	}
 	vFnMap["cooling_off_period_setting.cooling_off_period"], err = vrhCoolingOffPeriodSettingCoolingOffPeriod(rulesCoolingOffPeriodSettingCoolingOffPeriod)

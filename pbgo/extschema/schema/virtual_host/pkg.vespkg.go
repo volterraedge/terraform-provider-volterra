@@ -19,6 +19,8 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.StatusObject"] = StatusObjectValidator()
 
 	vr["ves.io.schema.virtual_host.APIEPActivityMetrics"] = APIEPActivityMetricsValidator()
+	vr["ves.io.schema.virtual_host.APIEPSourceOpenApiSchemaReq"] = APIEPSourceOpenApiSchemaReqValidator()
+	vr["ves.io.schema.virtual_host.APIEPSourceOpenApiSchemaRsp"] = APIEPSourceOpenApiSchemaRspValidator()
 	vr["ves.io.schema.virtual_host.APIEPSummaryFilter"] = APIEPSummaryFilterValidator()
 	vr["ves.io.schema.virtual_host.APIEndpoint"] = APIEndpointValidator()
 	vr["ves.io.schema.virtual_host.APIEndpointLearntSchemaReq"] = APIEndpointLearntSchemaReqValidator()
@@ -51,6 +53,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.virtual_host.TicketDetails"] = TicketDetailsValidator()
 	vr["ves.io.schema.virtual_host.UnlinkTicketsRequest"] = UnlinkTicketsRequestValidator()
 	vr["ves.io.schema.virtual_host.UnlinkTicketsResponse"] = UnlinkTicketsResponseValidator()
+	vr["ves.io.schema.virtual_host.UnmergeAPIEPSourceOpenApiSchemaReq"] = UnmergeAPIEPSourceOpenApiSchemaReqValidator()
 	vr["ves.io.schema.virtual_host.UpdateAPIEndpointsSchemasReq"] = UpdateAPIEndpointsSchemasReqValidator()
 	vr["ves.io.schema.virtual_host.UpdateAPIEndpointsSchemasResp"] = UpdateAPIEndpointsSchemasRespValidator()
 	vr["ves.io.schema.virtual_host.UpdateVulnerabilitiesStateReq"] = UpdateVulnerabilitiesStateReqValidator()
@@ -155,6 +158,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.API.Create"] = []string{
 		"spec.cdn_service.cache_ttl",
+		"spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.cdn_service.service_domains.#",
 	}
 
@@ -222,6 +226,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.API.Get"] = []string{
 		"spec.cdn_service.cache_ttl",
+		"spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.cdn_service.service_domains.#",
 	}
 
@@ -238,6 +243,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.API.List"] = []string{
 		"items.#.get_spec.cdn_service.cache_ttl",
+		"items.#.get_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"items.#.get_spec.cdn_service.service_domains.#",
 	}
 
@@ -404,11 +410,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

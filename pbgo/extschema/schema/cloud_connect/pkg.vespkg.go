@@ -123,49 +123,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.azure_vnet_site.cred",
 	}
 
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.cloud_connect.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.aws_cloud_transit_gateway",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cloud_connect.API.Create"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.aws_cloud_transit_gateway",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cloud_connect.API.Get"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "create_form.spec.aws_cloud_transit_gateway",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "replace_form.spec.aws_cloud_transit_gateway",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-		{
-			FieldPath:           "spec.aws_cloud_transit_gateway",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInResFieldRegistry["ves.io.schema.cloud_connect.API.List"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "items.#.get_spec.aws_cloud_transit_gateway",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
-	mdr.RPCAvailableInReqFieldRegistry["ves.io.schema.cloud_connect.API.Replace"] = []svcfw.EnvironmentField{
-		{
-			FieldPath:           "spec.aws_cloud_transit_gateway",
-			AllowedEnvironments: []string{"demo1", "test"},
-		},
-	}
-
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
@@ -277,11 +234,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

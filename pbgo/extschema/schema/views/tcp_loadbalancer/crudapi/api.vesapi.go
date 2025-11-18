@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.tcp_loadbalancer.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.tcp_loadbalancer.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3449,6 +3449,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -4963,7 +4970,7 @@ var APISwaggerJSON string = `{
                 },
                 "domains": {
                     "type": "array",
-                    "description": " A list of domains (host/authority header) that will be matched to this load balancer.\n\n Domains are also used for SNI matching if the with_sni is true\n Domains also indicate the list of names for which DNS resolution will be done by VER\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.hostname: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " A list of Domains (host/authority header) that will be matched to this Load Balancer.\n\n Supported Domains and search order:\n  1. Exact Domain names: www.foo.com.\n  2. Domains starting with a Wildcard: *.foo.com.\n\n Not supported Domains:\n - Just a Wildcard: *\n - A Wildcard and TLD with no root Domain: *.com.\n - A Wildcard not matching a whole DNS label.\n e.g. *.foo.com and *.bar.foo.com are valid Wildcards however *bar.foo.com, *-bar.foo.com, and bar*.foo.com are all invalid.\n\n Additional notes:\n A Wildcard will not match empty string.\n e.g. *.foo.com will match bar.foo.com and baz-bar.foo.com but not .foo.com.\n The longest Wildcards match first.\n Only a single virtual host in the entire route configuration can match on *.\n Also a Domain must be unique across all virtual hosts within an advertise policy.\n\n Domains are also used for SNI matching if SNI is activated on the given TCP Load Balancer.\n Domains also indicate the list of names for which DNS resolution will be automatically resolved to IP addresses by the system.\n\nExample: - \"www.foo.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.items.string.vh_domain: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Domains",
                     "maxItems": 32,
                     "items": {
@@ -4972,7 +4979,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Domains",
                     "x-ves-example": "www.foo.com",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.repeated.items.string.hostname": "true",
+                        "ves.io.schema.rules.repeated.items.string.vh_domain": "true",
                         "ves.io.schema.rules.repeated.max_items": "32",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }

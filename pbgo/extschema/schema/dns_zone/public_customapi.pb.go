@@ -261,9 +261,9 @@ func (*F5CSDNSZoneConfiguration) XXX_OneofWrappers() []interface{} {
 	}
 }
 
-// Import DNS Zone
+// Import AXFR for Primary Zone
 //
-// x-displayName: "Import DNS Zone"
+// x-displayName: "Import AXFR for Primary Zone"
 // DNS zone import via AXFR
 type ImportAXFRRequest struct {
 	// Primary Server

@@ -61,6 +61,39 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"hub": {
+
+				Type:       schema.TypeList,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"kind": {
+							Type:       schema.TypeString,
+							Computed:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"name": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+						"namespace": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+						"tenant": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
 			"full_mesh": {
 
 				Type:     schema.TypeList,
@@ -90,7 +123,20 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 				MaxItems: 1,
 				Optional: true,
 				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{},
+					Schema: map[string]*schema.Schema{
+
+						"control_and_data_plane_mesh": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"data_plane_mesh": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+					},
 				},
 			},
 
@@ -125,8 +171,38 @@ func resourceVolterraSiteMeshGroup() *schema.Resource {
 								},
 							},
 						},
+
+						"control_and_data_plane_mesh": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"data_plane_mesh": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
 					},
 				},
+			},
+
+			"disable_re_fallback": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"enable_re_fallback": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
+			},
+
+			"type": {
+				Type:       schema.TypeString,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"virtual_site": {
@@ -213,6 +289,41 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 			v.(string)
 	}
 
+	//hub
+	if v, ok := d.GetOk("hub"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		hubInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+		createSpec.Hub = hubInt
+		for i, ps := range sl {
+			if ps != nil {
+
+				hMapToStrVal := ps.(map[string]interface{})
+				hubInt[i] = &ves_io_schema.ObjectRefType{}
+
+				hubInt[i].Kind = "site_mesh_group"
+
+				if v, ok := hMapToStrVal["name"]; ok && !isIntfNil(v) {
+					hubInt[i].Name = v.(string)
+				}
+
+				if v, ok := hMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					hubInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := hMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					hubInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := hMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					hubInt[i].Uid = v.(string)
+				}
+
+			}
+		}
+
+	}
+
 	//mesh_choice
 
 	meshChoiceTypeFound := false
@@ -260,7 +371,7 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("hub_mesh"); ok && !meshChoiceTypeFound {
+	if v, ok := d.GetOk("hub_mesh"); ok && !isIntfNil(v) && !meshChoiceTypeFound {
 
 		meshChoiceTypeFound = true
 		meshChoiceInt := &ves_io_schema_site_mesh_group.CreateSpecType_HubMesh{}
@@ -270,7 +381,7 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 		sl := v.([]interface{})
 		for _, set := range sl {
 			if set != nil {
-				_ = set.(map[string]interface{})
+				 _ = set.(map[string]interface{})
 
 			}
 		}
@@ -318,6 +429,41 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 
 	}
 
+	//re_fallback
+
+	reFallbackTypeFound := false
+
+	if v, ok := d.GetOk("disable_re_fallback"); ok && !reFallbackTypeFound {
+
+		reFallbackTypeFound = true
+
+		if v.(bool) {
+			reFallbackInt := &ves_io_schema_site_mesh_group.CreateSpecType_DisableReFallback{}
+			reFallbackInt.DisableReFallback = &ves_io_schema.Empty{}
+			createSpec.ReFallback = reFallbackInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_re_fallback"); ok && !reFallbackTypeFound {
+
+		reFallbackTypeFound = true
+
+		if v.(bool) {
+			reFallbackInt := &ves_io_schema_site_mesh_group.CreateSpecType_EnableReFallback{}
+			reFallbackInt.EnableReFallback = &ves_io_schema.Empty{}
+			createSpec.ReFallback = reFallbackInt
+		}
+
+	}
+
+	//type
+	if v, ok := d.GetOk("type"); ok && !isIntfNil(v) {
+
+		createSpec.Type = ves_io_schema_site_mesh_group.SiteMeshGroupType(ves_io_schema_site_mesh_group.SiteMeshGroupType_value[v.(string)])
+
+	}
+
 	//virtual_site
 	if v, ok := d.GetOk("virtual_site"); ok && !isIntfNil(v) {
 
@@ -325,28 +471,30 @@ func resourceVolterraSiteMeshGroupCreate(d *schema.ResourceData, meta interface{
 		virtualSiteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		createSpec.VirtualSite = virtualSiteInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			vsMapToStrVal := ps.(map[string]interface{})
-			virtualSiteInt[i] = &ves_io_schema.ObjectRefType{}
+				vsMapToStrVal := ps.(map[string]interface{})
+				virtualSiteInt[i] = &ves_io_schema.ObjectRefType{}
 
-			virtualSiteInt[i].Kind = "virtual_site"
+				virtualSiteInt[i].Kind = "virtual_site"
 
-			if v, ok := vsMapToStrVal["name"]; ok && !isIntfNil(v) {
-				virtualSiteInt[i].Name = v.(string)
+				if v, ok := vsMapToStrVal["name"]; ok && !isIntfNil(v) {
+					virtualSiteInt[i].Name = v.(string)
+				}
+
+				if v, ok := vsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					virtualSiteInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := vsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					virtualSiteInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := vsMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					virtualSiteInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := vsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				virtualSiteInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := vsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				virtualSiteInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := vsMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				virtualSiteInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -450,6 +598,40 @@ func resourceVolterraSiteMeshGroupUpdate(d *schema.ResourceData, meta interface{
 			v.(string)
 	}
 
+	if v, ok := d.GetOk("hub"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		hubInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+		updateSpec.Hub = hubInt
+		for i, ps := range sl {
+			if ps != nil {
+
+				hMapToStrVal := ps.(map[string]interface{})
+				hubInt[i] = &ves_io_schema.ObjectRefType{}
+
+				hubInt[i].Kind = "site_mesh_group"
+
+				if v, ok := hMapToStrVal["name"]; ok && !isIntfNil(v) {
+					hubInt[i].Name = v.(string)
+				}
+
+				if v, ok := hMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					hubInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := hMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					hubInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := hMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					hubInt[i].Uid = v.(string)
+				}
+
+			}
+		}
+
+	}
+
 	meshChoiceTypeFound := false
 
 	if v, ok := d.GetOk("full_mesh"); ok && !isIntfNil(v) && !meshChoiceTypeFound {
@@ -495,7 +677,7 @@ func resourceVolterraSiteMeshGroupUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
-	if v, ok := d.GetOk("hub_mesh"); ok && !meshChoiceTypeFound {
+	if v, ok := d.GetOk("hub_mesh"); ok && !isIntfNil(v) && !meshChoiceTypeFound {
 
 		meshChoiceTypeFound = true
 		meshChoiceInt := &ves_io_schema_site_mesh_group.ReplaceSpecType_HubMesh{}
@@ -553,34 +735,68 @@ func resourceVolterraSiteMeshGroupUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
+	reFallbackTypeFound := false
+
+	if v, ok := d.GetOk("disable_re_fallback"); ok && !reFallbackTypeFound {
+
+		reFallbackTypeFound = true
+
+		if v.(bool) {
+			reFallbackInt := &ves_io_schema_site_mesh_group.ReplaceSpecType_DisableReFallback{}
+			reFallbackInt.DisableReFallback = &ves_io_schema.Empty{}
+			updateSpec.ReFallback = reFallbackInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("enable_re_fallback"); ok && !reFallbackTypeFound {
+
+		reFallbackTypeFound = true
+
+		if v.(bool) {
+			reFallbackInt := &ves_io_schema_site_mesh_group.ReplaceSpecType_EnableReFallback{}
+			reFallbackInt.EnableReFallback = &ves_io_schema.Empty{}
+			updateSpec.ReFallback = reFallbackInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("type"); ok && !isIntfNil(v) {
+
+		updateSpec.Type = ves_io_schema_site_mesh_group.SiteMeshGroupType(ves_io_schema_site_mesh_group.SiteMeshGroupType_value[v.(string)])
+
+	}
+
 	if v, ok := d.GetOk("virtual_site"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
 		virtualSiteInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		updateSpec.VirtualSite = virtualSiteInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			vsMapToStrVal := ps.(map[string]interface{})
-			virtualSiteInt[i] = &ves_io_schema.ObjectRefType{}
+				vsMapToStrVal := ps.(map[string]interface{})
+				virtualSiteInt[i] = &ves_io_schema.ObjectRefType{}
 
-			virtualSiteInt[i].Kind = "virtual_site"
+				virtualSiteInt[i].Kind = "virtual_site"
 
-			if v, ok := vsMapToStrVal["name"]; ok && !isIntfNil(v) {
-				virtualSiteInt[i].Name = v.(string)
+				if v, ok := vsMapToStrVal["name"]; ok && !isIntfNil(v) {
+					virtualSiteInt[i].Name = v.(string)
+				}
+
+				if v, ok := vsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					virtualSiteInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := vsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					virtualSiteInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := vsMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					virtualSiteInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := vsMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				virtualSiteInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := vsMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				virtualSiteInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := vsMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				virtualSiteInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}

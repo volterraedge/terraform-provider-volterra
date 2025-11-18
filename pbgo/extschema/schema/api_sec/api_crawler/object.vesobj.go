@@ -76,6 +76,12 @@ func LocateObject(ctx context.Context, locator db.EntryLocator, uid, tenant, nam
 	return obj, nil
 }
 
+func (o *Object) SetRevision(r int64) {
+	if o.SystemMetadata != nil {
+		o.SystemMetadata.SetRevision(r)
+	}
+}
+
 func FindObject(ctx context.Context, finder db.EntryFinder, key string, opts ...db.FindEntryOpt) (*DBObject, bool, error) {
 	e, exist, err := finder.FindEntry(ctx, ObjectDefTblName, key, opts...)
 	if !exist || err != nil {
@@ -1244,6 +1250,15 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["api_crawling_status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_crawling_status"))
+		if err := fv(ctx, e.GetApiCrawlingStatus(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["conditions"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("conditions"))
@@ -1269,6 +1284,18 @@ func (v *ValidateStatusObject) Validate(ctx context.Context, pm interface{}, opt
 
 		vOpts := append(opts, db.WithValidateField("object_refs"))
 		for idx, item := range e.GetObjectRefs() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["scans"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("scans"))
+		for idx, item := range e.GetScans() {
 			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err

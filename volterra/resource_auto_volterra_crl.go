@@ -95,6 +95,12 @@ func resourceVolterraCrl() *schema.Resource {
 				Type:     schema.TypeInt,
 				Optional: true,
 			},
+
+			"verify_all_certs_with_crl": {
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
 		},
 	}
 }
@@ -208,6 +214,14 @@ func resourceVolterraCrlCreate(d *schema.ResourceData, meta interface{}) error {
 
 		createSpec.Timeout =
 			uint32(v.(int))
+
+	}
+
+	//verify_all_certs_with_crl
+	if v, ok := d.GetOk("verify_all_certs_with_crl"); ok && !isIntfNil(v) {
+
+		createSpec.VerifyAllCertsWithCrl =
+			v.(bool)
 
 	}
 
@@ -360,6 +374,13 @@ func resourceVolterraCrlUpdate(d *schema.ResourceData, meta interface{}) error {
 
 		updateSpec.Timeout =
 			uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("verify_all_certs_with_crl"); ok && !isIntfNil(v) {
+
+		updateSpec.VerifyAllCertsWithCrl =
+			v.(bool)
 
 	}
 

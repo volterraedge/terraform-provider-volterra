@@ -34,6 +34,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.gc_spec.jwt_validation.jwks",
+		"spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
 
@@ -42,6 +43,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.gc_spec.jwt_validation.jwks",
+		"spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
 
@@ -52,6 +54,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.gc_spec.jwt_validation.jwks",
+		"spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
 
@@ -60,6 +63,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"items.#.spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"items.#.spec.gc_spec.jwt_validation.jwks",
+		"items.#.spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"items.#.spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
 
@@ -68,6 +72,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"items.#.spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"items.#.spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"items.#.spec.gc_spec.jwt_validation.jwks",
+		"items.#.spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"items.#.spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
 
@@ -76,6 +81,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.gc_spec.jwt_validation.jwks",
+		"spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
 
@@ -84,6 +90,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.gc_spec.caching_policy.default_cache_action.eligible_for_cache",
 		"spec.gc_spec.enable_api_discovery.sensitive_data_detection_rules",
 		"spec.gc_spec.jwt_validation.jwks",
+		"spec.gc_spec.routes.#.direct_response_route.route_direct_response.response_body",
 		"spec.gc_spec.single_lb_app.enable_discovery.sensitive_data_detection_rules",
 	}
 
@@ -130,11 +137,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

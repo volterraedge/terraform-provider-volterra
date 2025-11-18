@@ -32,6 +32,33 @@ func (m *ValidateTokenRequest) ToYAML() (string, error) {
 	return codec.ToYAML(m)
 }
 
+func (m *ValidateTokenRequest) String() string {
+	if m == nil {
+		return ""
+	}
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.string()
+}
+
+func (m *ValidateTokenRequest) GoString() string {
+	copy := m.DeepCopy()
+	copy.Redact(context.Background())
+	return copy.goString()
+}
+
+// Redact squashes sensitive info in m (in-place)
+func (m *ValidateTokenRequest) Redact(ctx context.Context) error {
+	// clear fields with confidential option set (at message or field level)
+	if m == nil {
+		return nil
+	}
+
+	m.Token = "Redacted"
+
+	return nil
+}
+
 func (m *ValidateTokenRequest) DeepCopy() *ValidateTokenRequest {
 	if m == nil {
 		return nil

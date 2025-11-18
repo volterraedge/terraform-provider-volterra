@@ -166,17 +166,6 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 				return err
 			}
 		}
-	case *AddonServiceChoice_NginxMgmtSuite:
-		if fv, exists := v.FldValidators["choice.nginx_mgmt_suite"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_NginxMgmtSuite).NginxMgmtSuite
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("nginx_mgmt_suite"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
 	case *AddonServiceChoice_Safeap:
 		if fv, exists := v.FldValidators["choice.safeap"]; exists {
 			val := m.GetChoice().(*AddonServiceChoice_Safeap).Safeap
@@ -359,17 +348,6 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("f5xc_flow_anomaly_detection_standard"),
-			)
-			if err := fv(ctx, val, vOpts...); err != nil {
-				return err
-			}
-		}
-	case *AddonServiceChoice_F5XcUniversalZtnaStandard:
-		if fv, exists := v.FldValidators["choice.f5xc_universal_ztna_standard"]; exists {
-			val := m.GetChoice().(*AddonServiceChoice_F5XcUniversalZtnaStandard).F5XcUniversalZtnaStandard
-			vOpts := append(opts,
-				db.WithValidateField("choice"),
-				db.WithValidateField("f5xc_universal_ztna_standard"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -590,6 +568,61 @@ func (v *ValidateAddonServiceChoice) Validate(ctx context.Context, pm interface{
 			vOpts := append(opts,
 				db.WithValidateField("choice"),
 				db.WithValidateField("f5xc_core_platform_service_advanced"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcDelegatedAccessSupport:
+		if fv, exists := v.FldValidators["choice.f5xc_delegated_access_support"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcDelegatedAccessSupport).F5XcDelegatedAccessSupport
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_delegated_access_support"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcApiSecurityStandard:
+		if fv, exists := v.FldValidators["choice.f5xc_api_security_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcApiSecurityStandard).F5XcApiSecurityStandard
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_api_security_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcApiSecurityAdvanced:
+		if fv, exists := v.FldValidators["choice.f5xc_api_security_advanced"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcApiSecurityAdvanced).F5XcApiSecurityAdvanced
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_api_security_advanced"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcBigIpIruleStandard:
+		if fv, exists := v.FldValidators["choice.f5xc_big_ip_irule_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcBigIpIruleStandard).F5XcBigIpIruleStandard
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_big_ip_irule_standard"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *AddonServiceChoice_F5XcUdpLbStandard:
+		if fv, exists := v.FldValidators["choice.f5xc_udp_lb_standard"]; exists {
+			val := m.GetChoice().(*AddonServiceChoice_F5XcUdpLbStandard).F5XcUdpLbStandard
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("f5xc_udp_lb_standard"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err

@@ -164,6 +164,46 @@ func resourceVolterraCluster() *schema.Resource {
 				Optional: true,
 			},
 
+			"header_transformation_type": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"default_header_transformation": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"legacy_header_transformation": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"preserve_case_header_transformation": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"proper_case_header_transformation": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
 			"health_checks": {
 
 				Type:     schema.TypeList,
@@ -502,6 +542,12 @@ func resourceVolterraCluster() *schema.Resource {
 													Optional: true,
 												},
 
+												"use_volterra_trusted_ca_url": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"verify_subject_alt_names": {
 
 													Type: schema.TypeList,
@@ -612,6 +658,42 @@ func resourceVolterraCluster() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
+															"blindfold_secret_info_internal": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"decryption_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"store_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"secret_encoding_type": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -658,11 +740,77 @@ func resourceVolterraCluster() *schema.Resource {
 																	},
 																},
 															},
+
+															"vault_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"key": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"provider": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"secret_encoding": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"version": {
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"wingman_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
 														},
 													},
 												},
 											},
 										},
+									},
+
+									"trusted_ca_url": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"validation_params": {
@@ -721,6 +869,12 @@ func resourceVolterraCluster() *schema.Resource {
 
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+
+												"use_volterra_trusted_ca_url": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"verify_subject_alt_names": {
@@ -919,28 +1073,30 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 		endpointsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		createSpec.Endpoints = endpointsInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			eMapToStrVal := ps.(map[string]interface{})
-			endpointsInt[i] = &ves_io_schema.ObjectRefType{}
+				eMapToStrVal := ps.(map[string]interface{})
+				endpointsInt[i] = &ves_io_schema.ObjectRefType{}
 
-			endpointsInt[i].Kind = "endpoint"
+				endpointsInt[i].Kind = "endpoint"
 
-			if v, ok := eMapToStrVal["name"]; ok && !isIntfNil(v) {
-				endpointsInt[i].Name = v.(string)
+				if v, ok := eMapToStrVal["name"]; ok && !isIntfNil(v) {
+					endpointsInt[i].Name = v.(string)
+				}
+
+				if v, ok := eMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					endpointsInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := eMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					endpointsInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := eMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					endpointsInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := eMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				endpointsInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := eMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				endpointsInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := eMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				endpointsInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -952,6 +1108,71 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 	}
 
+	//header_transformation_type
+	if v, ok := d.GetOk("header_transformation_type"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		headerTransformationType := &ves_io_schema.HeaderTransformationType{}
+		createSpec.HeaderTransformationType = headerTransformationType
+		for _, set := range sl {
+			if set != nil {
+				headerTransformationTypeMapStrToI := set.(map[string]interface{})
+
+				headerTransformationChoiceTypeFound := false
+
+				if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+						headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+				if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+						headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+				if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+						headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+				if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+						headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+			}
+		}
+
+	}
+
 	//health_checks
 	if v, ok := d.GetOk("health_checks"); ok && !isIntfNil(v) {
 
@@ -959,28 +1180,30 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 		healthChecksInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		createSpec.HealthChecks = healthChecksInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			hcMapToStrVal := ps.(map[string]interface{})
-			healthChecksInt[i] = &ves_io_schema.ObjectRefType{}
+				hcMapToStrVal := ps.(map[string]interface{})
+				healthChecksInt[i] = &ves_io_schema.ObjectRefType{}
 
-			healthChecksInt[i].Kind = "healthcheck"
+				healthChecksInt[i].Kind = "healthcheck"
 
-			if v, ok := hcMapToStrVal["name"]; ok && !isIntfNil(v) {
-				healthChecksInt[i].Name = v.(string)
+				if v, ok := hcMapToStrVal["name"]; ok && !isIntfNil(v) {
+					healthChecksInt[i].Name = v.(string)
+				}
+
+				if v, ok := hcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					healthChecksInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := hcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					healthChecksInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := hcMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					healthChecksInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := hcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				healthChecksInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := hcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				healthChecksInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := hcMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				healthChecksInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -1320,28 +1543,30 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 								certificatesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 								tlsParamsChoiceInt.CertParams.Certificates = certificatesInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									cMapToStrVal := ps.(map[string]interface{})
-									certificatesInt[i] = &ves_io_schema.ObjectRefType{}
+										cMapToStrVal := ps.(map[string]interface{})
+										certificatesInt[i] = &ves_io_schema.ObjectRefType{}
 
-									certificatesInt[i].Kind = "certificate"
+										certificatesInt[i].Kind = "certificate"
 
-									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-										certificatesInt[i].Name = v.(string)
+										if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+											certificatesInt[i].Name = v.(string)
+										}
+
+										if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											certificatesInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											certificatesInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											certificatesInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										certificatesInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										certificatesInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										certificatesInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -1406,28 +1631,30 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 														trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															tclMapToStrVal := ps.(map[string]interface{})
-															trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+																tclMapToStrVal := ps.(map[string]interface{})
+																trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
 
-															trustedCaListInt[i].Kind = "trusted_ca_list"
+																trustedCaListInt[i].Kind = "trusted_ca_list"
 
-															if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Name = v.(string)
+																if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Name = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -1446,6 +1673,10 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 											trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
+										}
+
+										if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
+											validationParams.UseVolterraTrustedCaUrl = w.(bool)
 										}
 
 										if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
@@ -1587,6 +1818,38 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
 
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -1653,6 +1916,76 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 													}
 
+													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
 												}
 											}
 
@@ -1660,6 +1993,12 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 									}
 								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+
+								tlsParamsChoiceInt.CommonParams.TrustedCaUrl = v.(string)
 
 							}
 
@@ -1696,28 +2035,30 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 														trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															tclMapToStrVal := ps.(map[string]interface{})
-															trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+																tclMapToStrVal := ps.(map[string]interface{})
+																trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
 
-															trustedCaListInt[i].Kind = "trusted_ca_list"
+																trustedCaListInt[i].Kind = "trusted_ca_list"
 
-															if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Name = v.(string)
+																if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Name = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -1736,6 +2077,10 @@ func resourceVolterraClusterCreate(d *schema.ResourceData, meta interface{}) err
 
 											trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
+										}
+
+										if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
+											validationParams.UseVolterraTrustedCaUrl = w.(bool)
 										}
 
 										if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
@@ -1998,28 +2343,30 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 		endpointsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		updateSpec.Endpoints = endpointsInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			eMapToStrVal := ps.(map[string]interface{})
-			endpointsInt[i] = &ves_io_schema.ObjectRefType{}
+				eMapToStrVal := ps.(map[string]interface{})
+				endpointsInt[i] = &ves_io_schema.ObjectRefType{}
 
-			endpointsInt[i].Kind = "endpoint"
+				endpointsInt[i].Kind = "endpoint"
 
-			if v, ok := eMapToStrVal["name"]; ok && !isIntfNil(v) {
-				endpointsInt[i].Name = v.(string)
+				if v, ok := eMapToStrVal["name"]; ok && !isIntfNil(v) {
+					endpointsInt[i].Name = v.(string)
+				}
+
+				if v, ok := eMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					endpointsInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := eMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					endpointsInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := eMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					endpointsInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := eMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				endpointsInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := eMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				endpointsInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := eMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				endpointsInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -2030,34 +2377,100 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 	}
 
+	if v, ok := d.GetOk("header_transformation_type"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		headerTransformationType := &ves_io_schema.HeaderTransformationType{}
+		updateSpec.HeaderTransformationType = headerTransformationType
+		for _, set := range sl {
+			if set != nil {
+				headerTransformationTypeMapStrToI := set.(map[string]interface{})
+
+				headerTransformationChoiceTypeFound := false
+
+				if v, ok := headerTransformationTypeMapStrToI["default_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_DefaultHeaderTransformation{}
+						headerTransformationChoiceInt.DefaultHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+				if v, ok := headerTransformationTypeMapStrToI["legacy_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_LegacyHeaderTransformation{}
+						headerTransformationChoiceInt.LegacyHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+				if v, ok := headerTransformationTypeMapStrToI["preserve_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_PreserveCaseHeaderTransformation{}
+						headerTransformationChoiceInt.PreserveCaseHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+				if v, ok := headerTransformationTypeMapStrToI["proper_case_header_transformation"]; ok && !isIntfNil(v) && !headerTransformationChoiceTypeFound {
+
+					headerTransformationChoiceTypeFound = true
+
+					if v.(bool) {
+						headerTransformationChoiceInt := &ves_io_schema.HeaderTransformationType_ProperCaseHeaderTransformation{}
+						headerTransformationChoiceInt.ProperCaseHeaderTransformation = &ves_io_schema.Empty{}
+						headerTransformationType.HeaderTransformationChoice = headerTransformationChoiceInt
+					}
+
+				}
+
+			}
+		}
+
+	}
+
 	if v, ok := d.GetOk("health_checks"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
 		healthChecksInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		updateSpec.HealthChecks = healthChecksInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			hcMapToStrVal := ps.(map[string]interface{})
-			healthChecksInt[i] = &ves_io_schema.ObjectRefType{}
+				hcMapToStrVal := ps.(map[string]interface{})
+				healthChecksInt[i] = &ves_io_schema.ObjectRefType{}
 
-			healthChecksInt[i].Kind = "healthcheck"
+				healthChecksInt[i].Kind = "healthcheck"
 
-			if v, ok := hcMapToStrVal["name"]; ok && !isIntfNil(v) {
-				healthChecksInt[i].Name = v.(string)
+				if v, ok := hcMapToStrVal["name"]; ok && !isIntfNil(v) {
+					healthChecksInt[i].Name = v.(string)
+				}
+
+				if v, ok := hcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					healthChecksInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := hcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					healthChecksInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := hcMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					healthChecksInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := hcMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				healthChecksInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := hcMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				healthChecksInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := hcMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				healthChecksInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -2387,28 +2800,30 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 								certificatesInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 								tlsParamsChoiceInt.CertParams.Certificates = certificatesInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									cMapToStrVal := ps.(map[string]interface{})
-									certificatesInt[i] = &ves_io_schema.ObjectRefType{}
+										cMapToStrVal := ps.(map[string]interface{})
+										certificatesInt[i] = &ves_io_schema.ObjectRefType{}
 
-									certificatesInt[i].Kind = "certificate"
+										certificatesInt[i].Kind = "certificate"
 
-									if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-										certificatesInt[i].Name = v.(string)
+										if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+											certificatesInt[i].Name = v.(string)
+										}
+
+										if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											certificatesInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											certificatesInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											certificatesInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										certificatesInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										certificatesInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										certificatesInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -2473,28 +2888,30 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 														trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															tclMapToStrVal := ps.(map[string]interface{})
-															trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+																tclMapToStrVal := ps.(map[string]interface{})
+																trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
 
-															trustedCaListInt[i].Kind = "trusted_ca_list"
+																trustedCaListInt[i].Kind = "trusted_ca_list"
 
-															if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Name = v.(string)
+																if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Name = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -2513,6 +2930,10 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 											trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
+										}
+
+										if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
+											validationParams.UseVolterraTrustedCaUrl = w.(bool)
 										}
 
 										if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
@@ -2654,6 +3075,38 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
 
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -2720,6 +3173,76 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 													}
 
+													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
 												}
 											}
 
@@ -2727,6 +3250,12 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 									}
 								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) {
+
+								tlsParamsChoiceInt.CommonParams.TrustedCaUrl = v.(string)
 
 							}
 
@@ -2763,28 +3292,30 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 														trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															tclMapToStrVal := ps.(map[string]interface{})
-															trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+																tclMapToStrVal := ps.(map[string]interface{})
+																trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
 
-															trustedCaListInt[i].Kind = "trusted_ca_list"
+																trustedCaListInt[i].Kind = "trusted_ca_list"
 
-															if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Name = v.(string)
+																if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Name = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -2803,6 +3334,10 @@ func resourceVolterraClusterUpdate(d *schema.ResourceData, meta interface{}) err
 
 											trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
+										}
+
+										if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
+											validationParams.UseVolterraTrustedCaUrl = w.(bool)
 										}
 
 										if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {

@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.cdn_cache_rule.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.cdn_cache_rule.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2657,13 +2657,13 @@ var APISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.cdn_cache_rule.CDNCacheRule",
             "properties": {
                 "cache_bypass": {
-                    "description": "Exclusive with [eligible_for_cache]\n Bypass Caching of content from the origin",
+                    "description": "Exclusive with [eligible_for_cache]\n Do not cache content if rule match occurs",
                     "title": "Bypass Cache",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Bypass Cache"
                 },
                 "eligible_for_cache": {
-                    "description": "Exclusive with [cache_bypass]\n Eligible for caching the content",
+                    "description": "Exclusive with [cache_bypass]\n Cache content if rule match occurs",
                     "title": "Eligible For Cache",
                     "$ref": "#/definitions/cdn_cache_ruleCacheEligibleOptions",
                     "x-displayname": "Eligible For Cache"
@@ -2940,9 +2940,16 @@ var APISwaggerJSON string = `{
                 },
                 "MatchRegex": {
                     "type": "string",
-                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals Startswith]\n Field matches regular expression",
+                    "description": "Exclusive with [Contains DoesNotContain DoesNotEndWith DoesNotEqual DoesNotStartWith Endswith Equals Startswith]\n Field matches PCRE 1 compliant regular expression\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.pcre_regex: true\n",
                     "title": "Matches Regex",
-                    "x-displayname": "Matches Regex"
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "x-displayname": "Matches Regex",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.pcre_regex": "true"
+                    }
                 },
                 "Startswith": {
                     "type": "string",
@@ -3009,10 +3016,10 @@ var APISwaggerJSON string = `{
                 },
                 "ignore_response_cookie": {
                     "type": "boolean",
-                    "description": " When enabled, the upstream cookie is sent to the client",
+                    "description": " By default, response will not be cached if set-cookie header is present. This option will override the behavior and cache response even with set-cookie header present.",
                     "title": "Set Cookie",
                     "format": "boolean",
-                    "x-displayname": "Set-Cookie"
+                    "x-displayname": "Ignore-Response-Cookie"
                 }
             }
         },
@@ -3565,6 +3572,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

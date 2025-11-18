@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.rate_limiter.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.rate_limiter.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2554,6 +2554,13 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "rate_limiterLeakyBucketRateLimiter": {
+            "type": "object",
+            "description": "Leaky-Bucket is the default rate limiter algorithm for F5",
+            "title": "LeakyBucketRateLimiter",
+            "x-displayname": "Leaky Bucket Rate Limiter",
+            "x-ves-proto-message": "ves.io.schema.rate_limiter.LeakyBucketRateLimiter"
+        },
         "rate_limiterListResponse": {
             "type": "object",
             "description": "This is the output message of 'List' RPC.",
@@ -2723,6 +2730,7 @@ var APISwaggerJSON string = `{
             "title": "RateLimitValue",
             "x-displayname": "Rate Limit Value",
             "x-ves-oneof-field-action_choice": "[\"action_block\",\"disabled\"]",
+            "x-ves-oneof-field-algorithm": "[\"leaky_bucket\",\"token_bucket\"]",
             "x-ves-proto-message": "ves.io.schema.rate_limiter.RateLimitValue",
             "properties": {
                 "action_block": {
@@ -2749,6 +2757,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disabled"
                 },
+                "leaky_bucket": {
+                    "description": "Exclusive with [token_bucket]\n Leaky-Bucket is the default rate limiter algorithm for F5",
+                    "title": "LeakyBucketRateLimiter",
+                    "$ref": "#/definitions/rate_limiterLeakyBucketRateLimiter",
+                    "x-displayname": "Leaky Bucket Rate Limiter"
+                },
                 "period_multiplier": {
                     "type": "integer",
                     "description": " This setting, combined with Per Period units, provides a duration \n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
@@ -2759,6 +2773,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "0"
                     }
+                },
+                "token_bucket": {
+                    "description": "Exclusive with [leaky_bucket]\n Token-Bucket is a rate limiter algorithm that is stricter with enforcing limits",
+                    "title": "TokenBucketRateLimiter",
+                    "$ref": "#/definitions/rate_limiterTokenBucketRateLimiter",
+                    "x-displayname": "Token Bucket Rate Limiter"
                 },
                 "total_number": {
                     "type": "integer",
@@ -2878,6 +2898,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Config Object"
                 }
             }
+        },
+        "rate_limiterTokenBucketRateLimiter": {
+            "type": "object",
+            "description": "Token-Bucket is a rate limiter algorithm that is stricter with enforcing limits",
+            "title": "TokenBucketRateLimiter",
+            "x-displayname": "Token Bucket Rate Limiter",
+            "x-ves-proto-message": "ves.io.schema.rate_limiter.TokenBucketRateLimiter"
         },
         "schemaConditionType": {
             "type": "object",

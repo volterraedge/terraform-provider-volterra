@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.waf_exclusion_policy.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.waf_exclusion_policy.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -1810,7 +1810,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf_exclusion_policy-api-create"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.waf_exclusion_policy.API.Create"
             },
             "x-displayname": "WAF Exclusion Policy",
@@ -1911,7 +1910,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf_exclusion_policy-api-replace"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.waf_exclusion_policy.API.Replace"
             },
             "x-displayname": "WAF Exclusion Policy",
@@ -2028,7 +2026,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf_exclusion_policy-api-list"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.waf_exclusion_policy.API.List"
             },
             "x-displayname": "WAF Exclusion Policy",
@@ -2139,7 +2136,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf_exclusion_policy-api-get"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.waf_exclusion_policy.API.Get"
             },
             "delete": {
@@ -2233,7 +2229,6 @@ var APISwaggerJSON string = `{
                     "description": "Examples of this operation",
                     "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-waf_exclusion_policy-api-delete"
                 },
-                "x-ves-in-development": "true",
                 "x-ves-proto-rpc": "ves.io.schema.waf_exclusion_policy.API.Delete"
             },
             "x-displayname": "WAF Exclusion Policy",
@@ -3386,13 +3381,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "waf_exclusion_rules": {
                     "type": "array",
-                    "description": " An ordered list of rules.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " An ordered list of rules.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/policySimpleWafExclusionRule"
                     },
                     "x-displayname": "WAF Exclusion Rules",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "256",
                         "ves.io.schema.rules.repeated.unique_metadata_name": "true"
                     }
@@ -3408,13 +3405,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "waf_exclusion_rules": {
                     "type": "array",
-                    "description": " An ordered list of rules.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " An ordered list of rules.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/policySimpleWafExclusionRule"
                     },
                     "x-displayname": "WAF Exclusion Rules",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "256",
                         "ves.io.schema.rules.repeated.unique_metadata_name": "true"
                     }
@@ -3430,13 +3429,15 @@ var APISwaggerJSON string = `{
             "properties": {
                 "waf_exclusion_rules": {
                     "type": "array",
-                    "description": " An ordered list of rules.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " An ordered list of rules.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 256\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 256,
                     "items": {
                         "$ref": "#/definitions/policySimpleWafExclusionRule"
                     },
                     "x-displayname": "WAF Exclusion Rules",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "256",
                         "ves.io.schema.rules.repeated.unique_metadata_name": "true"
                     }

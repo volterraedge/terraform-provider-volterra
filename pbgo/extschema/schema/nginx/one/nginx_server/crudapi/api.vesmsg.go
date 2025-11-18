@@ -788,6 +788,18 @@ func (v *ValidateObjectGetRsp) Validate(ctx context.Context, pm interface{}, opt
 
 	}
 
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		for idx, item := range m.GetStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
@@ -809,6 +821,8 @@ var DefaultObjectGetRspValidator = func() *ValidateObjectGetRsp {
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
 
 	v.FldValidators["spec"] = ves_io_schema_nginx_one_nginx_server.SpecTypeValidator().Validate
+
+	v.FldValidators["status"] = ves_io_schema_nginx_one_nginx_server.StatusObjectValidator().Validate
 
 	return v
 }()
@@ -1290,6 +1304,18 @@ func (v *ValidateObjectListRspItem) Validate(ctx context.Context, pm interface{}
 
 	}
 
+	if fv, exists := v.FldValidators["status"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("status"))
+		for idx, item := range m.GetStatus() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["system_metadata"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("system_metadata"))
@@ -1320,6 +1346,8 @@ var DefaultObjectListRspItemValidator = func() *ValidateObjectListRspItem {
 	v.FldValidators["system_metadata"] = ves_io_schema.SystemObjectMetaTypeValidator().Validate
 
 	v.FldValidators["spec"] = ves_io_schema_nginx_one_nginx_server.SpecTypeValidator().Validate
+
+	v.FldValidators["status"] = ves_io_schema_nginx_one_nginx_server.StatusObjectValidator().Validate
 
 	return v
 }()
@@ -1728,6 +1756,7 @@ func (m *ObjectGetRsp) fromObject(e db.Entry, withDeepCopy bool) {
 	m.Metadata = f.GetMetadata()
 
 	m.Spec = f.GetSpec()
+
 	m.SystemMetadata = f.GetSystemMetadata()
 }
 
@@ -1751,6 +1780,7 @@ func (m *ObjectGetRsp) toObject(e db.Entry, withDeepCopy bool) {
 	f.Metadata = m1.Metadata
 
 	f.Spec = m1.Spec
+
 	f.SystemMetadata = m1.SystemMetadata
 }
 
@@ -1772,6 +1802,7 @@ func (m *ObjectListRspItem) fromObject(e db.Entry, withDeepCopy bool) {
 	m.Metadata = f.GetMetadata()
 
 	m.Spec = f.GetSpec()
+
 	m.SystemMetadata = f.GetSystemMetadata()
 
 }
@@ -1796,6 +1827,7 @@ func (m *ObjectListRspItem) toObject(e db.Entry, withDeepCopy bool) {
 	f.Metadata = m1.Metadata
 
 	f.Spec = m1.Spec
+
 	f.SystemMetadata = m1.SystemMetadata
 
 }

@@ -73,6 +73,11 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 							Required: true,
 						},
 
+						"health_check_secondary_port": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
 						"receive": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -97,6 +102,11 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 						"health_check_port": {
 							Type:     schema.TypeInt,
 							Required: true,
+						},
+
+						"health_check_secondary_port": {
+							Type:     schema.TypeInt,
+							Optional: true,
 						},
 
 						"receive": {
@@ -131,6 +141,11 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 							Required: true,
 						},
 
+						"health_check_secondary_port": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
 						"receive": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -157,6 +172,11 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 							Required: true,
 						},
 
+						"health_check_secondary_port": {
+							Type:     schema.TypeInt,
+							Optional: true,
+						},
+
 						"receive": {
 							Type:     schema.TypeString,
 							Optional: true,
@@ -181,6 +201,11 @@ func resourceVolterraDnsLbHealthCheck() *schema.Resource {
 						"health_check_port": {
 							Type:     schema.TypeInt,
 							Required: true,
+						},
+
+						"health_check_secondary_port": {
+							Type:     schema.TypeInt,
+							Optional: true,
 						},
 
 						"receive": {
@@ -274,6 +299,12 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 
 				}
 
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
+
+				}
+
 				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.HttpHealthCheck.Receive = v.(string)
@@ -306,6 +337,12 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.HttpsHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpsHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 
@@ -356,6 +393,12 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 
 				}
 
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
+
+				}
+
 				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.TcpHealthCheck.Receive = v.(string)
@@ -391,6 +434,12 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 
 				}
 
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHexHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
+
+				}
+
 				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.TcpHexHealthCheck.Receive = v.(string)
@@ -423,6 +472,12 @@ func resourceVolterraDnsLbHealthCheckCreate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.UdpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.UdpHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 
@@ -562,6 +617,12 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 
 				}
 
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
+
+				}
+
 				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.HttpHealthCheck.Receive = v.(string)
@@ -594,6 +655,12 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.HttpsHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.HttpsHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 
@@ -644,6 +711,12 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 
 				}
 
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
+
+				}
+
 				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.TcpHealthCheck.Receive = v.(string)
@@ -679,6 +752,12 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 
 				}
 
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.TcpHexHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
+
+				}
+
 				if v, ok := cs["receive"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.TcpHexHealthCheck.Receive = v.(string)
@@ -711,6 +790,12 @@ func resourceVolterraDnsLbHealthCheckUpdate(d *schema.ResourceData, meta interfa
 				if v, ok := cs["health_check_port"]; ok && !isIntfNil(v) {
 
 					healthCheckInt.UdpHealthCheck.HealthCheckPort = uint32(v.(int))
+
+				}
+
+				if v, ok := cs["health_check_secondary_port"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.UdpHealthCheck.HealthCheckSecondaryPort = uint32(v.(int))
 
 				}
 

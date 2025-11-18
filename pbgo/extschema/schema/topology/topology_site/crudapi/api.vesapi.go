@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.topology.topology_site.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.topology.topology_site.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3153,6 +3153,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -3286,9 +3293,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Network"
                 },
                 "orchestration_mode": {
-                    "description": " x-displayName: Orchestration Mode\n Whether the site is managed or not managed",
+                    "description": " Whether the site is managed or not managed",
                     "title": "Orchestration Mode",
-                    "$ref": "#/definitions/topologyOrchestrationMode"
+                    "$ref": "#/definitions/topologyOrchestrationMode",
+                    "x-displayname": "Orchestration Mode"
                 },
                 "site_type": {
                     "description": " Site type indicates whether the site is CUSTOMER_EDGE or REGIONAL_EDGE",
@@ -3353,14 +3361,14 @@ var APISwaggerJSON string = `{
         },
         "topologyGatewayTypeEnum": {
             "type": "string",
-            "description": "x-displayName: Gateway type\nGateway Type\n\n - INGRESS_GATEWAY: Ingress gateway\n\nx-displayName: Ingress gateway\nIngress gateway (single nic)\n - INGRESS_EGRESS_GATEWAY: Ingress and Egress gateway\n\nx-displayName: Ingress and Egress gateway\nIngress and Egress gateway (dual nic)",
+            "description": "Gateway Type\n\n - INGRESS_GATEWAY: Ingress gateway\n\nIngress gateway (single nic)\n - INGRESS_EGRESS_GATEWAY: Ingress and Egress gateway\n\nIngress and Egress gateway (dual nic)",
             "title": "GatewayType",
             "enum": [
                 "INGRESS_GATEWAY",
                 "INGRESS_EGRESS_GATEWAY"
             ],
             "default": "INGRESS_GATEWAY",
-            "x-displayname": "",
+            "x-displayname": "Gateway type",
             "x-ves-proto-enum": "ves.io.schema.topology.GatewayTypeEnum"
         },
         "topologyMetaType": {
@@ -3492,7 +3500,7 @@ var APISwaggerJSON string = `{
         },
         "topologySiteAppTypeEnum": {
             "type": "string",
-            "description": "x-displayName: Site App type\nSite App Type\n\n - SITE_APPTYPE_NONE: Not applicable \n\nx-displayName: Not applicable \nNot applicable\n - SITE_APPTYPE_APPSTACK: AppStack Site\n\nx-displayName: AppStack Site\nAppStack Site\n - SITE_APPTYPE_MESH: Mesh site \n\nx-displayName: Mesh site \nMesh site",
+            "description": "Site App Type\n\n - SITE_APPTYPE_NONE: Not applicable \n\nNot applicable\n - SITE_APPTYPE_APPSTACK: AppStack Site\n\nAppStack Site\n - SITE_APPTYPE_MESH: Mesh site \n\nMesh site",
             "title": "Site App Type",
             "enum": [
                 "SITE_APPTYPE_NONE",
@@ -3500,7 +3508,7 @@ var APISwaggerJSON string = `{
                 "SITE_APPTYPE_MESH"
             ],
             "default": "SITE_APPTYPE_NONE",
-            "x-displayname": "",
+            "x-displayname": "Site App type",
             "x-ves-proto-enum": "ves.io.schema.topology.SiteAppTypeEnum"
         },
         "topology_siteSpecType": {

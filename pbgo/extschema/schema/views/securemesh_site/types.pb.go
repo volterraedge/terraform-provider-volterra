@@ -95,7 +95,7 @@ type GlobalSpecType struct {
 	//
 	// x-displayName: "Geographical Address"
 	// x-example: "123 Street, city, country, postal code"
-	// Site's geographical address that can be used determine its latitude and longitude.
+	// Site's geographical address that can be used to determine its latitude and longitude.
 	Address string `protobuf:"bytes,18,opt,name=address,proto3" json:"address,omitempty"`
 	// coordinates
 	//

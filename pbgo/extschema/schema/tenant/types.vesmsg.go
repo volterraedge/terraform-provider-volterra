@@ -879,6 +879,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["log_headers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("log_headers"))
+		if err := fv(ctx, m.GetLogHeaders(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["origin"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("origin"))

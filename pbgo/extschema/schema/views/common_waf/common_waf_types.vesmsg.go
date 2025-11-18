@@ -12215,6 +12215,10 @@ type ValidateWafExclusion struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateWafExclusion) WafExclusionChoiceWafExclusionPolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	return ves_io_schema_views.ObjectRefTypeValidator().Validate, nil
+}
+
 func (v *ValidateWafExclusion) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*WafExclusion)
 	if !ok {
@@ -12262,8 +12266,27 @@ func (v *ValidateWafExclusion) Validate(ctx context.Context, pm interface{}, opt
 var DefaultWafExclusionValidator = func() *ValidateWafExclusion {
 	v := &ValidateWafExclusion{FldValidators: map[string]db.ValidatorFunc{}}
 
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhWafExclusionChoiceWafExclusionPolicy := v.WafExclusionChoiceWafExclusionPolicyValidationRuleHandler
+	rulesWafExclusionChoiceWafExclusionPolicy := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFnMap["waf_exclusion_choice.waf_exclusion_policy"], err = vrhWafExclusionChoiceWafExclusionPolicy(rulesWafExclusionChoiceWafExclusionPolicy)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for oneof field WafExclusion.waf_exclusion_choice_waf_exclusion_policy: %s", err)
+		panic(errMsg)
+	}
+
+	v.FldValidators["waf_exclusion_choice.waf_exclusion_policy"] = vFnMap["waf_exclusion_choice.waf_exclusion_policy"]
+
 	v.FldValidators["waf_exclusion_choice.waf_exclusion_inline_rules"] = WafExclusionInlineRulesValidator().Validate
-	v.FldValidators["waf_exclusion_choice.waf_exclusion_policy"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
 }()

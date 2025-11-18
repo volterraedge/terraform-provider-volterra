@@ -16,6 +16,7 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_cloud_link "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_link"
+	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
@@ -116,6 +117,42 @@ func resourceVolterraCloudLink() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
+															"blindfold_secret_info_internal": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"decryption_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"store_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"secret_encoding_type": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -162,6 +199,66 @@ func resourceVolterraCloudLink() *schema.Resource {
 																	},
 																},
 															},
+
+															"vault_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"key": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"provider": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"secret_encoding": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"version": {
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"wingman_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
 														},
 													},
 												},
@@ -174,6 +271,36 @@ func resourceVolterraCloudLink() *schema.Resource {
 												"connection_id": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+
+												"coordinates": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"latitude": {
+																Type:       schema.TypeFloat,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"longitude": {
+																Type:       schema.TypeFloat,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"enable_sitelink": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"ipv4": {
@@ -197,6 +324,23 @@ func resourceVolterraCloudLink() *schema.Resource {
 													},
 												},
 
+												"ipv6": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{},
+													},
+												},
+
+												"jumbo_mtu": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"metadata": {
 
 													Type:     schema.TypeList,
@@ -210,6 +354,12 @@ func resourceVolterraCloudLink() *schema.Resource {
 																Optional: true,
 															},
 
+															"disable": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
 															"name": {
 																Type:     schema.TypeString,
 																Required: true,
@@ -221,6 +371,20 @@ func resourceVolterraCloudLink() *schema.Resource {
 												"region": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+
+												"system_generated_name": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"user_assigned_name": {
+
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"tags": {
@@ -244,12 +408,41 @@ func resourceVolterraCloudLink() *schema.Resource {
 							},
 						},
 
+						"f5xc_managed": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{},
+							},
+						},
+
+						"auto": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
 						"custom_asn": {
 
 							Type:     schema.TypeInt,
 							Optional: true,
 						},
 					},
+				},
+			},
+
+			"azure": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{},
 				},
 			},
 
@@ -276,6 +469,30 @@ func resourceVolterraCloudLink() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"coordinates": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"latitude": {
+																Type:       schema.TypeFloat,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"longitude": {
+																Type:       schema.TypeFloat,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
 												"interconnect_attachment_name": {
 													Type:     schema.TypeString,
 													Required: true,
@@ -292,6 +509,12 @@ func resourceVolterraCloudLink() *schema.Resource {
 															"description": {
 																Type:     schema.TypeString,
 																Optional: true,
+															},
+
+															"disable": {
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"name": {
@@ -503,6 +726,38 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 												if set != nil {
 													authKeyMapStrToI := set.(map[string]interface{})
 
+													if v, ok := authKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														authKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := authKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														authKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := authKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -569,6 +824,76 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 
 													}
 
+													if v, ok := authKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														authKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := authKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														authKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
 												}
 											}
 
@@ -580,6 +905,32 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 
 										if w, ok := connectionsMapStrToI["connection_id"]; ok && !isIntfNil(w) {
 											connections[i].ConnectionId = w.(string)
+										}
+
+										if v, ok := connectionsMapStrToI["coordinates"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											coordinates := &ves_io_schema_site.Coordinates{}
+											connections[i].Coordinates = coordinates
+											for _, set := range sl {
+												if set != nil {
+													coordinatesMapStrToI := set.(map[string]interface{})
+
+													if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
+														coordinates.Latitude = float32(w.(float64))
+													}
+
+													if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
+														coordinates.Longitude = float32(w.(float64))
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := connectionsMapStrToI["enable_sitelink"]; ok && !isIntfNil(w) {
+											connections[i].EnableSitelink = w.(bool)
 										}
 
 										ipTypeTypeFound := false
@@ -613,6 +964,19 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 
 										}
 
+										if v, ok := connectionsMapStrToI["ipv6"]; ok && !isIntfNil(v) && !ipTypeTypeFound {
+
+											ipTypeTypeFound = true
+											ipTypeInt := &ves_io_schema_cloud_link.AWSBYOCType_Ipv6{}
+											ipTypeInt.Ipv6 = &ves_io_schema_cloud_link.Ipv6Type{}
+											connections[i].IpType = ipTypeInt
+
+										}
+
+										if w, ok := connectionsMapStrToI["jumbo_mtu"]; ok && !isIntfNil(w) {
+											connections[i].JumboMtu = w.(bool)
+										}
+
 										if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
 
 											sl := v.([]interface{})
@@ -626,6 +990,10 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 														metadata.Description = w.(string)
 													}
 
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
+
 													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 														metadata.Name = w.(string)
 													}
@@ -637,6 +1005,31 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 
 										if w, ok := connectionsMapStrToI["region"]; ok && !isIntfNil(w) {
 											connections[i].Region = w.(string)
+										}
+
+										resourceNameChoiceTypeFound := false
+
+										if v, ok := connectionsMapStrToI["system_generated_name"]; ok && !isIntfNil(v) && !resourceNameChoiceTypeFound {
+
+											resourceNameChoiceTypeFound = true
+
+											if v.(bool) {
+												resourceNameChoiceInt := &ves_io_schema_cloud_link.AWSBYOCType_SystemGeneratedName{}
+												resourceNameChoiceInt.SystemGeneratedName = &ves_io_schema.Empty{}
+												connections[i].ResourceNameChoice = resourceNameChoiceInt
+											}
+
+										}
+
+										if v, ok := connectionsMapStrToI["user_assigned_name"]; ok && !isIntfNil(v) && !resourceNameChoiceTypeFound {
+
+											resourceNameChoiceTypeFound = true
+											resourceNameChoiceInt := &ves_io_schema_cloud_link.AWSBYOCType_UserAssignedName{}
+
+											connections[i].ResourceNameChoice = resourceNameChoiceInt
+
+											resourceNameChoiceInt.UserAssignedName = v.(string)
+
 										}
 
 										if w, ok := connectionsMapStrToI["tags"]; ok && !isIntfNil(w) {
@@ -667,7 +1060,28 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 
 				}
 
+				if v, ok := cs["f5xc_managed"]; ok && !isIntfNil(v) && !cloudLinkTypeTypeFound {
+
+					cloudLinkTypeTypeFound = true
+					cloudLinkTypeInt := &ves_io_schema_cloud_link.AWSType_F5XcManaged{}
+					cloudLinkTypeInt.F5XcManaged = &ves_io_schema_cloud_link.AWSF5XCManagedType{}
+					cloudProviderInt.Aws.CloudLinkType = cloudLinkTypeInt
+
+				}
+
 				directConnectGatewayAsnChoiceTypeFound := false
+
+				if v, ok := cs["auto"]; ok && !isIntfNil(v) && !directConnectGatewayAsnChoiceTypeFound {
+
+					directConnectGatewayAsnChoiceTypeFound = true
+
+					if v.(bool) {
+						directConnectGatewayAsnChoiceInt := &ves_io_schema_cloud_link.AWSType_Auto{}
+						directConnectGatewayAsnChoiceInt.Auto = &ves_io_schema.Empty{}
+						cloudProviderInt.Aws.DirectConnectGatewayAsnChoice = directConnectGatewayAsnChoiceInt
+					}
+
+				}
 
 				if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !directConnectGatewayAsnChoiceTypeFound {
 
@@ -682,6 +1096,15 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 
 			}
 		}
+
+	}
+
+	if _, ok := d.GetOk("azure"); ok && !cloudProviderTypeFound {
+
+		cloudProviderTypeFound = true
+		cloudProviderInt := &ves_io_schema_cloud_link.CreateSpecType_Azure{}
+		cloudProviderInt.Azure = &ves_io_schema_cloud_link.AzureType{}
+		createSpec.CloudProvider = cloudProviderInt
 
 	}
 
@@ -721,6 +1144,28 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 										connections[i] = &ves_io_schema_cloud_link.GCPBYOCType{}
 										connectionsMapStrToI := set.(map[string]interface{})
 
+										if v, ok := connectionsMapStrToI["coordinates"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											coordinates := &ves_io_schema_site.Coordinates{}
+											connections[i].Coordinates = coordinates
+											for _, set := range sl {
+												if set != nil {
+													coordinatesMapStrToI := set.(map[string]interface{})
+
+													if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
+														coordinates.Latitude = float32(w.(float64))
+													}
+
+													if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
+														coordinates.Longitude = float32(w.(float64))
+													}
+
+												}
+											}
+
+										}
+
 										if w, ok := connectionsMapStrToI["interconnect_attachment_name"]; ok && !isIntfNil(w) {
 											connections[i].InterconnectAttachmentName = w.(string)
 										}
@@ -736,6 +1181,10 @@ func resourceVolterraCloudLinkCreate(d *schema.ResourceData, meta interface{}) e
 
 													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 														metadata.Description = w.(string)
+													}
+
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
 													}
 
 													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -1024,6 +1473,38 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 												if set != nil {
 													authKeyMapStrToI := set.(map[string]interface{})
 
+													if v, ok := authKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														authKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := authKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														authKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := authKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -1090,6 +1571,76 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 
 													}
 
+													if v, ok := authKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														authKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := authKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														authKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
 												}
 											}
 
@@ -1101,6 +1652,32 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 
 										if w, ok := connectionsMapStrToI["connection_id"]; ok && !isIntfNil(w) {
 											connections[i].ConnectionId = w.(string)
+										}
+
+										if v, ok := connectionsMapStrToI["coordinates"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											coordinates := &ves_io_schema_site.Coordinates{}
+											connections[i].Coordinates = coordinates
+											for _, set := range sl {
+												if set != nil {
+													coordinatesMapStrToI := set.(map[string]interface{})
+
+													if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
+														coordinates.Latitude = float32(w.(float64))
+													}
+
+													if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
+														coordinates.Longitude = float32(w.(float64))
+													}
+
+												}
+											}
+
+										}
+
+										if w, ok := connectionsMapStrToI["enable_sitelink"]; ok && !isIntfNil(w) {
+											connections[i].EnableSitelink = w.(bool)
 										}
 
 										ipTypeTypeFound := false
@@ -1134,6 +1711,19 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 
 										}
 
+										if v, ok := connectionsMapStrToI["ipv6"]; ok && !isIntfNil(v) && !ipTypeTypeFound {
+
+											ipTypeTypeFound = true
+											ipTypeInt := &ves_io_schema_cloud_link.AWSBYOCType_Ipv6{}
+											ipTypeInt.Ipv6 = &ves_io_schema_cloud_link.Ipv6Type{}
+											connections[i].IpType = ipTypeInt
+
+										}
+
+										if w, ok := connectionsMapStrToI["jumbo_mtu"]; ok && !isIntfNil(w) {
+											connections[i].JumboMtu = w.(bool)
+										}
+
 										if v, ok := connectionsMapStrToI["metadata"]; ok && !isIntfNil(v) {
 
 											sl := v.([]interface{})
@@ -1147,6 +1737,10 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 														metadata.Description = w.(string)
 													}
 
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
+													}
+
 													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 														metadata.Name = w.(string)
 													}
@@ -1158,6 +1752,31 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 
 										if w, ok := connectionsMapStrToI["region"]; ok && !isIntfNil(w) {
 											connections[i].Region = w.(string)
+										}
+
+										resourceNameChoiceTypeFound := false
+
+										if v, ok := connectionsMapStrToI["system_generated_name"]; ok && !isIntfNil(v) && !resourceNameChoiceTypeFound {
+
+											resourceNameChoiceTypeFound = true
+
+											if v.(bool) {
+												resourceNameChoiceInt := &ves_io_schema_cloud_link.AWSBYOCType_SystemGeneratedName{}
+												resourceNameChoiceInt.SystemGeneratedName = &ves_io_schema.Empty{}
+												connections[i].ResourceNameChoice = resourceNameChoiceInt
+											}
+
+										}
+
+										if v, ok := connectionsMapStrToI["user_assigned_name"]; ok && !isIntfNil(v) && !resourceNameChoiceTypeFound {
+
+											resourceNameChoiceTypeFound = true
+											resourceNameChoiceInt := &ves_io_schema_cloud_link.AWSBYOCType_UserAssignedName{}
+
+											connections[i].ResourceNameChoice = resourceNameChoiceInt
+
+											resourceNameChoiceInt.UserAssignedName = v.(string)
+
 										}
 
 										if w, ok := connectionsMapStrToI["tags"]; ok && !isIntfNil(w) {
@@ -1188,7 +1807,28 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 
 				}
 
+				if v, ok := cs["f5xc_managed"]; ok && !isIntfNil(v) && !cloudLinkTypeTypeFound {
+
+					cloudLinkTypeTypeFound = true
+					cloudLinkTypeInt := &ves_io_schema_cloud_link.AWSType_F5XcManaged{}
+					cloudLinkTypeInt.F5XcManaged = &ves_io_schema_cloud_link.AWSF5XCManagedType{}
+					cloudProviderInt.Aws.CloudLinkType = cloudLinkTypeInt
+
+				}
+
 				directConnectGatewayAsnChoiceTypeFound := false
+
+				if v, ok := cs["auto"]; ok && !isIntfNil(v) && !directConnectGatewayAsnChoiceTypeFound {
+
+					directConnectGatewayAsnChoiceTypeFound = true
+
+					if v.(bool) {
+						directConnectGatewayAsnChoiceInt := &ves_io_schema_cloud_link.AWSType_Auto{}
+						directConnectGatewayAsnChoiceInt.Auto = &ves_io_schema.Empty{}
+						cloudProviderInt.Aws.DirectConnectGatewayAsnChoice = directConnectGatewayAsnChoiceInt
+					}
+
+				}
 
 				if v, ok := cs["custom_asn"]; ok && !isIntfNil(v) && !directConnectGatewayAsnChoiceTypeFound {
 
@@ -1203,6 +1843,15 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 
 			}
 		}
+
+	}
+
+	if _, ok := d.GetOk("azure"); ok && !cloudProviderTypeFound {
+
+		cloudProviderTypeFound = true
+		cloudProviderInt := &ves_io_schema_cloud_link.ReplaceSpecType_Azure{}
+		cloudProviderInt.Azure = &ves_io_schema_cloud_link.AzureType{}
+		updateSpec.CloudProvider = cloudProviderInt
 
 	}
 
@@ -1242,6 +1891,28 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 										connections[i] = &ves_io_schema_cloud_link.GCPBYOCType{}
 										connectionsMapStrToI := set.(map[string]interface{})
 
+										if v, ok := connectionsMapStrToI["coordinates"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											coordinates := &ves_io_schema_site.Coordinates{}
+											connections[i].Coordinates = coordinates
+											for _, set := range sl {
+												if set != nil {
+													coordinatesMapStrToI := set.(map[string]interface{})
+
+													if w, ok := coordinatesMapStrToI["latitude"]; ok && !isIntfNil(w) {
+														coordinates.Latitude = float32(w.(float64))
+													}
+
+													if w, ok := coordinatesMapStrToI["longitude"]; ok && !isIntfNil(w) {
+														coordinates.Longitude = float32(w.(float64))
+													}
+
+												}
+											}
+
+										}
+
 										if w, ok := connectionsMapStrToI["interconnect_attachment_name"]; ok && !isIntfNil(w) {
 											connections[i].InterconnectAttachmentName = w.(string)
 										}
@@ -1257,6 +1928,10 @@ func resourceVolterraCloudLinkUpdate(d *schema.ResourceData, meta interface{}) e
 
 													if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 														metadata.Description = w.(string)
+													}
+
+													if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+														metadata.Disable = w.(bool)
 													}
 
 													if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {

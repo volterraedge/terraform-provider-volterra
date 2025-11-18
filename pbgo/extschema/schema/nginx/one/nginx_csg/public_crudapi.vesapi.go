@@ -623,7 +623,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.nginx.one.nginx_csg.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.nginx.one.nginx_csg.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -1493,6 +1493,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "policy_name": {
+                    "type": "string",
+                    "description": " Policy name configured for WAF\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "policy_name",
+                    "x-displayname": "WAF Policy Name",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
                 "security_log_enabled": {
                     "type": "boolean",
                     "description": " Specifies if security logging is enabled",
@@ -1522,6 +1532,11 @@ var APISwaggerJSON string = `{
                     "description": " If specified, the value signifies the apiDiscovery configuration\n in the global context",
                     "$ref": "#/definitions/nginx_instanceAPIDiscoverySpec",
                     "x-displayname": "APIDiscoverySpec"
+                },
+                "csg_name": {
+                    "type": "string",
+                    "description": " Name for CSG in NGINX One",
+                    "x-displayname": "CSGName"
                 },
                 "object_id": {
                     "type": "string",

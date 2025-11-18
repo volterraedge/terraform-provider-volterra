@@ -94,6 +94,13 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 				},
 			},
 
+			"ns_system": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
+
 			"audit_logs": {
 
 				Type:     schema.TypeBool,
@@ -260,6 +267,42 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"blindfold_secret_info_internal": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"decryption_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"store_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"secret_encoding_type": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"blindfold_secret_info": {
 
 										Type:     schema.TypeList,
@@ -302,6 +345,66 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 												"url": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+											},
+										},
+									},
+
+									"vault_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"key": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"provider": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"secret_encoding": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"version": {
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"wingman_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -415,6 +518,42 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"blindfold_secret_info_internal": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"decryption_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"store_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"secret_encoding_type": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"blindfold_secret_info": {
 
 										Type:     schema.TypeList,
@@ -457,6 +596,66 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 												"url": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+											},
+										},
+									},
+
+									"vault_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"key": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"provider": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"secret_encoding": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"version": {
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"wingman_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -594,6 +793,42 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"blindfold_secret_info_internal": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"decryption_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"store_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"secret_encoding_type": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"blindfold_secret_info": {
 
 										Type:     schema.TypeList,
@@ -636,6 +871,66 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 												"url": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+											},
+										},
+									},
+
+									"vault_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"key": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"provider": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"secret_encoding": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"version": {
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"wingman_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -709,6 +1004,42 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
+															"blindfold_secret_info_internal": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"decryption_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"store_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"secret_encoding_type": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -755,6 +1086,66 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 																	},
 																},
 															},
+
+															"vault_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"key": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"provider": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"secret_encoding": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"version": {
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"wingman_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
 														},
 													},
 												},
@@ -784,6 +1175,574 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 
 										Type:     schema.TypeBool,
 										Optional: true,
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"elastic_receiver": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"auth_aws": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"namespace": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"tenant": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"auth_basic": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"password": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"blindfold_secret_info_internal": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"decryption_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"store_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"secret_encoding_type": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"blindfold_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"decryption_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"store_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"clear_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"url": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"vault_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"key": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"provider": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"secret_encoding": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"version": {
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"wingman_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"user_name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"auth_none": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"batch": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"max_bytes": {
+
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"max_bytes_disabled": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"max_events": {
+
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"max_events_disabled": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"timeout_seconds": {
+
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"timeout_seconds_default": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"compression": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"compression_default": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"compression_gzip": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"compression_none": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"endpoint": {
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"no_tls": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"use_tls": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"no_ca": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"trusted_ca_url": {
+
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"mtls_disabled": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"mtls_enable": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"certificate": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"key_url": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"blindfold_secret_info_internal": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"decryption_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"store_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"secret_encoding_type": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"blindfold_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"decryption_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"store_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"clear_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"url": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"vault_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"key": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"provider": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"secret_encoding": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"version": {
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"wingman_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"disable_verify_certificate": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"enable_verify_certificate": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"disable_verify_hostname": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"enable_verify_hostname": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -961,6 +1920,42 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"blindfold_secret_info_internal": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"decryption_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"store_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"secret_encoding_type": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"blindfold_secret_info": {
 
 													Type:     schema.TypeList,
@@ -1003,6 +1998,66 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 															"url": {
 																Type:     schema.TypeString,
 																Required: true,
+															},
+														},
+													},
+												},
+
+												"vault_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"key": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"provider": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"secret_encoding": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"version": {
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"wingman_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1041,6 +2096,42 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"blindfold_secret_info_internal": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"decryption_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"store_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"secret_encoding_type": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"blindfold_secret_info": {
 
 													Type:     schema.TypeList,
@@ -1083,6 +2174,66 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 															"url": {
 																Type:     schema.TypeString,
 																Required: true,
+															},
+														},
+													},
+												},
+
+												"vault_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"key": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"provider": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"secret_encoding": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"version": {
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"wingman_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1223,6 +2374,42 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
+															"blindfold_secret_info_internal": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"decryption_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"store_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"secret_encoding_type": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -1265,6 +2452,66 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 																		"url": {
 																			Type:     schema.TypeString,
 																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"vault_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"key": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"provider": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"secret_encoding": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"version": {
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"wingman_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1463,6 +2710,42 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
+															"blindfold_secret_info_internal": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"decryption_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"store_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"secret_encoding_type": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -1505,6 +2788,66 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 																		"url": {
 																			Type:     schema.TypeString,
 																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"vault_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"key": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"provider": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"secret_encoding": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"version": {
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"wingman_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1562,6 +2905,42 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"blindfold_secret_info_internal": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"decryption_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"store_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"secret_encoding_type": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"blindfold_secret_info": {
 
 										Type:     schema.TypeList,
@@ -1604,6 +2983,66 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 												"url": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+											},
+										},
+									},
+
+									"vault_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"key": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"provider": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"secret_encoding": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"version": {
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"wingman_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -1764,6 +3203,42 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
+															"blindfold_secret_info_internal": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"decryption_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"store_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"secret_encoding_type": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -1806,6 +3281,66 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 																		"url": {
 																			Type:     schema.TypeString,
 																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"vault_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"key": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"provider": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"secret_encoding": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"version": {
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"wingman_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2099,6 +3634,42 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"blindfold_secret_info_internal": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"decryption_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"store_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"secret_encoding_type": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"blindfold_secret_info": {
 
 										Type:     schema.TypeList,
@@ -2141,6 +3712,66 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 												"url": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+											},
+										},
+									},
+
+									"vault_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"key": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"provider": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"secret_encoding": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"version": {
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"wingman_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -2202,6 +3833,42 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
+															"blindfold_secret_info_internal": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"decryption_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"store_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"secret_encoding_type": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -2244,6 +3911,66 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 																		"url": {
 																			Type:     schema.TypeString,
 																			Required: true,
+																		},
+																	},
+																},
+															},
+
+															"vault_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"key": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"provider": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"secret_encoding": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"version": {
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"wingman_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -2301,6 +4028,42 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"blindfold_secret_info_internal": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"decryption_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"store_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"secret_encoding_type": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"blindfold_secret_info": {
 
 										Type:     schema.TypeList,
@@ -2343,6 +4106,66 @@ func resourceVolterraGlobalLogReceiver() *schema.Resource {
 												"url": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+											},
+										},
+									},
+
+									"vault_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"key": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"provider": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"secret_encoding": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"version": {
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"wingman_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -2466,6 +4289,18 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 				}
 
 			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("ns_system"); ok && !filterChoiceTypeFound {
+
+		filterChoiceTypeFound = true
+
+		if v.(bool) {
+			filterChoiceInt := &ves_io_schema_global_log_receiver.CreateSpecType_NsSystem{}
+			filterChoiceInt.NsSystem = &ves_io_schema.Empty{}
+			createSpec.FilterChoice = filterChoiceInt
 		}
 
 	}
@@ -2747,6 +4582,38 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 						if set != nil {
 							connectionStringMapStrToI := set.(map[string]interface{})
 
+							if v, ok := connectionStringMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								connectionString.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := connectionStringMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								connectionString.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := connectionStringMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -2805,6 +4672,76 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := connectionStringMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								connectionString.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := connectionStringMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								connectionString.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -2997,6 +4934,38 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 						if set != nil {
 							connectionStringMapStrToI := set.(map[string]interface{})
 
+							if v, ok := connectionStringMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								connectionString.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := connectionStringMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								connectionString.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := connectionStringMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -3055,6 +5024,76 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := connectionStringMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								connectionString.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := connectionStringMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								connectionString.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -3292,6 +5331,38 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 						if set != nil {
 							datadogApiKeyMapStrToI := set.(map[string]interface{})
 
+							if v, ok := datadogApiKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								datadogApiKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := datadogApiKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								datadogApiKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := datadogApiKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -3350,6 +5421,76 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := datadogApiKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								datadogApiKey.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := datadogApiKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								datadogApiKey.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -3479,6 +5620,38 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 												if set != nil {
 													keyUrlMapStrToI := set.(map[string]interface{})
 
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														keyUrl.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := keyUrlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -3537,6 +5710,821 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							verifyCertificateTypeFound := false
+
+							if v, ok := cs["disable_verify_certificate"]; ok && !isIntfNil(v) && !verifyCertificateTypeFound {
+
+								verifyCertificateTypeFound = true
+
+								if v.(bool) {
+									verifyCertificateInt := &ves_io_schema_global_log_receiver.TLSConfigType_DisableVerifyCertificate{}
+									verifyCertificateInt.DisableVerifyCertificate = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.VerifyCertificate = verifyCertificateInt
+								}
+
+							}
+
+							if v, ok := cs["enable_verify_certificate"]; ok && !isIntfNil(v) && !verifyCertificateTypeFound {
+
+								verifyCertificateTypeFound = true
+
+								if v.(bool) {
+									verifyCertificateInt := &ves_io_schema_global_log_receiver.TLSConfigType_EnableVerifyCertificate{}
+									verifyCertificateInt.EnableVerifyCertificate = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.VerifyCertificate = verifyCertificateInt
+								}
+
+							}
+
+							verifyHostnameTypeFound := false
+
+							if v, ok := cs["disable_verify_hostname"]; ok && !isIntfNil(v) && !verifyHostnameTypeFound {
+
+								verifyHostnameTypeFound = true
+
+								if v.(bool) {
+									verifyHostnameInt := &ves_io_schema_global_log_receiver.TLSConfigType_DisableVerifyHostname{}
+									verifyHostnameInt.DisableVerifyHostname = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.VerifyHostname = verifyHostnameInt
+								}
+
+							}
+
+							if v, ok := cs["enable_verify_hostname"]; ok && !isIntfNil(v) && !verifyHostnameTypeFound {
+
+								verifyHostnameTypeFound = true
+
+								if v.(bool) {
+									verifyHostnameInt := &ves_io_schema_global_log_receiver.TLSConfigType_EnableVerifyHostname{}
+									verifyHostnameInt.EnableVerifyHostname = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.VerifyHostname = verifyHostnameInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("elastic_receiver"); ok && !isIntfNil(v) && !receiverTypeFound {
+
+		receiverTypeFound = true
+		receiverInt := &ves_io_schema_global_log_receiver.CreateSpecType_ElasticReceiver{}
+		receiverInt.ElasticReceiver = &ves_io_schema_global_log_receiver.ElasticConfig{}
+		createSpec.Receiver = receiverInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				authChoiceTypeFound := false
+
+				if v, ok := cs["auth_aws"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+
+					authChoiceTypeFound = true
+					authChoiceInt := &ves_io_schema_global_log_receiver.ElasticConfig_AuthAws{}
+					authChoiceInt.AuthAws = &ves_io_schema_views.ObjectRefType{}
+					receiverInt.ElasticReceiver.AuthChoice = authChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								authChoiceInt.AuthAws.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								authChoiceInt.AuthAws.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								authChoiceInt.AuthAws.Tenant = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["auth_basic"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+
+					authChoiceTypeFound = true
+					authChoiceInt := &ves_io_schema_global_log_receiver.ElasticConfig_AuthBasic{}
+					authChoiceInt.AuthBasic = &ves_io_schema_global_log_receiver.HttpAuthBasic{}
+					receiverInt.ElasticReceiver.AuthChoice = authChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["password"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								password := &ves_io_schema.SecretType{}
+								authChoiceInt.AuthBasic.Password = password
+								for _, set := range sl {
+									if set != nil {
+										passwordMapStrToI := set.(map[string]interface{})
+
+										if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										secretInfoOneofTypeFound := false
+
+										if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+											secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+											password.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := passwordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+											secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+											password.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											password.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											password.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["user_name"]; ok && !isIntfNil(v) {
+
+								authChoiceInt.AuthBasic.UserName = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["auth_none"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+
+					authChoiceTypeFound = true
+
+					if v.(bool) {
+						authChoiceInt := &ves_io_schema_global_log_receiver.ElasticConfig_AuthNone{}
+						authChoiceInt.AuthNone = &ves_io_schema.Empty{}
+						receiverInt.ElasticReceiver.AuthChoice = authChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["batch"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					batch := &ves_io_schema_global_log_receiver.BatchOptionType{}
+					receiverInt.ElasticReceiver.Batch = batch
+					for _, set := range sl {
+						if set != nil {
+							batchMapStrToI := set.(map[string]interface{})
+
+							batchBytesTypeFound := false
+
+							if v, ok := batchMapStrToI["max_bytes"]; ok && !isIntfNil(v) && !batchBytesTypeFound {
+
+								batchBytesTypeFound = true
+								batchBytesInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxBytes{}
+
+								batch.BatchBytes = batchBytesInt
+
+								batchBytesInt.MaxBytes = uint32(v.(int))
+
+							}
+
+							if v, ok := batchMapStrToI["max_bytes_disabled"]; ok && !isIntfNil(v) && !batchBytesTypeFound {
+
+								batchBytesTypeFound = true
+
+								if v.(bool) {
+									batchBytesInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxBytesDisabled{}
+									batchBytesInt.MaxBytesDisabled = &ves_io_schema.Empty{}
+									batch.BatchBytes = batchBytesInt
+								}
+
+							}
+
+							batchEventsTypeFound := false
+
+							if v, ok := batchMapStrToI["max_events"]; ok && !isIntfNil(v) && !batchEventsTypeFound {
+
+								batchEventsTypeFound = true
+								batchEventsInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxEvents{}
+
+								batch.BatchEvents = batchEventsInt
+
+								batchEventsInt.MaxEvents = uint32(v.(int))
+
+							}
+
+							if v, ok := batchMapStrToI["max_events_disabled"]; ok && !isIntfNil(v) && !batchEventsTypeFound {
+
+								batchEventsTypeFound = true
+
+								if v.(bool) {
+									batchEventsInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxEventsDisabled{}
+									batchEventsInt.MaxEventsDisabled = &ves_io_schema.Empty{}
+									batch.BatchEvents = batchEventsInt
+								}
+
+							}
+
+							batchTimeoutTypeFound := false
+
+							if v, ok := batchMapStrToI["timeout_seconds"]; ok && !isIntfNil(v) && !batchTimeoutTypeFound {
+
+								batchTimeoutTypeFound = true
+								batchTimeoutInt := &ves_io_schema_global_log_receiver.BatchOptionType_TimeoutSeconds{}
+
+								batch.BatchTimeout = batchTimeoutInt
+
+								batchTimeoutInt.TimeoutSeconds = uint64(v.(int))
+
+							}
+
+							if v, ok := batchMapStrToI["timeout_seconds_default"]; ok && !isIntfNil(v) && !batchTimeoutTypeFound {
+
+								batchTimeoutTypeFound = true
+
+								if v.(bool) {
+									batchTimeoutInt := &ves_io_schema_global_log_receiver.BatchOptionType_TimeoutSecondsDefault{}
+									batchTimeoutInt.TimeoutSecondsDefault = &ves_io_schema.Empty{}
+									batch.BatchTimeout = batchTimeoutInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["compression"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					compression := &ves_io_schema_global_log_receiver.CompressionType{}
+					receiverInt.ElasticReceiver.Compression = compression
+					for _, set := range sl {
+						if set != nil {
+							compressionMapStrToI := set.(map[string]interface{})
+
+							compressionChoiceTypeFound := false
+
+							if v, ok := compressionMapStrToI["compression_default"]; ok && !isIntfNil(v) && !compressionChoiceTypeFound {
+
+								compressionChoiceTypeFound = true
+
+								if v.(bool) {
+									compressionChoiceInt := &ves_io_schema_global_log_receiver.CompressionType_CompressionDefault{}
+									compressionChoiceInt.CompressionDefault = &ves_io_schema.Empty{}
+									compression.CompressionChoice = compressionChoiceInt
+								}
+
+							}
+
+							if v, ok := compressionMapStrToI["compression_gzip"]; ok && !isIntfNil(v) && !compressionChoiceTypeFound {
+
+								compressionChoiceTypeFound = true
+
+								if v.(bool) {
+									compressionChoiceInt := &ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}
+									compressionChoiceInt.CompressionGzip = &ves_io_schema.Empty{}
+									compression.CompressionChoice = compressionChoiceInt
+								}
+
+							}
+
+							if v, ok := compressionMapStrToI["compression_none"]; ok && !isIntfNil(v) && !compressionChoiceTypeFound {
+
+								compressionChoiceTypeFound = true
+
+								if v.(bool) {
+									compressionChoiceInt := &ves_io_schema_global_log_receiver.CompressionType_CompressionNone{}
+									compressionChoiceInt.CompressionNone = &ves_io_schema.Empty{}
+									compression.CompressionChoice = compressionChoiceInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["endpoint"]; ok && !isIntfNil(v) {
+
+					receiverInt.ElasticReceiver.Endpoint = v.(string)
+
+				}
+
+				tlsChoiceTypeFound := false
+
+				if v, ok := cs["no_tls"]; ok && !isIntfNil(v) && !tlsChoiceTypeFound {
+
+					tlsChoiceTypeFound = true
+
+					if v.(bool) {
+						tlsChoiceInt := &ves_io_schema_global_log_receiver.ElasticConfig_NoTls{}
+						tlsChoiceInt.NoTls = &ves_io_schema.Empty{}
+						receiverInt.ElasticReceiver.TlsChoice = tlsChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["use_tls"]; ok && !isIntfNil(v) && !tlsChoiceTypeFound {
+
+					tlsChoiceTypeFound = true
+					tlsChoiceInt := &ves_io_schema_global_log_receiver.ElasticConfig_UseTls{}
+					tlsChoiceInt.UseTls = &ves_io_schema_global_log_receiver.TLSConfigType{}
+					receiverInt.ElasticReceiver.TlsChoice = tlsChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							caChoiceTypeFound := false
+
+							if v, ok := cs["no_ca"]; ok && !isIntfNil(v) && !caChoiceTypeFound {
+
+								caChoiceTypeFound = true
+
+								if v.(bool) {
+									caChoiceInt := &ves_io_schema_global_log_receiver.TLSConfigType_NoCa{}
+									caChoiceInt.NoCa = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.CaChoice = caChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !caChoiceTypeFound {
+
+								caChoiceTypeFound = true
+								caChoiceInt := &ves_io_schema_global_log_receiver.TLSConfigType_TrustedCaUrl{}
+
+								tlsChoiceInt.UseTls.CaChoice = caChoiceInt
+
+								caChoiceInt.TrustedCaUrl = v.(string)
+
+							}
+
+							mtlsChoiceTypeFound := false
+
+							if v, ok := cs["mtls_disabled"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+
+								if v.(bool) {
+									mtlsChoiceInt := &ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}
+									mtlsChoiceInt.MtlsDisabled = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.MtlsChoice = mtlsChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["mtls_enable"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+								mtlsChoiceInt := &ves_io_schema_global_log_receiver.TLSConfigType_MtlsEnable{}
+								mtlsChoiceInt.MtlsEnable = &ves_io_schema_global_log_receiver.TLSClientConfigType{}
+								tlsChoiceInt.UseTls.MtlsChoice = mtlsChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["certificate"]; ok && !isIntfNil(v) {
+
+											mtlsChoiceInt.MtlsEnable.Certificate = v.(string)
+
+										}
+
+										if v, ok := cs["key_url"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											keyUrl := &ves_io_schema.SecretType{}
+											mtlsChoiceInt.MtlsEnable.KeyUrl = keyUrl
+											for _, set := range sl {
+												if set != nil {
+													keyUrlMapStrToI := set.(map[string]interface{})
+
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														keyUrl.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													secretInfoOneofTypeFound := false
+
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -3891,6 +6879,38 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 									if set != nil {
 										passwordMapStrToI := set.(map[string]interface{})
 
+										if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
 										secretInfoOneofTypeFound := false
 
 										if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -3957,6 +6977,76 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 
 										}
 
+										if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											password.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											password.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
 									}
 								}
 
@@ -4005,6 +7095,38 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 								for _, set := range sl {
 									if set != nil {
 										tokenMapStrToI := set.(map[string]interface{})
+
+										if v, ok := tokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											token.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := tokenMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											token.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
 
 										secretInfoOneofTypeFound := false
 
@@ -4064,6 +7186,76 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := tokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											token.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := tokenMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											token.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 													}
 
@@ -4315,6 +7507,38 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 												if set != nil {
 													keyUrlMapStrToI := set.(map[string]interface{})
 
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														keyUrl.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := keyUrlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -4373,6 +7597,76 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -4725,6 +8019,38 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 												if set != nil {
 													keyUrlMapStrToI := set.(map[string]interface{})
 
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														keyUrl.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := keyUrlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -4783,6 +8109,76 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -4884,6 +8280,38 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 						if set != nil {
 							apiKeyMapStrToI := set.(map[string]interface{})
 
+							if v, ok := apiKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								apiKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := apiKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								apiKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := apiKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -4942,6 +8370,76 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := apiKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								apiKey.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := apiKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								apiKey.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -5231,6 +8729,38 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 												if set != nil {
 													keyUrlMapStrToI := set.(map[string]interface{})
 
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														keyUrl.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := keyUrlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -5289,6 +8819,76 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -5788,6 +9388,38 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 						if set != nil {
 							splunkHecTokenMapStrToI := set.(map[string]interface{})
 
+							if v, ok := splunkHecTokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								splunkHecToken.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := splunkHecTokenMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								splunkHecToken.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := splunkHecTokenMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -5846,6 +9478,76 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := splunkHecTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								splunkHecToken.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := splunkHecTokenMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								splunkHecToken.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -5951,6 +9653,38 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 												if set != nil {
 													keyUrlMapStrToI := set.(map[string]interface{})
 
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														keyUrl.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := keyUrlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -6009,6 +9743,76 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -6110,6 +9914,38 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 						if set != nil {
 							urlMapStrToI := set.(map[string]interface{})
 
+							if v, ok := urlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								url.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := urlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								url.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := urlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -6168,6 +10004,76 @@ func resourceVolterraGlobalLogReceiverCreate(d *schema.ResourceData, meta interf
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := urlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								url.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := urlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								url.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -6339,6 +10245,18 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 				}
 
 			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("ns_system"); ok && !filterChoiceTypeFound {
+
+		filterChoiceTypeFound = true
+
+		if v.(bool) {
+			filterChoiceInt := &ves_io_schema_global_log_receiver.ReplaceSpecType_NsSystem{}
+			filterChoiceInt.NsSystem = &ves_io_schema.Empty{}
+			updateSpec.FilterChoice = filterChoiceInt
 		}
 
 	}
@@ -6616,6 +10534,38 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 						if set != nil {
 							connectionStringMapStrToI := set.(map[string]interface{})
 
+							if v, ok := connectionStringMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								connectionString.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := connectionStringMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								connectionString.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := connectionStringMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -6674,6 +10624,76 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := connectionStringMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								connectionString.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := connectionStringMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								connectionString.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -6866,6 +10886,38 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 						if set != nil {
 							connectionStringMapStrToI := set.(map[string]interface{})
 
+							if v, ok := connectionStringMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								connectionString.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := connectionStringMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								connectionString.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := connectionStringMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -6924,6 +10976,76 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := connectionStringMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								connectionString.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := connectionStringMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								connectionString.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -7161,6 +11283,38 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 						if set != nil {
 							datadogApiKeyMapStrToI := set.(map[string]interface{})
 
+							if v, ok := datadogApiKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								datadogApiKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := datadogApiKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								datadogApiKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := datadogApiKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -7219,6 +11373,76 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := datadogApiKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								datadogApiKey.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := datadogApiKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								datadogApiKey.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -7348,6 +11572,38 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 												if set != nil {
 													keyUrlMapStrToI := set.(map[string]interface{})
 
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														keyUrl.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := keyUrlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -7406,6 +11662,821 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							verifyCertificateTypeFound := false
+
+							if v, ok := cs["disable_verify_certificate"]; ok && !isIntfNil(v) && !verifyCertificateTypeFound {
+
+								verifyCertificateTypeFound = true
+
+								if v.(bool) {
+									verifyCertificateInt := &ves_io_schema_global_log_receiver.TLSConfigType_DisableVerifyCertificate{}
+									verifyCertificateInt.DisableVerifyCertificate = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.VerifyCertificate = verifyCertificateInt
+								}
+
+							}
+
+							if v, ok := cs["enable_verify_certificate"]; ok && !isIntfNil(v) && !verifyCertificateTypeFound {
+
+								verifyCertificateTypeFound = true
+
+								if v.(bool) {
+									verifyCertificateInt := &ves_io_schema_global_log_receiver.TLSConfigType_EnableVerifyCertificate{}
+									verifyCertificateInt.EnableVerifyCertificate = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.VerifyCertificate = verifyCertificateInt
+								}
+
+							}
+
+							verifyHostnameTypeFound := false
+
+							if v, ok := cs["disable_verify_hostname"]; ok && !isIntfNil(v) && !verifyHostnameTypeFound {
+
+								verifyHostnameTypeFound = true
+
+								if v.(bool) {
+									verifyHostnameInt := &ves_io_schema_global_log_receiver.TLSConfigType_DisableVerifyHostname{}
+									verifyHostnameInt.DisableVerifyHostname = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.VerifyHostname = verifyHostnameInt
+								}
+
+							}
+
+							if v, ok := cs["enable_verify_hostname"]; ok && !isIntfNil(v) && !verifyHostnameTypeFound {
+
+								verifyHostnameTypeFound = true
+
+								if v.(bool) {
+									verifyHostnameInt := &ves_io_schema_global_log_receiver.TLSConfigType_EnableVerifyHostname{}
+									verifyHostnameInt.EnableVerifyHostname = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.VerifyHostname = verifyHostnameInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("elastic_receiver"); ok && !isIntfNil(v) && !receiverTypeFound {
+
+		receiverTypeFound = true
+		receiverInt := &ves_io_schema_global_log_receiver.ReplaceSpecType_ElasticReceiver{}
+		receiverInt.ElasticReceiver = &ves_io_schema_global_log_receiver.ElasticConfig{}
+		updateSpec.Receiver = receiverInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				authChoiceTypeFound := false
+
+				if v, ok := cs["auth_aws"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+
+					authChoiceTypeFound = true
+					authChoiceInt := &ves_io_schema_global_log_receiver.ElasticConfig_AuthAws{}
+					authChoiceInt.AuthAws = &ves_io_schema_views.ObjectRefType{}
+					receiverInt.ElasticReceiver.AuthChoice = authChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								authChoiceInt.AuthAws.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								authChoiceInt.AuthAws.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								authChoiceInt.AuthAws.Tenant = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["auth_basic"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+
+					authChoiceTypeFound = true
+					authChoiceInt := &ves_io_schema_global_log_receiver.ElasticConfig_AuthBasic{}
+					authChoiceInt.AuthBasic = &ves_io_schema_global_log_receiver.HttpAuthBasic{}
+					receiverInt.ElasticReceiver.AuthChoice = authChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["password"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								password := &ves_io_schema.SecretType{}
+								authChoiceInt.AuthBasic.Password = password
+								for _, set := range sl {
+									if set != nil {
+										passwordMapStrToI := set.(map[string]interface{})
+
+										if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										secretInfoOneofTypeFound := false
+
+										if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+											secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+											password.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := passwordMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+											secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+											password.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											password.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											password.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := cs["user_name"]; ok && !isIntfNil(v) {
+
+								authChoiceInt.AuthBasic.UserName = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["auth_none"]; ok && !isIntfNil(v) && !authChoiceTypeFound {
+
+					authChoiceTypeFound = true
+
+					if v.(bool) {
+						authChoiceInt := &ves_io_schema_global_log_receiver.ElasticConfig_AuthNone{}
+						authChoiceInt.AuthNone = &ves_io_schema.Empty{}
+						receiverInt.ElasticReceiver.AuthChoice = authChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["batch"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					batch := &ves_io_schema_global_log_receiver.BatchOptionType{}
+					receiverInt.ElasticReceiver.Batch = batch
+					for _, set := range sl {
+						if set != nil {
+							batchMapStrToI := set.(map[string]interface{})
+
+							batchBytesTypeFound := false
+
+							if v, ok := batchMapStrToI["max_bytes"]; ok && !isIntfNil(v) && !batchBytesTypeFound {
+
+								batchBytesTypeFound = true
+								batchBytesInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxBytes{}
+
+								batch.BatchBytes = batchBytesInt
+
+								batchBytesInt.MaxBytes = uint32(v.(int))
+
+							}
+
+							if v, ok := batchMapStrToI["max_bytes_disabled"]; ok && !isIntfNil(v) && !batchBytesTypeFound {
+
+								batchBytesTypeFound = true
+
+								if v.(bool) {
+									batchBytesInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxBytesDisabled{}
+									batchBytesInt.MaxBytesDisabled = &ves_io_schema.Empty{}
+									batch.BatchBytes = batchBytesInt
+								}
+
+							}
+
+							batchEventsTypeFound := false
+
+							if v, ok := batchMapStrToI["max_events"]; ok && !isIntfNil(v) && !batchEventsTypeFound {
+
+								batchEventsTypeFound = true
+								batchEventsInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxEvents{}
+
+								batch.BatchEvents = batchEventsInt
+
+								batchEventsInt.MaxEvents = uint32(v.(int))
+
+							}
+
+							if v, ok := batchMapStrToI["max_events_disabled"]; ok && !isIntfNil(v) && !batchEventsTypeFound {
+
+								batchEventsTypeFound = true
+
+								if v.(bool) {
+									batchEventsInt := &ves_io_schema_global_log_receiver.BatchOptionType_MaxEventsDisabled{}
+									batchEventsInt.MaxEventsDisabled = &ves_io_schema.Empty{}
+									batch.BatchEvents = batchEventsInt
+								}
+
+							}
+
+							batchTimeoutTypeFound := false
+
+							if v, ok := batchMapStrToI["timeout_seconds"]; ok && !isIntfNil(v) && !batchTimeoutTypeFound {
+
+								batchTimeoutTypeFound = true
+								batchTimeoutInt := &ves_io_schema_global_log_receiver.BatchOptionType_TimeoutSeconds{}
+
+								batch.BatchTimeout = batchTimeoutInt
+
+								batchTimeoutInt.TimeoutSeconds = uint64(v.(int))
+
+							}
+
+							if v, ok := batchMapStrToI["timeout_seconds_default"]; ok && !isIntfNil(v) && !batchTimeoutTypeFound {
+
+								batchTimeoutTypeFound = true
+
+								if v.(bool) {
+									batchTimeoutInt := &ves_io_schema_global_log_receiver.BatchOptionType_TimeoutSecondsDefault{}
+									batchTimeoutInt.TimeoutSecondsDefault = &ves_io_schema.Empty{}
+									batch.BatchTimeout = batchTimeoutInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["compression"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					compression := &ves_io_schema_global_log_receiver.CompressionType{}
+					receiverInt.ElasticReceiver.Compression = compression
+					for _, set := range sl {
+						if set != nil {
+							compressionMapStrToI := set.(map[string]interface{})
+
+							compressionChoiceTypeFound := false
+
+							if v, ok := compressionMapStrToI["compression_default"]; ok && !isIntfNil(v) && !compressionChoiceTypeFound {
+
+								compressionChoiceTypeFound = true
+
+								if v.(bool) {
+									compressionChoiceInt := &ves_io_schema_global_log_receiver.CompressionType_CompressionDefault{}
+									compressionChoiceInt.CompressionDefault = &ves_io_schema.Empty{}
+									compression.CompressionChoice = compressionChoiceInt
+								}
+
+							}
+
+							if v, ok := compressionMapStrToI["compression_gzip"]; ok && !isIntfNil(v) && !compressionChoiceTypeFound {
+
+								compressionChoiceTypeFound = true
+
+								if v.(bool) {
+									compressionChoiceInt := &ves_io_schema_global_log_receiver.CompressionType_CompressionGzip{}
+									compressionChoiceInt.CompressionGzip = &ves_io_schema.Empty{}
+									compression.CompressionChoice = compressionChoiceInt
+								}
+
+							}
+
+							if v, ok := compressionMapStrToI["compression_none"]; ok && !isIntfNil(v) && !compressionChoiceTypeFound {
+
+								compressionChoiceTypeFound = true
+
+								if v.(bool) {
+									compressionChoiceInt := &ves_io_schema_global_log_receiver.CompressionType_CompressionNone{}
+									compressionChoiceInt.CompressionNone = &ves_io_schema.Empty{}
+									compression.CompressionChoice = compressionChoiceInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["endpoint"]; ok && !isIntfNil(v) {
+
+					receiverInt.ElasticReceiver.Endpoint = v.(string)
+
+				}
+
+				tlsChoiceTypeFound := false
+
+				if v, ok := cs["no_tls"]; ok && !isIntfNil(v) && !tlsChoiceTypeFound {
+
+					tlsChoiceTypeFound = true
+
+					if v.(bool) {
+						tlsChoiceInt := &ves_io_schema_global_log_receiver.ElasticConfig_NoTls{}
+						tlsChoiceInt.NoTls = &ves_io_schema.Empty{}
+						receiverInt.ElasticReceiver.TlsChoice = tlsChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["use_tls"]; ok && !isIntfNil(v) && !tlsChoiceTypeFound {
+
+					tlsChoiceTypeFound = true
+					tlsChoiceInt := &ves_io_schema_global_log_receiver.ElasticConfig_UseTls{}
+					tlsChoiceInt.UseTls = &ves_io_schema_global_log_receiver.TLSConfigType{}
+					receiverInt.ElasticReceiver.TlsChoice = tlsChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							caChoiceTypeFound := false
+
+							if v, ok := cs["no_ca"]; ok && !isIntfNil(v) && !caChoiceTypeFound {
+
+								caChoiceTypeFound = true
+
+								if v.(bool) {
+									caChoiceInt := &ves_io_schema_global_log_receiver.TLSConfigType_NoCa{}
+									caChoiceInt.NoCa = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.CaChoice = caChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !caChoiceTypeFound {
+
+								caChoiceTypeFound = true
+								caChoiceInt := &ves_io_schema_global_log_receiver.TLSConfigType_TrustedCaUrl{}
+
+								tlsChoiceInt.UseTls.CaChoice = caChoiceInt
+
+								caChoiceInt.TrustedCaUrl = v.(string)
+
+							}
+
+							mtlsChoiceTypeFound := false
+
+							if v, ok := cs["mtls_disabled"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+
+								if v.(bool) {
+									mtlsChoiceInt := &ves_io_schema_global_log_receiver.TLSConfigType_MtlsDisabled{}
+									mtlsChoiceInt.MtlsDisabled = &ves_io_schema.Empty{}
+									tlsChoiceInt.UseTls.MtlsChoice = mtlsChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["mtls_enable"]; ok && !isIntfNil(v) && !mtlsChoiceTypeFound {
+
+								mtlsChoiceTypeFound = true
+								mtlsChoiceInt := &ves_io_schema_global_log_receiver.TLSConfigType_MtlsEnable{}
+								mtlsChoiceInt.MtlsEnable = &ves_io_schema_global_log_receiver.TLSClientConfigType{}
+								tlsChoiceInt.UseTls.MtlsChoice = mtlsChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["certificate"]; ok && !isIntfNil(v) {
+
+											mtlsChoiceInt.MtlsEnable.Certificate = v.(string)
+
+										}
+
+										if v, ok := cs["key_url"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											keyUrl := &ves_io_schema.SecretType{}
+											mtlsChoiceInt.MtlsEnable.KeyUrl = keyUrl
+											for _, set := range sl {
+												if set != nil {
+													keyUrlMapStrToI := set.(map[string]interface{})
+
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														keyUrl.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													secretInfoOneofTypeFound := false
+
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+														secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+														secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -7760,6 +12831,38 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 									if set != nil {
 										passwordMapStrToI := set.(map[string]interface{})
 
+										if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
 										secretInfoOneofTypeFound := false
 
 										if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -7826,6 +12929,76 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 
 										}
 
+										if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											password.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											password.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
 									}
 								}
 
@@ -7874,6 +13047,38 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 								for _, set := range sl {
 									if set != nil {
 										tokenMapStrToI := set.(map[string]interface{})
+
+										if v, ok := tokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											token.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := tokenMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											token.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
 
 										secretInfoOneofTypeFound := false
 
@@ -7933,6 +13138,76 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := tokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											token.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := tokenMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											token.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 													}
 
@@ -8184,6 +13459,38 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 												if set != nil {
 													keyUrlMapStrToI := set.(map[string]interface{})
 
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														keyUrl.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := keyUrlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -8242,6 +13549,76 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -8594,6 +13971,38 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 												if set != nil {
 													keyUrlMapStrToI := set.(map[string]interface{})
 
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														keyUrl.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := keyUrlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -8652,6 +14061,76 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -8753,6 +14232,38 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 						if set != nil {
 							apiKeyMapStrToI := set.(map[string]interface{})
 
+							if v, ok := apiKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								apiKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := apiKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								apiKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := apiKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -8811,6 +14322,76 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := apiKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								apiKey.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := apiKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								apiKey.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -9100,6 +14681,38 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 												if set != nil {
 													keyUrlMapStrToI := set.(map[string]interface{})
 
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														keyUrl.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := keyUrlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -9158,6 +14771,76 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -9657,6 +15340,38 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 						if set != nil {
 							splunkHecTokenMapStrToI := set.(map[string]interface{})
 
+							if v, ok := splunkHecTokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								splunkHecToken.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := splunkHecTokenMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								splunkHecToken.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := splunkHecTokenMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -9715,6 +15430,76 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := splunkHecTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								splunkHecToken.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := splunkHecTokenMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								splunkHecToken.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -9820,6 +15605,38 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 												if set != nil {
 													keyUrlMapStrToI := set.(map[string]interface{})
 
+													if v, ok := keyUrlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														keyUrl.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														keyUrl.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := keyUrlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -9878,6 +15695,76 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 																if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																	secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := keyUrlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														keyUrl.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																}
 
@@ -9979,6 +15866,38 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 						if set != nil {
 							urlMapStrToI := set.(map[string]interface{})
 
+							if v, ok := urlMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								url.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := urlMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								url.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := urlMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -10037,6 +15956,76 @@ func resourceVolterraGlobalLogReceiverUpdate(d *schema.ResourceData, meta interf
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := urlMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								url.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := urlMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								url.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 

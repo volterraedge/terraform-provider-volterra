@@ -3177,8 +3177,8 @@ var CustomAPISwaggerJSON string = `{
         "dns_zoneImportAXFRRequest": {
             "type": "object",
             "description": "DNS zone import via AXFR",
-            "title": "Import DNS Zone",
-            "x-displayname": "Import DNS Zone",
+            "title": "Import AXFR for Primary Zone",
+            "x-displayname": "Import AXFR for Primary Zone",
             "x-ves-displayorder": "7,3,8",
             "x-ves-proto-message": "ves.io.schema.dns_zone.ImportAXFRRequest",
             "properties": {
@@ -3684,7 +3684,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "default_rr_set_group": {
                     "type": "array",
-                    "description": " Collection of DNS record sets in the default group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
+                    "description": " Add and manage DNS resource record sets part of Default set group.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50000\n",
                     "maxItems": 50000,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSet"
@@ -3702,7 +3702,7 @@ var CustomAPISwaggerJSON string = `{
                 },
                 "rr_set_group": {
                     "type": "array",
-                    "description": " Collection of additional DNS resource record sets\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
+                    "description": " Create and manage set groups, and resource record sets within them, x-ves-io-managed set is managed by F5.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n  ves.io.schema.rules.repeated.unique_metadata_name: true\n",
                     "maxItems": 50,
                     "items": {
                         "$ref": "#/definitions/dns_zoneRRSetGroup"

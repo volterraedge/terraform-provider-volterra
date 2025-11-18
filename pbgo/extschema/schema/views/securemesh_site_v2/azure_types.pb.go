@@ -441,10 +441,10 @@ type AzureManagedNode struct {
 	Hostname string `protobuf:"bytes,2,opt,name=hostname,proto3" json:"hostname,omitempty"`
 	// Azure AZ
 	//
-	// x-displayName: "Azure AZ Name"
+	// x-displayName: "Azure Availability Zone"
 	// x-required
 	// x-example: "1"
-	// Azure availability zone.
+	// A zone depicting a grouping of datacenters within an Azure region. Expecting numeric input
 	AzureAz string `protobuf:"bytes,3,opt,name=azure_az,json=azureAz,proto3" json:"azure_az,omitempty"`
 	// AzureOrchestratedInterface
 	//

@@ -162,6 +162,243 @@ func ApiCertificateTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *BulkRevokeRequest) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BulkRevokeRequest) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BulkRevokeRequest) DeepCopy() *BulkRevokeRequest {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BulkRevokeRequest{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BulkRevokeRequest) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BulkRevokeRequest) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BulkRevokeRequestValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBulkRevokeRequest struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBulkRevokeRequest) BulkrevokeChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for bulkrevoke_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateBulkRevokeRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BulkRevokeRequest)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BulkRevokeRequest got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["bulkrevoke_choice"]; exists {
+		val := m.GetBulkrevokeChoice()
+		vOpts := append(opts,
+			db.WithValidateField("bulkrevoke_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetBulkrevokeChoice().(type) {
+	case *BulkRevokeRequest_NameSelector:
+		if fv, exists := v.FldValidators["bulkrevoke_choice.name_selector"]; exists {
+			val := m.GetBulkrevokeChoice().(*BulkRevokeRequest_NameSelector).NameSelector
+			vOpts := append(opts,
+				db.WithValidateField("bulkrevoke_choice"),
+				db.WithValidateField("name_selector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BulkRevokeRequest_ExpiredSelector:
+		if fv, exists := v.FldValidators["bulkrevoke_choice.expired_selector"]; exists {
+			val := m.GetBulkrevokeChoice().(*BulkRevokeRequest_ExpiredSelector).ExpiredSelector
+			vOpts := append(opts,
+				db.WithValidateField("bulkrevoke_choice"),
+				db.WithValidateField("expired_selector"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBulkRevokeRequestValidator = func() *ValidateBulkRevokeRequest {
+	v := &ValidateBulkRevokeRequest{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhBulkrevokeChoice := v.BulkrevokeChoiceValidationRuleHandler
+	rulesBulkrevokeChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhBulkrevokeChoice(rulesBulkrevokeChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BulkRevokeRequest.bulkrevoke_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["bulkrevoke_choice"] = vFn
+
+	v.FldValidators["bulkrevoke_choice.name_selector"] = NameSelectorValidator().Validate
+	v.FldValidators["bulkrevoke_choice.expired_selector"] = ExpiredSelectorValidator().Validate
+
+	return v
+}()
+
+func BulkRevokeRequestValidator() db.Validator {
+	return DefaultBulkRevokeRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *BulkRevokeResponse) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *BulkRevokeResponse) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *BulkRevokeResponse) DeepCopy() *BulkRevokeResponse {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &BulkRevokeResponse{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *BulkRevokeResponse) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *BulkRevokeResponse) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return BulkRevokeResponseValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateBulkRevokeResponse struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateBulkRevokeResponse) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*BulkRevokeResponse)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *BulkRevokeResponse got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["credentials_failed"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("credentials_failed"))
+		for idx, item := range m.GetCredentialsFailed() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["credentials_marked_for_deletion"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("credentials_marked_for_deletion"))
+		for idx, item := range m.GetCredentialsMarkedForDeletion() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["error_message"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("error_message"))
+		if err := fv(ctx, m.GetErrorMessage(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultBulkRevokeResponseValidator = func() *ValidateBulkRevokeResponse {
+	v := &ValidateBulkRevokeResponse{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func BulkRevokeResponseValidator() db.Validator {
+	return DefaultBulkRevokeResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *CreateRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1032,6 +1269,138 @@ var DefaultDeleteRequestValidator = func() *ValidateDeleteRequest {
 
 func DeleteRequestValidator() db.Validator {
 	return DefaultDeleteRequestValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ExpiredSelector) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ExpiredSelector) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ExpiredSelector) DeepCopy() *ExpiredSelector {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ExpiredSelector{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ExpiredSelector) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ExpiredSelector) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ExpiredSelectorValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateExpiredSelector struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateExpiredSelector) ExpiredCredentialChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for expired_credential_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateExpiredSelector) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ExpiredSelector)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ExpiredSelector got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["expired_credential_choice"]; exists {
+		val := m.GetExpiredCredentialChoice()
+		vOpts := append(opts,
+			db.WithValidateField("expired_credential_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetExpiredCredentialChoice().(type) {
+	case *ExpiredSelector_CredentialType:
+		if fv, exists := v.FldValidators["expired_credential_choice.credential_type"]; exists {
+			val := m.GetExpiredCredentialChoice().(*ExpiredSelector_CredentialType).CredentialType
+			vOpts := append(opts,
+				db.WithValidateField("expired_credential_choice"),
+				db.WithValidateField("credential_type"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *ExpiredSelector_All:
+		if fv, exists := v.FldValidators["expired_credential_choice.all"]; exists {
+			val := m.GetExpiredCredentialChoice().(*ExpiredSelector_All).All
+			vOpts := append(opts,
+				db.WithValidateField("expired_credential_choice"),
+				db.WithValidateField("all"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultExpiredSelectorValidator = func() *ValidateExpiredSelector {
+	v := &ValidateExpiredSelector{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhExpiredCredentialChoice := v.ExpiredCredentialChoiceValidationRuleHandler
+	rulesExpiredCredentialChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhExpiredCredentialChoice(rulesExpiredCredentialChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for ExpiredSelector.expired_credential_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["expired_credential_choice"] = vFn
+
+	return v
+}()
+
+func ExpiredSelectorValidator() db.Validator {
+	return DefaultExpiredSelectorValidator
 }
 
 // augmented methods on protoc/std generated struct
@@ -1969,6 +2338,147 @@ var DefaultListServiceCredentialsResponseItemValidator = func() *ValidateListSer
 
 func ListServiceCredentialsResponseItemValidator() db.Validator {
 	return DefaultListServiceCredentialsResponseItemValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NameSelector) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NameSelector) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NameSelector) DeepCopy() *NameSelector {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NameSelector{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NameSelector) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NameSelector) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NameSelectorValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNameSelector struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNameSelector) NamesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepStringItemRules(rules)
+	itemValFn, err := db.NewStringValidationRuleHandler(itemRules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Item ValidationRuleHandler for names")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []string, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for names")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]string)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []string, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated names")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items names")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNameSelector) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NameSelector)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NameSelector got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["names"]; exists {
+		vOpts := append(opts, db.WithValidateField("names"))
+		if err := fv(ctx, m.GetNames(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNameSelectorValidator = func() *ValidateNameSelector {
+	v := &ValidateNameSelector{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhNames := v.NamesValidationRuleHandler
+	rulesNames := map[string]string{
+		"ves.io.schema.rules.message.required":   "true",
+		"ves.io.schema.rules.repeated.max_items": "200",
+		"ves.io.schema.rules.repeated.min_items": "1",
+		"ves.io.schema.rules.repeated.unique":    "true",
+	}
+	vFn, err = vrhNames(rulesNames)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NameSelector.names: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["names"] = vFn
+
+	return v
+}()
+
+func NameSelectorValidator() db.Validator {
+	return DefaultNameSelectorValidator
 }
 
 // augmented methods on protoc/std generated struct

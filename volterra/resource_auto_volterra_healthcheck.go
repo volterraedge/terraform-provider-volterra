@@ -60,6 +60,109 @@ func resourceVolterraHealthcheck() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"dns_health_check": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"expected_rcode": {
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"expected_record_type": {
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"expected_response": {
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"query_name": {
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"query_type": {
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"reverse": {
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
+			"dns_proxy_icmp_health_check": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
+
+			"dns_proxy_tcp_health_check": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"expected_response": {
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"send_payload": {
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
+			"dns_proxy_udp_health_check": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"expected_response": {
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"send_payload": {
+							Type:       schema.TypeString,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
 			"http_health_check": {
 
 				Type:     schema.TypeList,
@@ -137,6 +240,12 @@ func resourceVolterraHealthcheck() *schema.Resource {
 						},
 					},
 				},
+			},
+
+			"udp_icmp_health_check": {
+
+				Type:     schema.TypeBool,
+				Optional: true,
 			},
 
 			"healthy_threshold": {
@@ -223,6 +332,129 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 	//health_check
 
 	healthCheckTypeFound := false
+
+	if v, ok := d.GetOk("dns_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
+
+		healthCheckTypeFound = true
+		healthCheckInt := &ves_io_schema_healthcheck.CreateSpecType_DnsHealthCheck{}
+		healthCheckInt.DnsHealthCheck = &ves_io_schema_healthcheck.DnsHealthCheck{}
+		createSpec.HealthCheck = healthCheckInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["expected_rcode"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.ExpectedRcode = ves_io_schema_healthcheck.DNSResponseRcodeType(ves_io_schema_healthcheck.DNSResponseRcodeType_value[v.(string)])
+
+				}
+
+				if v, ok := cs["expected_record_type"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.ExpectedRecordType = ves_io_schema_healthcheck.DNSResponseRecordType(ves_io_schema_healthcheck.DNSResponseRecordType_value[v.(string)])
+
+				}
+
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["query_name"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.QueryName = v.(string)
+
+				}
+
+				if v, ok := cs["query_type"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.QueryType = ves_io_schema_healthcheck.DNSQueryType(ves_io_schema_healthcheck.DNSQueryType_value[v.(string)])
+
+				}
+
+				if v, ok := cs["reverse"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.Reverse = v.(bool)
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("dns_proxy_icmp_health_check"); ok && !healthCheckTypeFound {
+
+		healthCheckTypeFound = true
+
+		if v.(bool) {
+			healthCheckInt := &ves_io_schema_healthcheck.CreateSpecType_DnsProxyIcmpHealthCheck{}
+			healthCheckInt.DnsProxyIcmpHealthCheck = &ves_io_schema.Empty{}
+			createSpec.HealthCheck = healthCheckInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("dns_proxy_tcp_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
+
+		healthCheckTypeFound = true
+		healthCheckInt := &ves_io_schema_healthcheck.CreateSpecType_DnsProxyTcpHealthCheck{}
+		healthCheckInt.DnsProxyTcpHealthCheck = &ves_io_schema_healthcheck.DnsProxyTcpHealthCheck{}
+		createSpec.HealthCheck = healthCheckInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsProxyTcpHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsProxyTcpHealthCheck.SendPayload = v.(string)
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("dns_proxy_udp_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
+
+		healthCheckTypeFound = true
+		healthCheckInt := &ves_io_schema_healthcheck.CreateSpecType_DnsProxyUdpHealthCheck{}
+		healthCheckInt.DnsProxyUdpHealthCheck = &ves_io_schema_healthcheck.DnsProxyUdpHealthCheck{}
+		createSpec.HealthCheck = healthCheckInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsProxyUdpHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsProxyUdpHealthCheck.SendPayload = v.(string)
+
+				}
+
+			}
+		}
+
+	}
 
 	if v, ok := d.GetOk("http_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
 
@@ -342,6 +574,18 @@ func resourceVolterraHealthcheckCreate(d *schema.ResourceData, meta interface{})
 				}
 
 			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("udp_icmp_health_check"); ok && !healthCheckTypeFound {
+
+		healthCheckTypeFound = true
+
+		if v.(bool) {
+			healthCheckInt := &ves_io_schema_healthcheck.CreateSpecType_UdpIcmpHealthCheck{}
+			healthCheckInt.UdpIcmpHealthCheck = &ves_io_schema.Empty{}
+			createSpec.HealthCheck = healthCheckInt
 		}
 
 	}
@@ -487,6 +731,129 @@ func resourceVolterraHealthcheckUpdate(d *schema.ResourceData, meta interface{})
 
 	healthCheckTypeFound := false
 
+	if v, ok := d.GetOk("dns_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
+
+		healthCheckTypeFound = true
+		healthCheckInt := &ves_io_schema_healthcheck.ReplaceSpecType_DnsHealthCheck{}
+		healthCheckInt.DnsHealthCheck = &ves_io_schema_healthcheck.DnsHealthCheck{}
+		updateSpec.HealthCheck = healthCheckInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["expected_rcode"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.ExpectedRcode = ves_io_schema_healthcheck.DNSResponseRcodeType(ves_io_schema_healthcheck.DNSResponseRcodeType_value[v.(string)])
+
+				}
+
+				if v, ok := cs["expected_record_type"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.ExpectedRecordType = ves_io_schema_healthcheck.DNSResponseRecordType(ves_io_schema_healthcheck.DNSResponseRecordType_value[v.(string)])
+
+				}
+
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["query_name"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.QueryName = v.(string)
+
+				}
+
+				if v, ok := cs["query_type"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.QueryType = ves_io_schema_healthcheck.DNSQueryType(ves_io_schema_healthcheck.DNSQueryType_value[v.(string)])
+
+				}
+
+				if v, ok := cs["reverse"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsHealthCheck.Reverse = v.(bool)
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("dns_proxy_icmp_health_check"); ok && !healthCheckTypeFound {
+
+		healthCheckTypeFound = true
+
+		if v.(bool) {
+			healthCheckInt := &ves_io_schema_healthcheck.ReplaceSpecType_DnsProxyIcmpHealthCheck{}
+			healthCheckInt.DnsProxyIcmpHealthCheck = &ves_io_schema.Empty{}
+			updateSpec.HealthCheck = healthCheckInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("dns_proxy_tcp_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
+
+		healthCheckTypeFound = true
+		healthCheckInt := &ves_io_schema_healthcheck.ReplaceSpecType_DnsProxyTcpHealthCheck{}
+		healthCheckInt.DnsProxyTcpHealthCheck = &ves_io_schema_healthcheck.DnsProxyTcpHealthCheck{}
+		updateSpec.HealthCheck = healthCheckInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsProxyTcpHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsProxyTcpHealthCheck.SendPayload = v.(string)
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("dns_proxy_udp_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
+
+		healthCheckTypeFound = true
+		healthCheckInt := &ves_io_schema_healthcheck.ReplaceSpecType_DnsProxyUdpHealthCheck{}
+		healthCheckInt.DnsProxyUdpHealthCheck = &ves_io_schema_healthcheck.DnsProxyUdpHealthCheck{}
+		updateSpec.HealthCheck = healthCheckInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["expected_response"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsProxyUdpHealthCheck.ExpectedResponse = v.(string)
+
+				}
+
+				if v, ok := cs["send_payload"]; ok && !isIntfNil(v) {
+
+					healthCheckInt.DnsProxyUdpHealthCheck.SendPayload = v.(string)
+
+				}
+
+			}
+		}
+
+	}
+
 	if v, ok := d.GetOk("http_health_check"); ok && !isIntfNil(v) && !healthCheckTypeFound {
 
 		healthCheckTypeFound = true
@@ -605,6 +972,18 @@ func resourceVolterraHealthcheckUpdate(d *schema.ResourceData, meta interface{})
 				}
 
 			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("udp_icmp_health_check"); ok && !healthCheckTypeFound {
+
+		healthCheckTypeFound = true
+
+		if v.(bool) {
+			healthCheckInt := &ves_io_schema_healthcheck.ReplaceSpecType_UdpIcmpHealthCheck{}
+			healthCheckInt.UdpIcmpHealthCheck = &ves_io_schema.Empty{}
+			updateSpec.HealthCheck = healthCheckInt
 		}
 
 	}

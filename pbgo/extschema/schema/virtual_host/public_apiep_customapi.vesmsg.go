@@ -155,6 +155,258 @@ func APIEPActivityMetricsValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *APIEPSourceOpenApiSchemaReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIEPSourceOpenApiSchemaReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIEPSourceOpenApiSchemaReq) DeepCopy() *APIEPSourceOpenApiSchemaReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIEPSourceOpenApiSchemaReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIEPSourceOpenApiSchemaReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIEPSourceOpenApiSchemaReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIEPSourceOpenApiSchemaReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAPIEPSourceOpenApiSchemaReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIEPSourceOpenApiSchemaReq) DiscoverySourceTypesValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(APIEPDiscoverySource)
+		return int32(i)
+	}
+	// APIEPDiscoverySource_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, APIEPDiscoverySource_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for discovery_source_types")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []APIEPDiscoverySource, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for discovery_source_types")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]APIEPDiscoverySource)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []APIEPDiscoverySource, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated discovery_source_types")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items discovery_source_types")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateAPIEPSourceOpenApiSchemaReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIEPSourceOpenApiSchemaReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIEPSourceOpenApiSchemaReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["discovery_source_types"]; exists {
+		vOpts := append(opts, db.WithValidateField("discovery_source_types"))
+		if err := fv(ctx, m.GetDiscoverySourceTypes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIEPSourceOpenApiSchemaReqValidator = func() *ValidateAPIEPSourceOpenApiSchemaReq {
+	v := &ValidateAPIEPSourceOpenApiSchemaReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDiscoverySourceTypes := v.DiscoverySourceTypesValidationRuleHandler
+	rulesDiscoverySourceTypes := map[string]string{
+		"ves.io.schema.rules.repeated.unique": "true",
+	}
+	vFn, err = vrhDiscoverySourceTypes(rulesDiscoverySourceTypes)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for APIEPSourceOpenApiSchemaReq.discovery_source_types: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["discovery_source_types"] = vFn
+
+	return v
+}()
+
+func APIEPSourceOpenApiSchemaReqValidator() db.Validator {
+	return DefaultAPIEPSourceOpenApiSchemaReqValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *APIEPSourceOpenApiSchemaRsp) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *APIEPSourceOpenApiSchemaRsp) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *APIEPSourceOpenApiSchemaRsp) DeepCopy() *APIEPSourceOpenApiSchemaRsp {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &APIEPSourceOpenApiSchemaRsp{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *APIEPSourceOpenApiSchemaRsp) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *APIEPSourceOpenApiSchemaRsp) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return APIEPSourceOpenApiSchemaRspValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateAPIEPSourceOpenApiSchemaRsp struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateAPIEPSourceOpenApiSchemaRsp) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*APIEPSourceOpenApiSchemaRsp)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *APIEPSourceOpenApiSchemaRsp got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_specs"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_specs"))
+		for key, value := range m.GetApiSpecs() {
+			vOpts := append(vOpts, db.WithValidateMapKey(key))
+			if err := fv(ctx, value, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultAPIEPSourceOpenApiSchemaRspValidator = func() *ValidateAPIEPSourceOpenApiSchemaRsp {
+	v := &ValidateAPIEPSourceOpenApiSchemaRsp{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func APIEPSourceOpenApiSchemaRspValidator() db.Validator {
+	return DefaultAPIEPSourceOpenApiSchemaRspValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *APIEPSummaryFilter) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -1714,6 +1966,15 @@ func (v *ValidateAPIEndpointsRsp) Validate(ctx context.Context, pm interface{}, 
 			if err := fv(ctx, item, vOpts...); err != nil {
 				return err
 			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["last_update"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("last_update"))
+		if err := fv(ctx, m.GetLastUpdate(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -4603,6 +4864,111 @@ var DefaultUnlinkTicketsResponseValidator = func() *ValidateUnlinkTicketsRespons
 
 func UnlinkTicketsResponseValidator() db.Validator {
 	return DefaultUnlinkTicketsResponseValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *UnmergeAPIEPSourceOpenApiSchemaReq) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *UnmergeAPIEPSourceOpenApiSchemaReq) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *UnmergeAPIEPSourceOpenApiSchemaReq) DeepCopy() *UnmergeAPIEPSourceOpenApiSchemaReq {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &UnmergeAPIEPSourceOpenApiSchemaReq{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *UnmergeAPIEPSourceOpenApiSchemaReq) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *UnmergeAPIEPSourceOpenApiSchemaReq) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return UnmergeAPIEPSourceOpenApiSchemaReqValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateUnmergeAPIEPSourceOpenApiSchemaReq struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateUnmergeAPIEPSourceOpenApiSchemaReq) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*UnmergeAPIEPSourceOpenApiSchemaReq)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *UnmergeAPIEPSourceOpenApiSchemaReq got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["discovery_source_type"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("discovery_source_type"))
+		if err := fv(ctx, m.GetDiscoverySourceType(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("id"))
+		if err := fv(ctx, m.GetId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["namespace"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("namespace"))
+		if err := fv(ctx, m.GetNamespace(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultUnmergeAPIEPSourceOpenApiSchemaReqValidator = func() *ValidateUnmergeAPIEPSourceOpenApiSchemaReq {
+	v := &ValidateUnmergeAPIEPSourceOpenApiSchemaReq{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func UnmergeAPIEPSourceOpenApiSchemaReqValidator() db.Validator {
+	return DefaultUnmergeAPIEPSourceOpenApiSchemaReqValidator
 }
 
 // augmented methods on protoc/std generated struct

@@ -6075,13 +6075,14 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "display_name": {
                     "type": "string",
-                    "description": " Tenant display name in the login screen\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 255\n",
+                    "description": " Tenant display name in the login screen\n\nExample: - \"value\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 255\n  ves.io.schema.rules.string.pattern: ^[^\u003c\u003e\u0026\\\"]+$\n",
                     "title": "Display Name",
                     "maxLength": 255,
                     "x-displayname": "Display Name",
                     "x-ves-example": "value",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.string.max_len": "255"
+                        "ves.io.schema.rules.string.max_len": "255",
+                        "ves.io.schema.rules.string.pattern": "^[^\u003c\u003e\u0026\\\"]+$"
                     }
                 }
             }
@@ -6204,7 +6205,7 @@ var CustomAPISwaggerJSON string = `{
             "properties": {
                 "cookie_expiry": {
                     "type": "integer",
-                    "description": " Session cookie expiry in seconds.\n The user will be logged-out after these many seconds, if inactive on the console. \n\nExample: - \"900\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 60\n  ves.io.schema.rules.uint32.lte: 86400\n",
+                    "description": " Session cookie expiry in seconds.\n The user will be logged-out after these many seconds, if inactive on the console.\n\nExample: - \"900\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 60\n  ves.io.schema.rules.uint32.lte: 86400\n",
                     "title": "Session Cookie Expiry",
                     "format": "int64",
                     "x-displayname": "Session Cookie Expiry",

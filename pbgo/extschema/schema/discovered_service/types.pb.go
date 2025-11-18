@@ -10,6 +10,7 @@ import (
 	_ "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
 	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	discovery "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovery"
 	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	io "io"
@@ -198,6 +199,10 @@ type GlobalSpecType struct {
 	//
 	// Types that are valid to be assigned to ServiceType:
 	//	*GlobalSpecType_VirtualServer
+	//	*GlobalSpecType_K8SService
+	//	*GlobalSpecType_ConsulService
+	//	*GlobalSpecType_N1DiscoveredServer
+	//	*GlobalSpecType_ThirdParty
 	ServiceType isGlobalSpecType_ServiceType `protobuf_oneof:"service_type"`
 	// Reference to the internally created vhost of type bigip_virtual_server
 	//
@@ -261,10 +266,26 @@ type GlobalSpecType_VisibilityDisabled struct {
 type GlobalSpecType_VirtualServer struct {
 	VirtualServer *VirtualServer `protobuf:"bytes,7,opt,name=virtual_server,json=virtualServer,proto3,oneof" json:"virtual_server,omitempty"`
 }
+type GlobalSpecType_K8SService struct {
+	K8SService *K8SService `protobuf:"bytes,9,opt,name=k8s_service,json=k8sService,proto3,oneof" json:"k8s_service,omitempty"`
+}
+type GlobalSpecType_ConsulService struct {
+	ConsulService *ConsulService `protobuf:"bytes,10,opt,name=consul_service,json=consulService,proto3,oneof" json:"consul_service,omitempty"`
+}
+type GlobalSpecType_N1DiscoveredServer struct {
+	N1DiscoveredServer *NginxOneDiscoveredServer `protobuf:"bytes,11,opt,name=n1_discovered_server,json=n1DiscoveredServer,proto3,oneof" json:"n1_discovered_server,omitempty"`
+}
+type GlobalSpecType_ThirdParty struct {
+	ThirdParty *ThirdPartyApplicationDiscovery `protobuf:"bytes,12,opt,name=third_party,json=thirdParty,proto3,oneof" json:"third_party,omitempty"`
+}
 
 func (*GlobalSpecType_VisibilityEnabled) isGlobalSpecType_VisibilityActionChoice()  {}
 func (*GlobalSpecType_VisibilityDisabled) isGlobalSpecType_VisibilityActionChoice() {}
 func (*GlobalSpecType_VirtualServer) isGlobalSpecType_ServiceType()                 {}
+func (*GlobalSpecType_K8SService) isGlobalSpecType_ServiceType()                    {}
+func (*GlobalSpecType_ConsulService) isGlobalSpecType_ServiceType()                 {}
+func (*GlobalSpecType_N1DiscoveredServer) isGlobalSpecType_ServiceType()            {}
+func (*GlobalSpecType_ThirdParty) isGlobalSpecType_ServiceType()                    {}
 
 func (m *GlobalSpecType) GetVisibilityActionChoice() isGlobalSpecType_VisibilityActionChoice {
 	if m != nil {
@@ -314,6 +335,34 @@ func (m *GlobalSpecType) GetVirtualServer() *VirtualServer {
 	return nil
 }
 
+func (m *GlobalSpecType) GetK8SService() *K8SService {
+	if x, ok := m.GetServiceType().(*GlobalSpecType_K8SService); ok {
+		return x.K8SService
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetConsulService() *ConsulService {
+	if x, ok := m.GetServiceType().(*GlobalSpecType_ConsulService); ok {
+		return x.ConsulService
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetN1DiscoveredServer() *NginxOneDiscoveredServer {
+	if x, ok := m.GetServiceType().(*GlobalSpecType_N1DiscoveredServer); ok {
+		return x.N1DiscoveredServer
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetThirdParty() *ThirdPartyApplicationDiscovery {
+	if x, ok := m.GetServiceType().(*GlobalSpecType_ThirdParty); ok {
+		return x.ThirdParty
+	}
+	return nil
+}
+
 func (m *GlobalSpecType) GetInternalVirtualHost() *views.ObjectRefType {
 	if m != nil {
 		return m.InternalVirtualHost
@@ -334,6 +383,10 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 		(*GlobalSpecType_VisibilityEnabled)(nil),
 		(*GlobalSpecType_VisibilityDisabled)(nil),
 		(*GlobalSpecType_VirtualServer)(nil),
+		(*GlobalSpecType_K8SService)(nil),
+		(*GlobalSpecType_ConsulService)(nil),
+		(*GlobalSpecType_N1DiscoveredServer)(nil),
+		(*GlobalSpecType_ThirdParty)(nil),
 	}
 }
 
@@ -410,6 +463,11 @@ type VirtualServer struct {
 	// x-displayName: "Server Name"
 	// Virtual Server name
 	ServerName string `protobuf:"bytes,12,opt,name=server_name,json=serverName,proto3" json:"server_name,omitempty"`
+	// Sub Path
+	//
+	// x-displayName: "Sub Path"
+	// BIG-IP Virtual Server sub path in relation to partition
+	SubPath string `protobuf:"bytes,13,opt,name=sub_path,json=subPath,proto3" json:"sub_path,omitempty"`
 }
 
 func (m *VirtualServer) Reset()      { *m = VirtualServer{} }
@@ -524,6 +582,345 @@ func (m *VirtualServer) GetServerName() string {
 	return ""
 }
 
+func (m *VirtualServer) GetSubPath() string {
+	if m != nil {
+		return m.SubPath
+	}
+	return ""
+}
+
+// K8s Service
+//
+// x-displayName: "K8s Service"
+// Service details discovered from K8s.
+type K8SService struct {
+	// Discovery Object
+	//
+	// x-displayName: "Reference to Discovery Object"
+	// Reference to the Discovery Object
+	DiscoveryObject *views.ObjectRefType `protobuf:"bytes,1,opt,name=discovery_object,json=discoveryObject,proto3" json:"discovery_object,omitempty"`
+	// Service Name
+	//
+	// x-displayName: "Service"
+	// x-example: "myservice"
+	// x-required
+	// Name of the discovered service
+	ServiceName string `protobuf:"bytes,2,opt,name=service_name,json=serviceName,proto3" json:"service_name,omitempty"`
+	// Pod List
+	//
+	// x-displayName: "PODs"
+	// List of pod-name to IP address mappings for the service
+	Pods []*discovery.PodInfoType `protobuf:"bytes,3,rep,name=pods,proto3" json:"pods,omitempty"`
+	// Port List
+	//
+	// x-displayName: "Ports"
+	// List of ports along with protocol on which the service is exposed
+	Ports []*discovery.PortInfoType `protobuf:"bytes,4,rep,name=ports,proto3" json:"ports,omitempty"`
+}
+
+func (m *K8SService) Reset()      { *m = K8SService{} }
+func (*K8SService) ProtoMessage() {}
+func (*K8SService) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5e612cab0245916d, []int{2}
+}
+func (m *K8SService) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *K8SService) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *K8SService) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_K8SService.Merge(m, src)
+}
+func (m *K8SService) XXX_Size() int {
+	return m.Size()
+}
+func (m *K8SService) XXX_DiscardUnknown() {
+	xxx_messageInfo_K8SService.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_K8SService proto.InternalMessageInfo
+
+func (m *K8SService) GetDiscoveryObject() *views.ObjectRefType {
+	if m != nil {
+		return m.DiscoveryObject
+	}
+	return nil
+}
+
+func (m *K8SService) GetServiceName() string {
+	if m != nil {
+		return m.ServiceName
+	}
+	return ""
+}
+
+func (m *K8SService) GetPods() []*discovery.PodInfoType {
+	if m != nil {
+		return m.Pods
+	}
+	return nil
+}
+
+func (m *K8SService) GetPorts() []*discovery.PortInfoType {
+	if m != nil {
+		return m.Ports
+	}
+	return nil
+}
+
+// Consul Service
+//
+// x-displayName: "Consul Service"
+// Service details discovered from Consul.
+type ConsulService struct {
+	// Discovery Object
+	//
+	// x-displayName: "Reference to Discovery Object"
+	// Reference to the Discovery Object
+	DiscoveryObject *views.ObjectRefType `protobuf:"bytes,1,opt,name=discovery_object,json=discoveryObject,proto3" json:"discovery_object,omitempty"`
+	// Service Name
+	//
+	// x-displayName: "Service"
+	// x-example: "myservice"
+	// x-required
+	// Name of the discovered service
+	ServiceName string `protobuf:"bytes,2,opt,name=service_name,json=serviceName,proto3" json:"service_name,omitempty"`
+	// Pod List
+	//
+	// x-displayName: "PODs"
+	// List of pod-name to IP address mappings for the service
+	Pods []*discovery.PodInfoType `protobuf:"bytes,3,rep,name=pods,proto3" json:"pods,omitempty"`
+	// Port List
+	//
+	// x-displayName: "Ports"
+	// List of ports along with protocol on which the service is exposed
+	Ports []*discovery.PortInfoType `protobuf:"bytes,4,rep,name=ports,proto3" json:"ports,omitempty"`
+}
+
+func (m *ConsulService) Reset()      { *m = ConsulService{} }
+func (*ConsulService) ProtoMessage() {}
+func (*ConsulService) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5e612cab0245916d, []int{3}
+}
+func (m *ConsulService) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ConsulService) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ConsulService) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ConsulService.Merge(m, src)
+}
+func (m *ConsulService) XXX_Size() int {
+	return m.Size()
+}
+func (m *ConsulService) XXX_DiscardUnknown() {
+	xxx_messageInfo_ConsulService.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ConsulService proto.InternalMessageInfo
+
+func (m *ConsulService) GetDiscoveryObject() *views.ObjectRefType {
+	if m != nil {
+		return m.DiscoveryObject
+	}
+	return nil
+}
+
+func (m *ConsulService) GetServiceName() string {
+	if m != nil {
+		return m.ServiceName
+	}
+	return ""
+}
+
+func (m *ConsulService) GetPods() []*discovery.PodInfoType {
+	if m != nil {
+		return m.Pods
+	}
+	return nil
+}
+
+func (m *ConsulService) GetPorts() []*discovery.PortInfoType {
+	if m != nil {
+		return m.Ports
+	}
+	return nil
+}
+
+// NginxOneDiscoveredServer
+//
+// x-displayName: "NGINX One Discovered Server"
+// Discovered Servers Info
+type NginxOneDiscoveredServer struct {
+	// Server Block Name
+	//
+	// x-displayName: "Server Block Name"
+	// x-example: "server-block-1"
+	// x-required
+	// Server Block Name
+	ServerBlock string `protobuf:"bytes,1,opt,name=server_block,json=serverBlock,proto3" json:"server_block,omitempty"`
+	// Port
+	//
+	// x-displayName: "Port"
+	// x-example: "8080"
+	// x-required
+	// Port number on which the Server is exposed
+	Port uint32 `protobuf:"varint,2,opt,name=port,proto3" json:"port,omitempty"`
+	// NGINX Instance or Config Sync Group ID
+	//
+	// x-displayName: "Instance or Config Sync Group Object ID"
+	// x-example: "inst_awuzd-6yRb2zbUPRxLa0SQ"
+	// x-required
+	// ID of the NGINX Instance or Config Sync Group
+	NginxOneObjectId string `protobuf:"bytes,3,opt,name=nginx_one_object_id,json=nginxOneObjectId,proto3" json:"nginx_one_object_id,omitempty"`
+	// Domains
+	//
+	// x-displayName: "Domains"
+	// Domains configured on the Server
+	Domains []string `protobuf:"bytes,4,rep,name=domains,proto3" json:"domains,omitempty"`
+	// NGINX Service Discovery Object Ref
+	//
+	// x-displayName: "BIG-IP Service Discovery"
+	// Reference to the NGINX Service Discovery Object
+	NginxServiceDiscoveryRef *views.ObjectRefType `protobuf:"bytes,5,opt,name=nginx_service_discovery_ref,json=nginxServiceDiscoveryRef,proto3" json:"nginx_service_discovery_ref,omitempty"`
+	// NGINX Instance or Config Sync Group Name
+	//
+	// x-displayName: "Instance or Config Sync Group Name"
+	// Hostname value set for Instance or Name for a Config Sync Group
+	// in NGINX One
+	NginxOneObjectName string `protobuf:"bytes,6,opt,name=nginx_one_object_name,json=nginxOneObjectName,proto3" json:"nginx_one_object_name,omitempty"`
+}
+
+func (m *NginxOneDiscoveredServer) Reset()      { *m = NginxOneDiscoveredServer{} }
+func (*NginxOneDiscoveredServer) ProtoMessage() {}
+func (*NginxOneDiscoveredServer) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5e612cab0245916d, []int{4}
+}
+func (m *NginxOneDiscoveredServer) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *NginxOneDiscoveredServer) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *NginxOneDiscoveredServer) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_NginxOneDiscoveredServer.Merge(m, src)
+}
+func (m *NginxOneDiscoveredServer) XXX_Size() int {
+	return m.Size()
+}
+func (m *NginxOneDiscoveredServer) XXX_DiscardUnknown() {
+	xxx_messageInfo_NginxOneDiscoveredServer.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_NginxOneDiscoveredServer proto.InternalMessageInfo
+
+func (m *NginxOneDiscoveredServer) GetServerBlock() string {
+	if m != nil {
+		return m.ServerBlock
+	}
+	return ""
+}
+
+func (m *NginxOneDiscoveredServer) GetPort() uint32 {
+	if m != nil {
+		return m.Port
+	}
+	return 0
+}
+
+func (m *NginxOneDiscoveredServer) GetNginxOneObjectId() string {
+	if m != nil {
+		return m.NginxOneObjectId
+	}
+	return ""
+}
+
+func (m *NginxOneDiscoveredServer) GetDomains() []string {
+	if m != nil {
+		return m.Domains
+	}
+	return nil
+}
+
+func (m *NginxOneDiscoveredServer) GetNginxServiceDiscoveryRef() *views.ObjectRefType {
+	if m != nil {
+		return m.NginxServiceDiscoveryRef
+	}
+	return nil
+}
+
+func (m *NginxOneDiscoveredServer) GetNginxOneObjectName() string {
+	if m != nil {
+		return m.NginxOneObjectName
+	}
+	return ""
+}
+
+// third_party_application
+//
+// x-displayName: "Discovery"
+// Configure third party log source applications to send logs to your XC environment. Define application names and allowed IP ranges using CIDR notation.
+// See Tech Docs for detailed setup instructions.
+type ThirdPartyApplicationDiscovery struct {
+	// Discovery Object
+	//
+	// x-displayName: "Reference to Discovery Object"
+	// Reference to the Discovery Object
+	DiscoveryObject *views.ObjectRefType `protobuf:"bytes,1,opt,name=discovery_object,json=discoveryObject,proto3" json:"discovery_object,omitempty"`
+}
+
+func (m *ThirdPartyApplicationDiscovery) Reset()      { *m = ThirdPartyApplicationDiscovery{} }
+func (*ThirdPartyApplicationDiscovery) ProtoMessage() {}
+func (*ThirdPartyApplicationDiscovery) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5e612cab0245916d, []int{5}
+}
+func (m *ThirdPartyApplicationDiscovery) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ThirdPartyApplicationDiscovery) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ThirdPartyApplicationDiscovery) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ThirdPartyApplicationDiscovery.Merge(m, src)
+}
+func (m *ThirdPartyApplicationDiscovery) XXX_Size() int {
+	return m.Size()
+}
+func (m *ThirdPartyApplicationDiscovery) XXX_DiscardUnknown() {
+	xxx_messageInfo_ThirdPartyApplicationDiscovery.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ThirdPartyApplicationDiscovery proto.InternalMessageInfo
+
+func (m *ThirdPartyApplicationDiscovery) GetDiscoveryObject() *views.ObjectRefType {
+	if m != nil {
+		return m.DiscoveryObject
+	}
+	return nil
+}
+
 // Create Discovered Service Object
 //
 // x-displayName: "Create Discovered Service Object"
@@ -537,13 +934,17 @@ type CreateSpecType struct {
 	VisibilityActionChoice isCreateSpecType_VisibilityActionChoice `protobuf_oneof:"visibility_action_choice"`
 	// Types that are valid to be assigned to ServiceType:
 	//	*CreateSpecType_VirtualServer
+	//	*CreateSpecType_K8SService
+	//	*CreateSpecType_ConsulService
+	//	*CreateSpecType_N1DiscoveredServer
+	//	*CreateSpecType_ThirdParty
 	ServiceType isCreateSpecType_ServiceType `protobuf_oneof:"service_type"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
 func (*CreateSpecType) ProtoMessage() {}
 func (*CreateSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5e612cab0245916d, []int{2}
+	return fileDescriptor_5e612cab0245916d, []int{6}
 }
 func (m *CreateSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -590,10 +991,26 @@ type CreateSpecType_VisibilityDisabled struct {
 type CreateSpecType_VirtualServer struct {
 	VirtualServer *VirtualServer `protobuf:"bytes,7,opt,name=virtual_server,json=virtualServer,proto3,oneof" json:"virtual_server,omitempty"`
 }
+type CreateSpecType_K8SService struct {
+	K8SService *K8SService `protobuf:"bytes,9,opt,name=k8s_service,json=k8sService,proto3,oneof" json:"k8s_service,omitempty"`
+}
+type CreateSpecType_ConsulService struct {
+	ConsulService *ConsulService `protobuf:"bytes,10,opt,name=consul_service,json=consulService,proto3,oneof" json:"consul_service,omitempty"`
+}
+type CreateSpecType_N1DiscoveredServer struct {
+	N1DiscoveredServer *NginxOneDiscoveredServer `protobuf:"bytes,11,opt,name=n1_discovered_server,json=n1DiscoveredServer,proto3,oneof" json:"n1_discovered_server,omitempty"`
+}
+type CreateSpecType_ThirdParty struct {
+	ThirdParty *ThirdPartyApplicationDiscovery `protobuf:"bytes,12,opt,name=third_party,json=thirdParty,proto3,oneof" json:"third_party,omitempty"`
+}
 
 func (*CreateSpecType_VisibilityEnabled) isCreateSpecType_VisibilityActionChoice()  {}
 func (*CreateSpecType_VisibilityDisabled) isCreateSpecType_VisibilityActionChoice() {}
 func (*CreateSpecType_VirtualServer) isCreateSpecType_ServiceType()                 {}
+func (*CreateSpecType_K8SService) isCreateSpecType_ServiceType()                    {}
+func (*CreateSpecType_ConsulService) isCreateSpecType_ServiceType()                 {}
+func (*CreateSpecType_N1DiscoveredServer) isCreateSpecType_ServiceType()            {}
+func (*CreateSpecType_ThirdParty) isCreateSpecType_ServiceType()                    {}
 
 func (m *CreateSpecType) GetVisibilityActionChoice() isCreateSpecType_VisibilityActionChoice {
 	if m != nil {
@@ -643,12 +1060,44 @@ func (m *CreateSpecType) GetVirtualServer() *VirtualServer {
 	return nil
 }
 
+func (m *CreateSpecType) GetK8SService() *K8SService {
+	if x, ok := m.GetServiceType().(*CreateSpecType_K8SService); ok {
+		return x.K8SService
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetConsulService() *ConsulService {
+	if x, ok := m.GetServiceType().(*CreateSpecType_ConsulService); ok {
+		return x.ConsulService
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetN1DiscoveredServer() *NginxOneDiscoveredServer {
+	if x, ok := m.GetServiceType().(*CreateSpecType_N1DiscoveredServer); ok {
+		return x.N1DiscoveredServer
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetThirdParty() *ThirdPartyApplicationDiscovery {
+	if x, ok := m.GetServiceType().(*CreateSpecType_ThirdParty); ok {
+		return x.ThirdParty
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CreateSpecType_VisibilityEnabled)(nil),
 		(*CreateSpecType_VisibilityDisabled)(nil),
 		(*CreateSpecType_VirtualServer)(nil),
+		(*CreateSpecType_K8SService)(nil),
+		(*CreateSpecType_ConsulService)(nil),
+		(*CreateSpecType_N1DiscoveredServer)(nil),
+		(*CreateSpecType_ThirdParty)(nil),
 	}
 }
 
@@ -665,13 +1114,17 @@ type GetSpecType struct {
 	VisibilityActionChoice isGetSpecType_VisibilityActionChoice `protobuf_oneof:"visibility_action_choice"`
 	// Types that are valid to be assigned to ServiceType:
 	//	*GetSpecType_VirtualServer
+	//	*GetSpecType_K8SService
+	//	*GetSpecType_ConsulService
+	//	*GetSpecType_N1DiscoveredServer
+	//	*GetSpecType_ThirdParty
 	ServiceType isGetSpecType_ServiceType `protobuf_oneof:"service_type"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
 func (*GetSpecType) ProtoMessage() {}
 func (*GetSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5e612cab0245916d, []int{3}
+	return fileDescriptor_5e612cab0245916d, []int{7}
 }
 func (m *GetSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -718,10 +1171,26 @@ type GetSpecType_VisibilityDisabled struct {
 type GetSpecType_VirtualServer struct {
 	VirtualServer *VirtualServer `protobuf:"bytes,7,opt,name=virtual_server,json=virtualServer,proto3,oneof" json:"virtual_server,omitempty"`
 }
+type GetSpecType_K8SService struct {
+	K8SService *K8SService `protobuf:"bytes,9,opt,name=k8s_service,json=k8sService,proto3,oneof" json:"k8s_service,omitempty"`
+}
+type GetSpecType_ConsulService struct {
+	ConsulService *ConsulService `protobuf:"bytes,10,opt,name=consul_service,json=consulService,proto3,oneof" json:"consul_service,omitempty"`
+}
+type GetSpecType_N1DiscoveredServer struct {
+	N1DiscoveredServer *NginxOneDiscoveredServer `protobuf:"bytes,11,opt,name=n1_discovered_server,json=n1DiscoveredServer,proto3,oneof" json:"n1_discovered_server,omitempty"`
+}
+type GetSpecType_ThirdParty struct {
+	ThirdParty *ThirdPartyApplicationDiscovery `protobuf:"bytes,12,opt,name=third_party,json=thirdParty,proto3,oneof" json:"third_party,omitempty"`
+}
 
 func (*GetSpecType_VisibilityEnabled) isGetSpecType_VisibilityActionChoice()  {}
 func (*GetSpecType_VisibilityDisabled) isGetSpecType_VisibilityActionChoice() {}
 func (*GetSpecType_VirtualServer) isGetSpecType_ServiceType()                 {}
+func (*GetSpecType_K8SService) isGetSpecType_ServiceType()                    {}
+func (*GetSpecType_ConsulService) isGetSpecType_ServiceType()                 {}
+func (*GetSpecType_N1DiscoveredServer) isGetSpecType_ServiceType()            {}
+func (*GetSpecType_ThirdParty) isGetSpecType_ServiceType()                    {}
 
 func (m *GetSpecType) GetVisibilityActionChoice() isGetSpecType_VisibilityActionChoice {
 	if m != nil {
@@ -771,12 +1240,44 @@ func (m *GetSpecType) GetVirtualServer() *VirtualServer {
 	return nil
 }
 
+func (m *GetSpecType) GetK8SService() *K8SService {
+	if x, ok := m.GetServiceType().(*GetSpecType_K8SService); ok {
+		return x.K8SService
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetConsulService() *ConsulService {
+	if x, ok := m.GetServiceType().(*GetSpecType_ConsulService); ok {
+		return x.ConsulService
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetN1DiscoveredServer() *NginxOneDiscoveredServer {
+	if x, ok := m.GetServiceType().(*GetSpecType_N1DiscoveredServer); ok {
+		return x.N1DiscoveredServer
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetThirdParty() *ThirdPartyApplicationDiscovery {
+	if x, ok := m.GetServiceType().(*GetSpecType_ThirdParty); ok {
+		return x.ThirdParty
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GetSpecType_VisibilityEnabled)(nil),
 		(*GetSpecType_VisibilityDisabled)(nil),
 		(*GetSpecType_VirtualServer)(nil),
+		(*GetSpecType_K8SService)(nil),
+		(*GetSpecType_ConsulService)(nil),
+		(*GetSpecType_N1DiscoveredServer)(nil),
+		(*GetSpecType_ThirdParty)(nil),
 	}
 }
 
@@ -793,13 +1294,17 @@ type ReplaceSpecType struct {
 	VisibilityActionChoice isReplaceSpecType_VisibilityActionChoice `protobuf_oneof:"visibility_action_choice"`
 	// Types that are valid to be assigned to ServiceType:
 	//	*ReplaceSpecType_VirtualServer
+	//	*ReplaceSpecType_K8SService
+	//	*ReplaceSpecType_ConsulService
+	//	*ReplaceSpecType_N1DiscoveredServer
+	//	*ReplaceSpecType_ThirdParty
 	ServiceType isReplaceSpecType_ServiceType `protobuf_oneof:"service_type"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
 func (*ReplaceSpecType) ProtoMessage() {}
 func (*ReplaceSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5e612cab0245916d, []int{4}
+	return fileDescriptor_5e612cab0245916d, []int{8}
 }
 func (m *ReplaceSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -846,10 +1351,26 @@ type ReplaceSpecType_VisibilityDisabled struct {
 type ReplaceSpecType_VirtualServer struct {
 	VirtualServer *VirtualServer `protobuf:"bytes,7,opt,name=virtual_server,json=virtualServer,proto3,oneof" json:"virtual_server,omitempty"`
 }
+type ReplaceSpecType_K8SService struct {
+	K8SService *K8SService `protobuf:"bytes,9,opt,name=k8s_service,json=k8sService,proto3,oneof" json:"k8s_service,omitempty"`
+}
+type ReplaceSpecType_ConsulService struct {
+	ConsulService *ConsulService `protobuf:"bytes,10,opt,name=consul_service,json=consulService,proto3,oneof" json:"consul_service,omitempty"`
+}
+type ReplaceSpecType_N1DiscoveredServer struct {
+	N1DiscoveredServer *NginxOneDiscoveredServer `protobuf:"bytes,11,opt,name=n1_discovered_server,json=n1DiscoveredServer,proto3,oneof" json:"n1_discovered_server,omitempty"`
+}
+type ReplaceSpecType_ThirdParty struct {
+	ThirdParty *ThirdPartyApplicationDiscovery `protobuf:"bytes,12,opt,name=third_party,json=thirdParty,proto3,oneof" json:"third_party,omitempty"`
+}
 
 func (*ReplaceSpecType_VisibilityEnabled) isReplaceSpecType_VisibilityActionChoice()  {}
 func (*ReplaceSpecType_VisibilityDisabled) isReplaceSpecType_VisibilityActionChoice() {}
 func (*ReplaceSpecType_VirtualServer) isReplaceSpecType_ServiceType()                 {}
+func (*ReplaceSpecType_K8SService) isReplaceSpecType_ServiceType()                    {}
+func (*ReplaceSpecType_ConsulService) isReplaceSpecType_ServiceType()                 {}
+func (*ReplaceSpecType_N1DiscoveredServer) isReplaceSpecType_ServiceType()            {}
+func (*ReplaceSpecType_ThirdParty) isReplaceSpecType_ServiceType()                    {}
 
 func (m *ReplaceSpecType) GetVisibilityActionChoice() isReplaceSpecType_VisibilityActionChoice {
 	if m != nil {
@@ -899,12 +1420,44 @@ func (m *ReplaceSpecType) GetVirtualServer() *VirtualServer {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetK8SService() *K8SService {
+	if x, ok := m.GetServiceType().(*ReplaceSpecType_K8SService); ok {
+		return x.K8SService
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetConsulService() *ConsulService {
+	if x, ok := m.GetServiceType().(*ReplaceSpecType_ConsulService); ok {
+		return x.ConsulService
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetN1DiscoveredServer() *NginxOneDiscoveredServer {
+	if x, ok := m.GetServiceType().(*ReplaceSpecType_N1DiscoveredServer); ok {
+		return x.N1DiscoveredServer
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetThirdParty() *ThirdPartyApplicationDiscovery {
+	if x, ok := m.GetServiceType().(*ReplaceSpecType_ThirdParty); ok {
+		return x.ThirdParty
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ReplaceSpecType_VisibilityEnabled)(nil),
 		(*ReplaceSpecType_VisibilityDisabled)(nil),
 		(*ReplaceSpecType_VirtualServer)(nil),
+		(*ReplaceSpecType_K8SService)(nil),
+		(*ReplaceSpecType_ConsulService)(nil),
+		(*ReplaceSpecType_N1DiscoveredServer)(nil),
+		(*ReplaceSpecType_ThirdParty)(nil),
 	}
 }
 
@@ -919,6 +1472,14 @@ func init() {
 	golang_proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.discovered_service.GlobalSpecType")
 	proto.RegisterType((*VirtualServer)(nil), "ves.io.schema.discovered_service.VirtualServer")
 	golang_proto.RegisterType((*VirtualServer)(nil), "ves.io.schema.discovered_service.VirtualServer")
+	proto.RegisterType((*K8SService)(nil), "ves.io.schema.discovered_service.K8sService")
+	golang_proto.RegisterType((*K8SService)(nil), "ves.io.schema.discovered_service.K8sService")
+	proto.RegisterType((*ConsulService)(nil), "ves.io.schema.discovered_service.ConsulService")
+	golang_proto.RegisterType((*ConsulService)(nil), "ves.io.schema.discovered_service.ConsulService")
+	proto.RegisterType((*NginxOneDiscoveredServer)(nil), "ves.io.schema.discovered_service.NginxOneDiscoveredServer")
+	golang_proto.RegisterType((*NginxOneDiscoveredServer)(nil), "ves.io.schema.discovered_service.NginxOneDiscoveredServer")
+	proto.RegisterType((*ThirdPartyApplicationDiscovery)(nil), "ves.io.schema.discovered_service.ThirdPartyApplicationDiscovery")
+	golang_proto.RegisterType((*ThirdPartyApplicationDiscovery)(nil), "ves.io.schema.discovered_service.ThirdPartyApplicationDiscovery")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.discovered_service.CreateSpecType")
 	golang_proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.discovered_service.CreateSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.discovered_service.GetSpecType")
@@ -935,82 +1496,107 @@ func init() {
 }
 
 var fileDescriptor_5e612cab0245916d = []byte{
-	// 1196 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x57, 0x4d, 0x6f, 0x1b, 0x45,
-	0x18, 0xf6, 0xd8, 0x1b, 0x7f, 0x8c, 0xed, 0x74, 0x33, 0x09, 0xea, 0x36, 0x54, 0x5b, 0x13, 0x71,
-	0x30, 0x21, 0xb1, 0x45, 0x2a, 0x2a, 0x54, 0xa4, 0x8a, 0x6c, 0xbc, 0x69, 0x5c, 0xc2, 0x26, 0xda,
-	0xa4, 0x01, 0xc1, 0x61, 0x59, 0xef, 0x4e, 0x9d, 0xa1, 0xbb, 0x9e, 0xd5, 0xee, 0xd8, 0x90, 0x83,
-	0xa5, 0xaa, 0xbf, 0x80, 0x03, 0x3f, 0x02, 0xe5, 0x27, 0xd0, 0x4b, 0x25, 0x24, 0x40, 0x9c, 0x72,
-	0xcc, 0x91, 0x3a, 0x97, 0x72, 0x41, 0x15, 0xc7, 0x5e, 0x8a, 0x76, 0x76, 0xed, 0x78, 0x93, 0xa6,
-	0x4d, 0xd5, 0x13, 0x52, 0x6e, 0x33, 0xef, 0xf3, 0xbc, 0x1f, 0xf3, 0xfa, 0x99, 0xd7, 0xb3, 0x70,
-	0xa1, 0x87, 0x83, 0x1a, 0xa1, 0xf5, 0xc0, 0xda, 0xc5, 0xae, 0x59, 0xb7, 0x49, 0x60, 0xd1, 0x1e,
-	0xf6, 0xb1, 0x6d, 0x04, 0xd8, 0xef, 0x11, 0x0b, 0xd7, 0xd9, 0x9e, 0x87, 0x83, 0x9a, 0xe7, 0x53,
-	0x46, 0x51, 0x25, 0x62, 0xd7, 0x22, 0x76, 0xed, 0x34, 0x7b, 0x76, 0xb1, 0x4d, 0xd8, 0x6e, 0xb7,
-	0x55, 0xb3, 0xa8, 0x5b, 0x6f, 0xd3, 0x36, 0xad, 0x73, 0xc7, 0x56, 0xf7, 0x1e, 0xdf, 0xf1, 0x0d,
-	0x5f, 0x45, 0x01, 0x67, 0xaf, 0xb5, 0x29, 0x6d, 0x3b, 0xf8, 0x98, 0xc5, 0x88, 0x8b, 0x03, 0x66,
-	0xba, 0x5e, 0x4c, 0xb8, 0x9c, 0xac, 0xaf, 0x83, 0x59, 0x0c, 0xbc, 0x9b, 0x04, 0xa8, 0xc7, 0x08,
-	0xed, 0xc4, 0x75, 0xce, 0x56, 0x92, 0xa0, 0x47, 0x1d, 0x62, 0xed, 0x8d, 0x9f, 0x64, 0xf6, 0x4a,
-	0x92, 0x31, 0x0e, 0x5d, 0x4d, 0x42, 0x3d, 0xd3, 0x21, 0xb6, 0xc9, 0xf0, 0xcb, 0x43, 0xf7, 0x08,
-	0xfe, 0xde, 0x48, 0x26, 0xbf, 0x76, 0x9a, 0x11, 0x8c, 0x27, 0x98, 0x7b, 0x3e, 0x01, 0x27, 0x6f,
-	0x3b, 0xb4, 0x65, 0x3a, 0x5b, 0x1e, 0xb6, 0xb6, 0xf7, 0x3c, 0x8c, 0x76, 0xe1, 0xf4, 0x2e, 0x63,
-	0x9e, 0xe1, 0x50, 0xd3, 0x36, 0x5a, 0xa6, 0x63, 0x76, 0x2c, 0xec, 0x07, 0x12, 0xa8, 0x64, 0xaa,
-	0xc5, 0xa5, 0xb9, 0x5a, 0xb2, 0xed, 0x3c, 0x62, 0x6d, 0xa3, 0xf5, 0x1d, 0xb6, 0x98, 0x8e, 0xef,
-	0x85, 0x01, 0x94, 0x99, 0xfd, 0xfe, 0xd4, 0x28, 0xc2, 0x30, 0x80, 0xce, 0x4d, 0xeb, 0xd4, 0xb4,
-	0x95, 0x61, 0x48, 0x84, 0x21, 0x62, 0xd6, 0xa9, 0x44, 0xe9, 0x73, 0x27, 0x9a, 0xde, 0xef, 0x8b,
-	0xc3, 0x00, 0xa3, 0x3c, 0xa1, 0x25, 0x99, 0x46, 0x85, 0xa8, 0x47, 0x02, 0xd2, 0x22, 0x0e, 0x61,
-	0x7b, 0x06, 0xee, 0x98, 0x2d, 0x07, 0xdb, 0x92, 0x50, 0x01, 0xd5, 0xe2, 0xd2, 0xcc, 0x89, 0x34,
-	0xaa, 0xeb, 0xb1, 0xbd, 0xb5, 0x94, 0x3e, 0x75, 0xec, 0xa1, 0x46, 0x0e, 0xe8, 0x36, 0x9c, 0x1e,
-	0x0b, 0x63, 0x93, 0x20, 0x8a, 0x33, 0xf1, 0xca, 0x38, 0x63, 0x99, 0x1b, 0xb1, 0x07, 0xfa, 0x0a,
-	0x4e, 0xf6, 0x88, 0xcf, 0xba, 0xa6, 0xc3, 0xa5, 0x8a, 0x7d, 0x29, 0xc7, 0x63, 0xd4, 0x6b, 0xaf,
-	0x93, 0x74, 0x6d, 0x27, 0xf2, 0xdb, 0xe2, 0x6e, 0x6b, 0x40, 0x2f, 0xf7, 0xc6, 0x0d, 0xa8, 0x07,
-	0xdf, 0x21, 0x1d, 0x86, 0xfd, 0x8e, 0xe9, 0x18, 0xc3, 0x14, 0xbb, 0x34, 0x60, 0x52, 0x9e, 0x27,
-	0x38, 0x4f, 0x4f, 0xe5, 0xfd, 0xfe, 0x4c, 0x8b, 0xb4, 0x89, 0x67, 0x24, 0x6b, 0x3c, 0xec, 0x83,
-	0xa7, 0x8f, 0x00, 0xd0, 0xa7, 0x87, 0x09, 0xe2, 0x52, 0xd6, 0x68, 0xc0, 0x90, 0x09, 0xcb, 0x5c,
-	0x7c, 0x43, 0x4c, 0x7a, 0x9a, 0x3b, 0x77, 0xc2, 0xcb, 0xfb, 0xfd, 0xa4, 0xf3, 0x30, 0x53, 0x29,
-	0xb4, 0x36, 0x63, 0xe3, 0x4d, 0xf8, 0xef, 0xad, 0xdc, 0x8d, 0x85, 0x8f, 0x16, 0xae, 0x2f, 0x2c,
-	0x29, 0xef, 0x43, 0x69, 0xec, 0x97, 0x30, 0xad, 0x50, 0xf1, 0x86, 0xb5, 0x4b, 0x89, 0x85, 0x51,
-	0xfe, 0xf1, 0x23, 0x20, 0x1c, 0x3c, 0x02, 0x19, 0x65, 0x06, 0x96, 0xe2, 0xb6, 0x19, 0xa1, 0xe2,
-	0x51, 0x68, 0xcd, 0xde, 0x11, 0xf2, 0x19, 0x51, 0xb8, 0x23, 0xe4, 0xb3, 0x62, 0x6e, 0xee, 0x9f,
-	0x09, 0x58, 0x4e, 0x74, 0x14, 0x7d, 0x03, 0xc5, 0x61, 0xd7, 0xf7, 0x0c, 0xca, 0xeb, 0x94, 0xc0,
-	0xb9, 0x8f, 0x52, 0xda, 0xef, 0x17, 0x46, 0xee, 0xfa, 0xa5, 0xd1, 0x32, 0x62, 0xa1, 0x2a, 0x2c,
-	0x78, 0xa6, 0xcf, 0x48, 0x58, 0xae, 0x94, 0xae, 0x80, 0x6a, 0x41, 0x81, 0xbf, 0xfc, 0xfd, 0x38,
-	0x33, 0xe1, 0x67, 0xa4, 0x07, 0x69, 0xfd, 0x18, 0x44, 0xf7, 0x61, 0x9e, 0x5f, 0x4f, 0x8b, 0x3a,
-	0x52, 0xa6, 0x02, 0xaa, 0x93, 0x4b, 0x37, 0x5e, 0xaf, 0x8d, 0x6d, 0xdf, 0xec, 0x04, 0x2e, 0x09,
-	0x02, 0x42, 0x3b, 0x9b, 0xb1, 0xb7, 0x72, 0xf9, 0xb0, 0x0f, 0x06, 0xfd, 0xb2, 0x46, 0x59, 0x25,
-	0xe8, 0x7a, 0x1e, 0xf5, 0x19, 0xb6, 0x79, 0x77, 0x47, 0x09, 0xd0, 0x7b, 0x50, 0x08, 0xed, 0xfc,
-	0x42, 0x94, 0x95, 0x72, 0x58, 0x51, 0x7e, 0x3e, 0x2b, 0xbd, 0x78, 0x91, 0xa9, 0x02, 0x9d, 0x43,
-	0xe8, 0x0b, 0x98, 0x0d, 0x98, 0xc9, 0xba, 0x01, 0x57, 0xfb, 0xe4, 0xd2, 0xc7, 0x6f, 0xa8, 0xd4,
-	0x2d, 0xee, 0xac, 0xc7, 0x41, 0xd0, 0x22, 0x2c, 0x59, 0x2d, 0xe2, 0x19, 0x96, 0xd3, 0x0d, 0x18,
-	0xf6, 0xa5, 0xec, 0xa9, 0x5e, 0x14, 0x43, 0x7c, 0x25, 0x82, 0x51, 0x1d, 0x96, 0x63, 0x45, 0x62,
-	0x3f, 0x3c, 0x1c, 0xbf, 0x2e, 0x49, 0x7e, 0x89, 0x13, 0x76, 0x22, 0x1c, 0x55, 0x21, 0x24, 0x9e,
-	0x61, 0xda, 0xb6, 0x8f, 0x83, 0x80, 0x6b, 0xbf, 0xa0, 0x14, 0x42, 0xb6, 0xe0, 0xa7, 0x3d, 0xa0,
-	0x17, 0x88, 0xb7, 0x1c, 0x61, 0xe8, 0x3a, 0x2c, 0xda, 0x38, 0xb0, 0x7c, 0xc2, 0xa7, 0xa6, 0x54,
-	0xe0, 0xd4, 0xa9, 0x58, 0x81, 0xa3, 0xf8, 0x79, 0x7d, 0x9c, 0x85, 0xbe, 0x85, 0xe5, 0x78, 0x88,
-	0x18, 0xe1, 0x81, 0xb0, 0x04, 0x79, 0x53, 0x3e, 0x7d, 0xc3, 0xa6, 0xc4, 0x73, 0x25, 0xec, 0x0d,
-	0xd6, 0x4b, 0x78, 0x6c, 0x87, 0x3e, 0x80, 0x39, 0xb7, 0xed, 0x32, 0x83, 0x78, 0x52, 0x91, 0x97,
-	0x24, 0x8e, 0x95, 0x14, 0x1d, 0x22, 0x1b, 0x12, 0x9a, 0x1e, 0xfa, 0x10, 0x16, 0xa3, 0x0b, 0x6a,
-	0x74, 0x4c, 0x17, 0x4b, 0xa5, 0x13, 0xad, 0xc9, 0xeb, 0x30, 0x82, 0x35, 0xd3, 0xc5, 0x73, 0xbf,
-	0x09, 0x70, 0x72, 0xc5, 0xc7, 0x26, 0xc3, 0x17, 0xd3, 0xfe, 0x7f, 0x3f, 0xed, 0x6f, 0x4e, 0xfd,
-	0x79, 0xeb, 0xc4, 0x7f, 0xb7, 0xf2, 0xc9, 0x2b, 0x26, 0xe3, 0xd5, 0x87, 0xcf, 0xc1, 0x99, 0xa8,
-	0x52, 0x39, 0x31, 0x2d, 0xc5, 0x87, 0xcf, 0x41, 0xc2, 0x92, 0x98, 0x9c, 0xbf, 0x0a, 0xb0, 0x78,
-	0x1b, 0xb3, 0x0b, 0x15, 0x5d, 0xa8, 0xe8, 0x2d, 0x54, 0xf4, 0xbb, 0x00, 0x2f, 0xe9, 0xd8, 0x73,
-	0x4c, 0xeb, 0x62, 0x1e, 0x5d, 0x28, 0xe9, 0x2d, 0x94, 0x34, 0xef, 0xc2, 0xe9, 0x97, 0x3c, 0x38,
-	0xd0, 0x25, 0x58, 0xbc, 0xab, 0x6d, 0x6d, 0xaa, 0x2b, 0xcd, 0xd5, 0xa6, 0xda, 0x10, 0x53, 0xa8,
-	0x0c, 0x0b, 0xcb, 0x3b, 0xcb, 0xcd, 0xf5, 0x65, 0x65, 0x5d, 0x15, 0x01, 0x2a, 0xc2, 0xdc, 0xc6,
-	0xea, 0xea, 0x7a, 0x53, 0x53, 0xc5, 0x74, 0xb8, 0xb9, 0xab, 0x7d, 0xae, 0x6d, 0x7c, 0xa9, 0x89,
-	0x99, 0xc8, 0xf3, 0x98, 0x2a, 0x84, 0x68, 0x43, 0x5d, 0x57, 0xb7, 0xd5, 0x86, 0x38, 0x31, 0xff,
-	0x19, 0xbc, 0x72, 0xe6, 0x5f, 0x39, 0xca, 0x43, 0x41, 0xdb, 0xd0, 0x54, 0x31, 0x15, 0xfa, 0xa8,
-	0x5a, 0xe8, 0xdf, 0x10, 0x01, 0x2a, 0xc1, 0x7c, 0xa3, 0xb9, 0x15, 0xed, 0xd2, 0xf3, 0x2b, 0x70,
-	0xe6, 0x65, 0xef, 0xb5, 0xb0, 0xc0, 0xbb, 0x5a, 0x43, 0x5d, 0x6d, 0x6a, 0xbc, 0xde, 0x3c, 0x14,
-	0xd6, 0xb6, 0xb7, 0x37, 0x45, 0x80, 0x0a, 0x70, 0x22, 0x5c, 0x6d, 0x89, 0x69, 0x94, 0x83, 0x99,
-	0xed, 0x95, 0x4d, 0x31, 0xa3, 0xfc, 0x04, 0x0e, 0x9e, 0xc8, 0xa9, 0xc3, 0x27, 0x72, 0xea, 0xd9,
-	0x13, 0x19, 0x3c, 0x18, 0xc8, 0xe0, 0xe7, 0x81, 0x0c, 0xfe, 0x18, 0xc8, 0xe0, 0x60, 0x20, 0x83,
-	0xc3, 0x81, 0x0c, 0xfe, 0x1a, 0xc8, 0xe0, 0xe9, 0x40, 0x4e, 0x3d, 0x1b, 0xc8, 0xe0, 0xc7, 0x23,
-	0x39, 0xf5, 0xf8, 0x48, 0x06, 0x07, 0x47, 0x72, 0xea, 0xf0, 0x48, 0x4e, 0x7d, 0xbd, 0xd3, 0xa6,
-	0xde, 0xfd, 0x76, 0xad, 0x47, 0x1d, 0x86, 0x7d, 0xdf, 0xac, 0x75, 0x83, 0x3a, 0x5f, 0xdc, 0xa3,
-	0xbe, 0xbb, 0xe8, 0xf9, 0xb4, 0x47, 0x6c, 0xec, 0x2f, 0x0e, 0xe1, 0xba, 0xd7, 0x6a, 0xd3, 0x3a,
-	0xfe, 0x81, 0xc5, 0xdf, 0x92, 0x67, 0x7e, 0xa5, 0xb7, 0xb2, 0xfc, 0x69, 0x79, 0xfd, 0xbf, 0x00,
-	0x00, 0x00, 0xff, 0xff, 0xeb, 0x22, 0x3b, 0x9f, 0xd0, 0x0f, 0x00, 0x00,
+	// 1599 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x59, 0x4f, 0x6f, 0xe3, 0xc6,
+	0x15, 0xd7, 0x48, 0xb2, 0xfe, 0x8c, 0x24, 0x2f, 0x77, 0xec, 0x60, 0x99, 0x4d, 0xc0, 0x28, 0x6e,
+	0x02, 0xa8, 0x5b, 0xaf, 0x84, 0xf5, 0xa2, 0xe9, 0x62, 0x0b, 0x04, 0x31, 0x2d, 0xad, 0xad, 0xc4,
+	0x95, 0x0d, 0xda, 0xeb, 0x16, 0xed, 0x81, 0xa5, 0xc8, 0xb1, 0x34, 0x35, 0xc5, 0x21, 0xc8, 0x91,
+	0x1a, 0x1d, 0x04, 0xb8, 0xf9, 0x04, 0x45, 0xd1, 0x9e, 0x0a, 0xf4, 0xd0, 0x53, 0xe1, 0x8f, 0xd0,
+	0xed, 0x61, 0x81, 0x02, 0x6d, 0xd1, 0x93, 0x8f, 0x3e, 0x76, 0xe5, 0xcb, 0xf6, 0x16, 0xf4, 0xb8,
+	0x97, 0x14, 0x33, 0xa4, 0xfe, 0xd0, 0xb6, 0x6c, 0x07, 0x41, 0x0e, 0x01, 0x74, 0x9b, 0x99, 0xf7,
+	0x7e, 0xbf, 0xf7, 0xe6, 0xcd, 0x7b, 0x6f, 0x46, 0x14, 0x5c, 0xed, 0x61, 0xbf, 0x4c, 0x68, 0xc5,
+	0x37, 0xdb, 0xb8, 0x63, 0x54, 0x2c, 0xe2, 0x9b, 0xb4, 0x87, 0x3d, 0x6c, 0xe9, 0x3e, 0xf6, 0x7a,
+	0xc4, 0xc4, 0x15, 0xd6, 0x77, 0xb1, 0x5f, 0x76, 0x3d, 0xca, 0x28, 0x2a, 0x06, 0xda, 0xe5, 0x40,
+	0xbb, 0x7c, 0x59, 0xfb, 0xfe, 0xc3, 0x16, 0x61, 0xed, 0x6e, 0xb3, 0x6c, 0xd2, 0x4e, 0xa5, 0x45,
+	0x5b, 0xb4, 0x22, 0x80, 0xcd, 0xee, 0xa1, 0x98, 0x89, 0x89, 0x18, 0x05, 0x84, 0xf7, 0xdf, 0x6b,
+	0x51, 0xda, 0xb2, 0xf1, 0x44, 0x8b, 0x91, 0x0e, 0xf6, 0x99, 0xd1, 0x71, 0x43, 0x85, 0xef, 0x5d,
+	0xed, 0x5f, 0x7f, 0xda, 0xad, 0xfb, 0xf7, 0xa2, 0x4a, 0x0e, 0x66, 0xa1, 0xe0, 0x9d, 0xa8, 0x80,
+	0xba, 0x8c, 0x50, 0x67, 0x84, 0x2a, 0x46, 0x85, 0x2e, 0xb5, 0x89, 0x19, 0xe5, 0x7d, 0x3b, 0xaa,
+	0x31, 0x2d, 0x7a, 0x37, 0x2a, 0xea, 0x19, 0x36, 0xb1, 0x0c, 0x86, 0xaf, 0xa6, 0xee, 0x11, 0xfc,
+	0x6b, 0x3d, 0x6a, 0xfc, 0xbd, 0xcb, 0x1a, 0xfe, 0xb4, 0x81, 0x95, 0x37, 0x19, 0xb8, 0xb8, 0x69,
+	0xd3, 0xa6, 0x61, 0xef, 0xb9, 0xd8, 0xdc, 0xef, 0xbb, 0x18, 0xb5, 0xe1, 0x52, 0x9b, 0x31, 0x57,
+	0xb7, 0xa9, 0x61, 0xe9, 0x4d, 0xc3, 0x36, 0x1c, 0x13, 0x7b, 0xbe, 0x0c, 0x8a, 0x89, 0x52, 0x6e,
+	0x6d, 0xa5, 0x1c, 0x3d, 0x1b, 0xc1, 0x58, 0xde, 0x69, 0xfe, 0x0a, 0x9b, 0x4c, 0xc3, 0x87, 0x9c,
+	0x40, 0x5d, 0x3e, 0x19, 0xdc, 0x1d, 0x33, 0x8c, 0x08, 0x34, 0xb1, 0xb4, 0x4d, 0x0d, 0x4b, 0x1d,
+	0x51, 0x22, 0x0c, 0x11, 0x33, 0x2f, 0x19, 0x8a, 0xdf, 0xda, 0xd0, 0xd2, 0xc9, 0x40, 0x1a, 0x11,
+	0x8c, 0xed, 0xf0, 0x95, 0xa8, 0x99, 0x1a, 0x44, 0x3d, 0xe2, 0x93, 0x26, 0xb1, 0x09, 0xeb, 0xeb,
+	0xd8, 0x31, 0x9a, 0x36, 0xb6, 0xe4, 0x64, 0x11, 0x94, 0x72, 0x6b, 0xcb, 0x17, 0xcc, 0xd4, 0x3a,
+	0x2e, 0xeb, 0x6f, 0xc5, 0xb4, 0xbb, 0x13, 0x44, 0x2d, 0x00, 0xa0, 0x4d, 0xb8, 0x34, 0x45, 0x63,
+	0x11, 0x3f, 0xe0, 0x59, 0xb8, 0x96, 0x67, 0xca, 0x72, 0x35, 0x44, 0xa0, 0x9f, 0xc1, 0xc5, 0x1e,
+	0xf1, 0x58, 0xd7, 0xb0, 0x45, 0x3e, 0x63, 0x4f, 0x4e, 0x0b, 0x8e, 0x4a, 0xf9, 0xa6, 0xbc, 0x2f,
+	0x1f, 0x04, 0xb8, 0x3d, 0x01, 0xdb, 0x02, 0x5a, 0xa1, 0x37, 0xbd, 0x80, 0x76, 0x60, 0xee, 0xe8,
+	0x89, 0x3f, 0xd2, 0x96, 0xb3, 0x82, 0x76, 0xf5, 0x66, 0xda, 0xcf, 0x9e, 0xf8, 0x7b, 0xc1, 0x70,
+	0x0b, 0x68, 0xf0, 0x68, 0x3c, 0xe3, 0xae, 0x9a, 0xd4, 0xf1, 0xbb, 0xf6, 0x98, 0x13, 0xde, 0xd6,
+	0xd5, 0x0d, 0x81, 0x9b, 0xd0, 0x16, 0xcc, 0xe9, 0x05, 0xe4, 0xc0, 0x65, 0xe7, 0x91, 0x7e, 0x01,
+	0x87, 0x3d, 0x39, 0x27, 0xf8, 0x9f, 0xde, 0xcc, 0xdf, 0x68, 0x11, 0xe7, 0xf3, 0x1d, 0x07, 0x57,
+	0xc7, 0xa2, 0x71, 0x54, 0x90, 0xf3, 0xe8, 0xe2, 0x2a, 0x32, 0x61, 0x8e, 0xb5, 0x89, 0x67, 0xe9,
+	0xae, 0xe1, 0xb1, 0xbe, 0x9c, 0x17, 0x66, 0x3e, 0xb9, 0xd9, 0xcc, 0x3e, 0x07, 0xed, 0x72, 0xcc,
+	0xba, 0xeb, 0xda, 0xc4, 0x34, 0x78, 0x79, 0x8d, 0xd8, 0xfb, 0x3c, 0x5c, 0x6c, 0xac, 0x81, 0x7a,
+	0xf0, 0x2d, 0xe2, 0x30, 0xec, 0x39, 0x86, 0xad, 0x8f, 0x8e, 0xb8, 0x4d, 0x7d, 0x26, 0x67, 0x84,
+	0xb9, 0xdb, 0xe4, 0xb4, 0x72, 0x32, 0x58, 0x6e, 0x92, 0x16, 0x71, 0xf5, 0x68, 0x8e, 0x9c, 0x0d,
+	0xc0, 0xeb, 0x17, 0x00, 0x68, 0x4b, 0x23, 0x03, 0x61, 0x2a, 0x6c, 0x51, 0x9f, 0x21, 0x03, 0x16,
+	0x44, 0xf1, 0x8f, 0x64, 0xf2, 0xeb, 0xf4, 0xad, 0x0d, 0xde, 0x3b, 0x19, 0x44, 0xc1, 0x23, 0x4b,
+	0x79, 0xbe, 0x5a, 0x0f, 0x17, 0x9f, 0xc2, 0xff, 0x7d, 0x9c, 0xfe, 0x68, 0xf5, 0xd1, 0xea, 0xe3,
+	0xd5, 0x35, 0xf5, 0x03, 0x28, 0x4f, 0x55, 0x82, 0x61, 0xf2, 0x90, 0xe8, 0x66, 0x9b, 0xf2, 0x73,
+	0xcd, 0xbc, 0x7c, 0x01, 0x92, 0xa7, 0x2f, 0x40, 0x42, 0x5d, 0x86, 0xf9, 0x30, 0x88, 0x3a, 0xef,
+	0x38, 0x88, 0xaf, 0xa6, 0x3e, 0x4d, 0x66, 0x12, 0x52, 0xf2, 0xd3, 0x64, 0x26, 0x25, 0xa5, 0x57,
+	0xfe, 0x90, 0x82, 0x85, 0x48, 0x46, 0xa3, 0x5f, 0x40, 0x69, 0xdc, 0x7b, 0x75, 0x2a, 0xfc, 0x94,
+	0xc1, 0xad, 0xb7, 0x92, 0x3f, 0x19, 0x64, 0xc7, 0x70, 0xed, 0xce, 0x78, 0x18, 0x68, 0xa1, 0x12,
+	0xcc, 0xf2, 0xc3, 0x27, 0xdc, 0x5d, 0x39, 0x5e, 0x04, 0xa5, 0xac, 0x0a, 0xff, 0xfa, 0xdf, 0x97,
+	0x89, 0x05, 0x2f, 0x21, 0x1f, 0xc7, 0xb5, 0x89, 0x10, 0x1d, 0xc1, 0x8c, 0x68, 0x8f, 0x26, 0xb5,
+	0xe5, 0x44, 0x11, 0x94, 0x16, 0xd7, 0x3e, 0xba, 0x45, 0xa6, 0x78, 0x86, 0xe3, 0x77, 0x88, 0xef,
+	0x13, 0xea, 0xec, 0x86, 0x68, 0xf5, 0xde, 0xd9, 0x00, 0x0c, 0x07, 0x85, 0x06, 0x65, 0x45, 0xbf,
+	0xeb, 0xba, 0xd4, 0x63, 0xd8, 0x12, 0xd1, 0x1d, 0x1b, 0x40, 0xef, 0xc3, 0x24, 0x5f, 0x17, 0x0d,
+	0xa9, 0xa0, 0x16, 0xb8, 0x47, 0x99, 0x07, 0x29, 0xf9, 0xab, 0xaf, 0x12, 0x25, 0xa0, 0x09, 0x11,
+	0xfa, 0x09, 0x4c, 0xf9, 0xcc, 0x60, 0x5d, 0x5f, 0x74, 0x9b, 0xc5, 0xb5, 0x1f, 0x7e, 0xcd, 0x4e,
+	0xb1, 0x27, 0xc0, 0x5a, 0x48, 0x82, 0x1e, 0xc2, 0xbc, 0xd9, 0x24, 0xae, 0x6e, 0xda, 0x5d, 0x9f,
+	0x61, 0x4f, 0x4e, 0x5d, 0x8a, 0x45, 0x8e, 0xcb, 0x37, 0x02, 0x31, 0xaa, 0xc0, 0x42, 0x98, 0x91,
+	0xd8, 0xe3, 0x9b, 0x13, 0xed, 0x2a, 0xaa, 0x9f, 0x17, 0x0a, 0x07, 0x81, 0x1c, 0x95, 0x20, 0x24,
+	0xae, 0x6e, 0x58, 0x96, 0x87, 0x7d, 0x5f, 0xe4, 0x7e, 0x56, 0xcd, 0x72, 0xed, 0xa4, 0x17, 0x77,
+	0x81, 0x96, 0x25, 0xee, 0x7a, 0x20, 0x43, 0x8f, 0x61, 0xce, 0xc2, 0xbe, 0xe9, 0x11, 0x71, 0x6b,
+	0x89, 0x86, 0x95, 0x55, 0xef, 0x86, 0x19, 0x38, 0xe6, 0xcf, 0x68, 0xd3, 0x5a, 0xe8, 0x97, 0xb0,
+	0x10, 0x36, 0x71, 0x9d, 0x6f, 0x28, 0xe8, 0x49, 0x8b, 0x6b, 0x3f, 0xfe, 0x9a, 0x41, 0x09, 0xfb,
+	0x3a, 0x8f, 0x0d, 0xd6, 0xf2, 0x78, 0x6a, 0x86, 0xbe, 0x0f, 0xd3, 0x9d, 0x56, 0x87, 0xe9, 0xc4,
+	0x15, 0xfd, 0x28, 0xab, 0x4a, 0x53, 0x2e, 0x05, 0x9b, 0x48, 0x71, 0x85, 0xba, 0x8b, 0x7e, 0x00,
+	0x73, 0x41, 0x81, 0xea, 0x8e, 0xd1, 0xc1, 0xa2, 0xaf, 0x4c, 0x87, 0x26, 0xa3, 0xc1, 0x40, 0xdc,
+	0x30, 0x3a, 0x18, 0x7d, 0x08, 0x33, 0x7e, 0xb7, 0xa9, 0xbb, 0x06, 0x6b, 0xcb, 0x85, 0x4b, 0x9a,
+	0x69, 0xbf, 0xdb, 0xdc, 0x35, 0x58, 0x7b, 0xe5, 0x8f, 0x71, 0x08, 0x27, 0x2d, 0xf9, 0xdb, 0x2d,
+	0x8a, 0xf7, 0x27, 0x55, 0x2a, 0x36, 0x20, 0xea, 0x42, 0xcb, 0x85, 0x6b, 0xc2, 0xeb, 0x2a, 0x4f,
+	0x50, 0xcb, 0x97, 0x13, 0xe2, 0x62, 0xfe, 0x60, 0x46, 0x98, 0xfb, 0xe5, 0x5d, 0x6a, 0xd5, 0x9d,
+	0x43, 0x2a, 0xac, 0x06, 0xfb, 0xfa, 0x1d, 0x88, 0x4b, 0x6b, 0x9a, 0x40, 0xa3, 0x4d, 0xb8, 0xc0,
+	0x73, 0xd9, 0x97, 0x93, 0x82, 0xe6, 0xc3, 0x6b, 0x68, 0x3c, 0x76, 0x25, 0x4f, 0x80, 0x5f, 0xf9,
+	0x53, 0x1c, 0x16, 0x22, 0x97, 0xcb, 0x3c, 0x40, 0xd1, 0x00, 0xfd, 0x39, 0x01, 0xe5, 0x59, 0xb7,
+	0x23, 0xfa, 0x51, 0xb0, 0x1d, 0xec, 0xe9, 0x4d, 0x9b, 0x9a, 0x47, 0x22, 0x4e, 0x59, 0x75, 0x39,
+	0x4c, 0xc3, 0xd2, 0x71, 0x3c, 0x1c, 0x9d, 0x01, 0xa0, 0x85, 0x99, 0xad, 0x72, 0xc5, 0x71, 0x9b,
+	0x8a, 0xcf, 0x6e, 0x53, 0x1b, 0x70, 0xc9, 0xe1, 0x76, 0x75, 0xea, 0xe0, 0xf0, 0x1c, 0x74, 0x62,
+	0x89, 0x0e, 0x3a, 0xcb, 0x84, 0xe4, 0x84, 0x8e, 0x06, 0xd1, 0xae, 0x5b, 0xa8, 0x0c, 0xd3, 0x16,
+	0xed, 0x18, 0xc4, 0x09, 0x02, 0x31, 0x02, 0xf2, 0x1d, 0x16, 0x47, 0x23, 0x19, 0x68, 0x23, 0x25,
+	0xf4, 0x1b, 0x00, 0xdf, 0x09, 0xac, 0x8e, 0x8e, 0x69, 0x92, 0x0b, 0x1e, 0x3e, 0x0c, 0xdf, 0x67,
+	0xb7, 0xbc, 0x7a, 0xef, 0xcd, 0x60, 0x3a, 0xfe, 0x1b, 0x00, 0x9a, 0x2c, 0x84, 0x61, 0xd2, 0x8d,
+	0x9f, 0x00, 0x1a, 0x3e, 0x44, 0x8f, 0xe0, 0x5b, 0x97, 0x36, 0x2e, 0x92, 0x45, 0x74, 0x56, 0x0d,
+	0x45, 0x37, 0xc9, 0x73, 0x66, 0x65, 0x00, 0x95, 0xeb, 0x9f, 0x16, 0xdf, 0x6a, 0x56, 0xaf, 0xfc,
+	0x23, 0x0d, 0x17, 0x37, 0x3c, 0x6c, 0x30, 0x3c, 0x7f, 0xf7, 0xcf, 0xdf, 0xfd, 0xf3, 0x77, 0xff,
+	0x37, 0x7a, 0xf7, 0x3f, 0xbd, 0xfb, 0xef, 0x8f, 0x2f, 0xfc, 0x8a, 0x56, 0x9f, 0x5c, 0xf3, 0x46,
+	0x7e, 0xf7, 0x8b, 0x37, 0x60, 0xa6, 0x54, 0x2d, 0x5e, 0x78, 0x37, 0x4b, 0x5f, 0xbc, 0x01, 0x91,
+	0x95, 0xc8, 0x1b, 0xfa, 0xef, 0x69, 0x98, 0xdb, 0xc4, 0x6c, 0x5e, 0xc5, 0xf3, 0x2a, 0x9e, 0x57,
+	0xf1, 0x77, 0xb6, 0x8a, 0xff, 0x99, 0x86, 0x77, 0x34, 0xec, 0xda, 0x86, 0x39, 0xbf, 0x8f, 0xe7,
+	0x95, 0x3c, 0xaf, 0xe4, 0xef, 0x6c, 0x25, 0x3f, 0xe8, 0xc0, 0xa5, 0x2b, 0x3e, 0xbd, 0xa0, 0x3b,
+	0x30, 0xf7, 0xbc, 0xb1, 0xb7, 0x5b, 0xdb, 0xa8, 0x3f, 0xab, 0xd7, 0xaa, 0x52, 0x0c, 0x15, 0x60,
+	0x76, 0xfd, 0x60, 0xbd, 0xbe, 0xbd, 0xae, 0x6e, 0xd7, 0x24, 0x80, 0x72, 0x30, 0xbd, 0xf3, 0xec,
+	0xd9, 0x76, 0xbd, 0x51, 0x93, 0xe2, 0x7c, 0xf2, 0xbc, 0xf1, 0x59, 0x63, 0xe7, 0xa7, 0x0d, 0x29,
+	0x11, 0x20, 0x27, 0xaa, 0x49, 0x2e, 0xad, 0xd6, 0xb6, 0x6b, 0xfb, 0xb5, 0xaa, 0xb4, 0xf0, 0xe0,
+	0x13, 0xf8, 0xf6, 0xcc, 0x8f, 0x1a, 0x28, 0x03, 0x93, 0x8d, 0x9d, 0x46, 0x4d, 0x8a, 0x71, 0x4c,
+	0xad, 0xc1, 0xf1, 0x55, 0x09, 0xa0, 0x3c, 0xcc, 0x54, 0xeb, 0x7b, 0xc1, 0x2c, 0xfe, 0x60, 0x03,
+	0x2e, 0x5f, 0xf5, 0xe5, 0x8a, 0x3b, 0xf8, 0xbc, 0x51, 0xad, 0x3d, 0xab, 0x37, 0x84, 0xbf, 0x19,
+	0x98, 0xdc, 0xda, 0xdf, 0xdf, 0x95, 0x00, 0xca, 0xc2, 0x05, 0x3e, 0xda, 0x93, 0xe2, 0x28, 0x0d,
+	0x13, 0xfb, 0x1b, 0xbb, 0x52, 0x42, 0xfd, 0x3d, 0x38, 0x7d, 0xa5, 0xc4, 0xce, 0x5e, 0x29, 0xb1,
+	0x2f, 0x5f, 0x29, 0xe0, 0x78, 0xa8, 0x80, 0xbf, 0x0c, 0x15, 0xf0, 0xaf, 0xa1, 0x02, 0x4e, 0x87,
+	0x0a, 0x38, 0x1b, 0x2a, 0xe0, 0x3f, 0x43, 0x05, 0xbc, 0x1e, 0x2a, 0xb1, 0x2f, 0x87, 0x0a, 0xf8,
+	0xed, 0xb9, 0x12, 0x7b, 0x79, 0xae, 0x80, 0xd3, 0x73, 0x25, 0x76, 0x76, 0xae, 0xc4, 0x7e, 0x7e,
+	0xd0, 0xa2, 0xee, 0x51, 0xab, 0xdc, 0xa3, 0x36, 0xc3, 0x9e, 0x67, 0x94, 0xbb, 0x7e, 0x45, 0x0c,
+	0x0e, 0xa9, 0xd7, 0x79, 0xe8, 0x7a, 0xb4, 0x47, 0x2c, 0xec, 0x3d, 0x1c, 0x89, 0x2b, 0x6e, 0xb3,
+	0x45, 0x2b, 0xf8, 0x73, 0x16, 0xfe, 0xab, 0x31, 0xf3, 0x4f, 0xa5, 0x66, 0x4a, 0x7c, 0x64, 0x7b,
+	0xfc, 0xff, 0x00, 0x00, 0x00, 0xff, 0xff, 0x58, 0x4e, 0x92, 0x32, 0x7f, 0x1a, 0x00, 0x00,
 }
 
 func (x VirtualServerStatus) String() string {
@@ -1167,6 +1753,102 @@ func (this *GlobalSpecType_VirtualServer) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_K8SService) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_K8SService)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_K8SService)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.K8SService.Equal(that1.K8SService) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_ConsulService) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_ConsulService)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_ConsulService)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ConsulService.Equal(that1.ConsulService) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_N1DiscoveredServer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_N1DiscoveredServer)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_N1DiscoveredServer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.N1DiscoveredServer.Equal(that1.N1DiscoveredServer) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_ThirdParty) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_ThirdParty)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_ThirdParty)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ThirdParty.Equal(that1.ThirdParty) {
+		return false
+	}
+	return true
+}
 func (this *VirtualServer) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1220,6 +1902,163 @@ func (this *VirtualServer) Equal(that interface{}) bool {
 		return false
 	}
 	if this.ServerName != that1.ServerName {
+		return false
+	}
+	if this.SubPath != that1.SubPath {
+		return false
+	}
+	return true
+}
+func (this *K8SService) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*K8SService)
+	if !ok {
+		that2, ok := that.(K8SService)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DiscoveryObject.Equal(that1.DiscoveryObject) {
+		return false
+	}
+	if this.ServiceName != that1.ServiceName {
+		return false
+	}
+	if len(this.Pods) != len(that1.Pods) {
+		return false
+	}
+	for i := range this.Pods {
+		if !this.Pods[i].Equal(that1.Pods[i]) {
+			return false
+		}
+	}
+	if len(this.Ports) != len(that1.Ports) {
+		return false
+	}
+	for i := range this.Ports {
+		if !this.Ports[i].Equal(that1.Ports[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *ConsulService) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ConsulService)
+	if !ok {
+		that2, ok := that.(ConsulService)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DiscoveryObject.Equal(that1.DiscoveryObject) {
+		return false
+	}
+	if this.ServiceName != that1.ServiceName {
+		return false
+	}
+	if len(this.Pods) != len(that1.Pods) {
+		return false
+	}
+	for i := range this.Pods {
+		if !this.Pods[i].Equal(that1.Pods[i]) {
+			return false
+		}
+	}
+	if len(this.Ports) != len(that1.Ports) {
+		return false
+	}
+	for i := range this.Ports {
+		if !this.Ports[i].Equal(that1.Ports[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *NginxOneDiscoveredServer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*NginxOneDiscoveredServer)
+	if !ok {
+		that2, ok := that.(NginxOneDiscoveredServer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.ServerBlock != that1.ServerBlock {
+		return false
+	}
+	if this.Port != that1.Port {
+		return false
+	}
+	if this.NginxOneObjectId != that1.NginxOneObjectId {
+		return false
+	}
+	if len(this.Domains) != len(that1.Domains) {
+		return false
+	}
+	for i := range this.Domains {
+		if this.Domains[i] != that1.Domains[i] {
+			return false
+		}
+	}
+	if !this.NginxServiceDiscoveryRef.Equal(that1.NginxServiceDiscoveryRef) {
+		return false
+	}
+	if this.NginxOneObjectName != that1.NginxOneObjectName {
+		return false
+	}
+	return true
+}
+func (this *ThirdPartyApplicationDiscovery) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ThirdPartyApplicationDiscovery)
+	if !ok {
+		that2, ok := that.(ThirdPartyApplicationDiscovery)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DiscoveryObject.Equal(that1.DiscoveryObject) {
 		return false
 	}
 	return true
@@ -1351,6 +2190,102 @@ func (this *CreateSpecType_VirtualServer) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_K8SService) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_K8SService)
+	if !ok {
+		that2, ok := that.(CreateSpecType_K8SService)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.K8SService.Equal(that1.K8SService) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_ConsulService) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_ConsulService)
+	if !ok {
+		that2, ok := that.(CreateSpecType_ConsulService)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ConsulService.Equal(that1.ConsulService) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_N1DiscoveredServer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_N1DiscoveredServer)
+	if !ok {
+		that2, ok := that.(CreateSpecType_N1DiscoveredServer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.N1DiscoveredServer.Equal(that1.N1DiscoveredServer) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_ThirdParty) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_ThirdParty)
+	if !ok {
+		that2, ok := that.(CreateSpecType_ThirdParty)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ThirdParty.Equal(that1.ThirdParty) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1474,6 +2409,102 @@ func (this *GetSpecType_VirtualServer) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.VirtualServer.Equal(that1.VirtualServer) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_K8SService) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_K8SService)
+	if !ok {
+		that2, ok := that.(GetSpecType_K8SService)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.K8SService.Equal(that1.K8SService) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_ConsulService) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_ConsulService)
+	if !ok {
+		that2, ok := that.(GetSpecType_ConsulService)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ConsulService.Equal(that1.ConsulService) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_N1DiscoveredServer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_N1DiscoveredServer)
+	if !ok {
+		that2, ok := that.(GetSpecType_N1DiscoveredServer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.N1DiscoveredServer.Equal(that1.N1DiscoveredServer) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_ThirdParty) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_ThirdParty)
+	if !ok {
+		that2, ok := that.(GetSpecType_ThirdParty)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ThirdParty.Equal(that1.ThirdParty) {
 		return false
 	}
 	return true
@@ -1605,11 +2636,107 @@ func (this *ReplaceSpecType_VirtualServer) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_K8SService) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_K8SService)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_K8SService)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.K8SService.Equal(that1.K8SService) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_ConsulService) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_ConsulService)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_ConsulService)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ConsulService.Equal(that1.ConsulService) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_N1DiscoveredServer) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_N1DiscoveredServer)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_N1DiscoveredServer)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.N1DiscoveredServer.Equal(that1.N1DiscoveredServer) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_ThirdParty) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_ThirdParty)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_ThirdParty)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ThirdParty.Equal(that1.ThirdParty) {
+		return false
+	}
+	return true
+}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 15)
 	s = append(s, "&discovered_service.GlobalSpecType{")
 	if this.HttpLoadBalancers != nil {
 		s = append(s, "HttpLoadBalancers: "+fmt.Sprintf("%#v", this.HttpLoadBalancers)+",\n")
@@ -1656,11 +2783,43 @@ func (this *GlobalSpecType_VirtualServer) GoString() string {
 		`VirtualServer:` + fmt.Sprintf("%#v", this.VirtualServer) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_K8SService) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.GlobalSpecType_K8SService{` +
+		`K8SService:` + fmt.Sprintf("%#v", this.K8SService) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_ConsulService) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.GlobalSpecType_ConsulService{` +
+		`ConsulService:` + fmt.Sprintf("%#v", this.ConsulService) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_N1DiscoveredServer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.GlobalSpecType_N1DiscoveredServer{` +
+		`N1DiscoveredServer:` + fmt.Sprintf("%#v", this.N1DiscoveredServer) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_ThirdParty) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.GlobalSpecType_ThirdParty{` +
+		`ThirdParty:` + fmt.Sprintf("%#v", this.ThirdParty) + `}`}, ", ")
+	return s
+}
 func (this *VirtualServer) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 16)
+	s := make([]string, 0, 17)
 	s = append(s, "&discovered_service.VirtualServer{")
 	if this.DiscoveryObject != nil {
 		s = append(s, "DiscoveryObject: "+fmt.Sprintf("%#v", this.DiscoveryObject)+",\n")
@@ -1676,6 +2835,74 @@ func (this *VirtualServer) GoString() string {
 	s = append(s, "EnabledState: "+fmt.Sprintf("%#v", this.EnabledState)+",\n")
 	s = append(s, "MgmtIp: "+fmt.Sprintf("%#v", this.MgmtIp)+",\n")
 	s = append(s, "ServerName: "+fmt.Sprintf("%#v", this.ServerName)+",\n")
+	s = append(s, "SubPath: "+fmt.Sprintf("%#v", this.SubPath)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *K8SService) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&discovered_service.K8SService{")
+	if this.DiscoveryObject != nil {
+		s = append(s, "DiscoveryObject: "+fmt.Sprintf("%#v", this.DiscoveryObject)+",\n")
+	}
+	s = append(s, "ServiceName: "+fmt.Sprintf("%#v", this.ServiceName)+",\n")
+	if this.Pods != nil {
+		s = append(s, "Pods: "+fmt.Sprintf("%#v", this.Pods)+",\n")
+	}
+	if this.Ports != nil {
+		s = append(s, "Ports: "+fmt.Sprintf("%#v", this.Ports)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ConsulService) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 8)
+	s = append(s, "&discovered_service.ConsulService{")
+	if this.DiscoveryObject != nil {
+		s = append(s, "DiscoveryObject: "+fmt.Sprintf("%#v", this.DiscoveryObject)+",\n")
+	}
+	s = append(s, "ServiceName: "+fmt.Sprintf("%#v", this.ServiceName)+",\n")
+	if this.Pods != nil {
+		s = append(s, "Pods: "+fmt.Sprintf("%#v", this.Pods)+",\n")
+	}
+	if this.Ports != nil {
+		s = append(s, "Ports: "+fmt.Sprintf("%#v", this.Ports)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *NginxOneDiscoveredServer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 10)
+	s = append(s, "&discovered_service.NginxOneDiscoveredServer{")
+	s = append(s, "ServerBlock: "+fmt.Sprintf("%#v", this.ServerBlock)+",\n")
+	s = append(s, "Port: "+fmt.Sprintf("%#v", this.Port)+",\n")
+	s = append(s, "NginxOneObjectId: "+fmt.Sprintf("%#v", this.NginxOneObjectId)+",\n")
+	s = append(s, "Domains: "+fmt.Sprintf("%#v", this.Domains)+",\n")
+	if this.NginxServiceDiscoveryRef != nil {
+		s = append(s, "NginxServiceDiscoveryRef: "+fmt.Sprintf("%#v", this.NginxServiceDiscoveryRef)+",\n")
+	}
+	s = append(s, "NginxOneObjectName: "+fmt.Sprintf("%#v", this.NginxOneObjectName)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ThirdPartyApplicationDiscovery) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&discovered_service.ThirdPartyApplicationDiscovery{")
+	if this.DiscoveryObject != nil {
+		s = append(s, "DiscoveryObject: "+fmt.Sprintf("%#v", this.DiscoveryObject)+",\n")
+	}
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -1683,7 +2910,7 @@ func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 13)
 	s = append(s, "&discovered_service.CreateSpecType{")
 	if this.HttpLoadBalancers != nil {
 		s = append(s, "HttpLoadBalancers: "+fmt.Sprintf("%#v", this.HttpLoadBalancers)+",\n")
@@ -1724,11 +2951,43 @@ func (this *CreateSpecType_VirtualServer) GoString() string {
 		`VirtualServer:` + fmt.Sprintf("%#v", this.VirtualServer) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_K8SService) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.CreateSpecType_K8SService{` +
+		`K8SService:` + fmt.Sprintf("%#v", this.K8SService) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_ConsulService) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.CreateSpecType_ConsulService{` +
+		`ConsulService:` + fmt.Sprintf("%#v", this.ConsulService) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_N1DiscoveredServer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.CreateSpecType_N1DiscoveredServer{` +
+		`N1DiscoveredServer:` + fmt.Sprintf("%#v", this.N1DiscoveredServer) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_ThirdParty) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.CreateSpecType_ThirdParty{` +
+		`ThirdParty:` + fmt.Sprintf("%#v", this.ThirdParty) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 13)
 	s = append(s, "&discovered_service.GetSpecType{")
 	if this.HttpLoadBalancers != nil {
 		s = append(s, "HttpLoadBalancers: "+fmt.Sprintf("%#v", this.HttpLoadBalancers)+",\n")
@@ -1769,11 +3028,43 @@ func (this *GetSpecType_VirtualServer) GoString() string {
 		`VirtualServer:` + fmt.Sprintf("%#v", this.VirtualServer) + `}`}, ", ")
 	return s
 }
+func (this *GetSpecType_K8SService) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.GetSpecType_K8SService{` +
+		`K8SService:` + fmt.Sprintf("%#v", this.K8SService) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_ConsulService) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.GetSpecType_ConsulService{` +
+		`ConsulService:` + fmt.Sprintf("%#v", this.ConsulService) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_N1DiscoveredServer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.GetSpecType_N1DiscoveredServer{` +
+		`N1DiscoveredServer:` + fmt.Sprintf("%#v", this.N1DiscoveredServer) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_ThirdParty) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.GetSpecType_ThirdParty{` +
+		`ThirdParty:` + fmt.Sprintf("%#v", this.ThirdParty) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 9)
+	s := make([]string, 0, 13)
 	s = append(s, "&discovered_service.ReplaceSpecType{")
 	if this.HttpLoadBalancers != nil {
 		s = append(s, "HttpLoadBalancers: "+fmt.Sprintf("%#v", this.HttpLoadBalancers)+",\n")
@@ -1812,6 +3103,38 @@ func (this *ReplaceSpecType_VirtualServer) GoString() string {
 	}
 	s := strings.Join([]string{`&discovered_service.ReplaceSpecType_VirtualServer{` +
 		`VirtualServer:` + fmt.Sprintf("%#v", this.VirtualServer) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_K8SService) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.ReplaceSpecType_K8SService{` +
+		`K8SService:` + fmt.Sprintf("%#v", this.K8SService) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_ConsulService) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.ReplaceSpecType_ConsulService{` +
+		`ConsulService:` + fmt.Sprintf("%#v", this.ConsulService) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_N1DiscoveredServer) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.ReplaceSpecType_N1DiscoveredServer{` +
+		`N1DiscoveredServer:` + fmt.Sprintf("%#v", this.N1DiscoveredServer) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_ThirdParty) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&discovered_service.ReplaceSpecType_ThirdParty{` +
+		`ThirdParty:` + fmt.Sprintf("%#v", this.ThirdParty) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -1856,6 +3179,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0xc2
 	}
+	if m.ServiceType != nil {
+		{
+			size := m.ServiceType.Size()
+			i -= size
+			if _, err := m.ServiceType.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.InternalVirtualHost != nil {
 		{
 			size, err := m.InternalVirtualHost.MarshalToSizedBuffer(dAtA[:i])
@@ -1867,15 +3199,6 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x42
-	}
-	if m.ServiceType != nil {
-		{
-			size := m.ServiceType.Size()
-			i -= size
-			if _, err := m.ServiceType.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
 	}
 	if m.VisibilityActionChoice != nil {
 		{
@@ -1980,6 +3303,90 @@ func (m *GlobalSpecType_VirtualServer) MarshalToSizedBuffer(dAtA []byte) (int, e
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_K8SService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_K8SService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.K8SService != nil {
+		{
+			size, err := m.K8SService.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_ConsulService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ConsulService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ConsulService != nil {
+		{
+			size, err := m.ConsulService.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_N1DiscoveredServer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_N1DiscoveredServer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.N1DiscoveredServer != nil {
+		{
+			size, err := m.N1DiscoveredServer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_ThirdParty) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_ThirdParty) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ThirdParty != nil {
+		{
+			size, err := m.ThirdParty.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
 func (m *VirtualServer) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2000,6 +3407,13 @@ func (m *VirtualServer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.SubPath) > 0 {
+		i -= len(m.SubPath)
+		copy(dAtA[i:], m.SubPath)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.SubPath)))
+		i--
+		dAtA[i] = 0x6a
+	}
 	if len(m.ServerName) > 0 {
 		i -= len(m.ServerName)
 		copy(dAtA[i:], m.ServerName)
@@ -2069,6 +3483,251 @@ func (m *VirtualServer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i--
 		dAtA[i] = 0x12
 	}
+	if m.DiscoveryObject != nil {
+		{
+			size, err := m.DiscoveryObject.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *K8SService) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *K8SService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *K8SService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Ports) > 0 {
+		for iNdEx := len(m.Ports) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Ports[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.Pods) > 0 {
+		for iNdEx := len(m.Pods) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Pods[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.ServiceName) > 0 {
+		i -= len(m.ServiceName)
+		copy(dAtA[i:], m.ServiceName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ServiceName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.DiscoveryObject != nil {
+		{
+			size, err := m.DiscoveryObject.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ConsulService) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ConsulService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ConsulService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.Ports) > 0 {
+		for iNdEx := len(m.Ports) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Ports[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.Pods) > 0 {
+		for iNdEx := len(m.Pods) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Pods[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0x1a
+		}
+	}
+	if len(m.ServiceName) > 0 {
+		i -= len(m.ServiceName)
+		copy(dAtA[i:], m.ServiceName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ServiceName)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if m.DiscoveryObject != nil {
+		{
+			size, err := m.DiscoveryObject.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *NginxOneDiscoveredServer) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *NginxOneDiscoveredServer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *NginxOneDiscoveredServer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.NginxOneObjectName) > 0 {
+		i -= len(m.NginxOneObjectName)
+		copy(dAtA[i:], m.NginxOneObjectName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.NginxOneObjectName)))
+		i--
+		dAtA[i] = 0x32
+	}
+	if m.NginxServiceDiscoveryRef != nil {
+		{
+			size, err := m.NginxServiceDiscoveryRef.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x2a
+	}
+	if len(m.Domains) > 0 {
+		for iNdEx := len(m.Domains) - 1; iNdEx >= 0; iNdEx-- {
+			i -= len(m.Domains[iNdEx])
+			copy(dAtA[i:], m.Domains[iNdEx])
+			i = encodeVarintTypes(dAtA, i, uint64(len(m.Domains[iNdEx])))
+			i--
+			dAtA[i] = 0x22
+		}
+	}
+	if len(m.NginxOneObjectId) > 0 {
+		i -= len(m.NginxOneObjectId)
+		copy(dAtA[i:], m.NginxOneObjectId)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.NginxOneObjectId)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if m.Port != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.Port))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.ServerBlock) > 0 {
+		i -= len(m.ServerBlock)
+		copy(dAtA[i:], m.ServerBlock)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.ServerBlock)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ThirdPartyApplicationDiscovery) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ThirdPartyApplicationDiscovery) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ThirdPartyApplicationDiscovery) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
 	if m.DiscoveryObject != nil {
 		{
 			size, err := m.DiscoveryObject.MarshalToSizedBuffer(dAtA[:i])
@@ -2216,6 +3875,90 @@ func (m *CreateSpecType_VirtualServer) MarshalToSizedBuffer(dAtA []byte) (int, e
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_K8SService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_K8SService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.K8SService != nil {
+		{
+			size, err := m.K8SService.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_ConsulService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ConsulService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ConsulService != nil {
+		{
+			size, err := m.ConsulService.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_N1DiscoveredServer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_N1DiscoveredServer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.N1DiscoveredServer != nil {
+		{
+			size, err := m.N1DiscoveredServer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_ThirdParty) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_ThirdParty) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ThirdParty != nil {
+		{
+			size, err := m.ThirdParty.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2345,6 +4088,90 @@ func (m *GetSpecType_VirtualServer) MarshalToSizedBuffer(dAtA []byte) (int, erro
 		}
 		i--
 		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_K8SService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_K8SService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.K8SService != nil {
+		{
+			size, err := m.K8SService.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_ConsulService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ConsulService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ConsulService != nil {
+		{
+			size, err := m.ConsulService.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_N1DiscoveredServer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_N1DiscoveredServer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.N1DiscoveredServer != nil {
+		{
+			size, err := m.N1DiscoveredServer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_ThirdParty) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_ThirdParty) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ThirdParty != nil {
+		{
+			size, err := m.ThirdParty.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
 	}
 	return len(dAtA) - i, nil
 }
@@ -2480,6 +4307,90 @@ func (m *ReplaceSpecType_VirtualServer) MarshalToSizedBuffer(dAtA []byte) (int, 
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_K8SService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_K8SService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.K8SService != nil {
+		{
+			size, err := m.K8SService.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_ConsulService) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ConsulService) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ConsulService != nil {
+		{
+			size, err := m.ConsulService.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_N1DiscoveredServer) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_N1DiscoveredServer) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.N1DiscoveredServer != nil {
+		{
+			size, err := m.N1DiscoveredServer.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_ThirdParty) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_ThirdParty) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ThirdParty != nil {
+		{
+			size, err := m.ThirdParty.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x62
+	}
+	return len(dAtA) - i, nil
+}
 func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	offset -= sovTypes(v)
 	base := offset
@@ -2562,6 +4473,54 @@ func (m *GlobalSpecType_VirtualServer) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_K8SService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.K8SService != nil {
+		l = m.K8SService.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_ConsulService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConsulService != nil {
+		l = m.ConsulService.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_N1DiscoveredServer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.N1DiscoveredServer != nil {
+		l = m.N1DiscoveredServer.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_ThirdParty) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ThirdParty != nil {
+		l = m.ThirdParty.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *VirtualServer) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2610,6 +4569,115 @@ func (m *VirtualServer) Size() (n int) {
 	}
 	l = len(m.ServerName)
 	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.SubPath)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *K8SService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DiscoveryObject != nil {
+		l = m.DiscoveryObject.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.ServiceName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Pods) > 0 {
+		for _, e := range m.Pods {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.Ports) > 0 {
+		for _, e := range m.Ports {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *ConsulService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DiscoveryObject != nil {
+		l = m.DiscoveryObject.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.ServiceName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Pods) > 0 {
+		for _, e := range m.Pods {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if len(m.Ports) > 0 {
+		for _, e := range m.Ports {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *NginxOneDiscoveredServer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.ServerBlock)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.Port != 0 {
+		n += 1 + sovTypes(uint64(m.Port))
+	}
+	l = len(m.NginxOneObjectId)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if len(m.Domains) > 0 {
+		for _, s := range m.Domains {
+			l = len(s)
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	if m.NginxServiceDiscoveryRef != nil {
+		l = m.NginxServiceDiscoveryRef.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	l = len(m.NginxOneObjectName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *ThirdPartyApplicationDiscovery) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DiscoveryObject != nil {
+		l = m.DiscoveryObject.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2678,6 +4746,54 @@ func (m *CreateSpecType_VirtualServer) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_K8SService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.K8SService != nil {
+		l = m.K8SService.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_ConsulService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConsulService != nil {
+		l = m.ConsulService.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_N1DiscoveredServer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.N1DiscoveredServer != nil {
+		l = m.N1DiscoveredServer.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_ThirdParty) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ThirdParty != nil {
+		l = m.ThirdParty.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2737,6 +4853,54 @@ func (m *GetSpecType_VirtualServer) Size() (n int) {
 	_ = l
 	if m.VirtualServer != nil {
 		l = m.VirtualServer.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_K8SService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.K8SService != nil {
+		l = m.K8SService.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_ConsulService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConsulService != nil {
+		l = m.ConsulService.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_N1DiscoveredServer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.N1DiscoveredServer != nil {
+		l = m.N1DiscoveredServer.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_ThirdParty) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ThirdParty != nil {
+		l = m.ThirdParty.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -2804,6 +4968,54 @@ func (m *ReplaceSpecType_VirtualServer) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_K8SService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.K8SService != nil {
+		l = m.K8SService.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_ConsulService) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ConsulService != nil {
+		l = m.ConsulService.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_N1DiscoveredServer) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.N1DiscoveredServer != nil {
+		l = m.N1DiscoveredServer.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_ThirdParty) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ThirdParty != nil {
+		l = m.ThirdParty.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 
 func sovTypes(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
@@ -2866,6 +5078,46 @@ func (this *GlobalSpecType_VirtualServer) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_K8SService) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_K8SService{`,
+		`K8SService:` + strings.Replace(fmt.Sprintf("%v", this.K8SService), "K8SService", "K8SService", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_ConsulService) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_ConsulService{`,
+		`ConsulService:` + strings.Replace(fmt.Sprintf("%v", this.ConsulService), "ConsulService", "ConsulService", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_N1DiscoveredServer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_N1DiscoveredServer{`,
+		`N1DiscoveredServer:` + strings.Replace(fmt.Sprintf("%v", this.N1DiscoveredServer), "NginxOneDiscoveredServer", "NginxOneDiscoveredServer", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_ThirdParty) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_ThirdParty{`,
+		`ThirdParty:` + strings.Replace(fmt.Sprintf("%v", this.ThirdParty), "ThirdPartyApplicationDiscovery", "ThirdPartyApplicationDiscovery", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *VirtualServer) String() string {
 	if this == nil {
 		return "nil"
@@ -2883,6 +5135,78 @@ func (this *VirtualServer) String() string {
 		`EnabledState:` + fmt.Sprintf("%v", this.EnabledState) + `,`,
 		`MgmtIp:` + fmt.Sprintf("%v", this.MgmtIp) + `,`,
 		`ServerName:` + fmt.Sprintf("%v", this.ServerName) + `,`,
+		`SubPath:` + fmt.Sprintf("%v", this.SubPath) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *K8SService) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForPods := "[]*PodInfoType{"
+	for _, f := range this.Pods {
+		repeatedStringForPods += strings.Replace(fmt.Sprintf("%v", f), "PodInfoType", "discovery.PodInfoType", 1) + ","
+	}
+	repeatedStringForPods += "}"
+	repeatedStringForPorts := "[]*PortInfoType{"
+	for _, f := range this.Ports {
+		repeatedStringForPorts += strings.Replace(fmt.Sprintf("%v", f), "PortInfoType", "discovery.PortInfoType", 1) + ","
+	}
+	repeatedStringForPorts += "}"
+	s := strings.Join([]string{`&K8SService{`,
+		`DiscoveryObject:` + strings.Replace(fmt.Sprintf("%v", this.DiscoveryObject), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`ServiceName:` + fmt.Sprintf("%v", this.ServiceName) + `,`,
+		`Pods:` + repeatedStringForPods + `,`,
+		`Ports:` + repeatedStringForPorts + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ConsulService) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForPods := "[]*PodInfoType{"
+	for _, f := range this.Pods {
+		repeatedStringForPods += strings.Replace(fmt.Sprintf("%v", f), "PodInfoType", "discovery.PodInfoType", 1) + ","
+	}
+	repeatedStringForPods += "}"
+	repeatedStringForPorts := "[]*PortInfoType{"
+	for _, f := range this.Ports {
+		repeatedStringForPorts += strings.Replace(fmt.Sprintf("%v", f), "PortInfoType", "discovery.PortInfoType", 1) + ","
+	}
+	repeatedStringForPorts += "}"
+	s := strings.Join([]string{`&ConsulService{`,
+		`DiscoveryObject:` + strings.Replace(fmt.Sprintf("%v", this.DiscoveryObject), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`ServiceName:` + fmt.Sprintf("%v", this.ServiceName) + `,`,
+		`Pods:` + repeatedStringForPods + `,`,
+		`Ports:` + repeatedStringForPorts + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *NginxOneDiscoveredServer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&NginxOneDiscoveredServer{`,
+		`ServerBlock:` + fmt.Sprintf("%v", this.ServerBlock) + `,`,
+		`Port:` + fmt.Sprintf("%v", this.Port) + `,`,
+		`NginxOneObjectId:` + fmt.Sprintf("%v", this.NginxOneObjectId) + `,`,
+		`Domains:` + fmt.Sprintf("%v", this.Domains) + `,`,
+		`NginxServiceDiscoveryRef:` + strings.Replace(fmt.Sprintf("%v", this.NginxServiceDiscoveryRef), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
+		`NginxOneObjectName:` + fmt.Sprintf("%v", this.NginxOneObjectName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ThirdPartyApplicationDiscovery) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ThirdPartyApplicationDiscovery{`,
+		`DiscoveryObject:` + strings.Replace(fmt.Sprintf("%v", this.DiscoveryObject), "ObjectRefType", "views.ObjectRefType", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2940,6 +5264,46 @@ func (this *CreateSpecType_VirtualServer) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_K8SService) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_K8SService{`,
+		`K8SService:` + strings.Replace(fmt.Sprintf("%v", this.K8SService), "K8SService", "K8SService", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_ConsulService) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_ConsulService{`,
+		`ConsulService:` + strings.Replace(fmt.Sprintf("%v", this.ConsulService), "ConsulService", "ConsulService", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_N1DiscoveredServer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_N1DiscoveredServer{`,
+		`N1DiscoveredServer:` + strings.Replace(fmt.Sprintf("%v", this.N1DiscoveredServer), "NginxOneDiscoveredServer", "NginxOneDiscoveredServer", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_ThirdParty) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_ThirdParty{`,
+		`ThirdParty:` + strings.Replace(fmt.Sprintf("%v", this.ThirdParty), "ThirdPartyApplicationDiscovery", "ThirdPartyApplicationDiscovery", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -2993,6 +5357,46 @@ func (this *GetSpecType_VirtualServer) String() string {
 	}, "")
 	return s
 }
+func (this *GetSpecType_K8SService) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_K8SService{`,
+		`K8SService:` + strings.Replace(fmt.Sprintf("%v", this.K8SService), "K8SService", "K8SService", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_ConsulService) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_ConsulService{`,
+		`ConsulService:` + strings.Replace(fmt.Sprintf("%v", this.ConsulService), "ConsulService", "ConsulService", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_N1DiscoveredServer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_N1DiscoveredServer{`,
+		`N1DiscoveredServer:` + strings.Replace(fmt.Sprintf("%v", this.N1DiscoveredServer), "NginxOneDiscoveredServer", "NginxOneDiscoveredServer", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_ThirdParty) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_ThirdParty{`,
+		`ThirdParty:` + strings.Replace(fmt.Sprintf("%v", this.ThirdParty), "ThirdPartyApplicationDiscovery", "ThirdPartyApplicationDiscovery", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -3042,6 +5446,46 @@ func (this *ReplaceSpecType_VirtualServer) String() string {
 	}
 	s := strings.Join([]string{`&ReplaceSpecType_VirtualServer{`,
 		`VirtualServer:` + strings.Replace(fmt.Sprintf("%v", this.VirtualServer), "VirtualServer", "VirtualServer", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_K8SService) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_K8SService{`,
+		`K8SService:` + strings.Replace(fmt.Sprintf("%v", this.K8SService), "K8SService", "K8SService", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_ConsulService) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_ConsulService{`,
+		`ConsulService:` + strings.Replace(fmt.Sprintf("%v", this.ConsulService), "ConsulService", "ConsulService", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_N1DiscoveredServer) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_N1DiscoveredServer{`,
+		`N1DiscoveredServer:` + strings.Replace(fmt.Sprintf("%v", this.N1DiscoveredServer), "NginxOneDiscoveredServer", "NginxOneDiscoveredServer", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_ThirdParty) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_ThirdParty{`,
+		`ThirdParty:` + strings.Replace(fmt.Sprintf("%v", this.ThirdParty), "ThirdPartyApplicationDiscovery", "ThirdPartyApplicationDiscovery", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3291,6 +5735,146 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			if err := m.InternalVirtualHost.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field K8SService", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &K8SService{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &GlobalSpecType_K8SService{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConsulService", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ConsulService{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &GlobalSpecType_ConsulService{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field N1DiscoveredServer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &NginxOneDiscoveredServer{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &GlobalSpecType_N1DiscoveredServer{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ThirdParty", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ThirdPartyApplicationDiscovery{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &GlobalSpecType_ThirdParty{v}
 			iNdEx = postIndex
 		case 1000:
 			if wireType != 2 {
@@ -3717,6 +6301,741 @@ func (m *VirtualServer) Unmarshal(dAtA []byte) error {
 			}
 			m.ServerName = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SubPath", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.SubPath = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *K8SService) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: K8sService: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: K8sService: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DiscoveryObject", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DiscoveryObject == nil {
+				m.DiscoveryObject = &views.ObjectRefType{}
+			}
+			if err := m.DiscoveryObject.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServiceName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ServiceName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pods", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Pods = append(m.Pods, &discovery.PodInfoType{})
+			if err := m.Pods[len(m.Pods)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ports", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ports = append(m.Ports, &discovery.PortInfoType{})
+			if err := m.Ports[len(m.Ports)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ConsulService) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ConsulService: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ConsulService: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DiscoveryObject", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DiscoveryObject == nil {
+				m.DiscoveryObject = &views.ObjectRefType{}
+			}
+			if err := m.DiscoveryObject.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServiceName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ServiceName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pods", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Pods = append(m.Pods, &discovery.PodInfoType{})
+			if err := m.Pods[len(m.Pods)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Ports", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Ports = append(m.Ports, &discovery.PortInfoType{})
+			if err := m.Ports[len(m.Ports)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *NginxOneDiscoveredServer) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: NginxOneDiscoveredServer: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: NginxOneDiscoveredServer: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ServerBlock", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.ServerBlock = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Port", wireType)
+			}
+			m.Port = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Port |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NginxOneObjectId", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NginxOneObjectId = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Domains", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Domains = append(m.Domains, string(dAtA[iNdEx:postIndex]))
+			iNdEx = postIndex
+		case 5:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NginxServiceDiscoveryRef", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.NginxServiceDiscoveryRef == nil {
+				m.NginxServiceDiscoveryRef = &views.ObjectRefType{}
+			}
+			if err := m.NginxServiceDiscoveryRef.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field NginxOneObjectName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.NginxOneObjectName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ThirdPartyApplicationDiscovery) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ThirdPartyApplicationDiscovery: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ThirdPartyApplicationDiscovery: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DiscoveryObject", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.DiscoveryObject == nil {
+				m.DiscoveryObject = &views.ObjectRefType{}
+			}
+			if err := m.DiscoveryObject.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -3942,6 +7261,146 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ServiceType = &CreateSpecType_VirtualServer{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field K8SService", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &K8SService{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &CreateSpecType_K8SService{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConsulService", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ConsulService{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &CreateSpecType_ConsulService{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field N1DiscoveredServer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &NginxOneDiscoveredServer{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &CreateSpecType_N1DiscoveredServer{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ThirdParty", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ThirdPartyApplicationDiscovery{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &CreateSpecType_ThirdParty{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -4169,6 +7628,146 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.ServiceType = &GetSpecType_VirtualServer{v}
 			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field K8SService", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &K8SService{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &GetSpecType_K8SService{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConsulService", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ConsulService{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &GetSpecType_ConsulService{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field N1DiscoveredServer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &NginxOneDiscoveredServer{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &GetSpecType_N1DiscoveredServer{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ThirdParty", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ThirdPartyApplicationDiscovery{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &GetSpecType_ThirdParty{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4394,6 +7993,146 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.ServiceType = &ReplaceSpecType_VirtualServer{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field K8SService", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &K8SService{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &ReplaceSpecType_K8SService{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ConsulService", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ConsulService{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &ReplaceSpecType_ConsulService{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field N1DiscoveredServer", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &NginxOneDiscoveredServer{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &ReplaceSpecType_N1DiscoveredServer{v}
+			iNdEx = postIndex
+		case 12:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ThirdParty", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ThirdPartyApplicationDiscovery{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ServiceType = &ReplaceSpecType_ThirdParty{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

@@ -821,7 +821,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.bigip_virtual_server.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.bigip_virtual_server.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -1853,15 +1853,13 @@ var APISwaggerJSON string = `{
         },
         "bigip_virtual_serverBigIpVirtualServerAWAFEnforcementMode": {
             "type": "string",
-            "description": "BigIpVirtualServerAWAFEnforcementMode could be of type NONE, ALARM or BLOCKING.\n\nSpecifies the Virtual Server AWAF enforcement mode\n\nNo AWAF Policy attached\nAWAF Enforcement Transparent mode\nAWAF  Enforcement Blocking mode",
+            "description": "BigIpVirtualServerAWAFEnforcementMode could be of type NONE, ALARM or BLOCKING.\n\nx-displayName: \"BigIP AWAF Enforcement Mode\"\nSpecifies the Virtual Server AWAF enforcement mode\n\n - NONE: x-displayName: \"None\"\nNo AWAF Policy attached\n - MONITORING: x-displayName: \"Monitoring\"\nAWAF Enforcement Transparent mode\n - BLOCKING: x-displayName: \"Blocking\"\nAWAF  Enforcement Blocking mode",
             "enum": [
                 "NONE",
                 "MONITORING",
                 "BLOCKING"
             ],
-            "default": "NONE",
-            "x-displayname": "BigIP AWAF Enforcement Mode",
-            "x-ves-proto-enum": "ves.io.schema.views.bigip_virtual_server.BigIpVirtualServerAWAFEnforcementMode"
+            "default": "NONE"
         },
         "bigip_virtual_serverBigIpVirtualServerType": {
             "type": "string",
@@ -3828,16 +3826,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/common_wafAPISpecificationSettings",
                     "x-displayname": "Enable"
                 },
-                "awaf_enforcement_mode": {
-                    "description": " Type of the BIG-IP AWAF Enforcement mode - None, Monitoring or Blocking",
-                    "$ref": "#/definitions/bigip_virtual_serverBigIpVirtualServerAWAFEnforcementMode",
-                    "x-displayname": "WAF Mode"
-                },
-                "awaf_policy_name": {
-                    "type": "string",
-                    "description": " BIG-IP AWAF policy name",
-                    "x-displayname": "WAF Policy Name"
-                },
                 "bigip_hostname": {
                     "type": "string",
                     "description": " BIG-IP Hostname",
@@ -3896,7 +3884,7 @@ var APISwaggerJSON string = `{
                 "service_discovery": {
                     "description": " Service Discovery Object, which discovered the bigip virtual server\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Service Discovery",
+                    "x-displayname": "BIG-IP Service Discovery",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"

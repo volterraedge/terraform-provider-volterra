@@ -7480,6 +7480,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_L7DdosCaptchaChallenge:
+		if fv, exists := v.FldValidators["ddos_auto_mitigation_action.l7_ddos_captcha_challenge"]; exists {
+			val := m.GetDdosAutoMitigationAction().(*GetSpecType_L7DdosCaptchaChallenge).L7DdosCaptchaChallenge
+			vOpts := append(opts,
+				db.WithValidateField("ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_captcha_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -8235,6 +8246,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 	v.FldValidators["challenge_type.captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
 
 	v.FldValidators["ddos_auto_mitigation_action.ddos_js_challenge"] = JavascriptChallengeTypeValidator().Validate
+	v.FldValidators["ddos_auto_mitigation_action.l7_ddos_captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
 
 	v.FldValidators["strict_sni_host_header_check_choice.additional_domains"] = ves_io_schema.DomainNameListValidator().Validate
 
@@ -9377,7 +9389,7 @@ func (m *GlobalSpecType) GetWafExclusionPolicyDRefInfo() ([]db.DRefInfo, error) 
 		}
 		// resolve kind to type if needed at DBObject.GetDRefInfo()
 		drInfos = append(drInfos, db.DRefInfo{
-			RefdType:   "waf_exclusion_policy.Object",
+			RefdType:   "service_policy.Object",
 			RefdUID:    ref.Uid,
 			RefdTenant: ref.Tenant,
 			RefdNS:     ref.Namespace,
@@ -9393,9 +9405,9 @@ func (m *GlobalSpecType) GetWafExclusionPolicyDRefInfo() ([]db.DRefInfo, error) 
 // GetWafExclusionPolicyDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *GlobalSpecType) GetWafExclusionPolicyDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "waf_exclusion_policy.Object")
+	refdType, err := d.TypeForEntryKind("", "", "service_policy.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: waf_exclusion_policy")
+		return nil, errors.Wrap(err, "Cannot find type for kind: service_policy")
 	}
 	for _, ref := range m.GetWafExclusionPolicy() {
 		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
@@ -10965,6 +10977,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *GlobalSpecType_L7DdosCaptchaChallenge:
+		if fv, exists := v.FldValidators["ddos_auto_mitigation_action.l7_ddos_captcha_challenge"]; exists {
+			val := m.GetDdosAutoMitigationAction().(*GlobalSpecType_L7DdosCaptchaChallenge).L7DdosCaptchaChallenge
+			vOpts := append(opts,
+				db.WithValidateField("ddos_auto_mitigation_action"),
+				db.WithValidateField("l7_ddos_captcha_challenge"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -11234,6 +11257,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 		vOpts := append(opts, db.WithValidateField("loadbalancer_algorithm"))
 		if err := fv(ctx, m.GetLoadbalancerAlgorithm(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["log_headers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("log_headers"))
+		if err := fv(ctx, m.GetLogHeaders(), vOpts...); err != nil {
 			return err
 		}
 
@@ -12081,6 +12113,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["challenge_type.policy_based_challenge"] = PolicyBasedChallengeValidator().Validate
 
 	v.FldValidators["ddos_auto_mitigation_action.ddos_js_challenge"] = JavascriptChallengeTypeValidator().Validate
+	v.FldValidators["ddos_auto_mitigation_action.l7_ddos_captcha_challenge"] = CaptchaChallengeTypeValidator().Validate
 
 	v.FldValidators["strict_sni_host_header_check_choice.additional_domains"] = ves_io_schema.DomainNameListValidator().Validate
 
@@ -13546,6 +13579,15 @@ func (v *ValidateOriginAdvancedConfiguration) Validate(ctx context.Context, pm i
 
 		vOpts := append(opts, db.WithValidateField("disable_byte_range_request"))
 		if err := fv(ctx, m.GetDisableByteRangeRequest(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["enable_byte_range_request"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("enable_byte_range_request"))
+		if err := fv(ctx, m.GetEnableByteRangeRequest(), vOpts...); err != nil {
 			return err
 		}
 
@@ -18121,6 +18163,9 @@ func (r *GetSpecType) SetDdosAutoMitigationActionToGlobalSpecType(o *GlobalSpecT
 	case *GetSpecType_L7DdosActionNone:
 		o.DdosAutoMitigationAction = &GlobalSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
 
+	case *GetSpecType_L7DdosCaptchaChallenge:
+		o.DdosAutoMitigationAction = &GlobalSpecType_L7DdosCaptchaChallenge{L7DdosCaptchaChallenge: of.L7DdosCaptchaChallenge}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -18143,6 +18188,9 @@ func (r *GetSpecType) GetDdosAutoMitigationActionFromGlobalSpecType(o *GlobalSpe
 
 	case *GlobalSpecType_L7DdosActionNone:
 		r.DdosAutoMitigationAction = &GetSpecType_L7DdosActionNone{L7DdosActionNone: of.L7DdosActionNone}
+
+	case *GlobalSpecType_L7DdosCaptchaChallenge:
+		r.DdosAutoMitigationAction = &GetSpecType_L7DdosCaptchaChallenge{L7DdosCaptchaChallenge: of.L7DdosCaptchaChallenge}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)

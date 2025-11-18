@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.service_policy.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.service_policy.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2679,6 +2679,167 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "policyBotAdvancedDomainMatcher": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Advanced Domain Matcher\"\nBot Advanced domain matcher Choice.",
+            "title": "Bot Advanced Domain Matcher",
+            "properties": {
+                "domain_match": {
+                    "type": "array",
+                    "description": "x-displayName: \"Domain Matcher(s)\"\nDomain Matchers",
+                    "title": "Domain Matchers",
+                    "items": {
+                        "$ref": "#/definitions/policyBotAdvancedDomainMatcherType"
+                    }
+                }
+            }
+        },
+        "policyBotAdvancedDomainMatcherType": {
+            "type": "object",
+            "description": "x-displayName: \"BotAdvanced Domain Matcher Type\"\nBot Advanced Domain Matcher Type",
+            "title": "Bot Advanced Domain Matcher Type",
+            "properties": {
+                "negation": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Not(!)\"\nnot checker",
+                    "title": "Check not",
+                    "format": "boolean"
+                },
+                "operator": {
+                    "description": "x-displayName: \"Comparison Operator\"\nChoose the Comparison Operator",
+                    "title": "Comparison Operator",
+                    "$ref": "#/definitions/policyComparisonOperator"
+                },
+                "value": {
+                    "type": "string",
+                    "description": "x-displayName: \"Domain Value\"\nDomain Value",
+                    "title": "Domain Value"
+                }
+            }
+        },
+        "policyBotAdvancedDomainOperator": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Advanced Operator\"\nBot Advanced Domain Operator",
+            "title": "Bot Advanced Domain Operator",
+            "properties": {
+                "all_domain": {
+                    "description": "x-displayName: \"ANYTHING\"\nMatch Anything. No request matcher is needed.",
+                    "title": "All domain",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "domain_and": {
+                    "description": "x-displayName: \"ALL\"\nMatch requests when all conditions are met ('And').",
+                    "title": "use AND operator for defined domain",
+                    "$ref": "#/definitions/policyBotAdvancedDomainMatcher"
+                },
+                "domain_none": {
+                    "description": "x-displayName: \"NONE\"\nMatch all requests except for the specified conditions defined.",
+                    "title": "use None operator for defined domain",
+                    "$ref": "#/definitions/policyBotAdvancedDomainMatcher"
+                },
+                "domain_or": {
+                    "description": "x-displayName: \"ANY\"\nMatch requests when at least one condition is met ('Or').",
+                    "title": "use ANY operator for defined domain",
+                    "$ref": "#/definitions/policyBotAdvancedDomainMatcher"
+                }
+            }
+        },
+        "policyBotAdvancedEndpointMatcherType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Advanced Endpoint Matcher\"\nMatches the endpoints for which bot advanced protection has to be enabled",
+            "title": "Bot Advanced Endpoint Matcher",
+            "properties": {
+                "domain": {
+                    "description": "x-displayName: \"Domain\"",
+                    "title": "Domain",
+                    "$ref": "#/definitions/policyBotAdvancedDomainOperator"
+                },
+                "http_methods": {
+                    "type": "array",
+                    "description": "x-displayName: \"HTTP Methods\"\nList of HTTP methods",
+                    "title": "HTTP Methods",
+                    "items": {
+                        "$ref": "#/definitions/schemaHttpMethod"
+                    }
+                },
+                "path": {
+                    "description": "x-displayName: \"Path\"\nURI path matcher",
+                    "title": "Path",
+                    "$ref": "#/definitions/policyBotAdvancedPathOperator"
+                }
+            }
+        },
+        "policyBotAdvancedPathMatcher": {
+            "type": "object",
+            "description": "x-displayName: \"Path Matcher(s)\"\nBot Advanced Path Matchers",
+            "title": "Bot Advanced Path Matchers",
+            "properties": {
+                "path_match": {
+                    "type": "array",
+                    "description": "x-displayName: \"Path Matcher(s)\"\nPath Matchers",
+                    "title": "Path Matchers",
+                    "items": {
+                        "$ref": "#/definitions/policyBotAdvancedPathMatcherType"
+                    }
+                }
+            }
+        },
+        "policyBotAdvancedPathMatcherType": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Advanced Path Matcher Type\"\nBot Advanced Path Matcher Type",
+            "title": "Bot Advanced Path Matcher Type",
+            "properties": {
+                "case_insensitive": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Case-Insensitive\"\ncase insensitive checker",
+                    "title": "Check case insensitive",
+                    "format": "boolean"
+                },
+                "negation": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Not(!)\"\nnot checker",
+                    "title": "Check not",
+                    "format": "boolean"
+                },
+                "operator": {
+                    "description": "x-displayName: \"Comparison Operator\"\nChoose the Comparison Operator",
+                    "title": "Comparison Operator",
+                    "$ref": "#/definitions/policyComparisonOperator"
+                },
+                "value": {
+                    "type": "string",
+                    "description": "x-displayName: \"Value\"\nPath Matcher Value",
+                    "title": "Path Matcher Value"
+                }
+            }
+        },
+        "policyBotAdvancedPathOperator": {
+            "type": "object",
+            "description": "x-displayName: \"Bot Advanced Path Operator\"\nBot Advanced Path Operator",
+            "title": "Bot Advanced Path Operator",
+            "properties": {
+                "all_path": {
+                    "description": "x-displayName: \"ANYTHING\"\nMatch Anything. No request matcher is needed.",
+                    "title": "ALL Path",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "path_and": {
+                    "description": "x-displayName: \"ALL\"\nMatch requests when all conditions are met ('And').",
+                    "title": "use AND operator for defined path",
+                    "$ref": "#/definitions/policyBotAdvancedPathMatcher"
+                },
+                "path_none": {
+                    "description": "x-displayName: \"NONE\"\nMatch all requests except for the specified conditions defined.",
+                    "title": "use None operator for defined path",
+                    "$ref": "#/definitions/policyBotAdvancedPathMatcher"
+                },
+                "path_or": {
+                    "description": "x-displayName: \"ANY\"\nMatch requests when at least one condition is met ('Or').",
+                    "title": "use ANY operator for defined path",
+                    "$ref": "#/definitions/policyBotAdvancedPathMatcher"
+                }
+            }
+        },
         "policyBotNameContext": {
             "type": "object",
             "description": "Specifies bot to be excluded by its name.",
@@ -2711,6 +2872,18 @@ var APISwaggerJSON string = `{
                 "TEMPORARY_BLOCKING"
             ],
             "default": "DEFAULT_CHALLENGE"
+        },
+        "policyComparisonOperator": {
+            "type": "string",
+            "description": "x-displayName: \"Comparison Operator\"\nSelect from one of the Comparison Operator.\n\n - COMPARISON_EXACT: exact value\n\nx-displayName: \"Exact\"\n - COMPARISON_CONTAIN: contain value\n\nx-displayName: \"Contain\"\n - COMPARISON_START_WITH: start with value \n\nx-displayName: \"Start With\"\n - COMPARISON_END_WITH: end with value \n\nx-displayName: \"End With\"",
+            "title": "Comparison Operator",
+            "enum": [
+                "COMPARISON_EXACT",
+                "COMPARISON_CONTAIN",
+                "COMPARISON_START_WITH",
+                "COMPARISON_END_WITH"
+            ],
+            "default": "COMPARISON_EXACT"
         },
         "policyContentRewriteAction": {
             "type": "object",
@@ -3463,6 +3636,31 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                }
+            }
+        },
+        "policyMobileIdentifierMatcherAction": {
+            "type": "object",
+            "description": "x-displayName: \"Mobile Identifier Matcher Action\"\nMobile Identifier Matcher Action",
+            "title": "Mobile Identifier Matcher Action",
+            "properties": {
+                "mobile_identifier": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Mobile Identifier\"\nIf request matches mobile identifier service policy, mobile identifier is true",
+                    "title": "Mobile Identifier",
+                    "format": "boolean"
+                },
+                "mobile_traffic": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Mobile Traffic\"\nIf request matches mobile endpoint service policy, mobile traffic is true",
+                    "title": "Mobile Traffic",
+                    "format": "boolean"
+                },
+                "web_traffic": {
+                    "type": "boolean",
+                    "description": "x-displayName: \"Web Traffic\"\nIf request matches web endpoint service policy, web traffic is true",
+                    "title": "Web Traffic",
+                    "format": "boolean"
                 }
             }
         },
@@ -4297,6 +4495,11 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "rate_limiterLeakyBucketRateLimiter": {
+            "type": "object",
+            "description": "x-displayName: \"Leaky Bucket Rate Limiter\"\nLeaky-Bucket is the default rate limiter algorithm for F5",
+            "title": "LeakyBucketRateLimiter"
+        },
         "rate_limiterRateLimitBlockAction": {
             "type": "object",
             "description": "x-displayName: \"Rate Limit Block Action\"\nAction where a user is blocked from making further requests after exceeding rate limit threshold.",
@@ -4352,11 +4555,21 @@ var APISwaggerJSON string = `{
                     "title": "Disabled",
                     "$ref": "#/definitions/ioschemaEmpty"
                 },
+                "leaky_bucket": {
+                    "description": "x-displayName: \"Leaky Bucket Rate Limiter\"\nLeaky-Bucket is the default rate limiter algorithm for F5",
+                    "title": "LeakyBucketRateLimiter",
+                    "$ref": "#/definitions/rate_limiterLeakyBucketRateLimiter"
+                },
                 "period_multiplier": {
                     "type": "integer",
                     "description": "x-displayName: \"Periods\"\nx-example: \"1\"\nThis setting, combined with Per Period units, provides a duration",
                     "title": "period_multiplier",
                     "format": "int64"
+                },
+                "token_bucket": {
+                    "description": "x-displayName: \"Token Bucket Rate Limiter\"\nToken-Bucket is a rate limiter algorithm that is stricter with enforcing limits",
+                    "title": "TokenBucketRateLimiter",
+                    "$ref": "#/definitions/rate_limiterTokenBucketRateLimiter"
                 },
                 "total_number": {
                     "type": "integer",
@@ -4380,6 +4593,11 @@ var APISwaggerJSON string = `{
                 "RATE_LIMITER_MODE_SHARED"
             ],
             "default": "RATE_LIMITER_MODE_NOT_SHARED"
+        },
+        "rate_limiterTokenBucketRateLimiter": {
+            "type": "object",
+            "description": "x-displayName: \"Token Bucket Rate Limiter\"\nToken-Bucket is a rate limiter algorithm that is stricter with enforcing limits",
+            "title": "TokenBucketRateLimiter"
         },
         "schemaAction": {
             "type": "object",
@@ -6465,6 +6683,11 @@ var APISwaggerJSON string = `{
                     "title": "Bot Action",
                     "$ref": "#/definitions/schemapolicyBotAction"
                 },
+                "bot_advanced_endpoint_matcher": {
+                    "description": "x-displayName: \"Bot Advanced Endpoints\"\nSpecify endpoints that need to be matched for advanced bot protection",
+                    "title": "Bot Advanced Endpoints",
+                    "$ref": "#/definitions/policyBotAdvancedEndpointMatcherType"
+                },
                 "challenge_action": {
                     "description": "x-displayName: \"Select Challenge Action Type\"\nx-required\nSelect challenge action, enable javascript/captcha challenge or disable challenge",
                     "title": "challenge action",
@@ -6612,6 +6835,11 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "x-displayName: \"Metric Name Label\"\nName label to use in service policy rule metrics generated for this simple rule.",
                     "title": "metric_name_label"
+                },
+                "mobile_identifier_matcher_action": {
+                    "description": "x-displayName: \"Mobiler Identifier Matcher Action\"\nSpecifies mobile requests can be matched when both web and mobile traffic types are set",
+                    "title": "Mobiler Identifier Matcher Action",
+                    "$ref": "#/definitions/policyMobileIdentifierMatcherAction"
                 },
                 "mum_action": {
                     "description": "x-displayName: \"Malicious User Mitigation Action\"\nSpecifies how Malicious User Mitigation is handled",

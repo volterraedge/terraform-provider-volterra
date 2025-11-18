@@ -247,6 +247,42 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
+															"blindfold_secret_info_internal": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"decryption_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"store_provider": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"secret_encoding_type": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
 															"blindfold_secret_info": {
 
 																Type:     schema.TypeList,
@@ -293,11 +329,77 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 																	},
 																},
 															},
+
+															"vault_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"key": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"location": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"provider": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"secret_encoding": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"version": {
+																			Type:       schema.TypeInt,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"wingman_secret_info": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
 														},
 													},
 												},
 											},
 										},
+									},
+
+									"trusted_ca_url": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"validation_params": {
@@ -358,6 +460,12 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 													Optional: true,
 												},
 
+												"use_volterra_trusted_ca_url": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"verify_subject_alt_names": {
 
 													Type: schema.TypeList,
@@ -372,6 +480,45 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 									},
 								},
 							},
+						},
+
+						"crl": {
+
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"kind": {
+										Type:       schema.TypeString,
+										Computed:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"namespace": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"tenant": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"require_client_certificate": {
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"xfcc_header_elements": {
@@ -443,6 +590,39 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 												"tenant": {
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+											},
+										},
+									},
+
+									"refs": {
+
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:       schema.TypeString,
+													Computed:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"namespace": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"tenant": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -538,6 +718,39 @@ func resourceVolterraAdvertisePolicy() *schema.Resource {
 												"tenant": {
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+											},
+										},
+									},
+
+									"refs": {
+
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"kind": {
+													Type:       schema.TypeString,
+													Computed:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"namespace": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"tenant": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -654,28 +867,30 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 		publicIpInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		createSpec.PublicIp = publicIpInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			piMapToStrVal := ps.(map[string]interface{})
-			publicIpInt[i] = &ves_io_schema.ObjectRefType{}
+				piMapToStrVal := ps.(map[string]interface{})
+				publicIpInt[i] = &ves_io_schema.ObjectRefType{}
 
-			publicIpInt[i].Kind = "public_ip"
+				publicIpInt[i].Kind = "public_ip"
 
-			if v, ok := piMapToStrVal["name"]; ok && !isIntfNil(v) {
-				publicIpInt[i].Name = v.(string)
+				if v, ok := piMapToStrVal["name"]; ok && !isIntfNil(v) {
+					publicIpInt[i].Name = v.(string)
+				}
+
+				if v, ok := piMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					publicIpInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := piMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					publicIpInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := piMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					publicIpInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := piMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				publicIpInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := piMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				publicIpInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := piMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				publicIpInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -838,6 +1053,38 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
 
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -904,6 +1151,76 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 
 													}
 
+													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
 												}
 											}
 
@@ -912,6 +1229,10 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 									}
 								}
 
+							}
+
+							if w, ok := commonParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(w) {
+								commonParams.TrustedCaUrl = w.(string)
 							}
 
 							if v, ok := commonParamsMapStrToI["validation_params"]; ok && !isIntfNil(v) {
@@ -947,28 +1268,30 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 														trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															tclMapToStrVal := ps.(map[string]interface{})
-															trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+																tclMapToStrVal := ps.(map[string]interface{})
+																trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
 
-															trustedCaListInt[i].Kind = "trusted_ca_list"
+																trustedCaListInt[i].Kind = "trusted_ca_list"
 
-															if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Name = v.(string)
+																if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Name = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -987,6 +1310,10 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 
 											trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
+										}
+
+										if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
+											validationParams.UseVolterraTrustedCaUrl = w.(bool)
 										}
 
 										if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
@@ -1010,6 +1337,44 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 						}
 					}
 
+				}
+
+				if v, ok := tlsParametersMapStrToI["crl"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					crlInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					tlsParameters.Crl = crlInt
+					for i, ps := range sl {
+						if ps != nil {
+
+							cMapToStrVal := ps.(map[string]interface{})
+							crlInt[i] = &ves_io_schema.ObjectRefType{}
+
+							crlInt[i].Kind = "crl"
+
+							if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+								crlInt[i].Name = v.(string)
+							}
+
+							if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								crlInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								crlInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								crlInt[i].Uid = v.(string)
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := tlsParametersMapStrToI["require_client_certificate"]; ok && !isIntfNil(w) {
+					tlsParameters.RequireClientCertificate = w.(bool)
 				}
 
 				if v, ok := tlsParametersMapStrToI["xfcc_header_elements"]; ok && !isIntfNil(v) {
@@ -1092,28 +1457,64 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
 								refOrSelectorInt.Site.Ref = refIntNew
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-									refIntNew[i].Kind = "site"
+										refIntNew[i].Kind = "site"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refIntNew[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refIntNew[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refIntNew[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refIntNew[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refIntNew[i].Uid = v.(string)
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refIntNew[i].Namespace = v.(string)
+							}
+
+							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.Site.Refs = refsInt
+								for i, ps := range sl {
+									if ps != nil {
+
+										rMapToStrVal := ps.(map[string]interface{})
+										refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+										refsInt[i].Kind = "virtual_network"
+
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refsInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refsInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refsInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refIntNew[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refIntNew[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -1141,28 +1542,30 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
 								refOrSelectorInt.VirtualNetwork.Ref = refIntNew
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-									refIntNew[i].Kind = "virtual_network"
+										refIntNew[i].Kind = "virtual_network"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refIntNew[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refIntNew[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refIntNew[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refIntNew[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refIntNew[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refIntNew[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refIntNew[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refIntNew[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -1222,28 +1625,64 @@ func resourceVolterraAdvertisePolicyCreate(d *schema.ResourceData, meta interfac
 								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
 								refOrSelectorInt.VirtualSite.Ref = refIntNew
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-									refIntNew[i].Kind = "virtual_site"
+										refIntNew[i].Kind = "virtual_site"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refIntNew[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refIntNew[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refIntNew[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refIntNew[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refIntNew[i].Uid = v.(string)
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refIntNew[i].Namespace = v.(string)
+							}
+
+							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.VirtualSite.Refs = refsInt
+								for i, ps := range sl {
+									if ps != nil {
+
+										rMapToStrVal := ps.(map[string]interface{})
+										refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+										refsInt[i].Kind = "virtual_network"
+
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refsInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refsInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refsInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refIntNew[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refIntNew[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -1401,28 +1840,30 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 		publicIpInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 		updateSpec.PublicIp = publicIpInt
 		for i, ps := range sl {
+			if ps != nil {
 
-			piMapToStrVal := ps.(map[string]interface{})
-			publicIpInt[i] = &ves_io_schema.ObjectRefType{}
+				piMapToStrVal := ps.(map[string]interface{})
+				publicIpInt[i] = &ves_io_schema.ObjectRefType{}
 
-			publicIpInt[i].Kind = "public_ip"
+				publicIpInt[i].Kind = "public_ip"
 
-			if v, ok := piMapToStrVal["name"]; ok && !isIntfNil(v) {
-				publicIpInt[i].Name = v.(string)
+				if v, ok := piMapToStrVal["name"]; ok && !isIntfNil(v) {
+					publicIpInt[i].Name = v.(string)
+				}
+
+				if v, ok := piMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					publicIpInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := piMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					publicIpInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := piMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					publicIpInt[i].Uid = v.(string)
+				}
+
 			}
-
-			if v, ok := piMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-				publicIpInt[i].Namespace = v.(string)
-			}
-
-			if v, ok := piMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-				publicIpInt[i].Tenant = v.(string)
-			}
-
-			if v, ok := piMapToStrVal["uid"]; ok && !isIntfNil(v) {
-				publicIpInt[i].Uid = v.(string)
-			}
-
 		}
 
 	}
@@ -1583,6 +2024,38 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 												if set != nil {
 													privateKeyMapStrToI := set.(map[string]interface{})
 
+													if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+														privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+														for _, set := range sl {
+															if set != nil {
+																blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.Location = w.(string)
+																}
+
+																if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																	blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+														privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
 													secretInfoOneofTypeFound := false
 
 													if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -1649,6 +2122,76 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 
 													}
 
+													if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+														secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																}
+
+																if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																}
+
+																if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																}
+
+																if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
+
+																if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+														secretInfoOneofTypeFound = true
+														secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+														secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+														privateKey.SecretInfoOneof = secretInfoOneofInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
 												}
 											}
 
@@ -1657,6 +2200,10 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 									}
 								}
 
+							}
+
+							if w, ok := commonParamsMapStrToI["trusted_ca_url"]; ok && !isIntfNil(w) {
+								commonParams.TrustedCaUrl = w.(string)
 							}
 
 							if v, ok := commonParamsMapStrToI["validation_params"]; ok && !isIntfNil(v) {
@@ -1692,28 +2239,30 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 														trustedCaListInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														trustedCaChoiceInt.TrustedCa.TrustedCaList = trustedCaListInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															tclMapToStrVal := ps.(map[string]interface{})
-															trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
+																tclMapToStrVal := ps.(map[string]interface{})
+																trustedCaListInt[i] = &ves_io_schema.ObjectRefType{}
 
-															trustedCaListInt[i].Kind = "trusted_ca_list"
+																trustedCaListInt[i].Kind = "trusted_ca_list"
 
-															if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Name = v.(string)
+																if v, ok := tclMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Name = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	trustedCaListInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := tclMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := tclMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := tclMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																trustedCaListInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -1732,6 +2281,10 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 
 											trustedCaChoiceInt.TrustedCaUrl = v.(string)
 
+										}
+
+										if w, ok := validationParamsMapStrToI["use_volterra_trusted_ca_url"]; ok && !isIntfNil(w) {
+											validationParams.UseVolterraTrustedCaUrl = w.(bool)
 										}
 
 										if w, ok := validationParamsMapStrToI["verify_subject_alt_names"]; ok && !isIntfNil(w) {
@@ -1755,6 +2308,44 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 						}
 					}
 
+				}
+
+				if v, ok := tlsParametersMapStrToI["crl"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					crlInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					tlsParameters.Crl = crlInt
+					for i, ps := range sl {
+						if ps != nil {
+
+							cMapToStrVal := ps.(map[string]interface{})
+							crlInt[i] = &ves_io_schema.ObjectRefType{}
+
+							crlInt[i].Kind = "crl"
+
+							if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+								crlInt[i].Name = v.(string)
+							}
+
+							if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								crlInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								crlInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								crlInt[i].Uid = v.(string)
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := tlsParametersMapStrToI["require_client_certificate"]; ok && !isIntfNil(w) {
+					tlsParameters.RequireClientCertificate = w.(bool)
 				}
 
 				if v, ok := tlsParametersMapStrToI["xfcc_header_elements"]; ok && !isIntfNil(v) {
@@ -1836,28 +2427,64 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
 								refOrSelectorInt.Site.Ref = refIntNew
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-									refIntNew[i].Kind = "site"
+										refIntNew[i].Kind = "site"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refIntNew[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refIntNew[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refIntNew[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refIntNew[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refIntNew[i].Uid = v.(string)
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refIntNew[i].Namespace = v.(string)
+							}
+
+							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.Site.Refs = refsInt
+								for i, ps := range sl {
+									if ps != nil {
+
+										rMapToStrVal := ps.(map[string]interface{})
+										refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+										refsInt[i].Kind = "virtual_network"
+
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refsInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refsInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refsInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refIntNew[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refIntNew[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -1885,28 +2512,30 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
 								refOrSelectorInt.VirtualNetwork.Ref = refIntNew
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-									refIntNew[i].Kind = "virtual_network"
+										refIntNew[i].Kind = "virtual_network"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refIntNew[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refIntNew[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refIntNew[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refIntNew[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refIntNew[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refIntNew[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refIntNew[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refIntNew[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -1966,28 +2595,64 @@ func resourceVolterraAdvertisePolicyUpdate(d *schema.ResourceData, meta interfac
 								refIntNew := make([]*ves_io_schema.ObjectRefType, len(sl))
 								refOrSelectorInt.VirtualSite.Ref = refIntNew
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refIntNew[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refIntNew[i] = &ves_io_schema.ObjectRefType{}
 
-									refIntNew[i].Kind = "virtual_site"
+										refIntNew[i].Kind = "virtual_site"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refIntNew[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refIntNew[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refIntNew[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refIntNew[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refIntNew[i].Uid = v.(string)
+										}
+
 									}
+								}
 
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refIntNew[i].Namespace = v.(string)
+							}
+
+							if v, ok := cs["refs"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								refsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+								refOrSelectorInt.VirtualSite.Refs = refsInt
+								for i, ps := range sl {
+									if ps != nil {
+
+										rMapToStrVal := ps.(map[string]interface{})
+										refsInt[i] = &ves_io_schema.ObjectRefType{}
+
+										refsInt[i].Kind = "virtual_network"
+
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refsInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refsInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refsInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refIntNew[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refIntNew[i].Uid = v.(string)
-									}
-
 								}
 
 							}

@@ -31,11 +31,13 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Create"] = []string{
 		"spec.gc_spec.cdn_service.cache_ttl",
+		"spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.cdn_service.service_domains.#",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Create"] = []string{
 		"spec.gc_spec.cdn_service.cache_ttl",
+		"spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.cdn_service.service_domains.#",
 	}
 
@@ -43,26 +45,31 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Get"] = []string{
 		"spec.gc_spec.cdn_service.cache_ttl",
+		"spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.cdn_service.service_domains.#",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.List"] = []string{
 		"items.#.spec.gc_spec.cdn_service.cache_ttl",
+		"items.#.spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"items.#.spec.gc_spec.cdn_service.service_domains.#",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.ListStream"] = []string{
 		"items.#.spec.gc_spec.cdn_service.cache_ttl",
+		"items.#.spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"items.#.spec.gc_spec.cdn_service.service_domains.#",
 	}
 
 	mdr.RPCDeprecatedRequestFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.cdn_service.cache_ttl",
+		"spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.cdn_service.service_domains.#",
 	}
 
 	mdr.RPCDeprecatedResponseFieldsRegistry["ves.io.schema.virtual_host.crudapi.API.Replace"] = []string{
 		"spec.gc_spec.cdn_service.cache_ttl",
+		"spec.gc_spec.cdn_service.cdn_origin_pool.more_origin_options.disable_byte_range_request",
 		"spec.gc_spec.cdn_service.service_domains.#",
 	}
 
@@ -109,11 +116,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

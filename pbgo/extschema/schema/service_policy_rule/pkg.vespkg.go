@@ -52,17 +52,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.service_policy_rule.API.Create"] = []svcfw.SubscriptionField{
-		{
-			FieldPath:     "ves.io.schema.service_policy_rule.CreateRequest.spec.dst_ip_choice.dst_ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.service_policy_rule.CreateRequest.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.service_policy_rule.API.Create"] = []string{
 		"spec.any_dst_asn",
 		"spec.any_dst_ip",
@@ -75,6 +64,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.dst_ip_prefix_list",
 		"spec.goto_policy.#",
 		"spec.ip_reputation_action",
+		"spec.mobile_identifier_matcher_action",
 		"spec.origin_server_subsets_action",
 		"spec.rate_limiter.#",
 		"spec.scheme.#",
@@ -148,17 +138,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		},
 	}
 
-	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.service_policy_rule.API.Replace"] = []svcfw.SubscriptionField{
-		{
-			FieldPath:     "ves.io.schema.service_policy_rule.ReplaceRequest.spec.dst_ip_choice.dst_ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.service_policy_rule.ReplaceRequest.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.service_policy_rule.API.Replace"] = []string{
 		"spec.any_dst_asn",
 		"spec.any_dst_ip",
@@ -171,6 +150,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.dst_ip_prefix_list",
 		"spec.goto_policy.#",
 		"spec.ip_reputation_action",
+		"spec.mobile_identifier_matcher_action",
 		"spec.origin_server_subsets_action",
 		"spec.rate_limiter.#",
 		"spec.scheme.#",
@@ -243,11 +223,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

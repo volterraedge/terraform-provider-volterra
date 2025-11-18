@@ -927,6 +927,15 @@ func (v *ValidateInfra) Validate(ctx context.Context, pm interface{}, opts ...db
 
 	}
 
+	if fv, exists := v.FldValidators["sw_info"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sw_info"))
+		if err := fv(ctx, m.GetSwInfo(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["timestamp"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("timestamp"))
@@ -1621,6 +1630,84 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 func ReplaceSpecTypeValidator() db.Validator {
 	return DefaultReplaceSpecTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *SWInfo) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *SWInfo) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *SWInfo) DeepCopy() *SWInfo {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &SWInfo{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *SWInfo) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *SWInfo) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return SWInfoValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateSWInfo struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateSWInfo) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*SWInfo)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *SWInfo got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["sw_version"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sw_version"))
+		if err := fv(ctx, m.GetSwVersion(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultSWInfoValidator = func() *ValidateSWInfo {
+	v := &ValidateSWInfo{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func SWInfoValidator() db.Validator {
+	return DefaultSWInfoValidator
 }
 
 // augmented methods on protoc/std generated struct

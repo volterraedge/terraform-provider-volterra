@@ -1644,12 +1644,37 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-displayname": "Health Check Type",
                     "x-ves-example": "HTTP"
                 },
+                "http_status_code": {
+                    "description": " HTTP Status Code of DNS Load Balancer Pool Member HTTP health check\n\nExample: - 200 OK-\n\nValidation Rules:\n  ves.io.schema.rules.enum.defined_only: true\n  ves.io.schema.rules.enum.not_in: [0]\n",
+                    "title": "HTTP Status Code",
+                    "$ref": "#/definitions/schemaHttpStatusCode",
+                    "x-displayname": "HTTP Status Code",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.enum.defined_only": "true",
+                        "ves.io.schema.rules.enum.not_in": "[0]"
+                    }
+                },
                 "name": {
                     "type": "string",
                     "description": " Name of the DNS Load Balancer Pool Member\n\nExample: - \"dns_lb_pool_member1\"-",
                     "title": "Name",
                     "x-displayname": "Name",
                     "x-ves-example": "dns_lb_pool_member1"
+                },
+                "ports": {
+                    "type": "array",
+                    "description": " Ports targeted for health check of the endpoint\n\nExample: - \"8080\"-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 2\n",
+                    "title": "Port Number",
+                    "maxItems": 2,
+                    "items": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "x-displayname": "Port Number",
+                    "x-ves-example": "8080",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "2"
+                    }
                 },
                 "status": {
                     "type": "array",
@@ -1659,6 +1684,20 @@ var CustomDataAPISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaMetricValue"
                     },
                     "x-displayname": "Status"
+                },
+                "unhealthy_ports": {
+                    "type": "array",
+                    "description": " Ports which were either unreachable or failed health checks\n\nExample: - [80, 443]-\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 2\n",
+                    "title": "Unhealthy Ports",
+                    "maxItems": 2,
+                    "items": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "x-displayname": "Unhealthy Ports",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "2"
+                    }
                 }
             }
         },
@@ -1717,6 +1756,73 @@ var CustomDataAPISwaggerJSON string = `{
                     "x-displayname": "Status"
                 }
             }
+        },
+        "schemaHttpStatusCode": {
+            "type": "string",
+            "description": "HTTP response status codes\n\nEmptyStatusCode response codes means it is not specified\nContinue status code\nOK status code\nCreated status code\nAccepted status code\nNon Authoritative Information status code\nNo Content status code\nReset Content status code\nPartial Content status code\nMulti Status status code\nAlready Reported status code\nIm Used status code\nMultiple Choices status code\nMoved Permanently status code\nFound status code\nSee Other status code\nNot Modified status code\nUse Proxy status code\nTemporary Redirect status code\nPermanent Redirect status code\nBad Request status code\nUnauthorized status code\nPayment Required status code\nForbidden status code\nNot Found status code\nMethod Not Allowed status code\nNot Acceptable status code\nProxy Authentication Required status code\nRequest Timeout status code\nConflict status code\nGone status code\nLength Required status code\nPrecondition Failed status code\nPayload Too Large status code\nUri Too Long status code\nUnsupported Media Type status code\nRange Not Satisfiable status code\nExpectation Failed status code\nMisdirected Request status code\nUnprocessable Entity status code\nLocked status code\nFailed Dependency status code\nUpgrade Required status code\nPrecondition Required status code\nToo Many Requests status code\nRequest Header Fields Too Large status code\nInternal Server Error status code\nNot Implemented status code\nBad Gateway status code\nService Unavailable status code\nGateway Timeout status code\nHttp Version Not Supported status code\nVariant Also Negotiates status code\nInsufficient Storage status code\nLoop Detected status code\nNot Extended status code\nNetwork Authentication Required status code",
+            "title": "HttpStatusCode",
+            "enum": [
+                "EmptyStatusCode",
+                "Continue",
+                "OK",
+                "Created",
+                "Accepted",
+                "NonAuthoritativeInformation",
+                "NoContent",
+                "ResetContent",
+                "PartialContent",
+                "MultiStatus",
+                "AlreadyReported",
+                "IMUsed",
+                "MultipleChoices",
+                "MovedPermanently",
+                "Found",
+                "SeeOther",
+                "NotModified",
+                "UseProxy",
+                "TemporaryRedirect",
+                "PermanentRedirect",
+                "BadRequest",
+                "Unauthorized",
+                "PaymentRequired",
+                "Forbidden",
+                "NotFound",
+                "MethodNotAllowed",
+                "NotAcceptable",
+                "ProxyAuthenticationRequired",
+                "RequestTimeout",
+                "Conflict",
+                "Gone",
+                "LengthRequired",
+                "PreconditionFailed",
+                "PayloadTooLarge",
+                "URITooLong",
+                "UnsupportedMediaType",
+                "RangeNotSatisfiable",
+                "ExpectationFailed",
+                "MisdirectedRequest",
+                "UnprocessableEntity",
+                "Locked",
+                "FailedDependency",
+                "UpgradeRequired",
+                "PreconditionRequired",
+                "TooManyRequests",
+                "RequestHeaderFieldsTooLarge",
+                "InternalServerError",
+                "NotImplemented",
+                "BadGateway",
+                "ServiceUnavailable",
+                "GatewayTimeout",
+                "HTTPVersionNotSupported",
+                "VariantAlsoNegotiates",
+                "InsufficientStorage",
+                "LoopDetected",
+                "NotExtended",
+                "NetworkAuthenticationRequired"
+            ],
+            "default": "EmptyStatusCode",
+            "x-displayname": "HTTP Status Code",
+            "x-ves-proto-enum": "ves.io.schema.HttpStatusCode"
         },
         "schemaMetricValue": {
             "type": "object",

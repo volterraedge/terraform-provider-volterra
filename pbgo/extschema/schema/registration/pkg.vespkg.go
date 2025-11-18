@@ -52,6 +52,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.registration.InternetProxy"] = InternetProxyValidator()
 	vr["ves.io.schema.registration.Passport"] = PassportValidator()
 	vr["ves.io.schema.registration.ReplaceSpecType"] = ReplaceSpecTypeValidator()
+	vr["ves.io.schema.registration.SWInfo"] = SWInfoValidator()
 	vr["ves.io.schema.registration.WorkloadContext"] = WorkloadContextValidator()
 
 }
@@ -134,11 +135,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

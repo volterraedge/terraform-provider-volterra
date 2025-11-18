@@ -325,6 +325,8 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_minutes"] = ves_io_schema_views_ike_phase1_profile.InputMinutesValidator().Validate
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_hours"] = ves_io_schema_views_ike_phase1_profile.InputHoursValidator().Validate
 
+	v.FldValidators["pfs_mode.dh_group_set"] = DHGroupsValidator().Validate
+
 	return v
 }()
 
@@ -373,6 +375,54 @@ type ValidateDHGroups struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
+func (v *ValidateDHGroups) DhGroupsValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	itemRules := db.GetRepEnumItemRules(rules)
+	var conv db.EnumConvFn
+	conv = func(v interface{}) int32 {
+		i := v.(ves_io_schema.DHGroup)
+		return int32(i)
+	}
+	// ves_io_schema.DHGroup_name is generated in .pb.go
+	itemValFn, err := db.NewEnumValidationRuleHandler(itemRules, ves_io_schema.DHGroup_name, conv)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for dh_groups")
+	}
+	itemsValidatorFn := func(ctx context.Context, elems []ves_io_schema.DHGroup, opts ...db.ValidateOpt) error {
+		for i, el := range elems {
+			if err := itemValFn(ctx, el, opts...); err != nil {
+				return errors.Wrap(err, fmt.Sprintf("element %d", i))
+			}
+		}
+		return nil
+	}
+	repValFn, err := db.NewRepeatedValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "Repeated ValidationRuleHandler for dh_groups")
+	}
+
+	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
+		elems, ok := val.([]ves_io_schema.DHGroup)
+		if !ok {
+			return fmt.Errorf("Repeated validation expected []ves_io_schema.DHGroup, got %T", val)
+		}
+		l := []string{}
+		for _, elem := range elems {
+			strVal := fmt.Sprintf("%v", elem)
+			l = append(l, strVal)
+		}
+		if err := repValFn(ctx, l, opts...); err != nil {
+			return errors.Wrap(err, "repeated dh_groups")
+		}
+		if err := itemsValidatorFn(ctx, elems, opts...); err != nil {
+			return errors.Wrap(err, "items dh_groups")
+		}
+		return nil
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateDHGroups) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*DHGroups)
 	if !ok {
@@ -388,13 +438,9 @@ func (v *ValidateDHGroups) Validate(ctx context.Context, pm interface{}, opts ..
 	}
 
 	if fv, exists := v.FldValidators["dh_groups"]; exists {
-
 		vOpts := append(opts, db.WithValidateField("dh_groups"))
-		for idx, item := range m.GetDhGroups() {
-			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
-			if err := fv(ctx, item, vOpts...); err != nil {
-				return err
-			}
+		if err := fv(ctx, m.GetDhGroups(), vOpts...); err != nil {
+			return err
 		}
 
 	}
@@ -405,6 +451,25 @@ func (v *ValidateDHGroups) Validate(ctx context.Context, pm interface{}, opts ..
 // Well-known symbol for default validator implementation
 var DefaultDHGroupsValidator = func() *ValidateDHGroups {
 	v := &ValidateDHGroups{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhDhGroups := v.DhGroupsValidationRuleHandler
+	rulesDhGroups := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhDhGroups(rulesDhGroups)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for DHGroups.dh_groups: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["dh_groups"] = vFn
 
 	return v
 }()
@@ -711,6 +776,8 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_minutes"] = ves_io_schema_views_ike_phase1_profile.InputMinutesValidator().Validate
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_hours"] = ves_io_schema_views_ike_phase1_profile.InputHoursValidator().Validate
+
+	v.FldValidators["pfs_mode.dh_group_set"] = DHGroupsValidator().Validate
 
 	return v
 }()
@@ -1085,6 +1152,8 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_minutes"] = ves_io_schema_views_ike_phase1_profile.InputMinutesValidator().Validate
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_hours"] = ves_io_schema_views_ike_phase1_profile.InputHoursValidator().Validate
 
+	v.FldValidators["pfs_mode.dh_group_set"] = DHGroupsValidator().Validate
+
 	v.FldValidators["view_internal"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	return v
@@ -1392,6 +1461,8 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_minutes"] = ves_io_schema_views_ike_phase1_profile.InputMinutesValidator().Validate
 	v.FldValidators["ike_key_lifetime.ike_keylifetime_hours"] = ves_io_schema_views_ike_phase1_profile.InputHoursValidator().Validate
+
+	v.FldValidators["pfs_mode.dh_group_set"] = DHGroupsValidator().Validate
 
 	return v
 }()

@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.origin_pool.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.origin_pool.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3318,7 +3318,7 @@ var APISwaggerJSON string = `{
                 },
                 "service_name": {
                     "type": "string",
-                    "description": " Consul service name of this origin server, including cluster-id.\n The format is servicename:cluster-id. If the servicename is \"frontend\",\n and cluster-id is \"prod\", then you will enter \"frontend:prod\".\n cluster-id is optional.\n\nExample: - \"matching:production\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Consul service name of this origin server will be listed, including cluster-id.\n The format is servicename:cluster-id.\n\nExample: - \"matching:production\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Service Name",
                     "x-displayname": "Service Name",
                     "x-ves-example": "matching:production",
@@ -3394,7 +3394,7 @@ var APISwaggerJSON string = `{
                 },
                 "service_name": {
                     "type": "string",
-                    "description": "Exclusive with []\n K8s service name of the origin server, including the namespace and cluster-id\n The format is servicename.namespace:cluster-id. If the servicename is \"frontend\",\n namespace is \"speedtest\" and cluster-id is \"prod\", then you will enter \"frontend.speedtest:prod\".\n Both namespace and cluster-id are optional.\n\nExample: - \"matching.default:production\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ves_service_namespace_name: true\n",
+                    "description": "Exclusive with []\n K8s service name of the origin server will be listed, including the namespace and cluster-id.\n For vK8s services, you need to enter a string with the format servicename.namespace:cluster-id. If the servicename is \"frontend\",\n namespace is \"speedtest\" and cluster-id is \"prod\", then you will enter \"frontend.speedtest:prod\".\n Both namespace and cluster-id are optional.\n\nExample: - \"matching.default:production\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ves_service_namespace_name: true\n",
                     "title": "Service Name",
                     "x-displayname": "Service Name",
                     "x-ves-example": "matching.default:production",
@@ -3528,13 +3528,13 @@ var APISwaggerJSON string = `{
                 },
                 "refresh_interval": {
                     "type": "integer",
-                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 604800\n",
+                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 0,10-604800\n",
                     "title": "refresh_interval",
                     "format": "int64",
-                    "x-displayname": "DNS Refresh interval",
+                    "x-displayname": "DNS Refresh Interval",
                     "x-ves-example": "20",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "604800"
+                        "ves.io.schema.rules.uint32.ranges": "0,10-604800"
                     }
                 },
                 "segment": {
@@ -3621,13 +3621,13 @@ var APISwaggerJSON string = `{
                 },
                 "refresh_interval": {
                     "type": "integer",
-                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 604800\n",
+                    "description": " Interval for DNS refresh in seconds.\n Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.ranges: 0,10-604800\n",
                     "title": "refresh_interval",
                     "format": "int64",
-                    "x-displayname": "DNS Refresh interval",
+                    "x-displayname": "DNS Refresh Interval",
                     "x-ves-example": "20",
                     "x-ves-validation-rules": {
-                        "ves.io.schema.rules.uint32.lte": "604800"
+                        "ves.io.schema.rules.uint32.ranges": "0,10-604800"
                     }
                 }
             }
@@ -4480,6 +4480,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

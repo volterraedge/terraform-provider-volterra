@@ -296,6 +296,27 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 										Optional: true,
 									},
 
+									"destination_aws_subnet_ids": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"subnet_id": {
+
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
+									},
+
 									"destination_aws_vpc_ids": {
 
 										Type:     schema.TypeList,
@@ -377,6 +398,13 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 										},
 									},
 
+									"destination_namespace": {
+
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"destination_prefix_list": {
 
 										Type:     schema.TypeList,
@@ -454,6 +482,12 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 													Optional: true,
 												},
 
+												"disable": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"name": {
 													Type:     schema.TypeString,
 													Required: true,
@@ -478,6 +512,27 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 
 										Type:     schema.TypeBool,
 										Optional: true,
+									},
+
+									"source_aws_subnet_ids": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"subnet_id": {
+
+													Type: schema.TypeList,
+
+													Required: true,
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
 									},
 
 									"source_aws_vpc_ids": {
@@ -559,6 +614,13 @@ func resourceVolterraEnhancedFirewallPolicy() *schema.Resource {
 												},
 											},
 										},
+									},
+
+									"source_namespace": {
+
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"source_prefix_list": {
@@ -1189,6 +1251,38 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 							}
 
+							if v, ok := rulesMapStrToI["destination_aws_subnet_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationAwsSubnetIds{}
+								destinationChoiceInt.DestinationAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field subnet_id")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											destinationChoiceInt.DestinationAwsSubnetIds.SubnetId = ls
+
+										}
+
+									}
+								}
+
+							}
+
 							if v, ok := rulesMapStrToI["destination_aws_vpc_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
 								destinationChoiceTypeFound = true
@@ -1239,28 +1333,30 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											destinationChoiceInt.DestinationIpPrefixSet.Ref = refInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refInt[i].Kind = "ip_prefix_set"
+													refInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -1299,6 +1395,17 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 									}
 								}
+
+							}
+
+							if v, ok := rulesMapStrToI["destination_namespace"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationNamespace{}
+
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								destinationChoiceInt.DestinationNamespace = v.(string)
 
 							}
 
@@ -1413,6 +1520,10 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 											metadata.Description = w.(string)
 										}
 
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 											metadata.Name = w.(string)
 										}
@@ -1456,6 +1567,38 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 									sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_OutsideSources{}
 									sourceChoiceInt.OutsideSources = &ves_io_schema.Empty{}
 									rules[i].SourceChoice = sourceChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_aws_subnet_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceAwsSubnetIds{}
+								sourceChoiceInt.SourceAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field subnet_id")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											sourceChoiceInt.SourceAwsSubnetIds.SubnetId = ls
+
+										}
+
+									}
 								}
 
 							}
@@ -1510,28 +1653,30 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											sourceChoiceInt.SourceIpPrefixSet.Ref = refInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refInt[i].Kind = "ip_prefix_set"
+													refInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -1570,6 +1715,17 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 
 									}
 								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceNamespace{}
+
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sourceChoiceInt.SourceNamespace = v.(string)
 
 							}
 
@@ -1778,22 +1934,24 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									sMapToStrVal := ps.(map[string]interface{})
-									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+										sMapToStrVal := ps.(map[string]interface{})
+										segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Name = v.(string)
+										if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Name = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -1847,22 +2005,24 @@ func resourceVolterraEnhancedFirewallPolicyCreate(d *schema.ResourceData, meta i
 								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									sMapToStrVal := ps.(map[string]interface{})
-									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+										sMapToStrVal := ps.(map[string]interface{})
+										segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Name = v.(string)
+										if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Name = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -2337,6 +2497,38 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 							}
 
+							if v, ok := rulesMapStrToI["destination_aws_subnet_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationAwsSubnetIds{}
+								destinationChoiceInt.DestinationAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field subnet_id")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											destinationChoiceInt.DestinationAwsSubnetIds.SubnetId = ls
+
+										}
+
+									}
+								}
+
+							}
+
 							if v, ok := rulesMapStrToI["destination_aws_vpc_ids"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
 
 								destinationChoiceTypeFound = true
@@ -2387,28 +2579,30 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											destinationChoiceInt.DestinationIpPrefixSet.Ref = refInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refInt[i].Kind = "ip_prefix_set"
+													refInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -2447,6 +2641,17 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 									}
 								}
+
+							}
+
+							if v, ok := rulesMapStrToI["destination_namespace"]; ok && !isIntfNil(v) && !destinationChoiceTypeFound {
+
+								destinationChoiceTypeFound = true
+								destinationChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_DestinationNamespace{}
+
+								rules[i].DestinationChoice = destinationChoiceInt
+
+								destinationChoiceInt.DestinationNamespace = v.(string)
 
 							}
 
@@ -2561,6 +2766,10 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 											metadata.Description = w.(string)
 										}
 
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 											metadata.Name = w.(string)
 										}
@@ -2604,6 +2813,38 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 									sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_OutsideSources{}
 									sourceChoiceInt.OutsideSources = &ves_io_schema.Empty{}
 									rules[i].SourceChoice = sourceChoiceInt
+								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_aws_subnet_ids"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceAwsSubnetIds{}
+								sourceChoiceInt.SourceAwsSubnetIds = &ves_io_schema.AwsSubnetList{}
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["subnet_id"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field subnet_id")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											sourceChoiceInt.SourceAwsSubnetIds.SubnetId = ls
+
+										}
+
+									}
 								}
 
 							}
@@ -2658,28 +2899,30 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											sourceChoiceInt.SourceIpPrefixSet.Ref = refInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refInt[i].Kind = "ip_prefix_set"
+													refInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -2718,6 +2961,17 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 
 									}
 								}
+
+							}
+
+							if v, ok := rulesMapStrToI["source_namespace"]; ok && !isIntfNil(v) && !sourceChoiceTypeFound {
+
+								sourceChoiceTypeFound = true
+								sourceChoiceInt := &ves_io_schema_enhanced_firewall_policy.EnhancedFirewallPolicyRuleType_SourceNamespace{}
+
+								rules[i].SourceChoice = sourceChoiceInt
+
+								sourceChoiceInt.SourceNamespace = v.(string)
 
 							}
 
@@ -2925,22 +3179,24 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								dstSegmentChoiceInt.DstSegments.Segments = segmentsInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									sMapToStrVal := ps.(map[string]interface{})
-									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+										sMapToStrVal := ps.(map[string]interface{})
+										segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Name = v.(string)
+										if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Name = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -2994,22 +3250,24 @@ func resourceVolterraEnhancedFirewallPolicyUpdate(d *schema.ResourceData, meta i
 								segmentsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								srcSegmentChoiceInt.SrcSegments.Segments = segmentsInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									sMapToStrVal := ps.(map[string]interface{})
-									segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
+										sMapToStrVal := ps.(map[string]interface{})
+										segmentsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Name = v.(string)
+										if v, ok := sMapToStrVal["name"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Name = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											segmentsInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := sMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := sMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										segmentsInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}

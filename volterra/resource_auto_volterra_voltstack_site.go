@@ -15,6 +15,7 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_bgp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp"
 	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
 	ves_io_schema_network_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall"
 	ves_io_schema_network_interface "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_interface"
@@ -343,15 +344,97 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 										Optional: true,
 									},
 
+									"drain_max_unavailable_node_percentage": {
+
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"drain_node_timeout": {
 										Type:     schema.TypeInt,
 										Required: true,
+									},
+
+									"disable_vega_upgrade_mode": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"enable_vega_upgrade_mode": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
 						},
 					},
 				},
+			},
+
+			"local_control_plane": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"bgp_config": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"asn": {
+										Type:       schema.TypeInt,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"peers": {
+
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{},
+										},
+									},
+								},
+							},
+						},
+
+						"inside_vn": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"outside_vn": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
+			"no_local_control_plane": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"log_receiver": {
@@ -401,6 +484,17 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 							Optional: true,
 						},
 					},
+				},
+			},
+
+			"master_nodes": {
+
+				Type: schema.TypeList,
+
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
 				},
 			},
 
@@ -562,6 +656,407 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																			Optional: true,
 																		},
 																	},
+																},
+															},
+														},
+													},
+												},
+
+												"disable_forward_proxy": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"enable_forward_proxy": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"connection_timeout": {
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"max_connect_attempts": {
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"no_interception": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"tls_intercept": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"enable_for_all_domains": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"policy": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interception_rules": {
+
+																						Type:       schema.TypeList,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"domain_match": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"exact_value": {
+
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"regex_value": {
+
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"suffix_value": {
+
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"disable_interception": {
+
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"enable_interception": {
+
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"custom_certificate": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"certificate_url": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"description": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"custom_hash_algorithms": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"hash_algorithms": {
+
+																									Type: schema.TypeList,
+
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Schema{
+																										Type: schema.TypeString,
+																									},
+																								},
+																							},
+																						},
+																					},
+
+																					"disable_ocsp_stapling": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
+																					"use_system_defaults": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{},
+																						},
+																					},
+
+																					"private_key": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"blindfold_secret_info_internal": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"decryption_provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"location": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"store_provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"secret_encoding_type": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"blindfold_secret_info": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"decryption_provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"location": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"store_provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"clear_secret_info": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"url": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"vault_secret_info": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"key": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"location": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"provider": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"secret_encoding": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"version": {
+																												Type:       schema.TypeInt,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"wingman_secret_info": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"volterra_certificate": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"trusted_ca_url": {
+
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"volterra_trusted_ca": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"white_listed_ports": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeInt,
+																},
+															},
+
+															"white_listed_prefixes": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
 																},
 															},
 														},
@@ -782,6 +1277,34 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																						Optional: true,
 																					},
 
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
 																					"pool_settings": {
 																						Type:     schema.TypeString,
 																						Required: true,
@@ -799,6 +1322,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																									Optional: true,
 																								},
 
+																								"exclude": {
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
 																								"start_ip": {
 																									Type:     schema.TypeString,
 																									Optional: true,
@@ -808,6 +1337,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					},
 																				},
 																			},
+																		},
+
+																		"dhcp_option82_tag": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"fixed_ip_map": {
@@ -887,12 +1422,70 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																												Optional: true,
 																											},
 
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -912,6 +1505,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					"default_gw": {
 																						Type:     schema.TypeString,
 																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"ip_address": {
@@ -979,6 +1578,34 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																												Optional: true,
 																											},
 
+																											"network_prefix_allocator": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"name": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"namespace": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"tenant": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
 																											"pool_settings": {
 																												Type:     schema.TypeString,
 																												Required: true,
@@ -994,6 +1621,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																														"end_ip": {
 																															Type:     schema.TypeString,
 																															Optional: true,
+																														},
+
+																														"exclude": {
+																															Type:       schema.TypeBool,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 
 																														"start_ip": {
@@ -1157,12 +1790,70 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																												Optional: true,
 																											},
 
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -1182,6 +1873,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					"default_gw": {
 																						Type:     schema.TypeString,
 																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"ip_address": {
@@ -1214,6 +1911,41 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 															"mtu": {
 																Type:     schema.TypeInt,
 																Optional: true,
+															},
+
+															"inside_network": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"namespace": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"tenant": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"ip_fabric_network": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"segment_network": {
@@ -1250,6 +1982,34 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																Type:     schema.TypeBool,
 																Optional: true,
+															},
+
+															"srv6_network": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"namespace": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"tenant": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
 															},
 
 															"storage_network": {
@@ -1302,6 +2062,557 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 													},
 												},
 
+												"loopback_interface": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"dhcp_client": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"dhcp_server": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"dhcp_networks": {
+
+																			Type:       schema.TypeList,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"dns_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"same_as_dgw": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dgw_address": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"first_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"last_address": {
+
+																						Type:       schema.TypeBool,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix": {
+
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"pool_settings": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"pools": {
+
+																						Type:       schema.TypeList,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"end_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"exclude": {
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"start_ip": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"dhcp_option82_tag": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"fixed_ip_map": {
+																			Type:       schema.TypeMap,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_end": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"automatic_from_start": {
+
+																			Type:       schema.TypeBool,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"interface_ip_map": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+																						Type:       schema.TypeMap,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"static_ip": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cluster_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"value": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"default_gw": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"ip_address": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"node_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"ip_address": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"device": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"no_ipv6_address": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"static_ipv6_address": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"cluster_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface_ip_map": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"value": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"default_gw": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"ip_address": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"node_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"ip_address": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+
+															"mtu": {
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"ip_fabric_network": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"site_local_inside_network": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"site_local_network": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"cluster": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"node": {
+
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
 												"tunnel_interface": {
 
 													Type:     schema.TypeList,
@@ -1310,9 +2621,70 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
+															"cloud_connect": {
+
+																Type:       schema.TypeList,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"kind": {
+																			Type:       schema.TypeString,
+																			Computed:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"namespace": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"tenant": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
 															"mtu": {
 																Type:     schema.TypeInt,
 																Optional: true,
+															},
+
+															"inside_network": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"namespace": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"tenant": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
 															},
 
 															"site_local_inside_network": {
@@ -1325,6 +2697,13 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																Type:     schema.TypeBool,
 																Optional: true,
+															},
+
+															"cluster": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"node": {
@@ -1379,12 +2758,70 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																												Optional: true,
 																											},
 
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -1404,6 +2841,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					"default_gw": {
 																						Type:     schema.TypeString,
 																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"ip_address": {
@@ -1567,6 +3010,337 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 							Optional: true,
 						},
 
+						"default_sli_config": {
+
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"sli_config": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"no_static_routes": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"static_routes": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"static_routes": {
+
+													Type:       schema.TypeList,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"attrs": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"ip_prefixes": {
+
+																Type: schema.TypeList,
+
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"default_gateway": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"interface": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"namespace": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"tenant": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"ip_address": {
+
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"node_interface": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"list": {
+
+																			Type:       schema.TypeList,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface": {
+
+																						Type:       schema.TypeList,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"kind": {
+																									Type:       schema.TypeString,
+																									Computed:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"node": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"no_v6_static_routes": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"static_v6_routes": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"static_routes": {
+
+													Type:       schema.TypeList,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"attrs": {
+
+																Type: schema.TypeList,
+
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"ip_prefixes": {
+
+																Type: schema.TypeList,
+
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Schema{
+																	Type: schema.TypeString,
+																},
+															},
+
+															"default_gateway": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"interface": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"namespace": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"tenant": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"ip_address": {
+
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"node_interface": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"list": {
+
+																			Type:       schema.TypeList,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface": {
+
+																						Type:       schema.TypeList,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"kind": {
+																									Type:       schema.TypeString,
+																									Computed:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"node": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+								},
+							},
+						},
+
 						"default_config": {
 
 							Type:     schema.TypeBool,
@@ -1609,6 +3383,33 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 										Type:     schema.TypeBool,
 										Optional: true,
+									},
+
+									"dc_cluster_group_interface": {
+
+										Type:       schema.TypeList,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"namespace": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+												"tenant": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
 									},
 
 									"labels": {
@@ -1665,23 +3466,27 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 															"interface": {
 
-																Type:     schema.TypeList,
-																MaxItems: 1,
-																Optional: true,
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1691,6 +3496,60 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																Type:     schema.TypeString,
 																Optional: true,
+															},
+
+															"node_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"list": {
+
+																			Type:     schema.TypeList,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface": {
+
+																						Type:     schema.TypeList,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"kind": {
+																									Type:     schema.TypeString,
+																									Computed: true,
+																								},
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																								"namespace": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																								"tenant": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"node": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
 															},
 														},
 													},
@@ -1748,23 +3607,27 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 															"interface": {
 
-																Type:     schema.TypeList,
-																MaxItems: 1,
-																Optional: true,
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
 
 																		"name": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"namespace": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																		"tenant": {
-																			Type:     schema.TypeString,
-																			Optional: true,
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1774,6 +3637,60 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																Type:     schema.TypeString,
 																Optional: true,
+															},
+
+															"node_interface": {
+
+																Type:     schema.TypeList,
+																MaxItems: 1,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"list": {
+
+																			Type:     schema.TypeList,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"interface": {
+
+																						Type:     schema.TypeList,
+																						Optional: true,
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"kind": {
+																									Type:     schema.TypeString,
+																									Computed: true,
+																								},
+
+																								"name": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																								"namespace": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																								"tenant": {
+																									Type:     schema.TypeString,
+																									Optional: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"node": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+																	},
+																},
 															},
 														},
 													},
@@ -1949,23 +3866,27 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 												"interface": {
 
-													Type:     schema.TypeList,
-													MaxItems: 1,
-													Optional: true,
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
 
 															"name": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 															"namespace": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 															"tenant": {
-																Type:     schema.TypeString,
-																Optional: true,
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1975,6 +3896,60 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+
+												"node_interface": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Optional: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"list": {
+
+																Type:     schema.TypeList,
+																Optional: true,
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"interface": {
+
+																			Type:     schema.TypeList,
+																			Optional: true,
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"kind": {
+																						Type:     schema.TypeString,
+																						Computed: true,
+																					},
+
+																					"name": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"namespace": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																					"tenant": {
+																						Type:     schema.TypeString,
+																						Optional: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"node": {
+																			Type:     schema.TypeString,
+																			Optional: true,
+																		},
+																	},
+																},
+															},
+														},
+													},
 												},
 											},
 										},
@@ -2244,6 +4219,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																Optional: true,
 															},
 
+															"csi_version": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
 															"iscsi_chap_password": {
 
 																Type:     schema.TypeList,
@@ -2251,6 +4232,42 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
+
+																		"blindfold_secret_info_internal": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"location": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"store_provider": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+
+																		"secret_encoding_type": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
 
 																		"blindfold_secret_info": {
 
@@ -2294,6 +4311,66 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					"url": {
 																						Type:     schema.TypeString,
 																						Required: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"vault_secret_info": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"key": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"location": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"provider": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"secret_encoding": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"version": {
+																						Type:       schema.TypeInt,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+
+																		"wingman_secret_info": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -2307,6 +4384,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																Optional: true,
 															},
 
+															"log_level": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
 															"password": {
 
 																Type:     schema.TypeList,
@@ -2314,6 +4397,42 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																Optional: true,
 																Elem: &schema.Resource{
 																	Schema: map[string]*schema.Schema{
+
+																		"blindfold_secret_info_internal": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"decryption_provider": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"location": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"store_provider": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+
+																		"secret_encoding_type": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
 
 																		"blindfold_secret_info": {
 
@@ -2357,6 +4476,66 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					"url": {
 																						Type:     schema.TypeString,
 																						Required: true,
+																					},
+																				},
+																			},
+																		},
+
+																		"vault_secret_info": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"key": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"location": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"provider": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"secret_encoding": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"version": {
+																						Type:       schema.TypeInt,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+
+																		"wingman_secret_info": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"name": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 																				},
 																			},
@@ -2453,6 +4632,42 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
+																					"blindfold_secret_info_internal": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"decryption_provider": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"location": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"store_provider": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"secret_encoding_type": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
 																					"blindfold_secret_info": {
 
 																						Type:     schema.TypeList,
@@ -2495,6 +4710,66 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																								"url": {
 																									Type:     schema.TypeString,
 																									Required: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"vault_secret_info": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"key": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"location": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"provider": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"secret_encoding": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"version": {
+																									Type:       schema.TypeInt,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"wingman_secret_info": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -2555,6 +4830,42 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
+																					"blindfold_secret_info_internal": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"decryption_provider": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"location": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"store_provider": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"secret_encoding_type": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
 																					"blindfold_secret_info": {
 
 																						Type:     schema.TypeList,
@@ -2597,6 +4908,66 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																								"url": {
 																									Type:     schema.TypeString,
 																									Required: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"vault_secret_info": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"key": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"location": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"provider": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"secret_encoding": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"version": {
+																									Type:       schema.TypeInt,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"wingman_secret_info": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -2846,6 +5217,42 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
+																								"blindfold_secret_info_internal": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"decryption_provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"location": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"store_provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"secret_encoding_type": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
 																								"blindfold_secret_info": {
 
 																									Type:     schema.TypeList,
@@ -2888,6 +5295,66 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																											"url": {
 																												Type:     schema.TypeString,
 																												Required: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"vault_secret_info": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"key": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"location": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"provider": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"secret_encoding": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"version": {
+																												Type:       schema.TypeInt,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"wingman_secret_info": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -2904,6 +5371,42 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																						Elem: &schema.Resource{
 																							Schema: map[string]*schema.Schema{
 
+																								"blindfold_secret_info_internal": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"decryption_provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"location": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"store_provider": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"secret_encoding_type": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
 																								"blindfold_secret_info": {
 
 																									Type:     schema.TypeList,
@@ -2946,6 +5449,66 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																											"url": {
 																												Type:     schema.TypeString,
 																												Required: true,
+																											},
+																										},
+																									},
+																								},
+
+																								"vault_secret_info": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"key": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"location": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"provider": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"secret_encoding": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
+																											"version": {
+																												Type:       schema.TypeInt,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+																										},
+																									},
+																								},
+
+																								"wingman_secret_info": {
+
+																									Type:       schema.TypeList,
+																									MaxItems:   1,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																									Elem: &schema.Resource{
+																										Schema: map[string]*schema.Schema{
+
+																											"name": {
+																												Type:       schema.TypeString,
+																												Required:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
 																											},
 																										},
 																									},
@@ -2979,6 +5542,42 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																			Optional: true,
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
+
+																					"blindfold_secret_info_internal": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"decryption_provider": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"location": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"store_provider": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"secret_encoding_type": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
 
 																					"blindfold_secret_info": {
 
@@ -3022,6 +5621,66 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																								"url": {
 																									Type:     schema.TypeString,
 																									Required: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"vault_secret_info": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"key": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"location": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"provider": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"secret_encoding": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"version": {
+																									Type:       schema.TypeInt,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"wingman_secret_info": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -3082,6 +5741,42 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																			Elem: &schema.Resource{
 																				Schema: map[string]*schema.Schema{
 
+																					"blindfold_secret_info_internal": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"decryption_provider": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"location": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"store_provider": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"secret_encoding_type": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
 																					"blindfold_secret_info": {
 
 																						Type:     schema.TypeList,
@@ -3124,6 +5819,66 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																								"url": {
 																									Type:     schema.TypeString,
 																									Required: true,
+																								},
+																							},
+																						},
+																					},
+
+																					"vault_secret_info": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"key": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"location": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"provider": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"secret_encoding": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
+																								"version": {
+																									Type:       schema.TypeInt,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
+																					"wingman_secret_info": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Required:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -3410,6 +6165,42 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
+																											"blindfold_secret_info_internal": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"decryption_provider": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"location": {
+																															Type:       schema.TypeString,
+																															Required:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"store_provider": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
+																											"secret_encoding_type": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
 																											"blindfold_secret_info": {
 
 																												Type:     schema.TypeList,
@@ -3452,6 +6243,66 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																														"url": {
 																															Type:     schema.TypeString,
 																															Required: true,
+																														},
+																													},
+																												},
+																											},
+
+																											"vault_secret_info": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"key": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"location": {
+																															Type:       schema.TypeString,
+																															Required:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"provider": {
+																															Type:       schema.TypeString,
+																															Required:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"secret_encoding": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"version": {
+																															Type:       schema.TypeInt,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
+																											"wingman_secret_info": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"name": {
+																															Type:       schema.TypeString,
+																															Required:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 																													},
 																												},
@@ -3526,6 +6377,42 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																									Elem: &schema.Resource{
 																										Schema: map[string]*schema.Schema{
 
+																											"blindfold_secret_info_internal": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"decryption_provider": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"location": {
+																															Type:       schema.TypeString,
+																															Required:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"store_provider": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
+																											"secret_encoding_type": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
 																											"blindfold_secret_info": {
 
 																												Type:     schema.TypeList,
@@ -3568,6 +6455,66 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																														"url": {
 																															Type:     schema.TypeString,
 																															Required: true,
+																														},
+																													},
+																												},
+																											},
+
+																											"vault_secret_info": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"key": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"location": {
+																															Type:       schema.TypeString,
+																															Required:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"provider": {
+																															Type:       schema.TypeString,
+																															Required:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"secret_encoding": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+
+																														"version": {
+																															Type:       schema.TypeInt,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
+																											"wingman_secret_info": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"name": {
+																															Type:       schema.TypeString,
+																															Required:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 																													},
 																												},
@@ -3739,6 +6686,34 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																						Optional: true,
 																					},
 
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																							},
+																						},
+																					},
+
 																					"pool_settings": {
 																						Type:     schema.TypeString,
 																						Required: true,
@@ -3756,6 +6731,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																									Optional: true,
 																								},
 
+																								"exclude": {
+																									Type:       schema.TypeBool,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+
 																								"start_ip": {
 																									Type:     schema.TypeString,
 																									Optional: true,
@@ -3765,6 +6746,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					},
 																				},
 																			},
+																		},
+
+																		"dhcp_option82_tag": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 
 																		"fixed_ip_map": {
@@ -3844,12 +6831,70 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																												Optional: true,
 																											},
 
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -3869,6 +6914,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					"default_gw": {
 																						Type:     schema.TypeString,
 																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"ip_address": {
@@ -3936,6 +6987,34 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																												Optional: true,
 																											},
 
+																											"network_prefix_allocator": {
+
+																												Type:       schema.TypeList,
+																												MaxItems:   1,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																												Elem: &schema.Resource{
+																													Schema: map[string]*schema.Schema{
+
+																														"name": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"namespace": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																														"tenant": {
+																															Type:       schema.TypeString,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
+																														},
+																													},
+																												},
+																											},
+
 																											"pool_settings": {
 																												Type:     schema.TypeString,
 																												Required: true,
@@ -3951,6 +7030,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																														"end_ip": {
 																															Type:     schema.TypeString,
 																															Optional: true,
+																														},
+
+																														"exclude": {
+																															Type:       schema.TypeBool,
+																															Optional:   true,
+																															Deprecated: "This field is deprecated and will be removed in future release.",
 																														},
 
 																														"start_ip": {
@@ -4114,12 +7199,70 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																												Optional: true,
 																											},
 
+																											"dns_server": {
+																												Type:       schema.TypeString,
+																												Optional:   true,
+																												Deprecated: "This field is deprecated and will be removed in future release.",
+																											},
+
 																											"ip_address": {
 																												Type:     schema.TypeString,
 																												Required: true,
 																											},
 																										},
 																									},
+																								},
+																							},
+																						},
+																					},
+																				},
+																			},
+																		},
+
+																		"fleet_static_ip": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"default_gw": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+
+																					"network_prefix_allocator": {
+
+																						Type:       schema.TypeList,
+																						MaxItems:   1,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																						Elem: &schema.Resource{
+																							Schema: map[string]*schema.Schema{
+
+																								"name": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"namespace": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
+																								},
+																								"tenant": {
+																									Type:       schema.TypeString,
+																									Optional:   true,
+																									Deprecated: "This field is deprecated and will be removed in future release.",
 																								},
 																							},
 																						},
@@ -4139,6 +7282,12 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 																					"default_gw": {
 																						Type:     schema.TypeString,
 																						Optional: true,
+																					},
+
+																					"dns_server": {
+																						Type:       schema.TypeString,
+																						Optional:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
 																					},
 
 																					"ip_address": {
@@ -4171,6 +7320,41 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 															"mtu": {
 																Type:     schema.TypeInt,
 																Optional: true,
+															},
+
+															"inside_network": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"namespace": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"tenant": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"ip_fabric_network": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 
 															"segment_network": {
@@ -4207,6 +7391,34 @@ func resourceVolterraVoltstackSite() *schema.Resource {
 
 																Type:     schema.TypeBool,
 																Optional: true,
+															},
+
+															"srv6_network": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"name": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"namespace": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																		"tenant": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
 															},
 
 															"storage_network": {
@@ -4847,9 +8059,46 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 							}
 
+							if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+								drainMaxUnavailableChoiceTypeFound = true
+								drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
+
+								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+								drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
+
+							}
+
 							if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
 
 								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
+
+							}
+
+							vegaUpgradeModeToggleChoiceTypeFound := false
+
+							if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+								vegaUpgradeModeToggleChoiceTypeFound = true
+
+								if v.(bool) {
+									vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
+									vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
+									kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+								vegaUpgradeModeToggleChoiceTypeFound = true
+
+								if v.(bool) {
+									vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
+									vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
+									kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+								}
 
 							}
 
@@ -4859,6 +8108,98 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 				}
 
 			}
+		}
+
+	}
+
+	//local_control_plane_choice
+
+	localControlPlaneChoiceTypeFound := false
+
+	if v, ok := d.GetOk("local_control_plane"); ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+		localControlPlaneChoiceTypeFound = true
+		localControlPlaneChoiceInt := &ves_io_schema_views_voltstack_site.CreateSpecType_LocalControlPlane{}
+		localControlPlaneChoiceInt.LocalControlPlane = &ves_io_schema_fleet.LocalControlPlaneType{}
+		createSpec.LocalControlPlaneChoice = localControlPlaneChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["bgp_config"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					bgpConfig := &ves_io_schema_fleet.BGPConfiguration{}
+					localControlPlaneChoiceInt.LocalControlPlane.BgpConfig = bgpConfig
+					for _, set := range sl {
+						if set != nil {
+							bgpConfigMapStrToI := set.(map[string]interface{})
+
+							if w, ok := bgpConfigMapStrToI["asn"]; ok && !isIntfNil(w) {
+								bgpConfig.Asn = uint32(w.(int))
+							}
+
+							if v, ok := bgpConfigMapStrToI["peers"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								peers := make([]*ves_io_schema_bgp.Peer, len(sl))
+								bgpConfig.Peers = peers
+								for i, set := range sl {
+									if set != nil {
+										peers[i] = &ves_io_schema_bgp.Peer{}
+										_ = set.(map[string]interface{})
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				networkChoiceTypeFound := false
+
+				if v, ok := cs["inside_vn"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+					networkChoiceTypeFound = true
+
+					if v.(bool) {
+						networkChoiceInt := &ves_io_schema_fleet.LocalControlPlaneType_InsideVn{}
+						networkChoiceInt.InsideVn = &ves_io_schema.Empty{}
+						localControlPlaneChoiceInt.LocalControlPlane.NetworkChoice = networkChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["outside_vn"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+					networkChoiceTypeFound = true
+
+					if v.(bool) {
+						networkChoiceInt := &ves_io_schema_fleet.LocalControlPlaneType_OutsideVn{}
+						networkChoiceInt.OutsideVn = &ves_io_schema.Empty{}
+						localControlPlaneChoiceInt.LocalControlPlane.NetworkChoice = networkChoiceInt
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("no_local_control_plane"); ok && !localControlPlaneChoiceTypeFound {
+
+		localControlPlaneChoiceTypeFound = true
+
+		if v.(bool) {
+			localControlPlaneChoiceInt := &ves_io_schema_views_voltstack_site.CreateSpecType_NoLocalControlPlane{}
+			localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+			createSpec.LocalControlPlaneChoice = localControlPlaneChoiceInt
 		}
 
 	}
@@ -4938,6 +8279,22 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 	}
 
+	//master_nodes
+	if v, ok := d.GetOk("master_nodes"); ok && !isIntfNil(v) {
+
+		ls := make([]string, len(v.([]interface{})))
+		for i, v := range v.([]interface{}) {
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field master_nodes")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
+		}
+		createSpec.MasterNodes = ls
+
+	}
+
 	//network_cfg_choice
 
 	networkCfgChoiceTypeFound := false
@@ -4992,22 +8349,24 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 								forwardProxyPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								forwardProxyChoiceInt.ActiveForwardProxyPolicies.ForwardProxyPolicies = forwardProxyPoliciesInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									fppMapToStrVal := ps.(map[string]interface{})
-									forwardProxyPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+										fppMapToStrVal := ps.(map[string]interface{})
+										forwardProxyPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := fppMapToStrVal["name"]; ok && !isIntfNil(v) {
-										forwardProxyPoliciesInt[i].Name = v.(string)
+										if v, ok := fppMapToStrVal["name"]; ok && !isIntfNil(v) {
+											forwardProxyPoliciesInt[i].Name = v.(string)
+										}
+
+										if v, ok := fppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											forwardProxyPoliciesInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := fppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											forwardProxyPoliciesInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := fppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										forwardProxyPoliciesInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := fppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										forwardProxyPoliciesInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -5145,6 +8504,526 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 															}
 														}
+
+													}
+
+												}
+											}
+
+										}
+
+										forwardProxyChoiceTypeFound := false
+
+										if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+
+											forwardProxyChoiceTypeFound = true
+
+											if v.(bool) {
+												forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
+												forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
+												globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
+											}
+
+										}
+
+										if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+
+											forwardProxyChoiceTypeFound = true
+											forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
+											forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
+											globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
+
+														forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
+													}
+
+													if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
+
+														forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
+													}
+
+													tlsInterceptionChoiceTypeFound := false
+
+													if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+														tlsInterceptionChoiceTypeFound = true
+
+														if v.(bool) {
+															tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
+															tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
+															forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+														tlsInterceptionChoiceTypeFound = true
+														tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
+														tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
+														forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																interceptionPolicyChoiceTypeFound := false
+
+																if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+																	interceptionPolicyChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
+																		interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
+																		tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+																	interceptionPolicyChoiceTypeFound = true
+																	interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
+																	interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
+																	tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
+																				interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
+																				for i, set := range sl {
+																					if set != nil {
+																						interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
+																						interceptionRulesMapStrToI := set.(map[string]interface{})
+
+																						if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							domainMatch := &ves_io_schema.DomainType{}
+																							interceptionRules[i].DomainMatch = domainMatch
+																							for _, set := range sl {
+																								if set != nil {
+																									domainMatchMapStrToI := set.(map[string]interface{})
+
+																									domainChoiceTypeFound := false
+
+																									if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																										domainChoiceTypeFound = true
+																										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+																										domainMatch.DomainChoice = domainChoiceInt
+
+																										domainChoiceInt.ExactValue = v.(string)
+
+																									}
+
+																									if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																										domainChoiceTypeFound = true
+																										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+																										domainMatch.DomainChoice = domainChoiceInt
+
+																										domainChoiceInt.RegexValue = v.(string)
+
+																									}
+
+																									if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																										domainChoiceTypeFound = true
+																										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+																										domainMatch.DomainChoice = domainChoiceInt
+
+																										domainChoiceInt.SuffixValue = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						enableDisableChoiceTypeFound := false
+
+																						if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																							enableDisableChoiceTypeFound = true
+
+																							if v.(bool) {
+																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
+																								enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
+																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																							enableDisableChoiceTypeFound = true
+
+																							if v.(bool) {
+																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
+																								enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
+																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																signingCertChoiceTypeFound := false
+
+																if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+																	signingCertChoiceTypeFound = true
+																	signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
+																	signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
+																	tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
+
+																				signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
+																			}
+
+																			if v, ok := cs["description"]; ok && !isIntfNil(v) {
+
+																				signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
+																			}
+
+																			ocspStaplingChoiceTypeFound := false
+
+																			if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+																				ocspStaplingChoiceTypeFound = true
+																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+																				ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																							hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																							for _, j := range v.([]interface{}) {
+																								if j == nil {
+																									return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+																								}
+																								hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																							}
+																							ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+																				ocspStaplingChoiceTypeFound = true
+																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+																				ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+																			}
+
+																			if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+																				ocspStaplingChoiceTypeFound = true
+																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+																				ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+																			}
+
+																			if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				privateKey := &ves_io_schema.SecretType{}
+																				signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
+																				for _, set := range sl {
+																					if set != nil {
+																						privateKeyMapStrToI := set.(map[string]interface{})
+
+																						if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																							privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																							for _, set := range sl {
+																								if set != nil {
+																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.Location = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																							privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						secretInfoOneofTypeFound := false
+
+																						if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+																							secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																									}
+
+																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																									}
+
+																									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+																							secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																									}
+
+																									if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																									}
+
+																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																									}
+
+																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																									}
+
+																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+																	signingCertChoiceTypeFound = true
+
+																	if v.(bool) {
+																		signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
+																		signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
+																		tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+																	}
+
+																}
+
+																trustedCaChoiceTypeFound := false
+
+																if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+																	trustedCaChoiceTypeFound = true
+																	trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
+
+																	tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+
+																	trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+																}
+
+																if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+																	trustedCaChoiceTypeFound = true
+
+																	if v.(bool) {
+																		trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
+																		trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
+																		tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
+
+														ls := make([]uint32, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = uint32(v.(int))
+														}
+														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
+
+													}
+
+													if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field white_listed_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
 
 													}
 
@@ -5529,6 +9408,41 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																			}
 
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
 																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -5549,6 +9463,10 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																							pools[i].EndIp = w.(string)
 																						}
 
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
 																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
 																							pools[i].StartIp = w.(string)
 																						}
@@ -5560,6 +9478,12 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
 
 																}
 
@@ -5678,6 +9602,10 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -5686,6 +9614,59 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																									break
 																								}
 																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	addressChoiceInt.StaticIp.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -5712,6 +9693,12 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 
 																			}
 
@@ -5825,6 +9812,41 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																									}
 
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
+																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																												}
+
+																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																												}
+
+																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -5843,6 +9865,10 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
+																												}
+
+																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -6098,6 +10124,10 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -6106,6 +10136,59 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																									break
 																								}
 																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -6132,6 +10215,12 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 
 																			}
 
@@ -6181,6 +10270,53 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 													}
 
 													networkChoiceTypeFound := false
+
+													if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+														networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_InsideNetwork{}
+														networkChoiceInt.InsideNetwork = &ves_io_schema_views.ObjectRefType{}
+														interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Tenant = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["ip_fabric_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+
+														if v.(bool) {
+															networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_IpFabricNetwork{}
+															networkChoiceInt.IpFabricNetwork = &ves_io_schema.Empty{}
+															interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
 
 													if v, ok := cs["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
@@ -6237,6 +10373,41 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 															networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_SiteLocalNetwork{}
 															networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
 															interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["srv6_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+														networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_Srv6Network{}
+														networkChoiceInt.Srv6Network = &ves_io_schema_views.ObjectRefType{}
+														interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.Srv6Network.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.Srv6Network.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.Srv6Network.Tenant = v.(string)
+
+																}
+
+															}
 														}
 
 													}
@@ -6340,6 +10511,698 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 										}
 
+										if v, ok := interfacesMapStrToI["loopback_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+											interfaceChoiceTypeFound = true
+											interfaceChoiceInt := &ves_io_schema_views_voltstack_site.Interface_LoopbackInterface{}
+											interfaceChoiceInt.LoopbackInterface = &ves_io_schema_network_interface.LoopbackInterfaceType{}
+											interfaces[i].InterfaceChoice = interfaceChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													addressChoiceTypeFound := false
+
+													if v, ok := cs["dhcp_client"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_DhcpClient{}
+															addressChoiceInt.DhcpClient = &ves_io_schema.Empty{}
+															interfaceChoiceInt.LoopbackInterface.AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_DhcpServer{}
+														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
+														interfaceChoiceInt.LoopbackInterface.AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
+																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
+																	for i, set := range sl {
+																		if set != nil {
+																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
+																			dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																			dnsChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
+
+																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
+
+																				dnsChoiceInt.DnsAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+
+																				if v.(bool) {
+																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
+																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
+																				}
+
+																			}
+
+																			gatewayChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
+
+																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+
+																				gatewayChoiceInt.DgwAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
+																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
+																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			networkPrefixChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
+
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
+																				dhcpNetworks[i].Pools = pools
+																				for i, set := range sl {
+																					if set != nil {
+																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
+																						poolsMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																							pools[i].EndIp = w.(string)
+																						}
+
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
+																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																							pools[i].StartIp = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
+
+																}
+
+																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																	ms := map[string]string{}
+																	for k, v := range v.(map[string]interface{}) {
+																		ms[k] = v.(string)
+																	}
+																	addressChoiceInt.DhcpServer.FixedIpMap = ms
+																}
+
+																interfacesAddressingChoiceTypeFound := false
+
+																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
+																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
+																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
+																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
+																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				ms := map[string]string{}
+																				for k, v := range v.(map[string]interface{}) {
+																					ms[k] = v.(string)
+																				}
+																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["static_ip"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_StaticIp{}
+														addressChoiceInt.StaticIp = &ves_io_schema_network_interface.StaticIPParametersType{}
+														interfaceChoiceInt.LoopbackInterface.AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																networkPrefixChoiceTypeFound := false
+
+																if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+																	networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+																	addressChoiceInt.StaticIp.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+																				networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+																				for _, set := range sl {
+																					if set != nil {
+																						interfaceIpMapMapStrToI := set.(map[string]interface{})
+																						key, ok := interfaceIpMapMapStrToI["name"]
+																						if ok && !isIntfNil(key) {
+																							interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																							val, _ := interfaceIpMapMapStrToI["value"]
+
+																							interfaceIpMapVals := val.([]interface{})
+																							for _, intVal := range interfaceIpMapVals {
+																								if intVal != nil {
+
+																									interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																									if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].IpAddress = w.(string)
+																									}
+
+																									// break after one loop
+																									break
+																								}
+																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	addressChoiceInt.StaticIp.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+																	networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																	addressChoiceInt.StaticIp.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+														interfaceChoiceInt.LoopbackInterface.Device = v.(string)
+
+													}
+
+													ipv6AddressChoiceTypeFound := false
+
+													if v, ok := cs["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+
+														if v.(bool) {
+															ipv6AddressChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_NoIpv6Address{}
+															ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+															interfaceChoiceInt.LoopbackInterface.Ipv6AddressChoice = ipv6AddressChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_StaticIpv6Address{}
+														ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+														interfaceChoiceInt.LoopbackInterface.Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																networkPrefixChoiceTypeFound := false
+
+																if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+																	networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+																				networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+																				for _, set := range sl {
+																					if set != nil {
+																						interfaceIpMapMapStrToI := set.(map[string]interface{})
+																						key, ok := interfaceIpMapMapStrToI["name"]
+																						if ok && !isIntfNil(key) {
+																							interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																							val, _ := interfaceIpMapMapStrToI["value"]
+
+																							interfaceIpMapVals := val.([]interface{})
+																							for _, intVal := range interfaceIpMapVals {
+																								if intVal != nil {
+
+																									interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																									if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].IpAddress = w.(string)
+																									}
+
+																									// break after one loop
+																									break
+																								}
+																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+																	networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
+
+														interfaceChoiceInt.LoopbackInterface.Mtu = uint32(v.(int))
+
+													}
+
+													networkChoiceTypeFound := false
+
+													if v, ok := cs["ip_fabric_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+
+														if v.(bool) {
+															networkChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_IpFabricNetwork{}
+															networkChoiceInt.IpFabricNetwork = &ves_io_schema.Empty{}
+															interfaceChoiceInt.LoopbackInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+
+														if v.(bool) {
+															networkChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_SiteLocalInsideNetwork{}
+															networkChoiceInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
+															interfaceChoiceInt.LoopbackInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["site_local_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+
+														if v.(bool) {
+															networkChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_SiteLocalNetwork{}
+															networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
+															interfaceChoiceInt.LoopbackInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
+
+													nodeChoiceTypeFound := false
+
+													if v, ok := cs["cluster"]; ok && !isIntfNil(v) && !nodeChoiceTypeFound {
+
+														nodeChoiceTypeFound = true
+
+														if v.(bool) {
+															nodeChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_Cluster{}
+															nodeChoiceInt.Cluster = &ves_io_schema.Empty{}
+															interfaceChoiceInt.LoopbackInterface.NodeChoice = nodeChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["node"]; ok && !isIntfNil(v) && !nodeChoiceTypeFound {
+
+														nodeChoiceTypeFound = true
+														nodeChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_Node{}
+
+														interfaceChoiceInt.LoopbackInterface.NodeChoice = nodeChoiceInt
+
+														nodeChoiceInt.Node = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
 										if v, ok := interfacesMapStrToI["tunnel_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
 
 											interfaceChoiceTypeFound = true
@@ -6352,6 +11215,40 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 												if set != nil {
 													cs := set.(map[string]interface{})
 
+													if v, ok := cs["cloud_connect"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														cloudConnectInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														interfaceChoiceInt.TunnelInterface.CloudConnect = cloudConnectInt
+														for i, ps := range sl {
+															if ps != nil {
+
+																ccMapToStrVal := ps.(map[string]interface{})
+																cloudConnectInt[i] = &ves_io_schema.ObjectRefType{}
+
+																cloudConnectInt[i].Kind = "cloud_connect"
+
+																if v, ok := ccMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	cloudConnectInt[i].Name = v.(string)
+																}
+
+																if v, ok := ccMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	cloudConnectInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := ccMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	cloudConnectInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := ccMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	cloudConnectInt[i].Uid = v.(string)
+																}
+
+															}
+														}
+
+													}
+
 													if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
 
 														interfaceChoiceInt.TunnelInterface.Mtu = uint32(v.(int))
@@ -6359,6 +11256,41 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 													}
 
 													networkChoiceTypeFound := false
+
+													if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+														networkChoiceInt := &ves_io_schema_network_interface.TunnelInterfaceType_InsideNetwork{}
+														networkChoiceInt.InsideNetwork = &ves_io_schema_views.ObjectRefType{}
+														interfaceChoiceInt.TunnelInterface.NetworkChoice = networkChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Tenant = v.(string)
+
+																}
+
+															}
+														}
+
+													}
 
 													if v, ok := cs["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
@@ -6385,6 +11317,18 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 													}
 
 													nodeChoiceTypeFound := false
+
+													if v, ok := cs["cluster"]; ok && !isIntfNil(v) && !nodeChoiceTypeFound {
+
+														nodeChoiceTypeFound = true
+
+														if v.(bool) {
+															nodeChoiceInt := &ves_io_schema_network_interface.TunnelInterfaceType_Cluster{}
+															nodeChoiceInt.Cluster = &ves_io_schema.Empty{}
+															interfaceChoiceInt.TunnelInterface.NodeChoice = nodeChoiceInt
+														}
+
+													}
 
 													if v, ok := cs["node"]; ok && !isIntfNil(v) && !nodeChoiceTypeFound {
 
@@ -6449,6 +11393,10 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -6457,6 +11405,59 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																									break
 																								}
 																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := staticIpMapStrToI["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	staticIp.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -6483,6 +11484,12 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 
 																			}
 
@@ -6569,22 +11576,24 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 								enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									efpMapToStrVal := ps.(map[string]interface{})
-									enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+										efpMapToStrVal := ps.(map[string]interface{})
+										enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
-										enhancedFirewallPoliciesInt[i].Name = v.(string)
+										if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+											enhancedFirewallPoliciesInt[i].Name = v.(string)
+										}
+
+										if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										enhancedFirewallPoliciesInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										enhancedFirewallPoliciesInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -6612,22 +11621,24 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 								networkPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								networkPolicyChoiceInt.ActiveNetworkPolicies.NetworkPolicies = networkPoliciesInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									npMapToStrVal := ps.(map[string]interface{})
-									networkPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+										npMapToStrVal := ps.(map[string]interface{})
+										networkPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := npMapToStrVal["name"]; ok && !isIntfNil(v) {
-										networkPoliciesInt[i].Name = v.(string)
+										if v, ok := npMapToStrVal["name"]; ok && !isIntfNil(v) {
+											networkPoliciesInt[i].Name = v.(string)
+										}
+
+										if v, ok := npMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											networkPoliciesInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := npMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											networkPoliciesInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := npMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										networkPoliciesInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := npMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										networkPoliciesInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -6710,6 +11721,441 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 				}
 
+				sliChoiceTypeFound := false
+
+				if v, ok := cs["default_sli_config"]; ok && !isIntfNil(v) && !sliChoiceTypeFound {
+
+					sliChoiceTypeFound = true
+
+					if v.(bool) {
+						sliChoiceInt := &ves_io_schema_views_voltstack_site.VssNetworkConfiguration_DefaultSliConfig{}
+						sliChoiceInt.DefaultSliConfig = &ves_io_schema.Empty{}
+						networkCfgChoiceInt.CustomNetworkConfig.SliChoice = sliChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["sli_config"]; ok && !isIntfNil(v) && !sliChoiceTypeFound {
+
+					sliChoiceTypeFound = true
+					sliChoiceInt := &ves_io_schema_views_voltstack_site.VssNetworkConfiguration_SliConfig{}
+					sliChoiceInt.SliConfig = &ves_io_schema_views_voltstack_site.SliVnConfiguration{}
+					networkCfgChoiceInt.CustomNetworkConfig.SliChoice = sliChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							staticRouteChoiceTypeFound := false
+
+							if v, ok := cs["no_static_routes"]; ok && !isIntfNil(v) && !staticRouteChoiceTypeFound {
+
+								staticRouteChoiceTypeFound = true
+
+								if v.(bool) {
+									staticRouteChoiceInt := &ves_io_schema_views_voltstack_site.SliVnConfiguration_NoStaticRoutes{}
+									staticRouteChoiceInt.NoStaticRoutes = &ves_io_schema.Empty{}
+									sliChoiceInt.SliConfig.StaticRouteChoice = staticRouteChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["static_routes"]; ok && !isIntfNil(v) && !staticRouteChoiceTypeFound {
+
+								staticRouteChoiceTypeFound = true
+								staticRouteChoiceInt := &ves_io_schema_views_voltstack_site.SliVnConfiguration_StaticRoutes{}
+								staticRouteChoiceInt.StaticRoutes = &ves_io_schema_views_voltstack_site.StaticRoutesListType{}
+								sliChoiceInt.SliConfig.StaticRouteChoice = staticRouteChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["static_routes"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											staticRoutes := make([]*ves_io_schema_virtual_network.StaticRouteViewType, len(sl))
+											staticRouteChoiceInt.StaticRoutes.StaticRoutes = staticRoutes
+											for i, set := range sl {
+												if set != nil {
+													staticRoutes[i] = &ves_io_schema_virtual_network.StaticRouteViewType{}
+													staticRoutesMapStrToI := set.(map[string]interface{})
+
+													if v, ok := staticRoutesMapStrToI["attrs"]; ok && !isIntfNil(v) {
+
+														attrsList := []ves_io_schema.RouteAttrType{}
+														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
+															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
+														}
+														staticRoutes[i].Attrs = attrsList
+
+													}
+
+													if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
+														ls := make([]string, len(w.([]interface{})))
+														for i, v := range w.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														staticRoutes[i].IpPrefixes = ls
+													}
+
+													nextHopChoiceTypeFound := false
+
+													if v, ok := staticRoutesMapStrToI["default_gateway"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+
+														if v.(bool) {
+															nextHopChoiceInt := &ves_io_schema_virtual_network.StaticRouteViewType_DefaultGateway{}
+															nextHopChoiceInt.DefaultGateway = &ves_io_schema.Empty{}
+															staticRoutes[i].NextHopChoice = nextHopChoiceInt
+														}
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticRouteViewType_Interface{}
+														nextHopChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	nextHopChoiceInt.Interface.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	nextHopChoiceInt.Interface.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	nextHopChoiceInt.Interface.Tenant = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["ip_address"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticRouteViewType_IpAddress{}
+
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														nextHopChoiceInt.IpAddress = v.(string)
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["node_interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticRouteViewType_NodeInterface{}
+														nextHopChoiceInt.NodeInterface = &ves_io_schema.NodeInterfaceType{}
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["list"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	list := make([]*ves_io_schema.NodeInterfaceInfo, len(sl))
+																	nextHopChoiceInt.NodeInterface.List = list
+																	for i, set := range sl {
+																		if set != nil {
+																			list[i] = &ves_io_schema.NodeInterfaceInfo{}
+																			listMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := listMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																				list[i].Interface = intfInt
+																				for i, ps := range sl {
+																					if ps != nil {
+
+																						iMapToStrVal := ps.(map[string]interface{})
+																						intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																						intfInt[i].Kind = "network_interface"
+
+																						if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							intfInt[i].Name = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							intfInt[i].Namespace = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							intfInt[i].Tenant = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																							intfInt[i].Uid = v.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if w, ok := listMapStrToI["node"]; ok && !isIntfNil(w) {
+																				list[i].Node = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							staticV6RouteChoiceTypeFound := false
+
+							if v, ok := cs["no_v6_static_routes"]; ok && !isIntfNil(v) && !staticV6RouteChoiceTypeFound {
+
+								staticV6RouteChoiceTypeFound = true
+
+								if v.(bool) {
+									staticV6RouteChoiceInt := &ves_io_schema_views_voltstack_site.SliVnConfiguration_NoV6StaticRoutes{}
+									staticV6RouteChoiceInt.NoV6StaticRoutes = &ves_io_schema.Empty{}
+									sliChoiceInt.SliConfig.StaticV6RouteChoice = staticV6RouteChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["static_v6_routes"]; ok && !isIntfNil(v) && !staticV6RouteChoiceTypeFound {
+
+								staticV6RouteChoiceTypeFound = true
+								staticV6RouteChoiceInt := &ves_io_schema_views_voltstack_site.SliVnConfiguration_StaticV6Routes{}
+								staticV6RouteChoiceInt.StaticV6Routes = &ves_io_schema_virtual_network.StaticV6RoutesListType{}
+								sliChoiceInt.SliConfig.StaticV6RouteChoice = staticV6RouteChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["static_routes"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											staticRoutes := make([]*ves_io_schema_virtual_network.StaticV6RouteViewType, len(sl))
+											staticV6RouteChoiceInt.StaticV6Routes.StaticRoutes = staticRoutes
+											for i, set := range sl {
+												if set != nil {
+													staticRoutes[i] = &ves_io_schema_virtual_network.StaticV6RouteViewType{}
+													staticRoutesMapStrToI := set.(map[string]interface{})
+
+													if v, ok := staticRoutesMapStrToI["attrs"]; ok && !isIntfNil(v) {
+
+														attrsList := []ves_io_schema.RouteAttrType{}
+														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
+															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
+														}
+														staticRoutes[i].Attrs = attrsList
+
+													}
+
+													if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
+														ls := make([]string, len(w.([]interface{})))
+														for i, v := range w.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														staticRoutes[i].IpPrefixes = ls
+													}
+
+													nextHopChoiceTypeFound := false
+
+													if v, ok := staticRoutesMapStrToI["default_gateway"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+
+														if v.(bool) {
+															nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_DefaultGateway{}
+															nextHopChoiceInt.DefaultGateway = &ves_io_schema.Empty{}
+															staticRoutes[i].NextHopChoice = nextHopChoiceInt
+														}
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_Interface{}
+														nextHopChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	nextHopChoiceInt.Interface.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	nextHopChoiceInt.Interface.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	nextHopChoiceInt.Interface.Tenant = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["ip_address"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_IpAddress{}
+
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														nextHopChoiceInt.IpAddress = v.(string)
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["node_interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_NodeInterface{}
+														nextHopChoiceInt.NodeInterface = &ves_io_schema.NodeInterfaceType{}
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["list"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	list := make([]*ves_io_schema.NodeInterfaceInfo, len(sl))
+																	nextHopChoiceInt.NodeInterface.List = list
+																	for i, set := range sl {
+																		if set != nil {
+																			list[i] = &ves_io_schema.NodeInterfaceInfo{}
+																			listMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := listMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																				list[i].Interface = intfInt
+																				for i, ps := range sl {
+																					if ps != nil {
+
+																						iMapToStrVal := ps.(map[string]interface{})
+																						intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																						intfInt[i].Kind = "network_interface"
+
+																						if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							intfInt[i].Name = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							intfInt[i].Namespace = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							intfInt[i].Tenant = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																							intfInt[i].Uid = v.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if w, ok := listMapStrToI["node"]; ok && !isIntfNil(w) {
+																				list[i].Node = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
 				sloChoiceTypeFound := false
 
 				if v, ok := cs["default_config"]; ok && !isIntfNil(v) && !sloChoiceTypeFound {
@@ -6781,6 +12227,34 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 									dcClusterGroupChoiceInt := &ves_io_schema_views_voltstack_site.VnConfiguration_NoDcClusterGroup{}
 									dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
 									sloChoiceInt.SloConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["dc_cluster_group_interface"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								dcClusterGroupInterfaceInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								sloChoiceInt.SloConfig.DcClusterGroupInterface = dcClusterGroupInterfaceInt
+								for i, ps := range sl {
+									if ps != nil {
+
+										dcgiMapToStrVal := ps.(map[string]interface{})
+										dcClusterGroupInterfaceInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+										if v, ok := dcgiMapToStrVal["name"]; ok && !isIntfNil(v) {
+											dcClusterGroupInterfaceInt[i].Name = v.(string)
+										}
+
+										if v, ok := dcgiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											dcClusterGroupInterfaceInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := dcgiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											dcClusterGroupInterfaceInt[i].Tenant = v.(string)
+										}
+
+									}
 								}
 
 							}
@@ -6916,6 +12390,76 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 													}
 
+													if v, ok := staticRoutesMapStrToI["node_interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticRouteViewType_NodeInterface{}
+														nextHopChoiceInt.NodeInterface = &ves_io_schema.NodeInterfaceType{}
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["list"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	list := make([]*ves_io_schema.NodeInterfaceInfo, len(sl))
+																	nextHopChoiceInt.NodeInterface.List = list
+																	for i, set := range sl {
+																		if set != nil {
+																			list[i] = &ves_io_schema.NodeInterfaceInfo{}
+																			listMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := listMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																				list[i].Interface = intfInt
+																				for i, ps := range sl {
+																					if ps != nil {
+
+																						iMapToStrVal := ps.(map[string]interface{})
+																						intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																						intfInt[i].Kind = "network_interface"
+
+																						if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							intfInt[i].Name = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							intfInt[i].Namespace = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							intfInt[i].Tenant = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																							intfInt[i].Uid = v.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if w, ok := listMapStrToI["node"]; ok && !isIntfNil(w) {
+																				list[i].Node = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
 												}
 											}
 
@@ -7045,6 +12589,76 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 														staticRoutes[i].NextHopChoice = nextHopChoiceInt
 
 														nextHopChoiceInt.IpAddress = v.(string)
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["node_interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_NodeInterface{}
+														nextHopChoiceInt.NodeInterface = &ves_io_schema.NodeInterfaceType{}
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["list"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	list := make([]*ves_io_schema.NodeInterfaceInfo, len(sl))
+																	nextHopChoiceInt.NodeInterface.List = list
+																	for i, set := range sl {
+																		if set != nil {
+																			list[i] = &ves_io_schema.NodeInterfaceInfo{}
+																			listMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := listMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																				list[i].Interface = intfInt
+																				for i, ps := range sl {
+																					if ps != nil {
+
+																						iMapToStrVal := ps.(map[string]interface{})
+																						intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																						intfInt[i].Kind = "network_interface"
+
+																						if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							intfInt[i].Name = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							intfInt[i].Namespace = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							intfInt[i].Tenant = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																							intfInt[i].Uid = v.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if w, ok := listMapStrToI["node"]; ok && !isIntfNil(w) {
+																				list[i].Node = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
 
 													}
 
@@ -7368,6 +12982,76 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 											staticRoutes[i].NextHopChoice = nextHopChoiceInt
 
 											nextHopChoiceInt.IpAddress = v.(string)
+
+										}
+
+										if v, ok := staticRoutesMapStrToI["node_interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+											nextHopChoiceTypeFound = true
+											nextHopChoiceInt := &ves_io_schema_virtual_network.StaticRouteViewType_NodeInterface{}
+											nextHopChoiceInt.NodeInterface = &ves_io_schema.NodeInterfaceType{}
+											staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["list"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														list := make([]*ves_io_schema.NodeInterfaceInfo, len(sl))
+														nextHopChoiceInt.NodeInterface.List = list
+														for i, set := range sl {
+															if set != nil {
+																list[i] = &ves_io_schema.NodeInterfaceInfo{}
+																listMapStrToI := set.(map[string]interface{})
+
+																if v, ok := listMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																	list[i].Interface = intfInt
+																	for i, ps := range sl {
+																		if ps != nil {
+
+																			iMapToStrVal := ps.(map[string]interface{})
+																			intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																			intfInt[i].Kind = "network_interface"
+
+																			if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																				intfInt[i].Name = v.(string)
+																			}
+
+																			if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																				intfInt[i].Namespace = v.(string)
+																			}
+
+																			if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																				intfInt[i].Tenant = v.(string)
+																			}
+
+																			if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																				intfInt[i].Uid = v.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+																if w, ok := listMapStrToI["node"]; ok && !isIntfNil(w) {
+																	list[i].Node = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
 
 										}
 
@@ -7740,6 +13424,12 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 													}
 
+													if v, ok := cs["csi_version"]; ok && !isIntfNil(v) {
+
+														deviceChoiceInt.HpeStorage.CsiVersion = v.(string)
+
+													}
+
 													if v, ok := cs["iscsi_chap_password"]; ok && !isIntfNil(v) {
 
 														sl := v.([]interface{})
@@ -7748,6 +13438,38 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 														for _, set := range sl {
 															if set != nil {
 																iscsiChapPasswordMapStrToI := set.(map[string]interface{})
+
+																if v, ok := iscsiChapPasswordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																	iscsiChapPassword.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																	for _, set := range sl {
+																		if set != nil {
+																			blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																			}
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.Location = w.(string)
+																			}
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := iscsiChapPasswordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																	iscsiChapPassword.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
 
 																secretInfoOneofTypeFound := false
 
@@ -7815,6 +13537,76 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																}
 
+																if v, ok := iscsiChapPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																	secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																	iscsiChapPassword.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																			}
+
+																			if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																			}
+
+																			if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																			}
+
+																			if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := iscsiChapPasswordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																	secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																	iscsiChapPassword.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
 															}
 														}
 
@@ -7826,6 +13618,12 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 													}
 
+													if v, ok := cs["log_level"]; ok && !isIntfNil(v) {
+
+														deviceChoiceInt.HpeStorage.LogLevel = v.(string)
+
+													}
+
 													if v, ok := cs["password"]; ok && !isIntfNil(v) {
 
 														sl := v.([]interface{})
@@ -7834,6 +13632,38 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 														for _, set := range sl {
 															if set != nil {
 																passwordMapStrToI := set.(map[string]interface{})
+
+																if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																	password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																	for _, set := range sl {
+																		if set != nil {
+																			blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																			}
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.Location = w.(string)
+																			}
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																	password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
 
 																secretInfoOneofTypeFound := false
 
@@ -7893,6 +13723,76 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																			if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																				secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																	secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																	password.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																			}
+
+																			if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																			}
+
+																			if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																			}
+
+																			if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																	secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																	password.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																			}
 
@@ -8022,6 +13922,38 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																		if set != nil {
 																			clientPrivateKeyMapStrToI := set.(map[string]interface{})
 
+																			if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																				clientPrivateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																				for _, set := range sl {
+																					if set != nil {
+																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.Location = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																				clientPrivateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
 																			secretInfoOneofTypeFound := false
 
 																			if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -8080,6 +14012,76 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																				clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																						}
+
+																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																						}
+
+																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																						}
+
+																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																				clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																						}
 
@@ -8177,6 +14179,38 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																		if set != nil {
 																			passwordMapStrToI := set.(map[string]interface{})
 
+																			if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																				password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																				for _, set := range sl {
+																					if set != nil {
+																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.Location = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																				password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
 																			secretInfoOneofTypeFound := false
 
 																			if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -8235,6 +14269,76 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																						}
+
+																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																						}
+
+																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																						}
+
+																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																						}
 
@@ -8543,6 +14647,38 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																					if set != nil {
 																						chapInitiatorSecretMapStrToI := set.(map[string]interface{})
 
+																						if v, ok := chapInitiatorSecretMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																							chapInitiatorSecret.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																							for _, set := range sl {
+																								if set != nil {
+																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.Location = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := chapInitiatorSecretMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																							chapInitiatorSecret.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
 																						secretInfoOneofTypeFound := false
 
 																						if v, ok := chapInitiatorSecretMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -8609,6 +14745,76 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																						}
 
+																						if v, ok := chapInitiatorSecretMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																							chapInitiatorSecret.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																									}
+
+																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																									}
+
+																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																									}
+
+																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := chapInitiatorSecretMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																							chapInitiatorSecret.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
 																					}
 																				}
 
@@ -8622,6 +14828,38 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																				for _, set := range sl {
 																					if set != nil {
 																						chapTargetInitiatorSecretMapStrToI := set.(map[string]interface{})
+
+																						if v, ok := chapTargetInitiatorSecretMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																							chapTargetInitiatorSecret.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																							for _, set := range sl {
+																								if set != nil {
+																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.Location = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := chapTargetInitiatorSecretMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																							chapTargetInitiatorSecret.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
 
 																						secretInfoOneofTypeFound := false
 
@@ -8689,6 +14927,76 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																						}
 
+																						if v, ok := chapTargetInitiatorSecretMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																							chapTargetInitiatorSecret.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																									}
+
+																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																									}
+
+																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																									}
+
+																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := chapTargetInitiatorSecretMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																							chapTargetInitiatorSecret.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
 																					}
 																				}
 
@@ -8725,6 +15033,38 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																	for _, set := range sl {
 																		if set != nil {
 																			clientPrivateKeyMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																				clientPrivateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																				for _, set := range sl {
+																					if set != nil {
+																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.Location = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																				clientPrivateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
 
 																			secretInfoOneofTypeFound := false
 
@@ -8784,6 +15124,76 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																				clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																						}
+
+																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																						}
+
+																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																						}
+
+																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																				clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																						}
 
@@ -8881,6 +15291,38 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																		if set != nil {
 																			passwordMapStrToI := set.(map[string]interface{})
 
+																			if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																				password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																				for _, set := range sl {
+																					if set != nil {
+																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.Location = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																				password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
 																			secretInfoOneofTypeFound := false
 
 																			if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -8939,6 +15381,76 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																						}
+
+																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																						}
+
+																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																						}
+
+																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																						}
 
@@ -9279,6 +15791,38 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																								if set != nil {
 																									apiTokenMapStrToI := set.(map[string]interface{})
 
+																									if v, ok := apiTokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																										apiToken.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																										for _, set := range sl {
+																											if set != nil {
+																												blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																													blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																												}
+
+																												if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																													blindfoldSecretInfoInternal.Location = w.(string)
+																												}
+
+																												if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																													blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																										apiToken.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																									}
+
 																									secretInfoOneofTypeFound := false
 
 																									if v, ok := apiTokenMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -9337,6 +15881,76 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																												if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																													secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																										secretInfoOneofTypeFound = true
+																										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																										apiToken.SecretInfoOneof = secretInfoOneofInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																												}
+
+																												if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																												}
+
+																												if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																												}
+
+																												if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																												}
+
+																												if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																										secretInfoOneofTypeFound = true
+																										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																										apiToken.SecretInfoOneof = secretInfoOneofInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																												}
 
@@ -9436,6 +16050,38 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																								if set != nil {
 																									apiTokenMapStrToI := set.(map[string]interface{})
 
+																									if v, ok := apiTokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																										apiToken.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																										for _, set := range sl {
+																											if set != nil {
+																												blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																													blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																												}
+
+																												if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																													blindfoldSecretInfoInternal.Location = w.(string)
+																												}
+
+																												if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																													blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																										apiToken.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																									}
+
 																									secretInfoOneofTypeFound := false
 
 																									if v, ok := apiTokenMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -9494,6 +16140,76 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																												if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																													secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																										secretInfoOneofTypeFound = true
+																										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																										apiToken.SecretInfoOneof = secretInfoOneofInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																												}
+
+																												if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																												}
+
+																												if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																												}
+
+																												if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																												}
+
+																												if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																										secretInfoOneofTypeFound = true
+																										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																										apiToken.SecretInfoOneof = secretInfoOneofInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																												}
 
@@ -9783,6 +16499,41 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																			}
 
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
 																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -9803,6 +16554,10 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																							pools[i].EndIp = w.(string)
 																						}
 
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
 																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
 																							pools[i].StartIp = w.(string)
 																						}
@@ -9814,6 +16569,12 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
 
 																}
 
@@ -9932,6 +16693,10 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -9940,6 +16705,59 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																									break
 																								}
 																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	addressChoiceInt.StaticIp.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -9966,6 +16784,12 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 
 																			}
 
@@ -10077,6 +16901,41 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																									}
 
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
+																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																												}
+
+																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																												}
+
+																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -10095,6 +16954,10 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
+																												}
+
+																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -10350,6 +17213,10 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -10358,6 +17225,59 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																									break
 																								}
 																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -10384,6 +17304,12 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 
 																			}
 
@@ -10431,6 +17357,53 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 													}
 
 													networkChoiceTypeFound := false
+
+													if v, ok := storageInterfaceMapStrToI["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+														networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_InsideNetwork{}
+														networkChoiceInt.InsideNetwork = &ves_io_schema_views.ObjectRefType{}
+														storageInterface.NetworkChoice = networkChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Tenant = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := storageInterfaceMapStrToI["ip_fabric_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+
+														if v.(bool) {
+															networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_IpFabricNetwork{}
+															networkChoiceInt.IpFabricNetwork = &ves_io_schema.Empty{}
+															storageInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
 
 													if v, ok := storageInterfaceMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
@@ -10487,6 +17460,41 @@ func resourceVolterraVoltstackSiteCreate(d *schema.ResourceData, meta interface{
 															networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_SiteLocalNetwork{}
 															networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
 															storageInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
+
+													if v, ok := storageInterfaceMapStrToI["srv6_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+														networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_Srv6Network{}
+														networkChoiceInt.Srv6Network = &ves_io_schema_views.ObjectRefType{}
+														storageInterface.NetworkChoice = networkChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.Srv6Network.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.Srv6Network.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.Srv6Network.Tenant = v.(string)
+
+																}
+
+															}
 														}
 
 													}
@@ -11281,9 +18289,46 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 							}
 
+							if v, ok := cs["drain_max_unavailable_node_percentage"]; ok && !isIntfNil(v) && !drainMaxUnavailableChoiceTypeFound {
+
+								drainMaxUnavailableChoiceTypeFound = true
+								drainMaxUnavailableChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DrainMaxUnavailableNodePercentage{}
+
+								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainMaxUnavailableChoice = drainMaxUnavailableChoiceInt
+
+								drainMaxUnavailableChoiceInt.DrainMaxUnavailableNodePercentage = uint32(v.(int))
+
+							}
+
 							if v, ok := cs["drain_node_timeout"]; ok && !isIntfNil(v) {
 
 								kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.DrainNodeTimeout = uint32(v.(int))
+
+							}
+
+							vegaUpgradeModeToggleChoiceTypeFound := false
+
+							if v, ok := cs["disable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+								vegaUpgradeModeToggleChoiceTypeFound = true
+
+								if v.(bool) {
+									vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_DisableVegaUpgradeMode{}
+									vegaUpgradeModeToggleChoiceInt.DisableVegaUpgradeMode = &ves_io_schema.Empty{}
+									kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["enable_vega_upgrade_mode"]; ok && !isIntfNil(v) && !vegaUpgradeModeToggleChoiceTypeFound {
+
+								vegaUpgradeModeToggleChoiceTypeFound = true
+
+								if v.(bool) {
+									vegaUpgradeModeToggleChoiceInt := &ves_io_schema_views.KubernetesUpgradeDrainConfig_EnableVegaUpgradeMode{}
+									vegaUpgradeModeToggleChoiceInt.EnableVegaUpgradeMode = &ves_io_schema.Empty{}
+									kubernetesUpgradeDrainEnableChoiceInt.EnableUpgradeDrain.VegaUpgradeModeToggleChoice = vegaUpgradeModeToggleChoiceInt
+								}
 
 							}
 
@@ -11293,6 +18338,96 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 				}
 
 			}
+		}
+
+	}
+
+	localControlPlaneChoiceTypeFound := false
+
+	if v, ok := d.GetOk("local_control_plane"); ok && !isIntfNil(v) && !localControlPlaneChoiceTypeFound {
+
+		localControlPlaneChoiceTypeFound = true
+		localControlPlaneChoiceInt := &ves_io_schema_views_voltstack_site.ReplaceSpecType_LocalControlPlane{}
+		localControlPlaneChoiceInt.LocalControlPlane = &ves_io_schema_fleet.LocalControlPlaneType{}
+		updateSpec.LocalControlPlaneChoice = localControlPlaneChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["bgp_config"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					bgpConfig := &ves_io_schema_fleet.BGPConfiguration{}
+					localControlPlaneChoiceInt.LocalControlPlane.BgpConfig = bgpConfig
+					for _, set := range sl {
+						if set != nil {
+							bgpConfigMapStrToI := set.(map[string]interface{})
+
+							if w, ok := bgpConfigMapStrToI["asn"]; ok && !isIntfNil(w) {
+								bgpConfig.Asn = uint32(w.(int))
+							}
+
+							if v, ok := bgpConfigMapStrToI["peers"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								peers := make([]*ves_io_schema_bgp.Peer, len(sl))
+								bgpConfig.Peers = peers
+								for i, set := range sl {
+									if set != nil {
+										peers[i] = &ves_io_schema_bgp.Peer{}
+										_ = set.(map[string]interface{})
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				networkChoiceTypeFound := false
+
+				if v, ok := cs["inside_vn"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+					networkChoiceTypeFound = true
+
+					if v.(bool) {
+						networkChoiceInt := &ves_io_schema_fleet.LocalControlPlaneType_InsideVn{}
+						networkChoiceInt.InsideVn = &ves_io_schema.Empty{}
+						localControlPlaneChoiceInt.LocalControlPlane.NetworkChoice = networkChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["outside_vn"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+					networkChoiceTypeFound = true
+
+					if v.(bool) {
+						networkChoiceInt := &ves_io_schema_fleet.LocalControlPlaneType_OutsideVn{}
+						networkChoiceInt.OutsideVn = &ves_io_schema.Empty{}
+						localControlPlaneChoiceInt.LocalControlPlane.NetworkChoice = networkChoiceInt
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("no_local_control_plane"); ok && !localControlPlaneChoiceTypeFound {
+
+		localControlPlaneChoiceTypeFound = true
+
+		if v.(bool) {
+			localControlPlaneChoiceInt := &ves_io_schema_views_voltstack_site.ReplaceSpecType_NoLocalControlPlane{}
+			localControlPlaneChoiceInt.NoLocalControlPlane = &ves_io_schema.Empty{}
+			updateSpec.LocalControlPlaneChoice = localControlPlaneChoiceInt
 		}
 
 	}
@@ -11369,6 +18504,21 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 	}
 
+	if v, ok := d.GetOk("master_nodes"); ok && !isIntfNil(v) {
+
+		ls := make([]string, len(v.([]interface{})))
+		for i, v := range v.([]interface{}) {
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field master_nodes")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
+		}
+		updateSpec.MasterNodes = ls
+
+	}
+
 	networkCfgChoiceTypeFound := false
 
 	if v, ok := d.GetOk("custom_network_config"); ok && !isIntfNil(v) && !networkCfgChoiceTypeFound {
@@ -11421,22 +18571,24 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 								forwardProxyPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								forwardProxyChoiceInt.ActiveForwardProxyPolicies.ForwardProxyPolicies = forwardProxyPoliciesInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									fppMapToStrVal := ps.(map[string]interface{})
-									forwardProxyPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+										fppMapToStrVal := ps.(map[string]interface{})
+										forwardProxyPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := fppMapToStrVal["name"]; ok && !isIntfNil(v) {
-										forwardProxyPoliciesInt[i].Name = v.(string)
+										if v, ok := fppMapToStrVal["name"]; ok && !isIntfNil(v) {
+											forwardProxyPoliciesInt[i].Name = v.(string)
+										}
+
+										if v, ok := fppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											forwardProxyPoliciesInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := fppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											forwardProxyPoliciesInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := fppMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										forwardProxyPoliciesInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := fppMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										forwardProxyPoliciesInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -11574,6 +18726,526 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 															}
 														}
+
+													}
+
+												}
+											}
+
+										}
+
+										forwardProxyChoiceTypeFound := false
+
+										if v, ok := globalNetworkConnectionsMapStrToI["disable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+
+											forwardProxyChoiceTypeFound = true
+
+											if v.(bool) {
+												forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_DisableForwardProxy{}
+												forwardProxyChoiceInt.DisableForwardProxy = &ves_io_schema.Empty{}
+												globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
+											}
+
+										}
+
+										if v, ok := globalNetworkConnectionsMapStrToI["enable_forward_proxy"]; ok && !isIntfNil(v) && !forwardProxyChoiceTypeFound {
+
+											forwardProxyChoiceTypeFound = true
+											forwardProxyChoiceInt := &ves_io_schema_views.GlobalNetworkConnectionType_EnableForwardProxy{}
+											forwardProxyChoiceInt.EnableForwardProxy = &ves_io_schema.ForwardProxyConfigType{}
+											globalNetworkConnections[i].ForwardProxyChoice = forwardProxyChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["connection_timeout"]; ok && !isIntfNil(v) {
+
+														forwardProxyChoiceInt.EnableForwardProxy.ConnectionTimeout = uint32(v.(int))
+
+													}
+
+													if v, ok := cs["max_connect_attempts"]; ok && !isIntfNil(v) {
+
+														forwardProxyChoiceInt.EnableForwardProxy.MaxConnectAttempts = uint32(v.(int))
+
+													}
+
+													tlsInterceptionChoiceTypeFound := false
+
+													if v, ok := cs["no_interception"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+														tlsInterceptionChoiceTypeFound = true
+
+														if v.(bool) {
+															tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_NoInterception{}
+															tlsInterceptionChoiceInt.NoInterception = &ves_io_schema.Empty{}
+															forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["tls_intercept"]; ok && !isIntfNil(v) && !tlsInterceptionChoiceTypeFound {
+
+														tlsInterceptionChoiceTypeFound = true
+														tlsInterceptionChoiceInt := &ves_io_schema.ForwardProxyConfigType_TlsIntercept{}
+														tlsInterceptionChoiceInt.TlsIntercept = &ves_io_schema.TlsInterceptionType{}
+														forwardProxyChoiceInt.EnableForwardProxy.TlsInterceptionChoice = tlsInterceptionChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																interceptionPolicyChoiceTypeFound := false
+
+																if v, ok := cs["enable_for_all_domains"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+																	interceptionPolicyChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_EnableForAllDomains{}
+																		interceptionPolicyChoiceInt.EnableForAllDomains = &ves_io_schema.Empty{}
+																		tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["policy"]; ok && !isIntfNil(v) && !interceptionPolicyChoiceTypeFound {
+
+																	interceptionPolicyChoiceTypeFound = true
+																	interceptionPolicyChoiceInt := &ves_io_schema.TlsInterceptionType_Policy{}
+																	interceptionPolicyChoiceInt.Policy = &ves_io_schema.TlsInterceptionPolicy{}
+																	tlsInterceptionChoiceInt.TlsIntercept.InterceptionPolicyChoice = interceptionPolicyChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interception_rules"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interceptionRules := make([]*ves_io_schema.TlsInterceptionRule, len(sl))
+																				interceptionPolicyChoiceInt.Policy.InterceptionRules = interceptionRules
+																				for i, set := range sl {
+																					if set != nil {
+																						interceptionRules[i] = &ves_io_schema.TlsInterceptionRule{}
+																						interceptionRulesMapStrToI := set.(map[string]interface{})
+
+																						if v, ok := interceptionRulesMapStrToI["domain_match"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							domainMatch := &ves_io_schema.DomainType{}
+																							interceptionRules[i].DomainMatch = domainMatch
+																							for _, set := range sl {
+																								if set != nil {
+																									domainMatchMapStrToI := set.(map[string]interface{})
+
+																									domainChoiceTypeFound := false
+
+																									if v, ok := domainMatchMapStrToI["exact_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																										domainChoiceTypeFound = true
+																										domainChoiceInt := &ves_io_schema.DomainType_ExactValue{}
+
+																										domainMatch.DomainChoice = domainChoiceInt
+
+																										domainChoiceInt.ExactValue = v.(string)
+
+																									}
+
+																									if v, ok := domainMatchMapStrToI["regex_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																										domainChoiceTypeFound = true
+																										domainChoiceInt := &ves_io_schema.DomainType_RegexValue{}
+
+																										domainMatch.DomainChoice = domainChoiceInt
+
+																										domainChoiceInt.RegexValue = v.(string)
+
+																									}
+
+																									if v, ok := domainMatchMapStrToI["suffix_value"]; ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+																										domainChoiceTypeFound = true
+																										domainChoiceInt := &ves_io_schema.DomainType_SuffixValue{}
+
+																										domainMatch.DomainChoice = domainChoiceInt
+
+																										domainChoiceInt.SuffixValue = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						enableDisableChoiceTypeFound := false
+
+																						if v, ok := interceptionRulesMapStrToI["disable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																							enableDisableChoiceTypeFound = true
+
+																							if v.(bool) {
+																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_DisableInterception{}
+																								enableDisableChoiceInt.DisableInterception = &ves_io_schema.Empty{}
+																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																							}
+
+																						}
+
+																						if v, ok := interceptionRulesMapStrToI["enable_interception"]; ok && !isIntfNil(v) && !enableDisableChoiceTypeFound {
+
+																							enableDisableChoiceTypeFound = true
+
+																							if v.(bool) {
+																								enableDisableChoiceInt := &ves_io_schema.TlsInterceptionRule_EnableInterception{}
+																								enableDisableChoiceInt.EnableInterception = &ves_io_schema.Empty{}
+																								interceptionRules[i].EnableDisableChoice = enableDisableChoiceInt
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																signingCertChoiceTypeFound := false
+
+																if v, ok := cs["custom_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+																	signingCertChoiceTypeFound = true
+																	signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_CustomCertificate{}
+																	signingCertChoiceInt.CustomCertificate = &ves_io_schema.TlsCertificateType{}
+																	tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["certificate_url"]; ok && !isIntfNil(v) {
+
+																				signingCertChoiceInt.CustomCertificate.CertificateUrl = v.(string)
+
+																			}
+
+																			if v, ok := cs["description"]; ok && !isIntfNil(v) {
+
+																				signingCertChoiceInt.CustomCertificate.Description = v.(string)
+
+																			}
+
+																			ocspStaplingChoiceTypeFound := false
+
+																			if v, ok := cs["custom_hash_algorithms"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+																				ocspStaplingChoiceTypeFound = true
+																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_CustomHashAlgorithms{}
+																				ocspStaplingChoiceInt.CustomHashAlgorithms = &ves_io_schema.HashAlgorithms{}
+																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["hash_algorithms"]; ok && !isIntfNil(v) {
+
+																							hash_algorithmsList := []ves_io_schema.HashAlgorithm{}
+																							for _, j := range v.([]interface{}) {
+																								if j == nil {
+																									return fmt.Errorf("please provide valid non-empty enum value of field hash_algorithms")
+																								}
+																								hash_algorithmsList = append(hash_algorithmsList, ves_io_schema.HashAlgorithm(ves_io_schema.HashAlgorithm_value[j.(string)]))
+																							}
+																							ocspStaplingChoiceInt.CustomHashAlgorithms.HashAlgorithms = hash_algorithmsList
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := cs["disable_ocsp_stapling"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+																				ocspStaplingChoiceTypeFound = true
+																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_DisableOcspStapling{}
+																				ocspStaplingChoiceInt.DisableOcspStapling = &ves_io_schema.Empty{}
+																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+																			}
+
+																			if v, ok := cs["use_system_defaults"]; ok && !isIntfNil(v) && !ocspStaplingChoiceTypeFound {
+
+																				ocspStaplingChoiceTypeFound = true
+																				ocspStaplingChoiceInt := &ves_io_schema.TlsCertificateType_UseSystemDefaults{}
+																				ocspStaplingChoiceInt.UseSystemDefaults = &ves_io_schema.Empty{}
+																				signingCertChoiceInt.CustomCertificate.OcspStaplingChoice = ocspStaplingChoiceInt
+
+																			}
+
+																			if v, ok := cs["private_key"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				privateKey := &ves_io_schema.SecretType{}
+																				signingCertChoiceInt.CustomCertificate.PrivateKey = privateKey
+																				for _, set := range sl {
+																					if set != nil {
+																						privateKeyMapStrToI := set.(map[string]interface{})
+
+																						if v, ok := privateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																							privateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																							for _, set := range sl {
+																								if set != nil {
+																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.Location = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																							privateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						secretInfoOneofTypeFound := false
+
+																						if v, ok := privateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_BlindfoldSecretInfo{}
+																							secretInfoOneofInt.BlindfoldSecretInfo = &ves_io_schema.BlindfoldSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["decryption_provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.BlindfoldSecretInfo.DecryptionProvider = v.(string)
+
+																									}
+
+																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.BlindfoldSecretInfo.Location = v.(string)
+
+																									}
+
+																									if v, ok := cs["store_provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.BlindfoldSecretInfo.StoreProvider = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["clear_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_ClearSecretInfo{}
+																							secretInfoOneofInt.ClearSecretInfo = &ves_io_schema.ClearSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.ClearSecretInfo.Provider = v.(string)
+
+																									}
+
+																									if v, ok := cs["url"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																									}
+
+																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																									}
+
+																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																									}
+
+																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := privateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																							privateKey.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["volterra_certificate"]; ok && !isIntfNil(v) && !signingCertChoiceTypeFound {
+
+																	signingCertChoiceTypeFound = true
+
+																	if v.(bool) {
+																		signingCertChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraCertificate{}
+																		signingCertChoiceInt.VolterraCertificate = &ves_io_schema.Empty{}
+																		tlsInterceptionChoiceInt.TlsIntercept.SigningCertChoice = signingCertChoiceInt
+																	}
+
+																}
+
+																trustedCaChoiceTypeFound := false
+
+																if v, ok := cs["trusted_ca_url"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+																	trustedCaChoiceTypeFound = true
+																	trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_TrustedCaUrl{}
+
+																	tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+
+																	trustedCaChoiceInt.TrustedCaUrl = v.(string)
+
+																}
+
+																if v, ok := cs["volterra_trusted_ca"]; ok && !isIntfNil(v) && !trustedCaChoiceTypeFound {
+
+																	trustedCaChoiceTypeFound = true
+
+																	if v.(bool) {
+																		trustedCaChoiceInt := &ves_io_schema.TlsInterceptionType_VolterraTrustedCa{}
+																		trustedCaChoiceInt.VolterraTrustedCa = &ves_io_schema.Empty{}
+																		tlsInterceptionChoiceInt.TlsIntercept.TrustedCaChoice = trustedCaChoiceInt
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["white_listed_ports"]; ok && !isIntfNil(v) {
+
+														ls := make([]uint32, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															ls[i] = uint32(v.(int))
+														}
+														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPorts = ls
+
+													}
+
+													if v, ok := cs["white_listed_prefixes"]; ok && !isIntfNil(v) {
+
+														ls := make([]string, len(v.([]interface{})))
+														for i, v := range v.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field white_listed_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														forwardProxyChoiceInt.EnableForwardProxy.WhiteListedPrefixes = ls
 
 													}
 
@@ -11958,6 +19630,41 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																			}
 
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
 																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -11978,6 +19685,10 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																							pools[i].EndIp = w.(string)
 																						}
 
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
 																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
 																							pools[i].StartIp = w.(string)
 																						}
@@ -11989,6 +19700,12 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
 
 																}
 
@@ -12107,6 +19824,10 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -12115,6 +19836,59 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																									break
 																								}
 																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	addressChoiceInt.StaticIp.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -12141,6 +19915,12 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 
 																			}
 
@@ -12254,6 +20034,41 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																									}
 
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
+																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																												}
+
+																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																												}
+
+																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -12272,6 +20087,10 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
+																												}
+
+																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -12527,6 +20346,10 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -12535,6 +20358,59 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																									break
 																								}
 																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -12561,6 +20437,12 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 
 																			}
 
@@ -12610,6 +20492,53 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 													}
 
 													networkChoiceTypeFound := false
+
+													if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+														networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_InsideNetwork{}
+														networkChoiceInt.InsideNetwork = &ves_io_schema_views.ObjectRefType{}
+														interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Tenant = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["ip_fabric_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+
+														if v.(bool) {
+															networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_IpFabricNetwork{}
+															networkChoiceInt.IpFabricNetwork = &ves_io_schema.Empty{}
+															interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
 
 													if v, ok := cs["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
@@ -12666,6 +20595,41 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 															networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_SiteLocalNetwork{}
 															networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
 															interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["srv6_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+														networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_Srv6Network{}
+														networkChoiceInt.Srv6Network = &ves_io_schema_views.ObjectRefType{}
+														interfaceChoiceInt.EthernetInterface.NetworkChoice = networkChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.Srv6Network.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.Srv6Network.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.Srv6Network.Tenant = v.(string)
+
+																}
+
+															}
 														}
 
 													}
@@ -12769,6 +20733,698 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 										}
 
+										if v, ok := interfacesMapStrToI["loopback_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
+
+											interfaceChoiceTypeFound = true
+											interfaceChoiceInt := &ves_io_schema_views_voltstack_site.Interface_LoopbackInterface{}
+											interfaceChoiceInt.LoopbackInterface = &ves_io_schema_network_interface.LoopbackInterfaceType{}
+											interfaces[i].InterfaceChoice = interfaceChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													addressChoiceTypeFound := false
+
+													if v, ok := cs["dhcp_client"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+
+														if v.(bool) {
+															addressChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_DhcpClient{}
+															addressChoiceInt.DhcpClient = &ves_io_schema.Empty{}
+															interfaceChoiceInt.LoopbackInterface.AddressChoice = addressChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["dhcp_server"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_DhcpServer{}
+														addressChoiceInt.DhcpServer = &ves_io_schema_network_interface.DHCPServerParametersType{}
+														interfaceChoiceInt.LoopbackInterface.AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["dhcp_networks"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	dhcpNetworks := make([]*ves_io_schema_network_interface.DHCPNetworkType, len(sl))
+																	addressChoiceInt.DhcpServer.DhcpNetworks = dhcpNetworks
+																	for i, set := range sl {
+																		if set != nil {
+																			dhcpNetworks[i] = &ves_io_schema_network_interface.DHCPNetworkType{}
+																			dhcpNetworksMapStrToI := set.(map[string]interface{})
+
+																			dnsChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dns_address"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+																				dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DnsAddress{}
+
+																				dhcpNetworks[i].DnsChoice = dnsChoiceInt
+
+																				dnsChoiceInt.DnsAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["same_as_dgw"]; ok && !isIntfNil(v) && !dnsChoiceTypeFound {
+
+																				dnsChoiceTypeFound = true
+
+																				if v.(bool) {
+																					dnsChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_SameAsDgw{}
+																					dnsChoiceInt.SameAsDgw = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].DnsChoice = dnsChoiceInt
+																				}
+
+																			}
+
+																			gatewayChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["dgw_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+																				gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_DgwAddress{}
+
+																				dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+
+																				gatewayChoiceInt.DgwAddress = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["first_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_FirstAddress{}
+																					gatewayChoiceInt.FirstAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["last_address"]; ok && !isIntfNil(v) && !gatewayChoiceTypeFound {
+
+																				gatewayChoiceTypeFound = true
+
+																				if v.(bool) {
+																					gatewayChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_LastAddress{}
+																					gatewayChoiceInt.LastAddress = &ves_io_schema.Empty{}
+																					dhcpNetworks[i].GatewayChoice = gatewayChoiceInt
+																				}
+
+																			}
+
+																			networkPrefixChoiceTypeFound := false
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefix{}
+
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				networkPrefixChoiceInt.NetworkPrefix = v.(string)
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
+
+																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := dhcpNetworksMapStrToI["pools"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				pools := make([]*ves_io_schema_network_interface.DHCPPoolType, len(sl))
+																				dhcpNetworks[i].Pools = pools
+																				for i, set := range sl {
+																					if set != nil {
+																						pools[i] = &ves_io_schema_network_interface.DHCPPoolType{}
+																						poolsMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
+																							pools[i].EndIp = w.(string)
+																						}
+
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
+																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
+																							pools[i].StartIp = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
+
+																}
+
+																if v, ok := cs["fixed_ip_map"]; ok && !isIntfNil(v) {
+
+																	ms := map[string]string{}
+																	for k, v := range v.(map[string]interface{}) {
+																		ms[k] = v.(string)
+																	}
+																	addressChoiceInt.DhcpServer.FixedIpMap = ms
+																}
+
+																interfacesAddressingChoiceTypeFound := false
+
+																if v, ok := cs["automatic_from_end"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromEnd{}
+																		interfacesAddressingChoiceInt.AutomaticFromEnd = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["automatic_from_start"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+
+																	if v.(bool) {
+																		interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_AutomaticFromStart{}
+																		interfacesAddressingChoiceInt.AutomaticFromStart = &ves_io_schema.Empty{}
+																		addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+																	}
+
+																}
+
+																if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) && !interfacesAddressingChoiceTypeFound {
+
+																	interfacesAddressingChoiceTypeFound = true
+																	interfacesAddressingChoiceInt := &ves_io_schema_network_interface.DHCPServerParametersType_InterfaceIpMap{}
+																	interfacesAddressingChoiceInt.InterfaceIpMap = &ves_io_schema_network_interface.DHCPInterfaceIPType{}
+																	addressChoiceInt.DhcpServer.InterfacesAddressingChoice = interfacesAddressingChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				ms := map[string]string{}
+																				for k, v := range v.(map[string]interface{}) {
+																					ms[k] = v.(string)
+																				}
+																				interfacesAddressingChoiceInt.InterfaceIpMap.InterfaceIpMap = ms
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["static_ip"]; ok && !isIntfNil(v) && !addressChoiceTypeFound {
+
+														addressChoiceTypeFound = true
+														addressChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_StaticIp{}
+														addressChoiceInt.StaticIp = &ves_io_schema_network_interface.StaticIPParametersType{}
+														interfaceChoiceInt.LoopbackInterface.AddressChoice = addressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																networkPrefixChoiceTypeFound := false
+
+																if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+																	networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+																	addressChoiceInt.StaticIp.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+																				networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+																				for _, set := range sl {
+																					if set != nil {
+																						interfaceIpMapMapStrToI := set.(map[string]interface{})
+																						key, ok := interfaceIpMapMapStrToI["name"]
+																						if ok && !isIntfNil(key) {
+																							interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																							val, _ := interfaceIpMapMapStrToI["value"]
+
+																							interfaceIpMapVals := val.([]interface{})
+																							for _, intVal := range interfaceIpMapVals {
+																								if intVal != nil {
+
+																									interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																									if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].IpAddress = w.(string)
+																									}
+
+																									// break after one loop
+																									break
+																								}
+																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	addressChoiceInt.StaticIp.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+																	networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																	addressChoiceInt.StaticIp.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["device"]; ok && !isIntfNil(v) {
+
+														interfaceChoiceInt.LoopbackInterface.Device = v.(string)
+
+													}
+
+													ipv6AddressChoiceTypeFound := false
+
+													if v, ok := cs["no_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+
+														if v.(bool) {
+															ipv6AddressChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_NoIpv6Address{}
+															ipv6AddressChoiceInt.NoIpv6Address = &ves_io_schema.Empty{}
+															interfaceChoiceInt.LoopbackInterface.Ipv6AddressChoice = ipv6AddressChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["static_ipv6_address"]; ok && !isIntfNil(v) && !ipv6AddressChoiceTypeFound {
+
+														ipv6AddressChoiceTypeFound = true
+														ipv6AddressChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_StaticIpv6Address{}
+														ipv6AddressChoiceInt.StaticIpv6Address = &ves_io_schema_network_interface.StaticIPParametersType{}
+														interfaceChoiceInt.LoopbackInterface.Ipv6AddressChoice = ipv6AddressChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																networkPrefixChoiceTypeFound := false
+
+																if v, ok := cs["cluster_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_ClusterStaticIp{}
+																	networkPrefixChoiceInt.ClusterStaticIp = &ves_io_schema_network_interface.StaticIpParametersClusterType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["interface_ip_map"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				interfaceIpMap := make(map[string]*ves_io_schema_network_interface.StaticIpParametersNodeType)
+																				networkPrefixChoiceInt.ClusterStaticIp.InterfaceIpMap = interfaceIpMap
+																				for _, set := range sl {
+																					if set != nil {
+																						interfaceIpMapMapStrToI := set.(map[string]interface{})
+																						key, ok := interfaceIpMapMapStrToI["name"]
+																						if ok && !isIntfNil(key) {
+																							interfaceIpMap[key.(string)] = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																							val, _ := interfaceIpMapMapStrToI["value"]
+
+																							interfaceIpMapVals := val.([]interface{})
+																							for _, intVal := range interfaceIpMapVals {
+																								if intVal != nil {
+
+																									interfaceIpMapStaticMap := intVal.(map[string]interface{})
+
+																									if w, ok := interfaceIpMapStaticMap["default_gw"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
+																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].IpAddress = w.(string)
+																									}
+
+																									// break after one loop
+																									break
+																								}
+																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["node_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_NodeStaticIp{}
+																	networkPrefixChoiceInt.NodeStaticIp = &ves_io_schema_network_interface.StaticIpParametersNodeType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["ip_address"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.IpAddress = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
+
+														interfaceChoiceInt.LoopbackInterface.Mtu = uint32(v.(int))
+
+													}
+
+													networkChoiceTypeFound := false
+
+													if v, ok := cs["ip_fabric_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+
+														if v.(bool) {
+															networkChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_IpFabricNetwork{}
+															networkChoiceInt.IpFabricNetwork = &ves_io_schema.Empty{}
+															interfaceChoiceInt.LoopbackInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+
+														if v.(bool) {
+															networkChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_SiteLocalInsideNetwork{}
+															networkChoiceInt.SiteLocalInsideNetwork = &ves_io_schema.Empty{}
+															interfaceChoiceInt.LoopbackInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["site_local_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+
+														if v.(bool) {
+															networkChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_SiteLocalNetwork{}
+															networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
+															interfaceChoiceInt.LoopbackInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
+
+													nodeChoiceTypeFound := false
+
+													if v, ok := cs["cluster"]; ok && !isIntfNil(v) && !nodeChoiceTypeFound {
+
+														nodeChoiceTypeFound = true
+
+														if v.(bool) {
+															nodeChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_Cluster{}
+															nodeChoiceInt.Cluster = &ves_io_schema.Empty{}
+															interfaceChoiceInt.LoopbackInterface.NodeChoice = nodeChoiceInt
+														}
+
+													}
+
+													if v, ok := cs["node"]; ok && !isIntfNil(v) && !nodeChoiceTypeFound {
+
+														nodeChoiceTypeFound = true
+														nodeChoiceInt := &ves_io_schema_network_interface.LoopbackInterfaceType_Node{}
+
+														interfaceChoiceInt.LoopbackInterface.NodeChoice = nodeChoiceInt
+
+														nodeChoiceInt.Node = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
 										if v, ok := interfacesMapStrToI["tunnel_interface"]; ok && !isIntfNil(v) && !interfaceChoiceTypeFound {
 
 											interfaceChoiceTypeFound = true
@@ -12781,6 +21437,40 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 												if set != nil {
 													cs := set.(map[string]interface{})
 
+													if v, ok := cs["cloud_connect"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														cloudConnectInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+														interfaceChoiceInt.TunnelInterface.CloudConnect = cloudConnectInt
+														for i, ps := range sl {
+															if ps != nil {
+
+																ccMapToStrVal := ps.(map[string]interface{})
+																cloudConnectInt[i] = &ves_io_schema.ObjectRefType{}
+
+																cloudConnectInt[i].Kind = "cloud_connect"
+
+																if v, ok := ccMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	cloudConnectInt[i].Name = v.(string)
+																}
+
+																if v, ok := ccMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	cloudConnectInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := ccMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	cloudConnectInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := ccMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	cloudConnectInt[i].Uid = v.(string)
+																}
+
+															}
+														}
+
+													}
+
 													if v, ok := cs["mtu"]; ok && !isIntfNil(v) {
 
 														interfaceChoiceInt.TunnelInterface.Mtu = uint32(v.(int))
@@ -12788,6 +21478,41 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 													}
 
 													networkChoiceTypeFound := false
+
+													if v, ok := cs["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+														networkChoiceInt := &ves_io_schema_network_interface.TunnelInterfaceType_InsideNetwork{}
+														networkChoiceInt.InsideNetwork = &ves_io_schema_views.ObjectRefType{}
+														interfaceChoiceInt.TunnelInterface.NetworkChoice = networkChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Tenant = v.(string)
+
+																}
+
+															}
+														}
+
+													}
 
 													if v, ok := cs["site_local_inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
@@ -12814,6 +21539,18 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 													}
 
 													nodeChoiceTypeFound := false
+
+													if v, ok := cs["cluster"]; ok && !isIntfNil(v) && !nodeChoiceTypeFound {
+
+														nodeChoiceTypeFound = true
+
+														if v.(bool) {
+															nodeChoiceInt := &ves_io_schema_network_interface.TunnelInterfaceType_Cluster{}
+															nodeChoiceInt.Cluster = &ves_io_schema.Empty{}
+															interfaceChoiceInt.TunnelInterface.NodeChoice = nodeChoiceInt
+														}
+
+													}
 
 													if v, ok := cs["node"]; ok && !isIntfNil(v) && !nodeChoiceTypeFound {
 
@@ -12878,6 +21615,10 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -12886,6 +21627,59 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																									break
 																								}
 																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := staticIpMapStrToI["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	staticIp.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -12912,6 +21706,12 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 
 																			}
 
@@ -12998,22 +21798,24 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 								enhancedFirewallPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								networkPolicyChoiceInt.ActiveEnhancedFirewallPolicies.EnhancedFirewallPolicies = enhancedFirewallPoliciesInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									efpMapToStrVal := ps.(map[string]interface{})
-									enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+										efpMapToStrVal := ps.(map[string]interface{})
+										enhancedFirewallPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
-										enhancedFirewallPoliciesInt[i].Name = v.(string)
+										if v, ok := efpMapToStrVal["name"]; ok && !isIntfNil(v) {
+											enhancedFirewallPoliciesInt[i].Name = v.(string)
+										}
+
+										if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											enhancedFirewallPoliciesInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											enhancedFirewallPoliciesInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := efpMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										enhancedFirewallPoliciesInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := efpMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										enhancedFirewallPoliciesInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -13041,22 +21843,24 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 								networkPoliciesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								networkPolicyChoiceInt.ActiveNetworkPolicies.NetworkPolicies = networkPoliciesInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									npMapToStrVal := ps.(map[string]interface{})
-									networkPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
+										npMapToStrVal := ps.(map[string]interface{})
+										networkPoliciesInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := npMapToStrVal["name"]; ok && !isIntfNil(v) {
-										networkPoliciesInt[i].Name = v.(string)
+										if v, ok := npMapToStrVal["name"]; ok && !isIntfNil(v) {
+											networkPoliciesInt[i].Name = v.(string)
+										}
+
+										if v, ok := npMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											networkPoliciesInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := npMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											networkPoliciesInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := npMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										networkPoliciesInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := npMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										networkPoliciesInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -13139,6 +21943,441 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 				}
 
+				sliChoiceTypeFound := false
+
+				if v, ok := cs["default_sli_config"]; ok && !isIntfNil(v) && !sliChoiceTypeFound {
+
+					sliChoiceTypeFound = true
+
+					if v.(bool) {
+						sliChoiceInt := &ves_io_schema_views_voltstack_site.VssNetworkConfiguration_DefaultSliConfig{}
+						sliChoiceInt.DefaultSliConfig = &ves_io_schema.Empty{}
+						networkCfgChoiceInt.CustomNetworkConfig.SliChoice = sliChoiceInt
+					}
+
+				}
+
+				if v, ok := cs["sli_config"]; ok && !isIntfNil(v) && !sliChoiceTypeFound {
+
+					sliChoiceTypeFound = true
+					sliChoiceInt := &ves_io_schema_views_voltstack_site.VssNetworkConfiguration_SliConfig{}
+					sliChoiceInt.SliConfig = &ves_io_schema_views_voltstack_site.SliVnConfiguration{}
+					networkCfgChoiceInt.CustomNetworkConfig.SliChoice = sliChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							staticRouteChoiceTypeFound := false
+
+							if v, ok := cs["no_static_routes"]; ok && !isIntfNil(v) && !staticRouteChoiceTypeFound {
+
+								staticRouteChoiceTypeFound = true
+
+								if v.(bool) {
+									staticRouteChoiceInt := &ves_io_schema_views_voltstack_site.SliVnConfiguration_NoStaticRoutes{}
+									staticRouteChoiceInt.NoStaticRoutes = &ves_io_schema.Empty{}
+									sliChoiceInt.SliConfig.StaticRouteChoice = staticRouteChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["static_routes"]; ok && !isIntfNil(v) && !staticRouteChoiceTypeFound {
+
+								staticRouteChoiceTypeFound = true
+								staticRouteChoiceInt := &ves_io_schema_views_voltstack_site.SliVnConfiguration_StaticRoutes{}
+								staticRouteChoiceInt.StaticRoutes = &ves_io_schema_views_voltstack_site.StaticRoutesListType{}
+								sliChoiceInt.SliConfig.StaticRouteChoice = staticRouteChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["static_routes"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											staticRoutes := make([]*ves_io_schema_virtual_network.StaticRouteViewType, len(sl))
+											staticRouteChoiceInt.StaticRoutes.StaticRoutes = staticRoutes
+											for i, set := range sl {
+												if set != nil {
+													staticRoutes[i] = &ves_io_schema_virtual_network.StaticRouteViewType{}
+													staticRoutesMapStrToI := set.(map[string]interface{})
+
+													if v, ok := staticRoutesMapStrToI["attrs"]; ok && !isIntfNil(v) {
+
+														attrsList := []ves_io_schema.RouteAttrType{}
+														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
+															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
+														}
+														staticRoutes[i].Attrs = attrsList
+
+													}
+
+													if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
+														ls := make([]string, len(w.([]interface{})))
+														for i, v := range w.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														staticRoutes[i].IpPrefixes = ls
+													}
+
+													nextHopChoiceTypeFound := false
+
+													if v, ok := staticRoutesMapStrToI["default_gateway"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+
+														if v.(bool) {
+															nextHopChoiceInt := &ves_io_schema_virtual_network.StaticRouteViewType_DefaultGateway{}
+															nextHopChoiceInt.DefaultGateway = &ves_io_schema.Empty{}
+															staticRoutes[i].NextHopChoice = nextHopChoiceInt
+														}
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticRouteViewType_Interface{}
+														nextHopChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	nextHopChoiceInt.Interface.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	nextHopChoiceInt.Interface.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	nextHopChoiceInt.Interface.Tenant = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["ip_address"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticRouteViewType_IpAddress{}
+
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														nextHopChoiceInt.IpAddress = v.(string)
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["node_interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticRouteViewType_NodeInterface{}
+														nextHopChoiceInt.NodeInterface = &ves_io_schema.NodeInterfaceType{}
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["list"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	list := make([]*ves_io_schema.NodeInterfaceInfo, len(sl))
+																	nextHopChoiceInt.NodeInterface.List = list
+																	for i, set := range sl {
+																		if set != nil {
+																			list[i] = &ves_io_schema.NodeInterfaceInfo{}
+																			listMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := listMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																				list[i].Interface = intfInt
+																				for i, ps := range sl {
+																					if ps != nil {
+
+																						iMapToStrVal := ps.(map[string]interface{})
+																						intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																						intfInt[i].Kind = "network_interface"
+
+																						if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							intfInt[i].Name = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							intfInt[i].Namespace = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							intfInt[i].Tenant = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																							intfInt[i].Uid = v.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if w, ok := listMapStrToI["node"]; ok && !isIntfNil(w) {
+																				list[i].Node = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							staticV6RouteChoiceTypeFound := false
+
+							if v, ok := cs["no_v6_static_routes"]; ok && !isIntfNil(v) && !staticV6RouteChoiceTypeFound {
+
+								staticV6RouteChoiceTypeFound = true
+
+								if v.(bool) {
+									staticV6RouteChoiceInt := &ves_io_schema_views_voltstack_site.SliVnConfiguration_NoV6StaticRoutes{}
+									staticV6RouteChoiceInt.NoV6StaticRoutes = &ves_io_schema.Empty{}
+									sliChoiceInt.SliConfig.StaticV6RouteChoice = staticV6RouteChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["static_v6_routes"]; ok && !isIntfNil(v) && !staticV6RouteChoiceTypeFound {
+
+								staticV6RouteChoiceTypeFound = true
+								staticV6RouteChoiceInt := &ves_io_schema_views_voltstack_site.SliVnConfiguration_StaticV6Routes{}
+								staticV6RouteChoiceInt.StaticV6Routes = &ves_io_schema_virtual_network.StaticV6RoutesListType{}
+								sliChoiceInt.SliConfig.StaticV6RouteChoice = staticV6RouteChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["static_routes"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											staticRoutes := make([]*ves_io_schema_virtual_network.StaticV6RouteViewType, len(sl))
+											staticV6RouteChoiceInt.StaticV6Routes.StaticRoutes = staticRoutes
+											for i, set := range sl {
+												if set != nil {
+													staticRoutes[i] = &ves_io_schema_virtual_network.StaticV6RouteViewType{}
+													staticRoutesMapStrToI := set.(map[string]interface{})
+
+													if v, ok := staticRoutesMapStrToI["attrs"]; ok && !isIntfNil(v) {
+
+														attrsList := []ves_io_schema.RouteAttrType{}
+														for _, j := range v.([]interface{}) {
+															if j == nil {
+																return fmt.Errorf("please provide valid non-empty enum value of field attrs")
+															}
+															attrsList = append(attrsList, ves_io_schema.RouteAttrType(ves_io_schema.RouteAttrType_value[j.(string)]))
+														}
+														staticRoutes[i].Attrs = attrsList
+
+													}
+
+													if w, ok := staticRoutesMapStrToI["ip_prefixes"]; ok && !isIntfNil(w) {
+														ls := make([]string, len(w.([]interface{})))
+														for i, v := range w.([]interface{}) {
+															if v == nil {
+																return fmt.Errorf("please provide valid non-empty string value of field ip_prefixes")
+															}
+															if str, ok := v.(string); ok {
+																ls[i] = str
+															}
+														}
+														staticRoutes[i].IpPrefixes = ls
+													}
+
+													nextHopChoiceTypeFound := false
+
+													if v, ok := staticRoutesMapStrToI["default_gateway"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+
+														if v.(bool) {
+															nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_DefaultGateway{}
+															nextHopChoiceInt.DefaultGateway = &ves_io_schema.Empty{}
+															staticRoutes[i].NextHopChoice = nextHopChoiceInt
+														}
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_Interface{}
+														nextHopChoiceInt.Interface = &ves_io_schema_views.ObjectRefType{}
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	nextHopChoiceInt.Interface.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	nextHopChoiceInt.Interface.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	nextHopChoiceInt.Interface.Tenant = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["ip_address"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_IpAddress{}
+
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														nextHopChoiceInt.IpAddress = v.(string)
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["node_interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_NodeInterface{}
+														nextHopChoiceInt.NodeInterface = &ves_io_schema.NodeInterfaceType{}
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["list"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	list := make([]*ves_io_schema.NodeInterfaceInfo, len(sl))
+																	nextHopChoiceInt.NodeInterface.List = list
+																	for i, set := range sl {
+																		if set != nil {
+																			list[i] = &ves_io_schema.NodeInterfaceInfo{}
+																			listMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := listMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																				list[i].Interface = intfInt
+																				for i, ps := range sl {
+																					if ps != nil {
+
+																						iMapToStrVal := ps.(map[string]interface{})
+																						intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																						intfInt[i].Kind = "network_interface"
+
+																						if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							intfInt[i].Name = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							intfInt[i].Namespace = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							intfInt[i].Tenant = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																							intfInt[i].Uid = v.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if w, ok := listMapStrToI["node"]; ok && !isIntfNil(w) {
+																				list[i].Node = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+						}
+					}
+
+				}
+
 				sloChoiceTypeFound := false
 
 				if v, ok := cs["default_config"]; ok && !isIntfNil(v) && !sloChoiceTypeFound {
@@ -13210,6 +22449,34 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 									dcClusterGroupChoiceInt := &ves_io_schema_views_voltstack_site.VnConfiguration_NoDcClusterGroup{}
 									dcClusterGroupChoiceInt.NoDcClusterGroup = &ves_io_schema.Empty{}
 									sloChoiceInt.SloConfig.DcClusterGroupChoice = dcClusterGroupChoiceInt
+								}
+
+							}
+
+							if v, ok := cs["dc_cluster_group_interface"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								dcClusterGroupInterfaceInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+								sloChoiceInt.SloConfig.DcClusterGroupInterface = dcClusterGroupInterfaceInt
+								for i, ps := range sl {
+									if ps != nil {
+
+										dcgiMapToStrVal := ps.(map[string]interface{})
+										dcClusterGroupInterfaceInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+										if v, ok := dcgiMapToStrVal["name"]; ok && !isIntfNil(v) {
+											dcClusterGroupInterfaceInt[i].Name = v.(string)
+										}
+
+										if v, ok := dcgiMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											dcClusterGroupInterfaceInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := dcgiMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											dcClusterGroupInterfaceInt[i].Tenant = v.(string)
+										}
+
+									}
 								}
 
 							}
@@ -13345,6 +22612,76 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 													}
 
+													if v, ok := staticRoutesMapStrToI["node_interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticRouteViewType_NodeInterface{}
+														nextHopChoiceInt.NodeInterface = &ves_io_schema.NodeInterfaceType{}
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["list"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	list := make([]*ves_io_schema.NodeInterfaceInfo, len(sl))
+																	nextHopChoiceInt.NodeInterface.List = list
+																	for i, set := range sl {
+																		if set != nil {
+																			list[i] = &ves_io_schema.NodeInterfaceInfo{}
+																			listMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := listMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																				list[i].Interface = intfInt
+																				for i, ps := range sl {
+																					if ps != nil {
+
+																						iMapToStrVal := ps.(map[string]interface{})
+																						intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																						intfInt[i].Kind = "network_interface"
+
+																						if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							intfInt[i].Name = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							intfInt[i].Namespace = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							intfInt[i].Tenant = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																							intfInt[i].Uid = v.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if w, ok := listMapStrToI["node"]; ok && !isIntfNil(w) {
+																				list[i].Node = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
+
+													}
+
 												}
 											}
 
@@ -13474,6 +22811,76 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 														staticRoutes[i].NextHopChoice = nextHopChoiceInt
 
 														nextHopChoiceInt.IpAddress = v.(string)
+
+													}
+
+													if v, ok := staticRoutesMapStrToI["node_interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+														nextHopChoiceTypeFound = true
+														nextHopChoiceInt := &ves_io_schema_virtual_network.StaticV6RouteViewType_NodeInterface{}
+														nextHopChoiceInt.NodeInterface = &ves_io_schema.NodeInterfaceType{}
+														staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["list"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	list := make([]*ves_io_schema.NodeInterfaceInfo, len(sl))
+																	nextHopChoiceInt.NodeInterface.List = list
+																	for i, set := range sl {
+																		if set != nil {
+																			list[i] = &ves_io_schema.NodeInterfaceInfo{}
+																			listMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := listMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																				list[i].Interface = intfInt
+																				for i, ps := range sl {
+																					if ps != nil {
+
+																						iMapToStrVal := ps.(map[string]interface{})
+																						intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																						intfInt[i].Kind = "network_interface"
+
+																						if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							intfInt[i].Name = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							intfInt[i].Namespace = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							intfInt[i].Tenant = v.(string)
+																						}
+
+																						if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																							intfInt[i].Uid = v.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if w, ok := listMapStrToI["node"]; ok && !isIntfNil(w) {
+																				list[i].Node = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+															}
+														}
 
 													}
 
@@ -13791,6 +23198,76 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 											staticRoutes[i].NextHopChoice = nextHopChoiceInt
 
 											nextHopChoiceInt.IpAddress = v.(string)
+
+										}
+
+										if v, ok := staticRoutesMapStrToI["node_interface"]; ok && !isIntfNil(v) && !nextHopChoiceTypeFound {
+
+											nextHopChoiceTypeFound = true
+											nextHopChoiceInt := &ves_io_schema_virtual_network.StaticRouteViewType_NodeInterface{}
+											nextHopChoiceInt.NodeInterface = &ves_io_schema.NodeInterfaceType{}
+											staticRoutes[i].NextHopChoice = nextHopChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["list"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														list := make([]*ves_io_schema.NodeInterfaceInfo, len(sl))
+														nextHopChoiceInt.NodeInterface.List = list
+														for i, set := range sl {
+															if set != nil {
+																list[i] = &ves_io_schema.NodeInterfaceInfo{}
+																listMapStrToI := set.(map[string]interface{})
+
+																if v, ok := listMapStrToI["interface"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	intfInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+																	list[i].Interface = intfInt
+																	for i, ps := range sl {
+																		if ps != nil {
+
+																			iMapToStrVal := ps.(map[string]interface{})
+																			intfInt[i] = &ves_io_schema.ObjectRefType{}
+
+																			intfInt[i].Kind = "network_interface"
+
+																			if v, ok := iMapToStrVal["name"]; ok && !isIntfNil(v) {
+																				intfInt[i].Name = v.(string)
+																			}
+
+																			if v, ok := iMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																				intfInt[i].Namespace = v.(string)
+																			}
+
+																			if v, ok := iMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																				intfInt[i].Tenant = v.(string)
+																			}
+
+																			if v, ok := iMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																				intfInt[i].Uid = v.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+																if w, ok := listMapStrToI["node"]; ok && !isIntfNil(w) {
+																	list[i].Node = w.(string)
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
 
 										}
 
@@ -14163,6 +23640,12 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 													}
 
+													if v, ok := cs["csi_version"]; ok && !isIntfNil(v) {
+
+														deviceChoiceInt.HpeStorage.CsiVersion = v.(string)
+
+													}
+
 													if v, ok := cs["iscsi_chap_password"]; ok && !isIntfNil(v) {
 
 														sl := v.([]interface{})
@@ -14171,6 +23654,38 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 														for _, set := range sl {
 															if set != nil {
 																iscsiChapPasswordMapStrToI := set.(map[string]interface{})
+
+																if v, ok := iscsiChapPasswordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																	iscsiChapPassword.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																	for _, set := range sl {
+																		if set != nil {
+																			blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																			}
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.Location = w.(string)
+																			}
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := iscsiChapPasswordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																	iscsiChapPassword.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
 
 																secretInfoOneofTypeFound := false
 
@@ -14238,6 +23753,76 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																}
 
+																if v, ok := iscsiChapPasswordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																	secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																	iscsiChapPassword.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																			}
+
+																			if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																			}
+
+																			if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																			}
+
+																			if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := iscsiChapPasswordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																	secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																	iscsiChapPassword.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
 															}
 														}
 
@@ -14249,6 +23834,12 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 													}
 
+													if v, ok := cs["log_level"]; ok && !isIntfNil(v) {
+
+														deviceChoiceInt.HpeStorage.LogLevel = v.(string)
+
+													}
+
 													if v, ok := cs["password"]; ok && !isIntfNil(v) {
 
 														sl := v.([]interface{})
@@ -14257,6 +23848,38 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 														for _, set := range sl {
 															if set != nil {
 																passwordMapStrToI := set.(map[string]interface{})
+
+																if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																	sl := v.([]interface{})
+																	blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																	password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																	for _, set := range sl {
+																		if set != nil {
+																			blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																			}
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.Location = w.(string)
+																			}
+
+																			if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																				blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																	password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																}
 
 																secretInfoOneofTypeFound := false
 
@@ -14316,6 +23939,76 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																			if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																				secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																	secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																	password.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																			}
+
+																			if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																			}
+
+																			if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																			}
+
+																			if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
+																			if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																	secretInfoOneofTypeFound = true
+																	secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																	secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																	password.SecretInfoOneof = secretInfoOneofInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																				secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																			}
 
@@ -14445,6 +24138,38 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																		if set != nil {
 																			clientPrivateKeyMapStrToI := set.(map[string]interface{})
 
+																			if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																				clientPrivateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																				for _, set := range sl {
+																					if set != nil {
+																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.Location = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																				clientPrivateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
 																			secretInfoOneofTypeFound := false
 
 																			if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -14503,6 +24228,76 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																				clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																						}
+
+																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																						}
+
+																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																						}
+
+																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																				clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																						}
 
@@ -14600,6 +24395,38 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																		if set != nil {
 																			passwordMapStrToI := set.(map[string]interface{})
 
+																			if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																				password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																				for _, set := range sl {
+																					if set != nil {
+																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.Location = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																				password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
 																			secretInfoOneofTypeFound := false
 
 																			if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -14658,6 +24485,76 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																						}
+
+																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																						}
+
+																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																						}
+
+																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																						}
 
@@ -14966,6 +24863,38 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																					if set != nil {
 																						chapInitiatorSecretMapStrToI := set.(map[string]interface{})
 
+																						if v, ok := chapInitiatorSecretMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																							chapInitiatorSecret.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																							for _, set := range sl {
+																								if set != nil {
+																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.Location = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := chapInitiatorSecretMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																							chapInitiatorSecret.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
 																						secretInfoOneofTypeFound := false
 
 																						if v, ok := chapInitiatorSecretMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -15032,6 +24961,76 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																						}
 
+																						if v, ok := chapInitiatorSecretMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																							chapInitiatorSecret.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																									}
+
+																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																									}
+
+																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																									}
+
+																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := chapInitiatorSecretMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																							chapInitiatorSecret.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
 																					}
 																				}
 
@@ -15045,6 +25044,38 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																				for _, set := range sl {
 																					if set != nil {
 																						chapTargetInitiatorSecretMapStrToI := set.(map[string]interface{})
+
+																						if v, ok := chapTargetInitiatorSecretMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																							sl := v.([]interface{})
+																							blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																							chapTargetInitiatorSecret.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																							for _, set := range sl {
+																								if set != nil {
+																									blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.Location = w.(string)
+																									}
+
+																									if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																										blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := chapTargetInitiatorSecretMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																							chapTargetInitiatorSecret.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
 
 																						secretInfoOneofTypeFound := false
 
@@ -15112,6 +25143,76 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																						}
 
+																						if v, ok := chapTargetInitiatorSecretMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																							secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																							chapTargetInitiatorSecret.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																									}
+
+																									if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																									}
+
+																									if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																									}
+
+																									if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																									}
+
+																									if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																									}
+
+																								}
+																							}
+
+																						}
+
+																						if v, ok := chapTargetInitiatorSecretMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																							secretInfoOneofTypeFound = true
+																							secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																							secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																							chapTargetInitiatorSecret.SecretInfoOneof = secretInfoOneofInt
+
+																							sl := v.([]interface{})
+																							for _, set := range sl {
+																								if set != nil {
+																									cs := set.(map[string]interface{})
+
+																									if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																										secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
+
+																									}
+
+																								}
+																							}
+
+																						}
+
 																					}
 																				}
 
@@ -15148,6 +25249,38 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																	for _, set := range sl {
 																		if set != nil {
 																			clientPrivateKeyMapStrToI := set.(map[string]interface{})
+
+																			if v, ok := clientPrivateKeyMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																				clientPrivateKey.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																				for _, set := range sl {
+																					if set != nil {
+																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.Location = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																				clientPrivateKey.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
 
 																			secretInfoOneofTypeFound := false
 
@@ -15207,6 +25340,76 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																				clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																						}
+
+																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																						}
+
+																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																						}
+
+																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := clientPrivateKeyMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																				clientPrivateKey.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																						}
 
@@ -15304,6 +25507,38 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																		if set != nil {
 																			passwordMapStrToI := set.(map[string]interface{})
 
+																			if v, ok := passwordMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																				password.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																				for _, set := range sl {
+																					if set != nil {
+																						blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.Location = w.(string)
+																						}
+
+																						if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																							blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																				password.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																			}
+
 																			secretInfoOneofTypeFound := false
 
 																			if v, ok := passwordMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -15362,6 +25597,76 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																						if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																							secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																				secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																						}
+
+																						if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																						}
+
+																						if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																						}
+
+																						if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																						}
+
+																						if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																						}
+
+																					}
+																				}
+
+																			}
+
+																			if v, ok := passwordMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																				secretInfoOneofTypeFound = true
+																				secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																				secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																				password.SecretInfoOneof = secretInfoOneofInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																						}
 
@@ -15702,6 +26007,38 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																								if set != nil {
 																									apiTokenMapStrToI := set.(map[string]interface{})
 
+																									if v, ok := apiTokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																										apiToken.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																										for _, set := range sl {
+																											if set != nil {
+																												blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																													blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																												}
+
+																												if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																													blindfoldSecretInfoInternal.Location = w.(string)
+																												}
+
+																												if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																													blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																										apiToken.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																									}
+
 																									secretInfoOneofTypeFound := false
 
 																									if v, ok := apiTokenMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -15760,6 +26097,76 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																												if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																													secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																										secretInfoOneofTypeFound = true
+																										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																										apiToken.SecretInfoOneof = secretInfoOneofInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																												}
+
+																												if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																												}
+
+																												if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																												}
+
+																												if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																												}
+
+																												if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																										secretInfoOneofTypeFound = true
+																										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																										apiToken.SecretInfoOneof = secretInfoOneofInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																												}
 
@@ -15859,6 +26266,38 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																								if set != nil {
 																									apiTokenMapStrToI := set.(map[string]interface{})
 
+																									if v, ok := apiTokenMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+																										sl := v.([]interface{})
+																										blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+																										apiToken.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+																										for _, set := range sl {
+																											if set != nil {
+																												blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+																												if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+																													blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+																												}
+
+																												if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+																													blindfoldSecretInfoInternal.Location = w.(string)
+																												}
+
+																												if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+																													blindfoldSecretInfoInternal.StoreProvider = w.(string)
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+																										apiToken.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																									}
+
 																									secretInfoOneofTypeFound := false
 
 																									if v, ok := apiTokenMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -15917,6 +26356,76 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																												if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 																													secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																										secretInfoOneofTypeFound = true
+																										secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+																										secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+																										apiToken.SecretInfoOneof = secretInfoOneofInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+																												}
+
+																												if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+																												}
+
+																												if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+																												}
+
+																												if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+																												}
+
+																												if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+																												}
+
+																											}
+																										}
+
+																									}
+
+																									if v, ok := apiTokenMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+																										secretInfoOneofTypeFound = true
+																										secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+																										secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+																										apiToken.SecretInfoOneof = secretInfoOneofInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 																												}
 
@@ -16206,6 +26715,41 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																			}
 
+																			if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																				networkPrefixChoiceTypeFound = true
+																				networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPNetworkType_NetworkPrefixAllocator{}
+																				networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																				dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																				sl := v.([]interface{})
+																				for _, set := range sl {
+																					if set != nil {
+																						cs := set.(map[string]interface{})
+
+																						if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																						}
+
+																						if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																						}
+
+																						if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																							networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																						}
+
+																					}
+																				}
+
+																			}
+
 																			if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																				dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -16226,6 +26770,10 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																							pools[i].EndIp = w.(string)
 																						}
 
+																						if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																							pools[i].Exclude = w.(bool)
+																						}
+
 																						if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
 																							pools[i].StartIp = w.(string)
 																						}
@@ -16237,6 +26785,12 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																		}
 																	}
+
+																}
+
+																if v, ok := cs["dhcp_option82_tag"]; ok && !isIntfNil(v) {
+
+																	addressChoiceInt.DhcpServer.DhcpOption82Tag = v.(string)
 
 																}
 
@@ -16355,6 +26909,10 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -16363,6 +26921,59 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																									break
 																								}
 																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	addressChoiceInt.StaticIp.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -16389,6 +27000,12 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 
 																			}
 
@@ -16500,6 +27117,41 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																									}
 
+																									if v, ok := dhcpNetworksMapStrToI["network_prefix_allocator"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																										networkPrefixChoiceTypeFound = true
+																										networkPrefixChoiceInt := &ves_io_schema_network_interface.DHCPIPV6NetworkType_NetworkPrefixAllocator{}
+																										networkPrefixChoiceInt.NetworkPrefixAllocator = &ves_io_schema_views.ObjectRefType{}
+																										dhcpNetworks[i].NetworkPrefixChoice = networkPrefixChoiceInt
+
+																										sl := v.([]interface{})
+																										for _, set := range sl {
+																											if set != nil {
+																												cs := set.(map[string]interface{})
+
+																												if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Name = v.(string)
+
+																												}
+
+																												if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Namespace = v.(string)
+
+																												}
+
+																												if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																													networkPrefixChoiceInt.NetworkPrefixAllocator.Tenant = v.(string)
+
+																												}
+
+																											}
+																										}
+
+																									}
+
 																									if v, ok := dhcpNetworksMapStrToI["pool_settings"]; ok && !isIntfNil(v) {
 
 																										dhcpNetworks[i].PoolSettings = ves_io_schema_network_interface.DHCPPoolSettingType(ves_io_schema_network_interface.DHCPPoolSettingType_value[v.(string)])
@@ -16518,6 +27170,10 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 
 																												if w, ok := poolsMapStrToI["end_ip"]; ok && !isIntfNil(w) {
 																													pools[i].EndIp = w.(string)
+																												}
+
+																												if w, ok := poolsMapStrToI["exclude"]; ok && !isIntfNil(w) {
+																													pools[i].Exclude = w.(bool)
 																												}
 
 																												if w, ok := poolsMapStrToI["start_ip"]; ok && !isIntfNil(w) {
@@ -16773,6 +27429,10 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																										interfaceIpMap[key.(string)].DefaultGw = w.(string)
 																									}
 
+																									if w, ok := interfaceIpMapStaticMap["dns_server"]; ok && !isIntfNil(w) {
+																										interfaceIpMap[key.(string)].DnsServer = w.(string)
+																									}
+
 																									if w, ok := interfaceIpMapStaticMap["ip_address"]; ok && !isIntfNil(w) {
 																										interfaceIpMap[key.(string)].IpAddress = w.(string)
 																									}
@@ -16781,6 +27441,59 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																									break
 																								}
 																							}
+																						}
+																					}
+																				}
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := cs["fleet_static_ip"]; ok && !isIntfNil(v) && !networkPrefixChoiceTypeFound {
+
+																	networkPrefixChoiceTypeFound = true
+																	networkPrefixChoiceInt := &ves_io_schema_network_interface.StaticIPParametersType_FleetStaticIp{}
+																	networkPrefixChoiceInt.FleetStaticIp = &ves_io_schema_network_interface.StaticIpParametersFleetType{}
+																	ipv6AddressChoiceInt.StaticIpv6Address.NetworkPrefixChoice = networkPrefixChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.FleetStaticIp.DnsServer = v.(string)
+
+																			}
+
+																			if v, ok := cs["network_prefix_allocator"]; ok && !isIntfNil(v) {
+
+																				sl := v.([]interface{})
+																				networkPrefixAllocatorInt := &ves_io_schema_views.ObjectRefType{}
+																				networkPrefixChoiceInt.FleetStaticIp.NetworkPrefixAllocator = networkPrefixAllocatorInt
+
+																				for _, set := range sl {
+																					if set != nil {
+																						npaMapToStrVal := set.(map[string]interface{})
+																						if val, ok := npaMapToStrVal["name"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Name = val.(string)
+																						}
+																						if val, ok := npaMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Namespace = val.(string)
+																						}
+
+																						if val, ok := npaMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																							networkPrefixAllocatorInt.Tenant = val.(string)
 																						}
 																					}
 																				}
@@ -16807,6 +27520,12 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 																			if v, ok := cs["default_gw"]; ok && !isIntfNil(v) {
 
 																				networkPrefixChoiceInt.NodeStaticIp.DefaultGw = v.(string)
+
+																			}
+
+																			if v, ok := cs["dns_server"]; ok && !isIntfNil(v) {
+
+																				networkPrefixChoiceInt.NodeStaticIp.DnsServer = v.(string)
 
 																			}
 
@@ -16854,6 +27573,53 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 													}
 
 													networkChoiceTypeFound := false
+
+													if v, ok := storageInterfaceMapStrToI["inside_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+														networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_InsideNetwork{}
+														networkChoiceInt.InsideNetwork = &ves_io_schema_views.ObjectRefType{}
+														storageInterface.NetworkChoice = networkChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.InsideNetwork.Tenant = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := storageInterfaceMapStrToI["ip_fabric_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+
+														if v.(bool) {
+															networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_IpFabricNetwork{}
+															networkChoiceInt.IpFabricNetwork = &ves_io_schema.Empty{}
+															storageInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
 
 													if v, ok := storageInterfaceMapStrToI["segment_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
 
@@ -16910,6 +27676,41 @@ func resourceVolterraVoltstackSiteUpdate(d *schema.ResourceData, meta interface{
 															networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_SiteLocalNetwork{}
 															networkChoiceInt.SiteLocalNetwork = &ves_io_schema.Empty{}
 															storageInterface.NetworkChoice = networkChoiceInt
+														}
+
+													}
+
+													if v, ok := storageInterfaceMapStrToI["srv6_network"]; ok && !isIntfNil(v) && !networkChoiceTypeFound {
+
+														networkChoiceTypeFound = true
+														networkChoiceInt := &ves_io_schema_network_interface.EthernetInterfaceType_Srv6Network{}
+														networkChoiceInt.Srv6Network = &ves_io_schema_views.ObjectRefType{}
+														storageInterface.NetworkChoice = networkChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.Srv6Network.Name = v.(string)
+
+																}
+
+																if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.Srv6Network.Namespace = v.(string)
+
+																}
+
+																if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+																	networkChoiceInt.Srv6Network.Tenant = v.(string)
+
+																}
+
+															}
 														}
 
 													}

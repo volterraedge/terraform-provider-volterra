@@ -295,7 +295,9 @@ func (c *NamespaceCustomAPIRestClient) doRPCAllApplicationInventory(ctx context.
 		q.Add("bigip_virtual_server_filter", fmt.Sprintf("%v", req.BigipVirtualServerFilter))
 		q.Add("cdn_load_balancer_filter", fmt.Sprintf("%v", req.CdnLoadBalancerFilter))
 		q.Add("http_load_balancer_filter", fmt.Sprintf("%v", req.HttpLoadBalancerFilter))
+		q.Add("nginx_one_server_filter", fmt.Sprintf("%v", req.NginxOneServerFilter))
 		q.Add("tcp_load_balancer_filter", fmt.Sprintf("%v", req.TcpLoadBalancerFilter))
+		q.Add("third_party_application_filter", fmt.Sprintf("%v", req.ThirdPartyApplicationFilter))
 		q.Add("udp_load_balancer_filter", fmt.Sprintf("%v", req.UdpLoadBalancerFilter))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -466,7 +468,9 @@ func (c *NamespaceCustomAPIRestClient) doRPCApplicationInventory(ctx context.Con
 		q.Add("cdn_load_balancer_filter", fmt.Sprintf("%v", req.CdnLoadBalancerFilter))
 		q.Add("http_load_balancer_filter", fmt.Sprintf("%v", req.HttpLoadBalancerFilter))
 		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("nginx_one_server_filter", fmt.Sprintf("%v", req.NginxOneServerFilter))
 		q.Add("tcp_load_balancer_filter", fmt.Sprintf("%v", req.TcpLoadBalancerFilter))
+		q.Add("third_party_application_filter", fmt.Sprintf("%v", req.ThirdPartyApplicationFilter))
 		q.Add("udp_load_balancer_filter", fmt.Sprintf("%v", req.UdpLoadBalancerFilter))
 
 		hReq.URL.RawQuery += q.Encode()
@@ -4079,11 +4083,23 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/namespaceHTTPLoadbalancerInventoryFilterType",
                     "x-displayname": "HTTP LoadBalancer Inventory Filter Type"
                 },
+                "nginx_one_server_filter": {
+                    "description": " Filters for NGINX One Server",
+                    "title": "NGINXOneServerInventoryFilterType",
+                    "$ref": "#/definitions/namespaceNGINXOneServerInventoryFilterType",
+                    "x-displayname": "NGINX One Servers Filter Type"
+                },
                 "tcp_load_balancer_filter": {
                     "description": " Filters for TCP LoadBalancer",
                     "title": "TCPLoadbalancerInventoryFilterType",
                     "$ref": "#/definitions/namespaceTCPLoadbalancerInventoryFilterType",
                     "x-displayname": "TCP LoadBalancer Inventory Filter Type"
+                },
+                "third_party_application_filter": {
+                    "description": " Filters for Third Party Application",
+                    "title": "ThirdPartyApplicationFilterType",
+                    "$ref": "#/definitions/namespaceThirdPartyApplicationFilterType",
+                    "x-displayname": "Third Party Application Filter Type"
                 },
                 "udp_load_balancer_filter": {
                     "description": " Filters for UDP LoadBalancer",
@@ -4175,11 +4191,23 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "x-displayname": "Namespace",
                     "x-ves-example": "ns1"
                 },
+                "nginx_one_server_filter": {
+                    "description": " Filters for NGINX One Server",
+                    "title": "NGINXOneServerInventoryFilterType",
+                    "$ref": "#/definitions/namespaceNGINXOneServerInventoryFilterType",
+                    "x-displayname": "NGINX One Servers Filter Type"
+                },
                 "tcp_load_balancer_filter": {
                     "description": " Filters for TCP LoadBalancer",
                     "title": "TCPLoadbalancerInventoryFilterType",
                     "$ref": "#/definitions/namespaceTCPLoadbalancerInventoryFilterType",
                     "x-displayname": "TCP LoadBalancer Inventory Filter Type"
+                },
+                "third_party_application_filter": {
+                    "description": " Filters for Third Party Application",
+                    "title": "ThirdPartyApplicationFilterType",
+                    "$ref": "#/definitions/namespaceThirdPartyApplicationFilterType",
+                    "x-displayname": "Third Party Application Filter Type"
                 },
                 "udp_load_balancer_filter": {
                     "description": " Filters for UDP LoadBalancer",
@@ -4221,6 +4249,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "Load Balancers"
                 },
+                "nginx_one_servers": {
+                    "description": " Inventory of configured NGINX One Servers",
+                    "title": "NGINX One Server Inventory",
+                    "$ref": "#/definitions/namespaceNGINXOneServerInventoryType",
+                    "x-displayname": "NGINX One Servers"
+                },
                 "origin_pools": {
                     "type": "integer",
                     "description": " Number of origin pools configured",
@@ -4240,6 +4274,12 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "TCP Loadbalancer Inventory",
                     "$ref": "#/definitions/namespaceTCPLoadbalancerInventoryType",
                     "x-displayname": "TCP Loadbalancers"
+                },
+                "third_party_applications": {
+                    "description": " Inventory of configured Third Party Applications",
+                    "title": "Third Party Application Inventory",
+                    "$ref": "#/definitions/namespaceThirdPartyApplicationInventoryType",
+                    "x-displayname": "Third Party Applications"
                 },
                 "udp_loadbalancers": {
                     "description": " Inventory of configured UDP Loadbalancers",
@@ -5210,6 +5250,157 @@ var NamespaceCustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "namespaceNGINXOneServerInventoryFilterType": {
+            "type": "object",
+            "description": "NGINX One Server Inventory Filter",
+            "title": "NGINXOneServerInventoryFilterType",
+            "x-displayname": "Filter for NGINX One Server Inventory",
+            "x-ves-proto-message": "ves.io.schema.namespace.NGINXOneServerInventoryFilterType",
+            "properties": {
+                "api_discovery": {
+                    "type": "boolean",
+                    "description": " Filter results with NGINX One Server with specificed API Discovery enablement state",
+                    "title": "API Discovery",
+                    "format": "boolean",
+                    "x-displayname": "API Discovery"
+                },
+                "waf_configured": {
+                    "type": "boolean",
+                    "description": " Filter results with NGINX One Server with specified WAF enablement state",
+                    "title": "WAF",
+                    "format": "boolean",
+                    "x-displayname": "WAF"
+                }
+            }
+        },
+        "namespaceNGINXOneServerInventoryType": {
+            "type": "object",
+            "description": "Inventory of configured NGINX One Servers",
+            "title": "NGINX One Server Inventory",
+            "x-displayname": "NGINX One Servers",
+            "x-ves-proto-message": "ves.io.schema.namespace.NGINXOneServerInventoryType",
+            "properties": {
+                "api_discovery_enabled_server_count": {
+                    "type": "integer",
+                    "description": " Number of NGINX One Servers with API Discovery enabled",
+                    "title": "API Discovery",
+                    "format": "int64",
+                    "x-displayname": "API Discovery"
+                },
+                "nginx_server_results": {
+                    "type": "array",
+                    "description": " List of NGINX One Server",
+                    "title": "NGINX One Servers",
+                    "items": {
+                        "$ref": "#/definitions/namespaceNGINXOneServerResultType"
+                    },
+                    "x-displayname": "List of NGINX One Server"
+                },
+                "waf_enabled_server_count": {
+                    "type": "integer",
+                    "description": " Number of NGINX One Servers with WAF configured",
+                    "title": "WAF",
+                    "format": "int64",
+                    "x-displayname": "WAF"
+                }
+            }
+        },
+        "namespaceNGINXOneServerResultType": {
+            "type": "object",
+            "x-ves-proto-message": "ves.io.schema.namespace.NGINXOneServerResultType",
+            "properties": {
+                "api_discovery_enabled": {
+                    "description": " API Discovery configured ",
+                    "title": "API Discovery Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "API Discovery Enabled or Disabled"
+                },
+                "domains": {
+                    "type": "array",
+                    "description": " Domains of Nginx One Server",
+                    "title": "Nginx One Server Domains",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Nginx One Server Domains"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Uniqueness identifier for NGINX One Server",
+                    "title": "Name",
+                    "x-displayname": "Server Name"
+                },
+                "nginx_one_object_id": {
+                    "type": "string",
+                    "description": " Instance or Config Sync Group ID",
+                    "title": "NGINX One Object Id",
+                    "x-displayname": "Instance or Config Sync Group Object ID"
+                },
+                "nginx_one_object_name": {
+                    "type": "string",
+                    "description": " Hostname value set for Instance or Name for a Config Sync Group\n in NGINX One",
+                    "title": "NGINX One Object Name",
+                    "x-displayname": "Instance or Config Sync Group Name"
+                },
+                "nginx_one_server_name": {
+                    "type": "string",
+                    "description": " Server name specified as ${server_name} in nginx config plus port",
+                    "title": "Nginx One Server Name",
+                    "x-displayname": "Name"
+                },
+                "total_routes": {
+                    "type": "integer",
+                    "description": " Total locations configured in the NGINX Server",
+                    "title": "Total locations configured in the NGINX Server",
+                    "format": "int64",
+                    "x-displayname": "Routes"
+                },
+                "waf_enforcement_mode": {
+                    "type": "string",
+                    "description": " WAF Enforcement Mode",
+                    "title": "WAF Enforcement Mode",
+                    "x-displayname": "WAF Enforcement Mode"
+                },
+                "waf_policy_file_name": {
+                    "type": "string",
+                    "description": " Policy file name for WAF",
+                    "title": "Waf Policy File Names",
+                    "x-displayname": "WAF Policy File Name"
+                },
+                "waf_policy_management_platform": {
+                    "type": "string",
+                    "description": " Specifies the platform that manages related WAF policies\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "WAF policy_management_platform",
+                    "x-displayname": "WAF Policy Management Platform",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "waf_policy_name": {
+                    "type": "string",
+                    "description": " Policy name configured for WAF",
+                    "title": "Waf Policy Name",
+                    "x-displayname": "WAF Policy Name"
+                },
+                "waf_security_log_enabled": {
+                    "type": "boolean",
+                    "description": " Specifies if security logging is enabled",
+                    "title": "security_log_enabled",
+                    "format": "boolean",
+                    "x-displayname": "WAF Log Enabled"
+                },
+                "waf_security_log_file_names": {
+                    "type": "array",
+                    "description": " WAF Security File Names",
+                    "title": "WAF Security File Names",
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "WAF Security File Names"
+                }
+            }
+        },
         "namespaceNetworkingInventoryRequest": {
             "type": "object",
             "description": "Request for inventory of networking related objects",
@@ -5635,6 +5826,68 @@ var NamespaceCustomAPISwaggerJSON string = `{
                     "title": "TLS Encryption Status",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "TLS Encryption Enabled or Disabled"
+                }
+            }
+        },
+        "namespaceThirdPartyApplicationFilterType": {
+            "type": "object",
+            "description": "Third Party Application Inventory Filter",
+            "title": "ThirdPartyApplicationFilterType",
+            "x-displayname": "Filter for Third Party ApplicationInventory",
+            "x-ves-proto-message": "ves.io.schema.namespace.ThirdPartyApplicationFilterType",
+            "properties": {
+                "api_discovery": {
+                    "type": "boolean",
+                    "description": " Filter results with Third Party Application with API Discovery",
+                    "title": "API Discovery",
+                    "format": "boolean",
+                    "x-displayname": "API Discovery"
+                }
+            }
+        },
+        "namespaceThirdPartyApplicationInventoryType": {
+            "type": "object",
+            "description": "Third Party Application inventory",
+            "title": "ThirdPartyApplicationInventoryType",
+            "x-displayname": "Inventory of Third Party Application",
+            "x-ves-proto-message": "ves.io.schema.namespace.ThirdPartyApplicationInventoryType",
+            "properties": {
+                "api_discovery": {
+                    "type": "integer",
+                    "description": " Number of Third Party Application with API Discovery enabled",
+                    "title": "API Discovery",
+                    "format": "int64",
+                    "x-displayname": "API Discovery"
+                },
+                "third_party_application_results": {
+                    "type": "array",
+                    "description": " List of Third Party Applications",
+                    "title": "ThirdPartyApplicationType",
+                    "items": {
+                        "$ref": "#/definitions/namespaceThirdPartyApplicationResultType"
+                    },
+                    "x-displayname": "List of Third Party Applications"
+                }
+            }
+        },
+        "namespaceThirdPartyApplicationResultType": {
+            "type": "object",
+            "description": "Third Party Application Inventory Results",
+            "title": "ThirdPartyApplicationType",
+            "x-displayname": "Third Party Application Inventory Results",
+            "x-ves-proto-message": "ves.io.schema.namespace.ThirdPartyApplicationResultType",
+            "properties": {
+                "api_discovery_enabled": {
+                    "description": " API Discovery configured",
+                    "title": "API Discovery Status",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "API Discovery Enabled or Disabled"
+                },
+                "name": {
+                    "type": "string",
+                    "description": " Name of Third Party Application",
+                    "title": "Third Party Application Name",
+                    "x-displayname": "Third Party Application Name"
                 }
             }
         },

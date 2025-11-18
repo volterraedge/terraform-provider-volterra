@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.endpoint.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.endpoint.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2424,7 +2424,7 @@ var APISwaggerJSON string = `{
                     "description": "Exclusive with []\n Interval for DNS refresh in seconds.\n\nExample: - \"20\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 10\n  ves.io.schema.rules.uint32.lte: 604800\n",
                     "title": "refresh_interval",
                     "format": "int64",
-                    "x-displayname": "DNS Refresh interval",
+                    "x-displayname": "DNS Refresh Interval",
                     "x-ves-example": "20",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "10",
@@ -3070,13 +3070,14 @@ var APISwaggerJSON string = `{
         },
         "schemaDiscoveryType": {
             "type": "string",
-            "description": "Specifies whether the discovery is from Kubernetes or Consul cluster\n\nInvalid Discovery mechanism\nDiscover from Kubernetes cluster\nDiscover from Consul service\nDiscover from Classic BIG-IP Clusters",
+            "description": "Specifies whether the discovery is from Kubernetes or Consul cluster\n\nInvalid Discovery mechanism\nDiscover from Kubernetes cluster\nDiscover from Consul service\nDiscover from Classic BIG-IP Clusters\nDiscover for Third Party Application",
             "title": "DiscoveryType",
             "enum": [
                 "INVALID_DISCOVERY",
                 "K8S",
                 "CONSUL",
-                "CLASSIC_BIGIP"
+                "CLASSIC_BIGIP",
+                "THIRD_PARTY"
             ],
             "default": "INVALID_DISCOVERY",
             "x-displayname": "Discovery Type",

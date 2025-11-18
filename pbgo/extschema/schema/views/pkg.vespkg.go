@@ -106,6 +106,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.views.SpecificRE"] = SpecificREValidator()
 	vr["ves.io.schema.views.TGWAssignedASNType"] = TGWAssignedASNTypeValidator()
 	vr["ves.io.schema.views.TGWParamsType"] = TGWParamsTypeValidator()
+	vr["ves.io.schema.views.ThirdPartyAuthorizationToken"] = ThirdPartyAuthorizationTokenValidator()
 	vr["ves.io.schema.views.TlsConfig"] = TlsConfigValidator()
 	vr["ves.io.schema.views.VolterraSoftwareType"] = VolterraSoftwareTypeValidator()
 	vr["ves.io.schema.views.WhereCloudEdgeSegment"] = WhereCloudEdgeSegmentValidator()
@@ -153,11 +154,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

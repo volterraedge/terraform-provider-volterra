@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.gcp_vpc_site.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.gcp_vpc_site.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -4445,6 +4445,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -5187,21 +5194,9 @@ var APISwaggerJSON string = `{
             "description": "Name of existing VPC network",
             "title": "GCP existing VPC network Type",
             "x-displayname": "GCP existing VPC network Type",
-            "x-ves-oneof-field-routing_type": "[\"f5_orchestrated_routing\",\"manual_routing\"]",
+            "x-ves-oneof-field-routing_type": "[]",
             "x-ves-proto-message": "ves.io.schema.views.GCPVPCNetworkType",
             "properties": {
-                "f5_orchestrated_routing": {
-                    "description": "Exclusive with [manual_routing]\n F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE.",
-                    "title": "F5 Orchestrated Routing",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "F5 Orchestrated Routing"
-                },
-                "manual_routing": {
-                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. ",
-                    "title": "Manual Routing",
-                    "$ref": "#/definitions/schemaEmpty",
-                    "x-displayname": "Manual Routing"
-                },
                 "name": {
                     "type": "string",
                     "description": " Name for your GCP VPC Network\n\nExample: - \"network1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
@@ -5676,7 +5671,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Site's geographical address that can be used to determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "address",
                     "maxLength": 256,
                     "x-displayname": "Geographical Address",

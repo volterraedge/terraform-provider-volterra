@@ -1398,6 +1398,15 @@ func (v *ValidateAWSVPCType) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["use_launch_templates"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("use_launch_templates"))
+		if err := fv(ctx, m.GetUseLaunchTemplates(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["volt_vpc_id"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("volt_vpc_id"))

@@ -70,14 +70,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:     "ves.io.schema.service_policy.CreateRequest.spec.rule_choice.deny_list.prefix_list.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
-		{
-			FieldPath:     "ves.io.schema.service_policy.CreateRequest.spec.rule_choice.rule_list.rules.spec.dst_ip_choice.dst_ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.service_policy.CreateRequest.spec.rule_choice.rule_list.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.service_policy.API.Create"] = []string{
@@ -100,6 +92,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rule_list.rules.#.spec.goto_policy.#",
 		"spec.rule_list.rules.#.spec.graphql_settings",
 		"spec.rule_list.rules.#.spec.ip_reputation_action",
+		"spec.rule_list.rules.#.spec.mobile_identifier_matcher_action",
 		"spec.rule_list.rules.#.spec.openapi_validation_action",
 		"spec.rule_list.rules.#.spec.origin_server_subsets_action",
 		"spec.rule_list.rules.#.spec.rate_limiter.#",
@@ -257,14 +250,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 			FieldPath:     "ves.io.schema.service_policy.ReplaceRequest.spec.rule_choice.deny_list.prefix_list.ipv6_prefixes",
 			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
-		{
-			FieldPath:     "ves.io.schema.service_policy.ReplaceRequest.spec.rule_choice.rule_list.rules.spec.dst_ip_choice.dst_ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-		{
-			FieldPath:     "ves.io.schema.service_policy.ReplaceRequest.spec.rule_choice.rule_list.rules.spec.ip_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
 	}
 
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.service_policy.API.Replace"] = []string{
@@ -286,6 +271,7 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		"spec.rule_list.rules.#.spec.goto_policy.#",
 		"spec.rule_list.rules.#.spec.graphql_settings",
 		"spec.rule_list.rules.#.spec.ip_reputation_action",
+		"spec.rule_list.rules.#.spec.mobile_identifier_matcher_action",
 		"spec.rule_list.rules.#.spec.openapi_validation_action",
 		"spec.rule_list.rules.#.spec.origin_server_subsets_action",
 		"spec.rule_list.rules.#.spec.rate_limiter.#",
@@ -390,11 +376,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

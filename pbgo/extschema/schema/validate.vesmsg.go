@@ -3676,6 +3676,17 @@ func (v *ValidateStringRules) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *StringRules_PcreRegex:
+		if fv, exists := v.FldValidators["well_known.pcre_regex"]; exists {
+			val := m.GetWellKnown().(*StringRules_PcreRegex).PcreRegex
+			vOpts := append(opts,
+				db.WithValidateField("well_known"),
+				db.WithValidateField("pcre_regex"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
