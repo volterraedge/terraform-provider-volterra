@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.gcp_vpc_site.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.gcp_vpc_site.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2899,6 +2899,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-dc_cluster_group_choice": "[\"dc_cluster_group\",\"no_dc_cluster_group\"]",
             "x-ves-oneof-field-forward_proxy_choice": "[\"active_forward_proxy_policies\",\"forward_proxy_allow_all\",\"no_forward_proxy\"]",
             "x-ves-oneof-field-global_network_choice": "[\"global_network_list\",\"no_global_network\"]",
+            "x-ves-oneof-field-k8s_cluster_choice": "[\"k8s_cluster\",\"no_k8s_cluster\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_enhanced_firewall_policies\",\"active_network_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-outside_static_route_choice": "[\"no_outside_static_routes\",\"outside_static_routes\"]",
             "x-ves-oneof-field-site_mesh_group_choice": "[\"sm_connection_public_ip\",\"sm_connection_pvt_ip\"]",
@@ -2959,6 +2960,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/viewsGlobalNetworkConnectionListType",
                     "x-displayname": "Connect Global Networks"
                 },
+                "k8s_cluster": {
+                    "description": "Exclusive with [no_k8s_cluster]\n Site Local K8s API access is enabled, using k8s_cluster object",
+                    "title": "Enable Site Local K8s API access",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Enable Site Local K8s API access"
+                },
                 "no_dc_cluster_group": {
                     "description": "Exclusive with [dc_cluster_group]\n This site is not a member of dc cluster group",
                     "title": "Not a Member",
@@ -2976,6 +2983,12 @@ var APISwaggerJSON string = `{
                     "title": "Do not Connect Global Networks",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Do Not Connect Global Networks"
+                },
+                "no_k8s_cluster": {
+                    "description": "Exclusive with [k8s_cluster]\n Site Local K8s API access is disabled",
+                    "title": "Disable Site Local K8s API access",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable Site Local K8s API access"
                 },
                 "no_network_policy": {
                     "description": "Exclusive with [active_enhanced_firewall_policies active_network_policies]\n Firewall Policy is disabled for this site.",
@@ -5343,21 +5356,9 @@ var APISwaggerJSON string = `{
             "description": "Name of existing VPC network",
             "title": "GCP existing VPC network Type",
             "x-displayname": "GCP existing VPC network Type",
-            "x-ves-oneof-field-routing_type": "[\"f5_orchestrated_routing\",\"manual_routing\"]",
+            "x-ves-oneof-field-routing_type": "[]",
             "x-ves-proto-message": "ves.io.schema.views.GCPVPCNetworkType",
             "properties": {
-                "f5_orchestrated_routing": {
-                    "description": "Exclusive with [manual_routing]\n F5 will orchestrate required routes for SLO Route Table towards Internet and SLI RT towards the CE.",
-                    "title": "F5 Orchestrated Routing",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "F5 Orchestrated Routing"
-                },
-                "manual_routing": {
-                    "description": "Exclusive with [f5_orchestrated_routing]\n  In this mode, F5 will not create nor alter any route tables or routes within the existing VPCs/Vnets providing better integration for existing environments. ",
-                    "title": "Manual Routing",
-                    "$ref": "#/definitions/ioschemaEmpty",
-                    "x-displayname": "Manual Routing"
-                },
                 "name": {
                     "type": "string",
                     "description": " Name for your GCP VPC Network\n\nExample: - \"network1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.min_len: 1\n",
@@ -5832,7 +5833,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Site's geographical address that can be used to determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
                     "x-displayname": "Geographical Address",
                     "x-ves-example": "123 Street, city, country, postal code",
@@ -6008,7 +6009,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Site's geographical address that can be used to determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
                     "x-displayname": "Geographical Address",
                     "x-ves-example": "123 Street, city, country, postal code",
@@ -6210,7 +6211,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Site's geographical address that can be used to determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "maxLength": 256,
                     "x-displayname": "Geographical Address",
                     "x-ves-example": "123 Street, city, country, postal code",

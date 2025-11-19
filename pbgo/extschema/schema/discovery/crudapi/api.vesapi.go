@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.discovery.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.discovery.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2935,45 +2935,11 @@ var APISwaggerJSON string = `{
         },
         "discoveryCbipCluster": {
             "type": "object",
-            "description": "A BIG-IP cluster is a set of BIG-IP devices which are in an \nActive-Active or Active-Standby setup or even a standalone BIG-IP device.",
+            "description": "A BIG-IP cluster is a set of BIG-IP devices which are in an\nActive-Active or Active-Standby setup or even a standalone BIG-IP device.",
             "title": "Classic BIG-IP Cluster",
             "x-displayname": "Classic BIG-IP Cluster",
-            "x-ves-proto-message": "ves.io.schema.discovery.CbipCluster",
-            "properties": {
-                "cbip_devices": {
-                    "type": "array",
-                    "description": " List of Classic BIG-IP devices.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.unique: true\n",
-                    "title": "Classic BIG-IP Devices",
-                    "maxItems": 8,
-                    "items": {
-                        "$ref": "#/definitions/discoveryCbipDeviceConfig"
-                    },
-                    "x-displayname": "Classic BIG-IP Devices",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.repeated.max_items": "8",
-                        "ves.io.schema.rules.repeated.unique": "true"
-                    }
-                },
-                "metadata": {
-                    "description": " Common attributes for the device configuration including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "title": "metadata",
-                    "$ref": "#/definitions/schemaMessageMetaType",
-                    "x-displayname": "Metadata",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
-                }
-            }
-        },
-        "discoveryCbipDeviceConfig": {
-            "type": "object",
-            "title": "Classic BIG-IP Configuration",
-            "x-displayname": "Classic BIG-IP Configuration",
             "x-ves-oneof-field-namespace_mapping_choice": "[\"default_all\",\"namespace_mapping\"]",
-            "x-ves-proto-message": "ves.io.schema.discovery.CbipDeviceConfig",
+            "x-ves-proto-message": "ves.io.schema.discovery.CbipCluster",
             "properties": {
                 "admin_credentials": {
                     "description": "\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
@@ -2995,16 +2961,24 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
-                "cbip_mgmt_ip": {
-                    "type": "string",
-                    "description": " IP Address of the Classic BIG-IP device. Hostname is not supported.\n\nExample: - \"10.1.1.1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4: true\n",
-                    "title": "Management IP",
+                "cbip_mgmt_ips": {
+                    "type": "array",
+                    "description": " IP Addresses of Classic BIG-IP devices. Hostname is not supported.\n\nExample: - \"['10.1.1.1', '10.2.2.2']\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.items.string.ipv4: true\n  ves.io.schema.rules.repeated.max_items: 8\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Classic BIG-IP Devices",
+                    "minItems": 1,
+                    "maxItems": 8,
+                    "items": {
+                        "type": "string"
+                    },
                     "x-displayname": "Management IP",
-                    "x-ves-example": "10.1.1.1",
+                    "x-ves-example": "['10.1.1.1', '10.2.2.2']",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true",
-                        "ves.io.schema.rules.string.ipv4": "true"
+                        "ves.io.schema.rules.repeated.items.string.ipv4": "true",
+                        "ves.io.schema.rules.repeated.max_items": "8",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
                 "default_all": {
@@ -3012,6 +2986,21 @@ var APISwaggerJSON string = `{
                     "title": "Default (Automatic)",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Automatic"
+                },
+                "metadata": {
+                    "description": " Common attributes for the device configuration including name and description.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "metadata",
+                    "$ref": "#/definitions/schemaMessageMetaType",
+                    "x-displayname": "Metadata",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "mgmt_port": {
+                    "title": "Classic BIG-IP Management Port",
+                    "$ref": "#/definitions/discoveryManagementPort",
+                    "x-displayname": "Management Port"
                 },
                 "namespace_mapping": {
                     "description": "Exclusive with [default_all]\n Select the BIG-IP partitions from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace.",
@@ -3024,6 +3013,43 @@ var APISwaggerJSON string = `{
                     "title": "Virtual Server Filter",
                     "$ref": "#/definitions/discoveryVirtualServerFilter",
                     "x-displayname": "Virtual Server Filter"
+                }
+            }
+        },
+        "discoveryCbipDeviceConfig": {
+            "type": "object",
+            "description": "x-displayName: \"Classic BIG-IP Configuration\"",
+            "title": "Classic BIG-IP Configuration",
+            "properties": {
+                "admin_credentials": {
+                    "description": "x-displayName: \"Admin Credentials\"\nx-required",
+                    "title": "Classic BIG-IP Admin Credentials",
+                    "$ref": "#/definitions/discoveryCbipAdminCredentials"
+                },
+                "cbip_certificate_authority": {
+                    "description": "x-displayName: \"Root CA Certificate\"\nx-required",
+                    "title": "Classic BIG-IP Root CA Certificate",
+                    "$ref": "#/definitions/discoveryCbipCertificateAuthority"
+                },
+                "cbip_mgmt_ip": {
+                    "type": "string",
+                    "description": "x-displayName: \"Management IP\"\nx-required\nx-example: \"10.1.1.1\"\nIP Address of the Classic BIG-IP device. Hostname is not supported.",
+                    "title": "Management IP"
+                },
+                "default_all": {
+                    "description": "x-displayName: \"Automatic\"\nIf configuring in an App Namespace, discovered services across all BIG-IP partitions will be discovered in the current Namespace",
+                    "title": "Default (Automatic)",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "namespace_mapping": {
+                    "description": "x-displayName: \"Custom\"\nSelect the BIG-IP partitions from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace.",
+                    "title": "Custom",
+                    "$ref": "#/definitions/discoveryNamespaceMapping"
+                },
+                "virtual_server_filter": {
+                    "description": "x-displayName: \"Virtual Server Filter\"\nFilters to discover only required BIG-IP Virtual Servers. The Virtual Server will be discovered only if it matches all criteria specified below. A blank criteria will be treated as match all.",
+                    "title": "Virtual Server Filter",
+                    "$ref": "#/definitions/discoveryVirtualServerFilter"
                 }
             }
         },
@@ -3080,6 +3106,7 @@ var APISwaggerJSON string = `{
             "description": "Discovery configuration for Hashicorp Consul",
             "title": "consul discovery type",
             "x-displayname": "Consul Discovery Configuration",
+            "x-ves-oneof-field-namespace_mapping_choice": "[]",
             "x-ves-proto-message": "ves.io.schema.discovery.ConsulDiscoveryType",
             "properties": {
                 "access_info": {
@@ -3127,6 +3154,38 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "64"
                     }
+                }
+            }
+        },
+        "discoveryConsulNamespaceMapping": {
+            "type": "object",
+            "description": "x-displayName: \"Consul Namespace Mapping\"\nSelect the mapping between Consul namespaces from which services will be discovered and App Namespace to which the discovered services will be shared.",
+            "title": "Consul Namespace Mapping",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": "x-displayName: \"Regex Matching\"\nx-required\nMap Consul namespace(s) to App Namespaces",
+                    "title": "Consul Namespace to App Namespace Mapping",
+                    "items": {
+                        "$ref": "#/definitions/discoveryConsulNamespaceMappingItem"
+                    }
+                }
+            }
+        },
+        "discoveryConsulNamespaceMappingItem": {
+            "type": "object",
+            "description": "x-displayName: \"Consul Namespace Mapping Item\"\nMap Consul Namespace(s) to an App Namespace. If not specified, all virtual\nservers will be discovered under shared namespace.",
+            "title": "Consul Namespace Mapping Item",
+            "properties": {
+                "namespace": {
+                    "type": "string",
+                    "description": "x-displayName: \"F5XC Application Namespaces\"\nSelect a namespace",
+                    "title": "App Namespace"
+                },
+                "namespace_regex": {
+                    "type": "string",
+                    "description": "x-displayName: \"Consul Namespaces\"\nThe regex here will be used to match Consul namespace(s).",
+                    "title": "Consul Namespace Regex"
                 }
             }
         },
@@ -3280,6 +3339,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/discoveryK8SDiscoveryType",
                     "x-displayname": "K8S Discovery Configuration"
                 },
+                "discovery_third_party": {
+                    "description": " Discovery configuration for Third Party",
+                    "title": "discovery Third Party",
+                    "$ref": "#/definitions/discoveryThirdPartyDiscoveryType",
+                    "x-displayname": "Third Party Discovery Configuration"
+                },
                 "no_cluster_id": {
                     "description": "Exclusive with [cluster_id]\n There is no cluster identifier specified. In this mode all endpoints\n of the site will discover from this discovery object.",
                     "title": "no cluster identifier",
@@ -3287,10 +3352,10 @@ var APISwaggerJSON string = `{
                     "x-displayname": "No cluster identifier"
                 },
                 "where": {
-                    "description": " All the sites where this discovery config is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": " Site for which discovery is valid.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Where",
                     "$ref": "#/definitions/schemaNetworkSiteRefSelector",
-                    "x-displayname": "Select Site, Virtual Site or Network",
+                    "x-displayname": "Site",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
@@ -3382,6 +3447,7 @@ var APISwaggerJSON string = `{
             "description": "Discovery configuration for K8s.",
             "title": "K8s discovery type",
             "x-displayname": "K8S Discovery Configuration",
+            "x-ves-oneof-field-namespace_mapping_choice": "[\"default_all\",\"namespace_mapping\"]",
             "x-ves-proto-message": "ves.io.schema.discovery.K8SDiscoveryType",
             "properties": {
                 "access_info": {
@@ -3394,6 +3460,18 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "default_all": {
+                    "description": "Exclusive with [namespace_mapping]\n If configuring in an App Namespace, discovered services across all K8s namespaces will be discovered in the current Namespace",
+                    "title": "Default (Automatic)",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Automatic"
+                },
+                "namespace_mapping": {
+                    "description": "Exclusive with [default_all]\n Select the K8s namespaces from which services will be discovered. If configuring in Shared Configuration, services can be discovered in selected App Namespaces. If configuring in App Namespace services will be discovered in the current Namespace.",
+                    "title": "Custom",
+                    "$ref": "#/definitions/discoveryK8SNamespaceMapping",
+                    "x-displayname": "Custom"
+                },
                 "publish_info": {
                     "description": " Configuration to publish VIPs\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "publish info",
@@ -3402,6 +3480,59 @@ var APISwaggerJSON string = `{
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "discoveryK8SNamespaceMapping": {
+            "type": "object",
+            "description": "Select the mapping between K8s namespaces from which services will be discovered and App Namespace to which the discovered services will be shared.",
+            "title": "K8S Namespace Mapping",
+            "x-displayname": "K8S Namespace Mapping",
+            "x-ves-proto-message": "ves.io.schema.discovery.K8SNamespaceMapping",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " Map K8s namespace(s) to App Namespaces. In Shared Configuration, Discovered Services can only be mapped to a single App Namespace, which is determined by the first matched regex.\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "K8S Namespace to App Namespace Mapping",
+                    "minItems": 1,
+                    "maxItems": 32,
+                    "items": {
+                        "$ref": "#/definitions/discoveryK8SNamespaceMappingItem"
+                    },
+                    "x-displayname": "Regex Matching",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                }
+            }
+        },
+        "discoveryK8SNamespaceMappingItem": {
+            "type": "object",
+            "description": "Map K8s Namespace(s) to an App Namespace. If not specified, all virtual\nservers will be discovered under shared namespace.",
+            "title": "K8S Namespace Mapping Item",
+            "x-displayname": "K8S Namespace Mapping Item",
+            "x-ves-proto-message": "ves.io.schema.discovery.K8SNamespaceMappingItem",
+            "properties": {
+                "namespace": {
+                    "type": "string",
+                    "description": " Select a namespace",
+                    "title": "App Namespace",
+                    "x-displayname": "F5XC Application Namespaces"
+                },
+                "namespace_regex": {
+                    "type": "string",
+                    "description": " The regex here will be used to match K8s namespace(s).\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.regex: true\n",
+                    "title": "Kubernetes Namespace Regex",
+                    "maxLength": 256,
+                    "x-displayname": "K8S Namespaces",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256",
+                        "ves.io.schema.rules.string.regex": "true"
                     }
                 }
             }
@@ -3461,6 +3592,26 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "discoveryManagementPort": {
+            "type": "object",
+            "title": "Management Port",
+            "x-displayname": "Management Port",
+            "x-ves-proto-message": "ves.io.schema.discovery.ManagementPort",
+            "properties": {
+                "port": {
+                    "type": "integer",
+                    "description": " Management Port of the BIGIP HA cluster\n\nExample: - \"443\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Management Port",
+                    "format": "int64",
+                    "x-displayname": "Management Port",
+                    "x-ves-example": "443",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                }
+            }
+        },
         "discoveryNamespaceMapping": {
             "type": "object",
             "description": "Select the mapping between BIG-IP partition from which services will be discovered and App Namespace to which the discovered services will be shared.",
@@ -3470,15 +3621,19 @@ var APISwaggerJSON string = `{
             "properties": {
                 "items": {
                     "type": "array",
-                    "description": " Map BIG-IP partition(s) to App Namespaces\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "description": " Map BIG-IP partition(s) to App Namespaces\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n",
                     "title": "Partition to Namespace Mapping",
+                    "minItems": 1,
                     "maxItems": 32,
                     "items": {
                         "$ref": "#/definitions/discoveryNamespaceMappingItem"
                     },
                     "x-displayname": "Partition to Namespace Mapping",
+                    "x-ves-required": "true",
                     "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
                         "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 }
@@ -3567,7 +3722,7 @@ var APISwaggerJSON string = `{
                 },
                 "target_port": {
                     "type": "integer",
-                    "description": " Port on which the pods targeted by the service can be reached.\n TargetPort of Kubenetes service when its type is ClusterIP.\n NodePort of Kubernetes service when its type is NodePort.\n\nExample: - \"8081\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": " Port on which the pods targeted by the service can be reached.\n TargetPort of Kubernetes service when its type is ClusterIP.\n NodePort of Kubernetes service when its type is NodePort.\n\nExample: - \"8081\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "title": "Target Port",
                     "format": "int64",
                     "x-displayname": "Target Port number",
@@ -3706,7 +3861,7 @@ var APISwaggerJSON string = `{
                 },
                 "server_name": {
                     "type": "string",
-                    "description": " ServerName is passed to the server for SNI and is used in the client to check server\n ceritificates against. If ServerName is empty, the hostname used to contact the\n server is used\n\nExample: - \"k8s.acme.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " ServerName is passed to the server for SNI and is used in the client to check server\n certificates against. If ServerName is empty, the hostname used to contact the\n server is used\n\nExample: - \"k8s.acme.com\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.hostname: true\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "Server Name",
                     "maxLength": 256,
                     "x-displayname": "SNI name",
@@ -3726,6 +3881,54 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_bytes": "131072",
                         "ves.io.schema.rules.string.uri_ref": "true"
+                    }
+                }
+            }
+        },
+        "discoveryThirdPartyDiscoveryType": {
+            "type": "object",
+            "description": "Configure third party log source applications to send logs to your XC environment. Define application names and allowed IP ranges using CIDR notation.\nSee Tech Docs for details setup instractions.",
+            "title": "Third Party Application",
+            "x-displayname": "Discovery",
+            "x-ves-proto-message": "ves.io.schema.discovery.ThirdPartyDiscoveryType",
+            "properties": {
+                "applications": {
+                    "type": "array",
+                    "description": " Defines names to identify and distingish log source system or platforms\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 320\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.ip_prefix: true\n",
+                    "title": "Third Party Application",
+                    "minItems": 1,
+                    "maxItems": 320,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Application Source Name",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "320",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.ip_prefix": "true"
+                    }
+                },
+                "source_cidr": {
+                    "type": "array",
+                    "description": " Source IP of the packet to match\n\nExample: - \"1.1.1.0/24 or 2001:10/64\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.repeated.max_items: 5\n  ves.io.schema.rules.repeated.min_items: 1\n  ves.io.schema.rules.repeated.unique: true\n  ves.io.schema.rules.string.ip_prefix: true\n",
+                    "title": "source IP",
+                    "minItems": 1,
+                    "maxItems": 5,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Source Subnet IP",
+                    "x-ves-example": "1.1.1.0/24 or 2001:10/64",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.repeated.max_items": "5",
+                        "ves.io.schema.rules.repeated.min_items": "1",
+                        "ves.io.schema.rules.repeated.unique": "true",
+                        "ves.io.schema.rules.string.ip_prefix": "true"
                     }
                 }
             }
@@ -3849,7 +4052,7 @@ var APISwaggerJSON string = `{
                 },
                 "port_ranges": {
                     "type": "string",
-                    "description": " A string containing a comma separated list of individual service ports or port ranges.\n Each port range consists of a single port or two ports separated by \"-\". For example, 8000-8191.\n Maximum number of ports allowed is 1024.\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 1024\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "description": " A string containing a comma separated list of individual service ports or port ranges.\n Each port range consists of a single port or two ports separated by \"-\". For example, 8000-8191.\n Maximum number of ports allowed is 1024.\n\nExample: - \"80,443,8080-8191,9080\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 1024\n  ves.io.schema.rules.string.port_range_list: true\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
                     "title": "Port_ranges",
                     "maxLength": 512,
                     "x-displayname": "Port Ranges",
@@ -3857,6 +4060,7 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "512",
                         "ves.io.schema.rules.string.max_ports": "1024",
+                        "ves.io.schema.rules.string.port_range_list": "true",
                         "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 }
@@ -4082,13 +4286,14 @@ var APISwaggerJSON string = `{
         },
         "schemaDiscoveryType": {
             "type": "string",
-            "description": "Specifies whether the discovery is from Kubernetes or Consul cluster\n\nInvalid Discovery mechanism\nDiscover from Kubernetes cluster\nDiscover from Consul service\nDiscover from Classic BIG-IP Clusters",
+            "description": "Specifies whether the discovery is from Kubernetes or Consul cluster\n\nInvalid Discovery mechanism\nDiscover from Kubernetes cluster\nDiscover from Consul service\nDiscover from Classic BIG-IP Clusters\nDiscover for Third Party Application",
             "title": "DiscoveryType",
             "enum": [
                 "INVALID_DISCOVERY",
                 "K8S",
                 "CONSUL",
-                "CLASSIC_BIGIP"
+                "CLASSIC_BIGIP",
+                "THIRD_PARTY"
             ],
             "default": "INVALID_DISCOVERY",
             "x-displayname": "Discovery Type",
@@ -4590,6 +4795,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

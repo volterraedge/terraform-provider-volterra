@@ -2881,14 +2881,14 @@ var CustomAPISwaggerJSON string = `{
         },
         "app_typeAPIEPPIILevel": {
             "type": "string",
-            "description": "x-displayName: API EP PII Level\nAPI Endpoint's PII Level.\n\n - APIEP_PII_NOT_DETECTED: x-displayName: API EP PII Level\nNo PII data detected for the given API Endpoint.\n - APIEP_PII_DETECTED: x-displayName: API EP PII Level Detected\nDetected PII data for a given API Endpoint.",
+            "description": "API Endpoint's PII Level.\n\nNo PII data detected for the given API Endpoint.\nDetected PII data for a given API Endpoint.",
             "title": "APIEP PII Level",
             "enum": [
                 "APIEP_PII_NOT_DETECTED",
                 "APIEP_PII_DETECTED"
             ],
             "default": "APIEP_PII_NOT_DETECTED",
-            "x-displayname": "",
+            "x-displayname": "API EP PII Level",
             "x-ves-proto-enum": "ves.io.schema.app_type.APIEPPIILevel"
         },
         "app_typeAPIEPSecurityRisk": {
@@ -3059,7 +3059,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "app_typeAuthenticationLocation": {
             "type": "string",
-            "description": "x-displayName: API EP Authentication Location\nAPI Endpoint's Authentication Location.\n\nThe API Endpoint authentication location is header.\nThe API Endpoint authentication location is query parameter.\nThe API Endpoint authentication location is request body.\nThe API Endpoint authentication location is cookie.",
+            "description": "API Endpoint's Authentication Location.\n\nThe API Endpoint authentication location is header.\nThe API Endpoint authentication location is query parameter.\nThe API Endpoint authentication location is request body.\nThe API Endpoint authentication location is cookie.",
             "title": "APIEP Authentication Location",
             "enum": [
                 "AUTH_LOCATION_HEADER",
@@ -3068,7 +3068,7 @@ var CustomAPISwaggerJSON string = `{
                 "AUTH_LOCATION_COOKIE"
             ],
             "default": "AUTH_LOCATION_HEADER",
-            "x-displayname": "",
+            "x-displayname": "API EP Authentication Location",
             "x-ves-proto-enum": "ves.io.schema.app_type.AuthenticationLocation"
         },
         "app_typeAuthenticationState": {
@@ -3086,7 +3086,7 @@ var CustomAPISwaggerJSON string = `{
         },
         "app_typeAuthenticationType": {
             "type": "string",
-            "description": "x-displayName: API EP Authentication Type\nAPI Endpoint's Authentication Type.\n\nThe API Endpoint authentication type is Basic.\nThe API Endpoint authentication type is Bearer.\nThe API Endpoint authentication type is JWT.\nThe API Endpoint authentication type is API Key.\nThe API Endpoint authentication type is OAuth 2.0.\nThe API Endpoint authentication type is OpenID Connect Discovery.\nThe API Endpoint authentication type is HTTP.\nThe API Endpoint authentication type is OAuth 1.0.\nThe API Endpoint authentication type is Digest.\nThe API Endpoint authentication type is Negotiate.",
+            "description": "API Endpoint's Authentication Type.\n\nThe API Endpoint authentication type is Basic.\nThe API Endpoint authentication type is Bearer.\nThe API Endpoint authentication type is JWT.\nThe API Endpoint authentication type is API Key.\nThe API Endpoint authentication type is OAuth 2.0.\nThe API Endpoint authentication type is OpenID Connect Discovery.\nThe API Endpoint authentication type is HTTP.\nThe API Endpoint authentication type is OAuth 1.0.\nThe API Endpoint authentication type is Digest.\nThe API Endpoint authentication type is Negotiate.",
             "title": "APIEP Authentication Type",
             "enum": [
                 "AUTH_TYPE_BASIC",
@@ -3101,7 +3101,7 @@ var CustomAPISwaggerJSON string = `{
                 "AUTH_TYPE_NEGOTIATE"
             ],
             "default": "AUTH_TYPE_BASIC",
-            "x-displayname": "",
+            "x-displayname": "API EP Authentication Type",
             "x-ves-proto-enum": "ves.io.schema.app_type.AuthenticationType"
         },
         "app_typeAuthenticationTypeLocPair": {

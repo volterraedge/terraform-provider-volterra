@@ -34,9 +34,11 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.rate_limiter.InputHours"] = InputHoursValidator()
 	vr["ves.io.schema.rate_limiter.InputMinutes"] = InputMinutesValidator()
 	vr["ves.io.schema.rate_limiter.InputSeconds"] = InputSecondsValidator()
+	vr["ves.io.schema.rate_limiter.LeakyBucketRateLimiter"] = LeakyBucketRateLimiterValidator()
 	vr["ves.io.schema.rate_limiter.RateLimitBlockAction"] = RateLimitBlockActionValidator()
 	vr["ves.io.schema.rate_limiter.RateLimitValue"] = RateLimitValueValidator()
 	vr["ves.io.schema.rate_limiter.ReplaceSpecType"] = ReplaceSpecTypeValidator()
+	vr["ves.io.schema.rate_limiter.TokenBucketRateLimiter"] = TokenBucketRateLimiterValidator()
 
 }
 
@@ -102,11 +104,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

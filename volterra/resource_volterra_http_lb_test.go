@@ -311,6 +311,18 @@ func testConfigHTTPLB(name, namespace, existLbName, existNsName string, timeout 
 			  "ves.io/app_type" = volterra_app_type.app_type.name
 			  "new-test"        = "true"
 		  }
+          caching_policy {
+			custom_cache_rule {
+			  cdn_cache_rules {
+				name = "rule1-test-1"
+				namespace = "%[2]s"
+				tenant    = "tenant1"
+			  }
+			}
+			default_cache_action {
+			  cache_ttl_default = "7h"
+			}
+		  }
 		  advertise_on_public_default_vip = true
 		  no_challenge = true
 		  http {
@@ -536,6 +548,18 @@ func testConfigHTTPLBWithAutoCert(name, namespace, existLbName, existNsName stri
 			non_default_loadbalancer = true
 			pass_through             = false
 			port = "443"
+		  }
+          caching_policy {
+			custom_cache_rule {
+			  cdn_cache_rules {
+				name = "rule1-test-1"
+				namespace = volterra_namespace.app.name
+				tenant    = "tenant1"
+			  }
+			}
+			default_cache_action {
+			  cache_ttl_default = "7h"
+			}
 		  }
 		  disable_rate_limit = true
 		  no_service_policies = true

@@ -471,6 +471,16 @@ var CustomAPISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "policy_name": {
+                    "type": "string",
+                    "description": " Policy name configured for WAF\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "policy_name",
+                    "x-displayname": "WAF Policy Name",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
                 "security_log_enabled": {
                     "type": "boolean",
                     "description": " Specifies if security logging is enabled",
@@ -617,6 +627,42 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "1000"
                     }
+                },
+                "nginx_one_object_id": {
+                    "type": "string",
+                    "description": " Signifies the uniqueness identifier for NGINX One representation of\n this NGINX server",
+                    "title": "nginx_one_object_id",
+                    "x-displayname": "Instance or Config Sync Group Object ID"
+                },
+                "nginx_one_object_name": {
+                    "type": "string",
+                    "description": " Hostname value set for Instance or Name for a Config Sync Group\n in NGINX One",
+                    "title": "nginx_one_object_name",
+                    "x-displayname": "Instance or Config Sync Group Name"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Signifies the port configured for the NGINX server\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "port",
+                    "format": "int64",
+                    "x-displayname": "Port",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "server_name": {
+                    "type": "string",
+                    "description": " Signifies the combination of first element in domains array and the port\n configured for the NGINX server",
+                    "title": "server_name",
+                    "x-displayname": "ServerName"
+                },
+                "total_routes": {
+                    "type": "integer",
+                    "description": " Total locations configured in the NGINX Server",
+                    "title": "Total locations configured in the NGINX Server",
+                    "format": "int64",
+                    "x-displayname": "Routes"
                 },
                 "waf_spec": {
                     "description": " If specified, the value signifies the WAF configuration in this server context",

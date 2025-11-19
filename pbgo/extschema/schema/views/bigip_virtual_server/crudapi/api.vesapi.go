@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.bigip_virtual_server.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.bigip_virtual_server.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2906,15 +2906,13 @@ var APISwaggerJSON string = `{
         },
         "bigip_virtual_serverBigIpVirtualServerAWAFEnforcementMode": {
             "type": "string",
-            "description": "BigIpVirtualServerAWAFEnforcementMode could be of type NONE, ALARM or BLOCKING.\n\nSpecifies the Virtual Server AWAF enforcement mode\n\nNo AWAF Policy attached\nAWAF Enforcement Transparent mode\nAWAF  Enforcement Blocking mode",
+            "description": "BigIpVirtualServerAWAFEnforcementMode could be of type NONE, ALARM or BLOCKING.\n\nx-displayName: \"BigIP AWAF Enforcement Mode\"\nSpecifies the Virtual Server AWAF enforcement mode\n\n - NONE: x-displayName: \"None\"\nNo AWAF Policy attached\n - MONITORING: x-displayName: \"Monitoring\"\nAWAF Enforcement Transparent mode\n - BLOCKING: x-displayName: \"Blocking\"\nAWAF  Enforcement Blocking mode",
             "enum": [
                 "NONE",
                 "MONITORING",
                 "BLOCKING"
             ],
-            "default": "NONE",
-            "x-displayname": "BigIP AWAF Enforcement Mode",
-            "x-ves-proto-enum": "ves.io.schema.views.bigip_virtual_server.BigIpVirtualServerAWAFEnforcementMode"
+            "default": "NONE"
         },
         "bigip_virtual_serverBigIpVirtualServerType": {
             "type": "string",
@@ -4637,6 +4635,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -4824,18 +4829,6 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/common_wafAPISpecificationSettings",
                     "x-displayname": "Enable"
                 },
-                "awaf_enforcement_mode": {
-                    "description": " Type of the BIG-IP AWAF Enforcement mode - None, Monitoring or Blocking",
-                    "title": "AWAF enforcement mode",
-                    "$ref": "#/definitions/bigip_virtual_serverBigIpVirtualServerAWAFEnforcementMode",
-                    "x-displayname": "WAF Mode"
-                },
-                "awaf_policy_name": {
-                    "type": "string",
-                    "description": " BIG-IP AWAF policy name",
-                    "title": "AWAF policy name",
-                    "x-displayname": "WAF Policy Name"
-                },
                 "bigip_hostname": {
                     "type": "string",
                     "description": " BIG-IP Hostname",
@@ -4904,10 +4897,20 @@ var APISwaggerJSON string = `{
                     "description": " Service Discovery Object, which discovered the bigip virtual server\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
                     "title": "Service Discovery",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Service Discovery",
+                    "x-displayname": "BIG-IP Service Discovery",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "sub_path": {
+                    "type": "string",
+                    "description": " BIG-IP Virtual Server sub path in relation to partition\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "title": "Sub Path",
+                    "maxLength": 1024,
+                    "x-displayname": "Sub Path",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1024"
                     }
                 },
                 "type": {

@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.udp_loadbalancer.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.udp_loadbalancer.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -4067,7 +4067,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cluster_retract_choice": "[]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"udp\"]",
-            "x-ves-oneof-field-port_choice": "[\"listen_port\"]",
+            "x-ves-oneof-field-port_choice": "[\"listen_port\",\"port_ranges\"]",
             "x-ves-proto-message": "ves.io.schema.views.udp_loadbalancer.CreateSpecType",
             "properties": {
                 "advertise_custom": {
@@ -4144,7 +4144,7 @@ var APISwaggerJSON string = `{
                 },
                 "listen_port": {
                     "type": "integer",
-                    "description": "Exclusive with []\n Listen Port for this load balancer\n\nExample: - \"53\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [port_ranges]\n Listen Port for this load balancer\n\nExample: - \"53\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Listen Port",
                     "x-ves-example": "53",
@@ -4165,6 +4165,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"53,123,5000-5020\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "53,123,5000-5020",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "64",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
+                    }
+                },
                 "udp": {
                     "description": "Exclusive with []\n UDP Load Balancer.",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -4181,7 +4195,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cluster_retract_choice": "[]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"udp\"]",
-            "x-ves-oneof-field-port_choice": "[\"listen_port\"]",
+            "x-ves-oneof-field-port_choice": "[\"listen_port\",\"port_ranges\"]",
             "x-ves-proto-message": "ves.io.schema.views.udp_loadbalancer.GetSpecType",
             "properties": {
                 "advertise_custom": {
@@ -4280,7 +4294,7 @@ var APISwaggerJSON string = `{
                 },
                 "listen_port": {
                     "type": "integer",
-                    "description": "Exclusive with []\n Listen Port for this load balancer\n\nExample: - \"53\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [port_ranges]\n Listen Port for this load balancer\n\nExample: - \"53\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Listen Port",
                     "x-ves-example": "53",
@@ -4301,6 +4315,20 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
                 },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"53,123,5000-5020\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "53,123,5000-5020",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "64",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
+                    }
+                },
                 "udp": {
                     "description": "Exclusive with []\n UDP Load Balancer.",
                     "$ref": "#/definitions/ioschemaEmpty",
@@ -4317,7 +4345,7 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cluster_retract_choice": "[]",
             "x-ves-oneof-field-hash_policy_choice": "[\"hash_policy_choice_random\",\"hash_policy_choice_round_robin\",\"hash_policy_choice_source_ip_stickiness\"]",
             "x-ves-oneof-field-loadbalancer_type": "[\"udp\"]",
-            "x-ves-oneof-field-port_choice": "[\"listen_port\"]",
+            "x-ves-oneof-field-port_choice": "[\"listen_port\",\"port_ranges\"]",
             "x-ves-proto-message": "ves.io.schema.views.udp_loadbalancer.ReplaceSpecType",
             "properties": {
                 "advertise_custom": {
@@ -4394,7 +4422,7 @@ var APISwaggerJSON string = `{
                 },
                 "listen_port": {
                     "type": "integer",
-                    "description": "Exclusive with []\n Listen Port for this load balancer\n\nExample: - \"53\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "description": "Exclusive with [port_ranges]\n Listen Port for this load balancer\n\nExample: - \"53\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.lte: 65535\n",
                     "format": "int64",
                     "x-displayname": "Listen Port",
                     "x-ves-example": "53",
@@ -4413,6 +4441,20 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "16",
                         "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "port_ranges": {
+                    "type": "string",
+                    "description": "Exclusive with [listen_port]\n A string containing a comma separated list of port ranges.\n Each port range consists of a single port or two ports separated by \"-\".\n\nExample: - \"53,123,5000-5020\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 512\n  ves.io.schema.rules.string.max_ports: 64\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.unique_port_range_list: true\n",
+                    "minLength": 1,
+                    "maxLength": 512,
+                    "x-displayname": "Port Ranges",
+                    "x-ves-example": "53,123,5000-5020",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "512",
+                        "ves.io.schema.rules.string.max_ports": "64",
+                        "ves.io.schema.rules.string.min_len": "1",
+                        "ves.io.schema.rules.string.unique_port_range_list": "true"
                     }
                 },
                 "udp": {

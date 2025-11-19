@@ -1026,9 +1026,9 @@ func (m *BotDefenseAdvancedType) GetMobileDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 	vdRef := db.NewDirectRefForView(vref)
-	vdRef.SetKind("bot_defense_app_infrastructure.Object")
+	vdRef.SetKind("bot_infrastructure.Object")
 	dri := db.DRefInfo{
-		RefdType:   "bot_defense_app_infrastructure.Object",
+		RefdType:   "bot_infrastructure.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
@@ -1042,9 +1042,9 @@ func (m *BotDefenseAdvancedType) GetMobileDRefInfo() ([]db.DRefInfo, error) {
 // GetMobileDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *BotDefenseAdvancedType) GetMobileDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "bot_defense_app_infrastructure.Object")
+	refdType, err := d.TypeForEntryKind("", "", "bot_infrastructure.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: bot_defense_app_infrastructure")
+		return nil, errors.Wrap(err, "Cannot find type for kind: bot_infrastructure")
 	}
 
 	vref := m.GetMobile()
@@ -1052,7 +1052,7 @@ func (m *BotDefenseAdvancedType) GetMobileDBEntries(ctx context.Context, d db.In
 		return nil, nil
 	}
 	ref := &ves_io_schema.ObjectRefType{
-		Kind:      "bot_defense_app_infrastructure.Object",
+		Kind:      "bot_infrastructure.Object",
 		Tenant:    vref.Tenant,
 		Namespace: vref.Namespace,
 		Name:      vref.Name,
@@ -1075,9 +1075,9 @@ func (m *BotDefenseAdvancedType) GetWebDRefInfo() ([]db.DRefInfo, error) {
 		return nil, nil
 	}
 	vdRef := db.NewDirectRefForView(vref)
-	vdRef.SetKind("bot_defense_app_infrastructure.Object")
+	vdRef.SetKind("bot_infrastructure.Object")
 	dri := db.DRefInfo{
-		RefdType:   "bot_defense_app_infrastructure.Object",
+		RefdType:   "bot_infrastructure.Object",
 		RefdTenant: vref.Tenant,
 		RefdNS:     vref.Namespace,
 		RefdName:   vref.Name,
@@ -1091,9 +1091,9 @@ func (m *BotDefenseAdvancedType) GetWebDRefInfo() ([]db.DRefInfo, error) {
 // GetWebDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
 func (m *BotDefenseAdvancedType) GetWebDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
 	var entries []db.Entry
-	refdType, err := d.TypeForEntryKind("", "", "bot_defense_app_infrastructure.Object")
+	refdType, err := d.TypeForEntryKind("", "", "bot_infrastructure.Object")
 	if err != nil {
-		return nil, errors.Wrap(err, "Cannot find type for kind: bot_defense_app_infrastructure")
+		return nil, errors.Wrap(err, "Cannot find type for kind: bot_infrastructure")
 	}
 
 	vref := m.GetWeb()
@@ -1101,7 +1101,7 @@ func (m *BotDefenseAdvancedType) GetWebDBEntries(ctx context.Context, d db.Inter
 		return nil, nil
 	}
 	ref := &ves_io_schema.ObjectRefType{
-		Kind:      "bot_defense_app_infrastructure.Object",
+		Kind:      "bot_infrastructure.Object",
 		Tenant:    vref.Tenant,
 		Namespace: vref.Namespace,
 		Name:      vref.Name,
@@ -1121,24 +1121,19 @@ type ValidateBotDefenseAdvancedType struct {
 	FldValidators map[string]db.ValidatorFunc
 }
 
-func (v *ValidateBotDefenseAdvancedType) PolicyValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
-
-	reqdValidatorFn, err := db.NewMessageValidationRuleHandler(rules)
+func (v *ValidateBotDefenseAdvancedType) JavaScriptChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
-		return nil, errors.Wrap(err, "MessageValidationRuleHandler for policy")
+		return nil, errors.Wrap(err, "ValidationRuleHandler for java_script_choice")
 	}
-	validatorFn := func(ctx context.Context, val interface{}, opts ...db.ValidateOpt) error {
-		if err := reqdValidatorFn(ctx, val, opts...); err != nil {
-			return err
-		}
+	return validatorFn, nil
+}
 
-		if err := BotDefenseAdvancedPolicyTypeValidator().Validate(ctx, val, opts...); err != nil {
-			return err
-		}
-
-		return nil
+func (v *ValidateBotDefenseAdvancedType) MobileSdkChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for mobile_sdk_choice")
 	}
-
 	return validatorFn, nil
 }
 
@@ -1156,6 +1151,64 @@ func (v *ValidateBotDefenseAdvancedType) Validate(ctx context.Context, pm interf
 		return nil
 	}
 
+	if fv, exists := v.FldValidators["java_script_choice"]; exists {
+		val := m.GetJavaScriptChoice()
+		vOpts := append(opts,
+			db.WithValidateField("java_script_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetJavaScriptChoice().(type) {
+	case *BotDefenseAdvancedType_DisableJsInsert:
+		if fv, exists := v.FldValidators["java_script_choice.disable_js_insert"]; exists {
+			val := m.GetJavaScriptChoice().(*BotDefenseAdvancedType_DisableJsInsert).DisableJsInsert
+			vOpts := append(opts,
+				db.WithValidateField("java_script_choice"),
+				db.WithValidateField("disable_js_insert"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotDefenseAdvancedType_JsInsertAllPages:
+		if fv, exists := v.FldValidators["java_script_choice.js_insert_all_pages"]; exists {
+			val := m.GetJavaScriptChoice().(*BotDefenseAdvancedType_JsInsertAllPages).JsInsertAllPages
+			vOpts := append(opts,
+				db.WithValidateField("java_script_choice"),
+				db.WithValidateField("js_insert_all_pages"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotDefenseAdvancedType_JsInsertAllPagesExcept:
+		if fv, exists := v.FldValidators["java_script_choice.js_insert_all_pages_except"]; exists {
+			val := m.GetJavaScriptChoice().(*BotDefenseAdvancedType_JsInsertAllPagesExcept).JsInsertAllPagesExcept
+			vOpts := append(opts,
+				db.WithValidateField("java_script_choice"),
+				db.WithValidateField("js_insert_all_pages_except"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotDefenseAdvancedType_JsInsertionRules:
+		if fv, exists := v.FldValidators["java_script_choice.js_insertion_rules"]; exists {
+			val := m.GetJavaScriptChoice().(*BotDefenseAdvancedType_JsInsertionRules).JsInsertionRules
+			vOpts := append(opts,
+				db.WithValidateField("java_script_choice"),
+				db.WithValidateField("js_insertion_rules"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["mobile"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("mobile"))
@@ -1165,11 +1218,38 @@ func (v *ValidateBotDefenseAdvancedType) Validate(ctx context.Context, pm interf
 
 	}
 
-	if fv, exists := v.FldValidators["policy"]; exists {
-
-		vOpts := append(opts, db.WithValidateField("policy"))
-		if err := fv(ctx, m.GetPolicy(), vOpts...); err != nil {
+	if fv, exists := v.FldValidators["mobile_sdk_choice"]; exists {
+		val := m.GetMobileSdkChoice()
+		vOpts := append(opts,
+			db.WithValidateField("mobile_sdk_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
 			return err
+		}
+	}
+
+	switch m.GetMobileSdkChoice().(type) {
+	case *BotDefenseAdvancedType_DisableMobileSdk:
+		if fv, exists := v.FldValidators["mobile_sdk_choice.disable_mobile_sdk"]; exists {
+			val := m.GetMobileSdkChoice().(*BotDefenseAdvancedType_DisableMobileSdk).DisableMobileSdk
+			vOpts := append(opts,
+				db.WithValidateField("mobile_sdk_choice"),
+				db.WithValidateField("disable_mobile_sdk"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *BotDefenseAdvancedType_MobileSdkConfig:
+		if fv, exists := v.FldValidators["mobile_sdk_choice.mobile_sdk_config"]; exists {
+			val := m.GetMobileSdkChoice().(*BotDefenseAdvancedType_MobileSdkConfig).MobileSdkConfig
+			vOpts := append(opts,
+				db.WithValidateField("mobile_sdk_choice"),
+				db.WithValidateField("mobile_sdk_config"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
 		}
 
 	}
@@ -1198,16 +1278,32 @@ var DefaultBotDefenseAdvancedTypeValidator = func() *ValidateBotDefenseAdvancedT
 	vFnMap := map[string]db.ValidatorFunc{}
 	_ = vFnMap
 
-	vrhPolicy := v.PolicyValidationRuleHandler
-	rulesPolicy := map[string]string{
-		"ves.io.schema.rules.message.required": "true",
+	vrhJavaScriptChoice := v.JavaScriptChoiceValidationRuleHandler
+	rulesJavaScriptChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
 	}
-	vFn, err = vrhPolicy(rulesPolicy)
+	vFn, err = vrhJavaScriptChoice(rulesJavaScriptChoice)
 	if err != nil {
-		errMsg := fmt.Sprintf("ValidationRuleHandler for BotDefenseAdvancedType.policy: %s", err)
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotDefenseAdvancedType.java_script_choice: %s", err)
 		panic(errMsg)
 	}
-	v.FldValidators["policy"] = vFn
+	v.FldValidators["java_script_choice"] = vFn
+
+	vrhMobileSdkChoice := v.MobileSdkChoiceValidationRuleHandler
+	rulesMobileSdkChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhMobileSdkChoice(rulesMobileSdkChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for BotDefenseAdvancedType.mobile_sdk_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["mobile_sdk_choice"] = vFn
+
+	v.FldValidators["java_script_choice.js_insert_all_pages_except"] = ShapeJavaScriptInsertAllWithExceptionsTypeValidator().Validate
+	v.FldValidators["java_script_choice.js_insertion_rules"] = ShapeJavaScriptInsertTypeValidator().Validate
+
+	v.FldValidators["mobile_sdk_choice.mobile_sdk_config"] = BotAdvancedMobileSDKConfigTypeValidator().Validate
 
 	v.FldValidators["web"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 

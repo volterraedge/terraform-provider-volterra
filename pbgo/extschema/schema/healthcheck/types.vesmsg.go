@@ -212,6 +212,17 @@ func (v *ValidateCreateSpecType) Validate(ctx context.Context, pm interface{}, o
 				return err
 			}
 		}
+	case *CreateSpecType_UdpIcmpHealthCheck:
+		if fv, exists := v.FldValidators["health_check.udp_icmp_health_check"]; exists {
+			val := m.GetHealthCheck().(*CreateSpecType_UdpIcmpHealthCheck).UdpIcmpHealthCheck
+			vOpts := append(opts,
+				db.WithValidateField("health_check"),
+				db.WithValidateField("udp_icmp_health_check"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1097,6 +1108,17 @@ func (v *ValidateGetSpecType) Validate(ctx context.Context, pm interface{}, opts
 				return err
 			}
 		}
+	case *GetSpecType_UdpIcmpHealthCheck:
+		if fv, exists := v.FldValidators["health_check.udp_icmp_health_check"]; exists {
+			val := m.GetHealthCheck().(*GetSpecType_UdpIcmpHealthCheck).UdpIcmpHealthCheck
+			vOpts := append(opts,
+				db.WithValidateField("health_check"),
+				db.WithValidateField("udp_icmp_health_check"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -1462,6 +1484,17 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 			vOpts := append(opts,
 				db.WithValidateField("health_check"),
 				db.WithValidateField("dns_proxy_icmp_health_check"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GlobalSpecType_UdpIcmpHealthCheck:
+		if fv, exists := v.FldValidators["health_check.udp_icmp_health_check"]; exists {
+			val := m.GetHealthCheck().(*GlobalSpecType_UdpIcmpHealthCheck).UdpIcmpHealthCheck
+			vOpts := append(opts,
+				db.WithValidateField("health_check"),
+				db.WithValidateField("udp_icmp_health_check"),
 			)
 			if err := fv(ctx, val, vOpts...); err != nil {
 				return err
@@ -2216,6 +2249,17 @@ func (v *ValidateReplaceSpecType) Validate(ctx context.Context, pm interface{}, 
 				return err
 			}
 		}
+	case *ReplaceSpecType_UdpIcmpHealthCheck:
+		if fv, exists := v.FldValidators["health_check.udp_icmp_health_check"]; exists {
+			val := m.GetHealthCheck().(*ReplaceSpecType_UdpIcmpHealthCheck).UdpIcmpHealthCheck
+			vOpts := append(opts,
+				db.WithValidateField("health_check"),
+				db.WithValidateField("udp_icmp_health_check"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 
@@ -2529,6 +2573,9 @@ func (r *CreateSpecType) SetHealthCheckToGlobalSpecType(o *GlobalSpecType) error
 	case *CreateSpecType_TcpHealthCheck:
 		o.HealthCheck = &GlobalSpecType_TcpHealthCheck{TcpHealthCheck: of.TcpHealthCheck}
 
+	case *CreateSpecType_UdpIcmpHealthCheck:
+		o.HealthCheck = &GlobalSpecType_UdpIcmpHealthCheck{UdpIcmpHealthCheck: of.UdpIcmpHealthCheck}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -2557,6 +2604,9 @@ func (r *CreateSpecType) GetHealthCheckFromGlobalSpecType(o *GlobalSpecType) err
 
 	case *GlobalSpecType_TcpHealthCheck:
 		r.HealthCheck = &CreateSpecType_TcpHealthCheck{TcpHealthCheck: of.TcpHealthCheck}
+
+	case *GlobalSpecType_UdpIcmpHealthCheck:
+		r.HealthCheck = &CreateSpecType_UdpIcmpHealthCheck{UdpIcmpHealthCheck: of.UdpIcmpHealthCheck}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2631,6 +2681,9 @@ func (r *GetSpecType) SetHealthCheckToGlobalSpecType(o *GlobalSpecType) error {
 	case *GetSpecType_TcpHealthCheck:
 		o.HealthCheck = &GlobalSpecType_TcpHealthCheck{TcpHealthCheck: of.TcpHealthCheck}
 
+	case *GetSpecType_UdpIcmpHealthCheck:
+		o.HealthCheck = &GlobalSpecType_UdpIcmpHealthCheck{UdpIcmpHealthCheck: of.UdpIcmpHealthCheck}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -2659,6 +2712,9 @@ func (r *GetSpecType) GetHealthCheckFromGlobalSpecType(o *GlobalSpecType) error 
 
 	case *GlobalSpecType_TcpHealthCheck:
 		r.HealthCheck = &GetSpecType_TcpHealthCheck{TcpHealthCheck: of.TcpHealthCheck}
+
+	case *GlobalSpecType_UdpIcmpHealthCheck:
+		r.HealthCheck = &GetSpecType_UdpIcmpHealthCheck{UdpIcmpHealthCheck: of.UdpIcmpHealthCheck}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
@@ -2735,6 +2791,9 @@ func (r *ReplaceSpecType) SetHealthCheckToGlobalSpecType(o *GlobalSpecType) erro
 	case *ReplaceSpecType_TcpHealthCheck:
 		o.HealthCheck = &GlobalSpecType_TcpHealthCheck{TcpHealthCheck: of.TcpHealthCheck}
 
+	case *ReplaceSpecType_UdpIcmpHealthCheck:
+		o.HealthCheck = &GlobalSpecType_UdpIcmpHealthCheck{UdpIcmpHealthCheck: of.UdpIcmpHealthCheck}
+
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)
 	}
@@ -2763,6 +2822,9 @@ func (r *ReplaceSpecType) GetHealthCheckFromGlobalSpecType(o *GlobalSpecType) er
 
 	case *GlobalSpecType_TcpHealthCheck:
 		r.HealthCheck = &ReplaceSpecType_TcpHealthCheck{TcpHealthCheck: of.TcpHealthCheck}
+
+	case *GlobalSpecType_UdpIcmpHealthCheck:
+		r.HealthCheck = &ReplaceSpecType_UdpIcmpHealthCheck{UdpIcmpHealthCheck: of.UdpIcmpHealthCheck}
 
 	default:
 		return fmt.Errorf("Unknown oneof field %T", of)

@@ -825,7 +825,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhApiInventoryInclusionList := v.ApiInventoryInclusionListValidationRuleHandler
 	rulesApiInventoryInclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryInclusionList(rulesApiInventoryInclusionList)
@@ -837,7 +837,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhApiInventoryExclusionList := v.ApiInventoryExclusionListValidationRuleHandler
 	rulesApiInventoryExclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryExclusionList(rulesApiInventoryExclusionList)
@@ -849,7 +849,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhNonApiEndpoints := v.NonApiEndpointsValidationRuleHandler
 	rulesNonApiEndpoints := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNonApiEndpoints(rulesNonApiEndpoints)
@@ -1249,7 +1249,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhApiInventoryInclusionList := v.ApiInventoryInclusionListValidationRuleHandler
 	rulesApiInventoryInclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryInclusionList(rulesApiInventoryInclusionList)
@@ -1261,7 +1261,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhApiInventoryExclusionList := v.ApiInventoryExclusionListValidationRuleHandler
 	rulesApiInventoryExclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryExclusionList(rulesApiInventoryExclusionList)
@@ -1273,7 +1273,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhNonApiEndpoints := v.NonApiEndpointsValidationRuleHandler
 	rulesNonApiEndpoints := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNonApiEndpoints(rulesNonApiEndpoints)
@@ -1794,7 +1794,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhApiInventoryInclusionList := v.ApiInventoryInclusionListValidationRuleHandler
 	rulesApiInventoryInclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryInclusionList(rulesApiInventoryInclusionList)
@@ -1806,7 +1806,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhApiInventoryExclusionList := v.ApiInventoryExclusionListValidationRuleHandler
 	rulesApiInventoryExclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryExclusionList(rulesApiInventoryExclusionList)
@@ -1818,7 +1818,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhNonApiEndpoints := v.NonApiEndpointsValidationRuleHandler
 	rulesNonApiEndpoints := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNonApiEndpoints(rulesNonApiEndpoints)
@@ -2212,7 +2212,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhApiInventoryInclusionList := v.ApiInventoryInclusionListValidationRuleHandler
 	rulesApiInventoryInclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryInclusionList(rulesApiInventoryInclusionList)
@@ -2224,7 +2224,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhApiInventoryExclusionList := v.ApiInventoryExclusionListValidationRuleHandler
 	rulesApiInventoryExclusionList := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryExclusionList(rulesApiInventoryExclusionList)
@@ -2236,7 +2236,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhNonApiEndpoints := v.NonApiEndpointsValidationRuleHandler
 	rulesNonApiEndpoints := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNonApiEndpoints(rulesNonApiEndpoints)

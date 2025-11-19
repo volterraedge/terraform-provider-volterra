@@ -16,6 +16,7 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_ike1 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ike1"
+	ves_io_schema_views_ike_phase1_profile "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/ike_phase1_profile"
 )
 
 // resourceVolterraIke1 is implementation of Volterra's Ike1 resources
@@ -58,6 +59,136 @@ func resourceVolterraIke1() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
+			},
+
+			"authentication_algos": {
+
+				Type: schema.TypeList,
+
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+
+			"dh_group": {
+
+				Type: schema.TypeList,
+
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+
+			"encryption_algos": {
+
+				Type: schema.TypeList,
+
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+
+			"ike_keylifetime_hours": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"duration": {
+							Type:       schema.TypeInt,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
+			"ike_keylifetime_minutes": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"duration": {
+							Type:       schema.TypeInt,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
+			"use_default_keylifetime": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
+
+			"reauth_disabled": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
+
+			"reauth_timeout_days": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"duration": {
+							Type:       schema.TypeInt,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
+			"reauth_timeout_hours": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"duration": {
+							Type:       schema.TypeInt,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
+			"prf": {
+
+				Type: schema.TypeList,
+
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
 			},
 		},
 	}
@@ -114,6 +245,186 @@ func resourceVolterraIke1Create(d *schema.ResourceData, meta interface{}) error 
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		createMeta.Namespace =
 			v.(string)
+	}
+
+	//authentication_algos
+	if v, ok := d.GetOk("authentication_algos"); ok && !isIntfNil(v) {
+
+		authentication_algosList := []ves_io_schema.AuthenticationAlgorithm{}
+		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field authentication_algos")
+			}
+			authentication_algosList = append(authentication_algosList, ves_io_schema.AuthenticationAlgorithm(ves_io_schema.AuthenticationAlgorithm_value[j.(string)]))
+		}
+		createSpec.AuthenticationAlgos = authentication_algosList
+
+	}
+
+	//dh_group
+	if v, ok := d.GetOk("dh_group"); ok && !isIntfNil(v) {
+
+		dh_groupList := []ves_io_schema.DHGroup{}
+		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field dh_group")
+			}
+			dh_groupList = append(dh_groupList, ves_io_schema.DHGroup(ves_io_schema.DHGroup_value[j.(string)]))
+		}
+		createSpec.DhGroup = dh_groupList
+
+	}
+
+	//encryption_algos
+	if v, ok := d.GetOk("encryption_algos"); ok && !isIntfNil(v) {
+
+		encryption_algosList := []ves_io_schema.EncryptionAlgorithm{}
+		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field encryption_algos")
+			}
+			encryption_algosList = append(encryption_algosList, ves_io_schema.EncryptionAlgorithm(ves_io_schema.EncryptionAlgorithm_value[j.(string)]))
+		}
+		createSpec.EncryptionAlgos = encryption_algosList
+
+	}
+
+	//ike_key_lifetime
+
+	ikeKeyLifetimeTypeFound := false
+
+	if v, ok := d.GetOk("ike_keylifetime_hours"); ok && !isIntfNil(v) && !ikeKeyLifetimeTypeFound {
+
+		ikeKeyLifetimeTypeFound = true
+		ikeKeyLifetimeInt := &ves_io_schema_ike1.CreateSpecType_IkeKeylifetimeHours{}
+		ikeKeyLifetimeInt.IkeKeylifetimeHours = &ves_io_schema_views_ike_phase1_profile.InputHours{}
+		createSpec.IkeKeyLifetime = ikeKeyLifetimeInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+					ikeKeyLifetimeInt.IkeKeylifetimeHours.Duration = uint32(v.(int))
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("ike_keylifetime_minutes"); ok && !isIntfNil(v) && !ikeKeyLifetimeTypeFound {
+
+		ikeKeyLifetimeTypeFound = true
+		ikeKeyLifetimeInt := &ves_io_schema_ike1.CreateSpecType_IkeKeylifetimeMinutes{}
+		ikeKeyLifetimeInt.IkeKeylifetimeMinutes = &ves_io_schema_views_ike_phase1_profile.InputMinutes{}
+		createSpec.IkeKeyLifetime = ikeKeyLifetimeInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+					ikeKeyLifetimeInt.IkeKeylifetimeMinutes.Duration = uint32(v.(int))
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("use_default_keylifetime"); ok && !ikeKeyLifetimeTypeFound {
+
+		ikeKeyLifetimeTypeFound = true
+
+		if v.(bool) {
+			ikeKeyLifetimeInt := &ves_io_schema_ike1.CreateSpecType_UseDefaultKeylifetime{}
+			ikeKeyLifetimeInt.UseDefaultKeylifetime = &ves_io_schema.Empty{}
+			createSpec.IkeKeyLifetime = ikeKeyLifetimeInt
+		}
+
+	}
+
+	//ike_reauth_timeout
+
+	ikeReauthTimeoutTypeFound := false
+
+	if v, ok := d.GetOk("reauth_disabled"); ok && !ikeReauthTimeoutTypeFound {
+
+		ikeReauthTimeoutTypeFound = true
+
+		if v.(bool) {
+			ikeReauthTimeoutInt := &ves_io_schema_ike1.CreateSpecType_ReauthDisabled{}
+			ikeReauthTimeoutInt.ReauthDisabled = &ves_io_schema.Empty{}
+			createSpec.IkeReauthTimeout = ikeReauthTimeoutInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("reauth_timeout_days"); ok && !isIntfNil(v) && !ikeReauthTimeoutTypeFound {
+
+		ikeReauthTimeoutTypeFound = true
+		ikeReauthTimeoutInt := &ves_io_schema_ike1.CreateSpecType_ReauthTimeoutDays{}
+		ikeReauthTimeoutInt.ReauthTimeoutDays = &ves_io_schema_views_ike_phase1_profile.InputDays{}
+		createSpec.IkeReauthTimeout = ikeReauthTimeoutInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+					ikeReauthTimeoutInt.ReauthTimeoutDays.Duration = uint32(v.(int))
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("reauth_timeout_hours"); ok && !isIntfNil(v) && !ikeReauthTimeoutTypeFound {
+
+		ikeReauthTimeoutTypeFound = true
+		ikeReauthTimeoutInt := &ves_io_schema_ike1.CreateSpecType_ReauthTimeoutHours{}
+		ikeReauthTimeoutInt.ReauthTimeoutHours = &ves_io_schema_views_ike_phase1_profile.InputHours{}
+		createSpec.IkeReauthTimeout = ikeReauthTimeoutInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+					ikeReauthTimeoutInt.ReauthTimeoutHours.Duration = uint32(v.(int))
+
+				}
+
+			}
+		}
+
+	}
+
+	//prf
+	if v, ok := d.GetOk("prf"); ok && !isIntfNil(v) {
+
+		prfList := []ves_io_schema.PseudoRandomFunction{}
+		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field prf")
+			}
+			prfList = append(prfList, ves_io_schema.PseudoRandomFunction(ves_io_schema.PseudoRandomFunction_value[j.(string)]))
+		}
+		createSpec.Prf = prfList
+
 	}
 
 	log.Printf("[DEBUG] Creating Volterra Ike1 object with struct: %+v", createReq)
@@ -213,6 +524,178 @@ func resourceVolterraIke1Update(d *schema.ResourceData, meta interface{}) error 
 	if v, ok := d.GetOk("namespace"); ok && !isIntfNil(v) {
 		updateMeta.Namespace =
 			v.(string)
+	}
+
+	if v, ok := d.GetOk("authentication_algos"); ok && !isIntfNil(v) {
+
+		authentication_algosList := []ves_io_schema.AuthenticationAlgorithm{}
+		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field authentication_algos")
+			}
+			authentication_algosList = append(authentication_algosList, ves_io_schema.AuthenticationAlgorithm(ves_io_schema.AuthenticationAlgorithm_value[j.(string)]))
+		}
+		updateSpec.AuthenticationAlgos = authentication_algosList
+
+	}
+
+	if v, ok := d.GetOk("dh_group"); ok && !isIntfNil(v) {
+
+		dh_groupList := []ves_io_schema.DHGroup{}
+		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field dh_group")
+			}
+			dh_groupList = append(dh_groupList, ves_io_schema.DHGroup(ves_io_schema.DHGroup_value[j.(string)]))
+		}
+		updateSpec.DhGroup = dh_groupList
+
+	}
+
+	if v, ok := d.GetOk("encryption_algos"); ok && !isIntfNil(v) {
+
+		encryption_algosList := []ves_io_schema.EncryptionAlgorithm{}
+		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field encryption_algos")
+			}
+			encryption_algosList = append(encryption_algosList, ves_io_schema.EncryptionAlgorithm(ves_io_schema.EncryptionAlgorithm_value[j.(string)]))
+		}
+		updateSpec.EncryptionAlgos = encryption_algosList
+
+	}
+
+	ikeKeyLifetimeTypeFound := false
+
+	if v, ok := d.GetOk("ike_keylifetime_hours"); ok && !isIntfNil(v) && !ikeKeyLifetimeTypeFound {
+
+		ikeKeyLifetimeTypeFound = true
+		ikeKeyLifetimeInt := &ves_io_schema_ike1.ReplaceSpecType_IkeKeylifetimeHours{}
+		ikeKeyLifetimeInt.IkeKeylifetimeHours = &ves_io_schema_views_ike_phase1_profile.InputHours{}
+		updateSpec.IkeKeyLifetime = ikeKeyLifetimeInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+					ikeKeyLifetimeInt.IkeKeylifetimeHours.Duration = uint32(v.(int))
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("ike_keylifetime_minutes"); ok && !isIntfNil(v) && !ikeKeyLifetimeTypeFound {
+
+		ikeKeyLifetimeTypeFound = true
+		ikeKeyLifetimeInt := &ves_io_schema_ike1.ReplaceSpecType_IkeKeylifetimeMinutes{}
+		ikeKeyLifetimeInt.IkeKeylifetimeMinutes = &ves_io_schema_views_ike_phase1_profile.InputMinutes{}
+		updateSpec.IkeKeyLifetime = ikeKeyLifetimeInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+					ikeKeyLifetimeInt.IkeKeylifetimeMinutes.Duration = uint32(v.(int))
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("use_default_keylifetime"); ok && !ikeKeyLifetimeTypeFound {
+
+		ikeKeyLifetimeTypeFound = true
+
+		if v.(bool) {
+			ikeKeyLifetimeInt := &ves_io_schema_ike1.ReplaceSpecType_UseDefaultKeylifetime{}
+			ikeKeyLifetimeInt.UseDefaultKeylifetime = &ves_io_schema.Empty{}
+			updateSpec.IkeKeyLifetime = ikeKeyLifetimeInt
+		}
+
+	}
+
+	ikeReauthTimeoutTypeFound := false
+
+	if v, ok := d.GetOk("reauth_disabled"); ok && !ikeReauthTimeoutTypeFound {
+
+		ikeReauthTimeoutTypeFound = true
+
+		if v.(bool) {
+			ikeReauthTimeoutInt := &ves_io_schema_ike1.ReplaceSpecType_ReauthDisabled{}
+			ikeReauthTimeoutInt.ReauthDisabled = &ves_io_schema.Empty{}
+			updateSpec.IkeReauthTimeout = ikeReauthTimeoutInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("reauth_timeout_days"); ok && !isIntfNil(v) && !ikeReauthTimeoutTypeFound {
+
+		ikeReauthTimeoutTypeFound = true
+		ikeReauthTimeoutInt := &ves_io_schema_ike1.ReplaceSpecType_ReauthTimeoutDays{}
+		ikeReauthTimeoutInt.ReauthTimeoutDays = &ves_io_schema_views_ike_phase1_profile.InputDays{}
+		updateSpec.IkeReauthTimeout = ikeReauthTimeoutInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+					ikeReauthTimeoutInt.ReauthTimeoutDays.Duration = uint32(v.(int))
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("reauth_timeout_hours"); ok && !isIntfNil(v) && !ikeReauthTimeoutTypeFound {
+
+		ikeReauthTimeoutTypeFound = true
+		ikeReauthTimeoutInt := &ves_io_schema_ike1.ReplaceSpecType_ReauthTimeoutHours{}
+		ikeReauthTimeoutInt.ReauthTimeoutHours = &ves_io_schema_views_ike_phase1_profile.InputHours{}
+		updateSpec.IkeReauthTimeout = ikeReauthTimeoutInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["duration"]; ok && !isIntfNil(v) {
+
+					ikeReauthTimeoutInt.ReauthTimeoutHours.Duration = uint32(v.(int))
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("prf"); ok && !isIntfNil(v) {
+
+		prfList := []ves_io_schema.PseudoRandomFunction{}
+		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field prf")
+			}
+			prfList = append(prfList, ves_io_schema.PseudoRandomFunction(ves_io_schema.PseudoRandomFunction_value[j.(string)]))
+		}
+		updateSpec.Prf = prfList
+
 	}
 
 	log.Printf("[DEBUG] Updating Volterra Ike1 obj with struct: %+v", updateReq)

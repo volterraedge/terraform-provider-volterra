@@ -83,6 +83,12 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 										Optional: true,
 									},
 
+									"disable": {
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"name": {
 										Type:     schema.TypeString,
 										Required: true,
@@ -329,6 +335,13 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 													},
 												},
 
+												"presence": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"name": {
 													Type:     schema.TypeString,
 													Required: true,
@@ -520,6 +533,77 @@ func resourceVolterraRateLimiterPolicy() *schema.Resource {
 					},
 				},
 			},
+
+			"any_server": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
+
+			"server_name": {
+
+				Type:       schema.TypeString,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
+
+			"server_name_matcher": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"exact_values": {
+
+							Type: schema.TypeList,
+
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+
+						"regex_values": {
+
+							Type: schema.TypeList,
+
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+					},
+				},
+			},
+
+			"server_selector": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"expressions": {
+
+							Type: schema.TypeList,
+
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Schema{
+								Type: schema.TypeString,
+							},
+						},
+					},
+				},
+			},
 		},
 	}
 }
@@ -599,6 +683,10 @@ func resourceVolterraRateLimiterPolicyCreate(d *schema.ResourceData, meta interf
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
 							}
 
 							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -739,28 +827,30 @@ func resourceVolterraRateLimiterPolicyCreate(d *schema.ResourceData, meta interf
 											asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											asnChoiceInt.AsnMatcher.AsnSets = asnSetsInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												asMapToStrVal := ps.(map[string]interface{})
-												asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+													asMapToStrVal := ps.(map[string]interface{})
+													asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
 
-												asnSetsInt[i].Kind = "bgp_asn_set"
+													asnSetsInt[i].Kind = "bgp_asn_set"
 
-												if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
-													asnSetsInt[i].Name = v.(string)
+													if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
+														asnSetsInt[i].Name = v.(string)
+													}
+
+													if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														asnSetsInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														asnSetsInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														asnSetsInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													asnSetsInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													asnSetsInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													asnSetsInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -960,6 +1050,17 @@ func resourceVolterraRateLimiterPolicyCreate(d *schema.ResourceData, meta interf
 
 										}
 
+										if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+											matchTypeFound = true
+											matchInt := &ves_io_schema_policy.HeaderMatcherType_Presence{}
+
+											headers[i].Match = matchInt
+
+											matchInt.Presence = v.(bool)
+
+										}
+
 										if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
 											headers[i].Name = w.(string)
 										}
@@ -1038,28 +1139,30 @@ func resourceVolterraRateLimiterPolicyCreate(d *schema.ResourceData, meta interf
 											prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											ipChoiceInt.IpMatcher.PrefixSets = prefixSetsInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												psMapToStrVal := ps.(map[string]interface{})
-												prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+													psMapToStrVal := ps.(map[string]interface{})
+													prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
 
-												prefixSetsInt[i].Kind = "ip_prefix_set"
+													prefixSetsInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
-													prefixSetsInt[i].Name = v.(string)
+													if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
+														prefixSetsInt[i].Name = v.(string)
+													}
+
+													if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														prefixSetsInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														prefixSetsInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														prefixSetsInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													prefixSetsInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													prefixSetsInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													prefixSetsInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -1215,6 +1318,112 @@ func resourceVolterraRateLimiterPolicyCreate(d *schema.ResourceData, meta interf
 
 	}
 
+	//server_choice
+
+	serverChoiceTypeFound := false
+
+	if v, ok := d.GetOk("any_server"); ok && !serverChoiceTypeFound {
+
+		serverChoiceTypeFound = true
+
+		if v.(bool) {
+			serverChoiceInt := &ves_io_schema_views_rate_limiter_policy.CreateSpecType_AnyServer{}
+			serverChoiceInt.AnyServer = &ves_io_schema.Empty{}
+			createSpec.ServerChoice = serverChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("server_name"); ok && !isIntfNil(v) && !serverChoiceTypeFound {
+
+		serverChoiceTypeFound = true
+		serverChoiceInt := &ves_io_schema_views_rate_limiter_policy.CreateSpecType_ServerName{}
+
+		createSpec.ServerChoice = serverChoiceInt
+
+		serverChoiceInt.ServerName = v.(string)
+
+	}
+
+	if v, ok := d.GetOk("server_name_matcher"); ok && !isIntfNil(v) && !serverChoiceTypeFound {
+
+		serverChoiceTypeFound = true
+		serverChoiceInt := &ves_io_schema_views_rate_limiter_policy.CreateSpecType_ServerNameMatcher{}
+		serverChoiceInt.ServerNameMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+		createSpec.ServerChoice = serverChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					serverChoiceInt.ServerNameMatcher.ExactValues = ls
+
+				}
+
+				if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					serverChoiceInt.ServerNameMatcher.RegexValues = ls
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("server_selector"); ok && !isIntfNil(v) && !serverChoiceTypeFound {
+
+		serverChoiceTypeFound = true
+		serverChoiceInt := &ves_io_schema_views_rate_limiter_policy.CreateSpecType_ServerSelector{}
+		serverChoiceInt.ServerSelector = &ves_io_schema.LabelSelectorType{}
+		createSpec.ServerChoice = serverChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field expressions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					serverChoiceInt.ServerSelector.Expressions = ls
+
+				}
+
+			}
+		}
+
+	}
+
 	log.Printf("[DEBUG] Creating Volterra RateLimiterPolicy object with struct: %+v", createReq)
 
 	createRateLimiterPolicyResp, err := client.CreateObject(context.Background(), ves_io_schema_views_rate_limiter_policy.ObjectType, createReq)
@@ -1335,6 +1544,10 @@ func resourceVolterraRateLimiterPolicyUpdate(d *schema.ResourceData, meta interf
 
 							if w, ok := metadataMapStrToI["description"]; ok && !isIntfNil(w) {
 								metadata.Description = w.(string)
+							}
+
+							if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+								metadata.Disable = w.(bool)
 							}
 
 							if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
@@ -1475,28 +1688,30 @@ func resourceVolterraRateLimiterPolicyUpdate(d *schema.ResourceData, meta interf
 											asnSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											asnChoiceInt.AsnMatcher.AsnSets = asnSetsInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												asMapToStrVal := ps.(map[string]interface{})
-												asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
+													asMapToStrVal := ps.(map[string]interface{})
+													asnSetsInt[i] = &ves_io_schema.ObjectRefType{}
 
-												asnSetsInt[i].Kind = "bgp_asn_set"
+													asnSetsInt[i].Kind = "bgp_asn_set"
 
-												if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
-													asnSetsInt[i].Name = v.(string)
+													if v, ok := asMapToStrVal["name"]; ok && !isIntfNil(v) {
+														asnSetsInt[i].Name = v.(string)
+													}
+
+													if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														asnSetsInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														asnSetsInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														asnSetsInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := asMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													asnSetsInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := asMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													asnSetsInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := asMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													asnSetsInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -1696,6 +1911,17 @@ func resourceVolterraRateLimiterPolicyUpdate(d *schema.ResourceData, meta interf
 
 										}
 
+										if v, ok := headersMapStrToI["presence"]; ok && !isIntfNil(v) && !matchTypeFound {
+
+											matchTypeFound = true
+											matchInt := &ves_io_schema_policy.HeaderMatcherType_Presence{}
+
+											headers[i].Match = matchInt
+
+											matchInt.Presence = v.(bool)
+
+										}
+
 										if w, ok := headersMapStrToI["name"]; ok && !isIntfNil(w) {
 											headers[i].Name = w.(string)
 										}
@@ -1774,28 +2000,30 @@ func resourceVolterraRateLimiterPolicyUpdate(d *schema.ResourceData, meta interf
 											prefixSetsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											ipChoiceInt.IpMatcher.PrefixSets = prefixSetsInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												psMapToStrVal := ps.(map[string]interface{})
-												prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
+													psMapToStrVal := ps.(map[string]interface{})
+													prefixSetsInt[i] = &ves_io_schema.ObjectRefType{}
 
-												prefixSetsInt[i].Kind = "ip_prefix_set"
+													prefixSetsInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
-													prefixSetsInt[i].Name = v.(string)
+													if v, ok := psMapToStrVal["name"]; ok && !isIntfNil(v) {
+														prefixSetsInt[i].Name = v.(string)
+													}
+
+													if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														prefixSetsInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														prefixSetsInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														prefixSetsInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := psMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													prefixSetsInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := psMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													prefixSetsInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := psMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													prefixSetsInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -1943,6 +2171,110 @@ func resourceVolterraRateLimiterPolicyUpdate(d *schema.ResourceData, meta interf
 
 						}
 					}
+
+				}
+
+			}
+		}
+
+	}
+
+	serverChoiceTypeFound := false
+
+	if v, ok := d.GetOk("any_server"); ok && !serverChoiceTypeFound {
+
+		serverChoiceTypeFound = true
+
+		if v.(bool) {
+			serverChoiceInt := &ves_io_schema_views_rate_limiter_policy.ReplaceSpecType_AnyServer{}
+			serverChoiceInt.AnyServer = &ves_io_schema.Empty{}
+			updateSpec.ServerChoice = serverChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("server_name"); ok && !isIntfNil(v) && !serverChoiceTypeFound {
+
+		serverChoiceTypeFound = true
+		serverChoiceInt := &ves_io_schema_views_rate_limiter_policy.ReplaceSpecType_ServerName{}
+
+		updateSpec.ServerChoice = serverChoiceInt
+
+		serverChoiceInt.ServerName = v.(string)
+
+	}
+
+	if v, ok := d.GetOk("server_name_matcher"); ok && !isIntfNil(v) && !serverChoiceTypeFound {
+
+		serverChoiceTypeFound = true
+		serverChoiceInt := &ves_io_schema_views_rate_limiter_policy.ReplaceSpecType_ServerNameMatcher{}
+		serverChoiceInt.ServerNameMatcher = &ves_io_schema_policy.MatcherTypeBasic{}
+		updateSpec.ServerChoice = serverChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["exact_values"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field exact_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					serverChoiceInt.ServerNameMatcher.ExactValues = ls
+
+				}
+
+				if v, ok := cs["regex_values"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field regex_values")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					serverChoiceInt.ServerNameMatcher.RegexValues = ls
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("server_selector"); ok && !isIntfNil(v) && !serverChoiceTypeFound {
+
+		serverChoiceTypeFound = true
+		serverChoiceInt := &ves_io_schema_views_rate_limiter_policy.ReplaceSpecType_ServerSelector{}
+		serverChoiceInt.ServerSelector = &ves_io_schema.LabelSelectorType{}
+		updateSpec.ServerChoice = serverChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["expressions"]; ok && !isIntfNil(v) {
+
+					ls := make([]string, len(v.([]interface{})))
+					for i, v := range v.([]interface{}) {
+						if v == nil {
+							return fmt.Errorf("please provide valid non-empty string value of field expressions")
+						}
+						if str, ok := v.(string); ok {
+							ls[i] = str
+						}
+					}
+					serverChoiceInt.ServerSelector.Expressions = ls
 
 				}
 

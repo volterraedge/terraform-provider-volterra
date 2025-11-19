@@ -737,9 +737,9 @@ var DefaultLilacCDNCachePurgeRequestValidator = func() *ValidateLilacCDNCachePur
 
 	vrhPatternTypePattern := v.PatternTypePatternValidationRuleHandler
 	rulesPatternTypePattern := map[string]string{
-		"ves.io.schema.rules.string.max_len": "256",
-		"ves.io.schema.rules.string.min_len": "1",
-		"ves.io.schema.rules.string.regex":   "true",
+		"ves.io.schema.rules.string.max_len":    "256",
+		"ves.io.schema.rules.string.min_len":    "1",
+		"ves.io.schema.rules.string.pcre_regex": "true",
 	}
 	vFnMap["pattern_type.pattern"], err = vrhPatternTypePattern(rulesPatternTypePattern)
 	if err != nil {

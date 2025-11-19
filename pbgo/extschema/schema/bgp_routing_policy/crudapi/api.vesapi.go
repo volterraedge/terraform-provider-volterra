@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.bgp_routing_policy.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.bgp_routing_policy.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2744,49 +2744,49 @@ var APISwaggerJSON string = `{
             "description": "Action to be enforced if the BGP route matches the rule.",
             "title": "BGP Route Action",
             "x-displayname": "BGP Route Action",
-            "x-ves-oneof-field-action_type": "[\"aggregate\",\"allow\",\"as_path\",\"community\",\"deny\",\"local_preference\",\"metric\"]",
+            "x-ves-oneof-field-action_type": "[\"allow\",\"as_path\",\"community\",\"deny\",\"local_preference\",\"metric\"]",
             "x-ves-proto-message": "ves.io.schema.bgp_routing_policy.BgpRouteAction",
             "properties": {
                 "aggregate": {
-                    "description": "Exclusive with [allow as_path community deny local_preference metric]\n Aggregation is useful to share a summary route or a default route\n without sharing the more specific prefix",
+                    "description": " Aggregation is useful to share a summary route or a default route\n without sharing the more specific prefix",
                     "title": "Aggregate",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Aggregate"
                 },
                 "allow": {
-                    "description": "Exclusive with [aggregate as_path community deny local_preference metric]\n Allow routes being shared",
+                    "description": "Exclusive with [as_path community deny local_preference metric]\n Allow routes being shared",
                     "title": "Allow",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Allow"
                 },
                 "as_path": {
                     "type": "string",
-                    "description": "Exclusive with [aggregate allow community deny local_preference metric]\n AS-Path Prepending is generally used to influence incoming traffic",
+                    "description": "Exclusive with [allow community deny local_preference metric]\n AS-Path Prepending is generally used to influence incoming traffic",
                     "title": "AS path",
                     "x-displayname": "AS-path to prepend"
                 },
                 "community": {
-                    "description": "Exclusive with [aggregate allow as_path deny local_preference metric]\n BGP communities are tags used to group routes to apply routing\n policies",
+                    "description": "Exclusive with [allow as_path deny local_preference metric]\n BGP communities are tags used to group routes to apply routing\n policies",
                     "title": "BGP Community",
                     "$ref": "#/definitions/bgp_routing_policyBgpCommunity",
                     "x-displayname": "BGP Community list"
                 },
                 "deny": {
-                    "description": "Exclusive with [aggregate allow as_path community local_preference metric]\n Generally used for route filtering purposes",
+                    "description": "Exclusive with [allow as_path community local_preference metric]\n Generally used for route filtering purposes",
                     "title": "Deny",
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Deny"
                 },
                 "local_preference": {
                     "type": "integer",
-                    "description": "Exclusive with [aggregate allow as_path community deny metric]\n BGP Local Preference is generally used to influence outgoing traffic",
+                    "description": "Exclusive with [allow as_path community deny metric]\n BGP Local Preference is generally used to influence outgoing traffic",
                     "title": "Local preference",
                     "format": "int64",
                     "x-displayname": "Local preference"
                 },
                 "metric": {
                     "type": "integer",
-                    "description": "Exclusive with [aggregate allow as_path community deny local_preference]\n The Multi-Exit Discriminator metric to indicate the preferred path to AS\n\nExample: - \"100\"-",
+                    "description": "Exclusive with [allow as_path community deny local_preference]\n The Multi-Exit Discriminator metric to indicate the preferred path to AS\n\nExample: - \"100\"-",
                     "title": "Metric",
                     "format": "int64",
                     "x-displayname": "MED/Metric",
@@ -3384,6 +3384,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

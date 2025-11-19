@@ -195,6 +195,43 @@ func resourceVolterraAppFirewall() *schema.Resource {
 				Optional: true,
 			},
 
+			"bot_protection_setting": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"good_bot_action": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"malicious_bot_action": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"suspicious_bot_action": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
+			"default_bot_setting": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
+
 			"ai_risk_based_blocking": {
 
 				Type:     schema.TypeList,
@@ -425,6 +462,13 @@ func resourceVolterraAppFirewall() *schema.Resource {
 
 				Type:     schema.TypeBool,
 				Optional: true,
+			},
+
+			"use_loadbalancer_setting": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 		},
 	}
@@ -698,6 +742,57 @@ func resourceVolterraAppFirewallCreate(d *schema.ResourceData, meta interface{})
 			blockingPageChoiceInt := &ves_io_schema_app_firewall.CreateSpecType_UseDefaultBlockingPage{}
 			blockingPageChoiceInt.UseDefaultBlockingPage = &ves_io_schema.Empty{}
 			createSpec.BlockingPageChoice = blockingPageChoiceInt
+		}
+
+	}
+
+	//bot_protection_choice
+
+	botProtectionChoiceTypeFound := false
+
+	if v, ok := d.GetOk("bot_protection_setting"); ok && !isIntfNil(v) && !botProtectionChoiceTypeFound {
+
+		botProtectionChoiceTypeFound = true
+		botProtectionChoiceInt := &ves_io_schema_app_firewall.CreateSpecType_BotProtectionSetting{}
+		botProtectionChoiceInt.BotProtectionSetting = &ves_io_schema_app_firewall.BotProtectionSetting{}
+		createSpec.BotProtectionChoice = botProtectionChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["good_bot_action"]; ok && !isIntfNil(v) {
+
+					botProtectionChoiceInt.BotProtectionSetting.GoodBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+				}
+
+				if v, ok := cs["malicious_bot_action"]; ok && !isIntfNil(v) {
+
+					botProtectionChoiceInt.BotProtectionSetting.MaliciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+				}
+
+				if v, ok := cs["suspicious_bot_action"]; ok && !isIntfNil(v) {
+
+					botProtectionChoiceInt.BotProtectionSetting.SuspiciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("default_bot_setting"); ok && !botProtectionChoiceTypeFound {
+
+		botProtectionChoiceTypeFound = true
+
+		if v.(bool) {
+			botProtectionChoiceInt := &ves_io_schema_app_firewall.CreateSpecType_DefaultBotSetting{}
+			botProtectionChoiceInt.DefaultBotSetting = &ves_io_schema.Empty{}
+			createSpec.BotProtectionChoice = botProtectionChoiceInt
 		}
 
 	}
@@ -1099,6 +1194,18 @@ func resourceVolterraAppFirewallCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	if v, ok := d.GetOk("use_loadbalancer_setting"); ok && !enforcementModeChoiceTypeFound {
+
+		enforcementModeChoiceTypeFound = true
+
+		if v.(bool) {
+			enforcementModeChoiceInt := &ves_io_schema_app_firewall.CreateSpecType_UseLoadbalancerSetting{}
+			enforcementModeChoiceInt.UseLoadbalancerSetting = &ves_io_schema.Empty{}
+			createSpec.EnforcementModeChoice = enforcementModeChoiceInt
+		}
+
+	}
+
 	log.Printf("[DEBUG] Creating Volterra AppFirewall object with struct: %+v", createReq)
 
 	createAppFirewallResp, err := client.CreateObject(context.Background(), ves_io_schema_app_firewall.ObjectType, createReq)
@@ -1407,6 +1514,55 @@ func resourceVolterraAppFirewallUpdate(d *schema.ResourceData, meta interface{})
 			blockingPageChoiceInt := &ves_io_schema_app_firewall.ReplaceSpecType_UseDefaultBlockingPage{}
 			blockingPageChoiceInt.UseDefaultBlockingPage = &ves_io_schema.Empty{}
 			updateSpec.BlockingPageChoice = blockingPageChoiceInt
+		}
+
+	}
+
+	botProtectionChoiceTypeFound := false
+
+	if v, ok := d.GetOk("bot_protection_setting"); ok && !isIntfNil(v) && !botProtectionChoiceTypeFound {
+
+		botProtectionChoiceTypeFound = true
+		botProtectionChoiceInt := &ves_io_schema_app_firewall.ReplaceSpecType_BotProtectionSetting{}
+		botProtectionChoiceInt.BotProtectionSetting = &ves_io_schema_app_firewall.BotProtectionSetting{}
+		updateSpec.BotProtectionChoice = botProtectionChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["good_bot_action"]; ok && !isIntfNil(v) {
+
+					botProtectionChoiceInt.BotProtectionSetting.GoodBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+				}
+
+				if v, ok := cs["malicious_bot_action"]; ok && !isIntfNil(v) {
+
+					botProtectionChoiceInt.BotProtectionSetting.MaliciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+				}
+
+				if v, ok := cs["suspicious_bot_action"]; ok && !isIntfNil(v) {
+
+					botProtectionChoiceInt.BotProtectionSetting.SuspiciousBotAction = ves_io_schema_app_firewall.BotAction(ves_io_schema_app_firewall.BotAction_value[v.(string)])
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("default_bot_setting"); ok && !botProtectionChoiceTypeFound {
+
+		botProtectionChoiceTypeFound = true
+
+		if v.(bool) {
+			botProtectionChoiceInt := &ves_io_schema_app_firewall.ReplaceSpecType_DefaultBotSetting{}
+			botProtectionChoiceInt.DefaultBotSetting = &ves_io_schema.Empty{}
+			updateSpec.BotProtectionChoice = botProtectionChoiceInt
 		}
 
 	}
@@ -1799,6 +1955,18 @@ func resourceVolterraAppFirewallUpdate(d *schema.ResourceData, meta interface{})
 		if v.(bool) {
 			enforcementModeChoiceInt := &ves_io_schema_app_firewall.ReplaceSpecType_Monitoring{}
 			enforcementModeChoiceInt.Monitoring = &ves_io_schema.Empty{}
+			updateSpec.EnforcementModeChoice = enforcementModeChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("use_loadbalancer_setting"); ok && !enforcementModeChoiceTypeFound {
+
+		enforcementModeChoiceTypeFound = true
+
+		if v.(bool) {
+			enforcementModeChoiceInt := &ves_io_schema_app_firewall.ReplaceSpecType_UseLoadbalancerSetting{}
+			enforcementModeChoiceInt.UseLoadbalancerSetting = &ves_io_schema.Empty{}
 			updateSpec.EnforcementModeChoice = enforcementModeChoiceInt
 		}
 

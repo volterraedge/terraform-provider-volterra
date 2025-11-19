@@ -920,9 +920,9 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.hostname": "true",
-		"ves.io.schema.rules.repeated.max_items":             "32",
-		"ves.io.schema.rules.repeated.unique":                "true",
+		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhDomains(rulesDomains)
 	if err != nil {
@@ -2043,9 +2043,9 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.hostname": "true",
-		"ves.io.schema.rules.repeated.max_items":             "32",
-		"ves.io.schema.rules.repeated.unique":                "true",
+		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhDomains(rulesDomains)
 	if err != nil {
@@ -3253,9 +3253,9 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.hostname": "true",
-		"ves.io.schema.rules.repeated.max_items":             "32",
-		"ves.io.schema.rules.repeated.unique":                "true",
+		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhDomains(rulesDomains)
 	if err != nil {
@@ -4705,9 +4705,9 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhDomains := v.DomainsValidationRuleHandler
 	rulesDomains := map[string]string{
-		"ves.io.schema.rules.repeated.items.string.hostname": "true",
-		"ves.io.schema.rules.repeated.max_items":             "32",
-		"ves.io.schema.rules.repeated.unique":                "true",
+		"ves.io.schema.rules.repeated.items.string.vh_domain": "true",
+		"ves.io.schema.rules.repeated.max_items":              "32",
+		"ves.io.schema.rules.repeated.unique":                 "true",
 	}
 	vFn, err = vrhDomains(rulesDomains)
 	if err != nil {

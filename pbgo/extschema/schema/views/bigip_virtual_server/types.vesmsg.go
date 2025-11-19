@@ -1114,6 +1114,16 @@ func (v *ValidateGlobalSpecType) ServerNameValidationRuleHandler(rules map[strin
 	return validatorFn, nil
 }
 
+func (v *ValidateGlobalSpecType) SubPathValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for sub_path")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*GlobalSpecType)
 	if !ok {
@@ -1325,6 +1335,15 @@ func (v *ValidateGlobalSpecType) Validate(ctx context.Context, pm interface{}, o
 
 	}
 
+	if fv, exists := v.FldValidators["sub_path"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("sub_path"))
+		if err := fv(ctx, m.GetSubPath(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["type"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("type"))
@@ -1471,6 +1490,17 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 		panic(errMsg)
 	}
 	v.FldValidators["server_name"] = vFn
+
+	vrhSubPath := v.SubPathValidationRuleHandler
+	rulesSubPath := map[string]string{
+		"ves.io.schema.rules.string.max_len": "1024",
+	}
+	vFn, err = vrhSubPath(rulesSubPath)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GlobalSpecType.sub_path: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["sub_path"] = vFn
 
 	v.FldValidators["api_definition_choice.api_specification"] = ves_io_schema_views_common_waf.APISpecificationSettingsValidator().Validate
 

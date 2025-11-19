@@ -3645,6 +3645,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 	}
 
+	if fv, exists := v.FldValidators["bot_advanced_endpoint_matcher"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("bot_advanced_endpoint_matcher"))
+		if err := fv(ctx, m.GetBotAdvancedEndpointMatcher(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["challenge_action"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("challenge_action"))
@@ -3883,6 +3892,15 @@ func (v *ValidateSimpleRule) Validate(ctx context.Context, pm interface{}, opts 
 
 		vOpts := append(opts, db.WithValidateField("metric_name_label"))
 		if err := fv(ctx, m.GetMetricNameLabel(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["mobile_identifier_matcher_action"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("mobile_identifier_matcher_action"))
+		if err := fv(ctx, m.GetMobileIdentifierMatcherAction(), vOpts...); err != nil {
 			return err
 		}
 
@@ -4277,6 +4295,8 @@ var DefaultSimpleRuleValidator = func() *ValidateSimpleRule {
 	v.FldValidators["malware_protection_action"] = ves_io_schema_policy.ModifyActionValidator().Validate
 
 	v.FldValidators["malware_protection_settings"] = ves_io_schema_policy.MalwareProtectionSettingsValidator().Validate
+
+	v.FldValidators["bot_advanced_endpoint_matcher"] = ves_io_schema_policy.BotAdvancedEndpointMatcherTypeValidator().Validate
 
 	return v
 }()

@@ -339,28 +339,30 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 								actionInt.PolicerAction.Ref = refInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refInt[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refInt[i] = &ves_io_schema.ObjectRefType{}
 
-									refInt[i].Kind = "policer"
+										refInt[i].Kind = "policer"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refInt[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -388,28 +390,30 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 								actionInt.ProtocolPolicerAction.Ref = refInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refInt[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refInt[i] = &ves_io_schema.ObjectRefType{}
 
-									refInt[i].Kind = "protocol_policer"
+										refInt[i].Kind = "protocol_policer"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refInt[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -510,28 +514,30 @@ func resourceVolterraFastAclRuleCreate(d *schema.ResourceData, meta interface{})
 					refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 					sourceInt.IpPrefixSet.Ref = refInt
 					for i, ps := range sl {
+						if ps != nil {
 
-						rMapToStrVal := ps.(map[string]interface{})
-						refInt[i] = &ves_io_schema.ObjectRefType{}
+							rMapToStrVal := ps.(map[string]interface{})
+							refInt[i] = &ves_io_schema.ObjectRefType{}
 
-						refInt[i].Kind = "ip_prefix_set"
+							refInt[i].Kind = "ip_prefix_set"
 
-						if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-							refInt[i].Name = v.(string)
+							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+								refInt[i].Name = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								refInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								refInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								refInt[i].Uid = v.(string)
+							}
+
 						}
-
-						if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							refInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							refInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							refInt[i].Uid = v.(string)
-						}
-
 					}
 
 				}
@@ -716,28 +722,30 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 								actionInt.PolicerAction.Ref = refInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refInt[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refInt[i] = &ves_io_schema.ObjectRefType{}
 
-									refInt[i].Kind = "policer"
+										refInt[i].Kind = "policer"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refInt[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -765,28 +773,30 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 								refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 								actionInt.ProtocolPolicerAction.Ref = refInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									rMapToStrVal := ps.(map[string]interface{})
-									refInt[i] = &ves_io_schema.ObjectRefType{}
+										rMapToStrVal := ps.(map[string]interface{})
+										refInt[i] = &ves_io_schema.ObjectRefType{}
 
-									refInt[i].Kind = "protocol_policer"
+										refInt[i].Kind = "protocol_policer"
 
-									if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-										refInt[i].Name = v.(string)
+										if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+											refInt[i].Name = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											refInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											refInt[i].Tenant = v.(string)
+										}
+
+										if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+											refInt[i].Uid = v.(string)
+										}
+
 									}
-
-									if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										refInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										refInt[i].Tenant = v.(string)
-									}
-
-									if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-										refInt[i].Uid = v.(string)
-									}
-
 								}
 
 							}
@@ -884,28 +894,30 @@ func resourceVolterraFastAclRuleUpdate(d *schema.ResourceData, meta interface{})
 					refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 					sourceInt.IpPrefixSet.Ref = refInt
 					for i, ps := range sl {
+						if ps != nil {
 
-						rMapToStrVal := ps.(map[string]interface{})
-						refInt[i] = &ves_io_schema.ObjectRefType{}
+							rMapToStrVal := ps.(map[string]interface{})
+							refInt[i] = &ves_io_schema.ObjectRefType{}
 
-						refInt[i].Kind = "ip_prefix_set"
+							refInt[i].Kind = "ip_prefix_set"
 
-						if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-							refInt[i].Name = v.(string)
+							if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+								refInt[i].Name = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								refInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								refInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								refInt[i].Uid = v.(string)
+							}
+
 						}
-
-						if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							refInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							refInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							refInt[i].Uid = v.(string)
-						}
-
 					}
 
 				}

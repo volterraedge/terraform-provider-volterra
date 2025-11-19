@@ -403,6 +403,16 @@ type GlobalSpecType struct {
 	//	*GlobalSpecType_SpokeMesh
 	//	*GlobalSpecType_FullMesh
 	MeshChoice isGlobalSpecType_MeshChoice `protobuf_oneof:"mesh_choice"`
+	// RE Fallback
+	//
+	// x-displayName: "RE Fallback"
+	// x-required
+	// Fallback to RE Connectivity when the SMG fails
+	//
+	// Types that are valid to be assigned to ReFallback:
+	//	*GlobalSpecType_EnableReFallback
+	//	*GlobalSpecType_DisableReFallback
+	ReFallback isGlobalSpecType_ReFallback `protobuf_oneof:"re_fallback"`
 }
 
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
@@ -439,6 +449,12 @@ type isGlobalSpecType_MeshChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGlobalSpecType_ReFallback interface {
+	isGlobalSpecType_ReFallback()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GlobalSpecType_HubMesh struct {
 	HubMesh *HubFullMeshGroupType `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
@@ -449,14 +465,28 @@ type GlobalSpecType_SpokeMesh struct {
 type GlobalSpecType_FullMesh struct {
 	FullMesh *FullMeshGroupType `protobuf:"bytes,8,opt,name=full_mesh,json=fullMesh,proto3,oneof" json:"full_mesh,omitempty"`
 }
+type GlobalSpecType_EnableReFallback struct {
+	EnableReFallback *schema.Empty `protobuf:"bytes,10,opt,name=enable_re_fallback,json=enableReFallback,proto3,oneof" json:"enable_re_fallback,omitempty"`
+}
+type GlobalSpecType_DisableReFallback struct {
+	DisableReFallback *schema.Empty `protobuf:"bytes,11,opt,name=disable_re_fallback,json=disableReFallback,proto3,oneof" json:"disable_re_fallback,omitempty"`
+}
 
-func (*GlobalSpecType_HubMesh) isGlobalSpecType_MeshChoice()   {}
-func (*GlobalSpecType_SpokeMesh) isGlobalSpecType_MeshChoice() {}
-func (*GlobalSpecType_FullMesh) isGlobalSpecType_MeshChoice()  {}
+func (*GlobalSpecType_HubMesh) isGlobalSpecType_MeshChoice()           {}
+func (*GlobalSpecType_SpokeMesh) isGlobalSpecType_MeshChoice()         {}
+func (*GlobalSpecType_FullMesh) isGlobalSpecType_MeshChoice()          {}
+func (*GlobalSpecType_EnableReFallback) isGlobalSpecType_ReFallback()  {}
+func (*GlobalSpecType_DisableReFallback) isGlobalSpecType_ReFallback() {}
 
 func (m *GlobalSpecType) GetMeshChoice() isGlobalSpecType_MeshChoice {
 	if m != nil {
 		return m.MeshChoice
+	}
+	return nil
+}
+func (m *GlobalSpecType) GetReFallback() isGlobalSpecType_ReFallback {
+	if m != nil {
+		return m.ReFallback
 	}
 	return nil
 }
@@ -511,12 +541,28 @@ func (m *GlobalSpecType) GetFullMesh() *FullMeshGroupType {
 	return nil
 }
 
+func (m *GlobalSpecType) GetEnableReFallback() *schema.Empty {
+	if x, ok := m.GetReFallback().(*GlobalSpecType_EnableReFallback); ok {
+		return x.EnableReFallback
+	}
+	return nil
+}
+
+func (m *GlobalSpecType) GetDisableReFallback() *schema.Empty {
+	if x, ok := m.GetReFallback().(*GlobalSpecType_DisableReFallback); ok {
+		return x.DisableReFallback
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GlobalSpecType_HubMesh)(nil),
 		(*GlobalSpecType_SpokeMesh)(nil),
 		(*GlobalSpecType_FullMesh)(nil),
+		(*GlobalSpecType_EnableReFallback)(nil),
+		(*GlobalSpecType_DisableReFallback)(nil),
 	}
 }
 
@@ -533,6 +579,10 @@ type CreateSpecType struct {
 	//	*CreateSpecType_SpokeMesh
 	//	*CreateSpecType_FullMesh
 	MeshChoice isCreateSpecType_MeshChoice `protobuf_oneof:"mesh_choice"`
+	// Types that are valid to be assigned to ReFallback:
+	//	*CreateSpecType_EnableReFallback
+	//	*CreateSpecType_DisableReFallback
+	ReFallback isCreateSpecType_ReFallback `protobuf_oneof:"re_fallback"`
 }
 
 func (m *CreateSpecType) Reset()      { *m = CreateSpecType{} }
@@ -569,6 +619,12 @@ type isCreateSpecType_MeshChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isCreateSpecType_ReFallback interface {
+	isCreateSpecType_ReFallback()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type CreateSpecType_HubMesh struct {
 	HubMesh *HubFullMeshGroupType `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
@@ -579,14 +635,28 @@ type CreateSpecType_SpokeMesh struct {
 type CreateSpecType_FullMesh struct {
 	FullMesh *FullMeshGroupType `protobuf:"bytes,8,opt,name=full_mesh,json=fullMesh,proto3,oneof" json:"full_mesh,omitempty"`
 }
+type CreateSpecType_EnableReFallback struct {
+	EnableReFallback *schema.Empty `protobuf:"bytes,10,opt,name=enable_re_fallback,json=enableReFallback,proto3,oneof" json:"enable_re_fallback,omitempty"`
+}
+type CreateSpecType_DisableReFallback struct {
+	DisableReFallback *schema.Empty `protobuf:"bytes,11,opt,name=disable_re_fallback,json=disableReFallback,proto3,oneof" json:"disable_re_fallback,omitempty"`
+}
 
-func (*CreateSpecType_HubMesh) isCreateSpecType_MeshChoice()   {}
-func (*CreateSpecType_SpokeMesh) isCreateSpecType_MeshChoice() {}
-func (*CreateSpecType_FullMesh) isCreateSpecType_MeshChoice()  {}
+func (*CreateSpecType_HubMesh) isCreateSpecType_MeshChoice()           {}
+func (*CreateSpecType_SpokeMesh) isCreateSpecType_MeshChoice()         {}
+func (*CreateSpecType_FullMesh) isCreateSpecType_MeshChoice()          {}
+func (*CreateSpecType_EnableReFallback) isCreateSpecType_ReFallback()  {}
+func (*CreateSpecType_DisableReFallback) isCreateSpecType_ReFallback() {}
 
 func (m *CreateSpecType) GetMeshChoice() isCreateSpecType_MeshChoice {
 	if m != nil {
 		return m.MeshChoice
+	}
+	return nil
+}
+func (m *CreateSpecType) GetReFallback() isCreateSpecType_ReFallback {
+	if m != nil {
+		return m.ReFallback
 	}
 	return nil
 }
@@ -633,12 +703,28 @@ func (m *CreateSpecType) GetFullMesh() *FullMeshGroupType {
 	return nil
 }
 
+func (m *CreateSpecType) GetEnableReFallback() *schema.Empty {
+	if x, ok := m.GetReFallback().(*CreateSpecType_EnableReFallback); ok {
+		return x.EnableReFallback
+	}
+	return nil
+}
+
+func (m *CreateSpecType) GetDisableReFallback() *schema.Empty {
+	if x, ok := m.GetReFallback().(*CreateSpecType_DisableReFallback); ok {
+		return x.DisableReFallback
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CreateSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*CreateSpecType_HubMesh)(nil),
 		(*CreateSpecType_SpokeMesh)(nil),
 		(*CreateSpecType_FullMesh)(nil),
+		(*CreateSpecType_EnableReFallback)(nil),
+		(*CreateSpecType_DisableReFallback)(nil),
 	}
 }
 
@@ -655,6 +741,10 @@ type ReplaceSpecType struct {
 	//	*ReplaceSpecType_SpokeMesh
 	//	*ReplaceSpecType_FullMesh
 	MeshChoice isReplaceSpecType_MeshChoice `protobuf_oneof:"mesh_choice"`
+	// Types that are valid to be assigned to ReFallback:
+	//	*ReplaceSpecType_EnableReFallback
+	//	*ReplaceSpecType_DisableReFallback
+	ReFallback isReplaceSpecType_ReFallback `protobuf_oneof:"re_fallback"`
 }
 
 func (m *ReplaceSpecType) Reset()      { *m = ReplaceSpecType{} }
@@ -691,6 +781,12 @@ type isReplaceSpecType_MeshChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isReplaceSpecType_ReFallback interface {
+	isReplaceSpecType_ReFallback()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type ReplaceSpecType_HubMesh struct {
 	HubMesh *HubFullMeshGroupType `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
@@ -701,14 +797,28 @@ type ReplaceSpecType_SpokeMesh struct {
 type ReplaceSpecType_FullMesh struct {
 	FullMesh *FullMeshGroupType `protobuf:"bytes,8,opt,name=full_mesh,json=fullMesh,proto3,oneof" json:"full_mesh,omitempty"`
 }
+type ReplaceSpecType_EnableReFallback struct {
+	EnableReFallback *schema.Empty `protobuf:"bytes,10,opt,name=enable_re_fallback,json=enableReFallback,proto3,oneof" json:"enable_re_fallback,omitempty"`
+}
+type ReplaceSpecType_DisableReFallback struct {
+	DisableReFallback *schema.Empty `protobuf:"bytes,11,opt,name=disable_re_fallback,json=disableReFallback,proto3,oneof" json:"disable_re_fallback,omitempty"`
+}
 
-func (*ReplaceSpecType_HubMesh) isReplaceSpecType_MeshChoice()   {}
-func (*ReplaceSpecType_SpokeMesh) isReplaceSpecType_MeshChoice() {}
-func (*ReplaceSpecType_FullMesh) isReplaceSpecType_MeshChoice()  {}
+func (*ReplaceSpecType_HubMesh) isReplaceSpecType_MeshChoice()           {}
+func (*ReplaceSpecType_SpokeMesh) isReplaceSpecType_MeshChoice()         {}
+func (*ReplaceSpecType_FullMesh) isReplaceSpecType_MeshChoice()          {}
+func (*ReplaceSpecType_EnableReFallback) isReplaceSpecType_ReFallback()  {}
+func (*ReplaceSpecType_DisableReFallback) isReplaceSpecType_ReFallback() {}
 
 func (m *ReplaceSpecType) GetMeshChoice() isReplaceSpecType_MeshChoice {
 	if m != nil {
 		return m.MeshChoice
+	}
+	return nil
+}
+func (m *ReplaceSpecType) GetReFallback() isReplaceSpecType_ReFallback {
+	if m != nil {
+		return m.ReFallback
 	}
 	return nil
 }
@@ -755,12 +865,28 @@ func (m *ReplaceSpecType) GetFullMesh() *FullMeshGroupType {
 	return nil
 }
 
+func (m *ReplaceSpecType) GetEnableReFallback() *schema.Empty {
+	if x, ok := m.GetReFallback().(*ReplaceSpecType_EnableReFallback); ok {
+		return x.EnableReFallback
+	}
+	return nil
+}
+
+func (m *ReplaceSpecType) GetDisableReFallback() *schema.Empty {
+	if x, ok := m.GetReFallback().(*ReplaceSpecType_DisableReFallback); ok {
+		return x.DisableReFallback
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*ReplaceSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*ReplaceSpecType_HubMesh)(nil),
 		(*ReplaceSpecType_SpokeMesh)(nil),
 		(*ReplaceSpecType_FullMesh)(nil),
+		(*ReplaceSpecType_EnableReFallback)(nil),
+		(*ReplaceSpecType_DisableReFallback)(nil),
 	}
 }
 
@@ -778,6 +904,10 @@ type GetSpecType struct {
 	//	*GetSpecType_SpokeMesh
 	//	*GetSpecType_FullMesh
 	MeshChoice isGetSpecType_MeshChoice `protobuf_oneof:"mesh_choice"`
+	// Types that are valid to be assigned to ReFallback:
+	//	*GetSpecType_EnableReFallback
+	//	*GetSpecType_DisableReFallback
+	ReFallback isGetSpecType_ReFallback `protobuf_oneof:"re_fallback"`
 }
 
 func (m *GetSpecType) Reset()      { *m = GetSpecType{} }
@@ -814,6 +944,12 @@ type isGetSpecType_MeshChoice interface {
 	MarshalTo([]byte) (int, error)
 	Size() int
 }
+type isGetSpecType_ReFallback interface {
+	isGetSpecType_ReFallback()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
 
 type GetSpecType_HubMesh struct {
 	HubMesh *HubFullMeshGroupType `protobuf:"bytes,6,opt,name=hub_mesh,json=hubMesh,proto3,oneof" json:"hub_mesh,omitempty"`
@@ -824,14 +960,28 @@ type GetSpecType_SpokeMesh struct {
 type GetSpecType_FullMesh struct {
 	FullMesh *FullMeshGroupType `protobuf:"bytes,8,opt,name=full_mesh,json=fullMesh,proto3,oneof" json:"full_mesh,omitempty"`
 }
+type GetSpecType_EnableReFallback struct {
+	EnableReFallback *schema.Empty `protobuf:"bytes,10,opt,name=enable_re_fallback,json=enableReFallback,proto3,oneof" json:"enable_re_fallback,omitempty"`
+}
+type GetSpecType_DisableReFallback struct {
+	DisableReFallback *schema.Empty `protobuf:"bytes,11,opt,name=disable_re_fallback,json=disableReFallback,proto3,oneof" json:"disable_re_fallback,omitempty"`
+}
 
-func (*GetSpecType_HubMesh) isGetSpecType_MeshChoice()   {}
-func (*GetSpecType_SpokeMesh) isGetSpecType_MeshChoice() {}
-func (*GetSpecType_FullMesh) isGetSpecType_MeshChoice()  {}
+func (*GetSpecType_HubMesh) isGetSpecType_MeshChoice()           {}
+func (*GetSpecType_SpokeMesh) isGetSpecType_MeshChoice()         {}
+func (*GetSpecType_FullMesh) isGetSpecType_MeshChoice()          {}
+func (*GetSpecType_EnableReFallback) isGetSpecType_ReFallback()  {}
+func (*GetSpecType_DisableReFallback) isGetSpecType_ReFallback() {}
 
 func (m *GetSpecType) GetMeshChoice() isGetSpecType_MeshChoice {
 	if m != nil {
 		return m.MeshChoice
+	}
+	return nil
+}
+func (m *GetSpecType) GetReFallback() isGetSpecType_ReFallback {
+	if m != nil {
+		return m.ReFallback
 	}
 	return nil
 }
@@ -885,12 +1035,28 @@ func (m *GetSpecType) GetFullMesh() *FullMeshGroupType {
 	return nil
 }
 
+func (m *GetSpecType) GetEnableReFallback() *schema.Empty {
+	if x, ok := m.GetReFallback().(*GetSpecType_EnableReFallback); ok {
+		return x.EnableReFallback
+	}
+	return nil
+}
+
+func (m *GetSpecType) GetDisableReFallback() *schema.Empty {
+	if x, ok := m.GetReFallback().(*GetSpecType_DisableReFallback); ok {
+		return x.DisableReFallback
+	}
+	return nil
+}
+
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*GetSpecType) XXX_OneofWrappers() []interface{} {
 	return []interface{}{
 		(*GetSpecType_HubMesh)(nil),
 		(*GetSpecType_SpokeMesh)(nil),
 		(*GetSpecType_FullMesh)(nil),
+		(*GetSpecType_EnableReFallback)(nil),
+		(*GetSpecType_DisableReFallback)(nil),
 	}
 }
 
@@ -921,75 +1087,82 @@ func init() {
 }
 
 var fileDescriptor_e184213e79779d5e = []byte{
-	// 1087 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x97, 0xc1, 0x6f, 0xdb, 0x54,
-	0x1c, 0xc7, 0xfd, 0xe2, 0xa4, 0xcd, 0x5e, 0x4a, 0x93, 0x5a, 0x45, 0x4b, 0xd3, 0xd6, 0xab, 0xb2,
-	0x81, 0x46, 0x48, 0x1d, 0x96, 0x4e, 0x80, 0x38, 0x54, 0x5a, 0xd6, 0xac, 0xe9, 0xe8, 0xda, 0xc8,
-	0x49, 0x87, 0x98, 0x10, 0x96, 0x9d, 0xbc, 0x38, 0x5e, 0x9d, 0x3c, 0xcb, 0x7e, 0x0e, 0xf4, 0x50,
-	0xa9, 0xda, 0x71, 0x27, 0xe0, 0x8f, 0x40, 0xa8, 0x88, 0x7f, 0x80, 0xec, 0xd0, 0x23, 0xe2, 0x94,
-	0x03, 0x87, 0x8a, 0x13, 0x4d, 0x0f, 0x6c, 0xb7, 0x89, 0x23, 0x27, 0xe4, 0x17, 0x37, 0x8d, 0x9d,
-	0x68, 0x2d, 0x65, 0x07, 0x10, 0xbd, 0xb4, 0xb6, 0x7f, 0xbf, 0xf7, 0x7d, 0xbf, 0xdf, 0xf7, 0x7d,
-	0xde, 0x73, 0x0c, 0xdf, 0x69, 0x21, 0x4b, 0xd0, 0x70, 0xc6, 0xaa, 0xd4, 0x51, 0x43, 0xce, 0x58,
-	0x1a, 0x41, 0x52, 0x03, 0x59, 0x75, 0x49, 0x35, 0xb1, 0x6d, 0x64, 0xc8, 0x8e, 0x81, 0x2c, 0xc1,
-	0x30, 0x31, 0xc1, 0xdc, 0x7c, 0x2f, 0x55, 0xe8, 0xa5, 0x0a, 0xbe, 0xd4, 0xc4, 0xa2, 0xaa, 0x91,
-	0xba, 0xad, 0x08, 0x15, 0xdc, 0xc8, 0xa8, 0x58, 0xc5, 0x19, 0x3a, 0x4a, 0xb1, 0x6b, 0xf4, 0x8e,
-	0xde, 0xd0, 0xab, 0x9e, 0x5a, 0xe2, 0x9a, 0x8a, 0xb1, 0xaa, 0xa3, 0xd3, 0x2c, 0xa2, 0x35, 0x90,
-	0x45, 0xe4, 0x86, 0xe1, 0x26, 0x5c, 0xf5, 0x56, 0xd6, 0x44, 0xc4, 0x0d, 0xcc, 0x7a, 0x03, 0xd8,
-	0x20, 0x1a, 0x6e, 0xba, 0x45, 0x26, 0xe6, 0xbd, 0x41, 0xa3, 0x45, 0xa4, 0x81, 0x1e, 0x12, 0xfc,
-	0x70, 0xbb, 0x83, 0x3d, 0x26, 0x66, 0xbc, 0xf1, 0xc1, 0xd0, 0x9c, 0x37, 0xd4, 0x92, 0x75, 0xad,
-	0x2a, 0x13, 0xe4, 0x46, 0x17, 0x7c, 0x51, 0x0d, 0x7d, 0x21, 0x79, 0x2b, 0xbb, 0x36, 0x9c, 0x61,
-	0x0d, 0x4e, 0x90, 0x7c, 0x1a, 0x80, 0xd3, 0x05, 0x5b, 0xb9, 0x67, 0xeb, 0xfa, 0x03, 0x64, 0xd5,
-	0x57, 0x1d, 0x57, 0xcb, 0x3b, 0x06, 0xe2, 0x96, 0x61, 0xb4, 0x2a, 0x13, 0x59, 0x32, 0x74, 0xb9,
-	0xd9, 0xb3, 0x3c, 0x1e, 0x58, 0x00, 0x37, 0x23, 0xd9, 0x69, 0xc1, 0xbb, 0x24, 0xf9, 0x86, 0x41,
-	0x76, 0x0a, 0x8c, 0xf8, 0x86, 0x93, 0x5e, 0x74, 0xb2, 0x1d, 0x21, 0xae, 0x0c, 0x67, 0x2b, 0xb8,
-	0x49, 0x4c, 0xac, 0x4b, 0x72, 0xb3, 0x2a, 0xf9, 0xb5, 0xd8, 0x57, 0x6a, 0x5d, 0x75, 0x87, 0xde,
-	0x69, 0x56, 0x57, 0x06, 0x55, 0x73, 0x0f, 0xe1, 0x74, 0xdd, 0x56, 0xa4, 0x9a, 0xad, 0xeb, 0x3d,
-	0x0c, 0x2a, 0x75, 0xac, 0x55, 0x10, 0xb7, 0x7c, 0xd0, 0x06, 0x81, 0x4e, 0x1b, 0x80, 0x6e, 0x1b,
-	0xb0, 0xd9, 0xf4, 0xd2, 0xd3, 0x67, 0xe0, 0xdd, 0x14, 0x5b, 0x31, 0x49, 0x6a, 0xdc, 0x22, 0xb2,
-	0xaa, 0x35, 0xd5, 0x54, 0xd0, 0x30, 0x71, 0x35, 0x35, 0x61, 0xe1, 0x1a, 0x51, 0xe4, 0xe6, 0xb6,
-	0xd4, 0x40, 0x95, 0xd4, 0x78, 0x0d, 0x55, 0x4d, 0xb9, 0x61, 0xdc, 0x0f, 0x86, 0x41, 0x2c, 0x90,
-	0xfc, 0x05, 0xc0, 0xa9, 0xff, 0x8a, 0x13, 0xd7, 0x61, 0x6c, 0xc8, 0x85, 0xa8, 0xcf, 0x05, 0xb7,
-	0xad, 0xdf, 0x03, 0x90, 0x2b, 0x19, 0x78, 0x1b, 0x79, 0xfb, 0xfa, 0x0c, 0x4e, 0x3a, 0x5e, 0x9e,
-	0xee, 0xa6, 0x38, 0xa0, 0xa5, 0x24, 0x7d, 0xa5, 0x50, 0x68, 0x84, 0x4d, 0xe5, 0x31, 0xaa, 0x10,
-	0x11, 0xd5, 0x9c, 0xb1, 0x39, 0x6e, 0x7f, 0x37, 0xea, 0xdb, 0x8b, 0xe2, 0x44, 0xdd, 0x56, 0xfa,
-	0x33, 0x8c, 0x72, 0x8d, 0x7d, 0x8d, 0xae, 0x05, 0x2f, 0xe6, 0xda, 0x27, 0xf0, 0x4d, 0xcb, 0x71,
-	0x42, 0xea, 0x77, 0x3e, 0x00, 0x10, 0xdb, 0x69, 0x83, 0x80, 0x63, 0xdd, 0x52, 0xfa, 0xf6, 0xdf,
-	0x07, 0x28, 0x10, 0x63, 0x93, 0x3f, 0x84, 0xe0, 0xe4, 0xaa, 0x8e, 0x15, 0x59, 0x2f, 0x19, 0xa8,
-	0x42, 0x5d, 0x7e, 0x04, 0x83, 0xce, 0x7e, 0xa3, 0xde, 0x4e, 0x66, 0xdf, 0x13, 0x5e, 0x79, 0x9e,
-	0x09, 0x25, 0x8d, 0x78, 0x57, 0x29, 0x37, 0xfd, 0xbc, 0x0d, 0xc0, 0x8f, 0x2f, 0x0e, 0xd8, 0x2b,
-	0x4f, 0xc0, 0x58, 0x22, 0xc8, 0x80, 0x00, 0x1b, 0x07, 0x22, 0xd5, 0xe4, 0x1e, 0xc3, 0x08, 0xb1,
-	0x9b, 0x4d, 0xa4, 0xd3, 0xe3, 0x86, 0x52, 0x39, 0x99, 0xbd, 0xee, 0x9b, 0xc2, 0x91, 0x2c, 0x63,
-	0xfa, 0x97, 0xe6, 0x52, 0xd5, 0x1b, 0x87, 0xbb, 0xe0, 0xd7, 0x36, 0x98, 0x29, 0xad, 0x95, 0xf3,
-	0x52, 0x79, 0x53, 0xea, 0xfd, 0xdf, 0xda, 0xd8, 0xc8, 0xaf, 0x4b, 0x6b, 0xc5, 0x52, 0xfe, 0xae,
-	0x33, 0xab, 0x08, 0x49, 0x7f, 0x04, 0xf7, 0x39, 0x9c, 0x68, 0x69, 0x26, 0xb1, 0x65, 0x5d, 0x72,
-	0x8a, 0x8e, 0xb3, 0x0b, 0xec, 0xcd, 0x48, 0x76, 0xce, 0x37, 0x99, 0x97, 0x92, 0xf9, 0xfd, 0x5d,
-	0xcf, 0xa0, 0xbd, 0x67, 0xbd, 0x56, 0x42, 0xdf, 0x80, 0x40, 0x0c, 0x88, 0x11, 0x37, 0xe6, 0xd4,
-	0xc6, 0x95, 0x21, 0x5b, 0xb7, 0x95, 0x78, 0xf0, 0x1c, 0xb2, 0x37, 0x86, 0xe1, 0x73, 0xca, 0xf5,
-	0xa9, 0x3b, 0x72, 0x5c, 0x11, 0x86, 0x4f, 0x56, 0x3a, 0x3e, 0x46, 0x91, 0x59, 0x3a, 0x63, 0x05,
-	0x46, 0x1d, 0x86, 0x05, 0x46, 0x1c, 0x77, 0xe1, 0xe6, 0x44, 0x08, 0x7b, 0x04, 0x51, 0xcd, 0x71,
-	0xaa, 0x79, 0xeb, 0xac, 0x55, 0x1d, 0xda, 0x7c, 0x05, 0x46, 0xbc, 0x62, 0x9d, 0x3c, 0xe5, 0x36,
-	0xe1, 0x95, 0xfe, 0x5e, 0x8e, 0x87, 0xa9, 0xe4, 0x59, 0xa0, 0x8c, 0xaa, 0x31, 0x5c, 0x73, 0x1f,
-	0xe6, 0x16, 0x60, 0x64, 0x10, 0xee, 0xa9, 0x83, 0x36, 0x08, 0x77, 0xda, 0x20, 0xd4, 0x6d, 0x83,
-	0xd0, 0x87, 0xe9, 0xf7, 0xd3, 0x1f, 0xdc, 0x0f, 0x86, 0x43, 0xb1, 0xb1, 0xe4, 0x7e, 0x10, 0x4e,
-	0xde, 0x35, 0x91, 0x4c, 0x50, 0x9f, 0xd7, 0x95, 0x7f, 0xc6, 0xab, 0x4b, 0x66, 0xf1, 0x02, 0xb4,
-	0x44, 0x7d, 0xb4, 0x78, 0xf9, 0xc8, 0x9d, 0x9f, 0x8f, 0x51, 0x87, 0xd3, 0xff, 0x98, 0x86, 0x8f,
-	0x66, 0x7e, 0x5e, 0xf6, 0x9d, 0x4a, 0x7f, 0x2c, 0x87, 0x6e, 0xa5, 0x97, 0xd2, 0xb7, 0x73, 0xbc,
-	0x17, 0x94, 0xe8, 0x93, 0x3f, 0xc1, 0xe0, 0x83, 0xde, 0xb1, 0xe6, 0xc2, 0xf2, 0x7d, 0x10, 0x46,
-	0x45, 0x64, 0xe8, 0x72, 0xe5, 0x92, 0x96, 0x4b, 0x5a, 0xce, 0xa2, 0xe5, 0x45, 0x10, 0x46, 0x56,
-	0x11, 0x79, 0xcd, 0xa4, 0xac, 0x5c, 0xf4, 0x8d, 0xe7, 0x79, 0x97, 0x5d, 0xf2, 0xf6, 0x2f, 0xe2,
-	0x6d, 0x76, 0x04, 0x6f, 0xe3, 0x94, 0xb7, 0x74, 0xf6, 0x1c, 0xc4, 0x85, 0x62, 0x63, 0xa9, 0x6f,
-	0x01, 0x9c, 0x1a, 0x22, 0x86, 0x7b, 0x0b, 0xce, 0xd1, 0x9f, 0x35, 0x0f, 0xf2, 0xa5, 0x82, 0xb4,
-	0x2a, 0x6e, 0x6e, 0x15, 0xa5, 0xf2, 0xa7, 0xc5, 0xbc, 0xb4, 0xb6, 0xf1, 0xf0, 0xce, 0xfa, 0xda,
-	0x4a, 0x8c, 0x49, 0xb0, 0x7b, 0xbb, 0x80, 0x7b, 0x1b, 0x26, 0x47, 0xa6, 0x15, 0xb6, 0x72, 0xd2,
-	0xbd, 0xad, 0xf5, 0x75, 0x1a, 0x88, 0x01, 0x8e, 0x87, 0x89, 0x91, 0x79, 0xa5, 0xe2, 0xe6, 0xc7,
-	0xf9, 0x58, 0x80, 0x4b, 0x42, 0x7e, 0x64, 0xfc, 0x54, 0x83, 0xcd, 0x7d, 0x0d, 0x3a, 0x47, 0x3c,
-	0x73, 0x78, 0xc4, 0x33, 0x2f, 0x8f, 0x78, 0xb0, 0xd7, 0xe5, 0xc1, 0x77, 0x5d, 0x1e, 0xfc, 0xd4,
-	0xe5, 0x41, 0xa7, 0xcb, 0x83, 0xc3, 0x2e, 0x0f, 0x7e, 0xeb, 0xf2, 0xe0, 0x79, 0x97, 0x67, 0x5e,
-	0x76, 0x79, 0xf0, 0xd5, 0x31, 0xcf, 0x1c, 0x1c, 0xf3, 0xa0, 0x73, 0xcc, 0x33, 0x87, 0xc7, 0x3c,
-	0xf3, 0xa8, 0xa4, 0x62, 0x63, 0x5b, 0x15, 0x5a, 0x58, 0x27, 0xc8, 0x34, 0x65, 0xc1, 0xb6, 0x32,
-	0xf4, 0xa2, 0x86, 0xcd, 0xc6, 0xa2, 0x61, 0xe2, 0x96, 0x56, 0x45, 0xe6, 0xe2, 0x49, 0x38, 0x63,
-	0x28, 0x2a, 0xce, 0xa0, 0x2f, 0xc9, 0xc9, 0x77, 0xe7, 0xc8, 0xaf, 0x6d, 0x65, 0x8c, 0x7e, 0x08,
-	0x2e, 0xfd, 0x15, 0x00, 0x00, 0xff, 0xff, 0xb5, 0x16, 0xe3, 0xc1, 0x95, 0x0f, 0x00, 0x00,
+	// 1190 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x58, 0xc1, 0x6f, 0x22, 0x55,
+	0x18, 0xe7, 0x31, 0x40, 0xe9, 0xa3, 0x02, 0x1d, 0x6b, 0x96, 0xd2, 0x76, 0xb6, 0xa1, 0xab, 0x59,
+	0x91, 0xc2, 0x42, 0x37, 0x6a, 0x3c, 0x34, 0x59, 0xb6, 0xb4, 0xb4, 0x76, 0x5b, 0x32, 0xd0, 0x35,
+	0x6e, 0x8c, 0x93, 0x99, 0xe1, 0x01, 0xb3, 0x1d, 0x78, 0x93, 0x99, 0x37, 0x68, 0x0f, 0x4d, 0x9a,
+	0x3d, 0xf6, 0xa4, 0x5e, 0xfc, 0x0f, 0x8c, 0xd9, 0x3f, 0x41, 0xf6, 0xd0, 0xa3, 0xf1, 0xc4, 0xc1,
+	0x43, 0xf5, 0x64, 0xe9, 0xc1, 0xf5, 0xb6, 0x31, 0xf1, 0xb2, 0x27, 0x33, 0x8f, 0x69, 0xcb, 0x00,
+	0xb6, 0x6b, 0xed, 0x41, 0x4d, 0x2f, 0x2d, 0xbc, 0xdf, 0xf7, 0xfd, 0xde, 0xf7, 0x7d, 0xef, 0xf7,
+	0x7b, 0x4c, 0x06, 0xbe, 0xdd, 0x44, 0x46, 0x52, 0xc1, 0x29, 0x43, 0xae, 0xa1, 0xba, 0x98, 0x32,
+	0x14, 0x82, 0x84, 0x3a, 0x32, 0x6a, 0x42, 0x55, 0xc7, 0xa6, 0x96, 0x22, 0x3b, 0x1a, 0x32, 0x92,
+	0x9a, 0x8e, 0x09, 0x66, 0x67, 0xba, 0xa1, 0xc9, 0x6e, 0x68, 0xb2, 0x2f, 0x34, 0x3a, 0x5f, 0x55,
+	0x48, 0xcd, 0x94, 0x92, 0x32, 0xae, 0xa7, 0xaa, 0xb8, 0x8a, 0x53, 0x34, 0x4b, 0x32, 0x2b, 0xf4,
+	0x1b, 0xfd, 0x42, 0x3f, 0x75, 0xd9, 0xa2, 0x37, 0xab, 0x18, 0x57, 0x55, 0x74, 0x16, 0x45, 0x94,
+	0x3a, 0x32, 0x88, 0x58, 0xd7, 0xec, 0x80, 0x1b, 0xce, 0xca, 0x1a, 0x88, 0xd8, 0xc0, 0x94, 0x13,
+	0xc0, 0x1a, 0x51, 0x70, 0xc3, 0x2e, 0x32, 0x3a, 0xe3, 0x04, 0xb5, 0x26, 0x11, 0x7a, 0x7a, 0x88,
+	0x72, 0x83, 0xed, 0xf6, 0xf6, 0x18, 0x9d, 0x74, 0xe2, 0xbd, 0xd0, 0xb4, 0x13, 0x6a, 0x8a, 0xaa,
+	0x52, 0x16, 0x09, 0xb2, 0xd1, 0xd9, 0x3e, 0x54, 0x41, 0x9f, 0x09, 0xce, 0xca, 0x6e, 0x0e, 0x46,
+	0x18, 0xbd, 0x1b, 0xc4, 0xf6, 0xdd, 0x70, 0x22, 0x6f, 0x4a, 0xcb, 0xa6, 0xaa, 0x3e, 0x40, 0x46,
+	0x6d, 0xc5, 0x9a, 0x6a, 0x69, 0x47, 0x43, 0xec, 0x22, 0x0c, 0x95, 0x45, 0x22, 0x0a, 0x9a, 0x2a,
+	0x36, 0xba, 0x23, 0x8f, 0xb8, 0x67, 0xc1, 0xed, 0x40, 0x66, 0x22, 0xe9, 0x3c, 0x92, 0x5c, 0x5d,
+	0x23, 0x3b, 0x79, 0x17, 0xff, 0x9a, 0x15, 0x5e, 0xb0, 0xa2, 0x2d, 0x22, 0xb6, 0x04, 0xa7, 0x64,
+	0xdc, 0x20, 0x3a, 0x56, 0x05, 0xb1, 0x51, 0x16, 0xfa, 0xb9, 0x98, 0x73, 0xb9, 0x6e, 0xd8, 0xa9,
+	0xf7, 0x1a, 0xe5, 0xa5, 0x5e, 0xd6, 0xec, 0x43, 0x38, 0x51, 0x33, 0x25, 0xa1, 0x62, 0xaa, 0x6a,
+	0x57, 0x06, 0x72, 0x0d, 0x2b, 0x32, 0x62, 0x17, 0x0f, 0x5a, 0xc0, 0xdd, 0x6e, 0x01, 0xd0, 0x69,
+	0x01, 0x26, 0x93, 0x58, 0xd8, 0x7f, 0x06, 0xde, 0x89, 0x33, 0xb2, 0x4e, 0xe2, 0x23, 0x06, 0x11,
+	0xab, 0x4a, 0xa3, 0x1a, 0xf7, 0x68, 0x3a, 0x2e, 0xc7, 0xc7, 0x0c, 0x5c, 0x21, 0x92, 0xd8, 0xd8,
+	0x16, 0xea, 0x48, 0x8e, 0x8f, 0x54, 0x50, 0x59, 0x17, 0xeb, 0xda, 0x9a, 0xc7, 0x0f, 0xc2, 0xee,
+	0xd8, 0x8f, 0x00, 0x8e, 0xff, 0x57, 0x26, 0x31, 0x07, 0xc3, 0x03, 0x53, 0x08, 0xf5, 0x4d, 0xc1,
+	0x6e, 0xeb, 0x57, 0x37, 0x64, 0x8b, 0x1a, 0xde, 0x46, 0xce, 0xbe, 0x3e, 0x81, 0x41, 0x6b, 0x96,
+	0x67, 0x6e, 0x8a, 0x00, 0x5a, 0x4a, 0xac, 0xaf, 0x14, 0x2a, 0x9a, 0xe4, 0xa6, 0xf4, 0x18, 0xc9,
+	0x84, 0x47, 0x15, 0x2b, 0x37, 0xcb, 0x3e, 0xdd, 0x0d, 0xf5, 0x79, 0x91, 0x1f, 0xab, 0x99, 0xd2,
+	0xe9, 0x0e, 0xc3, 0xa6, 0xc6, 0x5c, 0xe1, 0xd4, 0x3c, 0x97, 0x9b, 0xda, 0x47, 0xf0, 0x0d, 0xc3,
+	0x9a, 0x84, 0x70, 0xda, 0x79, 0x8f, 0x80, 0x98, 0x76, 0x0b, 0xb8, 0xad, 0xd1, 0x2d, 0x24, 0xee,
+	0xfe, 0x7d, 0x01, 0xb9, 0xc3, 0x4c, 0xec, 0x0f, 0x1f, 0x0c, 0xae, 0xa8, 0x58, 0x12, 0xd5, 0xa2,
+	0x86, 0x64, 0x3a, 0xe5, 0x47, 0xd0, 0x63, 0xf9, 0x8d, 0xce, 0x36, 0x98, 0xb9, 0x93, 0x3c, 0xf7,
+	0x3e, 0x4b, 0x16, 0x15, 0xe2, 0x3c, 0xa5, 0xec, 0xc4, 0xf3, 0x16, 0x00, 0xdf, 0xfd, 0x76, 0xc0,
+	0x8c, 0x3e, 0x01, 0xbe, 0xa8, 0xc7, 0x05, 0xdc, 0x4c, 0x04, 0xf0, 0x94, 0x93, 0x7d, 0x0c, 0x03,
+	0xc4, 0x6c, 0x34, 0x90, 0x4a, 0xaf, 0x1b, 0xaa, 0xca, 0x60, 0x66, 0xae, 0x6f, 0x0b, 0x8b, 0xb2,
+	0x84, 0xe9, 0x5f, 0x1a, 0x4b, 0x59, 0x6f, 0x1d, 0xee, 0x82, 0x9f, 0x5b, 0x60, 0xb2, 0xb8, 0x5a,
+	0xca, 0x09, 0xa5, 0x4d, 0xa1, 0xfb, 0x7f, 0x6b, 0x63, 0x23, 0xb7, 0x2e, 0xac, 0x16, 0x8a, 0xb9,
+	0xfb, 0xd6, 0xae, 0x3c, 0x24, 0xa7, 0x19, 0xec, 0xa7, 0x70, 0xac, 0xa9, 0xe8, 0xc4, 0x14, 0x55,
+	0xc1, 0x2a, 0x3a, 0xc2, 0xcc, 0x32, 0xb7, 0x03, 0x99, 0xe9, 0xbe, 0xcd, 0x9c, 0x2a, 0x99, 0x79,
+	0xba, 0xeb, 0x48, 0xda, 0x7b, 0xd6, 0x6d, 0xc5, 0xfb, 0x15, 0x70, 0x87, 0x01, 0x1f, 0xb0, 0x31,
+	0xab, 0x36, 0xb6, 0x04, 0x99, 0x9a, 0x29, 0x45, 0x3c, 0xaf, 0x40, 0x7b, 0x6b, 0x50, 0x7c, 0x56,
+	0xb9, 0x7d, 0xec, 0x16, 0x1d, 0x5b, 0x80, 0xfe, 0x93, 0x93, 0x8e, 0xf8, 0xa8, 0x64, 0x16, 0x2e,
+	0x38, 0x81, 0x61, 0x97, 0x61, 0xde, 0xc5, 0x8f, 0xd8, 0xe2, 0x66, 0x79, 0x08, 0xbb, 0x0a, 0xa2,
+	0x9c, 0x23, 0x94, 0x33, 0x7d, 0xd1, 0xa9, 0x0e, 0x98, 0x2f, 0xef, 0xe2, 0x47, 0x8d, 0x93, 0x55,
+	0x76, 0x13, 0x8e, 0x9e, 0x7a, 0x39, 0xe2, 0xa7, 0x94, 0x17, 0x09, 0x65, 0x58, 0x8d, 0xfe, 0x8a,
+	0xbd, 0xc8, 0x2e, 0x41, 0x16, 0x35, 0x44, 0x49, 0x45, 0x82, 0x8e, 0x84, 0x8a, 0xa8, 0xaa, 0x92,
+	0x28, 0x6f, 0x47, 0xe0, 0x39, 0x9e, 0x01, 0x7c, 0xb8, 0x9b, 0xc1, 0xa3, 0x65, 0x3b, 0x9e, 0x5d,
+	0x86, 0xaf, 0x97, 0x15, 0x63, 0x80, 0x26, 0x70, 0x2e, 0xcd, 0xb8, 0x9d, 0x72, 0xc6, 0x93, 0x9d,
+	0x85, 0x81, 0x5e, 0xab, 0x8d, 0x1f, 0xb4, 0x80, 0xbf, 0xdd, 0x02, 0xde, 0x4e, 0x0b, 0x78, 0xdf,
+	0x4f, 0xbc, 0x9b, 0x78, 0x2f, 0x9b, 0x81, 0x81, 0x9e, 0x1d, 0xd8, 0xb9, 0x83, 0x16, 0x80, 0xed,
+	0x16, 0x18, 0xb5, 0x22, 0xd2, 0x77, 0x12, 0xe9, 0xf4, 0xfe, 0x4b, 0x10, 0x2c, 0xa3, 0x3a, 0x4e,
+	0x27, 0x64, 0x9d, 0x24, 0x08, 0x32, 0xc8, 0x9a, 0xc7, 0xef, 0x0d, 0xfb, 0xd6, 0x3c, 0xfe, 0xd1,
+	0x30, 0x8c, 0x1d, 0x7a, 0x61, 0xf0, 0xbe, 0x8e, 0x44, 0x82, 0x4e, 0x7d, 0xb7, 0xf4, 0xcf, 0x7c,
+	0x67, 0x3b, 0xac, 0x70, 0x09, 0xd5, 0x87, 0xfa, 0x54, 0xef, 0xd4, 0x79, 0xf6, 0xd5, 0x75, 0x3e,
+	0xec, 0x92, 0xbd, 0x56, 0xf5, 0xbf, 0x44, 0xd5, 0x1f, 0x4c, 0xfe, 0xb0, 0xd8, 0x77, 0xd7, 0xff,
+	0xbe, 0xe8, 0x4d, 0x27, 0x16, 0x12, 0x77, 0xb3, 0x9c, 0x53, 0xf0, 0xa1, 0x27, 0x2f, 0x41, 0xef,
+	0x82, 0x85, 0xf7, 0xca, 0x9d, 0xe2, 0x3d, 0x0b, 0xdd, 0x1f, 0x93, 0xae, 0xc0, 0x63, 0x3f, 0x79,
+	0x61, 0x88, 0x47, 0x9a, 0x2a, 0xca, 0xd7, 0xda, 0xbe, 0xd6, 0xf6, 0xff, 0x4b, 0xdb, 0x5f, 0xfb,
+	0x60, 0x60, 0x05, 0x91, 0x2b, 0xd6, 0xf5, 0xd2, 0x65, 0x9f, 0x8a, 0x1c, 0xcf, 0x3b, 0xd7, 0xee,
+	0xb8, 0x76, 0xc7, 0x5f, 0xb8, 0x63, 0x6a, 0x88, 0x3b, 0x46, 0xa8, 0x3b, 0x12, 0x99, 0x2b, 0xf0,
+	0x87, 0x37, 0xec, 0x8b, 0x7f, 0x03, 0xe0, 0xf8, 0x80, 0xbe, 0xd9, 0x37, 0xe1, 0x34, 0x7d, 0x50,
+	0x7f, 0x90, 0x2b, 0xe6, 0x85, 0x15, 0x7e, 0x73, 0xab, 0x20, 0x94, 0x3e, 0x2e, 0xe4, 0x84, 0xd5,
+	0x8d, 0x87, 0xf7, 0xd6, 0x57, 0x97, 0xc2, 0xae, 0x28, 0xb3, 0xb7, 0x0b, 0xd8, 0xb7, 0x60, 0x6c,
+	0x68, 0x58, 0x7e, 0x2b, 0x2b, 0x2c, 0x6f, 0xad, 0xaf, 0x53, 0x20, 0x0c, 0x58, 0x0e, 0x46, 0x87,
+	0xc6, 0x15, 0x0b, 0x9b, 0x1f, 0xe6, 0xc2, 0x6e, 0x36, 0x06, 0xb9, 0xa1, 0xf8, 0x19, 0x07, 0x93,
+	0xfd, 0x12, 0xb4, 0x8f, 0x38, 0xd7, 0xe1, 0x11, 0xe7, 0x7a, 0x71, 0xc4, 0x81, 0xbd, 0x0e, 0x07,
+	0xbe, 0xed, 0x70, 0xe0, 0xfb, 0x0e, 0x07, 0xda, 0x1d, 0x0e, 0x1c, 0x76, 0x38, 0xf0, 0x4b, 0x87,
+	0x03, 0xcf, 0x3b, 0x9c, 0xeb, 0x45, 0x87, 0x03, 0x5f, 0x1c, 0x73, 0xae, 0x83, 0x63, 0x0e, 0xb4,
+	0x8f, 0x39, 0xd7, 0xe1, 0x31, 0xe7, 0x7a, 0x54, 0xac, 0x62, 0x6d, 0xbb, 0x9a, 0x6c, 0x62, 0x95,
+	0x20, 0x5d, 0x17, 0x93, 0xa6, 0x91, 0xa2, 0x1f, 0x2a, 0x58, 0xaf, 0xcf, 0x6b, 0x3a, 0x6e, 0x2a,
+	0x65, 0xa4, 0xcf, 0x9f, 0xc0, 0x29, 0x4d, 0xaa, 0xe2, 0x14, 0xfa, 0x9c, 0x9c, 0xbc, 0x49, 0x19,
+	0xfa, 0xfe, 0x48, 0xf2, 0xd1, 0x57, 0x1b, 0x0b, 0x7f, 0x06, 0x00, 0x00, 0xff, 0xff, 0x7b, 0xc7,
+	0xc7, 0x63, 0x67, 0x12, 0x00, 0x00,
 }
 
 func (x SiteMeshGroupType) String() string {
@@ -1286,6 +1459,15 @@ func (this *GlobalSpecType) Equal(that interface{}) bool {
 	} else if !this.MeshChoice.Equal(that1.MeshChoice) {
 		return false
 	}
+	if that1.ReFallback == nil {
+		if this.ReFallback != nil {
+			return false
+		}
+	} else if this.ReFallback == nil {
+		return false
+	} else if !this.ReFallback.Equal(that1.ReFallback) {
+		return false
+	}
 	return true
 }
 func (this *GlobalSpecType_HubMesh) Equal(that interface{}) bool {
@@ -1360,6 +1542,54 @@ func (this *GlobalSpecType_FullMesh) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *GlobalSpecType_EnableReFallback) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_EnableReFallback)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_EnableReFallback)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableReFallback.Equal(that1.EnableReFallback) {
+		return false
+	}
+	return true
+}
+func (this *GlobalSpecType_DisableReFallback) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GlobalSpecType_DisableReFallback)
+	if !ok {
+		that2, ok := that.(GlobalSpecType_DisableReFallback)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableReFallback.Equal(that1.DisableReFallback) {
+		return false
+	}
+	return true
+}
 func (this *CreateSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1405,6 +1635,15 @@ func (this *CreateSpecType) Equal(that interface{}) bool {
 	} else if this.MeshChoice == nil {
 		return false
 	} else if !this.MeshChoice.Equal(that1.MeshChoice) {
+		return false
+	}
+	if that1.ReFallback == nil {
+		if this.ReFallback != nil {
+			return false
+		}
+	} else if this.ReFallback == nil {
+		return false
+	} else if !this.ReFallback.Equal(that1.ReFallback) {
 		return false
 	}
 	return true
@@ -1481,6 +1720,54 @@ func (this *CreateSpecType_FullMesh) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *CreateSpecType_EnableReFallback) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_EnableReFallback)
+	if !ok {
+		that2, ok := that.(CreateSpecType_EnableReFallback)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableReFallback.Equal(that1.EnableReFallback) {
+		return false
+	}
+	return true
+}
+func (this *CreateSpecType_DisableReFallback) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateSpecType_DisableReFallback)
+	if !ok {
+		that2, ok := that.(CreateSpecType_DisableReFallback)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableReFallback.Equal(that1.DisableReFallback) {
+		return false
+	}
+	return true
+}
 func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1526,6 +1813,15 @@ func (this *ReplaceSpecType) Equal(that interface{}) bool {
 	} else if this.MeshChoice == nil {
 		return false
 	} else if !this.MeshChoice.Equal(that1.MeshChoice) {
+		return false
+	}
+	if that1.ReFallback == nil {
+		if this.ReFallback != nil {
+			return false
+		}
+	} else if this.ReFallback == nil {
+		return false
+	} else if !this.ReFallback.Equal(that1.ReFallback) {
 		return false
 	}
 	return true
@@ -1602,6 +1898,54 @@ func (this *ReplaceSpecType_FullMesh) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *ReplaceSpecType_EnableReFallback) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_EnableReFallback)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_EnableReFallback)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableReFallback.Equal(that1.EnableReFallback) {
+		return false
+	}
+	return true
+}
+func (this *ReplaceSpecType_DisableReFallback) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ReplaceSpecType_DisableReFallback)
+	if !ok {
+		that2, ok := that.(ReplaceSpecType_DisableReFallback)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableReFallback.Equal(that1.DisableReFallback) {
+		return false
+	}
+	return true
+}
 func (this *GetSpecType) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -1650,6 +1994,15 @@ func (this *GetSpecType) Equal(that interface{}) bool {
 	} else if this.MeshChoice == nil {
 		return false
 	} else if !this.MeshChoice.Equal(that1.MeshChoice) {
+		return false
+	}
+	if that1.ReFallback == nil {
+		if this.ReFallback != nil {
+			return false
+		}
+	} else if this.ReFallback == nil {
+		return false
+	} else if !this.ReFallback.Equal(that1.ReFallback) {
 		return false
 	}
 	return true
@@ -1722,6 +2075,54 @@ func (this *GetSpecType_FullMesh) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.FullMesh.Equal(that1.FullMesh) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_EnableReFallback) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_EnableReFallback)
+	if !ok {
+		that2, ok := that.(GetSpecType_EnableReFallback)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableReFallback.Equal(that1.EnableReFallback) {
+		return false
+	}
+	return true
+}
+func (this *GetSpecType_DisableReFallback) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*GetSpecType_DisableReFallback)
+	if !ok {
+		that2, ok := that.(GetSpecType_DisableReFallback)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableReFallback.Equal(that1.DisableReFallback) {
 		return false
 	}
 	return true
@@ -1817,7 +2218,7 @@ func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 13)
 	s = append(s, "&site_mesh_group.GlobalSpecType{")
 	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
 	s = append(s, "TunnelType: "+fmt.Sprintf("%#v", this.TunnelType)+",\n")
@@ -1829,6 +2230,9 @@ func (this *GlobalSpecType) GoString() string {
 	}
 	if this.MeshChoice != nil {
 		s = append(s, "MeshChoice: "+fmt.Sprintf("%#v", this.MeshChoice)+",\n")
+	}
+	if this.ReFallback != nil {
+		s = append(s, "ReFallback: "+fmt.Sprintf("%#v", this.ReFallback)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1857,11 +2261,27 @@ func (this *GlobalSpecType_FullMesh) GoString() string {
 		`FullMesh:` + fmt.Sprintf("%#v", this.FullMesh) + `}`}, ", ")
 	return s
 }
+func (this *GlobalSpecType_EnableReFallback) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.GlobalSpecType_EnableReFallback{` +
+		`EnableReFallback:` + fmt.Sprintf("%#v", this.EnableReFallback) + `}`}, ", ")
+	return s
+}
+func (this *GlobalSpecType_DisableReFallback) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.GlobalSpecType_DisableReFallback{` +
+		`DisableReFallback:` + fmt.Sprintf("%#v", this.DisableReFallback) + `}`}, ", ")
+	return s
+}
 func (this *CreateSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 12)
 	s = append(s, "&site_mesh_group.CreateSpecType{")
 	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
 	if this.VirtualSite != nil {
@@ -1872,6 +2292,9 @@ func (this *CreateSpecType) GoString() string {
 	}
 	if this.MeshChoice != nil {
 		s = append(s, "MeshChoice: "+fmt.Sprintf("%#v", this.MeshChoice)+",\n")
+	}
+	if this.ReFallback != nil {
+		s = append(s, "ReFallback: "+fmt.Sprintf("%#v", this.ReFallback)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1900,11 +2323,27 @@ func (this *CreateSpecType_FullMesh) GoString() string {
 		`FullMesh:` + fmt.Sprintf("%#v", this.FullMesh) + `}`}, ", ")
 	return s
 }
+func (this *CreateSpecType_EnableReFallback) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.CreateSpecType_EnableReFallback{` +
+		`EnableReFallback:` + fmt.Sprintf("%#v", this.EnableReFallback) + `}`}, ", ")
+	return s
+}
+func (this *CreateSpecType_DisableReFallback) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.CreateSpecType_DisableReFallback{` +
+		`DisableReFallback:` + fmt.Sprintf("%#v", this.DisableReFallback) + `}`}, ", ")
+	return s
+}
 func (this *ReplaceSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 10)
+	s := make([]string, 0, 12)
 	s = append(s, "&site_mesh_group.ReplaceSpecType{")
 	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
 	if this.VirtualSite != nil {
@@ -1915,6 +2354,9 @@ func (this *ReplaceSpecType) GoString() string {
 	}
 	if this.MeshChoice != nil {
 		s = append(s, "MeshChoice: "+fmt.Sprintf("%#v", this.MeshChoice)+",\n")
+	}
+	if this.ReFallback != nil {
+		s = append(s, "ReFallback: "+fmt.Sprintf("%#v", this.ReFallback)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1943,11 +2385,27 @@ func (this *ReplaceSpecType_FullMesh) GoString() string {
 		`FullMesh:` + fmt.Sprintf("%#v", this.FullMesh) + `}`}, ", ")
 	return s
 }
+func (this *ReplaceSpecType_EnableReFallback) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.ReplaceSpecType_EnableReFallback{` +
+		`EnableReFallback:` + fmt.Sprintf("%#v", this.EnableReFallback) + `}`}, ", ")
+	return s
+}
+func (this *ReplaceSpecType_DisableReFallback) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.ReplaceSpecType_DisableReFallback{` +
+		`DisableReFallback:` + fmt.Sprintf("%#v", this.DisableReFallback) + `}`}, ", ")
+	return s
+}
 func (this *GetSpecType) GoString() string {
 	if this == nil {
 		return "nil"
 	}
-	s := make([]string, 0, 11)
+	s := make([]string, 0, 13)
 	s = append(s, "&site_mesh_group.GetSpecType{")
 	s = append(s, "Type: "+fmt.Sprintf("%#v", this.Type)+",\n")
 	s = append(s, "TunnelType: "+fmt.Sprintf("%#v", this.TunnelType)+",\n")
@@ -1959,6 +2417,9 @@ func (this *GetSpecType) GoString() string {
 	}
 	if this.MeshChoice != nil {
 		s = append(s, "MeshChoice: "+fmt.Sprintf("%#v", this.MeshChoice)+",\n")
+	}
+	if this.ReFallback != nil {
+		s = append(s, "ReFallback: "+fmt.Sprintf("%#v", this.ReFallback)+",\n")
 	}
 	s = append(s, "}")
 	return strings.Join(s, "")
@@ -1985,6 +2446,22 @@ func (this *GetSpecType_FullMesh) GoString() string {
 	}
 	s := strings.Join([]string{`&site_mesh_group.GetSpecType_FullMesh{` +
 		`FullMesh:` + fmt.Sprintf("%#v", this.FullMesh) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_EnableReFallback) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.GetSpecType_EnableReFallback{` +
+		`EnableReFallback:` + fmt.Sprintf("%#v", this.EnableReFallback) + `}`}, ", ")
+	return s
+}
+func (this *GetSpecType_DisableReFallback) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&site_mesh_group.GetSpecType_DisableReFallback{` +
+		`DisableReFallback:` + fmt.Sprintf("%#v", this.DisableReFallback) + `}`}, ", ")
 	return s
 }
 func valueToGoStringTypes(v interface{}, typ string) string {
@@ -2249,6 +2726,15 @@ func (m *GlobalSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ReFallback != nil {
+		{
+			size := m.ReFallback.Size()
+			i -= size
+			if _, err := m.ReFallback.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.MeshChoice != nil {
 		{
 			size := m.MeshChoice.Size()
@@ -2362,6 +2848,48 @@ func (m *GlobalSpecType_FullMesh) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	}
 	return len(dAtA) - i, nil
 }
+func (m *GlobalSpecType_EnableReFallback) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_EnableReFallback) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableReFallback != nil {
+		{
+			size, err := m.EnableReFallback.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GlobalSpecType_DisableReFallback) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GlobalSpecType_DisableReFallback) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableReFallback != nil {
+		{
+			size, err := m.DisableReFallback.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *CreateSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2382,6 +2910,15 @@ func (m *CreateSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ReFallback != nil {
+		{
+			size := m.ReFallback.Size()
+			i -= size
+			if _, err := m.ReFallback.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.MeshChoice != nil {
 		{
 			size := m.MeshChoice.Size()
@@ -2490,6 +3027,48 @@ func (m *CreateSpecType_FullMesh) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	}
 	return len(dAtA) - i, nil
 }
+func (m *CreateSpecType_EnableReFallback) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_EnableReFallback) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableReFallback != nil {
+		{
+			size, err := m.EnableReFallback.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *CreateSpecType_DisableReFallback) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CreateSpecType_DisableReFallback) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableReFallback != nil {
+		{
+			size, err := m.DisableReFallback.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *ReplaceSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2510,6 +3089,15 @@ func (m *ReplaceSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ReFallback != nil {
+		{
+			size := m.ReFallback.Size()
+			i -= size
+			if _, err := m.ReFallback.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.MeshChoice != nil {
 		{
 			size := m.MeshChoice.Size()
@@ -2618,6 +3206,48 @@ func (m *ReplaceSpecType_FullMesh) MarshalToSizedBuffer(dAtA []byte) (int, error
 	}
 	return len(dAtA) - i, nil
 }
+func (m *ReplaceSpecType_EnableReFallback) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_EnableReFallback) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableReFallback != nil {
+		{
+			size, err := m.EnableReFallback.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *ReplaceSpecType_DisableReFallback) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ReplaceSpecType_DisableReFallback) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableReFallback != nil {
+		{
+			size, err := m.DisableReFallback.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
 func (m *GetSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2638,6 +3268,15 @@ func (m *GetSpecType) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.ReFallback != nil {
+		{
+			size := m.ReFallback.Size()
+			i -= size
+			if _, err := m.ReFallback.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
 	if m.MeshChoice != nil {
 		{
 			size := m.MeshChoice.Size()
@@ -2748,6 +3387,48 @@ func (m *GetSpecType_FullMesh) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		}
 		i--
 		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_EnableReFallback) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_EnableReFallback) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableReFallback != nil {
+		{
+			size, err := m.EnableReFallback.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x52
+	}
+	return len(dAtA) - i, nil
+}
+func (m *GetSpecType_DisableReFallback) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *GetSpecType_DisableReFallback) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableReFallback != nil {
+		{
+			size, err := m.DisableReFallback.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
 	}
 	return len(dAtA) - i, nil
 }
@@ -2901,6 +3582,9 @@ func (m *GlobalSpecType) Size() (n int) {
 	if m.MeshChoice != nil {
 		n += m.MeshChoice.Size()
 	}
+	if m.ReFallback != nil {
+		n += m.ReFallback.Size()
+	}
 	return n
 }
 
@@ -2940,6 +3624,30 @@ func (m *GlobalSpecType_FullMesh) Size() (n int) {
 	}
 	return n
 }
+func (m *GlobalSpecType_EnableReFallback) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableReFallback != nil {
+		l = m.EnableReFallback.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GlobalSpecType_DisableReFallback) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableReFallback != nil {
+		l = m.DisableReFallback.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *CreateSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2963,6 +3671,9 @@ func (m *CreateSpecType) Size() (n int) {
 	}
 	if m.MeshChoice != nil {
 		n += m.MeshChoice.Size()
+	}
+	if m.ReFallback != nil {
+		n += m.ReFallback.Size()
 	}
 	return n
 }
@@ -3003,6 +3714,30 @@ func (m *CreateSpecType_FullMesh) Size() (n int) {
 	}
 	return n
 }
+func (m *CreateSpecType_EnableReFallback) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableReFallback != nil {
+		l = m.EnableReFallback.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *CreateSpecType_DisableReFallback) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableReFallback != nil {
+		l = m.DisableReFallback.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *ReplaceSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3026,6 +3761,9 @@ func (m *ReplaceSpecType) Size() (n int) {
 	}
 	if m.MeshChoice != nil {
 		n += m.MeshChoice.Size()
+	}
+	if m.ReFallback != nil {
+		n += m.ReFallback.Size()
 	}
 	return n
 }
@@ -3066,6 +3804,30 @@ func (m *ReplaceSpecType_FullMesh) Size() (n int) {
 	}
 	return n
 }
+func (m *ReplaceSpecType_EnableReFallback) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableReFallback != nil {
+		l = m.EnableReFallback.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *ReplaceSpecType_DisableReFallback) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableReFallback != nil {
+		l = m.DisableReFallback.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
 func (m *GetSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -3092,6 +3854,9 @@ func (m *GetSpecType) Size() (n int) {
 	}
 	if m.MeshChoice != nil {
 		n += m.MeshChoice.Size()
+	}
+	if m.ReFallback != nil {
+		n += m.ReFallback.Size()
 	}
 	return n
 }
@@ -3128,6 +3893,30 @@ func (m *GetSpecType_FullMesh) Size() (n int) {
 	_ = l
 	if m.FullMesh != nil {
 		l = m.FullMesh.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_EnableReFallback) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableReFallback != nil {
+		l = m.EnableReFallback.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *GetSpecType_DisableReFallback) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableReFallback != nil {
+		l = m.DisableReFallback.Size()
 		n += 1 + l + sovTypes(uint64(l))
 	}
 	return n
@@ -3250,6 +4039,7 @@ func (this *GlobalSpecType) String() string {
 		`VirtualSite:` + repeatedStringForVirtualSite + `,`,
 		`Hub:` + repeatedStringForHub + `,`,
 		`MeshChoice:` + fmt.Sprintf("%v", this.MeshChoice) + `,`,
+		`ReFallback:` + fmt.Sprintf("%v", this.ReFallback) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3284,6 +4074,26 @@ func (this *GlobalSpecType_FullMesh) String() string {
 	}, "")
 	return s
 }
+func (this *GlobalSpecType_EnableReFallback) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_EnableReFallback{`,
+		`EnableReFallback:` + strings.Replace(fmt.Sprintf("%v", this.EnableReFallback), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GlobalSpecType_DisableReFallback) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GlobalSpecType_DisableReFallback{`,
+		`DisableReFallback:` + strings.Replace(fmt.Sprintf("%v", this.DisableReFallback), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CreateSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -3303,6 +4113,7 @@ func (this *CreateSpecType) String() string {
 		`VirtualSite:` + repeatedStringForVirtualSite + `,`,
 		`Hub:` + repeatedStringForHub + `,`,
 		`MeshChoice:` + fmt.Sprintf("%v", this.MeshChoice) + `,`,
+		`ReFallback:` + fmt.Sprintf("%v", this.ReFallback) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3337,6 +4148,26 @@ func (this *CreateSpecType_FullMesh) String() string {
 	}, "")
 	return s
 }
+func (this *CreateSpecType_EnableReFallback) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_EnableReFallback{`,
+		`EnableReFallback:` + strings.Replace(fmt.Sprintf("%v", this.EnableReFallback), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CreateSpecType_DisableReFallback) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CreateSpecType_DisableReFallback{`,
+		`DisableReFallback:` + strings.Replace(fmt.Sprintf("%v", this.DisableReFallback), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *ReplaceSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -3356,6 +4187,7 @@ func (this *ReplaceSpecType) String() string {
 		`VirtualSite:` + repeatedStringForVirtualSite + `,`,
 		`Hub:` + repeatedStringForHub + `,`,
 		`MeshChoice:` + fmt.Sprintf("%v", this.MeshChoice) + `,`,
+		`ReFallback:` + fmt.Sprintf("%v", this.ReFallback) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3390,6 +4222,26 @@ func (this *ReplaceSpecType_FullMesh) String() string {
 	}, "")
 	return s
 }
+func (this *ReplaceSpecType_EnableReFallback) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_EnableReFallback{`,
+		`EnableReFallback:` + strings.Replace(fmt.Sprintf("%v", this.EnableReFallback), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ReplaceSpecType_DisableReFallback) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ReplaceSpecType_DisableReFallback{`,
+		`DisableReFallback:` + strings.Replace(fmt.Sprintf("%v", this.DisableReFallback), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *GetSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -3410,6 +4262,7 @@ func (this *GetSpecType) String() string {
 		`VirtualSite:` + repeatedStringForVirtualSite + `,`,
 		`Hub:` + repeatedStringForHub + `,`,
 		`MeshChoice:` + fmt.Sprintf("%v", this.MeshChoice) + `,`,
+		`ReFallback:` + fmt.Sprintf("%v", this.ReFallback) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3440,6 +4293,26 @@ func (this *GetSpecType_FullMesh) String() string {
 	}
 	s := strings.Join([]string{`&GetSpecType_FullMesh{`,
 		`FullMesh:` + strings.Replace(fmt.Sprintf("%v", this.FullMesh), "FullMeshGroupType", "FullMeshGroupType", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_EnableReFallback) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_EnableReFallback{`,
+		`EnableReFallback:` + strings.Replace(fmt.Sprintf("%v", this.EnableReFallback), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *GetSpecType_DisableReFallback) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&GetSpecType_DisableReFallback{`,
+		`DisableReFallback:` + strings.Replace(fmt.Sprintf("%v", this.DisableReFallback), "Empty", "schema.Empty", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -4097,6 +4970,76 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.MeshChoice = &GlobalSpecType_FullMesh{v}
 			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableReFallback", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ReFallback = &GlobalSpecType_EnableReFallback{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableReFallback", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ReFallback = &GlobalSpecType_DisableReFallback{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4342,6 +5285,76 @@ func (m *CreateSpecType) Unmarshal(dAtA []byte) error {
 			}
 			m.MeshChoice = &CreateSpecType_FullMesh{v}
 			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableReFallback", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ReFallback = &CreateSpecType_EnableReFallback{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableReFallback", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ReFallback = &CreateSpecType_DisableReFallback{v}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipTypes(dAtA[iNdEx:])
@@ -4586,6 +5599,76 @@ func (m *ReplaceSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.MeshChoice = &ReplaceSpecType_FullMesh{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableReFallback", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ReFallback = &ReplaceSpecType_EnableReFallback{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableReFallback", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ReFallback = &ReplaceSpecType_DisableReFallback{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -4850,6 +5933,76 @@ func (m *GetSpecType) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			m.MeshChoice = &GetSpecType_FullMesh{v}
+			iNdEx = postIndex
+		case 10:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableReFallback", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ReFallback = &GetSpecType_EnableReFallback{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableReFallback", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ReFallback = &GetSpecType_DisableReFallback{v}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

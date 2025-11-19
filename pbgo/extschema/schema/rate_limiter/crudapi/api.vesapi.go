@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.rate_limiter.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.rate_limiter.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2947,6 +2947,13 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "rate_limiterLeakyBucketRateLimiter": {
+            "type": "object",
+            "description": "Leaky-Bucket is the default rate limiter algorithm for F5",
+            "title": "LeakyBucketRateLimiter",
+            "x-displayname": "Leaky Bucket Rate Limiter",
+            "x-ves-proto-message": "ves.io.schema.rate_limiter.LeakyBucketRateLimiter"
+        },
         "rate_limiterRateLimitBlockAction": {
             "type": "object",
             "description": "Action where a user is blocked from making further requests after exceeding rate limit threshold.",
@@ -2994,6 +3001,7 @@ var APISwaggerJSON string = `{
             "title": "RateLimitValue",
             "x-displayname": "Rate Limit Value",
             "x-ves-oneof-field-action_choice": "[\"action_block\",\"disabled\"]",
+            "x-ves-oneof-field-algorithm": "[\"leaky_bucket\",\"token_bucket\"]",
             "x-ves-proto-message": "ves.io.schema.rate_limiter.RateLimitValue",
             "properties": {
                 "action_block": {
@@ -3020,6 +3028,12 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaEmpty",
                     "x-displayname": "Disabled"
                 },
+                "leaky_bucket": {
+                    "description": "Exclusive with [token_bucket]\n Leaky-Bucket is the default rate limiter algorithm for F5",
+                    "title": "LeakyBucketRateLimiter",
+                    "$ref": "#/definitions/rate_limiterLeakyBucketRateLimiter",
+                    "x-displayname": "Leaky Bucket Rate Limiter"
+                },
                 "period_multiplier": {
                     "type": "integer",
                     "description": " This setting, combined with Per Period units, provides a duration \n\nExample: - \"1\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n",
@@ -3030,6 +3044,12 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.uint32.gte": "0"
                     }
+                },
+                "token_bucket": {
+                    "description": "Exclusive with [leaky_bucket]\n Token-Bucket is a rate limiter algorithm that is stricter with enforcing limits",
+                    "title": "TokenBucketRateLimiter",
+                    "$ref": "#/definitions/rate_limiterTokenBucketRateLimiter",
+                    "x-displayname": "Token Bucket Rate Limiter"
                 },
                 "total_number": {
                     "type": "integer",
@@ -3113,6 +3133,13 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Config Object"
                 }
             }
+        },
+        "rate_limiterTokenBucketRateLimiter": {
+            "type": "object",
+            "description": "Token-Bucket is a rate limiter algorithm that is stricter with enforcing limits",
+            "title": "TokenBucketRateLimiter",
+            "x-displayname": "Token Bucket Rate Limiter",
+            "x-ves-proto-message": "ves.io.schema.rate_limiter.TokenBucketRateLimiter"
         },
         "rate_limitercrudapiErrorCode": {
             "type": "string",
@@ -3585,6 +3612,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

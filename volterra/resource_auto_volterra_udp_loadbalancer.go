@@ -116,6 +116,135 @@ func resourceVolterraUdpLoadbalancer() *schema.Resource {
 										},
 									},
 
+									"cloud_edge_segment": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"cloud_edge": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+
+												"ip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"segment": {
+
+										Type:     schema.TypeList,
+										MaxItems: 1,
+										Optional: true,
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"ipv4_vip": {
+													Type:     schema.TypeString,
+													Required: true,
+												},
+
+												"ipv6_vip": {
+													Type:     schema.TypeString,
+													Optional: true,
+												},
+
+												"segment": {
+
+													Type:     schema.TypeList,
+													MaxItems: 1,
+													Required: true,
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"kind": {
+																Type:     schema.TypeString,
+																Computed: true,
+															},
+
+															"name": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"namespace": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+															"tenant": {
+																Type:     schema.TypeString,
+																Optional: true,
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
 									"site": {
 
 										Type:     schema.TypeList,
@@ -638,6 +767,20 @@ func resourceVolterraUdpLoadbalancer() *schema.Resource {
 				Optional: true,
 			},
 
+			"do_not_retract_cluster": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
+
+			"retract_cluster": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+			},
+
 			"dns_volterra_managed": {
 				Type:     schema.TypeBool,
 				Optional: true,
@@ -656,6 +799,13 @@ func resourceVolterraUdpLoadbalancer() *schema.Resource {
 			"enable_per_packet_load_balancing": {
 				Type:     schema.TypeBool,
 				Optional: true,
+			},
+
+			"hash_policy_choice_least_active": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"hash_policy_choice_random": {
@@ -773,6 +923,12 @@ func resourceVolterraUdpLoadbalancer() *schema.Resource {
 			"listen_port": {
 
 				Type:     schema.TypeInt,
+				Optional: true,
+			},
+
+			"port_ranges": {
+
+				Type:     schema.TypeString,
 				Optional: true,
 			},
 		},
@@ -1531,6 +1687,34 @@ func resourceVolterraUdpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 
 	}
 
+	//cluster_retract_choice
+
+	clusterRetractChoiceTypeFound := false
+
+	if v, ok := d.GetOk("do_not_retract_cluster"); ok && !clusterRetractChoiceTypeFound {
+
+		clusterRetractChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterRetractChoiceInt := &ves_io_schema_views_udp_loadbalancer.CreateSpecType_DoNotRetractCluster{}
+			clusterRetractChoiceInt.DoNotRetractCluster = &ves_io_schema.Empty{}
+			createSpec.ClusterRetractChoice = clusterRetractChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("retract_cluster"); ok && !clusterRetractChoiceTypeFound {
+
+		clusterRetractChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterRetractChoiceInt := &ves_io_schema_views_udp_loadbalancer.CreateSpecType_RetractCluster{}
+			clusterRetractChoiceInt.RetractCluster = &ves_io_schema.Empty{}
+			createSpec.ClusterRetractChoice = clusterRetractChoiceInt
+		}
+
+	}
+
 	//dns_volterra_managed
 	if v, ok := d.GetOk("dns_volterra_managed"); ok && !isIntfNil(v) {
 
@@ -1566,6 +1750,18 @@ func resourceVolterraUdpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 	//hash_policy_choice
 
 	hashPolicyChoiceTypeFound := false
+
+	if v, ok := d.GetOk("hash_policy_choice_least_active"); ok && !hashPolicyChoiceTypeFound {
+
+		hashPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			hashPolicyChoiceInt := &ves_io_schema_views_udp_loadbalancer.CreateSpecType_HashPolicyChoiceLeastActive{}
+			hashPolicyChoiceInt.HashPolicyChoiceLeastActive = &ves_io_schema.Empty{}
+			createSpec.HashPolicyChoice = hashPolicyChoiceInt
+		}
+
+	}
 
 	if v, ok := d.GetOk("hash_policy_choice_random"); ok && !hashPolicyChoiceTypeFound {
 
@@ -1743,6 +1939,17 @@ func resourceVolterraUdpLoadbalancerCreate(d *schema.ResourceData, meta interfac
 		createSpec.PortChoice = portChoiceInt
 
 		portChoiceInt.ListenPort = uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("port_ranges"); ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+		portChoiceInt := &ves_io_schema_views_udp_loadbalancer.CreateSpecType_PortRanges{}
+
+		createSpec.PortChoice = portChoiceInt
+
+		portChoiceInt.PortRanges = v.(string)
 
 	}
 
@@ -2542,6 +2749,32 @@ func resourceVolterraUdpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 
 	}
 
+	clusterRetractChoiceTypeFound := false
+
+	if v, ok := d.GetOk("do_not_retract_cluster"); ok && !clusterRetractChoiceTypeFound {
+
+		clusterRetractChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterRetractChoiceInt := &ves_io_schema_views_udp_loadbalancer.ReplaceSpecType_DoNotRetractCluster{}
+			clusterRetractChoiceInt.DoNotRetractCluster = &ves_io_schema.Empty{}
+			updateSpec.ClusterRetractChoice = clusterRetractChoiceInt
+		}
+
+	}
+
+	if v, ok := d.GetOk("retract_cluster"); ok && !clusterRetractChoiceTypeFound {
+
+		clusterRetractChoiceTypeFound = true
+
+		if v.(bool) {
+			clusterRetractChoiceInt := &ves_io_schema_views_udp_loadbalancer.ReplaceSpecType_RetractCluster{}
+			clusterRetractChoiceInt.RetractCluster = &ves_io_schema.Empty{}
+			updateSpec.ClusterRetractChoice = clusterRetractChoiceInt
+		}
+
+	}
+
 	if v, ok := d.GetOk("dns_volterra_managed"); ok && !isIntfNil(v) {
 
 		updateSpec.DnsVolterraManaged =
@@ -2572,6 +2805,18 @@ func resourceVolterraUdpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 	}
 
 	hashPolicyChoiceTypeFound := false
+
+	if v, ok := d.GetOk("hash_policy_choice_least_active"); ok && !hashPolicyChoiceTypeFound {
+
+		hashPolicyChoiceTypeFound = true
+
+		if v.(bool) {
+			hashPolicyChoiceInt := &ves_io_schema_views_udp_loadbalancer.ReplaceSpecType_HashPolicyChoiceLeastActive{}
+			hashPolicyChoiceInt.HashPolicyChoiceLeastActive = &ves_io_schema.Empty{}
+			updateSpec.HashPolicyChoice = hashPolicyChoiceInt
+		}
+
+	}
 
 	if v, ok := d.GetOk("hash_policy_choice_random"); ok && !hashPolicyChoiceTypeFound {
 
@@ -2743,6 +2988,17 @@ func resourceVolterraUdpLoadbalancerUpdate(d *schema.ResourceData, meta interfac
 		updateSpec.PortChoice = portChoiceInt
 
 		portChoiceInt.ListenPort = uint32(v.(int))
+
+	}
+
+	if v, ok := d.GetOk("port_ranges"); ok && !isIntfNil(v) && !portChoiceTypeFound {
+
+		portChoiceTypeFound = true
+		portChoiceInt := &ves_io_schema_views_udp_loadbalancer.ReplaceSpecType_PortRanges{}
+
+		updateSpec.PortChoice = portChoiceInt
+
+		portChoiceInt.PortRanges = v.(string)
 
 	}
 

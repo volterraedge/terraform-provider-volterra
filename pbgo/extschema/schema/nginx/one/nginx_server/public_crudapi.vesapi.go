@@ -61,6 +61,8 @@ func NewGetRequest(key string, opts ...server.CRUDCallOpt) (*GetRequest, error) 
 	switch ccOpts.ResponseFormat {
 	case server.DefaultForm:
 		rspFmt = GET_RSP_FORMAT_DEFAULT
+	case server.StatusForm:
+		rspFmt = GET_RSP_FORMAT_STATUS
 	case server.GetSpecForm:
 		rspFmt = GET_RSP_FORMAT_READ
 	case server.BrokenRefsForm:
@@ -143,6 +145,9 @@ func (c *crudAPIGrpcClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	if gRsp != nil {
 		respDetail.Entry = NewDBObject(nil)
 		gRsp.ToObject(respDetail.Entry)
+		for _, status := range gRsp.Status {
+			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
+		}
 
 		return &respDetail, err
 	}
@@ -313,6 +318,9 @@ func (c *crudAPIRestClient) GetDetail(ctx context.Context, key string, nef db.Ne
 	if gRsp != nil {
 		respDetail.Entry = NewDBObject(nil)
 		gRsp.ToObject(respDetail.Entry)
+		for _, status := range gRsp.Status {
+			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
+		}
 
 		return &respDetail, err
 	}
@@ -530,6 +538,9 @@ func (c *crudAPIInprocClient) GetDetail(ctx context.Context, key string, nef db.
 	if gRsp != nil {
 		respDetail.Entry = NewDBObject(nil)
 		gRsp.ToObject(respDetail.Entry)
+		for _, status := range gRsp.Status {
+			respDetail.BackRefs = append(respDetail.BackRefs, NewDBStatusObject(status))
+		}
 
 		return &respDetail, err
 	}
@@ -623,7 +634,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.nginx.one.nginx_server.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.nginx.one.nginx_server.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -647,6 +658,9 @@ func (s *APISrv) Get(ctx context.Context, req *GetRequest) (*GetResponse, error)
 
 	case GET_RSP_FORMAT_READ:
 		rsrcReq.RspInReadForm = true
+
+	case GET_RSP_FORMAT_STATUS:
+		rsrcReq.RspInStatusForm = true
 
 	case GET_RSP_FORMAT_REFERRING_OBJECTS:
 		rsrcReq.RspInReferringObjectsForm = true
@@ -810,6 +824,14 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 	}
 	_ = buildReadForm
 	buildStatusForm := func() {
+		for _, statusEnt := range rsrcRsp.BackRefs {
+			statusObj, ok := statusEnt.ToStore().(*StatusObject)
+			if !ok {
+				merr = multierror.Append(merr, fmt.Errorf("%T is not *StatusObject", statusEnt))
+				continue
+			}
+			rsp.Status = append(rsp.Status, statusObj)
+		}
 
 	}
 	_ = buildStatusForm
@@ -850,6 +872,9 @@ func NewObjectGetRsp(ctx context.Context, sf svcfw.Service, req *GetRequest, rsr
 	_ = buildBrokenReferencesForm
 
 	switch req.ResponseFormat {
+
+	case GET_RSP_FORMAT_STATUS:
+		buildStatusForm()
 
 	case GET_RSP_FORMAT_READ:
 		buildReadForm()
@@ -946,6 +971,21 @@ func NewListResponse(ctx context.Context, req *ListRequest, sf svcfw.Service, rs
 				}
 			}
 
+		}
+
+		if len(req.ReportStatusFields) > 0 {
+			for _, sroStatus := range rsrcItem.StatusSet {
+				statusDBO, ok := sroStatus.(*DBStatusObject)
+				if !ok {
+					resp.Errors = append(resp.Errors, &ves_io_schema.ErrorType{
+						Code:    ves_io_schema.EINTERNAL,
+						Message: fmt.Sprintf("sro.Status %T is not of type *DBStatusObject in NewListResponse", sroStatus),
+					})
+
+					continue
+				}
+				item.StatusSet = append(item.StatusSet, statusDBO.StatusObject)
+			}
 		}
 
 		resp.Items = append(resp.Items, item)
@@ -1176,12 +1216,13 @@ var APISwaggerJSON string = `{
                     },
                     {
                         "name": "response_format",
-                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object\nResponse should have deleted and disabled objects referrred by this object",
+                        "description": "The format in which the configuration object is to be fetched. This could be for example\n    - in GetSpec form for the contents of object\n    - in CreateRequest form to create a new similar object\n    - to ReplaceRequest form to replace changeable values\n\nDefault format of returned resource\nResponse should be in StatusObject(s) format\nResponse should be in format of GetSpecType\nResponse should have other objects referring to this object\nResponse should have deleted and disabled objects referrred by this object",
                         "in": "query",
                         "required": false,
                         "type": "string",
                         "enum": [
                             "GET_RSP_FORMAT_DEFAULT",
+                            "GET_RSP_FORMAT_STATUS",
                             "GET_RSP_FORMAT_READ",
                             "GET_RSP_FORMAT_REFERRING_OBJECTS",
                             "GET_RSP_FORMAT_BROKEN_REFERENCES"
@@ -1314,6 +1355,16 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.message.required": "true"
                     }
                 },
+                "policy_name": {
+                    "type": "string",
+                    "description": " Policy name configured for WAF\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "policy_name",
+                    "x-displayname": "WAF Policy Name",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
                 "security_log_enabled": {
                     "type": "boolean",
                     "description": " Specifies if security logging is enabled",
@@ -1399,6 +1450,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/onenginx_serverGetSpecType",
                     "x-displayname": "Spec"
                 },
+                "status": {
+                    "type": "array",
+                    "description": "The status reported by different services for this configuration object",
+                    "title": "status",
+                    "items": {
+                        "$ref": "#/definitions/nginx_serverStatusObject"
+                    },
+                    "x-displayname": "Status"
+                },
                 "system_metadata": {
                     "description": " System generated object's metadata, with createTime and modifiedTime populated",
                     "title": "system metadata",
@@ -1409,10 +1469,11 @@ var APISwaggerJSON string = `{
         },
         "nginx_serverGetResponseFormatCode": {
             "type": "string",
-            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
+            "description": "x-displayName: \"Get Response Format\"\nThis is the various forms that can be requested to be sent in the GetResponse\n\n - GET_RSP_FORMAT_DEFAULT: x-displayName: \"Default Format\"\nDefault format of returned resource\n - GET_RSP_FORMAT_STATUS: x-displayName: \"Status format\"\nResponse should be in StatusObject(s) format\n - GET_RSP_FORMAT_READ: x-displayName: \"GetSpecType format\"\nResponse should be in format of GetSpecType\n - GET_RSP_FORMAT_REFERRING_OBJECTS: x-displayName: \"Referring Objects\"\nResponse should have other objects referring to this object\n - GET_RSP_FORMAT_BROKEN_REFERENCES: x-displayName: \"Broken Referred Objects\"\nResponse should have deleted and disabled objects referrred by this object",
             "title": "GetResponseFormatCode",
             "enum": [
                 "GET_RSP_FORMAT_DEFAULT",
+                "GET_RSP_FORMAT_STATUS",
                 "GET_RSP_FORMAT_READ",
                 "GET_RSP_FORMAT_REFERRING_OBJECTS",
                 "GET_RSP_FORMAT_BROKEN_REFERENCES"
@@ -1510,6 +1571,15 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "status_set": {
+                    "type": "array",
+                    "description": " The status reported by different services for this configuration object",
+                    "title": "status",
+                    "items": {
+                        "$ref": "#/definitions/nginx_serverStatusObject"
+                    },
+                    "x-displayname": "Status"
+                },
                 "system_metadata": {
                     "description": " If list request has report_fields set then system_metadata will\n contain all the system generated details of this object.",
                     "title": "system_metadata",
@@ -1568,11 +1638,80 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.max_items": "1000"
                     }
                 },
+                "nginx_one_object_id": {
+                    "type": "string",
+                    "description": " Signifies the uniqueness identifier for NGINX One representation of\n this NGINX server",
+                    "title": "nginx_one_object_id",
+                    "x-displayname": "Instance or Config Sync Group Object ID"
+                },
+                "nginx_one_object_name": {
+                    "type": "string",
+                    "description": " Hostname value set for Instance or Name for a Config Sync Group\n in NGINX One",
+                    "title": "nginx_one_object_name",
+                    "x-displayname": "Instance or Config Sync Group Name"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Signifies the port configured for the NGINX server\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gte: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "port",
+                    "format": "int64",
+                    "x-displayname": "Port",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gte": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "server_name": {
+                    "type": "string",
+                    "description": " Signifies the combination of first element in domains array and the port\n configured for the NGINX server",
+                    "title": "server_name",
+                    "x-displayname": "ServerName"
+                },
+                "total_routes": {
+                    "type": "integer",
+                    "description": " Total locations configured in the NGINX Server",
+                    "title": "Total locations configured in the NGINX Server",
+                    "format": "int64",
+                    "x-displayname": "Routes"
+                },
                 "waf_spec": {
                     "description": " If specified, the value signifies the WAF configuration in this server context",
                     "title": "waf_spec",
                     "$ref": "#/definitions/nginx_instanceWAFSpec",
                     "x-displayname": "WAFSpec"
+                }
+            }
+        },
+        "nginx_serverStatusObject": {
+            "type": "object",
+            "description": "Most recently observed status of object.",
+            "title": "StatusObject",
+            "x-displayname": "Status",
+            "x-ves-proto-message": "ves.io.schema.nginx.one.nginx_server.StatusObject",
+            "properties": {
+                "conditions": {
+                    "type": "array",
+                    "description": " Conditions represent the normalized status values for configuration object.",
+                    "title": "Conditions",
+                    "items": {
+                        "$ref": "#/definitions/schemaConditionType"
+                    },
+                    "x-displayname": "Conditions"
+                },
+                "metadata": {
+                    "description": " Standard status's metadata.",
+                    "title": "Metadata",
+                    "$ref": "#/definitions/schemaStatusMetaType",
+                    "x-displayname": "Metadata"
+                },
+                "object_refs": {
+                    "type": "array",
+                    "description": " A nginx_server direct reference.",
+                    "title": "ObjectRefs",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Config Object"
                 }
             }
         },
@@ -1655,6 +1794,61 @@ var APISwaggerJSON string = `{
                     "type": "string",
                     "description": "Must be a valid serialized protocol buffer of the above specified type.",
                     "format": "byte"
+                }
+            }
+        },
+        "schemaConditionType": {
+            "type": "object",
+            "description": "Conditions are used in the object status to describe the current state of the\nobject, e.g. Ready, Succeeded, etc.",
+            "title": "ConditionType",
+            "x-displayname": "Status Condition",
+            "x-ves-proto-message": "ves.io.schema.ConditionType",
+            "properties": {
+                "hostname": {
+                    "type": "string",
+                    "description": " Hostname of the instance of the site that sent the status",
+                    "title": "hostname",
+                    "x-displayname": "Hostname"
+                },
+                "last_update_time": {
+                    "type": "string",
+                    "description": " Last time the condition was updated",
+                    "title": "last_update_time",
+                    "format": "date-time",
+                    "x-displayname": "Last Updated"
+                },
+                "reason": {
+                    "type": "string",
+                    "description": " x-reason: \"Insufficient memory in data plane\"\n A human readable string explaining the reason for reaching this condition\n\nExample: - \"value\"-",
+                    "title": "reason",
+                    "x-displayname": "Reason",
+                    "x-ves-example": "value"
+                },
+                "service_name": {
+                    "type": "string",
+                    "description": " Name of the service that sent the status",
+                    "title": "service name",
+                    "x-displayname": "Service Name"
+                },
+                "status": {
+                    "type": "string",
+                    "description": " Status of the condition\n \"Success\" Validtion has succeded. Requested operation was successful.\n \"Failed\"  Validation has failed.\n \"Incomplete\" Validation of configuration has failed due to missing configuration.\n \"Installed\" Validation has passed and configuration has been installed in data path or K8s\n \"Down\" Configuration is operationally down. e.g. down interface\n \"Disabled\" Configuration is administratively disabled i.e. ObjectMetaType.Disable = true.\n \"NotApplicable\" Configuration is not applicable e.g. tenant service_policy_set(s) in system namespace are not applicable on REs\n\nExample: - \"Failed\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]\n",
+                    "title": "status",
+                    "x-displayname": "Status",
+                    "x-ves-example": "Failed",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Success\\\",\\\"Failed\\\",\\\"Incomplete\\\",\\\"Installed\\\",\\\"Down\\\",\\\"Disabled\\\",\\\"NotApplicable\\\"]"
+                    }
+                },
+                "type": {
+                    "type": "string",
+                    "description": " Type of the condition\n \"Validation\" represents validation user given configuration object\n \"Operational\" represents operational status of a given configuration object\n\nExample: - \"Operational\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.in: [\\\"Validation\\\",\\\"Operational\\\"]\n",
+                    "title": "type",
+                    "x-displayname": "Type",
+                    "x-ves-example": "Operational",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.in": "[\\\"Validation\\\",\\\"Operational\\\"]"
+                    }
                 }
             }
         },
@@ -1809,6 +2003,80 @@ var APISwaggerJSON string = `{
                     "x-ves-example": "staging"
                 }
             }
+        },
+        "schemaStatusMetaType": {
+            "type": "object",
+            "description": "StatusMetaType is metadata that all status must have.",
+            "title": "StatusMetaType",
+            "x-displayname": "Metadata",
+            "x-ves-proto-message": "ves.io.schema.StatusMetaType",
+            "properties": {
+                "creation_timestamp": {
+                    "type": "string",
+                    "description": " creation_timestamp is when the status object was created. It is used to find/tie-break\n for latest status object from same origin",
+                    "title": "creation_timestamp",
+                    "format": "date-time",
+                    "x-displayname": "Creation Timestamp"
+                },
+                "creator_class": {
+                    "type": "string",
+                    "description": " Class of creator which created this StatusObject. This will be service's DNS FQDN.\n This will be set by the system based on client certificate information.\n\nExample: - \"ver.re1.int.ves.io\"-",
+                    "title": "creator_class",
+                    "x-displayname": "Creator Class",
+                    "x-ves-example": "ver.re1.int.ves.io"
+                },
+                "creator_id": {
+                    "type": "string",
+                    "description": " ID of creator which created this StatusObject. This will be a concrete identifier for service (e.g.\n identifying the environment also). This will be set by the system based on client certificate\n information\n\nExample: - \"ver-instance-1\"-",
+                    "title": "creator_id",
+                    "x-displayname": "Creator ID",
+                    "x-ves-example": "ver-instance-1"
+                },
+                "publish": {
+                    "description": " Decides wether this status object will be propagated to user.",
+                    "title": "publish",
+                    "$ref": "#/definitions/schemaStatusPublishType",
+                    "x-displayname": "Publish"
+                },
+                "status_id": {
+                    "type": "string",
+                    "description": " status_id is a field used by the generator to distinguish (if necessary) between two status\n objects for the same config object from the same site and same service and potentially same\n daemon(creator-id)",
+                    "title": "status_id",
+                    "x-displayname": "Status ID"
+                },
+                "uid": {
+                    "type": "string",
+                    "description": " uid is the unique in time and space value for a StatusObject.\n\nExample: - \"d15f1fad-4d37-48c0-8706-df1824d76d31\"-",
+                    "title": "uid",
+                    "x-displayname": "UID",
+                    "x-ves-example": "d15f1fad-4d37-48c0-8706-df1824d76d31"
+                },
+                "vtrp_id": {
+                    "type": "string",
+                    "description": " Origin of this status exchanged by VTRP.",
+                    "title": "vtrp_id",
+                    "x-displayname": "VTRP ID"
+                },
+                "vtrp_stale": {
+                    "type": "boolean",
+                    "description": " Indicate whether mars deems this object to be stale via graceful restart timer information",
+                    "title": "vtrp_stale",
+                    "format": "boolean",
+                    "x-displayname": "VTRP Stale"
+                }
+            }
+        },
+        "schemaStatusPublishType": {
+            "type": "string",
+            "description": "StatusPublishType is all possible publish operations on a StatusObject\n\n - STATUS_DO_NOT_PUBLISH: Do Not Publish\n\nDo not propagate this status to user. This could be because status is only informational\n - STATUS_PUBLISH: Publish\n\nPropagate this status up to user as it might be actionable",
+            "title": "StatusPublishType",
+            "enum": [
+                "STATUS_DO_NOT_PUBLISH",
+                "STATUS_PUBLISH"
+            ],
+            "default": "STATUS_DO_NOT_PUBLISH",
+            "x-displayname": "Status Publish Type",
+            "x-ves-proto-enum": "ves.io.schema.StatusPublishType"
         },
         "schemaStatusType": {
             "type": "object",

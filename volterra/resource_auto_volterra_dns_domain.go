@@ -16,6 +16,7 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_dns_domain "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_domain"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // resourceVolterraDnsDomain is implementation of Volterra's DnsDomain resources
@@ -68,6 +69,53 @@ func resourceVolterraDnsDomain() *schema.Resource {
 			"dnssec_mode": {
 				Type:     schema.TypeString,
 				Optional: true,
+			},
+
+			"route53": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"creds": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"namespace": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"tenant": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
+			"verification_only": {
+
+				Type:       schema.TypeBool,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
 			},
 
 			"volterra_managed": {
@@ -142,6 +190,59 @@ func resourceVolterraDnsDomainCreate(d *schema.ResourceData, meta interface{}) e
 	//domain_choice
 
 	domainChoiceTypeFound := false
+
+	if v, ok := d.GetOk("route53"); ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+		domainChoiceTypeFound = true
+		domainChoiceInt := &ves_io_schema_dns_domain.CreateSpecType_Route53{}
+		domainChoiceInt.Route53 = &ves_io_schema_dns_domain.AWSRoute53Type{}
+		createSpec.DomainChoice = domainChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["creds"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					credsInt := &ves_io_schema_views.ObjectRefType{}
+					domainChoiceInt.Route53.Creds = credsInt
+
+					for _, set := range sl {
+						if set != nil {
+							cMapToStrVal := set.(map[string]interface{})
+							if val, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+								credsInt.Name = val.(string)
+							}
+							if val, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								credsInt.Namespace = val.(string)
+							}
+
+							if val, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								credsInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("verification_only"); ok && !domainChoiceTypeFound {
+
+		domainChoiceTypeFound = true
+
+		if v.(bool) {
+			domainChoiceInt := &ves_io_schema_dns_domain.CreateSpecType_VerificationOnly{}
+			domainChoiceInt.VerificationOnly = &ves_io_schema.Empty{}
+			createSpec.DomainChoice = domainChoiceInt
+		}
+
+	}
 
 	if v, ok := d.GetOk("volterra_managed"); ok && !domainChoiceTypeFound {
 
@@ -264,6 +365,59 @@ func resourceVolterraDnsDomainUpdate(d *schema.ResourceData, meta interface{}) e
 	}
 
 	domainChoiceTypeFound := false
+
+	if v, ok := d.GetOk("route53"); ok && !isIntfNil(v) && !domainChoiceTypeFound {
+
+		domainChoiceTypeFound = true
+		domainChoiceInt := &ves_io_schema_dns_domain.ReplaceSpecType_Route53{}
+		domainChoiceInt.Route53 = &ves_io_schema_dns_domain.AWSRoute53Type{}
+		updateSpec.DomainChoice = domainChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["creds"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					credsInt := &ves_io_schema_views.ObjectRefType{}
+					domainChoiceInt.Route53.Creds = credsInt
+
+					for _, set := range sl {
+						if set != nil {
+							cMapToStrVal := set.(map[string]interface{})
+							if val, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+								credsInt.Name = val.(string)
+							}
+							if val, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								credsInt.Namespace = val.(string)
+							}
+
+							if val, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								credsInt.Tenant = val.(string)
+							}
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
+	if v, ok := d.GetOk("verification_only"); ok && !domainChoiceTypeFound {
+
+		domainChoiceTypeFound = true
+
+		if v.(bool) {
+			domainChoiceInt := &ves_io_schema_dns_domain.ReplaceSpecType_VerificationOnly{}
+			domainChoiceInt.VerificationOnly = &ves_io_schema.Empty{}
+			updateSpec.DomainChoice = domainChoiceInt
+		}
+
+	}
 
 	if v, ok := d.GetOk("volterra_managed"); ok && !domainChoiceTypeFound {
 

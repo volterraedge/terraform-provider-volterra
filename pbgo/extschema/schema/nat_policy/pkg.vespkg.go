@@ -34,6 +34,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nat_policy.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.nat_policy.GlobalSpecType"] = GlobalSpecTypeValidator()
 	vr["ves.io.schema.nat_policy.MatchCriteriaType"] = MatchCriteriaTypeValidator()
+	vr["ves.io.schema.nat_policy.PortConfiguration"] = PortConfigurationValidator()
 	vr["ves.io.schema.nat_policy.ReplaceSpecType"] = ReplaceSpecTypeValidator()
 	vr["ves.io.schema.nat_policy.RuleType"] = RuleTypeValidator()
 
@@ -168,11 +169,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

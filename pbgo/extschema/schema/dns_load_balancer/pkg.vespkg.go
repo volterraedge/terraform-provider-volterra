@@ -74,13 +74,6 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
-	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.dns_load_balancer.API.Create"] = []svcfw.SubscriptionField{
-		{
-			FieldPath:     "ves.io.schema.dns_load_balancer.CreateRequest.spec.rule_list.rules.client_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
-		},
-	}
-
 	mdr.RPCHiddenInternalFieldsRegistry["ves.io.schema.dns_load_balancer.API.Create"] = []string{
 		"spec.rule_list.rules.#.nxdomain",
 	}
@@ -118,13 +111,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 		{
 			FieldPath:           "items.#.get_spec.rule_list.rules.#.ip_prefix_list.ipv6_prefixes.#",
 			AllowedEnvironments: []string{"crt", "demo1", "prod", "softbank_mec", "staging", "test"},
-		},
-	}
-
-	mdr.RPCSubscriptionFieldsRegistry["ves.io.schema.dns_load_balancer.API.Replace"] = []svcfw.SubscriptionField{
-		{
-			FieldPath:     "ves.io.schema.dns_load_balancer.ReplaceRequest.spec.rule_list.rules.client_choice.ip_prefix_list.ipv6_prefixes",
-			AddonServices: []string{"f5xc-ipv6-standard"},
 		},
 	}
 
@@ -229,11 +215,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

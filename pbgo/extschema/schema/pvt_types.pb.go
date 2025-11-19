@@ -619,19 +619,19 @@ func (m *DaemonEnvironmentType) GetInternalDnsSuffix() string {
 type VTRPGracefulRestartParamsType struct {
 	// GR Enabled
 	//
-	// x-displayName: Graceful Restart Enabled"
+	// x-displayName: "Graceful Restart Enabled"
 	GrEnabled bool `protobuf:"varint,1,opt,name=gr_enabled,json=grEnabled,proto3" json:"gr_enabled,omitempty"`
 	// GR Timer
 	//
-	// x-displayName: Graceful Restart Timer in seconds"
+	// x-displayName: "Graceful Restart Timer in seconds"
 	GrTime uint32 `protobuf:"varint,2,opt,name=gr_time,json=grTime,proto3" json:"gr_time,omitempty"`
 	// LLGR Enabled
 	//
-	// x-displayName: Long lived Graceful Restart Enabled"
+	// x-displayName: "Long lived Graceful Restart Enabled"
 	LlgrEnabled bool `protobuf:"varint,3,opt,name=llgr_enabled,json=llgrEnabled,proto3" json:"llgr_enabled,omitempty"`
 	// LLGR Timer
 	//
-	// x-displayName: Long lived Graceful Restart Timer in seconds"
+	// x-displayName: "Long lived Graceful Restart Timer in seconds"
 	LlgrTime uint32 `protobuf:"varint,4,opt,name=llgr_time,json=llgrTime,proto3" json:"llgr_time,omitempty"`
 }
 

@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.cloud_connect.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.cloud_connect.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2385,49 +2385,31 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectAWSCloudTransitGatewayType": {
             "type": "object",
-            "description": "Cloud Transit Gateway Type",
+            "description": "x-displayName: \"Cloud Transit Gateway Type\"\nCloud Transit Gateway Type",
             "title": "Cloud Transit Gateway Type",
-            "x-displayname": "Cloud Transit Gateway Type",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.AWSCloudTransitGatewayType",
             "properties": {
                 "cloud_transit_gateway": {
-                    "description": " Cloud Transit Gateway Reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Cloud Transit Gateway\"\nCloud Transit Gateway Reference\nx-required",
                     "title": "Cloud Transit Gateway",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Cloud Transit Gateway",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "cred": {
-                    "description": " Reference to cloud credential to deploy resources\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Credential Reference\"\nReference to cloud credential to deploy resources\nx-required",
                     "title": "Cloud Credential",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Credential Reference",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "peers": {
                     "type": "array",
-                    "description": " Peers",
+                    "description": "x-displayName: \"Peers\"\nPeers",
                     "title": "Peers",
                     "items": {
                         "$ref": "#/definitions/cloud_connectPeerType"
-                    },
-                    "x-displayname": "Peers"
+                    }
                 },
                 "vpc_attachments": {
-                    "description": " Spoke VPCs to be attached to the Cloud Transit Gateway \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Spoke VPCs\"\nSpoke VPCs to be attached to the Cloud Transit Gateway \nx-required",
                     "title": "Spoke VPCs",
-                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
-                    "x-displayname": "Spoke VPCs",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType"
                 }
             }
         },
@@ -3376,36 +3358,21 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectCreateAWSCloudTransitGatewayType": {
             "type": "object",
-            "description": "AWS Cloud Transit Gateway Type",
+            "description": "x-displayName: \"AWS Cloud Transit Gateway Type\"\nAWS Cloud Transit Gateway Type",
             "title": "Create AWS Cloud Transit Gateway Type",
-            "x-displayname": "AWS Cloud Transit Gateway Type",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateAWSCloudTransitGatewayType",
             "properties": {
                 "cloud_transit_gateway": {
-                    "description": " Cloud Transit Gateway Reference\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "cred": {
-                    "description": " Reference to cloud credential to deploy resources\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Credential Reference\"\nReference to cloud credential to deploy resources\nx-required",
                     "title": "Cloud Credential",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Credential Reference",
-                    "x-ves-required": "true",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
                 },
                 "vpc_attachments": {
-                    "description": " Spoke VPCs to be attached to the Cloud Transit Gateway \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Spoke VPCs\"\nSpoke VPCs to be attached to the Cloud Transit Gateway",
                     "title": "Spoke VPCs",
-                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
-                    "x-displayname": "Spoke VPCs",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType"
                 }
             }
         },
@@ -3785,19 +3752,13 @@ var APISwaggerJSON string = `{
         },
         "cloud_connectReplaceAWSCloudTransitGatewayType": {
             "type": "object",
-            "description": "Cloud Transit Gateway Type",
+            "description": "x-displayName: \" Cloud Transit Gateway Type\"\nCloud Transit Gateway Type",
             "title": "Replace Cloud Transit Gateway Type",
-            "x-displayname": " Cloud Transit Gateway Type",
-            "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceAWSCloudTransitGatewayType",
             "properties": {
                 "vpc_attachments": {
-                    "description": " Spoke VPCs to be attached to the Cloud Transit Gateway \n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "description": "x-displayName: \"Spoke VPCs\"\nSpoke VPCs to be attached to the AWS TGW Site",
                     "title": "Spoke VPCs",
-                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType",
-                    "x-displayname": "Spoke VPCs",
-                    "x-ves-validation-rules": {
-                        "ves.io.schema.rules.message.required": "true"
-                    }
+                    "$ref": "#/definitions/cloud_connectAWSVPCAttachmentListType"
                 }
             }
         },
@@ -4691,10 +4652,6 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.CreateSpecType",
             "properties": {
-                "aws_cloud_transit_gateway": {
-                    "$ref": "#/definitions/cloud_connectCreateAWSCloudTransitGatewayType",
-                    "x-displayname": "Cloud Transit Gateway"
-                },
                 "aws_tgw_site": {
                     "description": "Exclusive with [azure_vnet_site]\n",
                     "$ref": "#/definitions/cloud_connectCreateAWSTGWSiteType",
@@ -4724,10 +4681,6 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.GetSpecType",
             "properties": {
-                "aws_cloud_transit_gateway": {
-                    "$ref": "#/definitions/cloud_connectAWSCloudTransitGatewayType",
-                    "x-displayname": "Cloud Transit Gateway"
-                },
                 "aws_tgw_site": {
                     "description": "Exclusive with [azure_vnet_site]\n",
                     "$ref": "#/definitions/cloud_connectAWSTGWSiteType",
@@ -4762,10 +4715,6 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-cloud": "[\"aws_tgw_site\",\"azure_vnet_site\"]",
             "x-ves-proto-message": "ves.io.schema.cloud_connect.ReplaceSpecType",
             "properties": {
-                "aws_cloud_transit_gateway": {
-                    "$ref": "#/definitions/cloud_connectReplaceAWSCloudTransitGatewayType",
-                    "x-displayname": "Cloud Transit Gateway"
-                },
                 "aws_tgw_site": {
                     "description": "Exclusive with [azure_vnet_site]\n",
                     "$ref": "#/definitions/cloud_connectReplaceAWSTGWSiteType",

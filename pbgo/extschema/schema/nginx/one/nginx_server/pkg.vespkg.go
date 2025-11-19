@@ -16,6 +16,7 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.nginx.one.nginx_server.SpecType"] = SpecTypeValidator()
 
 	vr["ves.io.schema.nginx.one.nginx_server.Object"] = ObjectValidator()
+	vr["ves.io.schema.nginx.one.nginx_server.StatusObject"] = StatusObjectValidator()
 
 	vr["ves.io.schema.nginx.one.nginx_server.GetRequest"] = GetRequestValidator()
 	vr["ves.io.schema.nginx.one.nginx_server.GetResponse"] = GetResponseValidator()
@@ -40,6 +41,10 @@ func initializeEntryRegistry(mdr *svcfw.MDRegistry) {
 	mdr.EntryStoreMap["ves.io.schema.nginx.one.nginx_server.Object"] = store.InMemory
 	mdr.EntryRegistry["ves.io.schema.nginx.one.nginx_server.Object"] = reflect.TypeOf(&DBObject{})
 	mdr.EntryIndexers["ves.io.schema.nginx.one.nginx_server.Object"] = GetObjectIndexers
+	mdr.EntryFactory["ves.io.schema.nginx.one.nginx_server.StatusObject"] = NewEntryStatusObject
+	mdr.EntryStoreMap["ves.io.schema.nginx.one.nginx_server.StatusObject"] = store.InMemory
+	mdr.EntryRegistry["ves.io.schema.nginx.one.nginx_server.StatusObject"] = reflect.TypeOf(&DBStatusObject{})
+	mdr.EntryIndexers["ves.io.schema.nginx.one.nginx_server.StatusObject"] = GetStatusObjectIndexers
 
 }
 
@@ -114,11 +119,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

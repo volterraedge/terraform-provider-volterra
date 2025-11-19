@@ -254,6 +254,7 @@ func (c *CustomAPIRestClient) doRPCEvaluateAPIAccess(ctx context.Context, callOp
 		hReq = newReq
 		q := hReq.URL.Query()
 		_ = q
+		q.Add("access_control_type", fmt.Sprintf("%v", req.AccessControlType))
 		for _, item := range req.ItemLists {
 			q.Add("item_lists", fmt.Sprintf("%v", item))
 		}
@@ -1350,12 +1351,80 @@ var CustomAPISwaggerJSON string = `{
         }
     },
     "definitions": {
-        "namespaceAPIItem": {
+        "ioschemaEmpty": {
             "type": "object",
-            "description": "An item for which API access needs to be checked - used in request and response\nThe result field is ignored when processing requests",
-            "title": "APIItem",
-            "x-displayname": "API Item",
-            "x-ves-proto-message": "ves.io.schema.namespace.APIItem",
+            "description": "This can be used for messages where no values are needed",
+            "title": "Empty",
+            "x-displayname": "Empty",
+            "x-ves-proto-message": "ves.io.schema.Empty"
+        },
+        "namespaceAPIItemListReq": {
+            "type": "object",
+            "description": "A request API item list.",
+            "title": "APIItemListReq",
+            "x-displayname": "API Item List Req",
+            "x-ves-proto-message": "ves.io.schema.namespace.APIItemListReq",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " A list of request API items.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 100\n",
+                    "title": "items",
+                    "maxItems": 100,
+                    "items": {
+                        "$ref": "#/definitions/namespaceAPIItemReq"
+                    },
+                    "x-displayname": "Items",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "100"
+                    }
+                },
+                "list_id": {
+                    "type": "string",
+                    "description": " API item list identifier\n\nExample: - \"value\"-",
+                    "title": "list_id",
+                    "x-displayname": "List ID",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "namespaceAPIItemListResp": {
+            "type": "object",
+            "description": "A response API item list.\nresult will show combined AND output from the result of individual api items.",
+            "title": "APIItemListResp",
+            "x-displayname": "API Item List Resp",
+            "x-ves-proto-message": "ves.io.schema.namespace.APIItemListResp",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " A list of response API item lists.",
+                    "title": "items",
+                    "items": {
+                        "$ref": "#/definitions/namespaceAPIItemResp"
+                    },
+                    "x-displayname": "Items"
+                },
+                "list_id": {
+                    "type": "string",
+                    "description": " API item list identifier\n\nExample: - \"value\"-",
+                    "title": "list_id",
+                    "x-displayname": "List ID",
+                    "x-ves-example": "value"
+                },
+                "result": {
+                    "type": "boolean",
+                    "description": " Combined result after evaluation of items",
+                    "title": "result",
+                    "format": "boolean",
+                    "x-displayname": "Result"
+                }
+            }
+        },
+        "namespaceAPIItemReq": {
+            "type": "object",
+            "description": "A request API item.",
+            "title": "APIItemReq",
+            "x-displayname": "API Item Req",
+            "x-ves-proto-message": "ves.io.schema.namespace.APIItemReq",
             "properties": {
                 "method": {
                     "type": "string",
@@ -1363,6 +1432,42 @@ var CustomAPISwaggerJSON string = `{
                     "title": "method",
                     "x-displayname": "Method",
                     "x-ves-example": "GET"
+                },
+                "path": {
+                    "type": "string",
+                    "description": " HTTP request URL path\n\nExample: - \"/api/web/namespaces\"-",
+                    "title": "path",
+                    "x-displayname": "Path",
+                    "x-ves-example": "/api/web/namespaces"
+                }
+            }
+        },
+        "namespaceAPIItemResp": {
+            "type": "object",
+            "description": "A response API item.",
+            "title": "APIItemResp",
+            "x-displayname": "API Item Resp",
+            "x-ves-oneof-field-access_enablers": "[\"addon_services\",\"none\"]",
+            "x-ves-proto-message": "ves.io.schema.namespace.APIItemResp",
+            "properties": {
+                "addon_services": {
+                    "description": "Exclusive with [none]\n List of addon services API is part of.",
+                    "title": "addon_services",
+                    "$ref": "#/definitions/namespaceAccessEnablerAddonService",
+                    "x-displayname": "Addon Services"
+                },
+                "method": {
+                    "type": "string",
+                    "description": " HTTP request method\n\nExample: - \"GET\"-",
+                    "title": "method",
+                    "x-displayname": "Method",
+                    "x-ves-example": "GET"
+                },
+                "none": {
+                    "description": "Exclusive with [addon_services]\n Default value, when there's no other access enabler choice populated.",
+                    "title": "none",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "None"
                 },
                 "path": {
                     "type": "string",
@@ -1380,35 +1485,34 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "namespaceAPIItemList": {
+        "namespaceAccessControlType": {
+            "type": "string",
+            "description": "Enum consists of different access control types.\n\n - RBAC: RBAC\n\nDefault access control, evaluates role based access control.\n - PBAC: PBAC\n\nEvaluates plan based access control\n - ALL: ALL\n\nEvaluates all access controls specified in this enum.",
+            "title": "AccessControlType",
+            "enum": [
+                "RBAC",
+                "PBAC",
+                "ALL"
+            ],
+            "default": "RBAC",
+            "x-displayname": "Access Control Type",
+            "x-ves-proto-enum": "ves.io.schema.namespace.AccessControlType"
+        },
+        "namespaceAccessEnablerAddonService": {
             "type": "object",
-            "description": "An list of items for which API access needs to be checked  - used in request and response\nresult will show combined AND output from the result of individual api items.",
-            "title": "APIItemList",
-            "x-displayname": "API Item List",
-            "x-ves-proto-message": "ves.io.schema.namespace.APIItemList",
+            "description": "An addon service details schema",
+            "title": "AccessEnablerAddonService",
+            "x-displayname": "Access Enabler Addon Service",
+            "x-ves-proto-message": "ves.io.schema.namespace.AccessEnablerAddonService",
             "properties": {
-                "items": {
+                "addon_service_names": {
                     "type": "array",
-                    "description": " List of APIItem entries",
-                    "title": "items",
+                    "description": " List of addon service names.",
+                    "title": "addon_service_names",
                     "items": {
-                        "$ref": "#/definitions/namespaceAPIItem"
+                        "type": "string"
                     },
-                    "x-displayname": "Items"
-                },
-                "list_id": {
-                    "type": "string",
-                    "description": " Identifier group items\n\nExample: - \"value\"-",
-                    "title": "list_id",
-                    "x-displayname": "List ID",
-                    "x-ves-example": "value"
-                },
-                "result": {
-                    "type": "boolean",
-                    "description": " Combined result after evaluation of items",
-                    "title": "result",
-                    "format": "boolean",
-                    "x-displayname": "Result"
+                    "x-displayname": "Addon Service Names"
                 }
             }
         },
@@ -1485,19 +1589,29 @@ var CustomAPISwaggerJSON string = `{
         },
         "namespaceEvaluateAPIAccessReq": {
             "type": "object",
-            "description": "Request body of EvaluateAPIAccess request",
+            "description": "Request body of Evaluate API Access",
             "title": "EvaluateAPIAccessReq",
-            "x-displayname": "Request for EvaluateAPIAccess",
+            "x-displayname": "Evaluate API Access Req",
             "x-ves-proto-message": "ves.io.schema.namespace.EvaluateAPIAccessReq",
             "properties": {
+                "access_control_type": {
+                    "description": " access control type to evaluate item lists on.",
+                    "title": "access_control_type",
+                    "$ref": "#/definitions/namespaceAccessControlType",
+                    "x-displayname": "Access Control Type"
+                },
                 "item_lists": {
                     "type": "array",
-                    "description": " List of APIItemList entries",
+                    "description": " A list of request API item lists.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1000\n",
                     "title": "item_lists",
+                    "maxItems": 1000,
                     "items": {
-                        "$ref": "#/definitions/namespaceAPIItemList"
+                        "$ref": "#/definitions/namespaceAPIItemListReq"
                     },
-                    "x-displayname": "Item Lists"
+                    "x-displayname": "Item Lists",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1000"
+                    }
                 },
                 "namespace": {
                     "type": "string",
@@ -1510,17 +1624,17 @@ var CustomAPISwaggerJSON string = `{
         },
         "namespaceEvaluateAPIAccessResp": {
             "type": "object",
-            "description": "Response body of EvaluateAPIAccess request",
+            "description": "Response body of Evaluate API Access",
             "title": "EvaluateAPIAccessResp",
             "x-displayname": "Response for EvaluateAPIAccess",
             "x-ves-proto-message": "ves.io.schema.namespace.EvaluateAPIAccessResp",
             "properties": {
                 "item_lists": {
                     "type": "array",
-                    "description": " List of APIItemList entries",
+                    "description": " A list of request API item lists.",
                     "title": "item_lists",
                     "items": {
-                        "$ref": "#/definitions/namespaceAPIItemList"
+                        "$ref": "#/definitions/namespaceAPIItemListResp"
                     },
                     "x-displayname": "Item Lists"
                 }
@@ -1528,9 +1642,9 @@ var CustomAPISwaggerJSON string = `{
         },
         "namespaceEvaluateBatchAPIAccessReq": {
             "type": "object",
-            "description": "Request body of EvaluateBatchAPIAccess request",
+            "description": "Request body of Evaluate Batch API Access",
             "title": "EvaluateBatchAPIAccessReq",
-            "x-displayname": "Request for EvaluateBatchAPIAccess",
+            "x-displayname": "Evaluate Batch API Access Req",
             "x-ves-proto-message": "ves.io.schema.namespace.EvaluateBatchAPIAccessReq",
             "properties": {
                 "batch_namespace_api_list": {
@@ -1539,9 +1653,9 @@ var CustomAPISwaggerJSON string = `{
                     "title": "batch_namespace_api_list",
                     "maxItems": 75,
                     "items": {
-                        "$ref": "#/definitions/namespaceNamespaceAPIList"
+                        "$ref": "#/definitions/namespaceNamespaceAPIListReq"
                     },
-                    "x-displayname": "BatchNamespaceApiList",
+                    "x-displayname": "Batch Namespace Api List",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.repeated.max_items": "75"
                     }
@@ -1550,9 +1664,9 @@ var CustomAPISwaggerJSON string = `{
         },
         "namespaceEvaluateBatchAPIAccessResp": {
             "type": "object",
-            "description": "Response body of EvaluateBatchAPIAccess request",
+            "description": "Response body of Evaluate Batch API Access",
             "title": "EvaluateBatchAPIAccessResp",
-            "x-displayname": "Response for EvaluateBatchAPIAccess",
+            "x-displayname": "Evaluate Batch API Access Resp",
             "x-ves-proto-message": "ves.io.schema.namespace.EvaluateBatchAPIAccessResp",
             "properties": {
                 "batch_namespace_api_list": {
@@ -1560,9 +1674,9 @@ var CustomAPISwaggerJSON string = `{
                     "description": " List of namespaces and associated api list entries",
                     "title": "batch_namespace_api_list",
                     "items": {
-                        "$ref": "#/definitions/namespaceNamespaceAPIList"
+                        "$ref": "#/definitions/namespaceNamespaceAPIListResp"
                     },
-                    "x-displayname": "BatchNamespaceApiList"
+                    "x-displayname": "Batch Namespace Api List"
                 }
             }
         },
@@ -1600,20 +1714,20 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
-        "namespaceNamespaceAPIList": {
+        "namespaceNamespaceAPIListReq": {
             "type": "object",
-            "description": "NamespaceAPIList holds the namespace and its associated APIs",
-            "title": "NamespaceAPIList",
-            "x-displayname": "NamespaceAPIList",
-            "x-ves-proto-message": "ves.io.schema.namespace.NamespaceAPIList",
+            "description": "NamespaceAPIListReq holds the namespace and its associated APIs",
+            "title": "NamespaceAPIListReq",
+            "x-displayname": "Namespace API List",
+            "x-ves-proto-message": "ves.io.schema.namespace.NamespaceAPIListReq",
             "properties": {
                 "item_lists": {
                     "type": "array",
-                    "description": " List of APIItemList entries\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 15\n",
+                    "description": " A list of request API item lists.\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 15\n",
                     "title": "item_lists",
                     "maxItems": 15,
                     "items": {
-                        "$ref": "#/definitions/namespaceAPIItemList"
+                        "$ref": "#/definitions/namespaceAPIItemListReq"
                     },
                     "x-displayname": "Item Lists",
                     "x-ves-validation-rules": {
@@ -1623,6 +1737,31 @@ var CustomAPISwaggerJSON string = `{
                 "namespace": {
                     "type": "string",
                     "description": " Name of the namespace under which all the URLs in APIItems will be evaluated\n\nExample: - \"value\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "value"
+                }
+            }
+        },
+        "namespaceNamespaceAPIListResp": {
+            "type": "object",
+            "description": "NamespaceAPIListResp holds the namespace and its associated APIs",
+            "title": "NamespaceAPIListResp",
+            "x-displayname": "Namespace API List Resp",
+            "x-ves-proto-message": "ves.io.schema.namespace.NamespaceAPIListResp",
+            "properties": {
+                "item_lists": {
+                    "type": "array",
+                    "description": " A list of response API item lists.",
+                    "title": "item_lists",
+                    "items": {
+                        "$ref": "#/definitions/namespaceAPIItemListResp"
+                    },
+                    "x-displayname": "Item Lists"
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Name of the namespace under which all the URLs in item lists were evaluated\n\nExample: - \"value\"-",
                     "title": "namespace",
                     "x-displayname": "Namespace",
                     "x-ves-example": "value"

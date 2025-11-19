@@ -17,17 +17,6 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.uztna.uztna_leasepool.Object"] = ObjectValidator()
 	vr["ves.io.schema.uztna.uztna_leasepool.StatusObject"] = StatusObjectValidator()
 
-	vr["ves.io.schema.uztna.uztna_leasepool.CreateRequest"] = CreateRequestValidator()
-	vr["ves.io.schema.uztna.uztna_leasepool.CreateResponse"] = CreateResponseValidator()
-	vr["ves.io.schema.uztna.uztna_leasepool.DeleteRequest"] = DeleteRequestValidator()
-	vr["ves.io.schema.uztna.uztna_leasepool.GetRequest"] = GetRequestValidator()
-	vr["ves.io.schema.uztna.uztna_leasepool.GetResponse"] = GetResponseValidator()
-	vr["ves.io.schema.uztna.uztna_leasepool.ListRequest"] = ListRequestValidator()
-	vr["ves.io.schema.uztna.uztna_leasepool.ListResponse"] = ListResponseValidator()
-	vr["ves.io.schema.uztna.uztna_leasepool.ListResponseItem"] = ListResponseItemValidator()
-	vr["ves.io.schema.uztna.uztna_leasepool.ReplaceRequest"] = ReplaceRequestValidator()
-	vr["ves.io.schema.uztna.uztna_leasepool.ReplaceResponse"] = ReplaceResponseValidator()
-
 	vr["ves.io.schema.uztna.uztna_leasepool.CreateSpecType"] = CreateSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_leasepool.GetSpecType"] = GetSpecTypeValidator()
 	vr["ves.io.schema.uztna.uztna_leasepool.GlobalSpecType"] = GlobalSpecTypeValidator()
@@ -57,7 +46,6 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 }
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
-	sm["ves.io.schema.uztna.uztna_leasepool.API"] = "config"
 
 }
 
@@ -77,24 +65,6 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	)
 	_, _ = csr, customCSR
 
-	csr = mdr.PubCRUDServiceRegistry
-
-	func() {
-		// set swagger jsons for our and external schemas
-		csr.CRUDSwaggerRegistry["ves.io.schema.uztna.uztna_leasepool.Object"] = APISwaggerJSON
-		csr.CRUDGrpcClientRegistry["ves.io.schema.uztna.uztna_leasepool.Object"] = NewCRUDAPIGrpcClient
-		csr.CRUDRestClientRegistry["ves.io.schema.uztna.uztna_leasepool.Object"] = NewCRUDAPIRestClient
-		csr.CRUDInprocClientRegistry["ves.io.schema.uztna.uztna_leasepool.Object"] = NewCRUDAPIInprocClient
-		if isExternal {
-			return
-		}
-		// registration of api handlers if our own schema
-		mdr.SvcRegisterHandlers["ves.io.schema.uztna.uztna_leasepool.API"] = RegisterAPIServer
-		mdr.SvcGwRegisterHandlers["ves.io.schema.uztna.uztna_leasepool.API"] = RegisterGwAPIHandler
-		csr.CRUDServerRegistry["ves.io.schema.uztna.uztna_leasepool.Object"] = NewCRUDAPIServer
-
-	}()
-
 }
 
 func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
@@ -102,11 +72,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

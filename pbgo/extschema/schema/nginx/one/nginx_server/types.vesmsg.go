@@ -1006,6 +1006,16 @@ func (v *ValidateServer) LocationsValidationRuleHandler(rules map[string]string)
 	return validatorFn, nil
 }
 
+func (v *ValidateServer) PortValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewUint32ValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for port")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateServer) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*Server)
 	if !ok {
@@ -1040,6 +1050,51 @@ func (v *ValidateServer) Validate(ctx context.Context, pm interface{}, opts ...d
 	if fv, exists := v.FldValidators["locations"]; exists {
 		vOpts := append(opts, db.WithValidateField("locations"))
 		if err := fv(ctx, m.GetLocations(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nginx_one_object_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_one_object_id"))
+		if err := fv(ctx, m.GetNginxOneObjectId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nginx_one_object_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_one_object_name"))
+		if err := fv(ctx, m.GetNginxOneObjectName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["port"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("port"))
+		if err := fv(ctx, m.GetPort(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["server_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("server_name"))
+		if err := fv(ctx, m.GetServerName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["total_routes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("total_routes"))
+		if err := fv(ctx, m.GetTotalRoutes(), vOpts...); err != nil {
 			return err
 		}
 
@@ -1090,6 +1145,18 @@ var DefaultServerValidator = func() *ValidateServer {
 		panic(errMsg)
 	}
 	v.FldValidators["locations"] = vFn
+
+	vrhPort := v.PortValidationRuleHandler
+	rulesPort := map[string]string{
+		"ves.io.schema.rules.uint32.gte": "0",
+		"ves.io.schema.rules.uint32.lte": "65535",
+	}
+	vFn, err = vrhPort(rulesPort)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for Server.port: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["port"] = vFn
 
 	v.FldValidators["waf_spec"] = ves_io_schema_nginx_one_nginx_instance.WAFSpecValidator().Validate
 

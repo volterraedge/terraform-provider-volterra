@@ -16,7 +16,9 @@ import (
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
 	ves_io_schema_ip_prefix_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set"
+
 	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
+
 )
 
 // resourceVolterraIpPrefixSet is implementation of Volterra's IpPrefixSet resources
@@ -81,6 +83,17 @@ func resourceVolterraIpPrefixSet() *schema.Resource {
 				},
 			},
 
+			"ipv6_prefix": {
+
+				Type: schema.TypeList,
+
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+
 			"ipv6_prefixes": {
 
 				Type:     schema.TypeList,
@@ -98,6 +111,17 @@ func resourceVolterraIpPrefixSet() *schema.Resource {
 							Required: true,
 						},
 					},
+				},
+			},
+
+			"prefix": {
+
+				Type: schema.TypeList,
+
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
 				},
 			},
 		},
@@ -181,6 +205,22 @@ func resourceVolterraIpPrefixSetCreate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	//ipv6_prefix
+	if v, ok := d.GetOk("ipv6_prefix"); ok && !isIntfNil(v) {
+
+		ls := make([]string, len(v.([]interface{})))
+		for i, v := range v.([]interface{}) {
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
+		}
+		createSpec.Ipv6Prefix = ls
+
+	}
+
 	//ipv6_prefixes
 	if v, ok := d.GetOk("ipv6_prefixes"); ok && !isIntfNil(v) {
 
@@ -202,6 +242,22 @@ func resourceVolterraIpPrefixSetCreate(d *schema.ResourceData, meta interface{})
 
 			}
 		}
+
+	}
+
+	//prefix
+	if v, ok := d.GetOk("prefix"); ok && !isIntfNil(v) {
+
+		ls := make([]string, len(v.([]interface{})))
+		for i, v := range v.([]interface{}) {
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field prefix")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
+		}
+		createSpec.Prefix = ls
 
 	}
 
@@ -329,6 +385,21 @@ func resourceVolterraIpPrefixSetUpdate(d *schema.ResourceData, meta interface{})
 
 	}
 
+	if v, ok := d.GetOk("ipv6_prefix"); ok && !isIntfNil(v) {
+
+		ls := make([]string, len(v.([]interface{})))
+		for i, v := range v.([]interface{}) {
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field ipv6_prefix")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
+		}
+		updateSpec.Ipv6Prefix = ls
+
+	}
+
 	if v, ok := d.GetOk("ipv6_prefixes"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -349,6 +420,21 @@ func resourceVolterraIpPrefixSetUpdate(d *schema.ResourceData, meta interface{})
 
 			}
 		}
+
+	}
+
+	if v, ok := d.GetOk("prefix"); ok && !isIntfNil(v) {
+
+		ls := make([]string, len(v.([]interface{})))
+		for i, v := range v.([]interface{}) {
+			if v == nil {
+				return fmt.Errorf("please provide valid non-empty string value of field prefix")
+			}
+			if str, ok := v.(string); ok {
+				ls[i] = str
+			}
+		}
+		updateSpec.Prefix = ls
 
 	}
 

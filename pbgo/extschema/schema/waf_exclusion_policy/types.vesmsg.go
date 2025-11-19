@@ -154,6 +154,7 @@ var DefaultCreateSpecTypeValidator = func() *ValidateCreateSpecType {
 
 	vrhWafExclusionRules := v.WafExclusionRulesValidationRuleHandler
 	rulesWafExclusionRules := map[string]string{
+		"ves.io.schema.rules.message.required":              "true",
 		"ves.io.schema.rules.repeated.max_items":            "256",
 		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
@@ -299,6 +300,7 @@ var DefaultGetSpecTypeValidator = func() *ValidateGetSpecType {
 
 	vrhWafExclusionRules := v.WafExclusionRulesValidationRuleHandler
 	rulesWafExclusionRules := map[string]string{
+		"ves.io.schema.rules.message.required":              "true",
 		"ves.io.schema.rules.repeated.max_items":            "256",
 		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
@@ -511,6 +513,7 @@ var DefaultGlobalSpecTypeValidator = func() *ValidateGlobalSpecType {
 
 	vrhWafExclusionRules := v.WafExclusionRulesValidationRuleHandler
 	rulesWafExclusionRules := map[string]string{
+		"ves.io.schema.rules.message.required":              "true",
 		"ves.io.schema.rules.repeated.max_items":            "256",
 		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}
@@ -658,6 +661,7 @@ var DefaultReplaceSpecTypeValidator = func() *ValidateReplaceSpecType {
 
 	vrhWafExclusionRules := v.WafExclusionRulesValidationRuleHandler
 	rulesWafExclusionRules := map[string]string{
+		"ves.io.schema.rules.message.required":              "true",
 		"ves.io.schema.rules.repeated.max_items":            "256",
 		"ves.io.schema.rules.repeated.unique_metadata_name": "true",
 	}

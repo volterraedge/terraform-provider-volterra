@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.app_api_group.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.app_api_group.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2706,6 +2706,44 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "app_api_groupApiGroupScopeBIGIPVirtualServer": {
+            "type": "object",
+            "description": "Set the scope of the API Group to a specific BIGIP Virtual Server",
+            "title": "ApiGroupScopeBIGIPVirtualServer",
+            "x-displayname": "API Group Scope BIGIP Virtual Server",
+            "x-ves-proto-message": "ves.io.schema.views.app_api_group.ApiGroupScopeBIGIPVirtualServer",
+            "properties": {
+                "bigip_virtual_server": {
+                    "description": " Reference to an BIGIP Virtual Server object which defines a superset of API Endpoints for the API Group\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Bigip Virtual Server Reference",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "BIGIP Virtual Server",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
+        "app_api_groupApiGroupScopeCDNLoadbalancer": {
+            "type": "object",
+            "description": "Set the scope of the API Group to a specific CDN Loadbalancer",
+            "title": "ApiGroupScopeCdnLoadbalancer",
+            "x-displayname": "API Group Scope CDN Loadbalancer",
+            "x-ves-proto-message": "ves.io.schema.views.app_api_group.ApiGroupScopeCDNLoadbalancer",
+            "properties": {
+                "cdn_loadbalancer": {
+                    "description": " Reference to an CDN Loadbalancer object which defines a superset of API Endpoints for the API Group\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "CDN Loadbalancer Reference",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "CDN Loadbalancer",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "app_api_groupApiGroupScopeHttpLoadbalancer": {
             "type": "object",
             "description": "Set the scope of the API Group to a specific HTTP Loadbalancer",
@@ -3495,6 +3533,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -3688,7 +3733,7 @@ var APISwaggerJSON string = `{
             "description": "Shape of app_api_group in the storage backend.",
             "title": "GlobalSpecType",
             "x-displayname": "Specification",
-            "x-ves-oneof-field-scope_choice": "[\"http_loadbalancer\"]",
+            "x-ves-oneof-field-scope_choice": "[\"bigip_virtual_server\",\"cdn_loadbalancer\",\"http_loadbalancer\"]",
             "x-ves-proto-message": "ves.io.schema.views.app_api_group.GlobalSpecType",
             "properties": {
                 "api_endpoints_count": {
@@ -3698,6 +3743,18 @@ var APISwaggerJSON string = `{
                     "format": "int64",
                     "x-displayname": "API Endpoints Count",
                     "x-ves-example": "25"
+                },
+                "bigip_virtual_server": {
+                    "description": "Exclusive with [cdn_loadbalancer http_loadbalancer]\n Set scope to an BIGIP Virtual Server object to define the API endpoints list for API groups management",
+                    "title": "BIGIP Virtual Server Scope",
+                    "$ref": "#/definitions/app_api_groupApiGroupScopeBIGIPVirtualServer",
+                    "x-displayname": "BIGIP Virtual Server"
+                },
+                "cdn_loadbalancer": {
+                    "description": "Exclusive with [bigip_virtual_server http_loadbalancer]\n Set scope to an CDN Loadbalancer object to define the API endpoints list for API groups management",
+                    "title": "CDN Loadbalancer Scope",
+                    "$ref": "#/definitions/app_api_groupApiGroupScopeCDNLoadbalancer",
+                    "x-displayname": "CDN Loadbalancer"
                 },
                 "elements": {
                     "type": "array",
@@ -3715,7 +3772,7 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "http_loadbalancer": {
-                    "description": "Exclusive with []\n Set scope to an HTTP Loadbalancer object to define the API endpoints list for API groups management",
+                    "description": "Exclusive with [bigip_virtual_server cdn_loadbalancer]\n Set scope to an HTTP Loadbalancer object to define the API endpoints list for API groups management",
                     "title": "HTTP Loadbalancer Scope",
                     "$ref": "#/definitions/app_api_groupApiGroupScopeHttpLoadbalancer",
                     "x-displayname": "HTTP Loadbalancer"

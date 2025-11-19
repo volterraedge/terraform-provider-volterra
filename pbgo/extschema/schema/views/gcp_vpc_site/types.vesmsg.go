@@ -3693,6 +3693,12 @@ func (m *GCPVPCVoltstackClusterReplaceType) GetDRefInfo() ([]db.DRefInfo, error)
 		drInfos = append(drInfos, fdrInfos...)
 	}
 
+	if fdrInfos, err := m.GetK8SClusterChoiceDRefInfo(); err != nil {
+		return nil, errors.Wrap(err, "GetK8SClusterChoiceDRefInfo() FAILED")
+	} else {
+		drInfos = append(drInfos, fdrInfos...)
+	}
+
 	if fdrInfos, err := m.GetNetworkPolicyChoiceDRefInfo(); err != nil {
 		return nil, errors.Wrap(err, "GetNetworkPolicyChoiceDRefInfo() FAILED")
 	} else {
@@ -3834,6 +3840,71 @@ func (m *GCPVPCVoltstackClusterReplaceType) GetGlobalNetworkChoiceDRefInfo() ([]
 
 }
 
+func (m *GCPVPCVoltstackClusterReplaceType) GetK8SClusterChoiceDRefInfo() ([]db.DRefInfo, error) {
+	switch m.GetK8SClusterChoice().(type) {
+	case *GCPVPCVoltstackClusterReplaceType_NoK8SCluster:
+
+		return nil, nil
+
+	case *GCPVPCVoltstackClusterReplaceType_K8SCluster:
+
+		vref := m.GetK8SCluster()
+		if vref == nil {
+			return nil, nil
+		}
+		vdRef := db.NewDirectRefForView(vref)
+		vdRef.SetKind("k8s_cluster.Object")
+		dri := db.DRefInfo{
+			RefdType:   "k8s_cluster.Object",
+			RefdTenant: vref.Tenant,
+			RefdNS:     vref.Namespace,
+			RefdName:   vref.Name,
+			DRField:    "k8s_cluster",
+			Ref:        vdRef,
+		}
+		return []db.DRefInfo{dri}, nil
+
+	default:
+		return nil, nil
+	}
+}
+
+// GetK8SClusterChoiceDBEntries returns the db.Entry corresponding to the ObjRefType from the default Table
+func (m *GCPVPCVoltstackClusterReplaceType) GetK8SClusterChoiceDBEntries(ctx context.Context, d db.Interface) ([]db.Entry, error) {
+	var entries []db.Entry
+
+	switch m.GetK8SClusterChoice().(type) {
+	case *GCPVPCVoltstackClusterReplaceType_NoK8SCluster:
+
+	case *GCPVPCVoltstackClusterReplaceType_K8SCluster:
+		refdType, err := d.TypeForEntryKind("", "", "k8s_cluster.Object")
+		if err != nil {
+			return nil, errors.Wrap(err, "Cannot find type for kind: k8s_cluster")
+		}
+
+		vref := m.GetK8SCluster()
+		if vref == nil {
+			return nil, nil
+		}
+		ref := &ves_io_schema.ObjectRefType{
+			Kind:      "k8s_cluster.Object",
+			Tenant:    vref.Tenant,
+			Namespace: vref.Namespace,
+			Name:      vref.Name,
+		}
+		refdEnt, err := d.GetReferredEntry(ctx, refdType, ref, db.WithRefOpOptions(db.OpWithReadRefFromInternalTable()))
+		if err != nil {
+			return nil, errors.Wrap(err, "Getting referred entry")
+		}
+		if refdEnt != nil {
+			entries = append(entries, refdEnt)
+		}
+
+	}
+
+	return entries, nil
+}
+
 // GetDRefInfo for the field's type
 func (m *GCPVPCVoltstackClusterReplaceType) GetNetworkPolicyChoiceDRefInfo() ([]db.DRefInfo, error) {
 	if m.GetNetworkPolicyChoice() == nil {
@@ -3926,6 +3997,14 @@ func (v *ValidateGCPVPCVoltstackClusterReplaceType) GlobalNetworkChoiceValidatio
 	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
 	if err != nil {
 		return nil, errors.Wrap(err, "ValidationRuleHandler for global_network_choice")
+	}
+	return validatorFn, nil
+}
+
+func (v *ValidateGCPVPCVoltstackClusterReplaceType) K8SClusterChoiceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+	validatorFn, err := db.NewMessageValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for k8s_cluster_choice")
 	}
 	return validatorFn, nil
 }
@@ -4147,6 +4226,42 @@ func (v *ValidateGCPVPCVoltstackClusterReplaceType) Validate(ctx context.Context
 
 	}
 
+	if fv, exists := v.FldValidators["k8s_cluster_choice"]; exists {
+		val := m.GetK8SClusterChoice()
+		vOpts := append(opts,
+			db.WithValidateField("k8s_cluster_choice"),
+		)
+		if err := fv(ctx, val, vOpts...); err != nil {
+			return err
+		}
+	}
+
+	switch m.GetK8SClusterChoice().(type) {
+	case *GCPVPCVoltstackClusterReplaceType_NoK8SCluster:
+		if fv, exists := v.FldValidators["k8s_cluster_choice.no_k8s_cluster"]; exists {
+			val := m.GetK8SClusterChoice().(*GCPVPCVoltstackClusterReplaceType_NoK8SCluster).NoK8SCluster
+			vOpts := append(opts,
+				db.WithValidateField("k8s_cluster_choice"),
+				db.WithValidateField("no_k8s_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *GCPVPCVoltstackClusterReplaceType_K8SCluster:
+		if fv, exists := v.FldValidators["k8s_cluster_choice.k8s_cluster"]; exists {
+			val := m.GetK8SClusterChoice().(*GCPVPCVoltstackClusterReplaceType_K8SCluster).K8SCluster
+			vOpts := append(opts,
+				db.WithValidateField("k8s_cluster_choice"),
+				db.WithValidateField("k8s_cluster"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["network_policy_choice"]; exists {
 		val := m.GetNetworkPolicyChoice()
 		vOpts := append(opts,
@@ -4341,6 +4456,17 @@ var DefaultGCPVPCVoltstackClusterReplaceTypeValidator = func() *ValidateGCPVPCVo
 	}
 	v.FldValidators["global_network_choice"] = vFn
 
+	vrhK8SClusterChoice := v.K8SClusterChoiceValidationRuleHandler
+	rulesK8SClusterChoice := map[string]string{
+		"ves.io.schema.rules.message.required_oneof": "true",
+	}
+	vFn, err = vrhK8SClusterChoice(rulesK8SClusterChoice)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for GCPVPCVoltstackClusterReplaceType.k8s_cluster_choice: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["k8s_cluster_choice"] = vFn
+
 	vrhNetworkPolicyChoice := v.NetworkPolicyChoiceValidationRuleHandler
 	rulesNetworkPolicyChoice := map[string]string{
 		"ves.io.schema.rules.message.required_oneof": "true",
@@ -4404,6 +4530,8 @@ var DefaultGCPVPCVoltstackClusterReplaceTypeValidator = func() *ValidateGCPVPCVo
 	v.FldValidators["forward_proxy_choice.active_forward_proxy_policies"] = ves_io_schema_network_firewall.ActiveForwardProxyPoliciesTypeValidator().Validate
 
 	v.FldValidators["global_network_choice.global_network_list"] = ves_io_schema_views.GlobalNetworkConnectionListTypeValidator().Validate
+
+	v.FldValidators["k8s_cluster_choice.k8s_cluster"] = ves_io_schema_views.ObjectRefTypeValidator().Validate
 
 	v.FldValidators["network_policy_choice.active_network_policies"] = ves_io_schema_network_firewall.ActiveNetworkPoliciesTypeValidator().Validate
 	v.FldValidators["network_policy_choice.active_enhanced_firewall_policies"] = ves_io_schema_network_firewall.ActiveEnhancedFirewallPoliciesTypeValidator().Validate
@@ -9316,6 +9444,41 @@ func (r *GCPVPCVoltstackClusterReplaceType) GetGlobalNetworkChoiceFromGCPVPCVolt
 }
 
 // create setters in GCPVPCVoltstackClusterReplaceType from GCPVPCVoltstackClusterType for oneof fields
+func (r *GCPVPCVoltstackClusterReplaceType) SetK8SClusterChoiceToGCPVPCVoltstackClusterType(o *GCPVPCVoltstackClusterType) error {
+	switch of := r.K8SClusterChoice.(type) {
+	case nil:
+		o.K8SClusterChoice = nil
+
+	case *GCPVPCVoltstackClusterReplaceType_K8SCluster:
+		o.K8SClusterChoice = &GCPVPCVoltstackClusterType_K8SCluster{K8SCluster: of.K8SCluster}
+
+	case *GCPVPCVoltstackClusterReplaceType_NoK8SCluster:
+		o.K8SClusterChoice = &GCPVPCVoltstackClusterType_NoK8SCluster{NoK8SCluster: of.NoK8SCluster}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+func (r *GCPVPCVoltstackClusterReplaceType) GetK8SClusterChoiceFromGCPVPCVoltstackClusterType(o *GCPVPCVoltstackClusterType) error {
+	switch of := o.K8SClusterChoice.(type) {
+	case nil:
+		r.K8SClusterChoice = nil
+
+	case *GCPVPCVoltstackClusterType_K8SCluster:
+		r.K8SClusterChoice = &GCPVPCVoltstackClusterReplaceType_K8SCluster{K8SCluster: of.K8SCluster}
+
+	case *GCPVPCVoltstackClusterType_NoK8SCluster:
+		r.K8SClusterChoice = &GCPVPCVoltstackClusterReplaceType_NoK8SCluster{NoK8SCluster: of.NoK8SCluster}
+
+	default:
+		return fmt.Errorf("Unknown oneof field %T", of)
+	}
+	return nil
+}
+
+// create setters in GCPVPCVoltstackClusterReplaceType from GCPVPCVoltstackClusterType for oneof fields
 func (r *GCPVPCVoltstackClusterReplaceType) SetNetworkPolicyChoiceToGCPVPCVoltstackClusterType(o *GCPVPCVoltstackClusterType) error {
 	switch of := r.NetworkPolicyChoice.(type) {
 	case nil:
@@ -9434,6 +9597,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) fromGCPVPCVoltstackClusterType(f *GC
 	m.GetForwardProxyChoiceFromGCPVPCVoltstackClusterType(f)
 	m.GcpZoneNames = f.GetGcpZoneNames()
 	m.GetGlobalNetworkChoiceFromGCPVPCVoltstackClusterType(f)
+	m.GetK8SClusterChoiceFromGCPVPCVoltstackClusterType(f)
 	m.GetNetworkPolicyChoiceFromGCPVPCVoltstackClusterType(f)
 	m.NodeNumber = f.GetNodeNumber()
 	m.GetOutsideStaticRouteChoiceFromGCPVPCVoltstackClusterType(f)
@@ -9461,6 +9625,7 @@ func (m *GCPVPCVoltstackClusterReplaceType) toGCPVPCVoltstackClusterType(f *GCPV
 	m1.SetForwardProxyChoiceToGCPVPCVoltstackClusterType(f)
 	f.GcpZoneNames = m1.GcpZoneNames
 	m1.SetGlobalNetworkChoiceToGCPVPCVoltstackClusterType(f)
+	m1.SetK8SClusterChoiceToGCPVPCVoltstackClusterType(f)
 	m1.SetNetworkPolicyChoiceToGCPVPCVoltstackClusterType(f)
 	f.NodeNumber = m1.NodeNumber
 	m1.SetOutsideStaticRouteChoiceToGCPVPCVoltstackClusterType(f)

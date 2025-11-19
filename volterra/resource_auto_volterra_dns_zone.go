@@ -187,6 +187,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"value": {
 													Type:     schema.TypeString,
 													Optional: true,
@@ -382,6 +388,101 @@ func resourceVolterraDnsZone() *schema.Resource {
 												"value": {
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+											},
+										},
+									},
+
+									"dlv_record": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"values": {
+
+													Type:       schema.TypeList,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"sha1_digest": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"digest": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"sha256_digest": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"digest": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"sha384_digest": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"digest": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"ds_key_algorithm": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"key_tag": {
+																Type:       schema.TypeInt,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
 												},
 											},
 										},
@@ -854,6 +955,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 																Required: true,
 															},
 
+															"fingerprint": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
 															"sha1_fingerprint": {
 
 																Type:     schema.TypeList,
@@ -884,6 +991,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 																		},
 																	},
 																},
+															},
+
+															"fingerprinttype": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -1014,6 +1127,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 													Optional: true,
 												},
 
+												"disable": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"name": {
 													Type:     schema.TypeString,
 													Required: true,
@@ -1134,6 +1253,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 													Optional: true,
 													Elem: &schema.Resource{
 														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
 
 															"value": {
 																Type:     schema.TypeString,
@@ -1330,6 +1455,101 @@ func resourceVolterraDnsZone() *schema.Resource {
 															"value": {
 																Type:     schema.TypeString,
 																Optional: true,
+															},
+														},
+													},
+												},
+
+												"dlv_record": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"values": {
+
+																Type:       schema.TypeList,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"sha1_digest": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"digest": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+
+																		"sha256_digest": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"digest": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+
+																		"sha384_digest": {
+
+																			Type:       schema.TypeList,
+																			MaxItems:   1,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																			Elem: &schema.Resource{
+																				Schema: map[string]*schema.Schema{
+
+																					"digest": {
+																						Type:       schema.TypeString,
+																						Required:   true,
+																						Deprecated: "This field is deprecated and will be removed in future release.",
+																					},
+																				},
+																			},
+																		},
+
+																		"ds_key_algorithm": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
+																		"key_tag": {
+																			Type:       schema.TypeInt,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
 															},
 														},
 													},
@@ -1802,6 +2022,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 																			Required: true,
 																		},
 
+																		"fingerprint": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+
 																		"sha1_fingerprint": {
 
 																			Type:     schema.TypeList,
@@ -1832,6 +2058,12 @@ func resourceVolterraDnsZone() *schema.Resource {
 																					},
 																				},
 																			},
+																		},
+
+																		"fingerprinttype": {
+																			Type:       schema.TypeString,
+																			Required:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
 																		},
 																	},
 																},
@@ -1999,6 +2231,42 @@ func resourceVolterraDnsZone() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"blindfold_secret_info_internal": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"decryption_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"store_provider": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"secret_encoding_type": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"blindfold_secret_info": {
 
 										Type:     schema.TypeList,
@@ -2041,6 +2309,66 @@ func resourceVolterraDnsZone() *schema.Resource {
 												"url": {
 													Type:     schema.TypeString,
 													Required: true,
+												},
+											},
+										},
+									},
+
+									"vault_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"key": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"location": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"provider": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"secret_encoding": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"version": {
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"wingman_secret_info": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"name": {
+													Type:       schema.TypeString,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -2285,6 +2613,12 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 								for _, set := range sl {
 									if set != nil {
 										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											typeRecordSetInt.AliasRecord.Name = v.(string)
+
+										}
 
 										if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
@@ -2545,6 +2879,125 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 										if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 											typeRecordSetInt.CnameRecord.Value = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := defaultRrSetGroupMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DlvRecord{}
+								typeRecordSetInt.DlvRecord = &ves_io_schema_dns_zone.DLVResourceRecord{}
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											typeRecordSetInt.DlvRecord.Name = v.(string)
+
+										}
+
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+											typeRecordSetInt.DlvRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
+
+													digestChoiceTypeFound := false
+
+													if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+														digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+														values[i].DigestChoice = digestChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																	digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+														digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+														values[i].DigestChoice = digestChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																	digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+														digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+														values[i].DigestChoice = digestChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																	digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+														values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+													}
+
+													if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+														values[i].KeyTag = uint32(w.(int))
+													}
+
+												}
+											}
 
 										}
 
@@ -3139,6 +3592,10 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 													}
 
+													if w, ok := valuesMapStrToI["fingerprint"]; ok && !isIntfNil(w) {
+														values[i].Fingerprint = w.(string)
+													}
+
 													fingerprintTypeTypeFound := false
 
 													if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
@@ -3184,6 +3641,12 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 															}
 														}
+
+													}
+
+													if v, ok := valuesMapStrToI["fingerprinttype"]; ok && !isIntfNil(v) {
+
+														values[i].Fingerprinttype = ves_io_schema_dns_zone.SSHFPFingerprintType(ves_io_schema_dns_zone.SSHFPFingerprintType_value[v.(string)])
 
 													}
 
@@ -3360,6 +3823,10 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 											metadata.Description = w.(string)
 										}
 
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 											metadata.Name = w.(string)
 										}
@@ -3524,6 +3991,12 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 											for _, set := range sl {
 												if set != nil {
 													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.AliasRecord.Name = v.(string)
+
+													}
 
 													if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
@@ -3784,6 +4257,125 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 													if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 														typeRecordSetInt.CnameRecord.Value = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DlvRecord{}
+											typeRecordSetInt.DlvRecord = &ves_io_schema_dns_zone.DLVResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.DlvRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+														typeRecordSetInt.DlvRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																digestChoiceTypeFound := false
+
+																if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+																	digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+																	digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+																	digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+																	values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+																	values[i].KeyTag = uint32(w.(int))
+																}
+
+															}
+														}
 
 													}
 
@@ -4378,6 +4970,10 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 																}
 
+																if w, ok := valuesMapStrToI["fingerprint"]; ok && !isIntfNil(w) {
+																	values[i].Fingerprint = w.(string)
+																}
+
 																fingerprintTypeTypeFound := false
 
 																if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
@@ -4423,6 +5019,12 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 
 																		}
 																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["fingerprinttype"]; ok && !isIntfNil(v) {
+
+																	values[i].Fingerprinttype = ves_io_schema_dns_zone.SSHFPFingerprintType(ves_io_schema_dns_zone.SSHFPFingerprintType_value[v.(string)])
 
 																}
 
@@ -4658,6 +5260,38 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 						if set != nil {
 							tsigKeyValueMapStrToI := set.(map[string]interface{})
 
+							if v, ok := tsigKeyValueMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								tsigKeyValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								tsigKeyValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := tsigKeyValueMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -4716,6 +5350,76 @@ func resourceVolterraDnsZoneCreate(d *schema.ResourceData, meta interface{}) err
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 
@@ -5009,6 +5713,12 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 									if set != nil {
 										cs := set.(map[string]interface{})
 
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											typeRecordSetInt.AliasRecord.Name = v.(string)
+
+										}
+
 										if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 											typeRecordSetInt.AliasRecord.Value = v.(string)
@@ -5268,6 +5978,125 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 										if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 											typeRecordSetInt.CnameRecord.Value = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := defaultRrSetGroupMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+								typeRecordSetTypeFound = true
+								typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DlvRecord{}
+								typeRecordSetInt.DlvRecord = &ves_io_schema_dns_zone.DLVResourceRecord{}
+								defaultRrSetGroup[i].TypeRecordSet = typeRecordSetInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											typeRecordSetInt.DlvRecord.Name = v.(string)
+
+										}
+
+										if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+											typeRecordSetInt.DlvRecord.Values = values
+											for i, set := range sl {
+												if set != nil {
+													values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+													valuesMapStrToI := set.(map[string]interface{})
+
+													digestChoiceTypeFound := false
+
+													if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+														digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+														values[i].DigestChoice = digestChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																	digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+														digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+														values[i].DigestChoice = digestChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																	digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+														digestChoiceTypeFound = true
+														digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+														digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+														values[i].DigestChoice = digestChoiceInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																	digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+														values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+													}
+
+													if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+														values[i].KeyTag = uint32(w.(int))
+													}
+
+												}
+											}
 
 										}
 
@@ -5862,6 +6691,10 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 													}
 
+													if w, ok := valuesMapStrToI["fingerprint"]; ok && !isIntfNil(w) {
+														values[i].Fingerprint = w.(string)
+													}
+
 													fingerprintTypeTypeFound := false
 
 													if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
@@ -5907,6 +6740,12 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 															}
 														}
+
+													}
+
+													if v, ok := valuesMapStrToI["fingerprinttype"]; ok && !isIntfNil(v) {
+
+														values[i].Fingerprinttype = ves_io_schema_dns_zone.SSHFPFingerprintType(ves_io_schema_dns_zone.SSHFPFingerprintType_value[v.(string)])
 
 													}
 
@@ -6083,6 +6922,10 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 											metadata.Description = w.(string)
 										}
 
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 											metadata.Name = w.(string)
 										}
@@ -6247,6 +7090,12 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 											for _, set := range sl {
 												if set != nil {
 													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.AliasRecord.Name = v.(string)
+
+													}
 
 													if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
@@ -6507,6 +7356,125 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 													if v, ok := cs["value"]; ok && !isIntfNil(v) {
 
 														typeRecordSetInt.CnameRecord.Value = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := rrSetMapStrToI["dlv_record"]; ok && !isIntfNil(v) && !typeRecordSetTypeFound {
+
+											typeRecordSetTypeFound = true
+											typeRecordSetInt := &ves_io_schema_dns_zone.RRSet_DlvRecord{}
+											typeRecordSetInt.DlvRecord = &ves_io_schema_dns_zone.DLVResourceRecord{}
+											rrSet[i].TypeRecordSet = typeRecordSetInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														typeRecordSetInt.DlvRecord.Name = v.(string)
+
+													}
+
+													if v, ok := cs["values"]; ok && !isIntfNil(v) {
+
+														sl := v.([]interface{})
+														values := make([]*ves_io_schema_dns_zone.DSRecordValue, len(sl))
+														typeRecordSetInt.DlvRecord.Values = values
+														for i, set := range sl {
+															if set != nil {
+																values[i] = &ves_io_schema_dns_zone.DSRecordValue{}
+																valuesMapStrToI := set.(map[string]interface{})
+
+																digestChoiceTypeFound := false
+
+																if v, ok := valuesMapStrToI["sha1_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha1Digest{}
+																	digestChoiceInt.Sha1Digest = &ves_io_schema_dns_zone.SHA1Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha1Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha256_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha256Digest{}
+																	digestChoiceInt.Sha256Digest = &ves_io_schema_dns_zone.SHA256Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha256Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["sha384_digest"]; ok && !isIntfNil(v) && !digestChoiceTypeFound {
+
+																	digestChoiceTypeFound = true
+																	digestChoiceInt := &ves_io_schema_dns_zone.DSRecordValue_Sha384Digest{}
+																	digestChoiceInt.Sha384Digest = &ves_io_schema_dns_zone.SHA384Digest{}
+																	values[i].DigestChoice = digestChoiceInt
+
+																	sl := v.([]interface{})
+																	for _, set := range sl {
+																		if set != nil {
+																			cs := set.(map[string]interface{})
+
+																			if v, ok := cs["digest"]; ok && !isIntfNil(v) {
+
+																				digestChoiceInt.Sha384Digest.Digest = v.(string)
+
+																			}
+
+																		}
+																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["ds_key_algorithm"]; ok && !isIntfNil(v) {
+
+																	values[i].DsKeyAlgorithm = ves_io_schema_dns_zone.DSKeyAlgorithm(ves_io_schema_dns_zone.DSKeyAlgorithm_value[v.(string)])
+
+																}
+
+																if w, ok := valuesMapStrToI["key_tag"]; ok && !isIntfNil(w) {
+																	values[i].KeyTag = uint32(w.(int))
+																}
+
+															}
+														}
 
 													}
 
@@ -7101,6 +8069,10 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 																}
 
+																if w, ok := valuesMapStrToI["fingerprint"]; ok && !isIntfNil(w) {
+																	values[i].Fingerprint = w.(string)
+																}
+
 																fingerprintTypeTypeFound := false
 
 																if v, ok := valuesMapStrToI["sha1_fingerprint"]; ok && !isIntfNil(v) && !fingerprintTypeTypeFound {
@@ -7146,6 +8118,12 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 
 																		}
 																	}
+
+																}
+
+																if v, ok := valuesMapStrToI["fingerprinttype"]; ok && !isIntfNil(v) {
+
+																	values[i].Fingerprinttype = ves_io_schema_dns_zone.SSHFPFingerprintType(ves_io_schema_dns_zone.SSHFPFingerprintType_value[v.(string)])
 
 																}
 
@@ -7381,6 +8359,38 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 						if set != nil {
 							tsigKeyValueMapStrToI := set.(map[string]interface{})
 
+							if v, ok := tsigKeyValueMapStrToI["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+								sl := v.([]interface{})
+								blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+								tsigKeyValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+								for _, set := range sl {
+									if set != nil {
+										blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.Location = w.(string)
+										}
+
+										if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+											blindfoldSecretInfoInternal.StoreProvider = w.(string)
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+								tsigKeyValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+							}
+
 							secretInfoOneofTypeFound := false
 
 							if v, ok := tsigKeyValueMapStrToI["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -7439,6 +8449,76 @@ func resourceVolterraDnsZoneUpdate(d *schema.ResourceData, meta interface{}) err
 										if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 											secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+								secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+										}
+
+										if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+										}
+
+										if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+										}
+
+										if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
+										if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := tsigKeyValueMapStrToI["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+								secretInfoOneofTypeFound = true
+								secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+								secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+								tsigKeyValue.SecretInfoOneof = secretInfoOneofInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+											secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 										}
 

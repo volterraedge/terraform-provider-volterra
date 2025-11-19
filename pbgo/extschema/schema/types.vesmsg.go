@@ -20421,6 +20421,11 @@ func (m *SystemObjectMetaType) SetObjectIndex(in uint32) {
 	m.ObjectIndex = in
 }
 
+// SetRevision sets the field
+func (m *SystemObjectMetaType) SetRevision(in int64) {
+	m.Revision = in
+}
+
 // SetSreDisable sets the field
 func (m *SystemObjectMetaType) SetSreDisable(in bool) {
 	m.SreDisable = in
@@ -20679,6 +20684,15 @@ func (v *ValidateSystemObjectMetaType) Validate(ctx context.Context, pm interfac
 
 		vOpts := append(opts, db.WithValidateField("owner_view"))
 		if err := fv(ctx, m.GetOwnerView(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["revision"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("revision"))
+		if err := fv(ctx, m.GetRevision(), vOpts...); err != nil {
 			return err
 		}
 

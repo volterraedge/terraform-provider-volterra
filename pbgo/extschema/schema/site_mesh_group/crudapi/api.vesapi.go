@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.site_mesh_group.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.site_mesh_group.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3386,6 +3386,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -3473,8 +3480,21 @@ var APISwaggerJSON string = `{
             "title": "Global Specification",
             "x-displayname": "Specification",
             "x-ves-oneof-field-mesh_choice": "[\"full_mesh\",\"hub_mesh\",\"spoke_mesh\"]",
+            "x-ves-oneof-field-re_fallback": "[\"disable_re_fallback\",\"enable_re_fallback\"]",
             "x-ves-proto-message": "ves.io.schema.site_mesh_group.GlobalSpecType",
             "properties": {
+                "disable_re_fallback": {
+                    "description": "Exclusive with [enable_re_fallback]\n Disable RE Fallback connectivity when SMG fails",
+                    "title": "disable",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Disable"
+                },
+                "enable_re_fallback": {
+                    "description": "Exclusive with [disable_re_fallback]\n Enable RE Fallback connectivity when SMG fails",
+                    "title": "enable",
+                    "$ref": "#/definitions/schemaEmpty",
+                    "x-displayname": "Enable"
+                },
                 "full_mesh": {
                     "description": "Exclusive with [hub_mesh spoke_mesh]\n  Full mesh of tunnels are created between all sites",
                     "title": "full_mesh",

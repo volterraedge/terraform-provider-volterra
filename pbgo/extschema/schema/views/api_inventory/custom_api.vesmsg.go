@@ -837,7 +837,7 @@ var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInvent
 
 	vrhApiInventoryInclusionListDeltaAdded := v.ApiInventoryInclusionListDeltaAddedValidationRuleHandler
 	rulesApiInventoryInclusionListDeltaAdded := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryInclusionListDeltaAdded(rulesApiInventoryInclusionListDeltaAdded)
@@ -849,7 +849,7 @@ var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInvent
 
 	vrhApiInventoryInclusionListDeltaRemoved := v.ApiInventoryInclusionListDeltaRemovedValidationRuleHandler
 	rulesApiInventoryInclusionListDeltaRemoved := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryInclusionListDeltaRemoved(rulesApiInventoryInclusionListDeltaRemoved)
@@ -861,7 +861,7 @@ var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInvent
 
 	vrhApiInventoryExclusionListDeltaAdded := v.ApiInventoryExclusionListDeltaAddedValidationRuleHandler
 	rulesApiInventoryExclusionListDeltaAdded := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryExclusionListDeltaAdded(rulesApiInventoryExclusionListDeltaAdded)
@@ -873,7 +873,7 @@ var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInvent
 
 	vrhApiInventoryExclusionListDeltaRemoved := v.ApiInventoryExclusionListDeltaRemovedValidationRuleHandler
 	rulesApiInventoryExclusionListDeltaRemoved := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhApiInventoryExclusionListDeltaRemoved(rulesApiInventoryExclusionListDeltaRemoved)
@@ -885,7 +885,7 @@ var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInvent
 
 	vrhNonApiEndpointsDeltaAdded := v.NonApiEndpointsDeltaAddedValidationRuleHandler
 	rulesNonApiEndpointsDeltaAdded := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNonApiEndpointsDeltaAdded(rulesNonApiEndpointsDeltaAdded)
@@ -897,7 +897,7 @@ var DefaultUpdateApiInventoryListsReqValidator = func() *ValidateUpdateApiInvent
 
 	vrhNonApiEndpointsDeltaRemoved := v.NonApiEndpointsDeltaRemovedValidationRuleHandler
 	rulesNonApiEndpointsDeltaRemoved := map[string]string{
-		"ves.io.schema.rules.repeated.max_items": "5000",
+		"ves.io.schema.rules.repeated.max_items": "1000",
 		"ves.io.schema.rules.repeated.unique":    "true",
 	}
 	vFn, err = vrhNonApiEndpointsDeltaRemoved(rulesNonApiEndpointsDeltaRemoved)

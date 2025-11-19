@@ -996,16 +996,16 @@ var CDNCustomAPISwaggerJSON string = `{
                 },
                 "pattern": {
                     "type": "string",
-                    "description": "Exclusive with [hostname purge_all url]\n Purge cached content using RegEx.\n\nExample: - \"*.ts\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.regex: true\n",
+                    "description": "Exclusive with [hostname purge_all url]\n Purge cached content using PCRE 1 compliant regular expression.\n\nExample: - \".*\\.ts\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n  ves.io.schema.rules.string.min_len: 1\n  ves.io.schema.rules.string.pcre_regex: true\n",
                     "title": "Regex Pattern to match",
                     "minLength": 1,
                     "maxLength": 256,
                     "x-displayname": "Pattern",
-                    "x-ves-example": "*.ts",
+                    "x-ves-example": ".*\\.ts",
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256",
                         "ves.io.schema.rules.string.min_len": "1",
-                        "ves.io.schema.rules.string.regex": "true"
+                        "ves.io.schema.rules.string.pcre_regex": "true"
                     }
                 },
                 "purge_all": {

@@ -42,6 +42,9 @@ func initializeValidatorRegistry(vr map[string]db.Validator) {
 	vr["ves.io.schema.tenant.Object"] = ObjectValidator()
 	vr["ves.io.schema.tenant.StatusObject"] = StatusObjectValidator()
 
+	vr["ves.io.schema.tenant.SummaryRequest"] = SummaryRequestValidator()
+	vr["ves.io.schema.tenant.SummaryResponse"] = SummaryResponseValidator()
+
 	vr["ves.io.schema.tenant.DeactivateTenantRequest"] = DeactivateTenantRequestValidator()
 	vr["ves.io.schema.tenant.DeactivateTenantResponse"] = DeactivateTenantResponseValidator()
 
@@ -96,11 +99,17 @@ func initializeRPCRegistry(mdr *svcfw.MDRegistry) {
 
 func initializeAPIGwServiceSlugsRegistry(sm map[string]string) {
 	sm["ves.io.schema.tenant.CustomAPI"] = "web"
+	sm["ves.io.schema.tenant.TenantSummaryCustomAPI"] = "config"
 	sm["ves.io.schema.tenant.CustomAPIEywaprime"] = "saas"
 
 }
 
 func initializeP0PolicyRegistry(sm map[string]svcfw.P0PolicyInfo) {
+
+	sm["config"] = svcfw.P0PolicyInfo{
+		Name:            "ves-io-allow-config",
+		ServiceSelector: "akar\\.gc.*\\",
+	}
 
 }
 
@@ -153,6 +162,25 @@ func initializeCRUDServiceRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 
 	func() {
 		// set swagger jsons for our and external schemas
+		customCSR.SwaggerRegistry["ves.io.schema.tenant.TenantSummaryCustomAPI"] = TenantSummaryCustomAPISwaggerJSON
+
+		customCSR.GrpcClientRegistry["ves.io.schema.tenant.TenantSummaryCustomAPI"] = NewTenantSummaryCustomAPIGrpcClient
+		customCSR.RestClientRegistry["ves.io.schema.tenant.TenantSummaryCustomAPI"] = NewTenantSummaryCustomAPIRestClient
+		if isExternal {
+			return
+		}
+		mdr.SvcRegisterHandlers["ves.io.schema.tenant.TenantSummaryCustomAPI"] = RegisterTenantSummaryCustomAPIServer
+		mdr.SvcGwRegisterHandlers["ves.io.schema.tenant.TenantSummaryCustomAPI"] = RegisterGwTenantSummaryCustomAPIHandler
+		customCSR.ServerRegistry["ves.io.schema.tenant.TenantSummaryCustomAPI"] = func(svc svcfw.Service) server.APIHandler {
+			return NewTenantSummaryCustomAPIServer(svc)
+		}
+
+	}()
+
+	customCSR = mdr.PubCustomServiceRegistry
+
+	func() {
+		// set swagger jsons for our and external schemas
 		customCSR.SwaggerRegistry["ves.io.schema.tenant.CustomAPIEywaprime"] = CustomAPIEywaprimeSwaggerJSON
 
 		customCSR.GrpcClientRegistry["ves.io.schema.tenant.CustomAPIEywaprime"] = NewCustomAPIEywaprimeGrpcClient
@@ -175,11 +203,11 @@ func InitializeMDRegistry(mdr *svcfw.MDRegistry, isExternal bool) {
 	initializeValidatorRegistry(mdr.ValidatorRegistry)
 
 	initializeCRUDServiceRegistry(mdr, isExternal)
+	initializeRPCRegistry(mdr)
 	if isExternal {
 		return
 	}
 
-	initializeRPCRegistry(mdr)
 	initializeAPIGwServiceSlugsRegistry(mdr.APIGwServiceSlugs)
 	initializeP0PolicyRegistry(mdr.P0PolicyRegistry)
 

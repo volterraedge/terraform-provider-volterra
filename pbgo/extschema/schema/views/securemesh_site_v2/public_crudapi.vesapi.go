@@ -1135,7 +1135,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.views.securemesh_site_v2.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.views.securemesh_site_v2.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3257,6 +3257,57 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaNodeInterfaceInfo": {
+            "type": "object",
+            "description": "On a multinode site, this list holds the nodes and corresponding tunnel transport interface",
+            "title": "NodeInterfaceInfo",
+            "x-displayname": "NodeInterfaceInfo",
+            "x-ves-proto-message": "ves.io.schema.NodeInterfaceInfo",
+            "properties": {
+                "interface": {
+                    "type": "array",
+                    "description": " Interface reference on this node\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 1\n",
+                    "title": "Interface",
+                    "maxItems": 1,
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    },
+                    "x-displayname": "Interface",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "1"
+                    }
+                },
+                "node": {
+                    "type": "string",
+                    "description": " Node name on this site\n\nExample: - \"master-0\"-",
+                    "title": "Node",
+                    "x-displayname": "Node",
+                    "x-ves-example": "master-0"
+                }
+            }
+        },
+        "schemaNodeInterfaceType": {
+            "type": "object",
+            "description": "On multinode site, this type holds the information about per node interfaces",
+            "title": "NodeInterfaceType",
+            "x-displayname": "NodeInterfaceType",
+            "x-ves-proto-message": "ves.io.schema.NodeInterfaceType",
+            "properties": {
+                "list": {
+                    "type": "array",
+                    "description": " On a multinode site, this list holds the nodes and corresponding networking_interface\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 8\n",
+                    "title": "NodeInterfaceInfo",
+                    "maxItems": 8,
+                    "items": {
+                        "$ref": "#/definitions/schemaNodeInterfaceInfo"
+                    },
+                    "x-displayname": "Node Interface Info",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "8"
+                    }
+                }
+            }
+        },
         "schemaObjectCreateMetaType": {
             "type": "object",
             "description": "ObjectCreateMetaType is metadata that can be specified in Create request of an object.",
@@ -3828,6 +3879,39 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "schemaviewsCloudSubnetParamType": {
+            "type": "object",
+            "description": "Parameters for creating a new cloud subnet",
+            "title": "Cloud Subnet Param",
+            "x-displayname": "New Cloud Subnet Parameters",
+            "x-ves-displayorder": "1,2",
+            "x-ves-proto-message": "ves.io.schema.views.CloudSubnetParamType",
+            "properties": {
+                "ipv4": {
+                    "type": "string",
+                    "description": " IPv4 subnet prefix for this subnet\n\nExample: - \"10.1.2.0/24\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.ipv4_prefix: true\n  ves.io.schema.rules.string.max_ip_prefix_length: 28\n",
+                    "title": "IPv4 Subnet",
+                    "x-displayname": "IPv4 Subnet",
+                    "x-ves-example": "10.1.2.0/24",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.ipv4_prefix": "true",
+                        "ves.io.schema.rules.string.max_ip_prefix_length": "28"
+                    }
+                },
+                "ipv6": {
+                    "type": "string",
+                    "description": " IPv6 subnet prefix for this subnet\n\nExample: - \"1234:568:abcd:9100::/64\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6_prefix: true\n",
+                    "title": "IPv6 Subnet",
+                    "x-displayname": "IPv6 Subnet",
+                    "x-ves-example": "1234:568:abcd:9100::/64",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.ipv6_prefix": "true"
+                    }
+                }
+            }
+        },
         "schemaviewsObjectRefType": {
             "type": "object",
             "description": "This type establishes a direct reference from one object(the referrer) to another(the referred).\nSuch a reference is in form of tenant/namespace/name",
@@ -3922,6 +4006,7 @@ var APISwaggerJSON string = `{
             "description": "F5 Distributed Cloud will automate provisioning (ex: node bringup) for this AWS site.",
             "title": "AWSManagedMode",
             "x-displayname": "Managed By F5XC",
+            "x-ves-oneof-field-cloud_connect_attachments": "[\"disabled\",\"tgw\"]",
             "x-ves-oneof-field-egress_gateway_choice": "[\"egress_gateway_default\",\"egress_nat_gw\",\"egress_virtual_private_gateway\"]",
             "x-ves-oneof-field-private_connectivity_choice": "[\"private_connectivity\",\"private_connectivity_disabled\"]",
             "x-ves-oneof-field-security_group_choice": "[\"custom_security_group\",\"f5xc_security_group\"]",
@@ -3955,6 +4040,12 @@ var APISwaggerJSON string = `{
                     "title": "Custom Security Groups for SLO and SLI Interface",
                     "$ref": "#/definitions/viewsSecurityGroupType",
                     "x-displayname": "Select this option to specify custom security groups for slo and sli interfaces."
+                },
+                "disabled": {
+                    "description": "Exclusive with [tgw]\n Disable Cloud Connect for this site",
+                    "title": "Disable Cloud Connect for this site",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
                 },
                 "disk_size": {
                     "type": "integer",
@@ -4045,6 +4136,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.map.max_pairs": "40",
                         "ves.io.schema.rules.map.values.string.max_len": "255"
                     }
+                },
+                "tgw": {
+                    "description": "Exclusive with [disabled]\n Enable Cloud Connect for this site",
+                    "title": "Enable Cloud Connect for this site",
+                    "$ref": "#/definitions/securemesh_site_v2TGWType",
+                    "x-displayname": "Enable"
                 },
                 "vpc_id": {
                     "type": "string",
@@ -4378,9 +4475,9 @@ var APISwaggerJSON string = `{
             "properties": {
                 "azure_az": {
                     "type": "string",
-                    "description": " Azure availability zone.\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"1\\\",\\\"2\\\",\\\"3\\\"]\n",
+                    "description": " A zone depicting a grouping of datacenters within an Azure region. Expecting numeric input\n\nExample: - \"1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.in: [\\\"1\\\",\\\"2\\\",\\\"3\\\"]\n",
                     "title": "Azure AZ",
-                    "x-displayname": "Azure AZ Name",
+                    "x-displayname": "Azure Availability Zone",
                     "x-ves-example": "1",
                     "x-ves-required": "true",
                     "x-ves-validation-rules": {
@@ -4557,13 +4654,17 @@ var APISwaggerJSON string = `{
         },
         "securemesh_site_v2BaremetalProviderType": {
             "type": "object",
-            "description": "x-displayName: \"Baremetal Provider Type\"\nBaremetal Provider Type",
+            "description": "Baremetal Provider Type",
             "title": "Baremetal Provider Type",
+            "x-displayname": "Baremetal Provider Type",
+            "x-ves-oneof-field-orchestration_choice": "[\"not_managed\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.BaremetalProviderType",
             "properties": {
                 "not_managed": {
-                    "description": "x-displayName: \"Not Managed By F5XC\"\nF5 Distributed Cloud will not automate any provisioning (ex: node bringup) for this site.\nCustomers will need to do this either via provider specific manual workflows\nor by using automation tools such as Terraform.",
+                    "description": "Exclusive with []\n F5 Distributed Cloud will not automate any provisioning (ex: node bringup) for this site.\n Customers will need to do this either via provider specific manual workflows\n or by using automation tools such as Terraform.",
                     "title": "Not Managed By F5XC",
-                    "$ref": "#/definitions/securemesh_site_v2NodeList"
+                    "$ref": "#/definitions/securemesh_site_v2NodeList",
+                    "x-displayname": "Not Managed By F5XC"
                 }
             }
         },
@@ -4810,13 +4911,17 @@ var APISwaggerJSON string = `{
         },
         "securemesh_site_v2EquinixProviderType": {
             "type": "object",
-            "description": "x-displayName: \"Equinix Provider Type\"\nEquinix Provider Type",
+            "description": "Equinix Provider Type",
             "title": "Equinix Provider Type",
+            "x-displayname": "Equinix Provider Type",
+            "x-ves-oneof-field-orchestration_choice": "[\"not_managed\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.EquinixProviderType",
             "properties": {
                 "not_managed": {
-                    "description": "x-displayName: \"Not Managed By F5XC\"\nF5 Distributed Cloud will not automate any provisioning (ex: node bringup) for this site.\nCustomers will need to do this either via provider specific manual workflows\nor by using automation tools such as Terraform.",
+                    "description": "Exclusive with []\n F5 Distributed Cloud will not automate any provisioning (ex: node bringup) for this site.\n Customers will need to do this either via provider specific manual workflows\n or by using automation tools such as Terraform.",
                     "title": "Not Managed By F5XC",
-                    "$ref": "#/definitions/securemesh_site_v2NodeList"
+                    "$ref": "#/definitions/securemesh_site_v2NodeList",
+                    "x-displayname": "Not Managed By F5XC"
                 }
             }
         },
@@ -5747,17 +5852,13 @@ var APISwaggerJSON string = `{
         },
         "securemesh_site_v2RSeriesProviderType": {
             "type": "object",
-            "description": "RSeries Provider Type",
+            "description": "x-displayName: \"RSeries Provider Type\"\nRSeries Provider Type",
             "title": "RSeries Provider Type",
-            "x-displayname": "RSeries Provider Type",
-            "x-ves-oneof-field-orchestration_choice": "[\"not_managed\"]",
-            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.RSeriesProviderType",
             "properties": {
                 "not_managed": {
-                    "description": "Exclusive with []\n F5 Distributed Cloud will not automate any provisioning (ex: node bringup) for this site.\n Customers will need to do this either via provider specific manual workflows\n or by using automation tools such as Terraform.",
+                    "description": "x-displayName: \"Not Managed By F5XC\"\nF5 Distributed Cloud will not automate any provisioning (ex: node bringup) for this site.\nCustomers will need to do this either via provider specific manual workflows\nor by using automation tools such as Terraform.",
                     "title": "Not Managed By F5XC",
-                    "$ref": "#/definitions/securemesh_site_v2NodeList",
-                    "x-displayname": "Not Managed By F5XC"
+                    "$ref": "#/definitions/securemesh_site_v2NodeList"
                 }
             }
         },
@@ -5785,6 +5886,60 @@ var APISwaggerJSON string = `{
         "securemesh_site_v2ReplaceResponse": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.ReplaceResponse"
+        },
+        "securemesh_site_v2SegmentNetworkConfiguration": {
+            "type": "object",
+            "description": "x-displayName: \"Segment Network Configuration\"\nSegment Network Configuration",
+            "title": "Segment Network Configuration",
+            "properties": {
+                "nameserver": {
+                    "type": "string",
+                    "description": "x-displayName: \"DNS V4 Server\"\nx-example: \"10.1.1.1\"\nOptional DNS V4 server IP to be used for name resolution",
+                    "title": "nameserver"
+                },
+                "nameserver_v6": {
+                    "type": "string",
+                    "description": "x-displayName: \"DNS V6 Server\"\nx-example: \"1001::1\"\nOptional DNS V6 server IP to be used for name resolution",
+                    "title": "nameserver_v6"
+                },
+                "no_static_routes": {
+                    "description": "x-displayName: \"Disable Static Routes\"\nStatic IPv4 Routes disabled for this Segment Network (VRF).",
+                    "title": "Do Not Manage Static Routes",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "no_v6_static_routes": {
+                    "description": "x-displayName: \"Disable IPv6 Static Routes\"\nStatic IPv6 Routes disabled for this segment Network (VRF).",
+                    "title": "Do Not Manage IPv6 Static Routes",
+                    "$ref": "#/definitions/ioschemaEmpty"
+                },
+                "static_routes": {
+                    "description": "x-displayName: \"Manage Static routes\"\nManage IPv4 static routes for this Segment Network (VRF).",
+                    "title": "Manage Static routes",
+                    "$ref": "#/definitions/securemesh_site_v2StaticRoutesListType"
+                },
+                "static_v6_routes": {
+                    "description": "x-displayName: \"Manage IPv6 Static routes\"\nManage IPv6 static routes for this Segment Nework(VRF).",
+                    "title": "Manage IPv6 Static routes",
+                    "$ref": "#/definitions/virtual_networkStaticV6RoutesListType"
+                }
+            }
+        },
+        "securemesh_site_v2SegmentVRFSettingType": {
+            "type": "object",
+            "description": "x-displayName: \"Segment VRF Settings\"\nThe Segment VRF is valid across all Sites of a Tenant. These are identified with a Segment name. Though these VRFs are across all Sites of a Tenant, there are some configurations that are valid\nper Site that can be configured here",
+            "title": "Segment VRF Settings",
+            "properties": {
+                "segment_config": {
+                    "description": "x-displayName: \"Configure segment Network\"\nConfigure properties such as static routes, DNS and common VIP for Load Balancing on the segment VRF.",
+                    "title": "Configure Segment Network",
+                    "$ref": "#/definitions/securemesh_site_v2SegmentNetworkConfiguration"
+                },
+                "segment_network": {
+                    "description": "x-displayName: \"Segment (Global VRF)\"",
+                    "title": "Segment",
+                    "$ref": "#/definitions/schemaviewsObjectRefType"
+                }
+            }
         },
         "securemesh_site_v2SingleInterface": {
             "type": "object",
@@ -5913,6 +6068,41 @@ var APISwaggerJSON string = `{
                         "$ref": "#/definitions/ioschemaObjectRefType"
                     },
                     "x-displayname": "Config Object"
+                }
+            }
+        },
+        "securemesh_site_v2TGWType": {
+            "type": "object",
+            "description": "Configure Transit Gateway to be used with Cloud Connect",
+            "title": "Transit Gateway for Cloud Connect",
+            "x-displayname": "Transit Gateway Configuration",
+            "x-ves-oneof-field-tgw_choice": "[\"existing_tgw\",\"new_tgw\"]",
+            "x-ves-oneof-field-tgw_cidr_choice": "[\"reserved_tgw_cidr\",\"tgw_cidr\"]",
+            "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.TGWType",
+            "properties": {
+                "existing_tgw": {
+                    "description": "Exclusive with [new_tgw]\n Information about existing TGW",
+                    "title": "Existing TGW",
+                    "$ref": "#/definitions/viewsExistingTGWType",
+                    "x-displayname": "Existing TGW"
+                },
+                "new_tgw": {
+                    "description": "Exclusive with [existing_tgw]\n Details needed to create new TGW",
+                    "title": "New Transit Gateway",
+                    "$ref": "#/definitions/viewsTGWParamsType",
+                    "x-displayname": "New Transit Gateway"
+                },
+                "reserved_tgw_cidr": {
+                    "description": "Exclusive with [tgw_cidr]\n Autogenerate and reserve a TGW CIDR Block from the Primary CIDR",
+                    "title": "Reserved TGW CIDR Choice",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Autogenerate TGW CIDR Block"
+                },
+                "tgw_cidr": {
+                    "description": "Exclusive with [reserved_tgw_cidr]\n Specify TGW CIDR block",
+                    "title": "TGW CIDR Choice",
+                    "$ref": "#/definitions/schemaviewsCloudSubnetParamType",
+                    "x-displayname": "Specify TGW CIDR block"
                 }
             }
         },
@@ -6346,6 +6536,51 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsExistingTGWType": {
+            "type": "object",
+            "description": "Information needed for existing TGW",
+            "title": "Existing TGW Type",
+            "x-displayname": "Existing TGW Type",
+            "x-ves-proto-message": "ves.io.schema.views.ExistingTGWType",
+            "properties": {
+                "tgw_asn": {
+                    "type": "integer",
+                    "description": " TGW ASN.\n\nExample: - \"64500\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "TGW ASN",
+                    "format": "int64",
+                    "x-displayname": "Enter TGW ASN",
+                    "x-ves-example": "64500",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "tgw_id": {
+                    "type": "string",
+                    "description": " Existing TGW ID\n\nExample: - \"tgw-12345678901234567\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 64\n  ves.io.schema.rules.string.pattern: ^(tgw-)([a-z0-9]{8}|[a-z0-9]{17})$\n",
+                    "title": "Existing TGW ID",
+                    "maxLength": 64,
+                    "x-displayname": "Existing TGW ID",
+                    "x-ves-example": "tgw-12345678901234567",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "64",
+                        "ves.io.schema.rules.string.pattern": "^(tgw-)([a-z0-9]{8}|[a-z0-9]{17})$"
+                    }
+                },
+                "volterra_site_asn": {
+                    "type": "integer",
+                    "description": " F5XC Site ASN.\n\nExample: - \"64501\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "F5XC Site ASN",
+                    "format": "int64",
+                    "x-displayname": "Enter F5XC Site ASN",
+                    "x-ves-example": "64501",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                }
+            }
+        },
         "viewsKubernetesUpgradeDrain": {
             "type": "object",
             "description": "Specify how worker nodes within a site will be upgraded.",
@@ -6673,6 +6908,60 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "viewsTGWAssignedASNType": {
+            "type": "object",
+            "description": "Information needed when ASNs are assigned by the user",
+            "title": "TGW Assigned ASN Type",
+            "x-displayname": "TGW Assigned ASN Type",
+            "x-ves-proto-message": "ves.io.schema.views.TGWAssignedASNType",
+            "properties": {
+                "tgw_asn": {
+                    "type": "integer",
+                    "description": " TGW ASN. Allowed range for 16-bit private ASNs include 64512 to 65534.\n\nExample: - \"64512\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 64512\n  ves.io.schema.rules.uint32.lte: 65534\n",
+                    "title": "TGW ASN",
+                    "format": "int64",
+                    "x-displayname": "Enter TGW ASN",
+                    "x-ves-example": "64512",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "64512",
+                        "ves.io.schema.rules.uint32.lte": "65534"
+                    }
+                },
+                "volterra_site_asn": {
+                    "type": "integer",
+                    "description": " F5XC Site ASN.\n\nExample: - \"64500\"-\n\nValidation Rules:\n  ves.io.schema.rules.uint32.gt: 0\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "F5XC Site ASN",
+                    "format": "int64",
+                    "x-displayname": "Enter F5XC Site ASN",
+                    "x-ves-example": "64500",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.uint32.gt": "0",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                }
+            }
+        },
+        "viewsTGWParamsType": {
+            "type": "object",
+            "title": "TGWParamsType",
+            "x-displayname": "TGWParamsType",
+            "x-ves-oneof-field-asn_choice": "[\"system_generated\",\"user_assigned\"]",
+            "x-ves-proto-message": "ves.io.schema.views.TGWParamsType",
+            "properties": {
+                "system_generated": {
+                    "description": "Exclusive with [user_assigned]\n F5XC will automatically assign a private ASN for TGW and F5XC Site",
+                    "title": "System Generated",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Automatic"
+                },
+                "user_assigned": {
+                    "description": "Exclusive with [system_generated]\n User is managing the ASN for TGW and F5XC Site.",
+                    "title": "User Assigned",
+                    "$ref": "#/definitions/viewsTGWAssignedASNType",
+                    "x-displayname": "User will assign ASN for TGW and F5XC Site"
+                }
+            }
+        },
         "viewsVolterraSoftwareType": {
             "type": "object",
             "description": "Select the F5XC Software Version for the site. By default, latest available F5XC Software Version will be used.\nRefer to release notes to find required released SW versions.",
@@ -6813,10 +7102,11 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_enhanced_firewall_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-node_ha_choice": "[\"disable_ha\",\"enable_ha\"]",
-            "x-ves-oneof-field-provider_choice": "[\"aws\",\"azure\",\"gcp\",\"kvm\",\"nutanix\",\"oci\",\"openstack\",\"rseries\",\"vmware\"]",
+            "x-ves-oneof-field-provider_choice": "[\"aws\",\"azure\",\"baremetal\",\"equinix\",\"gcp\",\"kvm\",\"nutanix\",\"oci\",\"openstack\",\"vmware\"]",
             "x-ves-oneof-field-proxy_bypass_choice": "[\"custom_proxy_bypass\",\"no_proxy_bypass\"]",
             "x-ves-oneof-field-s2s_connectivity_sli_choice": "[\"dc_cluster_group_sli\",\"no_s2s_connectivity_sli\"]",
             "x-ves-oneof-field-s2s_connectivity_slo_choice": "[\"dc_cluster_group_slo\",\"no_s2s_connectivity_slo\",\"site_mesh_group_on_slo\"]",
+            "x-ves-oneof-field-url_categorization_choice": "[\"disable_url_categorization\",\"enable_url_categorization\"]",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.CreateSpecType",
             "properties": {
                 "active_enhanced_firewall_policies": {
@@ -6835,14 +7125,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Admin User Credentials"
                 },
                 "aws": {
-                    "description": "Exclusive with [azure gcp kvm nutanix oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [azure baremetal equinix gcp kvm nutanix oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2AWSProviderType",
                     "x-displayname": "AWS"
                 },
                 "azure": {
-                    "description": "Exclusive with [aws gcp kvm nutanix oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws baremetal equinix gcp kvm nutanix oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2AzureProviderType",
                     "x-displayname": "Azure"
+                },
+                "baremetal": {
+                    "description": "Exclusive with [aws azure equinix gcp kvm nutanix oci openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2BaremetalProviderType",
+                    "x-displayname": "Baremetal"
                 },
                 "block_all_services": {
                     "description": "Exclusive with [blocked_services]\n Enable WebUI, SSH and DNS on all nodes in this site.",
@@ -6879,6 +7174,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_url_categorization": {
+                    "description": "Exclusive with [enable_url_categorization]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "dns_ntp_config": {
                     "description": " Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site.",
                     "$ref": "#/definitions/securemesh_site_v2DNSNTPServerConfig",
@@ -6889,18 +7189,28 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable"
                 },
+                "enable_url_categorization": {
+                    "description": "Exclusive with [disable_url_categorization]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
+                "equinix": {
+                    "description": "Exclusive with [aws azure baremetal gcp kvm nutanix oci openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2EquinixProviderType",
+                    "x-displayname": "Equinix"
+                },
                 "f5_proxy": {
                     "description": "Exclusive with [custom_proxy]\n Use the F5 Enterprise Proxy hosted on the F5 Global Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "F5 Enterprise Proxy"
                 },
                 "gcp": {
-                    "description": "Exclusive with [aws azure kvm nutanix oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix kvm nutanix oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2GCPProviderType",
                     "x-displayname": "GCP"
                 },
                 "kvm": {
-                    "description": "Exclusive with [aws azure gcp nutanix oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp nutanix oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2KVMProviderType",
                     "x-displayname": "KVM (EA)"
                 },
@@ -6950,12 +7260,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disabled"
                 },
                 "nutanix": {
-                    "description": "Exclusive with [aws azure gcp kvm oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2NutanixProviderType",
                     "x-displayname": "Nutanix"
                 },
                 "oci": {
-                    "description": "Exclusive with [aws azure gcp kvm nutanix openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm nutanix openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OCIProviderType",
                     "x-displayname": "OCI"
                 },
@@ -6965,7 +7275,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Offline Survivability Mode"
                 },
                 "openstack": {
-                    "description": "Exclusive with [aws azure gcp kvm nutanix oci rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm nutanix oci vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OpenstackProviderType",
                     "x-displayname": "OpenStack"
                 },
@@ -6978,11 +7288,6 @@ var APISwaggerJSON string = `{
                     "description": " Selection criteria to connect the site with F5 Distributed Cloud Regional Edge(s).",
                     "$ref": "#/definitions/viewsRegionalEdgeSelection",
                     "x-displayname": "Regional Edge Selection"
-                },
-                "rseries": {
-                    "description": "Exclusive with [aws azure gcp kvm nutanix oci openstack vmware]\n",
-                    "$ref": "#/definitions/securemesh_site_v2RSeriesProviderType",
-                    "x-displayname": "F5 rSeries (EA)"
                 },
                 "site_mesh_group_on_slo": {
                     "description": "Exclusive with [dc_cluster_group_slo no_s2s_connectivity_slo]\n Use a Site Mesh Group to connect to other sites.",
@@ -7016,7 +7321,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Upgrade Settings"
                 },
                 "vmware": {
-                    "description": "Exclusive with [aws azure gcp kvm nutanix oci openstack rseries]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm nutanix oci openstack]\n",
                     "$ref": "#/definitions/securemesh_site_v2VMwareProviderType",
                     "x-displayname": "VMWare"
                 }
@@ -7066,10 +7371,11 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_enhanced_firewall_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-node_ha_choice": "[\"disable_ha\",\"enable_ha\"]",
-            "x-ves-oneof-field-provider_choice": "[\"aws\",\"azure\",\"gcp\",\"kvm\",\"nutanix\",\"oci\",\"openstack\",\"rseries\",\"vmware\"]",
+            "x-ves-oneof-field-provider_choice": "[\"aws\",\"azure\",\"baremetal\",\"equinix\",\"gcp\",\"kvm\",\"nutanix\",\"oci\",\"openstack\",\"vmware\"]",
             "x-ves-oneof-field-proxy_bypass_choice": "[\"custom_proxy_bypass\",\"no_proxy_bypass\"]",
             "x-ves-oneof-field-s2s_connectivity_sli_choice": "[\"dc_cluster_group_sli\",\"no_s2s_connectivity_sli\"]",
             "x-ves-oneof-field-s2s_connectivity_slo_choice": "[\"dc_cluster_group_slo\",\"no_s2s_connectivity_slo\",\"site_mesh_group_on_slo\"]",
+            "x-ves-oneof-field-url_categorization_choice": "[\"disable_url_categorization\",\"enable_url_categorization\"]",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.GetSpecType",
             "properties": {
                 "active_enhanced_firewall_policies": {
@@ -7088,14 +7394,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Admin User Credentials"
                 },
                 "aws": {
-                    "description": "Exclusive with [azure gcp kvm nutanix oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [azure baremetal equinix gcp kvm nutanix oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2AWSProviderType",
                     "x-displayname": "AWS"
                 },
                 "azure": {
-                    "description": "Exclusive with [aws gcp kvm nutanix oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws baremetal equinix gcp kvm nutanix oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2AzureProviderType",
                     "x-displayname": "Azure"
+                },
+                "baremetal": {
+                    "description": "Exclusive with [aws azure equinix gcp kvm nutanix oci openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2BaremetalProviderType",
+                    "x-displayname": "Baremetal"
                 },
                 "block_all_services": {
                     "description": "Exclusive with [blocked_services]\n Enable WebUI, SSH and DNS on all nodes in this site.",
@@ -7132,6 +7443,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_url_categorization": {
+                    "description": "Exclusive with [enable_url_categorization]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "dns_ntp_config": {
                     "description": " Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site.",
                     "$ref": "#/definitions/securemesh_site_v2DNSNTPServerConfig",
@@ -7142,18 +7458,28 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable"
                 },
+                "enable_url_categorization": {
+                    "description": "Exclusive with [disable_url_categorization]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
+                "equinix": {
+                    "description": "Exclusive with [aws azure baremetal gcp kvm nutanix oci openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2EquinixProviderType",
+                    "x-displayname": "Equinix"
+                },
                 "f5_proxy": {
                     "description": "Exclusive with [custom_proxy]\n Use the F5 Enterprise Proxy hosted on the F5 Global Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "F5 Enterprise Proxy"
                 },
                 "gcp": {
-                    "description": "Exclusive with [aws azure kvm nutanix oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix kvm nutanix oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2GCPProviderType",
                     "x-displayname": "GCP"
                 },
                 "kvm": {
-                    "description": "Exclusive with [aws azure gcp nutanix oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp nutanix oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2KVMProviderType",
                     "x-displayname": "KVM (EA)"
                 },
@@ -7203,12 +7529,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disabled"
                 },
                 "nutanix": {
-                    "description": "Exclusive with [aws azure gcp kvm oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2NutanixProviderType",
                     "x-displayname": "Nutanix"
                 },
                 "oci": {
-                    "description": "Exclusive with [aws azure gcp kvm nutanix openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm nutanix openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OCIProviderType",
                     "x-displayname": "OCI"
                 },
@@ -7218,7 +7544,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Offline Survivability Mode"
                 },
                 "openstack": {
-                    "description": "Exclusive with [aws azure gcp kvm nutanix oci rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm nutanix oci vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OpenstackProviderType",
                     "x-displayname": "OpenStack"
                 },
@@ -7241,11 +7567,6 @@ var APISwaggerJSON string = `{
                     "description": " Selection criteria to connect the site with F5 Distributed Cloud Regional Edge(s).",
                     "$ref": "#/definitions/viewsRegionalEdgeSelection",
                     "x-displayname": "Regional Edge Selection"
-                },
-                "rseries": {
-                    "description": "Exclusive with [aws azure gcp kvm nutanix oci openstack vmware]\n",
-                    "$ref": "#/definitions/securemesh_site_v2RSeriesProviderType",
-                    "x-displayname": "F5 rSeries (EA)"
                 },
                 "site_errors": {
                     "type": "array",
@@ -7293,7 +7614,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Upgrade Settings"
                 },
                 "vmware": {
-                    "description": "Exclusive with [aws azure gcp kvm nutanix oci openstack rseries]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm nutanix oci openstack]\n",
                     "$ref": "#/definitions/securemesh_site_v2VMwareProviderType",
                     "x-displayname": "VMWare"
                 },
@@ -7375,10 +7696,11 @@ var APISwaggerJSON string = `{
             "x-ves-oneof-field-logs_receiver_choice": "[\"log_receiver\",\"logs_streaming_disabled\"]",
             "x-ves-oneof-field-network_policy_choice": "[\"active_enhanced_firewall_policies\",\"no_network_policy\"]",
             "x-ves-oneof-field-node_ha_choice": "[\"disable_ha\",\"enable_ha\"]",
-            "x-ves-oneof-field-provider_choice": "[\"aws\",\"azure\",\"gcp\",\"kvm\",\"nutanix\",\"oci\",\"openstack\",\"rseries\",\"vmware\"]",
+            "x-ves-oneof-field-provider_choice": "[\"aws\",\"azure\",\"baremetal\",\"equinix\",\"gcp\",\"kvm\",\"nutanix\",\"oci\",\"openstack\",\"vmware\"]",
             "x-ves-oneof-field-proxy_bypass_choice": "[\"custom_proxy_bypass\",\"no_proxy_bypass\"]",
             "x-ves-oneof-field-s2s_connectivity_sli_choice": "[\"dc_cluster_group_sli\",\"no_s2s_connectivity_sli\"]",
             "x-ves-oneof-field-s2s_connectivity_slo_choice": "[\"dc_cluster_group_slo\",\"no_s2s_connectivity_slo\",\"site_mesh_group_on_slo\"]",
+            "x-ves-oneof-field-url_categorization_choice": "[\"disable_url_categorization\",\"enable_url_categorization\"]",
             "x-ves-proto-message": "ves.io.schema.views.securemesh_site_v2.ReplaceSpecType",
             "properties": {
                 "active_enhanced_firewall_policies": {
@@ -7397,14 +7719,19 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Admin User Credentials"
                 },
                 "aws": {
-                    "description": "Exclusive with [azure gcp kvm nutanix oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [azure baremetal equinix gcp kvm nutanix oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2AWSProviderType",
                     "x-displayname": "AWS"
                 },
                 "azure": {
-                    "description": "Exclusive with [aws gcp kvm nutanix oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws baremetal equinix gcp kvm nutanix oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2AzureProviderType",
                     "x-displayname": "Azure"
+                },
+                "baremetal": {
+                    "description": "Exclusive with [aws azure equinix gcp kvm nutanix oci openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2BaremetalProviderType",
+                    "x-displayname": "Baremetal"
                 },
                 "block_all_services": {
                     "description": "Exclusive with [blocked_services]\n Enable WebUI, SSH and DNS on all nodes in this site.",
@@ -7441,6 +7768,11 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Disable"
                 },
+                "disable_url_categorization": {
+                    "description": "Exclusive with [enable_url_categorization]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Disable"
+                },
                 "dns_ntp_config": {
                     "description": " Specify DNS and NTP servers that will be used by the nodes in this Customer Edge site.",
                     "$ref": "#/definitions/securemesh_site_v2DNSNTPServerConfig",
@@ -7451,18 +7783,28 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Enable"
                 },
+                "enable_url_categorization": {
+                    "description": "Exclusive with [disable_url_categorization]\n",
+                    "$ref": "#/definitions/ioschemaEmpty",
+                    "x-displayname": "Enable"
+                },
+                "equinix": {
+                    "description": "Exclusive with [aws azure baremetal gcp kvm nutanix oci openstack vmware]\n",
+                    "$ref": "#/definitions/securemesh_site_v2EquinixProviderType",
+                    "x-displayname": "Equinix"
+                },
                 "f5_proxy": {
                     "description": "Exclusive with [custom_proxy]\n Use the F5 Enterprise Proxy hosted on the F5 Global Network",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "F5 Enterprise Proxy"
                 },
                 "gcp": {
-                    "description": "Exclusive with [aws azure kvm nutanix oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix kvm nutanix oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2GCPProviderType",
                     "x-displayname": "GCP"
                 },
                 "kvm": {
-                    "description": "Exclusive with [aws azure gcp nutanix oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp nutanix oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2KVMProviderType",
                     "x-displayname": "KVM (EA)"
                 },
@@ -7512,12 +7854,12 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Disabled"
                 },
                 "nutanix": {
-                    "description": "Exclusive with [aws azure gcp kvm oci openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm oci openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2NutanixProviderType",
                     "x-displayname": "Nutanix"
                 },
                 "oci": {
-                    "description": "Exclusive with [aws azure gcp kvm nutanix openstack rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm nutanix openstack vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OCIProviderType",
                     "x-displayname": "OCI"
                 },
@@ -7527,7 +7869,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Offline Survivability Mode"
                 },
                 "openstack": {
-                    "description": "Exclusive with [aws azure gcp kvm nutanix oci rseries vmware]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm nutanix oci vmware]\n",
                     "$ref": "#/definitions/securemesh_site_v2OpenstackProviderType",
                     "x-displayname": "OpenStack"
                 },
@@ -7540,11 +7882,6 @@ var APISwaggerJSON string = `{
                     "description": " Selection criteria to connect the site with F5 Distributed Cloud Regional Edge(s).",
                     "$ref": "#/definitions/viewsRegionalEdgeSelection",
                     "x-displayname": "Regional Edge Selection"
-                },
-                "rseries": {
-                    "description": "Exclusive with [aws azure gcp kvm nutanix oci openstack vmware]\n",
-                    "$ref": "#/definitions/securemesh_site_v2RSeriesProviderType",
-                    "x-displayname": "F5 rSeries (EA)"
                 },
                 "site_mesh_group_on_slo": {
                     "description": "Exclusive with [dc_cluster_group_slo no_s2s_connectivity_slo]\n Use a Site Mesh Group to connect to other sites.",
@@ -7578,7 +7915,7 @@ var APISwaggerJSON string = `{
                     "x-displayname": "Upgrade Settings"
                 },
                 "vmware": {
-                    "description": "Exclusive with [aws azure gcp kvm nutanix oci openstack rseries]\n",
+                    "description": "Exclusive with [aws azure baremetal equinix gcp kvm nutanix oci openstack]\n",
                     "$ref": "#/definitions/securemesh_site_v2VMwareProviderType",
                     "x-displayname": "VMWare"
                 }
@@ -7589,7 +7926,7 @@ var APISwaggerJSON string = `{
             "description": "Defines a static route, configuring a list of prefixes and a next-hop to be used for them",
             "title": "Static Route",
             "x-displayname": "Static Route",
-            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"interface\",\"ip_address\"]",
+            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"ip_address\",\"node_interface\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.StaticRouteViewType",
             "properties": {
                 "attrs": {
@@ -7607,20 +7944,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to the default gateway",
+                    "description": "Exclusive with [ip_address node_interface]\n Traffic matching the ip prefixes is sent to the default gateway",
                     "title": "Default Gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
-                "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
-                    "title": "Interface",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Interface"
-                },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
+                    "description": "Exclusive with [default_gateway node_interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv4: true\n",
                     "title": "IP Address",
                     "x-displayname": "IP Address",
                     "x-ves-validation-rules": {
@@ -7646,6 +7977,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "node_interface": {
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
+                    "title": "Node Interface",
+                    "$ref": "#/definitions/schemaNodeInterfaceType",
+                    "x-displayname": "Node Interface"
                 }
             }
         },
@@ -7654,7 +7991,7 @@ var APISwaggerJSON string = `{
             "description": "Defines a static route of IPv6 prefixes, configuring a list of prefixes and a next-hop to be used for them",
             "title": "Static IPv6 Route",
             "x-displayname": "Static IPv6 Route",
-            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"interface\",\"ip_address\"]",
+            "x-ves-oneof-field-next_hop_choice": "[\"default_gateway\",\"ip_address\",\"node_interface\"]",
             "x-ves-proto-message": "ves.io.schema.virtual_network.StaticV6RouteViewType",
             "properties": {
                 "attrs": {
@@ -7672,20 +8009,14 @@ var APISwaggerJSON string = `{
                     }
                 },
                 "default_gateway": {
-                    "description": "Exclusive with [interface ip_address]\n Traffic matching the ip prefixes is sent to the default gateway",
+                    "description": "Exclusive with [ip_address node_interface]\n Traffic matching the ip prefixes is sent to the default gateway",
                     "title": "Default Gateway",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Default Gateway"
                 },
-                "interface": {
-                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
-                    "title": "Interface",
-                    "$ref": "#/definitions/schemaviewsObjectRefType",
-                    "x-displayname": "Interface"
-                },
                 "ip_address": {
                     "type": "string",
-                    "description": "Exclusive with [default_gateway interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
+                    "description": "Exclusive with [default_gateway node_interface]\n Traffic matching the ip prefixes is sent to this IP Address\n\nValidation Rules:\n  ves.io.schema.rules.string.ipv6: true\n",
                     "title": "IP Address",
                     "x-displayname": "IP Address",
                     "x-ves-validation-rules": {
@@ -7711,6 +8042,12 @@ var APISwaggerJSON string = `{
                         "ves.io.schema.rules.repeated.min_items": "1",
                         "ves.io.schema.rules.repeated.unique": "true"
                     }
+                },
+                "node_interface": {
+                    "description": "Exclusive with [default_gateway ip_address]\n Traffic matching the ip prefixes is sent to this interface",
+                    "title": "Node Interface",
+                    "$ref": "#/definitions/schemaNodeInterfaceType",
+                    "x-displayname": "Node Interface"
                 }
             }
         },

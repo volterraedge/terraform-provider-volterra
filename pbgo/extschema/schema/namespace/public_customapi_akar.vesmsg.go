@@ -108,10 +108,28 @@ func (v *ValidateAllApplicationInventoryRequest) Validate(ctx context.Context, p
 
 	}
 
+	if fv, exists := v.FldValidators["nginx_one_server_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_one_server_filter"))
+		if err := fv(ctx, m.GetNginxOneServerFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tcp_load_balancer_filter"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tcp_load_balancer_filter"))
 		if err := fv(ctx, m.GetTcpLoadBalancerFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["third_party_application_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("third_party_application_filter"))
+		if err := fv(ctx, m.GetThirdPartyApplicationFilter(), vOpts...); err != nil {
 			return err
 		}
 
@@ -456,10 +474,28 @@ func (v *ValidateApplicationInventoryRequest) Validate(ctx context.Context, pm i
 
 	}
 
+	if fv, exists := v.FldValidators["nginx_one_server_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_one_server_filter"))
+		if err := fv(ctx, m.GetNginxOneServerFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["tcp_load_balancer_filter"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("tcp_load_balancer_filter"))
 		if err := fv(ctx, m.GetTcpLoadBalancerFilter(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["third_party_application_filter"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("third_party_application_filter"))
+		if err := fv(ctx, m.GetThirdPartyApplicationFilter(), vOpts...); err != nil {
 			return err
 		}
 
@@ -637,6 +673,15 @@ func (v *ValidateApplicationInventoryResponse) Validate(ctx context.Context, pm 
 
 	}
 
+	if fv, exists := v.FldValidators["nginx_one_servers"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_one_servers"))
+		if err := fv(ctx, m.GetNginxOneServers(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["origin_pools"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("origin_pools"))
@@ -664,6 +709,15 @@ func (v *ValidateApplicationInventoryResponse) Validate(ctx context.Context, pm 
 
 	}
 
+	if fv, exists := v.FldValidators["third_party_applications"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("third_party_applications"))
+		if err := fv(ctx, m.GetThirdPartyApplications(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
 	if fv, exists := v.FldValidators["udp_loadbalancers"]; exists {
 
 		vOpts := append(opts, db.WithValidateField("udp_loadbalancers"))
@@ -683,6 +737,8 @@ var DefaultApplicationInventoryResponseValidator = func() *ValidateApplicationIn
 	v.FldValidators["http_loadbalancers"] = HTTPLoadbalancerInventoryTypeValidator().Validate
 
 	v.FldValidators["cdn_loadbalancers"] = HTTPLoadbalancerInventoryTypeValidator().Validate
+
+	v.FldValidators["nginx_one_servers"] = NGINXOneServerInventoryTypeValidator().Validate
 
 	return v
 }()
@@ -3345,6 +3401,415 @@ func HTTPLoadbalancerWafFilterResultTypeValidator() db.Validator {
 
 // augmented methods on protoc/std generated struct
 
+func (m *NGINXOneServerInventoryFilterType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NGINXOneServerInventoryFilterType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NGINXOneServerInventoryFilterType) DeepCopy() *NGINXOneServerInventoryFilterType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NGINXOneServerInventoryFilterType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NGINXOneServerInventoryFilterType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NGINXOneServerInventoryFilterType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NGINXOneServerInventoryFilterTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNGINXOneServerInventoryFilterType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNGINXOneServerInventoryFilterType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NGINXOneServerInventoryFilterType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NGINXOneServerInventoryFilterType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_discovery"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_discovery"))
+		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_configured"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_configured"))
+		if err := fv(ctx, m.GetWafConfigured(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNGINXOneServerInventoryFilterTypeValidator = func() *ValidateNGINXOneServerInventoryFilterType {
+	v := &ValidateNGINXOneServerInventoryFilterType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func NGINXOneServerInventoryFilterTypeValidator() db.Validator {
+	return DefaultNGINXOneServerInventoryFilterTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NGINXOneServerInventoryType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NGINXOneServerInventoryType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NGINXOneServerInventoryType) DeepCopy() *NGINXOneServerInventoryType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NGINXOneServerInventoryType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NGINXOneServerInventoryType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NGINXOneServerInventoryType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NGINXOneServerInventoryTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNGINXOneServerInventoryType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNGINXOneServerInventoryType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NGINXOneServerInventoryType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NGINXOneServerInventoryType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_discovery_enabled_server_count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_discovery_enabled_server_count"))
+		if err := fv(ctx, m.GetApiDiscoveryEnabledServerCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nginx_server_results"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_server_results"))
+		for idx, item := range m.GetNginxServerResults() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_enabled_server_count"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_enabled_server_count"))
+		if err := fv(ctx, m.GetWafEnabledServerCount(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNGINXOneServerInventoryTypeValidator = func() *ValidateNGINXOneServerInventoryType {
+	v := &ValidateNGINXOneServerInventoryType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	v.FldValidators["nginx_server_results"] = NGINXOneServerResultTypeValidator().Validate
+
+	return v
+}()
+
+func NGINXOneServerInventoryTypeValidator() db.Validator {
+	return DefaultNGINXOneServerInventoryTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *NGINXOneServerResultType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *NGINXOneServerResultType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *NGINXOneServerResultType) DeepCopy() *NGINXOneServerResultType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &NGINXOneServerResultType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *NGINXOneServerResultType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *NGINXOneServerResultType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return NGINXOneServerResultTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateNGINXOneServerResultType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateNGINXOneServerResultType) WafPolicyManagementPlatformValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewStringValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for waf_policy_management_platform")
+	}
+
+	return validatorFn, nil
+}
+
+func (v *ValidateNGINXOneServerResultType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*NGINXOneServerResultType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *NGINXOneServerResultType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_discovery_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_discovery_enabled"))
+		if err := fv(ctx, m.GetApiDiscoveryEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["domains"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("domains"))
+		for idx, item := range m.GetDomains() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nginx_one_object_id"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_one_object_id"))
+		if err := fv(ctx, m.GetNginxOneObjectId(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nginx_one_object_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_one_object_name"))
+		if err := fv(ctx, m.GetNginxOneObjectName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["nginx_one_server_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("nginx_one_server_name"))
+		if err := fv(ctx, m.GetNginxOneServerName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["total_routes"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("total_routes"))
+		if err := fv(ctx, m.GetTotalRoutes(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_enforcement_mode"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_enforcement_mode"))
+		if err := fv(ctx, m.GetWafEnforcementMode(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_policy_file_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_policy_file_name"))
+		if err := fv(ctx, m.GetWafPolicyFileName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_policy_management_platform"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_policy_management_platform"))
+		if err := fv(ctx, m.GetWafPolicyManagementPlatform(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_policy_name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_policy_name"))
+		if err := fv(ctx, m.GetWafPolicyName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_security_log_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_security_log_enabled"))
+		if err := fv(ctx, m.GetWafSecurityLogEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["waf_security_log_file_names"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("waf_security_log_file_names"))
+		for idx, item := range m.GetWafSecurityLogFileNames() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultNGINXOneServerResultTypeValidator = func() *ValidateNGINXOneServerResultType {
+	v := &ValidateNGINXOneServerResultType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	var (
+		err error
+		vFn db.ValidatorFunc
+	)
+	_, _ = err, vFn
+	vFnMap := map[string]db.ValidatorFunc{}
+	_ = vFnMap
+
+	vrhWafPolicyManagementPlatform := v.WafPolicyManagementPlatformValidationRuleHandler
+	rulesWafPolicyManagementPlatform := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhWafPolicyManagementPlatform(rulesWafPolicyManagementPlatform)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for NGINXOneServerResultType.waf_policy_management_platform: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["waf_policy_management_platform"] = vFn
+
+	return v
+}()
+
+func NGINXOneServerResultTypeValidator() db.Validator {
+	return DefaultNGINXOneServerResultTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
 func (m *NetworkingInventoryRequest) ToJSON() (string, error) {
 	return codec.ToJSON(m)
 }
@@ -5058,6 +5523,261 @@ var DefaultTCPLoadbalancerResultTypeValidator = func() *ValidateTCPLoadbalancerR
 
 func TCPLoadbalancerResultTypeValidator() db.Validator {
 	return DefaultTCPLoadbalancerResultTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ThirdPartyApplicationFilterType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ThirdPartyApplicationFilterType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ThirdPartyApplicationFilterType) DeepCopy() *ThirdPartyApplicationFilterType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ThirdPartyApplicationFilterType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ThirdPartyApplicationFilterType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ThirdPartyApplicationFilterType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ThirdPartyApplicationFilterTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateThirdPartyApplicationFilterType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateThirdPartyApplicationFilterType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ThirdPartyApplicationFilterType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ThirdPartyApplicationFilterType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_discovery"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_discovery"))
+		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultThirdPartyApplicationFilterTypeValidator = func() *ValidateThirdPartyApplicationFilterType {
+	v := &ValidateThirdPartyApplicationFilterType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ThirdPartyApplicationFilterTypeValidator() db.Validator {
+	return DefaultThirdPartyApplicationFilterTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ThirdPartyApplicationInventoryType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ThirdPartyApplicationInventoryType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ThirdPartyApplicationInventoryType) DeepCopy() *ThirdPartyApplicationInventoryType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ThirdPartyApplicationInventoryType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ThirdPartyApplicationInventoryType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ThirdPartyApplicationInventoryType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ThirdPartyApplicationInventoryTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateThirdPartyApplicationInventoryType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateThirdPartyApplicationInventoryType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ThirdPartyApplicationInventoryType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ThirdPartyApplicationInventoryType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_discovery"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_discovery"))
+		if err := fv(ctx, m.GetApiDiscovery(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["third_party_application_results"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("third_party_application_results"))
+		for idx, item := range m.GetThirdPartyApplicationResults() {
+			vOpts := append(vOpts, db.WithValidateRepItem(idx), db.WithValidateIsRepItem(true))
+			if err := fv(ctx, item, vOpts...); err != nil {
+				return err
+			}
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultThirdPartyApplicationInventoryTypeValidator = func() *ValidateThirdPartyApplicationInventoryType {
+	v := &ValidateThirdPartyApplicationInventoryType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ThirdPartyApplicationInventoryTypeValidator() db.Validator {
+	return DefaultThirdPartyApplicationInventoryTypeValidator
+}
+
+// augmented methods on protoc/std generated struct
+
+func (m *ThirdPartyApplicationResultType) ToJSON() (string, error) {
+	return codec.ToJSON(m)
+}
+
+func (m *ThirdPartyApplicationResultType) ToYAML() (string, error) {
+	return codec.ToYAML(m)
+}
+
+func (m *ThirdPartyApplicationResultType) DeepCopy() *ThirdPartyApplicationResultType {
+	if m == nil {
+		return nil
+	}
+	ser, err := m.Marshal()
+	if err != nil {
+		return nil
+	}
+	c := &ThirdPartyApplicationResultType{}
+	err = c.Unmarshal(ser)
+	if err != nil {
+		return nil
+	}
+	return c
+}
+
+func (m *ThirdPartyApplicationResultType) DeepCopyProto() proto.Message {
+	if m == nil {
+		return nil
+	}
+	return m.DeepCopy()
+}
+
+func (m *ThirdPartyApplicationResultType) Validate(ctx context.Context, opts ...db.ValidateOpt) error {
+	return ThirdPartyApplicationResultTypeValidator().Validate(ctx, m, opts...)
+}
+
+type ValidateThirdPartyApplicationResultType struct {
+	FldValidators map[string]db.ValidatorFunc
+}
+
+func (v *ValidateThirdPartyApplicationResultType) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
+	m, ok := pm.(*ThirdPartyApplicationResultType)
+	if !ok {
+		switch t := pm.(type) {
+		case nil:
+			return nil
+		default:
+			return fmt.Errorf("Expected type *ThirdPartyApplicationResultType got type %s", t)
+		}
+	}
+	if m == nil {
+		return nil
+	}
+
+	if fv, exists := v.FldValidators["api_discovery_enabled"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("api_discovery_enabled"))
+		if err := fv(ctx, m.GetApiDiscoveryEnabled(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	if fv, exists := v.FldValidators["name"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("name"))
+		if err := fv(ctx, m.GetName(), vOpts...); err != nil {
+			return err
+		}
+
+	}
+
+	return nil
+}
+
+// Well-known symbol for default validator implementation
+var DefaultThirdPartyApplicationResultTypeValidator = func() *ValidateThirdPartyApplicationResultType {
+	v := &ValidateThirdPartyApplicationResultType{FldValidators: map[string]db.ValidatorFunc{}}
+
+	return v
+}()
+
+func ThirdPartyApplicationResultTypeValidator() db.Validator {
+	return DefaultThirdPartyApplicationResultTypeValidator
 }
 
 // augmented methods on protoc/std generated struct

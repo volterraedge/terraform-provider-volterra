@@ -60,6 +60,50 @@ func resourceVolterraAppSetting() *schema.Resource {
 				ForceNew: true,
 			},
 
+			"anomaly_types": {
+
+				Type: schema.TypeList,
+
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Schema{
+					Type: schema.TypeString,
+				},
+			},
+
+			"app_type_refs": {
+
+				Type:       schema.TypeList,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"kind": {
+							Type:       schema.TypeString,
+							Computed:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"name": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+						"namespace": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+						"tenant": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+					},
+				},
+			},
+
 			"app_type_settings": {
 
 				Type:     schema.TypeList,
@@ -188,6 +232,74 @@ func resourceVolterraAppSetting() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"bola_detection_automatic": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"bola_detection_manual": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"threshold_level_1": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"threshold_level_2": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"threshold_level_3": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"threshold_level_4": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"threshold_level_5": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"threshold_level_6": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"exclude_bola_detection": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"exclude_bot_defense_activity": {
 
 													Type:     schema.TypeBool,
@@ -260,6 +372,64 @@ func resourceVolterraAppSetting() *schema.Resource {
 
 													Type:     schema.TypeBool,
 													Optional: true,
+												},
+
+												"exclude_non_existent_url_activity": {
+
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
+												"include_non_existent_url_activity_automatic": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"high": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"low": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"medium": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"include_non_existent_url_activity_custom": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"nonexistent_requests_threshold": {
+																Type:       schema.TypeInt,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
 												},
 
 												"exclude_rate_limit": {
@@ -351,6 +521,55 @@ func resourceVolterraAppSettingCreate(d *schema.ResourceData, meta interface{}) 
 			v.(string)
 	}
 
+	//anomaly_types
+	if v, ok := d.GetOk("anomaly_types"); ok && !isIntfNil(v) {
+
+		anomaly_typesList := []ves_io_schema_app_setting.AnomalyType{}
+		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field anomaly_types")
+			}
+			anomaly_typesList = append(anomaly_typesList, ves_io_schema_app_setting.AnomalyType(ves_io_schema_app_setting.AnomalyType_value[j.(string)]))
+		}
+		createSpec.AnomalyTypes = anomaly_typesList
+
+	}
+
+	//app_type_refs
+	if v, ok := d.GetOk("app_type_refs"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		appTypeRefsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+		createSpec.AppTypeRefs = appTypeRefsInt
+		for i, ps := range sl {
+			if ps != nil {
+
+				atrMapToStrVal := ps.(map[string]interface{})
+				appTypeRefsInt[i] = &ves_io_schema.ObjectRefType{}
+
+				appTypeRefsInt[i].Kind = "app_type"
+
+				if v, ok := atrMapToStrVal["name"]; ok && !isIntfNil(v) {
+					appTypeRefsInt[i].Name = v.(string)
+				}
+
+				if v, ok := atrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					appTypeRefsInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := atrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					appTypeRefsInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := atrMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					appTypeRefsInt[i].Uid = v.(string)
+				}
+
+			}
+		}
+
+	}
+
 	//app_type_settings
 	if v, ok := d.GetOk("app_type_settings"); ok && !isIntfNil(v) {
 
@@ -368,28 +587,30 @@ func resourceVolterraAppSettingCreate(d *schema.ResourceData, meta interface{}) 
 					appTypeRefInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 					appTypeSettings[i].AppTypeRef = appTypeRefInt
 					for i, ps := range sl {
+						if ps != nil {
 
-						atrMapToStrVal := ps.(map[string]interface{})
-						appTypeRefInt[i] = &ves_io_schema.ObjectRefType{}
+							atrMapToStrVal := ps.(map[string]interface{})
+							appTypeRefInt[i] = &ves_io_schema.ObjectRefType{}
 
-						appTypeRefInt[i].Kind = "app_type"
+							appTypeRefInt[i].Kind = "app_type"
 
-						if v, ok := atrMapToStrVal["name"]; ok && !isIntfNil(v) {
-							appTypeRefInt[i].Name = v.(string)
+							if v, ok := atrMapToStrVal["name"]; ok && !isIntfNil(v) {
+								appTypeRefInt[i].Name = v.(string)
+							}
+
+							if v, ok := atrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								appTypeRefInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := atrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								appTypeRefInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := atrMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								appTypeRefInt[i].Uid = v.(string)
+							}
+
 						}
-
-						if v, ok := atrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							appTypeRefInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := atrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							appTypeRefInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := atrMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							appTypeRefInt[i].Uid = v.(string)
-						}
-
 					}
 
 				}
@@ -543,6 +764,123 @@ func resourceVolterraAppSettingCreate(d *schema.ResourceData, meta interface{}) 
 									if set != nil {
 										cs := set.(map[string]interface{})
 
+										bolaActivityChoiceTypeFound := false
+
+										if v, ok := cs["bola_detection_automatic"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+											bolaActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionAutomatic{}
+												bolaActivityChoiceInt.BolaDetectionAutomatic = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["bola_detection_manual"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+											bolaActivityChoiceTypeFound = true
+											bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionManual{}
+											bolaActivityChoiceInt.BolaDetectionManual = &ves_io_schema_app_setting.BolaDetectionManualSettings{}
+											maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													thresholdLevelsTypeFound := false
+
+													if v, ok := cs["threshold_level_1"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_1{}
+															thresholdLevelsInt.ThresholdLevel_1 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_2"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_2{}
+															thresholdLevelsInt.ThresholdLevel_2 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_3"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_3{}
+															thresholdLevelsInt.ThresholdLevel_3 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_4"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_4{}
+															thresholdLevelsInt.ThresholdLevel_4 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_5"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_5{}
+															thresholdLevelsInt.ThresholdLevel_5 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_6"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_6{}
+															thresholdLevelsInt.ThresholdLevel_6 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["exclude_bola_detection"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+											bolaActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBolaDetection{}
+												bolaActivityChoiceInt.ExcludeBolaDetection = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+											}
+
+										}
+
 										botDefenseActivityChoiceTypeFound := false
 
 										if v, ok := cs["exclude_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
@@ -678,6 +1016,98 @@ func resourceVolterraAppSettingCreate(d *schema.ResourceData, meta interface{}) 
 												ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeIpReputation{}
 												ipReputationChoiceInt.IncludeIpReputation = &ves_io_schema.Empty{}
 												maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
+											}
+
+										}
+
+										nonExistentUrlActivityChoiceTypeFound := false
+
+										if v, ok := cs["exclude_non_existent_url_activity"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+											nonExistentUrlActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeNonExistentUrlActivity{}
+												nonExistentUrlActivityChoiceInt.ExcludeNonExistentUrlActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_non_existent_url_activity_automatic"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+											nonExistentUrlActivityChoiceTypeFound = true
+											nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityAutomatic{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic = &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting{}
+											maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													sensitivityTypeFound := false
+
+													if v, ok := cs["high"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+														sensitivityTypeFound = true
+
+														if v.(bool) {
+															sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_High{}
+															sensitivityInt.High = &ves_io_schema.Empty{}
+															nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+														}
+
+													}
+
+													if v, ok := cs["low"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+														sensitivityTypeFound = true
+
+														if v.(bool) {
+															sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Low{}
+															sensitivityInt.Low = &ves_io_schema.Empty{}
+															nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+														}
+
+													}
+
+													if v, ok := cs["medium"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+														sensitivityTypeFound = true
+
+														if v.(bool) {
+															sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Medium{}
+															sensitivityInt.Medium = &ves_io_schema.Empty{}
+															nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["include_non_existent_url_activity_custom"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+											nonExistentUrlActivityChoiceTypeFound = true
+											nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityCustom{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom = &ves_io_schema_app_setting.NonexistentUrlCustomActivitySetting{}
+											maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["nonexistent_requests_threshold"]; ok && !isIntfNil(v) {
+
+														nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom.NonexistentRequestsThreshold = uint32(v.(int))
+
+													}
+
+												}
 											}
 
 										}
@@ -848,6 +1278,53 @@ func resourceVolterraAppSettingUpdate(d *schema.ResourceData, meta interface{}) 
 			v.(string)
 	}
 
+	if v, ok := d.GetOk("anomaly_types"); ok && !isIntfNil(v) {
+
+		anomaly_typesList := []ves_io_schema_app_setting.AnomalyType{}
+		for _, j := range v.([]interface{}) {
+			if j == nil {
+				return fmt.Errorf("please provide valid non-empty enum value of field anomaly_types")
+			}
+			anomaly_typesList = append(anomaly_typesList, ves_io_schema_app_setting.AnomalyType(ves_io_schema_app_setting.AnomalyType_value[j.(string)]))
+		}
+		updateSpec.AnomalyTypes = anomaly_typesList
+
+	}
+
+	if v, ok := d.GetOk("app_type_refs"); ok && !isIntfNil(v) {
+
+		sl := v.([]interface{})
+		appTypeRefsInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+		updateSpec.AppTypeRefs = appTypeRefsInt
+		for i, ps := range sl {
+			if ps != nil {
+
+				atrMapToStrVal := ps.(map[string]interface{})
+				appTypeRefsInt[i] = &ves_io_schema.ObjectRefType{}
+
+				appTypeRefsInt[i].Kind = "app_type"
+
+				if v, ok := atrMapToStrVal["name"]; ok && !isIntfNil(v) {
+					appTypeRefsInt[i].Name = v.(string)
+				}
+
+				if v, ok := atrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+					appTypeRefsInt[i].Namespace = v.(string)
+				}
+
+				if v, ok := atrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+					appTypeRefsInt[i].Tenant = v.(string)
+				}
+
+				if v, ok := atrMapToStrVal["uid"]; ok && !isIntfNil(v) {
+					appTypeRefsInt[i].Uid = v.(string)
+				}
+
+			}
+		}
+
+	}
+
 	if v, ok := d.GetOk("app_type_settings"); ok && !isIntfNil(v) {
 
 		sl := v.([]interface{})
@@ -864,28 +1341,30 @@ func resourceVolterraAppSettingUpdate(d *schema.ResourceData, meta interface{}) 
 					appTypeRefInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 					appTypeSettings[i].AppTypeRef = appTypeRefInt
 					for i, ps := range sl {
+						if ps != nil {
 
-						atrMapToStrVal := ps.(map[string]interface{})
-						appTypeRefInt[i] = &ves_io_schema.ObjectRefType{}
+							atrMapToStrVal := ps.(map[string]interface{})
+							appTypeRefInt[i] = &ves_io_schema.ObjectRefType{}
 
-						appTypeRefInt[i].Kind = "app_type"
+							appTypeRefInt[i].Kind = "app_type"
 
-						if v, ok := atrMapToStrVal["name"]; ok && !isIntfNil(v) {
-							appTypeRefInt[i].Name = v.(string)
+							if v, ok := atrMapToStrVal["name"]; ok && !isIntfNil(v) {
+								appTypeRefInt[i].Name = v.(string)
+							}
+
+							if v, ok := atrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								appTypeRefInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := atrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								appTypeRefInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := atrMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								appTypeRefInt[i].Uid = v.(string)
+							}
+
 						}
-
-						if v, ok := atrMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-							appTypeRefInt[i].Namespace = v.(string)
-						}
-
-						if v, ok := atrMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-							appTypeRefInt[i].Tenant = v.(string)
-						}
-
-						if v, ok := atrMapToStrVal["uid"]; ok && !isIntfNil(v) {
-							appTypeRefInt[i].Uid = v.(string)
-						}
-
 					}
 
 				}
@@ -1039,6 +1518,123 @@ func resourceVolterraAppSettingUpdate(d *schema.ResourceData, meta interface{}) 
 									if set != nil {
 										cs := set.(map[string]interface{})
 
+										bolaActivityChoiceTypeFound := false
+
+										if v, ok := cs["bola_detection_automatic"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+											bolaActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionAutomatic{}
+												bolaActivityChoiceInt.BolaDetectionAutomatic = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["bola_detection_manual"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+											bolaActivityChoiceTypeFound = true
+											bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_BolaDetectionManual{}
+											bolaActivityChoiceInt.BolaDetectionManual = &ves_io_schema_app_setting.BolaDetectionManualSettings{}
+											maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													thresholdLevelsTypeFound := false
+
+													if v, ok := cs["threshold_level_1"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_1{}
+															thresholdLevelsInt.ThresholdLevel_1 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_2"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_2{}
+															thresholdLevelsInt.ThresholdLevel_2 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_3"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_3{}
+															thresholdLevelsInt.ThresholdLevel_3 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_4"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_4{}
+															thresholdLevelsInt.ThresholdLevel_4 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_5"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_5{}
+															thresholdLevelsInt.ThresholdLevel_5 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+													if v, ok := cs["threshold_level_6"]; ok && !isIntfNil(v) && !thresholdLevelsTypeFound {
+
+														thresholdLevelsTypeFound = true
+
+														if v.(bool) {
+															thresholdLevelsInt := &ves_io_schema_app_setting.BolaDetectionManualSettings_ThresholdLevel_6{}
+															thresholdLevelsInt.ThresholdLevel_6 = &ves_io_schema.Empty{}
+															bolaActivityChoiceInt.BolaDetectionManual.ThresholdLevels = thresholdLevelsInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["exclude_bola_detection"]; ok && !isIntfNil(v) && !bolaActivityChoiceTypeFound {
+
+											bolaActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												bolaActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeBolaDetection{}
+												bolaActivityChoiceInt.ExcludeBolaDetection = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.BolaActivityChoice = bolaActivityChoiceInt
+											}
+
+										}
+
 										botDefenseActivityChoiceTypeFound := false
 
 										if v, ok := cs["exclude_bot_defense_activity"]; ok && !isIntfNil(v) && !botDefenseActivityChoiceTypeFound {
@@ -1174,6 +1770,98 @@ func resourceVolterraAppSettingUpdate(d *schema.ResourceData, meta interface{}) 
 												ipReputationChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeIpReputation{}
 												ipReputationChoiceInt.IncludeIpReputation = &ves_io_schema.Empty{}
 												maliciousUserDetectionInt.EnableDetection.IpReputationChoice = ipReputationChoiceInt
+											}
+
+										}
+
+										nonExistentUrlActivityChoiceTypeFound := false
+
+										if v, ok := cs["exclude_non_existent_url_activity"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+											nonExistentUrlActivityChoiceTypeFound = true
+
+											if v.(bool) {
+												nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_ExcludeNonExistentUrlActivity{}
+												nonExistentUrlActivityChoiceInt.ExcludeNonExistentUrlActivity = &ves_io_schema.Empty{}
+												maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+											}
+
+										}
+
+										if v, ok := cs["include_non_existent_url_activity_automatic"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+											nonExistentUrlActivityChoiceTypeFound = true
+											nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityAutomatic{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic = &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting{}
+											maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													sensitivityTypeFound := false
+
+													if v, ok := cs["high"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+														sensitivityTypeFound = true
+
+														if v.(bool) {
+															sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_High{}
+															sensitivityInt.High = &ves_io_schema.Empty{}
+															nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+														}
+
+													}
+
+													if v, ok := cs["low"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+														sensitivityTypeFound = true
+
+														if v.(bool) {
+															sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Low{}
+															sensitivityInt.Low = &ves_io_schema.Empty{}
+															nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+														}
+
+													}
+
+													if v, ok := cs["medium"]; ok && !isIntfNil(v) && !sensitivityTypeFound {
+
+														sensitivityTypeFound = true
+
+														if v.(bool) {
+															sensitivityInt := &ves_io_schema_app_setting.NonexistentUrlAutomaticActivitySetting_Medium{}
+															sensitivityInt.Medium = &ves_io_schema.Empty{}
+															nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityAutomatic.Sensitivity = sensitivityInt
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["include_non_existent_url_activity_custom"]; ok && !isIntfNil(v) && !nonExistentUrlActivityChoiceTypeFound {
+
+											nonExistentUrlActivityChoiceTypeFound = true
+											nonExistentUrlActivityChoiceInt := &ves_io_schema_app_setting.MaliciousUserDetectionSetting_IncludeNonExistentUrlActivityCustom{}
+											nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom = &ves_io_schema_app_setting.NonexistentUrlCustomActivitySetting{}
+											maliciousUserDetectionInt.EnableDetection.NonExistentUrlActivityChoice = nonExistentUrlActivityChoiceInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["nonexistent_requests_threshold"]; ok && !isIntfNil(v) {
+
+														nonExistentUrlActivityChoiceInt.IncludeNonExistentUrlActivityCustom.NonexistentRequestsThreshold = uint32(v.(int))
+
+													}
+
+												}
 											}
 
 										}

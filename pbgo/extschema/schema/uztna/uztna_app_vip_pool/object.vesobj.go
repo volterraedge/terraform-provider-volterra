@@ -76,6 +76,12 @@ func LocateObject(ctx context.Context, locator db.EntryLocator, uid, tenant, nam
 	return obj, nil
 }
 
+func (o *Object) SetRevision(r int64) {
+	if o.SystemMetadata != nil {
+		o.SystemMetadata.SetRevision(r)
+	}
+}
+
 func FindObject(ctx context.Context, finder db.EntryFinder, key string, opts ...db.FindEntryOpt) (*DBObject, bool, error) {
 	e, exist, err := finder.FindEntry(ctx, ObjectDefTblName, key, opts...)
 	if !exist || err != nil {

@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.fleet.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.fleet.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -2656,6 +2656,31 @@ var APISwaggerJSON string = `{
         }
     },
     "definitions": {
+        "bgpBFD": {
+            "type": "object",
+            "description": "x-displayName: \"BFD\"\nBFD parameters.",
+            "title": "BFD",
+            "properties": {
+                "multiplier": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Multiplier\"\nx-example: \"3\"\nx-required\nSpecify Number of missed packets to bring session down\"",
+                    "title": "Multiplier",
+                    "format": "int64"
+                },
+                "receive_interval_milliseconds": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Minimum Receive Interval\"\nx-example: \"3000\"\nx-required\nBFD receive interval timer, in milliseconds",
+                    "title": "Receive Interval in milliseconds",
+                    "format": "int64"
+                },
+                "transmit_interval_milliseconds": {
+                    "type": "integer",
+                    "description": "x-displayName: \"Transmit Interval\"\nx-example: \"3000\"\nx-required\nBFD transmit interval timer, in milliseconds",
+                    "title": "Transmit Interval in milliseconds",
+                    "format": "int64"
+                }
+            }
+        },
         "bgpBgpRoutePolicies": {
             "type": "object",
             "description": "x-displayName: \"BGP Routing Policy\"\nList of rules which can be applied on all or particular nodes",
@@ -2860,6 +2885,16 @@ var APISwaggerJSON string = `{
             "description": "x-displayName: \"BGP Peer\"\nBGP Peer parameters",
             "title": "Peer",
             "properties": {
+                "bfd_disabled": {
+                    "description": "x-displayName: \"Disabled\"",
+                    "title": "bfd_disabled",
+                    "$ref": "#/definitions/schemaEmpty"
+                },
+                "bfd_enabled": {
+                    "description": "x-displayName: \"Enabled\"",
+                    "title": "bfd_enabled",
+                    "$ref": "#/definitions/bgpBFD"
+                },
                 "disable": {
                     "description": "x-displayName: \"Disabled\"\nDisables the BGP routing policy",
                     "title": "disable",
@@ -6315,6 +6350,13 @@ var APISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

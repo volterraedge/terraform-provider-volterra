@@ -79,6 +79,15 @@ func (c *CustomAPIGrpcClient) doRPCListDiscoveredServices(ctx context.Context, y
 	return rsp, err
 }
 
+func (c *CustomAPIGrpcClient) doRPCSuggestValues(ctx context.Context, yamlReq string, opts ...grpc.CallOption) (proto.Message, error) {
+	req := &SuggestValuesReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.discovered_service.SuggestValuesReq", yamlReq)
+	}
+	rsp, err := c.grpcClient.SuggestValues(ctx, req, opts...)
+	return rsp, err
+}
+
 func (c *CustomAPIGrpcClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -118,6 +127,8 @@ func NewCustomAPIGrpcClient(cc *grpc.ClientConn) server.CustomClient {
 	rpcFns["EnableVisibility"] = ccl.doRPCEnableVisibility
 
 	rpcFns["ListDiscoveredServices"] = ccl.doRPCListDiscoveredServices
+
+	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
 
 	ccl.rpcFns = rpcFns
 
@@ -555,6 +566,92 @@ func (c *CustomAPIRestClient) doRPCListDiscoveredServices(ctx context.Context, c
 	return pbRsp, nil
 }
 
+func (c *CustomAPIRestClient) doRPCSuggestValues(ctx context.Context, callOpts *server.CustomCallOpts) (proto.Message, error) {
+	if callOpts.URI == "" {
+		return nil, fmt.Errorf("Error, URI should be specified, got empty")
+	}
+	url := fmt.Sprintf("%s%s", c.baseURL, callOpts.URI)
+
+	yamlReq := callOpts.YAMLReq
+	req := &SuggestValuesReq{}
+	if err := codec.FromYAML(yamlReq, req); err != nil {
+		return nil, fmt.Errorf("YAML Request %s is not of type *ves.io.schema.discovered_service.SuggestValuesReq: %s", yamlReq, err)
+	}
+
+	var hReq *http.Request
+	hm := strings.ToLower(callOpts.HTTPMethod)
+	switch hm {
+	case "post", "put":
+		jsn, err := codec.ToJSON(req, codec.ToWithUseProtoFieldName())
+		if err != nil {
+			return nil, errors.Wrap(err, "Custom RestClient converting YAML to JSON")
+		}
+		var op string
+		if hm == "post" {
+			op = http.MethodPost
+		} else {
+			op = http.MethodPut
+		}
+		newReq, err := http.NewRequest(op, url, bytes.NewBuffer([]byte(jsn)))
+		if err != nil {
+			return nil, errors.Wrapf(err, "Creating new HTTP %s request for custom API", op)
+		}
+		hReq = newReq
+	case "get":
+		newReq, err := http.NewRequest(http.MethodGet, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP GET request for custom API")
+		}
+		hReq = newReq
+		q := hReq.URL.Query()
+		_ = q
+		q.Add("field_path", fmt.Sprintf("%v", req.FieldPath))
+		q.Add("match_value", fmt.Sprintf("%v", req.MatchValue))
+		q.Add("namespace", fmt.Sprintf("%v", req.Namespace))
+		q.Add("request_body", fmt.Sprintf("%v", req.RequestBody))
+
+		hReq.URL.RawQuery += q.Encode()
+	case "delete":
+		newReq, err := http.NewRequest(http.MethodDelete, url, nil)
+		if err != nil {
+			return nil, errors.Wrap(err, "Creating new HTTP DELETE request for custom API")
+		}
+		hReq = newReq
+	default:
+		return nil, fmt.Errorf("Error, invalid/empty HTTPMethod(%s) specified, should be POST|DELETE|GET", callOpts.HTTPMethod)
+	}
+	hReq = hReq.WithContext(ctx)
+	hReq.Header.Set("Content-Type", "application/json")
+	client.AddHdrsToReq(callOpts.Headers, hReq)
+
+	rsp, err := c.client.Do(hReq)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient")
+	}
+	defer rsp.Body.Close()
+
+	// checking whether the status code is a successful status code (2xx series)
+	if rsp.StatusCode < 200 || rsp.StatusCode > 299 {
+		body, err := io.ReadAll(rsp.Body)
+		return nil, fmt.Errorf("Unsuccessful custom API %s on %s, status code %d, body %s, err %s", callOpts.HTTPMethod, callOpts.URI, rsp.StatusCode, body, err)
+	}
+
+	body, err := io.ReadAll(rsp.Body)
+	if err != nil {
+		return nil, errors.Wrap(err, "Custom API RestClient read body")
+	}
+	pbRsp := &SuggestValuesResp{}
+	if err := codec.FromJSON(string(body), pbRsp); err != nil {
+		return nil, errors.Wrapf(err, "JSON Response %s is not of type *ves.io.schema.discovered_service.SuggestValuesResp", body)
+
+	}
+	if callOpts.OutCallResponse != nil {
+		callOpts.OutCallResponse.ProtoMsg = pbRsp
+		callOpts.OutCallResponse.JSON = string(body)
+	}
+	return pbRsp, nil
+}
+
 func (c *CustomAPIRestClient) DoRPC(ctx context.Context, rpc string, opts ...server.CustomCallOpt) (proto.Message, error) {
 	rpcFn, exists := c.rpcFns[rpc]
 	if !exists {
@@ -589,6 +686,8 @@ func NewCustomAPIRestClient(baseURL string, hc http.Client) server.CustomClient 
 
 	rpcFns["ListDiscoveredServices"] = ccl.doRPCListDiscoveredServices
 
+	rpcFns["SuggestValues"] = ccl.doRPCSuggestValues
+
 	ccl.rpcFns = rpcFns
 
 	return ccl
@@ -620,6 +719,10 @@ func (c *customAPIInprocClient) EnableVisibility(ctx context.Context, in *Enable
 func (c *customAPIInprocClient) ListDiscoveredServices(ctx context.Context, in *ListServicesRequest, opts ...grpc.CallOption) (*ListServicesResponse, error) {
 	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.discovered_service.CustomAPI.ListDiscoveredServices")
 	return c.CustomAPIServer.ListDiscoveredServices(ctx, in)
+}
+func (c *customAPIInprocClient) SuggestValues(ctx context.Context, in *SuggestValuesReq, opts ...grpc.CallOption) (*SuggestValuesResp, error) {
+	ctx = server.ContextWithRpcFQN(ctx, "ves.io.schema.discovered_service.CustomAPI.SuggestValues")
+	return c.CustomAPIServer.SuggestValues(ctx, in)
 }
 
 func NewCustomAPIInprocClient(svc svcfw.Service) CustomAPIClient {
@@ -894,6 +997,55 @@ func (s *customAPISrv) ListDiscoveredServices(ctx context.Context, in *ListServi
 
 	return rsp, nil
 }
+func (s *customAPISrv) SuggestValues(ctx context.Context, in *SuggestValuesReq) (*SuggestValuesResp, error) {
+	ah := s.svc.GetAPIHandler("ves.io.schema.discovered_service.CustomAPI")
+	cah, ok := ah.(CustomAPIServer)
+	if !ok {
+		return nil, fmt.Errorf("ah %v is not of type *CustomAPIServer", ah)
+	}
+
+	var (
+		rsp *SuggestValuesResp
+		err error
+	)
+
+	bodyFields := svcfw.GenAuditReqBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.SuggestValuesReq", in)
+	defer func() {
+		if len(bodyFields) > 0 {
+			server.ExtendAPIAudit(ctx, svcfw.PublicAPIBodyLog.Uid, bodyFields)
+		}
+		userMsg := "The 'CustomAPI.SuggestValues' operation on 'discovered_service'"
+		if err == nil {
+			userMsg += " was successfully performed."
+		} else {
+			userMsg += " failed to be performed."
+		}
+		server.AddUserMsgToAPIAudit(ctx, userMsg)
+	}()
+
+	if err := svcfw.FillOneofDefaultChoice(ctx, s.svc, in); err != nil {
+		err = server.MaybePublicRestError(ctx, errors.Wrapf(err, "Filling oneof default choice"))
+		return nil, server.GRPCStatusFromError(err).Err()
+	}
+
+	if s.svc.Config().EnableAPIValidation {
+		if rvFn := s.svc.GetRPCValidator("ves.io.schema.discovered_service.CustomAPI.SuggestValues"); rvFn != nil {
+			if verr := rvFn(ctx, in); verr != nil {
+				err = server.MaybePublicRestError(ctx, errors.Wrapf(verr, "Validating Request"))
+				return nil, server.GRPCStatusFromError(err).Err()
+			}
+		}
+	}
+
+	rsp, err = cah.SuggestValues(ctx, in)
+	if err != nil {
+		return rsp, server.GRPCStatusFromError(server.MaybePublicRestError(ctx, err)).Err()
+	}
+
+	bodyFields = append(bodyFields, svcfw.GenAuditRspBodyFields(ctx, s.svc, "ves.io.schema.discovered_service.SuggestValuesResp", rsp)...)
+
+	return rsp, nil
+}
 
 func NewCustomAPIServer(svc svcfw.Service) CustomAPIServer {
 	return &customAPISrv{svc: svc}
@@ -921,7 +1073,7 @@ var CustomAPISwaggerJSON string = `{
         "/public/custom/namespaces/{namespace}/discovered_services": {
             "get": {
                 "summary": "List discovered services of specific type",
-                "description": "List the discoverd services of specific type like virtual-servers, k8s, consul, ngix server, etc",
+                "description": "List the discovered services of specific type like virtual-servers, k8s, consul, nginx server, etc",
                 "operationId": "ves.io.schema.discovered_service.CustomAPI.ListDiscoveredServices",
                 "responses": {
                     "200": {
@@ -990,7 +1142,7 @@ var CustomAPISwaggerJSON string = `{
                     },
                     {
                         "name": "service_type",
-                        "description": "x-example: \"bigip_virtual_server\"\nx-required\nIdentifies the discovered service type",
+                        "description": "x-example: \"bigip_virtual_server\"\nIdentifies the discovered service type. Omit for all types.",
                         "in": "query",
                         "required": false,
                         "type": "string",
@@ -1417,9 +1569,153 @@ var CustomAPISwaggerJSON string = `{
             "x-displayname": "Discovered Service Custom API",
             "x-ves-proto-service": "ves.io.schema.discovered_service.CustomAPI",
             "x-ves-proto-service-type": "CUSTOM_PUBLIC"
+        },
+        "/public/namespaces/{namespace}/suggest-values": {
+            "post": {
+                "summary": "Suggest Values",
+                "description": "SuggestValues returns suggested values for the specified field in the given Create/Replace/Custom request.",
+                "operationId": "ves.io.schema.discovered_service.CustomAPI.SuggestValues",
+                "responses": {
+                    "200": {
+                        "description": "A successful response.",
+                        "schema": {
+                            "$ref": "#/definitions/schemadiscovered_serviceSuggestValuesResp"
+                        }
+                    },
+                    "401": {
+                        "description": "Returned when operation is not authorized",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "403": {
+                        "description": "Returned when there is no permission to access resource",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Returned when resource is not found",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "409": {
+                        "description": "Returned when operation on resource is conflicting with current value",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "429": {
+                        "description": "Returned when operation has been rejected as it is happening too frequently",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Returned when server encountered an error in processing API",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "503": {
+                        "description": "Returned when service is unavailable temporarily",
+                        "schema": {
+                            "format": "string"
+                        }
+                    },
+                    "504": {
+                        "description": "Returned when server timed out processing request",
+                        "schema": {
+                            "format": "string"
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "name": "namespace",
+                        "description": "namespace\n\nx-example: \"foobar\"\nNamespace in which the suggestions are scoped.",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "x-displayname": "Namespace"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/discovered_serviceSuggestValuesReq"
+                        }
+                    }
+                ],
+                "tags": [
+                    "CustomAPI"
+                ],
+                "externalDocs": {
+                    "description": "Examples of this operation",
+                    "url": "https://docs.cloud.f5.com/docs-v2/platform/reference/api-ref/ves-io-schema-discovered_service-customapi-suggestvalues"
+                },
+                "x-ves-proto-rpc": "ves.io.schema.discovered_service.CustomAPI.SuggestValues"
+            },
+            "x-displayname": "Discovered Service Custom API",
+            "x-ves-proto-service": "ves.io.schema.discovered_service.CustomAPI",
+            "x-ves-proto-service-type": "CUSTOM_PUBLIC"
         }
     },
     "definitions": {
+        "discovered_serviceConsulService": {
+            "type": "object",
+            "description": "Service details discovered from Consul.",
+            "title": "Consul Service",
+            "x-displayname": "Consul Service",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.ConsulService",
+            "properties": {
+                "discovery_object": {
+                    "description": " Reference to the Discovery Object",
+                    "title": "Discovery Object",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Reference to Discovery Object"
+                },
+                "pods": {
+                    "type": "array",
+                    "description": " List of pod-name to IP address mappings for the service\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
+                    "title": "Pod List",
+                    "maxItems": 50,
+                    "items": {
+                        "$ref": "#/definitions/discoveryPodInfoType"
+                    },
+                    "x-displayname": "PODs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "50"
+                    }
+                },
+                "ports": {
+                    "type": "array",
+                    "description": " List of ports along with protocol on which the service is exposed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
+                    "title": "Port List",
+                    "maxItems": 50,
+                    "items": {
+                        "$ref": "#/definitions/discoveryPortInfoType"
+                    },
+                    "x-displayname": "Ports",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "50"
+                    }
+                },
+                "service_name": {
+                    "type": "string",
+                    "description": " Name of the discovered service\n\nExample: - \"myservice\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Service Name",
+                    "x-displayname": "Service",
+                    "x-ves-example": "myservice",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                }
+            }
+        },
         "discovered_serviceCreateHTTPLoadBalancerRequest": {
             "type": "object",
             "description": "CreateHTTPLoadBalancerRequest",
@@ -1581,7 +1877,7 @@ var CustomAPISwaggerJSON string = `{
             "x-ves-proto-message": "ves.io.schema.discovered_service.EnableVisibilityResponse",
             "properties": {
                 "virtual_host_ref": {
-                    "description": " Reference to the virtual host ",
+                    "description": " Reference to the virtual host",
                     "title": "The virtual host of specific type created as part of the visibility enablement workflow",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Virtual Host corresponding to the discovered service"
@@ -1651,6 +1947,58 @@ var CustomAPISwaggerJSON string = `{
                     "title": "trusted_ca",
                     "$ref": "#/definitions/schemaviewsObjectRefType",
                     "x-displayname": "Root CA Certificate"
+                }
+            }
+        },
+        "discovered_serviceK8sService": {
+            "type": "object",
+            "description": "Service details discovered from K8s.",
+            "title": "K8s Service",
+            "x-displayname": "K8s Service",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.K8sService",
+            "properties": {
+                "discovery_object": {
+                    "description": " Reference to the Discovery Object",
+                    "title": "Discovery Object",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Reference to Discovery Object"
+                },
+                "pods": {
+                    "type": "array",
+                    "description": " List of pod-name to IP address mappings for the service\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
+                    "title": "Pod List",
+                    "maxItems": 50,
+                    "items": {
+                        "$ref": "#/definitions/discoveryPodInfoType"
+                    },
+                    "x-displayname": "PODs",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "50"
+                    }
+                },
+                "ports": {
+                    "type": "array",
+                    "description": " List of ports along with protocol on which the service is exposed\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 50\n",
+                    "title": "Port List",
+                    "maxItems": 50,
+                    "items": {
+                        "$ref": "#/definitions/discoveryPortInfoType"
+                    },
+                    "x-displayname": "Ports",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "50"
+                    }
+                },
+                "service_name": {
+                    "type": "string",
+                    "description": " Name of the discovered service\n\nExample: - \"myservice\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Service Name",
+                    "x-displayname": "Service",
+                    "x-ves-example": "myservice",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
                 }
             }
         },
@@ -1776,6 +2124,83 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "discovered_serviceNginxOneDiscoveredServer": {
+            "type": "object",
+            "description": "Discovered Servers Info",
+            "title": "NginxOneDiscoveredServer",
+            "x-displayname": "NGINX One Discovered Server",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.NginxOneDiscoveredServer",
+            "properties": {
+                "domains": {
+                    "type": "array",
+                    "description": " Domains configured on the Server\n\nValidation Rules:\n  ves.io.schema.rules.repeated.max_items: 32\n  ves.io.schema.rules.repeated.unique: true\n",
+                    "title": "Domains",
+                    "maxItems": 32,
+                    "items": {
+                        "type": "string"
+                    },
+                    "x-displayname": "Domains",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.repeated.max_items": "32",
+                        "ves.io.schema.rules.repeated.unique": "true"
+                    }
+                },
+                "nginx_one_object_id": {
+                    "type": "string",
+                    "description": " ID of the NGINX Instance or Config Sync Group\n\nExample: - \"inst_awuzd-6yRb2zbUPRxLa0SQ\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "NGINX Instance or Config Sync Group ID",
+                    "maxLength": 256,
+                    "x-displayname": "Instance or Config Sync Group Object ID",
+                    "x-ves-example": "inst_awuzd-6yRb2zbUPRxLa0SQ",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
+                },
+                "nginx_one_object_name": {
+                    "type": "string",
+                    "description": " Hostname value set for Instance or Name for a Config Sync Group\n in NGINX One",
+                    "title": "NGINX Instance or Config Sync Group Name",
+                    "x-displayname": "Instance or Config Sync Group Name"
+                },
+                "nginx_service_discovery_ref": {
+                    "description": " Reference to the NGINX Service Discovery Object",
+                    "title": "NGINX Service Discovery Object Ref",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "BIG-IP Service Discovery"
+                },
+                "port": {
+                    "type": "integer",
+                    "description": " Port number on which the Server is exposed\n\nExample: - \"8080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Port",
+                    "format": "int64",
+                    "x-displayname": "Port",
+                    "x-ves-example": "8080",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "server_block": {
+                    "type": "string",
+                    "description": " Server Block Name\n\nExample: - \"server-block-1\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.string.max_bytes: 256\n  ves.io.schema.rules.string.not_empty: true\n",
+                    "title": "Server Block Name",
+                    "maxLength": 256,
+                    "x-displayname": "Server Block Name",
+                    "x-ves-example": "server-block-1",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.string.max_bytes": "256",
+                        "ves.io.schema.rules.string.not_empty": "true"
+                    }
+                }
+            }
+        },
         "discovered_serviceProxyTypeHttp": {
             "type": "object",
             "description": "Choice for selecting HTTP proxy",
@@ -1871,6 +2296,50 @@ var CustomAPISwaggerJSON string = `{
                 }
             }
         },
+        "discovered_serviceSuggestValuesReq": {
+            "type": "object",
+            "description": "Request body of SuggestValues request",
+            "title": "SuggestValuesReq",
+            "x-displayname": "Request for SuggestValues",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.SuggestValuesReq",
+            "properties": {
+                "field_path": {
+                    "type": "string",
+                    "description": " JSON path of the field for which the suggested values are being requested.\n\nExample: - \"spec.rule_choice.rule_list.rules[2].spec.api_group_matcher.match\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "title": "field_path",
+                    "maxLength": 1024,
+                    "x-displayname": "Field Path",
+                    "x-ves-example": "spec.rule_choice.rule_list.rules[2].spec.api_group_matcher.match",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1024"
+                    }
+                },
+                "match_value": {
+                    "type": "string",
+                    "description": " A substring that must be present in either the value or description of each SuggestedItem in the response.\n\nExample: - \"some-substring\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "title": "match_value",
+                    "maxLength": 256,
+                    "x-displayname": "Match Value",
+                    "x-ves-example": "some-substring",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "256"
+                    }
+                },
+                "namespace": {
+                    "type": "string",
+                    "description": " Namespace in which the suggestions are scoped.\n\nExample: - \"foobar\"-",
+                    "title": "namespace",
+                    "x-displayname": "Namespace",
+                    "x-ves-example": "foobar"
+                },
+                "request_body": {
+                    "description": " Body of the Create/Replace/Custom request in whose context the suggested values for the field are being requested.",
+                    "title": "request_body",
+                    "$ref": "#/definitions/protobufAny",
+                    "x-displayname": "Request Body"
+                }
+            }
+        },
         "discovered_serviceTCPLBRequest": {
             "type": "object",
             "description": "TCP LB Request",
@@ -1954,6 +2423,21 @@ var CustomAPISwaggerJSON string = `{
                     "title": "With SNI",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "SNI"
+                }
+            }
+        },
+        "discovered_serviceThirdPartyApplicationDiscovery": {
+            "type": "object",
+            "description": "Configure third party log source applications to send logs to your XC environment. Define application names and allowed IP ranges using CIDR notation.\nSee Tech Docs for detailed setup instructions.",
+            "title": "third_party_application",
+            "x-displayname": "Discovery",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.ThirdPartyApplicationDiscovery",
+            "properties": {
+                "discovery_object": {
+                    "description": " Reference to the Discovery Object",
+                    "title": "Discovery Object",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Reference to Discovery Object"
                 }
             }
         },
@@ -2070,6 +2554,16 @@ var CustomAPISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.message.required": "true"
                     }
+                },
+                "sub_path": {
+                    "type": "string",
+                    "description": " BIG-IP Virtual Server sub path in relation to partition\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 1024\n",
+                    "title": "Sub Path",
+                    "maxLength": 1024,
+                    "x-displayname": "Sub Path",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.string.max_len": "1024"
+                    }
                 }
             }
         },
@@ -2101,6 +2595,77 @@ var CustomAPISwaggerJSON string = `{
             "default": "UNSPECIFIED",
             "x-displayname": "Virtual Server Availability Status",
             "x-ves-proto-enum": "ves.io.schema.discovered_service.VirtualServerStatus"
+        },
+        "discoveryPodInfoType": {
+            "type": "object",
+            "description": "Information about POD providing the service",
+            "title": "Pod info",
+            "x-displayname": "POD",
+            "x-ves-proto-message": "ves.io.schema.discovery.PodInfoType",
+            "properties": {
+                "ip": {
+                    "type": "string",
+                    "description": " IP Address of the POD\n\nExample: - \"192.1.2.3\"-",
+                    "title": "IP Address",
+                    "x-displayname": "IP",
+                    "x-ves-example": "192.1.2.3"
+                },
+                "pod_name": {
+                    "type": "string",
+                    "description": " Name of the Pod\n\nExample: - \"mypod-nk8wr\"-",
+                    "title": "POD name",
+                    "x-displayname": "Name",
+                    "x-ves-example": "mypod-nk8wr"
+                }
+            }
+        },
+        "discoveryPortInfoType": {
+            "type": "object",
+            "description": "Information about port and protocol on which the service is provided",
+            "title": "Port information",
+            "x-displayname": "Port details",
+            "x-ves-proto-message": "ves.io.schema.discovery.PortInfoType",
+            "properties": {
+                "port": {
+                    "type": "integer",
+                    "description": " Port number on which the service is exposed\n\nExample: - \"8080\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Port",
+                    "format": "int64",
+                    "x-displayname": "Port number",
+                    "x-ves-example": "8080",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                },
+                "protocol": {
+                    "type": "string",
+                    "description": " Protocol on which the service is exposed\n\nExample: - \"TCP\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n",
+                    "title": "Protocol",
+                    "x-displayname": "Protocol",
+                    "x-ves-example": "TCP",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true"
+                    }
+                },
+                "target_port": {
+                    "type": "integer",
+                    "description": " Port on which the pods targeted by the service can be reached.\n TargetPort of Kubernetes service when its type is ClusterIP.\n NodePort of Kubernetes service when its type is NodePort.\n\nExample: - \"8081\"-\n\nRequired: YES\n\nValidation Rules:\n  ves.io.schema.rules.message.required: true\n  ves.io.schema.rules.uint32.gte: 1\n  ves.io.schema.rules.uint32.lte: 65535\n",
+                    "title": "Target Port",
+                    "format": "int64",
+                    "x-displayname": "Target Port number",
+                    "x-ves-example": "8081",
+                    "x-ves-required": "true",
+                    "x-ves-validation-rules": {
+                        "ves.io.schema.rules.message.required": "true",
+                        "ves.io.schema.rules.uint32.gte": "1",
+                        "ves.io.schema.rules.uint32.lte": "65535"
+                    }
+                }
+            }
         },
         "ioschemaEmpty": {
             "type": "object",
@@ -2617,10 +3182,15 @@ var CustomAPISwaggerJSON string = `{
             "description": "Get Discovered Service Object.",
             "title": "Get Discovered Service Object",
             "x-displayname": "Get Discovered Service Object",
-            "x-ves-oneof-field-service_type": "[\"virtual_server\"]",
+            "x-ves-oneof-field-service_type": "[\"consul_service\",\"k8s_service\",\"n1_discovered_server\",\"third_party\",\"virtual_server\"]",
             "x-ves-oneof-field-visibility_action_choice": "[\"visibility_disabled\",\"visibility_enabled\"]",
             "x-ves-proto-message": "ves.io.schema.discovered_service.GetSpecType",
             "properties": {
+                "consul_service": {
+                    "description": "Exclusive with [k8s_service n1_discovered_server third_party virtual_server]\n Details of Consul Service discovered by Discovery Service",
+                    "$ref": "#/definitions/discovered_serviceConsulService",
+                    "x-displayname": "Consul Service"
+                },
                 "http_load_balancers": {
                     "type": "array",
                     "description": " List of references to HTTP Load Balancers using this service",
@@ -2628,6 +3198,16 @@ var CustomAPISwaggerJSON string = `{
                         "$ref": "#/definitions/schemaviewsObjectRefType"
                     },
                     "x-displayname": "HTTP Load Balancers"
+                },
+                "k8s_service": {
+                    "description": "Exclusive with [consul_service n1_discovered_server third_party virtual_server]\n Details of K8s Service discovered by Discovery Service",
+                    "$ref": "#/definitions/discovered_serviceK8sService",
+                    "x-displayname": "K8s Service"
+                },
+                "n1_discovered_server": {
+                    "description": "Exclusive with [consul_service k8s_service third_party virtual_server]\n Details of NGINX Server discovered by NGINX Discovery Service",
+                    "$ref": "#/definitions/discovered_serviceNginxOneDiscoveredServer",
+                    "x-displayname": "NGINX One Discovered Server"
                 },
                 "tcp_load_balancers": {
                     "type": "array",
@@ -2637,8 +3217,13 @@ var CustomAPISwaggerJSON string = `{
                     },
                     "x-displayname": "TCP Load Balancers"
                 },
+                "third_party": {
+                    "description": "Exclusive with [consul_service k8s_service n1_discovered_server virtual_server]\n Configure third party log source applications to send logs to your XC environment. Define application names and allowed IP ranges using CIDR notation.\n See Tech Docs for details setup instractions.",
+                    "$ref": "#/definitions/discovered_serviceThirdPartyApplicationDiscovery",
+                    "x-displayname": "Discovery"
+                },
                 "virtual_server": {
-                    "description": "Exclusive with []\n Details of virtual server discovered by Discovered Services ",
+                    "description": "Exclusive with [consul_service k8s_service n1_discovered_server third_party]\n Details of virtual server discovered by Discovery Service",
                     "$ref": "#/definitions/discovered_serviceVirtualServer",
                     "x-displayname": "Virtual Server"
                 },
@@ -2651,6 +3236,52 @@ var CustomAPISwaggerJSON string = `{
                     "description": "Exclusive with [visibility_disabled]\n Option for enabling Visibility across workspaces",
                     "$ref": "#/definitions/ioschemaEmpty",
                     "x-displayname": "Visibility Enabled"
+                }
+            }
+        },
+        "schemadiscovered_serviceSuggestValuesResp": {
+            "type": "object",
+            "description": "Response body of SuggestValues request",
+            "title": "SuggestValuesResp",
+            "x-displayname": "Response for SuggestValues",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.SuggestValuesResp",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "description": " List of suggested items.",
+                    "title": "item_lists",
+                    "items": {
+                        "$ref": "#/definitions/schemadiscovered_serviceSuggestedItem"
+                    },
+                    "x-displayname": "Suggested Items"
+                }
+            }
+        },
+        "schemadiscovered_serviceSuggestedItem": {
+            "type": "object",
+            "description": "A tuple with a suggested value and it's description.",
+            "title": "SuggestedItem",
+            "x-displayname": "Suggested Item",
+            "x-ves-oneof-field-value_choice": "[\"ref_value\",\"str_value\"]",
+            "x-ves-proto-message": "ves.io.schema.discovered_service.SuggestedItem",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "description": " Optional description for the suggested value.",
+                    "title": "description",
+                    "x-displayname": "Description"
+                },
+                "ref_value": {
+                    "description": "Exclusive with [str_value]\n",
+                    "title": "str_value",
+                    "$ref": "#/definitions/schemaviewsObjectRefType",
+                    "x-displayname": "Object Reference"
+                },
+                "str_value": {
+                    "type": "string",
+                    "description": "Exclusive with [ref_value]\n",
+                    "title": "str_value",
+                    "x-displayname": "String"
                 }
             }
         },

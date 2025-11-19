@@ -86,6 +86,281 @@ func resourceVolterraFastAcl() *schema.Resource {
 				},
 			},
 
+			"legacy_acl": {
+
+				Type:       schema.TypeList,
+				MaxItems:   1,
+				Optional:   true,
+				Deprecated: "This field is deprecated and will be removed in future release.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+
+						"destination_type": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"all_services": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"destination_ip_address": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"address": {
+
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ipv4": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"addr": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"ipv6": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"addr": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+
+												"ports": {
+
+													Type:       schema.TypeList,
+													Required:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"all": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"dns": {
+
+																Type:       schema.TypeBool,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"user_defined": {
+
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"protocol": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
+									"interface_services": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"selected_vip_address": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"address": {
+
+													Type:       schema.TypeList,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"ipv4": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"addr": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+
+															"ipv6": {
+
+																Type:       schema.TypeList,
+																MaxItems:   1,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+																Elem: &schema.Resource{
+																	Schema: map[string]*schema.Schema{
+
+																		"addr": {
+																			Type:       schema.TypeString,
+																			Optional:   true,
+																			Deprecated: "This field is deprecated and will be removed in future release.",
+																		},
+																	},
+																},
+															},
+														},
+													},
+												},
+											},
+										},
+									},
+
+									"shared_vip_services": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"vhost": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"vip_services": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"network_type": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Required:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"public": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"site_local": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"site_local_inside": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"source_rules": {
+
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"namespace": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"tenant": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+
 			"re_acl": {
 
 				Type:     schema.TypeList,
@@ -209,12 +484,24 @@ func resourceVolterraFastAcl() *schema.Resource {
 													Optional: true,
 												},
 
+												"disable": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"name": {
 													Type:     schema.TypeString,
 													Required: true,
 												},
 											},
 										},
+									},
+
+									"name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"port": {
@@ -495,12 +782,24 @@ func resourceVolterraFastAcl() *schema.Resource {
 													Optional: true,
 												},
 
+												"disable": {
+													Type:       schema.TypeBool,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"name": {
 													Type:     schema.TypeString,
 													Required: true,
 												},
 											},
 										},
+									},
+
+									"name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"port": {
@@ -722,6 +1021,397 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 
 	siteChoiceTypeFound := false
 
+	if v, ok := d.GetOk("legacy_acl"); ok && !isIntfNil(v) && !siteChoiceTypeFound {
+
+		siteChoiceTypeFound = true
+		siteChoiceInt := &ves_io_schema_fast_acl.CreateSpecType_LegacyAcl{}
+		siteChoiceInt.LegacyAcl = &ves_io_schema_fast_acl.LegacyACLType{}
+		createSpec.SiteChoice = siteChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["destination_type"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					destinationType := &ves_io_schema_fast_acl.DestinationType{}
+					siteChoiceInt.LegacyAcl.DestinationType = destinationType
+					for _, set := range sl {
+						if set != nil {
+							destinationTypeMapStrToI := set.(map[string]interface{})
+
+							destinationTypeChoiceTypeFound := false
+
+							if v, ok := destinationTypeMapStrToI["all_services"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_AllServices{}
+									destinationTypeChoiceInt.AllServices = &ves_io_schema.Empty{}
+									destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := destinationTypeMapStrToI["destination_ip_address"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+								destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_DestinationIpAddress{}
+								destinationTypeChoiceInt.DestinationIpAddress = &ves_io_schema_fast_acl.DestinationIPAddressType{}
+								destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["address"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											address := make([]*ves_io_schema.IpAddressType, len(sl))
+											destinationTypeChoiceInt.DestinationIpAddress.Address = address
+											for i, set := range sl {
+												if set != nil {
+													address[i] = &ves_io_schema.IpAddressType{}
+													addressMapStrToI := set.(map[string]interface{})
+
+													verTypeFound := false
+
+													if v, ok := addressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+														verTypeFound = true
+														verInt := &ves_io_schema.IpAddressType_Ipv4{}
+														verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+														address[i].Ver = verInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																	verInt.Ipv4.Addr = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := addressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+														verTypeFound = true
+														verInt := &ves_io_schema.IpAddressType_Ipv6{}
+														verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+														address[i].Ver = verInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																	verInt.Ipv6.Addr = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["ports"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											ports := make([]*ves_io_schema.PortValueType, len(sl))
+											destinationTypeChoiceInt.DestinationIpAddress.Ports = ports
+											for i, set := range sl {
+												if set != nil {
+													ports[i] = &ves_io_schema.PortValueType{}
+													portsMapStrToI := set.(map[string]interface{})
+
+													portValueTypeChoiceTypeFound := false
+
+													if v, ok := portsMapStrToI["all"]; ok && !isIntfNil(v) && !portValueTypeChoiceTypeFound {
+
+														portValueTypeChoiceTypeFound = true
+
+														if v.(bool) {
+															portValueTypeChoiceInt := &ves_io_schema.PortValueType_All{}
+															portValueTypeChoiceInt.All = &ves_io_schema.Empty{}
+															ports[i].PortValueTypeChoice = portValueTypeChoiceInt
+														}
+
+													}
+
+													if v, ok := portsMapStrToI["dns"]; ok && !isIntfNil(v) && !portValueTypeChoiceTypeFound {
+
+														portValueTypeChoiceTypeFound = true
+
+														if v.(bool) {
+															portValueTypeChoiceInt := &ves_io_schema.PortValueType_Dns{}
+															portValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+															ports[i].PortValueTypeChoice = portValueTypeChoiceInt
+														}
+
+													}
+
+													if v, ok := portsMapStrToI["user_defined"]; ok && !isIntfNil(v) && !portValueTypeChoiceTypeFound {
+
+														portValueTypeChoiceTypeFound = true
+														portValueTypeChoiceInt := &ves_io_schema.PortValueType_UserDefined{}
+
+														ports[i].PortValueTypeChoice = portValueTypeChoiceInt
+
+														portValueTypeChoiceInt.UserDefined = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
+
+											destinationTypeChoiceInt.DestinationIpAddress.Protocol = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := destinationTypeMapStrToI["interface_services"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_InterfaceServices{}
+									destinationTypeChoiceInt.InterfaceServices = &ves_io_schema.Empty{}
+									destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := destinationTypeMapStrToI["selected_vip_address"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+								destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_SelectedVipAddress{}
+								destinationTypeChoiceInt.SelectedVipAddress = &ves_io_schema_fast_acl.SelectedVIPAddressType{}
+								destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["address"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											address := make([]*ves_io_schema.IpAddressType, len(sl))
+											destinationTypeChoiceInt.SelectedVipAddress.Address = address
+											for i, set := range sl {
+												if set != nil {
+													address[i] = &ves_io_schema.IpAddressType{}
+													addressMapStrToI := set.(map[string]interface{})
+
+													verTypeFound := false
+
+													if v, ok := addressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+														verTypeFound = true
+														verInt := &ves_io_schema.IpAddressType_Ipv4{}
+														verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+														address[i].Ver = verInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																	verInt.Ipv4.Addr = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := addressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+														verTypeFound = true
+														verInt := &ves_io_schema.IpAddressType_Ipv6{}
+														verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+														address[i].Ver = verInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																	verInt.Ipv6.Addr = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := destinationTypeMapStrToI["shared_vip_services"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_SharedVipServices{}
+									destinationTypeChoiceInt.SharedVipServices = &ves_io_schema.Empty{}
+									destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := destinationTypeMapStrToI["vhost"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_Vhost{}
+									destinationTypeChoiceInt.Vhost = &ves_io_schema.Empty{}
+									destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := destinationTypeMapStrToI["vip_services"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_VipServices{}
+									destinationTypeChoiceInt.VipServices = &ves_io_schema.Empty{}
+									destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					networkType := &ves_io_schema.VirtualNetworkSelectorType{}
+					siteChoiceInt.LegacyAcl.NetworkType = networkType
+					for _, set := range sl {
+						if set != nil {
+							networkTypeMapStrToI := set.(map[string]interface{})
+
+							vnTypeChoiceTypeFound := false
+
+							if v, ok := networkTypeMapStrToI["public"]; ok && !isIntfNil(v) && !vnTypeChoiceTypeFound {
+
+								vnTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									vnTypeChoiceInt := &ves_io_schema.VirtualNetworkSelectorType_Public{}
+									vnTypeChoiceInt.Public = &ves_io_schema.Empty{}
+									networkType.VnTypeChoice = vnTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := networkTypeMapStrToI["site_local"]; ok && !isIntfNil(v) && !vnTypeChoiceTypeFound {
+
+								vnTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									vnTypeChoiceInt := &ves_io_schema.VirtualNetworkSelectorType_SiteLocal{}
+									vnTypeChoiceInt.SiteLocal = &ves_io_schema.Empty{}
+									networkType.VnTypeChoice = vnTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := networkTypeMapStrToI["site_local_inside"]; ok && !isIntfNil(v) && !vnTypeChoiceTypeFound {
+
+								vnTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									vnTypeChoiceInt := &ves_io_schema.VirtualNetworkSelectorType_SiteLocalInside{}
+									vnTypeChoiceInt.SiteLocalInside = &ves_io_schema.Empty{}
+									networkType.VnTypeChoice = vnTypeChoiceInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["source_rules"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					sourceRulesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					siteChoiceInt.LegacyAcl.SourceRules = sourceRulesInt
+					for i, ps := range sl {
+						if ps != nil {
+
+							srMapToStrVal := ps.(map[string]interface{})
+							sourceRulesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := srMapToStrVal["name"]; ok && !isIntfNil(v) {
+								sourceRulesInt[i].Name = v.(string)
+							}
+
+							if v, ok := srMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								sourceRulesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := srMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								sourceRulesInt[i].Tenant = v.(string)
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
 	if v, ok := d.GetOk("re_acl"); ok && !isIntfNil(v) && !siteChoiceTypeFound {
 
 		siteChoiceTypeFound = true
@@ -773,28 +1463,30 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 														refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														actionInt.PolicerAction.Ref = refInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															rMapToStrVal := ps.(map[string]interface{})
-															refInt[i] = &ves_io_schema.ObjectRefType{}
+																rMapToStrVal := ps.(map[string]interface{})
+																refInt[i] = &ves_io_schema.ObjectRefType{}
 
-															refInt[i].Kind = "policer"
+																refInt[i].Kind = "policer"
 
-															if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-																refInt[i].Name = v.(string)
+																if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	refInt[i].Name = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	refInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	refInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	refInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																refInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																refInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																refInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -822,28 +1514,30 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 														refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														actionInt.ProtocolPolicerAction.Ref = refInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															rMapToStrVal := ps.(map[string]interface{})
-															refInt[i] = &ves_io_schema.ObjectRefType{}
+																rMapToStrVal := ps.(map[string]interface{})
+																refInt[i] = &ves_io_schema.ObjectRefType{}
 
-															refInt[i].Kind = "protocol_policer"
+																refInt[i].Kind = "protocol_policer"
 
-															if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-																refInt[i].Name = v.(string)
+																if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	refInt[i].Name = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	refInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	refInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	refInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																refInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																refInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																refInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -882,6 +1576,10 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 											metadata.Description = w.(string)
 										}
 
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 											metadata.Name = w.(string)
 										}
@@ -889,6 +1587,10 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 									}
 								}
 
+							}
+
+							if w, ok := fastAclRulesMapStrToI["name"]; ok && !isIntfNil(w) {
+								fastAclRules[i].Name = w.(string)
 							}
 
 							if v, ok := fastAclRulesMapStrToI["port"]; ok && !isIntfNil(v) {
@@ -963,28 +1665,30 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											sourceInt.IpPrefixSet.Ref = refInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refInt[i].Kind = "ip_prefix_set"
+													refInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -1096,22 +1800,24 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 								publicIpRefsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								vipChoiceInt.SelectedTenantVip.PublicIpRefs = publicIpRefsInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									pirMapToStrVal := ps.(map[string]interface{})
-									publicIpRefsInt[i] = &ves_io_schema_views.ObjectRefType{}
+										pirMapToStrVal := ps.(map[string]interface{})
+										publicIpRefsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := pirMapToStrVal["name"]; ok && !isIntfNil(v) {
-										publicIpRefsInt[i].Name = v.(string)
+										if v, ok := pirMapToStrVal["name"]; ok && !isIntfNil(v) {
+											publicIpRefsInt[i].Name = v.(string)
+										}
+
+										if v, ok := pirMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											publicIpRefsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := pirMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											publicIpRefsInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := pirMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										publicIpRefsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := pirMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										publicIpRefsInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -1177,28 +1883,30 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 														refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														actionInt.PolicerAction.Ref = refInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															rMapToStrVal := ps.(map[string]interface{})
-															refInt[i] = &ves_io_schema.ObjectRefType{}
+																rMapToStrVal := ps.(map[string]interface{})
+																refInt[i] = &ves_io_schema.ObjectRefType{}
 
-															refInt[i].Kind = "policer"
+																refInt[i].Kind = "policer"
 
-															if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-																refInt[i].Name = v.(string)
+																if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	refInt[i].Name = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	refInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	refInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	refInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																refInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																refInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																refInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -1226,28 +1934,30 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 														refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														actionInt.ProtocolPolicerAction.Ref = refInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															rMapToStrVal := ps.(map[string]interface{})
-															refInt[i] = &ves_io_schema.ObjectRefType{}
+																rMapToStrVal := ps.(map[string]interface{})
+																refInt[i] = &ves_io_schema.ObjectRefType{}
 
-															refInt[i].Kind = "protocol_policer"
+																refInt[i].Kind = "protocol_policer"
 
-															if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-																refInt[i].Name = v.(string)
+																if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	refInt[i].Name = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	refInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	refInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	refInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																refInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																refInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																refInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -1286,6 +1996,10 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 											metadata.Description = w.(string)
 										}
 
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 											metadata.Name = w.(string)
 										}
@@ -1293,6 +2007,10 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 									}
 								}
 
+							}
+
+							if w, ok := fastAclRulesMapStrToI["name"]; ok && !isIntfNil(w) {
+								fastAclRules[i].Name = w.(string)
 							}
 
 							if v, ok := fastAclRulesMapStrToI["port"]; ok && !isIntfNil(v) {
@@ -1367,28 +2085,30 @@ func resourceVolterraFastAclCreate(d *schema.ResourceData, meta interface{}) err
 											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											sourceInt.IpPrefixSet.Ref = refInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refInt[i].Kind = "ip_prefix_set"
+													refInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -1644,6 +2364,397 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 
 	siteChoiceTypeFound := false
 
+	if v, ok := d.GetOk("legacy_acl"); ok && !isIntfNil(v) && !siteChoiceTypeFound {
+
+		siteChoiceTypeFound = true
+		siteChoiceInt := &ves_io_schema_fast_acl.ReplaceSpecType_LegacyAcl{}
+		siteChoiceInt.LegacyAcl = &ves_io_schema_fast_acl.LegacyACLType{}
+		updateSpec.SiteChoice = siteChoiceInt
+
+		sl := v.([]interface{})
+		for _, set := range sl {
+			if set != nil {
+				cs := set.(map[string]interface{})
+
+				if v, ok := cs["destination_type"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					destinationType := &ves_io_schema_fast_acl.DestinationType{}
+					siteChoiceInt.LegacyAcl.DestinationType = destinationType
+					for _, set := range sl {
+						if set != nil {
+							destinationTypeMapStrToI := set.(map[string]interface{})
+
+							destinationTypeChoiceTypeFound := false
+
+							if v, ok := destinationTypeMapStrToI["all_services"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_AllServices{}
+									destinationTypeChoiceInt.AllServices = &ves_io_schema.Empty{}
+									destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := destinationTypeMapStrToI["destination_ip_address"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+								destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_DestinationIpAddress{}
+								destinationTypeChoiceInt.DestinationIpAddress = &ves_io_schema_fast_acl.DestinationIPAddressType{}
+								destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["address"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											address := make([]*ves_io_schema.IpAddressType, len(sl))
+											destinationTypeChoiceInt.DestinationIpAddress.Address = address
+											for i, set := range sl {
+												if set != nil {
+													address[i] = &ves_io_schema.IpAddressType{}
+													addressMapStrToI := set.(map[string]interface{})
+
+													verTypeFound := false
+
+													if v, ok := addressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+														verTypeFound = true
+														verInt := &ves_io_schema.IpAddressType_Ipv4{}
+														verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+														address[i].Ver = verInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																	verInt.Ipv4.Addr = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := addressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+														verTypeFound = true
+														verInt := &ves_io_schema.IpAddressType_Ipv6{}
+														verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+														address[i].Ver = verInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																	verInt.Ipv6.Addr = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["ports"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											ports := make([]*ves_io_schema.PortValueType, len(sl))
+											destinationTypeChoiceInt.DestinationIpAddress.Ports = ports
+											for i, set := range sl {
+												if set != nil {
+													ports[i] = &ves_io_schema.PortValueType{}
+													portsMapStrToI := set.(map[string]interface{})
+
+													portValueTypeChoiceTypeFound := false
+
+													if v, ok := portsMapStrToI["all"]; ok && !isIntfNil(v) && !portValueTypeChoiceTypeFound {
+
+														portValueTypeChoiceTypeFound = true
+
+														if v.(bool) {
+															portValueTypeChoiceInt := &ves_io_schema.PortValueType_All{}
+															portValueTypeChoiceInt.All = &ves_io_schema.Empty{}
+															ports[i].PortValueTypeChoice = portValueTypeChoiceInt
+														}
+
+													}
+
+													if v, ok := portsMapStrToI["dns"]; ok && !isIntfNil(v) && !portValueTypeChoiceTypeFound {
+
+														portValueTypeChoiceTypeFound = true
+
+														if v.(bool) {
+															portValueTypeChoiceInt := &ves_io_schema.PortValueType_Dns{}
+															portValueTypeChoiceInt.Dns = &ves_io_schema.Empty{}
+															ports[i].PortValueTypeChoice = portValueTypeChoiceInt
+														}
+
+													}
+
+													if v, ok := portsMapStrToI["user_defined"]; ok && !isIntfNil(v) && !portValueTypeChoiceTypeFound {
+
+														portValueTypeChoiceTypeFound = true
+														portValueTypeChoiceInt := &ves_io_schema.PortValueType_UserDefined{}
+
+														ports[i].PortValueTypeChoice = portValueTypeChoiceInt
+
+														portValueTypeChoiceInt.UserDefined = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["protocol"]; ok && !isIntfNil(v) {
+
+											destinationTypeChoiceInt.DestinationIpAddress.Protocol = v.(string)
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := destinationTypeMapStrToI["interface_services"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_InterfaceServices{}
+									destinationTypeChoiceInt.InterfaceServices = &ves_io_schema.Empty{}
+									destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := destinationTypeMapStrToI["selected_vip_address"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+								destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_SelectedVipAddress{}
+								destinationTypeChoiceInt.SelectedVipAddress = &ves_io_schema_fast_acl.SelectedVIPAddressType{}
+								destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["address"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											address := make([]*ves_io_schema.IpAddressType, len(sl))
+											destinationTypeChoiceInt.SelectedVipAddress.Address = address
+											for i, set := range sl {
+												if set != nil {
+													address[i] = &ves_io_schema.IpAddressType{}
+													addressMapStrToI := set.(map[string]interface{})
+
+													verTypeFound := false
+
+													if v, ok := addressMapStrToI["ipv4"]; ok && !isIntfNil(v) && !verTypeFound {
+
+														verTypeFound = true
+														verInt := &ves_io_schema.IpAddressType_Ipv4{}
+														verInt.Ipv4 = &ves_io_schema.Ipv4AddressType{}
+														address[i].Ver = verInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																	verInt.Ipv4.Addr = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+													if v, ok := addressMapStrToI["ipv6"]; ok && !isIntfNil(v) && !verTypeFound {
+
+														verTypeFound = true
+														verInt := &ves_io_schema.IpAddressType_Ipv6{}
+														verInt.Ipv6 = &ves_io_schema.Ipv6AddressType{}
+														address[i].Ver = verInt
+
+														sl := v.([]interface{})
+														for _, set := range sl {
+															if set != nil {
+																cs := set.(map[string]interface{})
+
+																if v, ok := cs["addr"]; ok && !isIntfNil(v) {
+
+																	verInt.Ipv6.Addr = v.(string)
+
+																}
+
+															}
+														}
+
+													}
+
+												}
+											}
+
+										}
+
+									}
+								}
+
+							}
+
+							if v, ok := destinationTypeMapStrToI["shared_vip_services"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_SharedVipServices{}
+									destinationTypeChoiceInt.SharedVipServices = &ves_io_schema.Empty{}
+									destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := destinationTypeMapStrToI["vhost"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_Vhost{}
+									destinationTypeChoiceInt.Vhost = &ves_io_schema.Empty{}
+									destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := destinationTypeMapStrToI["vip_services"]; ok && !isIntfNil(v) && !destinationTypeChoiceTypeFound {
+
+								destinationTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									destinationTypeChoiceInt := &ves_io_schema_fast_acl.DestinationType_VipServices{}
+									destinationTypeChoiceInt.VipServices = &ves_io_schema.Empty{}
+									destinationType.DestinationTypeChoice = destinationTypeChoiceInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["network_type"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					networkType := &ves_io_schema.VirtualNetworkSelectorType{}
+					siteChoiceInt.LegacyAcl.NetworkType = networkType
+					for _, set := range sl {
+						if set != nil {
+							networkTypeMapStrToI := set.(map[string]interface{})
+
+							vnTypeChoiceTypeFound := false
+
+							if v, ok := networkTypeMapStrToI["public"]; ok && !isIntfNil(v) && !vnTypeChoiceTypeFound {
+
+								vnTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									vnTypeChoiceInt := &ves_io_schema.VirtualNetworkSelectorType_Public{}
+									vnTypeChoiceInt.Public = &ves_io_schema.Empty{}
+									networkType.VnTypeChoice = vnTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := networkTypeMapStrToI["site_local"]; ok && !isIntfNil(v) && !vnTypeChoiceTypeFound {
+
+								vnTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									vnTypeChoiceInt := &ves_io_schema.VirtualNetworkSelectorType_SiteLocal{}
+									vnTypeChoiceInt.SiteLocal = &ves_io_schema.Empty{}
+									networkType.VnTypeChoice = vnTypeChoiceInt
+								}
+
+							}
+
+							if v, ok := networkTypeMapStrToI["site_local_inside"]; ok && !isIntfNil(v) && !vnTypeChoiceTypeFound {
+
+								vnTypeChoiceTypeFound = true
+
+								if v.(bool) {
+									vnTypeChoiceInt := &ves_io_schema.VirtualNetworkSelectorType_SiteLocalInside{}
+									vnTypeChoiceInt.SiteLocalInside = &ves_io_schema.Empty{}
+									networkType.VnTypeChoice = vnTypeChoiceInt
+								}
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := cs["source_rules"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					sourceRulesInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
+					siteChoiceInt.LegacyAcl.SourceRules = sourceRulesInt
+					for i, ps := range sl {
+						if ps != nil {
+
+							srMapToStrVal := ps.(map[string]interface{})
+							sourceRulesInt[i] = &ves_io_schema_views.ObjectRefType{}
+
+							if v, ok := srMapToStrVal["name"]; ok && !isIntfNil(v) {
+								sourceRulesInt[i].Name = v.(string)
+							}
+
+							if v, ok := srMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								sourceRulesInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := srMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								sourceRulesInt[i].Tenant = v.(string)
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+
+	}
+
 	if v, ok := d.GetOk("re_acl"); ok && !isIntfNil(v) && !siteChoiceTypeFound {
 
 		siteChoiceTypeFound = true
@@ -1695,28 +2806,30 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 														refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														actionInt.PolicerAction.Ref = refInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															rMapToStrVal := ps.(map[string]interface{})
-															refInt[i] = &ves_io_schema.ObjectRefType{}
+																rMapToStrVal := ps.(map[string]interface{})
+																refInt[i] = &ves_io_schema.ObjectRefType{}
 
-															refInt[i].Kind = "policer"
+																refInt[i].Kind = "policer"
 
-															if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-																refInt[i].Name = v.(string)
+																if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	refInt[i].Name = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	refInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	refInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	refInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																refInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																refInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																refInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -1744,28 +2857,30 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 														refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														actionInt.ProtocolPolicerAction.Ref = refInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															rMapToStrVal := ps.(map[string]interface{})
-															refInt[i] = &ves_io_schema.ObjectRefType{}
+																rMapToStrVal := ps.(map[string]interface{})
+																refInt[i] = &ves_io_schema.ObjectRefType{}
 
-															refInt[i].Kind = "protocol_policer"
+																refInt[i].Kind = "protocol_policer"
 
-															if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-																refInt[i].Name = v.(string)
+																if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	refInt[i].Name = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	refInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	refInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	refInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																refInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																refInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																refInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -1804,6 +2919,10 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 											metadata.Description = w.(string)
 										}
 
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 											metadata.Name = w.(string)
 										}
@@ -1811,6 +2930,10 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 									}
 								}
 
+							}
+
+							if w, ok := fastAclRulesMapStrToI["name"]; ok && !isIntfNil(w) {
+								fastAclRules[i].Name = w.(string)
 							}
 
 							if v, ok := fastAclRulesMapStrToI["port"]; ok && !isIntfNil(v) {
@@ -1885,28 +3008,30 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											sourceInt.IpPrefixSet.Ref = refInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refInt[i].Kind = "ip_prefix_set"
+													refInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -2018,22 +3143,24 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 								publicIpRefsInt := make([]*ves_io_schema_views.ObjectRefType, len(sl))
 								vipChoiceInt.SelectedTenantVip.PublicIpRefs = publicIpRefsInt
 								for i, ps := range sl {
+									if ps != nil {
 
-									pirMapToStrVal := ps.(map[string]interface{})
-									publicIpRefsInt[i] = &ves_io_schema_views.ObjectRefType{}
+										pirMapToStrVal := ps.(map[string]interface{})
+										publicIpRefsInt[i] = &ves_io_schema_views.ObjectRefType{}
 
-									if v, ok := pirMapToStrVal["name"]; ok && !isIntfNil(v) {
-										publicIpRefsInt[i].Name = v.(string)
+										if v, ok := pirMapToStrVal["name"]; ok && !isIntfNil(v) {
+											publicIpRefsInt[i].Name = v.(string)
+										}
+
+										if v, ok := pirMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+											publicIpRefsInt[i].Namespace = v.(string)
+										}
+
+										if v, ok := pirMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+											publicIpRefsInt[i].Tenant = v.(string)
+										}
+
 									}
-
-									if v, ok := pirMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-										publicIpRefsInt[i].Namespace = v.(string)
-									}
-
-									if v, ok := pirMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-										publicIpRefsInt[i].Tenant = v.(string)
-									}
-
 								}
 
 							}
@@ -2099,28 +3226,30 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 														refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														actionInt.PolicerAction.Ref = refInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															rMapToStrVal := ps.(map[string]interface{})
-															refInt[i] = &ves_io_schema.ObjectRefType{}
+																rMapToStrVal := ps.(map[string]interface{})
+																refInt[i] = &ves_io_schema.ObjectRefType{}
 
-															refInt[i].Kind = "policer"
+																refInt[i].Kind = "policer"
 
-															if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-																refInt[i].Name = v.(string)
+																if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	refInt[i].Name = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	refInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	refInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	refInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																refInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																refInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																refInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -2148,28 +3277,30 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 														refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 														actionInt.ProtocolPolicerAction.Ref = refInt
 														for i, ps := range sl {
+															if ps != nil {
 
-															rMapToStrVal := ps.(map[string]interface{})
-															refInt[i] = &ves_io_schema.ObjectRefType{}
+																rMapToStrVal := ps.(map[string]interface{})
+																refInt[i] = &ves_io_schema.ObjectRefType{}
 
-															refInt[i].Kind = "protocol_policer"
+																refInt[i].Kind = "protocol_policer"
 
-															if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-																refInt[i].Name = v.(string)
+																if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+																	refInt[i].Name = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+																	refInt[i].Namespace = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+																	refInt[i].Tenant = v.(string)
+																}
+
+																if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+																	refInt[i].Uid = v.(string)
+																}
+
 															}
-
-															if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-																refInt[i].Namespace = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-																refInt[i].Tenant = v.(string)
-															}
-
-															if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-																refInt[i].Uid = v.(string)
-															}
-
 														}
 
 													}
@@ -2208,6 +3339,10 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 											metadata.Description = w.(string)
 										}
 
+										if w, ok := metadataMapStrToI["disable"]; ok && !isIntfNil(w) {
+											metadata.Disable = w.(bool)
+										}
+
 										if w, ok := metadataMapStrToI["name"]; ok && !isIntfNil(w) {
 											metadata.Name = w.(string)
 										}
@@ -2215,6 +3350,10 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 									}
 								}
 
+							}
+
+							if w, ok := fastAclRulesMapStrToI["name"]; ok && !isIntfNil(w) {
+								fastAclRules[i].Name = w.(string)
 							}
 
 							if v, ok := fastAclRulesMapStrToI["port"]; ok && !isIntfNil(v) {
@@ -2289,28 +3428,30 @@ func resourceVolterraFastAclUpdate(d *schema.ResourceData, meta interface{}) err
 											refInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											sourceInt.IpPrefixSet.Ref = refInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												rMapToStrVal := ps.(map[string]interface{})
-												refInt[i] = &ves_io_schema.ObjectRefType{}
+													rMapToStrVal := ps.(map[string]interface{})
+													refInt[i] = &ves_io_schema.ObjectRefType{}
 
-												refInt[i].Kind = "ip_prefix_set"
+													refInt[i].Kind = "ip_prefix_set"
 
-												if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
-													refInt[i].Name = v.(string)
+													if v, ok := rMapToStrVal["name"]; ok && !isIntfNil(v) {
+														refInt[i].Name = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														refInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														refInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														refInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := rMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													refInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													refInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := rMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													refInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}

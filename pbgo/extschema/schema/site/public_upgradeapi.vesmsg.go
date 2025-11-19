@@ -93,6 +93,16 @@ func (v *ValidateUpgradeOSRequest) VersionValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
+func (v *ValidateUpgradeOSRequest) ForceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewBoolValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for force")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateUpgradeOSRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*UpgradeOSRequest)
 	if !ok {
@@ -105,6 +115,15 @@ func (v *ValidateUpgradeOSRequest) Validate(ctx context.Context, pm interface{},
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["force"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("force"))
+		if err := fv(ctx, m.GetForce(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["name"]; exists {
@@ -181,6 +200,17 @@ var DefaultUpgradeOSRequestValidator = func() *ValidateUpgradeOSRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["version"] = vFn
+
+	vrhForce := v.ForceValidationRuleHandler
+	rulesForce := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhForce(rulesForce)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpgradeOSRequest.force: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["force"] = vFn
 
 	return v
 }()
@@ -329,6 +359,16 @@ func (v *ValidateUpgradeSWRequest) VersionValidationRuleHandler(rules map[string
 	return validatorFn, nil
 }
 
+func (v *ValidateUpgradeSWRequest) ForceValidationRuleHandler(rules map[string]string) (db.ValidatorFunc, error) {
+
+	validatorFn, err := db.NewBoolValidationRuleHandler(rules)
+	if err != nil {
+		return nil, errors.Wrap(err, "ValidationRuleHandler for force")
+	}
+
+	return validatorFn, nil
+}
+
 func (v *ValidateUpgradeSWRequest) Validate(ctx context.Context, pm interface{}, opts ...db.ValidateOpt) error {
 	m, ok := pm.(*UpgradeSWRequest)
 	if !ok {
@@ -341,6 +381,15 @@ func (v *ValidateUpgradeSWRequest) Validate(ctx context.Context, pm interface{},
 	}
 	if m == nil {
 		return nil
+	}
+
+	if fv, exists := v.FldValidators["force"]; exists {
+
+		vOpts := append(opts, db.WithValidateField("force"))
+		if err := fv(ctx, m.GetForce(), vOpts...); err != nil {
+			return err
+		}
+
 	}
 
 	if fv, exists := v.FldValidators["name"]; exists {
@@ -417,6 +466,17 @@ var DefaultUpgradeSWRequestValidator = func() *ValidateUpgradeSWRequest {
 		panic(errMsg)
 	}
 	v.FldValidators["version"] = vFn
+
+	vrhForce := v.ForceValidationRuleHandler
+	rulesForce := map[string]string{
+		"ves.io.schema.rules.message.required": "true",
+	}
+	vFn, err = vrhForce(rulesForce)
+	if err != nil {
+		errMsg := fmt.Sprintf("ValidationRuleHandler for UpgradeSWRequest.force: %s", err)
+		panic(errMsg)
+	}
+	v.FldValidators["force"] = vFn
 
 	return v
 }()

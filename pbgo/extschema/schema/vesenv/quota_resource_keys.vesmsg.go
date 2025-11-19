@@ -496,6 +496,28 @@ func (v *ValidateQuotaResourceKeyChoice) Validate(ctx context.Context, pm interf
 				return err
 			}
 		}
+	case *QuotaResourceKeyChoice_BotDefenseInfraInlineProduction:
+		if fv, exists := v.FldValidators["choice.bot_defense_infra_inline_production"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_BotDefenseInfraInlineProduction).BotDefenseInfraInlineProduction
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("bot_defense_infra_inline_production"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
+	case *QuotaResourceKeyChoice_BotDefenseInfraInlineTest:
+		if fv, exists := v.FldValidators["choice.bot_defense_infra_inline_test"]; exists {
+			val := m.GetChoice().(*QuotaResourceKeyChoice_BotDefenseInfraInlineTest).BotDefenseInfraInlineTest
+			vOpts := append(opts,
+				db.WithValidateField("choice"),
+				db.WithValidateField("bot_defense_infra_inline_test"),
+			)
+			if err := fv(ctx, val, vOpts...); err != nil {
+				return err
+			}
+		}
 
 	}
 

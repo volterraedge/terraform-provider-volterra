@@ -3338,6 +3338,12 @@ var CustomAPISwaggerJSON string = `{
                     "$ref": "#/definitions/registrationProvider",
                     "x-displayname": "Provider"
                 },
+                "sw_info": {
+                    "description": " SW information about node in the site",
+                    "title": "Software information",
+                    "$ref": "#/definitions/registrationSWInfo",
+                    "x-displayname": "Software Information"
+                },
                 "timestamp": {
                     "type": "string",
                     "description": " It's used to verify machine have acceptable time difference from server",
@@ -3823,6 +3829,21 @@ var CustomAPISwaggerJSON string = `{
                     "title": "spec",
                     "$ref": "#/definitions/schemaregistrationReplaceSpecType",
                     "x-displayname": "Spec"
+                }
+            }
+        },
+        "registrationSWInfo": {
+            "type": "object",
+            "description": "SWInfo holds information about sw version",
+            "title": "SWInfo",
+            "x-displayname": "SW Info",
+            "x-ves-proto-message": "ves.io.schema.registration.SWInfo",
+            "properties": {
+                "sw_version": {
+                    "type": "string",
+                    "description": " SW Version in the site",
+                    "title": "sw version",
+                    "x-displayname": "SW Version"
                 }
             }
         },
@@ -4465,6 +4486,13 @@ var CustomAPISwaggerJSON string = `{
                     "title": "owner_view",
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
+                },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
                 },
                 "sre_disable": {
                     "type": "boolean",

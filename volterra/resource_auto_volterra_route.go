@@ -15,7 +15,9 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
 	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
 	ves_io_schema_route "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
+	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // resourceVolterraRoute is implementation of Volterra's Route resources
@@ -122,6 +124,42 @@ func resourceVolterraRoute() *schema.Resource {
 
 							Type:     schema.TypeBool,
 							Optional: true,
+						},
+
+						"bot_defense_javascript_injection_inline_mode": {
+
+							Type:       schema.TypeList,
+							MaxItems:   1,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"element_selector": {
+										Type:       schema.TypeString,
+										Required:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"insert_content": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"position": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+								},
+							},
+						},
+
+						"disable_custom_script": {
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
 						"disable_location_add": {
@@ -292,6 +330,42 @@ func resourceVolterraRoute() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"blindfold_secret_info_internal": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"decryption_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"store_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"secret_encoding_type": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"blindfold_secret_info": {
 
 													Type:     schema.TypeList,
@@ -334,6 +408,66 @@ func resourceVolterraRoute() *schema.Resource {
 															"url": {
 																Type:     schema.TypeString,
 																Required: true,
+															},
+														},
+													},
+												},
+
+												"vault_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"key": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"provider": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"secret_encoding": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"version": {
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"wingman_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -386,6 +520,42 @@ func resourceVolterraRoute() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"blindfold_secret_info_internal": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"decryption_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"store_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"secret_encoding_type": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"blindfold_secret_info": {
 
 													Type:     schema.TypeList,
@@ -428,6 +598,66 @@ func resourceVolterraRoute() *schema.Resource {
 															"url": {
 																Type:     schema.TypeString,
 																Required: true,
+															},
+														},
+													},
+												},
+
+												"vault_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"key": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"provider": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"secret_encoding": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"version": {
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"wingman_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -594,6 +824,42 @@ func resourceVolterraRoute() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"blindfold_secret_info_internal": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"decryption_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"store_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"secret_encoding_type": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"blindfold_secret_info": {
 
 													Type:     schema.TypeList,
@@ -636,6 +902,66 @@ func resourceVolterraRoute() *schema.Resource {
 															"url": {
 																Type:     schema.TypeString,
 																Required: true,
+															},
+														},
+													},
+												},
+
+												"vault_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"key": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"provider": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"secret_encoding": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"version": {
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"wingman_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -688,6 +1014,42 @@ func resourceVolterraRoute() *schema.Resource {
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
+												"blindfold_secret_info_internal": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"decryption_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"store_provider": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"secret_encoding_type": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+
 												"blindfold_secret_info": {
 
 													Type:     schema.TypeList,
@@ -730,6 +1092,66 @@ func resourceVolterraRoute() *schema.Resource {
 															"url": {
 																Type:     schema.TypeString,
 																Required: true,
+															},
+														},
+													},
+												},
+
+												"vault_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"key": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"location": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"provider": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"secret_encoding": {
+																Type:       schema.TypeString,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+
+															"version": {
+																Type:       schema.TypeInt,
+																Optional:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
+															},
+														},
+													},
+												},
+
+												"wingman_secret_info": {
+
+													Type:       schema.TypeList,
+													MaxItems:   1,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Resource{
+														Schema: map[string]*schema.Schema{
+
+															"name": {
+																Type:       schema.TypeString,
+																Required:   true,
+																Deprecated: "This field is deprecated and will be removed in future release.",
 															},
 														},
 													},
@@ -781,6 +1203,12 @@ func resourceVolterraRoute() *schema.Resource {
 												"max_request_bytes": {
 													Type:     schema.TypeInt,
 													Optional: true,
+												},
+
+												"max_request_time": {
+													Type:       schema.TypeInt,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 											},
 										},
@@ -849,6 +1277,12 @@ func resourceVolterraRoute() *schema.Resource {
 												"expose_headers": {
 													Type:     schema.TypeString,
 													Optional: true,
+												},
+
+												"max_age": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
 												},
 
 												"maximum_age": {
@@ -1226,6 +1660,12 @@ func resourceVolterraRoute() *schema.Resource {
 														Type: schema.TypeString,
 													},
 												},
+
+												"retry_on": {
+													Type:       schema.TypeString,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
 											},
 										},
 									},
@@ -1306,6 +1746,12 @@ func resourceVolterraRoute() *schema.Resource {
 								Schema: map[string]*schema.Schema{
 
 									"response_body": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"response_body_encoded": {
 										Type:     schema.TypeString,
 										Optional: true,
 									},
@@ -1331,9 +1777,22 @@ func resourceVolterraRoute() *schema.Resource {
 										Optional: true,
 									},
 
+									"port_redirect": {
+										Type:       schema.TypeInt,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
 									"proto_redirect": {
 										Type:     schema.TypeString,
 										Optional: true,
+									},
+
+									"all_params": {
+
+										Type:       schema.TypeBool,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 
 									"remove_all_params": {
@@ -1352,6 +1811,29 @@ func resourceVolterraRoute() *schema.Resource {
 
 										Type:     schema.TypeBool,
 										Optional: true,
+									},
+
+									"strip_query_params": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"query_params": {
+
+													Type: schema.TypeList,
+
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+													Elem: &schema.Schema{
+														Type: schema.TypeString,
+													},
+												},
+											},
+										},
 									},
 
 									"path_redirect": {
@@ -1382,10 +1864,103 @@ func resourceVolterraRoute() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 
+									"context_extensions": {
+
+										Type:       schema.TypeList,
+										MaxItems:   1,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+										Elem: &schema.Resource{
+											Schema: map[string]*schema.Schema{
+
+												"context_extensions": {
+													Type:       schema.TypeMap,
+													Optional:   true,
+													Deprecated: "This field is deprecated and will be removed in future release.",
+												},
+											},
+										},
+									},
+
 									"disable": {
 
 										Type:     schema.TypeBool,
 										Optional: true,
+									},
+								},
+							},
+						},
+
+						"skip_lb_override": {
+							Type:       schema.TypeBool,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"uuid": {
+							Type:       schema.TypeString,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+						},
+
+						"inherited_waf_exclusion": {
+
+							Type:     schema.TypeBool,
+							Optional: true,
+						},
+
+						"waf_exclusion_policy": {
+
+							Type:     schema.TypeList,
+							MaxItems: 1,
+							Required: true,
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"name": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"namespace": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+									"tenant": {
+										Type:     schema.TypeString,
+										Optional: true,
+									},
+								},
+							},
+						},
+
+						"waf_exclusion_service_policy": {
+
+							Type:       schema.TypeList,
+							Optional:   true,
+							Deprecated: "This field is deprecated and will be removed in future release.",
+							Elem: &schema.Resource{
+								Schema: map[string]*schema.Schema{
+
+									"kind": {
+										Type:       schema.TypeString,
+										Computed:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+
+									"name": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"namespace": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
+									},
+									"tenant": {
+										Type:       schema.TypeString,
+										Optional:   true,
+										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 								},
 							},
@@ -1602,6 +2177,38 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 						routes[i].BotDefenseJavascriptInjectionChoice = botDefenseJavascriptInjectionChoiceInt
 					}
 
+				}
+
+				if v, ok := routesMapStrToI["bot_defense_javascript_injection_inline_mode"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					botDefenseJavascriptInjectionInlineMode := &ves_io_schema_route.ContentRewriteType{}
+					routes[i].BotDefenseJavascriptInjectionInlineMode = botDefenseJavascriptInjectionInlineMode
+					for _, set := range sl {
+						if set != nil {
+							botDefenseJavascriptInjectionInlineModeMapStrToI := set.(map[string]interface{})
+
+							if w, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["element_selector"]; ok && !isIntfNil(w) {
+								botDefenseJavascriptInjectionInlineMode.ElementSelector = w.(string)
+							}
+
+							if w, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["insert_content"]; ok && !isIntfNil(w) {
+								botDefenseJavascriptInjectionInlineMode.InsertContent = w.(string)
+							}
+
+							if v, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["position"]; ok && !isIntfNil(v) {
+
+								botDefenseJavascriptInjectionInlineMode.Position = ves_io_schema_policy.HTMLPosition(ves_io_schema_policy.HTMLPosition_value[v.(string)])
+
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := routesMapStrToI["disable_custom_script"]; ok && !isIntfNil(w) {
+					routes[i].DisableCustomScript = w.(bool)
 				}
 
 				if w, ok := routesMapStrToI["disable_location_add"]; ok && !isIntfNil(w) {
@@ -1861,6 +2468,38 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 									if set != nil {
 										cs := set.(map[string]interface{})
 
+										if v, ok := cs["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											valueChoiceInt.SecretValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											valueChoiceInt.SecretValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
 										secretInfoOneofTypeFound := false
 
 										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -1919,6 +2558,76 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 													}
 
@@ -1993,6 +2702,38 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 									if set != nil {
 										cs := set.(map[string]interface{})
 
+										if v, ok := cs["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											valueChoiceInt.SecretValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											valueChoiceInt.SecretValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
 										secretInfoOneofTypeFound := false
 
 										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -2051,6 +2792,76 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 													}
 
@@ -2365,6 +3176,38 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 									if set != nil {
 										cs := set.(map[string]interface{})
 
+										if v, ok := cs["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											valueChoiceInt.SecretValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											valueChoiceInt.SecretValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
 										secretInfoOneofTypeFound := false
 
 										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -2423,6 +3266,76 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 													}
 
@@ -2497,6 +3410,38 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 									if set != nil {
 										cs := set.(map[string]interface{})
 
+										if v, ok := cs["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											valueChoiceInt.SecretValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											valueChoiceInt.SecretValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
 										secretInfoOneofTypeFound := false
 
 										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -2555,6 +3500,76 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 													}
 
@@ -2626,6 +3641,10 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 										if w, ok := bufferPolicyMapStrToI["max_request_bytes"]; ok && !isIntfNil(w) {
 											bufferPolicy.MaxRequestBytes = uint32(w.(int))
+										}
+
+										if w, ok := bufferPolicyMapStrToI["max_request_time"]; ok && !isIntfNil(w) {
+											bufferPolicy.MaxRequestTime = uint32(w.(int))
 										}
 
 									}
@@ -2712,6 +3731,10 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 										if w, ok := corsPolicyMapStrToI["expose_headers"]; ok && !isIntfNil(w) {
 											corsPolicy.ExposeHeaders = w.(string)
+										}
+
+										if w, ok := corsPolicyMapStrToI["max_age"]; ok && !isIntfNil(w) {
+											corsPolicy.MaxAge = w.(string)
 										}
 
 										if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
@@ -2811,28 +3834,30 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 											clusterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											destinations[i].Cluster = clusterInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												cMapToStrVal := ps.(map[string]interface{})
-												clusterInt[i] = &ves_io_schema.ObjectRefType{}
+													cMapToStrVal := ps.(map[string]interface{})
+													clusterInt[i] = &ves_io_schema.ObjectRefType{}
 
-												clusterInt[i].Kind = "cluster"
+													clusterInt[i].Kind = "cluster"
 
-												if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-													clusterInt[i].Name = v.(string)
+													if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+														clusterInt[i].Name = v.(string)
+													}
+
+													if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														clusterInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														clusterInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														clusterInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													clusterInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													clusterInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													clusterInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -3086,28 +4111,30 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 											clusterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											mirrorPolicy.Cluster = clusterInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												cMapToStrVal := ps.(map[string]interface{})
-												clusterInt[i] = &ves_io_schema.ObjectRefType{}
+													cMapToStrVal := ps.(map[string]interface{})
+													clusterInt[i] = &ves_io_schema.ObjectRefType{}
 
-												clusterInt[i].Kind = "cluster"
+													clusterInt[i].Kind = "cluster"
 
-												if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-													clusterInt[i].Name = v.(string)
+													if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+														clusterInt[i].Name = v.(string)
+													}
+
+													if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														clusterInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														clusterInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														clusterInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													clusterInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													clusterInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													clusterInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -3258,6 +4285,10 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 											retryPolicy.RetryCondition = ls
 										}
 
+										if w, ok := retryPolicyMapStrToI["retry_on"]; ok && !isIntfNil(w) {
+											retryPolicy.RetryOn = w.(string)
+										}
+
 									}
 								}
 
@@ -3370,6 +4401,12 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 							}
 
+							if v, ok := cs["response_body_encoded"]; ok && !isIntfNil(v) {
+
+								routeActionInt.RouteDirectResponse.ResponseBodyEncoded = v.(string)
+
+							}
+
 							if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
 
 								routeActionInt.RouteDirectResponse.ResponseCode = uint32(v.(int))
@@ -3399,6 +4436,12 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 							}
 
+							if v, ok := cs["port_redirect"]; ok && !isIntfNil(v) {
+
+								routeActionInt.RouteRedirect.PortRedirect = uint32(v.(int))
+
+							}
+
 							if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
 
 								routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
@@ -3406,6 +4449,17 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 							}
 
 							queryParamsTypeFound := false
+
+							if v, ok := cs["all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+								queryParamsTypeFound = true
+								queryParamsInt := &ves_io_schema_route.RouteRedirect_AllParams{}
+
+								routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+
+								queryParamsInt.AllParams = v.(bool)
+
+							}
 
 							if v, ok := cs["remove_all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
 
@@ -3438,6 +4492,38 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 									queryParamsInt := &ves_io_schema_route.RouteRedirect_RetainAllParams{}
 									queryParamsInt.RetainAllParams = &ves_io_schema.Empty{}
 									routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+								}
+
+							}
+
+							if v, ok := cs["strip_query_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+								queryParamsTypeFound = true
+								queryParamsInt := &ves_io_schema_route.RouteRedirect_StripQueryParams{}
+								queryParamsInt.StripQueryParams = &ves_io_schema_route.RouteQueryParams{}
+								routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["query_params"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field query_params")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											queryParamsInt.StripQueryParams.QueryParams = ls
+
+										}
+
+									}
 								}
 
 							}
@@ -3488,6 +4574,32 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 							servicePolicyChoiceTypeFound := false
 
+							if v, ok := servicePolicyMapStrToI["context_extensions"]; ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
+
+								servicePolicyChoiceTypeFound = true
+								servicePolicyChoiceInt := &ves_io_schema_route.ServicePolicyInfo_ContextExtensions{}
+								servicePolicyChoiceInt.ContextExtensions = &ves_io_schema_route.ContextExtensionInfo{}
+								servicePolicy.ServicePolicyChoice = servicePolicyChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["context_extensions"]; ok && !isIntfNil(v) {
+
+											ms := map[string]string{}
+											for k, v := range v.(map[string]interface{}) {
+												ms[k] = v.(string)
+											}
+											servicePolicyChoiceInt.ContextExtensions.ContextExtensions = ms
+										}
+
+									}
+								}
+
+							}
+
 							if v, ok := servicePolicyMapStrToI["disable"]; ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
 
 								servicePolicyChoiceTypeFound = true
@@ -3497,6 +4609,97 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 
 								servicePolicyChoiceInt.Disable = v.(bool)
 
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := routesMapStrToI["skip_lb_override"]; ok && !isIntfNil(w) {
+					routes[i].SkipLbOverride = w.(bool)
+				}
+
+				if w, ok := routesMapStrToI["uuid"]; ok && !isIntfNil(w) {
+					routes[i].Uuid = w.(string)
+				}
+
+				wafExclusionChoiceTypeFound := false
+
+				if v, ok := routesMapStrToI["inherited_waf_exclusion"]; ok && !isIntfNil(v) && !wafExclusionChoiceTypeFound {
+
+					wafExclusionChoiceTypeFound = true
+
+					if v.(bool) {
+						wafExclusionChoiceInt := &ves_io_schema_route.RouteType_InheritedWafExclusion{}
+						wafExclusionChoiceInt.InheritedWafExclusion = &ves_io_schema.Empty{}
+						routes[i].WafExclusionChoice = wafExclusionChoiceInt
+					}
+
+				}
+
+				if v, ok := routesMapStrToI["waf_exclusion_policy"]; ok && !isIntfNil(v) && !wafExclusionChoiceTypeFound {
+
+					wafExclusionChoiceTypeFound = true
+					wafExclusionChoiceInt := &ves_io_schema_route.RouteType_WafExclusionPolicy{}
+					wafExclusionChoiceInt.WafExclusionPolicy = &ves_io_schema_views.ObjectRefType{}
+					routes[i].WafExclusionChoice = wafExclusionChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								wafExclusionChoiceInt.WafExclusionPolicy.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								wafExclusionChoiceInt.WafExclusionPolicy.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								wafExclusionChoiceInt.WafExclusionPolicy.Tenant = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := routesMapStrToI["waf_exclusion_service_policy"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					wafExclusionServicePolicyInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					routes[i].WafExclusionServicePolicy = wafExclusionServicePolicyInt
+					for i, ps := range sl {
+						if ps != nil {
+
+							wespMapToStrVal := ps.(map[string]interface{})
+							wafExclusionServicePolicyInt[i] = &ves_io_schema.ObjectRefType{}
+
+							wafExclusionServicePolicyInt[i].Kind = "service_policy"
+
+							if v, ok := wespMapToStrVal["name"]; ok && !isIntfNil(v) {
+								wafExclusionServicePolicyInt[i].Name = v.(string)
+							}
+
+							if v, ok := wespMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								wafExclusionServicePolicyInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := wespMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								wafExclusionServicePolicyInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := wespMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								wafExclusionServicePolicyInt[i].Uid = v.(string)
 							}
 
 						}
@@ -3533,28 +4736,30 @@ func resourceVolterraRouteCreate(d *schema.ResourceData, meta interface{}) error
 											appFirewallInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											refTypeInt.AppFirewall.AppFirewall = appFirewallInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												afMapToStrVal := ps.(map[string]interface{})
-												appFirewallInt[i] = &ves_io_schema.ObjectRefType{}
+													afMapToStrVal := ps.(map[string]interface{})
+													appFirewallInt[i] = &ves_io_schema.ObjectRefType{}
 
-												appFirewallInt[i].Kind = "app_firewall"
+													appFirewallInt[i].Kind = "app_firewall"
 
-												if v, ok := afMapToStrVal["name"]; ok && !isIntfNil(v) {
-													appFirewallInt[i].Name = v.(string)
+													if v, ok := afMapToStrVal["name"]; ok && !isIntfNil(v) {
+														appFirewallInt[i].Name = v.(string)
+													}
+
+													if v, ok := afMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														appFirewallInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := afMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														appFirewallInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := afMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														appFirewallInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := afMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													appFirewallInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := afMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													appFirewallInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := afMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													appFirewallInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -3788,6 +4993,38 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 				}
 
+				if v, ok := routesMapStrToI["bot_defense_javascript_injection_inline_mode"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					botDefenseJavascriptInjectionInlineMode := &ves_io_schema_route.ContentRewriteType{}
+					routes[i].BotDefenseJavascriptInjectionInlineMode = botDefenseJavascriptInjectionInlineMode
+					for _, set := range sl {
+						if set != nil {
+							botDefenseJavascriptInjectionInlineModeMapStrToI := set.(map[string]interface{})
+
+							if w, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["element_selector"]; ok && !isIntfNil(w) {
+								botDefenseJavascriptInjectionInlineMode.ElementSelector = w.(string)
+							}
+
+							if w, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["insert_content"]; ok && !isIntfNil(w) {
+								botDefenseJavascriptInjectionInlineMode.InsertContent = w.(string)
+							}
+
+							if v, ok := botDefenseJavascriptInjectionInlineModeMapStrToI["position"]; ok && !isIntfNil(v) {
+
+								botDefenseJavascriptInjectionInlineMode.Position = ves_io_schema_policy.HTMLPosition(ves_io_schema_policy.HTMLPosition_value[v.(string)])
+
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := routesMapStrToI["disable_custom_script"]; ok && !isIntfNil(w) {
+					routes[i].DisableCustomScript = w.(bool)
+				}
+
 				if w, ok := routesMapStrToI["disable_location_add"]; ok && !isIntfNil(w) {
 					routes[i].DisableLocationAdd = w.(bool)
 				}
@@ -4045,6 +5282,38 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 									if set != nil {
 										cs := set.(map[string]interface{})
 
+										if v, ok := cs["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											valueChoiceInt.SecretValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											valueChoiceInt.SecretValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
 										secretInfoOneofTypeFound := false
 
 										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -4103,6 +5372,76 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 													}
 
@@ -4177,6 +5516,38 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 									if set != nil {
 										cs := set.(map[string]interface{})
 
+										if v, ok := cs["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											valueChoiceInt.SecretValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											valueChoiceInt.SecretValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
 										secretInfoOneofTypeFound := false
 
 										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -4235,6 +5606,76 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 													}
 
@@ -4549,6 +5990,38 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 									if set != nil {
 										cs := set.(map[string]interface{})
 
+										if v, ok := cs["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											valueChoiceInt.SecretValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											valueChoiceInt.SecretValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
 										secretInfoOneofTypeFound := false
 
 										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -4607,6 +6080,76 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 													}
 
@@ -4681,6 +6224,38 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 									if set != nil {
 										cs := set.(map[string]interface{})
 
+										if v, ok := cs["blindfold_secret_info_internal"]; ok && !isIntfNil(v) {
+
+											sl := v.([]interface{})
+											blindfoldSecretInfoInternal := &ves_io_schema.BlindfoldSecretInfoType{}
+											valueChoiceInt.SecretValue.BlindfoldSecretInfoInternal = blindfoldSecretInfoInternal
+											for _, set := range sl {
+												if set != nil {
+													blindfoldSecretInfoInternalMapStrToI := set.(map[string]interface{})
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["decryption_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.DecryptionProvider = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["location"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.Location = w.(string)
+													}
+
+													if w, ok := blindfoldSecretInfoInternalMapStrToI["store_provider"]; ok && !isIntfNil(w) {
+														blindfoldSecretInfoInternal.StoreProvider = w.(string)
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["secret_encoding_type"]; ok && !isIntfNil(v) {
+
+											valueChoiceInt.SecretValue.SecretEncodingType = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+										}
+
 										secretInfoOneofTypeFound := false
 
 										if v, ok := cs["blindfold_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
@@ -4739,6 +6314,76 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 													if v, ok := cs["url"]; ok && !isIntfNil(v) {
 
 														secretInfoOneofInt.ClearSecretInfo.Url = v.(string)
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["vault_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_VaultSecretInfo{}
+											secretInfoOneofInt.VaultSecretInfo = &ves_io_schema.VaultSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["key"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Key = v.(string)
+
+													}
+
+													if v, ok := cs["location"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Location = v.(string)
+
+													}
+
+													if v, ok := cs["provider"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Provider = v.(string)
+
+													}
+
+													if v, ok := cs["secret_encoding"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.SecretEncoding = ves_io_schema.SecretEncodingType(ves_io_schema.SecretEncodingType_value[v.(string)])
+
+													}
+
+													if v, ok := cs["version"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.VaultSecretInfo.Version = uint32(v.(int))
+
+													}
+
+												}
+											}
+
+										}
+
+										if v, ok := cs["wingman_secret_info"]; ok && !isIntfNil(v) && !secretInfoOneofTypeFound {
+
+											secretInfoOneofTypeFound = true
+											secretInfoOneofInt := &ves_io_schema.SecretType_WingmanSecretInfo{}
+											secretInfoOneofInt.WingmanSecretInfo = &ves_io_schema.WingmanSecretInfoType{}
+											valueChoiceInt.SecretValue.SecretInfoOneof = secretInfoOneofInt
+
+											sl := v.([]interface{})
+											for _, set := range sl {
+												if set != nil {
+													cs := set.(map[string]interface{})
+
+													if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+														secretInfoOneofInt.WingmanSecretInfo.Name = v.(string)
 
 													}
 
@@ -4810,6 +6455,10 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 										if w, ok := bufferPolicyMapStrToI["max_request_bytes"]; ok && !isIntfNil(w) {
 											bufferPolicy.MaxRequestBytes = uint32(w.(int))
+										}
+
+										if w, ok := bufferPolicyMapStrToI["max_request_time"]; ok && !isIntfNil(w) {
+											bufferPolicy.MaxRequestTime = uint32(w.(int))
 										}
 
 									}
@@ -4896,6 +6545,10 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 										if w, ok := corsPolicyMapStrToI["expose_headers"]; ok && !isIntfNil(w) {
 											corsPolicy.ExposeHeaders = w.(string)
+										}
+
+										if w, ok := corsPolicyMapStrToI["max_age"]; ok && !isIntfNil(w) {
+											corsPolicy.MaxAge = w.(string)
 										}
 
 										if w, ok := corsPolicyMapStrToI["maximum_age"]; ok && !isIntfNil(w) {
@@ -4995,28 +6648,30 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 											clusterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											destinations[i].Cluster = clusterInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												cMapToStrVal := ps.(map[string]interface{})
-												clusterInt[i] = &ves_io_schema.ObjectRefType{}
+													cMapToStrVal := ps.(map[string]interface{})
+													clusterInt[i] = &ves_io_schema.ObjectRefType{}
 
-												clusterInt[i].Kind = "cluster"
+													clusterInt[i].Kind = "cluster"
 
-												if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-													clusterInt[i].Name = v.(string)
+													if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+														clusterInt[i].Name = v.(string)
+													}
+
+													if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														clusterInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														clusterInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														clusterInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													clusterInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													clusterInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													clusterInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -5270,28 +6925,30 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 											clusterInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											mirrorPolicy.Cluster = clusterInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												cMapToStrVal := ps.(map[string]interface{})
-												clusterInt[i] = &ves_io_schema.ObjectRefType{}
+													cMapToStrVal := ps.(map[string]interface{})
+													clusterInt[i] = &ves_io_schema.ObjectRefType{}
 
-												clusterInt[i].Kind = "cluster"
+													clusterInt[i].Kind = "cluster"
 
-												if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
-													clusterInt[i].Name = v.(string)
+													if v, ok := cMapToStrVal["name"]; ok && !isIntfNil(v) {
+														clusterInt[i].Name = v.(string)
+													}
+
+													if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														clusterInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														clusterInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														clusterInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := cMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													clusterInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := cMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													clusterInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := cMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													clusterInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}
@@ -5442,6 +7099,10 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 											retryPolicy.RetryCondition = ls
 										}
 
+										if w, ok := retryPolicyMapStrToI["retry_on"]; ok && !isIntfNil(w) {
+											retryPolicy.RetryOn = w.(string)
+										}
+
 									}
 								}
 
@@ -5554,6 +7215,12 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 							}
 
+							if v, ok := cs["response_body_encoded"]; ok && !isIntfNil(v) {
+
+								routeActionInt.RouteDirectResponse.ResponseBodyEncoded = v.(string)
+
+							}
+
 							if v, ok := cs["response_code"]; ok && !isIntfNil(v) {
 
 								routeActionInt.RouteDirectResponse.ResponseCode = uint32(v.(int))
@@ -5583,6 +7250,12 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 							}
 
+							if v, ok := cs["port_redirect"]; ok && !isIntfNil(v) {
+
+								routeActionInt.RouteRedirect.PortRedirect = uint32(v.(int))
+
+							}
+
 							if v, ok := cs["proto_redirect"]; ok && !isIntfNil(v) {
 
 								routeActionInt.RouteRedirect.ProtoRedirect = v.(string)
@@ -5590,6 +7263,17 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 							}
 
 							queryParamsTypeFound := false
+
+							if v, ok := cs["all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+								queryParamsTypeFound = true
+								queryParamsInt := &ves_io_schema_route.RouteRedirect_AllParams{}
+
+								routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+
+								queryParamsInt.AllParams = v.(bool)
+
+							}
 
 							if v, ok := cs["remove_all_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
 
@@ -5622,6 +7306,38 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 									queryParamsInt := &ves_io_schema_route.RouteRedirect_RetainAllParams{}
 									queryParamsInt.RetainAllParams = &ves_io_schema.Empty{}
 									routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+								}
+
+							}
+
+							if v, ok := cs["strip_query_params"]; ok && !isIntfNil(v) && !queryParamsTypeFound {
+
+								queryParamsTypeFound = true
+								queryParamsInt := &ves_io_schema_route.RouteRedirect_StripQueryParams{}
+								queryParamsInt.StripQueryParams = &ves_io_schema_route.RouteQueryParams{}
+								routeActionInt.RouteRedirect.QueryParams = queryParamsInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["query_params"]; ok && !isIntfNil(v) {
+
+											ls := make([]string, len(v.([]interface{})))
+											for i, v := range v.([]interface{}) {
+												if v == nil {
+													return fmt.Errorf("please provide valid non-empty string value of field query_params")
+												}
+												if str, ok := v.(string); ok {
+													ls[i] = str
+												}
+											}
+											queryParamsInt.StripQueryParams.QueryParams = ls
+
+										}
+
+									}
 								}
 
 							}
@@ -5672,6 +7388,32 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 							servicePolicyChoiceTypeFound := false
 
+							if v, ok := servicePolicyMapStrToI["context_extensions"]; ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
+
+								servicePolicyChoiceTypeFound = true
+								servicePolicyChoiceInt := &ves_io_schema_route.ServicePolicyInfo_ContextExtensions{}
+								servicePolicyChoiceInt.ContextExtensions = &ves_io_schema_route.ContextExtensionInfo{}
+								servicePolicy.ServicePolicyChoice = servicePolicyChoiceInt
+
+								sl := v.([]interface{})
+								for _, set := range sl {
+									if set != nil {
+										cs := set.(map[string]interface{})
+
+										if v, ok := cs["context_extensions"]; ok && !isIntfNil(v) {
+
+											ms := map[string]string{}
+											for k, v := range v.(map[string]interface{}) {
+												ms[k] = v.(string)
+											}
+											servicePolicyChoiceInt.ContextExtensions.ContextExtensions = ms
+										}
+
+									}
+								}
+
+							}
+
 							if v, ok := servicePolicyMapStrToI["disable"]; ok && !isIntfNil(v) && !servicePolicyChoiceTypeFound {
 
 								servicePolicyChoiceTypeFound = true
@@ -5681,6 +7423,97 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 
 								servicePolicyChoiceInt.Disable = v.(bool)
 
+							}
+
+						}
+					}
+
+				}
+
+				if w, ok := routesMapStrToI["skip_lb_override"]; ok && !isIntfNil(w) {
+					routes[i].SkipLbOverride = w.(bool)
+				}
+
+				if w, ok := routesMapStrToI["uuid"]; ok && !isIntfNil(w) {
+					routes[i].Uuid = w.(string)
+				}
+
+				wafExclusionChoiceTypeFound := false
+
+				if v, ok := routesMapStrToI["inherited_waf_exclusion"]; ok && !isIntfNil(v) && !wafExclusionChoiceTypeFound {
+
+					wafExclusionChoiceTypeFound = true
+
+					if v.(bool) {
+						wafExclusionChoiceInt := &ves_io_schema_route.RouteType_InheritedWafExclusion{}
+						wafExclusionChoiceInt.InheritedWafExclusion = &ves_io_schema.Empty{}
+						routes[i].WafExclusionChoice = wafExclusionChoiceInt
+					}
+
+				}
+
+				if v, ok := routesMapStrToI["waf_exclusion_policy"]; ok && !isIntfNil(v) && !wafExclusionChoiceTypeFound {
+
+					wafExclusionChoiceTypeFound = true
+					wafExclusionChoiceInt := &ves_io_schema_route.RouteType_WafExclusionPolicy{}
+					wafExclusionChoiceInt.WafExclusionPolicy = &ves_io_schema_views.ObjectRefType{}
+					routes[i].WafExclusionChoice = wafExclusionChoiceInt
+
+					sl := v.([]interface{})
+					for _, set := range sl {
+						if set != nil {
+							cs := set.(map[string]interface{})
+
+							if v, ok := cs["name"]; ok && !isIntfNil(v) {
+
+								wafExclusionChoiceInt.WafExclusionPolicy.Name = v.(string)
+
+							}
+
+							if v, ok := cs["namespace"]; ok && !isIntfNil(v) {
+
+								wafExclusionChoiceInt.WafExclusionPolicy.Namespace = v.(string)
+
+							}
+
+							if v, ok := cs["tenant"]; ok && !isIntfNil(v) {
+
+								wafExclusionChoiceInt.WafExclusionPolicy.Tenant = v.(string)
+
+							}
+
+						}
+					}
+
+				}
+
+				if v, ok := routesMapStrToI["waf_exclusion_service_policy"]; ok && !isIntfNil(v) {
+
+					sl := v.([]interface{})
+					wafExclusionServicePolicyInt := make([]*ves_io_schema.ObjectRefType, len(sl))
+					routes[i].WafExclusionServicePolicy = wafExclusionServicePolicyInt
+					for i, ps := range sl {
+						if ps != nil {
+
+							wespMapToStrVal := ps.(map[string]interface{})
+							wafExclusionServicePolicyInt[i] = &ves_io_schema.ObjectRefType{}
+
+							wafExclusionServicePolicyInt[i].Kind = "service_policy"
+
+							if v, ok := wespMapToStrVal["name"]; ok && !isIntfNil(v) {
+								wafExclusionServicePolicyInt[i].Name = v.(string)
+							}
+
+							if v, ok := wespMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+								wafExclusionServicePolicyInt[i].Namespace = v.(string)
+							}
+
+							if v, ok := wespMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+								wafExclusionServicePolicyInt[i].Tenant = v.(string)
+							}
+
+							if v, ok := wespMapToStrVal["uid"]; ok && !isIntfNil(v) {
+								wafExclusionServicePolicyInt[i].Uid = v.(string)
 							}
 
 						}
@@ -5717,28 +7550,30 @@ func resourceVolterraRouteUpdate(d *schema.ResourceData, meta interface{}) error
 											appFirewallInt := make([]*ves_io_schema.ObjectRefType, len(sl))
 											refTypeInt.AppFirewall.AppFirewall = appFirewallInt
 											for i, ps := range sl {
+												if ps != nil {
 
-												afMapToStrVal := ps.(map[string]interface{})
-												appFirewallInt[i] = &ves_io_schema.ObjectRefType{}
+													afMapToStrVal := ps.(map[string]interface{})
+													appFirewallInt[i] = &ves_io_schema.ObjectRefType{}
 
-												appFirewallInt[i].Kind = "app_firewall"
+													appFirewallInt[i].Kind = "app_firewall"
 
-												if v, ok := afMapToStrVal["name"]; ok && !isIntfNil(v) {
-													appFirewallInt[i].Name = v.(string)
+													if v, ok := afMapToStrVal["name"]; ok && !isIntfNil(v) {
+														appFirewallInt[i].Name = v.(string)
+													}
+
+													if v, ok := afMapToStrVal["namespace"]; ok && !isIntfNil(v) {
+														appFirewallInt[i].Namespace = v.(string)
+													}
+
+													if v, ok := afMapToStrVal["tenant"]; ok && !isIntfNil(v) {
+														appFirewallInt[i].Tenant = v.(string)
+													}
+
+													if v, ok := afMapToStrVal["uid"]; ok && !isIntfNil(v) {
+														appFirewallInt[i].Uid = v.(string)
+													}
+
 												}
-
-												if v, ok := afMapToStrVal["namespace"]; ok && !isIntfNil(v) {
-													appFirewallInt[i].Namespace = v.(string)
-												}
-
-												if v, ok := afMapToStrVal["tenant"]; ok && !isIntfNil(v) {
-													appFirewallInt[i].Tenant = v.(string)
-												}
-
-												if v, ok := afMapToStrVal["uid"]; ok && !isIntfNil(v) {
-													appFirewallInt[i].Uid = v.(string)
-												}
-
 											}
 
 										}

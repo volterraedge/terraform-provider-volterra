@@ -463,1099 +463,6 @@ func (RiskBasedBlockingAction) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_f3c53032614c5085, []int{3}
 }
 
-// BotProtectionSetting
-//
-// x-displayName: "Bot Protection"
-// Configuration of WAF Bot Protection
-type BotProtectionSetting struct {
-	// malicious_bot_action
-	//
-	// x-displayName: "Malicious Bot"
-	// A client that exhibits malicious intent such as DoS tools, known exploit tools, and vulnerability scanners
-	MaliciousBotAction BotAction `protobuf:"varint,1,opt,name=malicious_bot_action,json=maliciousBotAction,proto3,enum=ves.io.schema.app_firewall.BotAction" json:"malicious_bot_action,omitempty"`
-	// suspicious_bot_action
-	//
-	// x-displayName: "Suspicious Bot"
-	// A client that exhibits non-malicious tools such as site crawlers, monitors, spiders, web downloaders and bots behaviors, signatures such as search bots and social media agents
-	SuspiciousBotAction BotAction `protobuf:"varint,2,opt,name=suspicious_bot_action,json=suspiciousBotAction,proto3,enum=ves.io.schema.app_firewall.BotAction" json:"suspicious_bot_action,omitempty"`
-	// good_bot_action
-	//
-	// x-displayName: "Good Bot"
-	// A client that exhibits known search engine behaviors and signatures
-	GoodBotAction BotAction `protobuf:"varint,3,opt,name=good_bot_action,json=goodBotAction,proto3,enum=ves.io.schema.app_firewall.BotAction" json:"good_bot_action,omitempty"`
-}
-
-func (m *BotProtectionSetting) Reset()      { *m = BotProtectionSetting{} }
-func (*BotProtectionSetting) ProtoMessage() {}
-func (*BotProtectionSetting) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{0}
-}
-func (m *BotProtectionSetting) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *BotProtectionSetting) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *BotProtectionSetting) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BotProtectionSetting.Merge(m, src)
-}
-func (m *BotProtectionSetting) XXX_Size() int {
-	return m.Size()
-}
-func (m *BotProtectionSetting) XXX_DiscardUnknown() {
-	xxx_messageInfo_BotProtectionSetting.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_BotProtectionSetting proto.InternalMessageInfo
-
-func (m *BotProtectionSetting) GetMaliciousBotAction() BotAction {
-	if m != nil {
-		return m.MaliciousBotAction
-	}
-	return BLOCK
-}
-
-func (m *BotProtectionSetting) GetSuspiciousBotAction() BotAction {
-	if m != nil {
-		return m.SuspiciousBotAction
-	}
-	return BLOCK
-}
-
-func (m *BotProtectionSetting) GetGoodBotAction() BotAction {
-	if m != nil {
-		return m.GoodBotAction
-	}
-	return BLOCK
-}
-
-// Attack Type Settings
-//
-// x-displayName: "Attack Type Settings"
-// Specifies attack-type settings to be used by WAF
-type AttackTypeSettings struct {
-	// Disabled Attack Types
-	//
-	// x-displayName: "Disabled Attack Types"
-	// x-required
-	// List of Attack Types that will be ignored and not trigger a detection
-	DisabledAttackTypes []AttackType `protobuf:"varint,1,rep,packed,name=disabled_attack_types,json=disabledAttackTypes,proto3,enum=ves.io.schema.app_firewall.AttackType" json:"disabled_attack_types,omitempty"`
-}
-
-func (m *AttackTypeSettings) Reset()      { *m = AttackTypeSettings{} }
-func (*AttackTypeSettings) ProtoMessage() {}
-func (*AttackTypeSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{1}
-}
-func (m *AttackTypeSettings) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AttackTypeSettings) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *AttackTypeSettings) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AttackTypeSettings.Merge(m, src)
-}
-func (m *AttackTypeSettings) XXX_Size() int {
-	return m.Size()
-}
-func (m *AttackTypeSettings) XXX_DiscardUnknown() {
-	xxx_messageInfo_AttackTypeSettings.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AttackTypeSettings proto.InternalMessageInfo
-
-func (m *AttackTypeSettings) GetDisabledAttackTypes() []AttackType {
-	if m != nil {
-		return m.DisabledAttackTypes
-	}
-	return nil
-}
-
-// Attack Signatures
-//
-// x-displayName: "Attack Signatures"
-// Attack Signatures are patterns that identify attacks on a web application and its components
-type SignatureSelectionSetting struct {
-	// Signature selection by accuracy
-	//
-	// x-displayName: "Signature Selection By Accuracy"
-	// x-required
-	// Accuracy indicates the ability of the Attack Signatures to identify the attack including susceptibility to false-positive alarms.
-	// Low: Indicates a high likelihood of false positives.
-	// Medium: Indicates some likelihood of false positives.
-	// High: Indicates a low likelihood of false positives.
-	//
-	// Types that are valid to be assigned to SignatureSelectionByAccuracy:
-	//	*SignatureSelectionSetting_OnlyHighAccuracySignatures
-	//	*SignatureSelectionSetting_HighMediumAccuracySignatures
-	//	*SignatureSelectionSetting_HighMediumLowAccuracySignatures
-	SignatureSelectionByAccuracy isSignatureSelectionSetting_SignatureSelectionByAccuracy `protobuf_oneof:"signature_selection_by_accuracy"`
-	// Attack Types
-	//
-	// x-displayName: "Attack Types"
-	// x-required
-	// The types of attacks that Attack Signatures can detect
-	//
-	// Types that are valid to be assigned to AttackTypeSetting:
-	//	*SignatureSelectionSetting_DefaultAttackTypeSettings
-	//	*SignatureSelectionSetting_AttackTypeSettings
-	AttackTypeSetting isSignatureSelectionSetting_AttackTypeSetting `protobuf_oneof:"attack_type_setting"`
-}
-
-func (m *SignatureSelectionSetting) Reset()      { *m = SignatureSelectionSetting{} }
-func (*SignatureSelectionSetting) ProtoMessage() {}
-func (*SignatureSelectionSetting) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{2}
-}
-func (m *SignatureSelectionSetting) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *SignatureSelectionSetting) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *SignatureSelectionSetting) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignatureSelectionSetting.Merge(m, src)
-}
-func (m *SignatureSelectionSetting) XXX_Size() int {
-	return m.Size()
-}
-func (m *SignatureSelectionSetting) XXX_DiscardUnknown() {
-	xxx_messageInfo_SignatureSelectionSetting.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SignatureSelectionSetting proto.InternalMessageInfo
-
-type isSignatureSelectionSetting_SignatureSelectionByAccuracy interface {
-	isSignatureSelectionSetting_SignatureSelectionByAccuracy()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isSignatureSelectionSetting_AttackTypeSetting interface {
-	isSignatureSelectionSetting_AttackTypeSetting()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type SignatureSelectionSetting_OnlyHighAccuracySignatures struct {
-	OnlyHighAccuracySignatures *schema.Empty `protobuf:"bytes,2,opt,name=only_high_accuracy_signatures,json=onlyHighAccuracySignatures,proto3,oneof" json:"only_high_accuracy_signatures,omitempty"`
-}
-type SignatureSelectionSetting_HighMediumAccuracySignatures struct {
-	HighMediumAccuracySignatures *schema.Empty `protobuf:"bytes,3,opt,name=high_medium_accuracy_signatures,json=highMediumAccuracySignatures,proto3,oneof" json:"high_medium_accuracy_signatures,omitempty"`
-}
-type SignatureSelectionSetting_HighMediumLowAccuracySignatures struct {
-	HighMediumLowAccuracySignatures *schema.Empty `protobuf:"bytes,4,opt,name=high_medium_low_accuracy_signatures,json=highMediumLowAccuracySignatures,proto3,oneof" json:"high_medium_low_accuracy_signatures,omitempty"`
-}
-type SignatureSelectionSetting_DefaultAttackTypeSettings struct {
-	DefaultAttackTypeSettings *schema.Empty `protobuf:"bytes,6,opt,name=default_attack_type_settings,json=defaultAttackTypeSettings,proto3,oneof" json:"default_attack_type_settings,omitempty"`
-}
-type SignatureSelectionSetting_AttackTypeSettings struct {
-	AttackTypeSettings *AttackTypeSettings `protobuf:"bytes,8,opt,name=attack_type_settings,json=attackTypeSettings,proto3,oneof" json:"attack_type_settings,omitempty"`
-}
-
-func (*SignatureSelectionSetting_OnlyHighAccuracySignatures) isSignatureSelectionSetting_SignatureSelectionByAccuracy() {
-}
-func (*SignatureSelectionSetting_HighMediumAccuracySignatures) isSignatureSelectionSetting_SignatureSelectionByAccuracy() {
-}
-func (*SignatureSelectionSetting_HighMediumLowAccuracySignatures) isSignatureSelectionSetting_SignatureSelectionByAccuracy() {
-}
-func (*SignatureSelectionSetting_DefaultAttackTypeSettings) isSignatureSelectionSetting_AttackTypeSetting() {
-}
-func (*SignatureSelectionSetting_AttackTypeSettings) isSignatureSelectionSetting_AttackTypeSetting() {
-}
-
-func (m *SignatureSelectionSetting) GetSignatureSelectionByAccuracy() isSignatureSelectionSetting_SignatureSelectionByAccuracy {
-	if m != nil {
-		return m.SignatureSelectionByAccuracy
-	}
-	return nil
-}
-func (m *SignatureSelectionSetting) GetAttackTypeSetting() isSignatureSelectionSetting_AttackTypeSetting {
-	if m != nil {
-		return m.AttackTypeSetting
-	}
-	return nil
-}
-
-func (m *SignatureSelectionSetting) GetOnlyHighAccuracySignatures() *schema.Empty {
-	if x, ok := m.GetSignatureSelectionByAccuracy().(*SignatureSelectionSetting_OnlyHighAccuracySignatures); ok {
-		return x.OnlyHighAccuracySignatures
-	}
-	return nil
-}
-
-func (m *SignatureSelectionSetting) GetHighMediumAccuracySignatures() *schema.Empty {
-	if x, ok := m.GetSignatureSelectionByAccuracy().(*SignatureSelectionSetting_HighMediumAccuracySignatures); ok {
-		return x.HighMediumAccuracySignatures
-	}
-	return nil
-}
-
-func (m *SignatureSelectionSetting) GetHighMediumLowAccuracySignatures() *schema.Empty {
-	if x, ok := m.GetSignatureSelectionByAccuracy().(*SignatureSelectionSetting_HighMediumLowAccuracySignatures); ok {
-		return x.HighMediumLowAccuracySignatures
-	}
-	return nil
-}
-
-func (m *SignatureSelectionSetting) GetDefaultAttackTypeSettings() *schema.Empty {
-	if x, ok := m.GetAttackTypeSetting().(*SignatureSelectionSetting_DefaultAttackTypeSettings); ok {
-		return x.DefaultAttackTypeSettings
-	}
-	return nil
-}
-
-func (m *SignatureSelectionSetting) GetAttackTypeSettings() *AttackTypeSettings {
-	if x, ok := m.GetAttackTypeSetting().(*SignatureSelectionSetting_AttackTypeSettings); ok {
-		return x.AttackTypeSettings
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*SignatureSelectionSetting) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*SignatureSelectionSetting_OnlyHighAccuracySignatures)(nil),
-		(*SignatureSelectionSetting_HighMediumAccuracySignatures)(nil),
-		(*SignatureSelectionSetting_HighMediumLowAccuracySignatures)(nil),
-		(*SignatureSelectionSetting_DefaultAttackTypeSettings)(nil),
-		(*SignatureSelectionSetting_AttackTypeSettings)(nil),
-	}
-}
-
-// Violation Settings
-//
-// x-displayName: "Violation Settings"
-// Specifies violation settings to be used by WAF
-type ViolationSettings struct {
-	// Disabled Violations
-	//
-	// x-displayName: "Disabled Violations"
-	// x-required
-	// List of violations to be excluded
-	DisabledViolationTypes []AppFirewallViolationType `protobuf:"varint,1,rep,packed,name=disabled_violation_types,json=disabledViolationTypes,proto3,enum=ves.io.schema.app_firewall.AppFirewallViolationType" json:"disabled_violation_types,omitempty"`
-}
-
-func (m *ViolationSettings) Reset()      { *m = ViolationSettings{} }
-func (*ViolationSettings) ProtoMessage() {}
-func (*ViolationSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{3}
-}
-func (m *ViolationSettings) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *ViolationSettings) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *ViolationSettings) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ViolationSettings.Merge(m, src)
-}
-func (m *ViolationSettings) XXX_Size() int {
-	return m.Size()
-}
-func (m *ViolationSettings) XXX_DiscardUnknown() {
-	xxx_messageInfo_ViolationSettings.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ViolationSettings proto.InternalMessageInfo
-
-func (m *ViolationSettings) GetDisabledViolationTypes() []AppFirewallViolationType {
-	if m != nil {
-		return m.DisabledViolationTypes
-	}
-	return nil
-}
-
-// Detection Settings
-//
-// x-displayName: "Detection Settings"
-// Specifies detection settings to be used by WAF
-type DetectionSetting struct {
-	// Signature Selection Setting
-	//
-	// x-displayName: "Attack Signatures"
-	// Attack Signatures are patterns that identify attacks on a web application and its components
-	SignatureSelectionSetting *SignatureSelectionSetting `protobuf:"bytes,1,opt,name=signature_selection_setting,json=signatureSelectionSetting,proto3" json:"signature_selection_setting,omitempty"`
-	// Automatic Attack Signatures Tuning
-	//
-	// x-displayName: "Automatic Attack Signatures Tuning"
-	// x-required
-	// Self-learning probabilistic machine learning model that suppresses false positive triggers
-	//
-	// Types that are valid to be assigned to FalsePositiveSuppression:
-	//	*DetectionSetting_EnableSuppression
-	//	*DetectionSetting_DisableSuppression
-	FalsePositiveSuppression isDetectionSetting_FalsePositiveSuppression `protobuf_oneof:"false_positive_suppression"`
-	// Threat Campaigns
-	//
-	// x-displayName: "Threat Campaigns"
-	// x-required
-	// Threat Campaigns provide targeted signatures to protect organizations from sophisticated attacks
-	//
-	// Types that are valid to be assigned to ThreatCampaignChoice:
-	//	*DetectionSetting_EnableThreatCampaigns
-	//	*DetectionSetting_DisableThreatCampaigns
-	ThreatCampaignChoice isDetectionSetting_ThreatCampaignChoice `protobuf_oneof:"threat_campaign_choice"`
-	// Violations
-	//
-	// x-displayName: "Violations"
-	// x-required
-	// Lists of validation checks that are performed on HTTP requests to ensure the requests are properly formatted, detection of evasion techniques and other violations
-	//
-	// Types that are valid to be assigned to ViolationDetectionSetting:
-	//	*DetectionSetting_DefaultViolationSettings
-	//	*DetectionSetting_ViolationSettings
-	ViolationDetectionSetting isDetectionSetting_ViolationDetectionSetting `protobuf_oneof:"violation_detection_setting"`
-	// Attack Signatures Staging Settings
-	//
-	// x-displayName: "Attack Signatures Staging"
-	// Attack signatures are added/updated on the Distributed cloud platform on a regular cadence. This setting
-	// enables/disables staging process for new and modified attack signatures. Staging means that, when new signatures
-	// are added or existing signatures are updated on the platform, WAF applies the attack signature to web application
-	// traffic, but does not block an incoming request if it triggers this attack signature. The default staging period
-	// is 7 days
-	//
-	// Types that are valid to be assigned to SignaturesStagingSettings:
-	//	*DetectionSetting_DisableStaging
-	//	*DetectionSetting_StageNewSignatures
-	//	*DetectionSetting_StageNewAndUpdatedSignatures
-	SignaturesStagingSettings isDetectionSetting_SignaturesStagingSettings `protobuf_oneof:"signatures_staging_settings"`
-	// Signature-based Bot Protection
-	//
-	// x-displayName: "Signature-Based Bot Protection"
-	// x-required
-	// Settings to manage and mitigate bot traffic. These settings work in tandem with the appfirewall enforcement mode i.e, block setting for bot protection is enforced if both bot and appfirewall enforcement modes are in block. In all other scenarios, bots will only be reported. Behavior based bot protection, which prevents large-scale fraud with account takeover protection and much more, is available as F5 Distributed Cloud Bot Defense and is an add-on subscription service.
-	//
-	// Types that are valid to be assigned to BotProtectionChoice:
-	//	*DetectionSetting_DefaultBotSetting
-	//	*DetectionSetting_BotProtectionSetting
-	BotProtectionChoice isDetectionSetting_BotProtectionChoice `protobuf_oneof:"bot_protection_choice"`
-}
-
-func (m *DetectionSetting) Reset()      { *m = DetectionSetting{} }
-func (*DetectionSetting) ProtoMessage() {}
-func (*DetectionSetting) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{4}
-}
-func (m *DetectionSetting) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *DetectionSetting) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *DetectionSetting) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DetectionSetting.Merge(m, src)
-}
-func (m *DetectionSetting) XXX_Size() int {
-	return m.Size()
-}
-func (m *DetectionSetting) XXX_DiscardUnknown() {
-	xxx_messageInfo_DetectionSetting.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DetectionSetting proto.InternalMessageInfo
-
-type isDetectionSetting_FalsePositiveSuppression interface {
-	isDetectionSetting_FalsePositiveSuppression()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isDetectionSetting_ThreatCampaignChoice interface {
-	isDetectionSetting_ThreatCampaignChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isDetectionSetting_ViolationDetectionSetting interface {
-	isDetectionSetting_ViolationDetectionSetting()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isDetectionSetting_SignaturesStagingSettings interface {
-	isDetectionSetting_SignaturesStagingSettings()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-type isDetectionSetting_BotProtectionChoice interface {
-	isDetectionSetting_BotProtectionChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type DetectionSetting_EnableSuppression struct {
-	EnableSuppression *schema.Empty `protobuf:"bytes,3,opt,name=enable_suppression,json=enableSuppression,proto3,oneof" json:"enable_suppression,omitempty"`
-}
-type DetectionSetting_DisableSuppression struct {
-	DisableSuppression *schema.Empty `protobuf:"bytes,4,opt,name=disable_suppression,json=disableSuppression,proto3,oneof" json:"disable_suppression,omitempty"`
-}
-type DetectionSetting_EnableThreatCampaigns struct {
-	EnableThreatCampaigns *schema.Empty `protobuf:"bytes,6,opt,name=enable_threat_campaigns,json=enableThreatCampaigns,proto3,oneof" json:"enable_threat_campaigns,omitempty"`
-}
-type DetectionSetting_DisableThreatCampaigns struct {
-	DisableThreatCampaigns *schema.Empty `protobuf:"bytes,7,opt,name=disable_threat_campaigns,json=disableThreatCampaigns,proto3,oneof" json:"disable_threat_campaigns,omitempty"`
-}
-type DetectionSetting_DefaultViolationSettings struct {
-	DefaultViolationSettings *schema.Empty `protobuf:"bytes,9,opt,name=default_violation_settings,json=defaultViolationSettings,proto3,oneof" json:"default_violation_settings,omitempty"`
-}
-type DetectionSetting_ViolationSettings struct {
-	ViolationSettings *ViolationSettings `protobuf:"bytes,11,opt,name=violation_settings,json=violationSettings,proto3,oneof" json:"violation_settings,omitempty"`
-}
-type DetectionSetting_DisableStaging struct {
-	DisableStaging *schema.Empty `protobuf:"bytes,13,opt,name=disable_staging,json=disableStaging,proto3,oneof" json:"disable_staging,omitempty"`
-}
-type DetectionSetting_StageNewSignatures struct {
-	StageNewSignatures *SignaturesStagingSettings `protobuf:"bytes,14,opt,name=stage_new_signatures,json=stageNewSignatures,proto3,oneof" json:"stage_new_signatures,omitempty"`
-}
-type DetectionSetting_StageNewAndUpdatedSignatures struct {
-	StageNewAndUpdatedSignatures *SignaturesStagingSettings `protobuf:"bytes,15,opt,name=stage_new_and_updated_signatures,json=stageNewAndUpdatedSignatures,proto3,oneof" json:"stage_new_and_updated_signatures,omitempty"`
-}
-type DetectionSetting_DefaultBotSetting struct {
-	DefaultBotSetting *schema.Empty `protobuf:"bytes,17,opt,name=default_bot_setting,json=defaultBotSetting,proto3,oneof" json:"default_bot_setting,omitempty"`
-}
-type DetectionSetting_BotProtectionSetting struct {
-	BotProtectionSetting *BotProtectionSetting `protobuf:"bytes,18,opt,name=bot_protection_setting,json=botProtectionSetting,proto3,oneof" json:"bot_protection_setting,omitempty"`
-}
-
-func (*DetectionSetting_EnableSuppression) isDetectionSetting_FalsePositiveSuppression()         {}
-func (*DetectionSetting_DisableSuppression) isDetectionSetting_FalsePositiveSuppression()        {}
-func (*DetectionSetting_EnableThreatCampaigns) isDetectionSetting_ThreatCampaignChoice()         {}
-func (*DetectionSetting_DisableThreatCampaigns) isDetectionSetting_ThreatCampaignChoice()        {}
-func (*DetectionSetting_DefaultViolationSettings) isDetectionSetting_ViolationDetectionSetting() {}
-func (*DetectionSetting_ViolationSettings) isDetectionSetting_ViolationDetectionSetting()        {}
-func (*DetectionSetting_DisableStaging) isDetectionSetting_SignaturesStagingSettings()           {}
-func (*DetectionSetting_StageNewSignatures) isDetectionSetting_SignaturesStagingSettings()       {}
-func (*DetectionSetting_StageNewAndUpdatedSignatures) isDetectionSetting_SignaturesStagingSettings() {
-}
-func (*DetectionSetting_DefaultBotSetting) isDetectionSetting_BotProtectionChoice()    {}
-func (*DetectionSetting_BotProtectionSetting) isDetectionSetting_BotProtectionChoice() {}
-
-func (m *DetectionSetting) GetFalsePositiveSuppression() isDetectionSetting_FalsePositiveSuppression {
-	if m != nil {
-		return m.FalsePositiveSuppression
-	}
-	return nil
-}
-func (m *DetectionSetting) GetThreatCampaignChoice() isDetectionSetting_ThreatCampaignChoice {
-	if m != nil {
-		return m.ThreatCampaignChoice
-	}
-	return nil
-}
-func (m *DetectionSetting) GetViolationDetectionSetting() isDetectionSetting_ViolationDetectionSetting {
-	if m != nil {
-		return m.ViolationDetectionSetting
-	}
-	return nil
-}
-func (m *DetectionSetting) GetSignaturesStagingSettings() isDetectionSetting_SignaturesStagingSettings {
-	if m != nil {
-		return m.SignaturesStagingSettings
-	}
-	return nil
-}
-func (m *DetectionSetting) GetBotProtectionChoice() isDetectionSetting_BotProtectionChoice {
-	if m != nil {
-		return m.BotProtectionChoice
-	}
-	return nil
-}
-
-func (m *DetectionSetting) GetSignatureSelectionSetting() *SignatureSelectionSetting {
-	if m != nil {
-		return m.SignatureSelectionSetting
-	}
-	return nil
-}
-
-func (m *DetectionSetting) GetEnableSuppression() *schema.Empty {
-	if x, ok := m.GetFalsePositiveSuppression().(*DetectionSetting_EnableSuppression); ok {
-		return x.EnableSuppression
-	}
-	return nil
-}
-
-func (m *DetectionSetting) GetDisableSuppression() *schema.Empty {
-	if x, ok := m.GetFalsePositiveSuppression().(*DetectionSetting_DisableSuppression); ok {
-		return x.DisableSuppression
-	}
-	return nil
-}
-
-func (m *DetectionSetting) GetEnableThreatCampaigns() *schema.Empty {
-	if x, ok := m.GetThreatCampaignChoice().(*DetectionSetting_EnableThreatCampaigns); ok {
-		return x.EnableThreatCampaigns
-	}
-	return nil
-}
-
-func (m *DetectionSetting) GetDisableThreatCampaigns() *schema.Empty {
-	if x, ok := m.GetThreatCampaignChoice().(*DetectionSetting_DisableThreatCampaigns); ok {
-		return x.DisableThreatCampaigns
-	}
-	return nil
-}
-
-func (m *DetectionSetting) GetDefaultViolationSettings() *schema.Empty {
-	if x, ok := m.GetViolationDetectionSetting().(*DetectionSetting_DefaultViolationSettings); ok {
-		return x.DefaultViolationSettings
-	}
-	return nil
-}
-
-func (m *DetectionSetting) GetViolationSettings() *ViolationSettings {
-	if x, ok := m.GetViolationDetectionSetting().(*DetectionSetting_ViolationSettings); ok {
-		return x.ViolationSettings
-	}
-	return nil
-}
-
-func (m *DetectionSetting) GetDisableStaging() *schema.Empty {
-	if x, ok := m.GetSignaturesStagingSettings().(*DetectionSetting_DisableStaging); ok {
-		return x.DisableStaging
-	}
-	return nil
-}
-
-func (m *DetectionSetting) GetStageNewSignatures() *SignaturesStagingSettings {
-	if x, ok := m.GetSignaturesStagingSettings().(*DetectionSetting_StageNewSignatures); ok {
-		return x.StageNewSignatures
-	}
-	return nil
-}
-
-func (m *DetectionSetting) GetStageNewAndUpdatedSignatures() *SignaturesStagingSettings {
-	if x, ok := m.GetSignaturesStagingSettings().(*DetectionSetting_StageNewAndUpdatedSignatures); ok {
-		return x.StageNewAndUpdatedSignatures
-	}
-	return nil
-}
-
-func (m *DetectionSetting) GetDefaultBotSetting() *schema.Empty {
-	if x, ok := m.GetBotProtectionChoice().(*DetectionSetting_DefaultBotSetting); ok {
-		return x.DefaultBotSetting
-	}
-	return nil
-}
-
-func (m *DetectionSetting) GetBotProtectionSetting() *BotProtectionSetting {
-	if x, ok := m.GetBotProtectionChoice().(*DetectionSetting_BotProtectionSetting); ok {
-		return x.BotProtectionSetting
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*DetectionSetting) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*DetectionSetting_EnableSuppression)(nil),
-		(*DetectionSetting_DisableSuppression)(nil),
-		(*DetectionSetting_EnableThreatCampaigns)(nil),
-		(*DetectionSetting_DisableThreatCampaigns)(nil),
-		(*DetectionSetting_DefaultViolationSettings)(nil),
-		(*DetectionSetting_ViolationSettings)(nil),
-		(*DetectionSetting_DisableStaging)(nil),
-		(*DetectionSetting_StageNewSignatures)(nil),
-		(*DetectionSetting_StageNewAndUpdatedSignatures)(nil),
-		(*DetectionSetting_DefaultBotSetting)(nil),
-		(*DetectionSetting_BotProtectionSetting)(nil),
-	}
-}
-
-// Attack Signatures Staging Settings
-//
-// x-displayName: "Attack Signatures Staging Settings"
-// Attack Signatures staging configuration.
-type SignaturesStagingSettings struct {
-	// Staging Period
-	//
-	// x-displayName: "Staging Period"
-	// x-example: "7"
-	// x-required
-	// Define staging period in days. The default staging period is 7 days and the max supported staging period is
-	// 20 days.
-	StagingPeriod uint32 `protobuf:"varint,1,opt,name=staging_period,json=stagingPeriod,proto3" json:"staging_period,omitempty"`
-}
-
-func (m *SignaturesStagingSettings) Reset()      { *m = SignaturesStagingSettings{} }
-func (*SignaturesStagingSettings) ProtoMessage() {}
-func (*SignaturesStagingSettings) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{5}
-}
-func (m *SignaturesStagingSettings) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *SignaturesStagingSettings) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *SignaturesStagingSettings) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SignaturesStagingSettings.Merge(m, src)
-}
-func (m *SignaturesStagingSettings) XXX_Size() int {
-	return m.Size()
-}
-func (m *SignaturesStagingSettings) XXX_DiscardUnknown() {
-	xxx_messageInfo_SignaturesStagingSettings.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_SignaturesStagingSettings proto.InternalMessageInfo
-
-func (m *SignaturesStagingSettings) GetStagingPeriod() uint32 {
-	if m != nil {
-		return m.StagingPeriod
-	}
-	return 0
-}
-
-// Allowed Response Codes
-//
-// x-displayName: "Allowed Response Codes"
-// List of HTTP response status codes that are allowed
-type AllowedResponseCodes struct {
-	// response_code
-	//
-	// x-displayName: "Response Code"
-	// x-example: "[200, 201, 204, 300, 302, 400, 403, 404, 500, 501, 503]"
-	// x-required
-	// List of HTTP response status codes that are allowed
-	ResponseCode []uint32 `protobuf:"varint,1,rep,packed,name=response_code,json=responseCode,proto3" json:"response_code,omitempty"`
-}
-
-func (m *AllowedResponseCodes) Reset()      { *m = AllowedResponseCodes{} }
-func (*AllowedResponseCodes) ProtoMessage() {}
-func (*AllowedResponseCodes) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{6}
-}
-func (m *AllowedResponseCodes) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AllowedResponseCodes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *AllowedResponseCodes) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AllowedResponseCodes.Merge(m, src)
-}
-func (m *AllowedResponseCodes) XXX_Size() int {
-	return m.Size()
-}
-func (m *AllowedResponseCodes) XXX_DiscardUnknown() {
-	xxx_messageInfo_AllowedResponseCodes.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AllowedResponseCodes proto.InternalMessageInfo
-
-func (m *AllowedResponseCodes) GetResponseCode() []uint32 {
-	if m != nil {
-		return m.ResponseCode
-	}
-	return nil
-}
-
-// AnonymizeHttpHeader
-//
-// x-displayName: "Anonymize HTTP Header"
-// Configure anonymization for HTTP Headers
-type AnonymizeHttpHeader struct {
-	// header_name
-	//
-	// x-displayName: "Header Name"
-	// x-example: "value"
-	// x-required
-	// Masks the HTTP header value. The setting does not mask the HTTP header name.
-	HeaderName string `protobuf:"bytes,1,opt,name=header_name,json=headerName,proto3" json:"header_name,omitempty"`
-}
-
-func (m *AnonymizeHttpHeader) Reset()      { *m = AnonymizeHttpHeader{} }
-func (*AnonymizeHttpHeader) ProtoMessage() {}
-func (*AnonymizeHttpHeader) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{7}
-}
-func (m *AnonymizeHttpHeader) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AnonymizeHttpHeader) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *AnonymizeHttpHeader) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnonymizeHttpHeader.Merge(m, src)
-}
-func (m *AnonymizeHttpHeader) XXX_Size() int {
-	return m.Size()
-}
-func (m *AnonymizeHttpHeader) XXX_DiscardUnknown() {
-	xxx_messageInfo_AnonymizeHttpHeader.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AnonymizeHttpHeader proto.InternalMessageInfo
-
-func (m *AnonymizeHttpHeader) GetHeaderName() string {
-	if m != nil {
-		return m.HeaderName
-	}
-	return ""
-}
-
-// AnonymizeHttpQueryParameter
-//
-// x-displayName: "Anonymize HTTP Query Parameter"
-// Configure anonymization for HTTP Parameters
-type AnonymizeHttpQueryParameter struct {
-	// query_param_name
-	//
-	// x-displayName: "Query Parameter Name"
-	// x-example: "value"
-	// x-required
-	// Masks the query parameter value. The setting does not mask the query parameter name.
-	QueryParamName string `protobuf:"bytes,1,opt,name=query_param_name,json=queryParamName,proto3" json:"query_param_name,omitempty"`
-}
-
-func (m *AnonymizeHttpQueryParameter) Reset()      { *m = AnonymizeHttpQueryParameter{} }
-func (*AnonymizeHttpQueryParameter) ProtoMessage() {}
-func (*AnonymizeHttpQueryParameter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{8}
-}
-func (m *AnonymizeHttpQueryParameter) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AnonymizeHttpQueryParameter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *AnonymizeHttpQueryParameter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnonymizeHttpQueryParameter.Merge(m, src)
-}
-func (m *AnonymizeHttpQueryParameter) XXX_Size() int {
-	return m.Size()
-}
-func (m *AnonymizeHttpQueryParameter) XXX_DiscardUnknown() {
-	xxx_messageInfo_AnonymizeHttpQueryParameter.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AnonymizeHttpQueryParameter proto.InternalMessageInfo
-
-func (m *AnonymizeHttpQueryParameter) GetQueryParamName() string {
-	if m != nil {
-		return m.QueryParamName
-	}
-	return ""
-}
-
-// AnonymizeHttpCookie
-//
-// x-displayName: "Anonymize HTTP Cookie"
-// Configure anonymization for HTTP Cookies
-type AnonymizeHttpCookie struct {
-	// cookie_name
-	//
-	// x-displayName: "Cookie Name"
-	// x-example: "value"
-	// x-required
-	// Masks the cookie value. The setting does not mask the cookie name.
-	CookieName string `protobuf:"bytes,1,opt,name=cookie_name,json=cookieName,proto3" json:"cookie_name,omitempty"`
-}
-
-func (m *AnonymizeHttpCookie) Reset()      { *m = AnonymizeHttpCookie{} }
-func (*AnonymizeHttpCookie) ProtoMessage() {}
-func (*AnonymizeHttpCookie) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{9}
-}
-func (m *AnonymizeHttpCookie) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AnonymizeHttpCookie) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *AnonymizeHttpCookie) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnonymizeHttpCookie.Merge(m, src)
-}
-func (m *AnonymizeHttpCookie) XXX_Size() int {
-	return m.Size()
-}
-func (m *AnonymizeHttpCookie) XXX_DiscardUnknown() {
-	xxx_messageInfo_AnonymizeHttpCookie.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AnonymizeHttpCookie proto.InternalMessageInfo
-
-func (m *AnonymizeHttpCookie) GetCookieName() string {
-	if m != nil {
-		return m.CookieName
-	}
-	return ""
-}
-
-// AnonymizationConfiguration
-//
-// x-displayName: "Anonymization Configuration"
-// Configure anonymization for HTTP headers, parameters or cookies which may contain sensitive data
-type AnonymizationConfiguration struct {
-	// Anonymization Choice
-	//
-	// x-displayName: "Choice"
-	// x-required
-	// Define HTTP headers, query parameters or cookie names whose values should be masked
-	//
-	// Types that are valid to be assigned to AnonymizationChoice:
-	//	*AnonymizationConfiguration_HttpHeader
-	//	*AnonymizationConfiguration_QueryParameter
-	//	*AnonymizationConfiguration_Cookie
-	AnonymizationChoice isAnonymizationConfiguration_AnonymizationChoice `protobuf_oneof:"anonymization_choice"`
-}
-
-func (m *AnonymizationConfiguration) Reset()      { *m = AnonymizationConfiguration{} }
-func (*AnonymizationConfiguration) ProtoMessage() {}
-func (*AnonymizationConfiguration) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{10}
-}
-func (m *AnonymizationConfiguration) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AnonymizationConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *AnonymizationConfiguration) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnonymizationConfiguration.Merge(m, src)
-}
-func (m *AnonymizationConfiguration) XXX_Size() int {
-	return m.Size()
-}
-func (m *AnonymizationConfiguration) XXX_DiscardUnknown() {
-	xxx_messageInfo_AnonymizationConfiguration.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AnonymizationConfiguration proto.InternalMessageInfo
-
-type isAnonymizationConfiguration_AnonymizationChoice interface {
-	isAnonymizationConfiguration_AnonymizationChoice()
-	Equal(interface{}) bool
-	MarshalTo([]byte) (int, error)
-	Size() int
-}
-
-type AnonymizationConfiguration_HttpHeader struct {
-	HttpHeader *AnonymizeHttpHeader `protobuf:"bytes,2,opt,name=http_header,json=httpHeader,proto3,oneof" json:"http_header,omitempty"`
-}
-type AnonymizationConfiguration_QueryParameter struct {
-	QueryParameter *AnonymizeHttpQueryParameter `protobuf:"bytes,3,opt,name=query_parameter,json=queryParameter,proto3,oneof" json:"query_parameter,omitempty"`
-}
-type AnonymizationConfiguration_Cookie struct {
-	Cookie *AnonymizeHttpCookie `protobuf:"bytes,4,opt,name=cookie,proto3,oneof" json:"cookie,omitempty"`
-}
-
-func (*AnonymizationConfiguration_HttpHeader) isAnonymizationConfiguration_AnonymizationChoice() {}
-func (*AnonymizationConfiguration_QueryParameter) isAnonymizationConfiguration_AnonymizationChoice() {
-}
-func (*AnonymizationConfiguration_Cookie) isAnonymizationConfiguration_AnonymizationChoice() {}
-
-func (m *AnonymizationConfiguration) GetAnonymizationChoice() isAnonymizationConfiguration_AnonymizationChoice {
-	if m != nil {
-		return m.AnonymizationChoice
-	}
-	return nil
-}
-
-func (m *AnonymizationConfiguration) GetHttpHeader() *AnonymizeHttpHeader {
-	if x, ok := m.GetAnonymizationChoice().(*AnonymizationConfiguration_HttpHeader); ok {
-		return x.HttpHeader
-	}
-	return nil
-}
-
-func (m *AnonymizationConfiguration) GetQueryParameter() *AnonymizeHttpQueryParameter {
-	if x, ok := m.GetAnonymizationChoice().(*AnonymizationConfiguration_QueryParameter); ok {
-		return x.QueryParameter
-	}
-	return nil
-}
-
-func (m *AnonymizationConfiguration) GetCookie() *AnonymizeHttpCookie {
-	if x, ok := m.GetAnonymizationChoice().(*AnonymizationConfiguration_Cookie); ok {
-		return x.Cookie
-	}
-	return nil
-}
-
-// XXX_OneofWrappers is for the internal use of the proto package.
-func (*AnonymizationConfiguration) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*AnonymizationConfiguration_HttpHeader)(nil),
-		(*AnonymizationConfiguration_QueryParameter)(nil),
-		(*AnonymizationConfiguration_Cookie)(nil),
-	}
-}
-
-// AnonymizationSetting
-//
-// x-displayName: "Anonymization Configuration"
-// Anonymization settings which is a list of HTTP headers, parameters and cookies
-type AnonymizationSetting struct {
-	// AnonymizationConfiguration
-	//
-	// x-displayName: "Configuration"
-	// x-required
-	// List of HTTP headers, cookies and query parameters whose values will be masked
-	AnonymizationConfig []*AnonymizationConfiguration `protobuf:"bytes,1,rep,name=anonymization_config,json=anonymizationConfig,proto3" json:"anonymization_config,omitempty"`
-}
-
-func (m *AnonymizationSetting) Reset()      { *m = AnonymizationSetting{} }
-func (*AnonymizationSetting) ProtoMessage() {}
-func (*AnonymizationSetting) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{11}
-}
-func (m *AnonymizationSetting) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AnonymizationSetting) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *AnonymizationSetting) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AnonymizationSetting.Merge(m, src)
-}
-func (m *AnonymizationSetting) XXX_Size() int {
-	return m.Size()
-}
-func (m *AnonymizationSetting) XXX_DiscardUnknown() {
-	xxx_messageInfo_AnonymizationSetting.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AnonymizationSetting proto.InternalMessageInfo
-
-func (m *AnonymizationSetting) GetAnonymizationConfig() []*AnonymizationConfiguration {
-	if m != nil {
-		return m.AnonymizationConfig
-	}
-	return nil
-}
-
-// Custom Blocking Page
-//
-// x-displayName: "Custom Blocking Response Page"
-// Custom blocking response page body
-type CustomBlockingPage struct {
-	// blocking_page
-	//
-	// x-displayName: "Blocking Response Page Body"
-	// x-example: "<html><head><title>Request Rejected</title></head><body>The requested URL was rejected. Please consult with your administrator.<br/><br/>Your support ID is: {{request_id}}<br/><br/><a href=\"javascript:history.back()\">[Go Back]</a></body></html>"
-	// Define the content of the response page (e.g., an HTML document or a JSON object), use the
-	// {{request_id}} placeholder to provide users with a unique
-	// identifier to be able to trace the blocked request in the logs.
-	// The maximum allowed size of response body is 4096 bytes after base64 encoding,
-	// which would be about 3070 bytes in plain text.
-	BlockingPage string `protobuf:"bytes,1,opt,name=blocking_page,json=blockingPage,proto3" json:"blocking_page,omitempty"`
-	// response_code
-	//
-	// x-displayName: "Response Code"
-	// x-example: 200 OK
-	// HTTP status code to be sent for blocked requests
-	ResponseCode schema.HttpStatusCode `protobuf:"varint,2,opt,name=response_code,json=responseCode,proto3,enum=ves.io.schema.HttpStatusCode" json:"response_code,omitempty"`
-}
-
-func (m *CustomBlockingPage) Reset()      { *m = CustomBlockingPage{} }
-func (*CustomBlockingPage) ProtoMessage() {}
-func (*CustomBlockingPage) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{12}
-}
-func (m *CustomBlockingPage) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *CustomBlockingPage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	b = b[:cap(b)]
-	n, err := m.MarshalToSizedBuffer(b)
-	if err != nil {
-		return nil, err
-	}
-	return b[:n], nil
-}
-func (m *CustomBlockingPage) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CustomBlockingPage.Merge(m, src)
-}
-func (m *CustomBlockingPage) XXX_Size() int {
-	return m.Size()
-}
-func (m *CustomBlockingPage) XXX_DiscardUnknown() {
-	xxx_messageInfo_CustomBlockingPage.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CustomBlockingPage proto.InternalMessageInfo
-
-func (m *CustomBlockingPage) GetBlockingPage() string {
-	if m != nil {
-		return m.BlockingPage
-	}
-	return ""
-}
-
-func (m *CustomBlockingPage) GetResponseCode() schema.HttpStatusCode {
-	if m != nil {
-		return m.ResponseCode
-	}
-	return schema.EmptyStatusCode
-}
-
 // GlobalSpecType
 //
 // x-displayName: "Application Firewall Specification"
@@ -1629,7 +536,7 @@ type GlobalSpecType struct {
 func (m *GlobalSpecType) Reset()      { *m = GlobalSpecType{} }
 func (*GlobalSpecType) ProtoMessage() {}
 func (*GlobalSpecType) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{13}
+	return fileDescriptor_f3c53032614c5085, []int{0}
 }
 func (m *GlobalSpecType) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1916,6 +823,685 @@ func (*GlobalSpecType) XXX_OneofWrappers() []interface{} {
 	}
 }
 
+// Detection Settings
+//
+// x-displayName: "Detection Settings"
+// Specifies detection settings to be used by WAF
+type DetectionSetting struct {
+	// Signature Selection Setting
+	//
+	// x-displayName: "Attack Signatures"
+	// Attack Signatures are patterns that identify attacks on a web application and its components
+	SignatureSelectionSetting *SignatureSelectionSetting `protobuf:"bytes,1,opt,name=signature_selection_setting,json=signatureSelectionSetting,proto3" json:"signature_selection_setting,omitempty"`
+	// Automatic Attack Signatures Tuning
+	//
+	// x-displayName: "Automatic Attack Signatures Tuning"
+	// x-required
+	// Self-learning probabilistic machine learning model that suppresses false positive triggers
+	//
+	// Types that are valid to be assigned to FalsePositiveSuppression:
+	//	*DetectionSetting_EnableSuppression
+	//	*DetectionSetting_DisableSuppression
+	FalsePositiveSuppression isDetectionSetting_FalsePositiveSuppression `protobuf_oneof:"false_positive_suppression"`
+	// Threat Campaigns
+	//
+	// x-displayName: "Threat Campaigns"
+	// x-required
+	// Threat Campaigns provide targeted signatures to protect organizations from sophisticated attacks
+	//
+	// Types that are valid to be assigned to ThreatCampaignChoice:
+	//	*DetectionSetting_EnableThreatCampaigns
+	//	*DetectionSetting_DisableThreatCampaigns
+	ThreatCampaignChoice isDetectionSetting_ThreatCampaignChoice `protobuf_oneof:"threat_campaign_choice"`
+	// Violations
+	//
+	// x-displayName: "Violations"
+	// x-required
+	// Lists of validation checks that are performed on HTTP requests to ensure the requests are properly formatted, detection of evasion techniques and other violations
+	//
+	// Types that are valid to be assigned to ViolationDetectionSetting:
+	//	*DetectionSetting_DefaultViolationSettings
+	//	*DetectionSetting_ViolationSettings
+	ViolationDetectionSetting isDetectionSetting_ViolationDetectionSetting `protobuf_oneof:"violation_detection_setting"`
+	// Attack Signatures Staging Settings
+	//
+	// x-displayName: "Attack Signatures Staging"
+	// Attack signatures are added/updated on the Distributed cloud platform on a regular cadence. This setting
+	// enables/disables staging process for new and modified attack signatures. Staging means that, when new signatures
+	// are added or existing signatures are updated on the platform, WAF applies the attack signature to web application
+	// traffic, but does not block an incoming request if it triggers this attack signature. The default staging period
+	// is 7 days
+	//
+	// Types that are valid to be assigned to SignaturesStagingSettings:
+	//	*DetectionSetting_DisableStaging
+	//	*DetectionSetting_StageNewSignatures
+	//	*DetectionSetting_StageNewAndUpdatedSignatures
+	SignaturesStagingSettings isDetectionSetting_SignaturesStagingSettings `protobuf_oneof:"signatures_staging_settings"`
+	// Signature-based Bot Protection
+	//
+	// x-displayName: "Signature-Based Bot Protection"
+	// x-required
+	// Settings to manage and mitigate bot traffic. These settings work in tandem with the appfirewall enforcement mode i.e, block setting for bot protection is enforced if both bot and appfirewall enforcement modes are in block. In all other scenarios, bots will only be reported. Behavior based bot protection, which prevents large-scale fraud with account takeover protection and much more, is available as F5 Distributed Cloud Bot Defense and is an add-on subscription service.
+	//
+	// Types that are valid to be assigned to BotProtectionChoice:
+	//	*DetectionSetting_DefaultBotSetting
+	//	*DetectionSetting_BotProtectionSetting
+	BotProtectionChoice isDetectionSetting_BotProtectionChoice `protobuf_oneof:"bot_protection_choice"`
+}
+
+func (m *DetectionSetting) Reset()      { *m = DetectionSetting{} }
+func (*DetectionSetting) ProtoMessage() {}
+func (*DetectionSetting) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f3c53032614c5085, []int{1}
+}
+func (m *DetectionSetting) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *DetectionSetting) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *DetectionSetting) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DetectionSetting.Merge(m, src)
+}
+func (m *DetectionSetting) XXX_Size() int {
+	return m.Size()
+}
+func (m *DetectionSetting) XXX_DiscardUnknown() {
+	xxx_messageInfo_DetectionSetting.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DetectionSetting proto.InternalMessageInfo
+
+type isDetectionSetting_FalsePositiveSuppression interface {
+	isDetectionSetting_FalsePositiveSuppression()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isDetectionSetting_ThreatCampaignChoice interface {
+	isDetectionSetting_ThreatCampaignChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isDetectionSetting_ViolationDetectionSetting interface {
+	isDetectionSetting_ViolationDetectionSetting()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isDetectionSetting_SignaturesStagingSettings interface {
+	isDetectionSetting_SignaturesStagingSettings()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isDetectionSetting_BotProtectionChoice interface {
+	isDetectionSetting_BotProtectionChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type DetectionSetting_EnableSuppression struct {
+	EnableSuppression *schema.Empty `protobuf:"bytes,3,opt,name=enable_suppression,json=enableSuppression,proto3,oneof" json:"enable_suppression,omitempty"`
+}
+type DetectionSetting_DisableSuppression struct {
+	DisableSuppression *schema.Empty `protobuf:"bytes,4,opt,name=disable_suppression,json=disableSuppression,proto3,oneof" json:"disable_suppression,omitempty"`
+}
+type DetectionSetting_EnableThreatCampaigns struct {
+	EnableThreatCampaigns *schema.Empty `protobuf:"bytes,6,opt,name=enable_threat_campaigns,json=enableThreatCampaigns,proto3,oneof" json:"enable_threat_campaigns,omitempty"`
+}
+type DetectionSetting_DisableThreatCampaigns struct {
+	DisableThreatCampaigns *schema.Empty `protobuf:"bytes,7,opt,name=disable_threat_campaigns,json=disableThreatCampaigns,proto3,oneof" json:"disable_threat_campaigns,omitempty"`
+}
+type DetectionSetting_DefaultViolationSettings struct {
+	DefaultViolationSettings *schema.Empty `protobuf:"bytes,9,opt,name=default_violation_settings,json=defaultViolationSettings,proto3,oneof" json:"default_violation_settings,omitempty"`
+}
+type DetectionSetting_ViolationSettings struct {
+	ViolationSettings *ViolationSettings `protobuf:"bytes,11,opt,name=violation_settings,json=violationSettings,proto3,oneof" json:"violation_settings,omitempty"`
+}
+type DetectionSetting_DisableStaging struct {
+	DisableStaging *schema.Empty `protobuf:"bytes,13,opt,name=disable_staging,json=disableStaging,proto3,oneof" json:"disable_staging,omitempty"`
+}
+type DetectionSetting_StageNewSignatures struct {
+	StageNewSignatures *SignaturesStagingSettings `protobuf:"bytes,14,opt,name=stage_new_signatures,json=stageNewSignatures,proto3,oneof" json:"stage_new_signatures,omitempty"`
+}
+type DetectionSetting_StageNewAndUpdatedSignatures struct {
+	StageNewAndUpdatedSignatures *SignaturesStagingSettings `protobuf:"bytes,15,opt,name=stage_new_and_updated_signatures,json=stageNewAndUpdatedSignatures,proto3,oneof" json:"stage_new_and_updated_signatures,omitempty"`
+}
+type DetectionSetting_DefaultBotSetting struct {
+	DefaultBotSetting *schema.Empty `protobuf:"bytes,17,opt,name=default_bot_setting,json=defaultBotSetting,proto3,oneof" json:"default_bot_setting,omitempty"`
+}
+type DetectionSetting_BotProtectionSetting struct {
+	BotProtectionSetting *BotProtectionSetting `protobuf:"bytes,18,opt,name=bot_protection_setting,json=botProtectionSetting,proto3,oneof" json:"bot_protection_setting,omitempty"`
+}
+
+func (*DetectionSetting_EnableSuppression) isDetectionSetting_FalsePositiveSuppression()         {}
+func (*DetectionSetting_DisableSuppression) isDetectionSetting_FalsePositiveSuppression()        {}
+func (*DetectionSetting_EnableThreatCampaigns) isDetectionSetting_ThreatCampaignChoice()         {}
+func (*DetectionSetting_DisableThreatCampaigns) isDetectionSetting_ThreatCampaignChoice()        {}
+func (*DetectionSetting_DefaultViolationSettings) isDetectionSetting_ViolationDetectionSetting() {}
+func (*DetectionSetting_ViolationSettings) isDetectionSetting_ViolationDetectionSetting()        {}
+func (*DetectionSetting_DisableStaging) isDetectionSetting_SignaturesStagingSettings()           {}
+func (*DetectionSetting_StageNewSignatures) isDetectionSetting_SignaturesStagingSettings()       {}
+func (*DetectionSetting_StageNewAndUpdatedSignatures) isDetectionSetting_SignaturesStagingSettings() {
+}
+func (*DetectionSetting_DefaultBotSetting) isDetectionSetting_BotProtectionChoice()    {}
+func (*DetectionSetting_BotProtectionSetting) isDetectionSetting_BotProtectionChoice() {}
+
+func (m *DetectionSetting) GetFalsePositiveSuppression() isDetectionSetting_FalsePositiveSuppression {
+	if m != nil {
+		return m.FalsePositiveSuppression
+	}
+	return nil
+}
+func (m *DetectionSetting) GetThreatCampaignChoice() isDetectionSetting_ThreatCampaignChoice {
+	if m != nil {
+		return m.ThreatCampaignChoice
+	}
+	return nil
+}
+func (m *DetectionSetting) GetViolationDetectionSetting() isDetectionSetting_ViolationDetectionSetting {
+	if m != nil {
+		return m.ViolationDetectionSetting
+	}
+	return nil
+}
+func (m *DetectionSetting) GetSignaturesStagingSettings() isDetectionSetting_SignaturesStagingSettings {
+	if m != nil {
+		return m.SignaturesStagingSettings
+	}
+	return nil
+}
+func (m *DetectionSetting) GetBotProtectionChoice() isDetectionSetting_BotProtectionChoice {
+	if m != nil {
+		return m.BotProtectionChoice
+	}
+	return nil
+}
+
+func (m *DetectionSetting) GetSignatureSelectionSetting() *SignatureSelectionSetting {
+	if m != nil {
+		return m.SignatureSelectionSetting
+	}
+	return nil
+}
+
+func (m *DetectionSetting) GetEnableSuppression() *schema.Empty {
+	if x, ok := m.GetFalsePositiveSuppression().(*DetectionSetting_EnableSuppression); ok {
+		return x.EnableSuppression
+	}
+	return nil
+}
+
+func (m *DetectionSetting) GetDisableSuppression() *schema.Empty {
+	if x, ok := m.GetFalsePositiveSuppression().(*DetectionSetting_DisableSuppression); ok {
+		return x.DisableSuppression
+	}
+	return nil
+}
+
+func (m *DetectionSetting) GetEnableThreatCampaigns() *schema.Empty {
+	if x, ok := m.GetThreatCampaignChoice().(*DetectionSetting_EnableThreatCampaigns); ok {
+		return x.EnableThreatCampaigns
+	}
+	return nil
+}
+
+func (m *DetectionSetting) GetDisableThreatCampaigns() *schema.Empty {
+	if x, ok := m.GetThreatCampaignChoice().(*DetectionSetting_DisableThreatCampaigns); ok {
+		return x.DisableThreatCampaigns
+	}
+	return nil
+}
+
+func (m *DetectionSetting) GetDefaultViolationSettings() *schema.Empty {
+	if x, ok := m.GetViolationDetectionSetting().(*DetectionSetting_DefaultViolationSettings); ok {
+		return x.DefaultViolationSettings
+	}
+	return nil
+}
+
+func (m *DetectionSetting) GetViolationSettings() *ViolationSettings {
+	if x, ok := m.GetViolationDetectionSetting().(*DetectionSetting_ViolationSettings); ok {
+		return x.ViolationSettings
+	}
+	return nil
+}
+
+func (m *DetectionSetting) GetDisableStaging() *schema.Empty {
+	if x, ok := m.GetSignaturesStagingSettings().(*DetectionSetting_DisableStaging); ok {
+		return x.DisableStaging
+	}
+	return nil
+}
+
+func (m *DetectionSetting) GetStageNewSignatures() *SignaturesStagingSettings {
+	if x, ok := m.GetSignaturesStagingSettings().(*DetectionSetting_StageNewSignatures); ok {
+		return x.StageNewSignatures
+	}
+	return nil
+}
+
+func (m *DetectionSetting) GetStageNewAndUpdatedSignatures() *SignaturesStagingSettings {
+	if x, ok := m.GetSignaturesStagingSettings().(*DetectionSetting_StageNewAndUpdatedSignatures); ok {
+		return x.StageNewAndUpdatedSignatures
+	}
+	return nil
+}
+
+func (m *DetectionSetting) GetDefaultBotSetting() *schema.Empty {
+	if x, ok := m.GetBotProtectionChoice().(*DetectionSetting_DefaultBotSetting); ok {
+		return x.DefaultBotSetting
+	}
+	return nil
+}
+
+func (m *DetectionSetting) GetBotProtectionSetting() *BotProtectionSetting {
+	if x, ok := m.GetBotProtectionChoice().(*DetectionSetting_BotProtectionSetting); ok {
+		return x.BotProtectionSetting
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*DetectionSetting) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*DetectionSetting_EnableSuppression)(nil),
+		(*DetectionSetting_DisableSuppression)(nil),
+		(*DetectionSetting_EnableThreatCampaigns)(nil),
+		(*DetectionSetting_DisableThreatCampaigns)(nil),
+		(*DetectionSetting_DefaultViolationSettings)(nil),
+		(*DetectionSetting_ViolationSettings)(nil),
+		(*DetectionSetting_DisableStaging)(nil),
+		(*DetectionSetting_StageNewSignatures)(nil),
+		(*DetectionSetting_StageNewAndUpdatedSignatures)(nil),
+		(*DetectionSetting_DefaultBotSetting)(nil),
+		(*DetectionSetting_BotProtectionSetting)(nil),
+	}
+}
+
+// Attack Signatures
+//
+// x-displayName: "Attack Signatures"
+// Attack Signatures are patterns that identify attacks on a web application and its components
+type SignatureSelectionSetting struct {
+	// Signature selection by accuracy
+	//
+	// x-displayName: "Signature Selection By Accuracy"
+	// x-required
+	// Accuracy indicates the ability of the Attack Signatures to identify the attack including susceptibility to false-positive alarms.
+	// Low: Indicates a high likelihood of false positives.
+	// Medium: Indicates some likelihood of false positives.
+	// High: Indicates a low likelihood of false positives.
+	//
+	// Types that are valid to be assigned to SignatureSelectionByAccuracy:
+	//	*SignatureSelectionSetting_OnlyHighAccuracySignatures
+	//	*SignatureSelectionSetting_HighMediumAccuracySignatures
+	//	*SignatureSelectionSetting_HighMediumLowAccuracySignatures
+	SignatureSelectionByAccuracy isSignatureSelectionSetting_SignatureSelectionByAccuracy `protobuf_oneof:"signature_selection_by_accuracy"`
+	// Attack Types
+	//
+	// x-displayName: "Attack Types"
+	// x-required
+	// The types of attacks that Attack Signatures can detect
+	//
+	// Types that are valid to be assigned to AttackTypeSetting:
+	//	*SignatureSelectionSetting_DefaultAttackTypeSettings
+	//	*SignatureSelectionSetting_AttackTypeSettings
+	AttackTypeSetting isSignatureSelectionSetting_AttackTypeSetting `protobuf_oneof:"attack_type_setting"`
+}
+
+func (m *SignatureSelectionSetting) Reset()      { *m = SignatureSelectionSetting{} }
+func (*SignatureSelectionSetting) ProtoMessage() {}
+func (*SignatureSelectionSetting) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f3c53032614c5085, []int{2}
+}
+func (m *SignatureSelectionSetting) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SignatureSelectionSetting) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SignatureSelectionSetting) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignatureSelectionSetting.Merge(m, src)
+}
+func (m *SignatureSelectionSetting) XXX_Size() int {
+	return m.Size()
+}
+func (m *SignatureSelectionSetting) XXX_DiscardUnknown() {
+	xxx_messageInfo_SignatureSelectionSetting.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SignatureSelectionSetting proto.InternalMessageInfo
+
+type isSignatureSelectionSetting_SignatureSelectionByAccuracy interface {
+	isSignatureSelectionSetting_SignatureSelectionByAccuracy()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+type isSignatureSelectionSetting_AttackTypeSetting interface {
+	isSignatureSelectionSetting_AttackTypeSetting()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type SignatureSelectionSetting_OnlyHighAccuracySignatures struct {
+	OnlyHighAccuracySignatures *schema.Empty `protobuf:"bytes,2,opt,name=only_high_accuracy_signatures,json=onlyHighAccuracySignatures,proto3,oneof" json:"only_high_accuracy_signatures,omitempty"`
+}
+type SignatureSelectionSetting_HighMediumAccuracySignatures struct {
+	HighMediumAccuracySignatures *schema.Empty `protobuf:"bytes,3,opt,name=high_medium_accuracy_signatures,json=highMediumAccuracySignatures,proto3,oneof" json:"high_medium_accuracy_signatures,omitempty"`
+}
+type SignatureSelectionSetting_HighMediumLowAccuracySignatures struct {
+	HighMediumLowAccuracySignatures *schema.Empty `protobuf:"bytes,4,opt,name=high_medium_low_accuracy_signatures,json=highMediumLowAccuracySignatures,proto3,oneof" json:"high_medium_low_accuracy_signatures,omitempty"`
+}
+type SignatureSelectionSetting_DefaultAttackTypeSettings struct {
+	DefaultAttackTypeSettings *schema.Empty `protobuf:"bytes,6,opt,name=default_attack_type_settings,json=defaultAttackTypeSettings,proto3,oneof" json:"default_attack_type_settings,omitempty"`
+}
+type SignatureSelectionSetting_AttackTypeSettings struct {
+	AttackTypeSettings *AttackTypeSettings `protobuf:"bytes,8,opt,name=attack_type_settings,json=attackTypeSettings,proto3,oneof" json:"attack_type_settings,omitempty"`
+}
+
+func (*SignatureSelectionSetting_OnlyHighAccuracySignatures) isSignatureSelectionSetting_SignatureSelectionByAccuracy() {
+}
+func (*SignatureSelectionSetting_HighMediumAccuracySignatures) isSignatureSelectionSetting_SignatureSelectionByAccuracy() {
+}
+func (*SignatureSelectionSetting_HighMediumLowAccuracySignatures) isSignatureSelectionSetting_SignatureSelectionByAccuracy() {
+}
+func (*SignatureSelectionSetting_DefaultAttackTypeSettings) isSignatureSelectionSetting_AttackTypeSetting() {
+}
+func (*SignatureSelectionSetting_AttackTypeSettings) isSignatureSelectionSetting_AttackTypeSetting() {
+}
+
+func (m *SignatureSelectionSetting) GetSignatureSelectionByAccuracy() isSignatureSelectionSetting_SignatureSelectionByAccuracy {
+	if m != nil {
+		return m.SignatureSelectionByAccuracy
+	}
+	return nil
+}
+func (m *SignatureSelectionSetting) GetAttackTypeSetting() isSignatureSelectionSetting_AttackTypeSetting {
+	if m != nil {
+		return m.AttackTypeSetting
+	}
+	return nil
+}
+
+func (m *SignatureSelectionSetting) GetOnlyHighAccuracySignatures() *schema.Empty {
+	if x, ok := m.GetSignatureSelectionByAccuracy().(*SignatureSelectionSetting_OnlyHighAccuracySignatures); ok {
+		return x.OnlyHighAccuracySignatures
+	}
+	return nil
+}
+
+func (m *SignatureSelectionSetting) GetHighMediumAccuracySignatures() *schema.Empty {
+	if x, ok := m.GetSignatureSelectionByAccuracy().(*SignatureSelectionSetting_HighMediumAccuracySignatures); ok {
+		return x.HighMediumAccuracySignatures
+	}
+	return nil
+}
+
+func (m *SignatureSelectionSetting) GetHighMediumLowAccuracySignatures() *schema.Empty {
+	if x, ok := m.GetSignatureSelectionByAccuracy().(*SignatureSelectionSetting_HighMediumLowAccuracySignatures); ok {
+		return x.HighMediumLowAccuracySignatures
+	}
+	return nil
+}
+
+func (m *SignatureSelectionSetting) GetDefaultAttackTypeSettings() *schema.Empty {
+	if x, ok := m.GetAttackTypeSetting().(*SignatureSelectionSetting_DefaultAttackTypeSettings); ok {
+		return x.DefaultAttackTypeSettings
+	}
+	return nil
+}
+
+func (m *SignatureSelectionSetting) GetAttackTypeSettings() *AttackTypeSettings {
+	if x, ok := m.GetAttackTypeSetting().(*SignatureSelectionSetting_AttackTypeSettings); ok {
+		return x.AttackTypeSettings
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*SignatureSelectionSetting) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*SignatureSelectionSetting_OnlyHighAccuracySignatures)(nil),
+		(*SignatureSelectionSetting_HighMediumAccuracySignatures)(nil),
+		(*SignatureSelectionSetting_HighMediumLowAccuracySignatures)(nil),
+		(*SignatureSelectionSetting_DefaultAttackTypeSettings)(nil),
+		(*SignatureSelectionSetting_AttackTypeSettings)(nil),
+	}
+}
+
+// Attack Type Settings
+//
+// x-displayName: "Attack Type Settings"
+// Specifies attack-type settings to be used by WAF
+type AttackTypeSettings struct {
+	// Disabled Attack Types
+	//
+	// x-displayName: "Disabled Attack Types"
+	// x-required
+	// List of Attack Types that will be ignored and not trigger a detection
+	DisabledAttackTypes []AttackType `protobuf:"varint,1,rep,packed,name=disabled_attack_types,json=disabledAttackTypes,proto3,enum=ves.io.schema.app_firewall.AttackType" json:"disabled_attack_types,omitempty"`
+}
+
+func (m *AttackTypeSettings) Reset()      { *m = AttackTypeSettings{} }
+func (*AttackTypeSettings) ProtoMessage() {}
+func (*AttackTypeSettings) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f3c53032614c5085, []int{3}
+}
+func (m *AttackTypeSettings) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AttackTypeSettings) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AttackTypeSettings) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AttackTypeSettings.Merge(m, src)
+}
+func (m *AttackTypeSettings) XXX_Size() int {
+	return m.Size()
+}
+func (m *AttackTypeSettings) XXX_DiscardUnknown() {
+	xxx_messageInfo_AttackTypeSettings.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AttackTypeSettings proto.InternalMessageInfo
+
+func (m *AttackTypeSettings) GetDisabledAttackTypes() []AttackType {
+	if m != nil {
+		return m.DisabledAttackTypes
+	}
+	return nil
+}
+
+// Violation Settings
+//
+// x-displayName: "Violation Settings"
+// Specifies violation settings to be used by WAF
+type ViolationSettings struct {
+	// Disabled Violations
+	//
+	// x-displayName: "Disabled Violations"
+	// x-required
+	// List of violations to be excluded
+	DisabledViolationTypes []AppFirewallViolationType `protobuf:"varint,1,rep,packed,name=disabled_violation_types,json=disabledViolationTypes,proto3,enum=ves.io.schema.app_firewall.AppFirewallViolationType" json:"disabled_violation_types,omitempty"`
+}
+
+func (m *ViolationSettings) Reset()      { *m = ViolationSettings{} }
+func (*ViolationSettings) ProtoMessage() {}
+func (*ViolationSettings) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f3c53032614c5085, []int{4}
+}
+func (m *ViolationSettings) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ViolationSettings) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *ViolationSettings) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ViolationSettings.Merge(m, src)
+}
+func (m *ViolationSettings) XXX_Size() int {
+	return m.Size()
+}
+func (m *ViolationSettings) XXX_DiscardUnknown() {
+	xxx_messageInfo_ViolationSettings.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ViolationSettings proto.InternalMessageInfo
+
+func (m *ViolationSettings) GetDisabledViolationTypes() []AppFirewallViolationType {
+	if m != nil {
+		return m.DisabledViolationTypes
+	}
+	return nil
+}
+
+// Attack Signatures Staging Settings
+//
+// x-displayName: "Attack Signatures Staging Settings"
+// Attack Signatures staging configuration.
+type SignaturesStagingSettings struct {
+	// Staging Period
+	//
+	// x-displayName: "Staging Period"
+	// x-example: "7"
+	// x-required
+	// Define staging period in days. The default staging period is 7 days and the max supported staging period is
+	// 20 days.
+	StagingPeriod uint32 `protobuf:"varint,1,opt,name=staging_period,json=stagingPeriod,proto3" json:"staging_period,omitempty"`
+}
+
+func (m *SignaturesStagingSettings) Reset()      { *m = SignaturesStagingSettings{} }
+func (*SignaturesStagingSettings) ProtoMessage() {}
+func (*SignaturesStagingSettings) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f3c53032614c5085, []int{5}
+}
+func (m *SignaturesStagingSettings) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SignaturesStagingSettings) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *SignaturesStagingSettings) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SignaturesStagingSettings.Merge(m, src)
+}
+func (m *SignaturesStagingSettings) XXX_Size() int {
+	return m.Size()
+}
+func (m *SignaturesStagingSettings) XXX_DiscardUnknown() {
+	xxx_messageInfo_SignaturesStagingSettings.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SignaturesStagingSettings proto.InternalMessageInfo
+
+func (m *SignaturesStagingSettings) GetStagingPeriod() uint32 {
+	if m != nil {
+		return m.StagingPeriod
+	}
+	return 0
+}
+
+// BotProtectionSetting
+//
+// x-displayName: "Bot Protection"
+// Configuration of WAF Bot Protection
+type BotProtectionSetting struct {
+	// malicious_bot_action
+	//
+	// x-displayName: "Malicious Bot"
+	// A client that exhibits malicious intent such as DoS tools, known exploit tools, and vulnerability scanners
+	MaliciousBotAction BotAction `protobuf:"varint,1,opt,name=malicious_bot_action,json=maliciousBotAction,proto3,enum=ves.io.schema.app_firewall.BotAction" json:"malicious_bot_action,omitempty"`
+	// suspicious_bot_action
+	//
+	// x-displayName: "Suspicious Bot"
+	// A client that exhibits non-malicious tools such as site crawlers, monitors, spiders, web downloaders and bots behaviors, signatures such as search bots and social media agents
+	SuspiciousBotAction BotAction `protobuf:"varint,2,opt,name=suspicious_bot_action,json=suspiciousBotAction,proto3,enum=ves.io.schema.app_firewall.BotAction" json:"suspicious_bot_action,omitempty"`
+	// good_bot_action
+	//
+	// x-displayName: "Good Bot"
+	// A client that exhibits known search engine behaviors and signatures
+	GoodBotAction BotAction `protobuf:"varint,3,opt,name=good_bot_action,json=goodBotAction,proto3,enum=ves.io.schema.app_firewall.BotAction" json:"good_bot_action,omitempty"`
+}
+
+func (m *BotProtectionSetting) Reset()      { *m = BotProtectionSetting{} }
+func (*BotProtectionSetting) ProtoMessage() {}
+func (*BotProtectionSetting) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f3c53032614c5085, []int{6}
+}
+func (m *BotProtectionSetting) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BotProtectionSetting) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *BotProtectionSetting) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BotProtectionSetting.Merge(m, src)
+}
+func (m *BotProtectionSetting) XXX_Size() int {
+	return m.Size()
+}
+func (m *BotProtectionSetting) XXX_DiscardUnknown() {
+	xxx_messageInfo_BotProtectionSetting.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BotProtectionSetting proto.InternalMessageInfo
+
+func (m *BotProtectionSetting) GetMaliciousBotAction() BotAction {
+	if m != nil {
+		return m.MaliciousBotAction
+	}
+	return BLOCK
+}
+
+func (m *BotProtectionSetting) GetSuspiciousBotAction() BotAction {
+	if m != nil {
+		return m.SuspiciousBotAction
+	}
+	return BLOCK
+}
+
+func (m *BotProtectionSetting) GetGoodBotAction() BotAction {
+	if m != nil {
+		return m.GoodBotAction
+	}
+	return BLOCK
+}
+
 // AI Risk Based Blocking
 //
 // x-displayName: "Risk-Based Blocking (Powered by AI) - Preview"
@@ -1946,7 +1532,7 @@ type AiRiskBasedBlocking struct {
 func (m *AiRiskBasedBlocking) Reset()      { *m = AiRiskBasedBlocking{} }
 func (*AiRiskBasedBlocking) ProtoMessage() {}
 func (*AiRiskBasedBlocking) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f3c53032614c5085, []int{14}
+	return fileDescriptor_f3c53032614c5085, []int{7}
 }
 func (m *AiRiskBasedBlocking) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1990,6 +1576,420 @@ func (m *AiRiskBasedBlocking) GetLowRiskAction() RiskBasedBlockingAction {
 		return m.LowRiskAction
 	}
 	return AI_BLOCK
+}
+
+// Allowed Response Codes
+//
+// x-displayName: "Allowed Response Codes"
+// List of HTTP response status codes that are allowed
+type AllowedResponseCodes struct {
+	// response_code
+	//
+	// x-displayName: "Response Code"
+	// x-example: "[200, 201, 204, 300, 302, 400, 403, 404, 500, 501, 503]"
+	// x-required
+	// List of HTTP response status codes that are allowed
+	ResponseCode []uint32 `protobuf:"varint,1,rep,packed,name=response_code,json=responseCode,proto3" json:"response_code,omitempty"`
+}
+
+func (m *AllowedResponseCodes) Reset()      { *m = AllowedResponseCodes{} }
+func (*AllowedResponseCodes) ProtoMessage() {}
+func (*AllowedResponseCodes) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f3c53032614c5085, []int{8}
+}
+func (m *AllowedResponseCodes) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AllowedResponseCodes) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AllowedResponseCodes) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AllowedResponseCodes.Merge(m, src)
+}
+func (m *AllowedResponseCodes) XXX_Size() int {
+	return m.Size()
+}
+func (m *AllowedResponseCodes) XXX_DiscardUnknown() {
+	xxx_messageInfo_AllowedResponseCodes.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AllowedResponseCodes proto.InternalMessageInfo
+
+func (m *AllowedResponseCodes) GetResponseCode() []uint32 {
+	if m != nil {
+		return m.ResponseCode
+	}
+	return nil
+}
+
+// AnonymizationSetting
+//
+// x-displayName: "Anonymization Configuration"
+// Anonymization settings which is a list of HTTP headers, parameters and cookies
+type AnonymizationSetting struct {
+	// AnonymizationConfiguration
+	//
+	// x-displayName: "Configuration"
+	// x-required
+	// List of HTTP headers, cookies and query parameters whose values will be masked
+	AnonymizationConfig []*AnonymizationConfiguration `protobuf:"bytes,1,rep,name=anonymization_config,json=anonymizationConfig,proto3" json:"anonymization_config,omitempty"`
+}
+
+func (m *AnonymizationSetting) Reset()      { *m = AnonymizationSetting{} }
+func (*AnonymizationSetting) ProtoMessage() {}
+func (*AnonymizationSetting) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f3c53032614c5085, []int{9}
+}
+func (m *AnonymizationSetting) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AnonymizationSetting) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AnonymizationSetting) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnonymizationSetting.Merge(m, src)
+}
+func (m *AnonymizationSetting) XXX_Size() int {
+	return m.Size()
+}
+func (m *AnonymizationSetting) XXX_DiscardUnknown() {
+	xxx_messageInfo_AnonymizationSetting.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AnonymizationSetting proto.InternalMessageInfo
+
+func (m *AnonymizationSetting) GetAnonymizationConfig() []*AnonymizationConfiguration {
+	if m != nil {
+		return m.AnonymizationConfig
+	}
+	return nil
+}
+
+// AnonymizationConfiguration
+//
+// x-displayName: "Anonymization Configuration"
+// Configure anonymization for HTTP headers, parameters or cookies which may contain sensitive data
+type AnonymizationConfiguration struct {
+	// Anonymization Choice
+	//
+	// x-displayName: "Choice"
+	// x-required
+	// Define HTTP headers, query parameters or cookie names whose values should be masked
+	//
+	// Types that are valid to be assigned to AnonymizationChoice:
+	//	*AnonymizationConfiguration_HttpHeader
+	//	*AnonymizationConfiguration_QueryParameter
+	//	*AnonymizationConfiguration_Cookie
+	AnonymizationChoice isAnonymizationConfiguration_AnonymizationChoice `protobuf_oneof:"anonymization_choice"`
+}
+
+func (m *AnonymizationConfiguration) Reset()      { *m = AnonymizationConfiguration{} }
+func (*AnonymizationConfiguration) ProtoMessage() {}
+func (*AnonymizationConfiguration) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f3c53032614c5085, []int{10}
+}
+func (m *AnonymizationConfiguration) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AnonymizationConfiguration) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AnonymizationConfiguration) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnonymizationConfiguration.Merge(m, src)
+}
+func (m *AnonymizationConfiguration) XXX_Size() int {
+	return m.Size()
+}
+func (m *AnonymizationConfiguration) XXX_DiscardUnknown() {
+	xxx_messageInfo_AnonymizationConfiguration.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AnonymizationConfiguration proto.InternalMessageInfo
+
+type isAnonymizationConfiguration_AnonymizationChoice interface {
+	isAnonymizationConfiguration_AnonymizationChoice()
+	Equal(interface{}) bool
+	MarshalTo([]byte) (int, error)
+	Size() int
+}
+
+type AnonymizationConfiguration_HttpHeader struct {
+	HttpHeader *AnonymizeHttpHeader `protobuf:"bytes,2,opt,name=http_header,json=httpHeader,proto3,oneof" json:"http_header,omitempty"`
+}
+type AnonymizationConfiguration_QueryParameter struct {
+	QueryParameter *AnonymizeHttpQueryParameter `protobuf:"bytes,3,opt,name=query_parameter,json=queryParameter,proto3,oneof" json:"query_parameter,omitempty"`
+}
+type AnonymizationConfiguration_Cookie struct {
+	Cookie *AnonymizeHttpCookie `protobuf:"bytes,4,opt,name=cookie,proto3,oneof" json:"cookie,omitempty"`
+}
+
+func (*AnonymizationConfiguration_HttpHeader) isAnonymizationConfiguration_AnonymizationChoice() {}
+func (*AnonymizationConfiguration_QueryParameter) isAnonymizationConfiguration_AnonymizationChoice() {
+}
+func (*AnonymizationConfiguration_Cookie) isAnonymizationConfiguration_AnonymizationChoice() {}
+
+func (m *AnonymizationConfiguration) GetAnonymizationChoice() isAnonymizationConfiguration_AnonymizationChoice {
+	if m != nil {
+		return m.AnonymizationChoice
+	}
+	return nil
+}
+
+func (m *AnonymizationConfiguration) GetHttpHeader() *AnonymizeHttpHeader {
+	if x, ok := m.GetAnonymizationChoice().(*AnonymizationConfiguration_HttpHeader); ok {
+		return x.HttpHeader
+	}
+	return nil
+}
+
+func (m *AnonymizationConfiguration) GetQueryParameter() *AnonymizeHttpQueryParameter {
+	if x, ok := m.GetAnonymizationChoice().(*AnonymizationConfiguration_QueryParameter); ok {
+		return x.QueryParameter
+	}
+	return nil
+}
+
+func (m *AnonymizationConfiguration) GetCookie() *AnonymizeHttpCookie {
+	if x, ok := m.GetAnonymizationChoice().(*AnonymizationConfiguration_Cookie); ok {
+		return x.Cookie
+	}
+	return nil
+}
+
+// XXX_OneofWrappers is for the internal use of the proto package.
+func (*AnonymizationConfiguration) XXX_OneofWrappers() []interface{} {
+	return []interface{}{
+		(*AnonymizationConfiguration_HttpHeader)(nil),
+		(*AnonymizationConfiguration_QueryParameter)(nil),
+		(*AnonymizationConfiguration_Cookie)(nil),
+	}
+}
+
+// AnonymizeHttpHeader
+//
+// x-displayName: "Anonymize HTTP Header"
+// Configure anonymization for HTTP Headers
+type AnonymizeHttpHeader struct {
+	// header_name
+	//
+	// x-displayName: "Header Name"
+	// x-example: "value"
+	// x-required
+	// Masks the HTTP header value. The setting does not mask the HTTP header name.
+	HeaderName string `protobuf:"bytes,1,opt,name=header_name,json=headerName,proto3" json:"header_name,omitempty"`
+}
+
+func (m *AnonymizeHttpHeader) Reset()      { *m = AnonymizeHttpHeader{} }
+func (*AnonymizeHttpHeader) ProtoMessage() {}
+func (*AnonymizeHttpHeader) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f3c53032614c5085, []int{11}
+}
+func (m *AnonymizeHttpHeader) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AnonymizeHttpHeader) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AnonymizeHttpHeader) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnonymizeHttpHeader.Merge(m, src)
+}
+func (m *AnonymizeHttpHeader) XXX_Size() int {
+	return m.Size()
+}
+func (m *AnonymizeHttpHeader) XXX_DiscardUnknown() {
+	xxx_messageInfo_AnonymizeHttpHeader.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AnonymizeHttpHeader proto.InternalMessageInfo
+
+func (m *AnonymizeHttpHeader) GetHeaderName() string {
+	if m != nil {
+		return m.HeaderName
+	}
+	return ""
+}
+
+// AnonymizeHttpQueryParameter
+//
+// x-displayName: "Anonymize HTTP Query Parameter"
+// Configure anonymization for HTTP Parameters
+type AnonymizeHttpQueryParameter struct {
+	// query_param_name
+	//
+	// x-displayName: "Query Parameter Name"
+	// x-example: "value"
+	// x-required
+	// Masks the query parameter value. The setting does not mask the query parameter name.
+	QueryParamName string `protobuf:"bytes,1,opt,name=query_param_name,json=queryParamName,proto3" json:"query_param_name,omitempty"`
+}
+
+func (m *AnonymizeHttpQueryParameter) Reset()      { *m = AnonymizeHttpQueryParameter{} }
+func (*AnonymizeHttpQueryParameter) ProtoMessage() {}
+func (*AnonymizeHttpQueryParameter) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f3c53032614c5085, []int{12}
+}
+func (m *AnonymizeHttpQueryParameter) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AnonymizeHttpQueryParameter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AnonymizeHttpQueryParameter) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnonymizeHttpQueryParameter.Merge(m, src)
+}
+func (m *AnonymizeHttpQueryParameter) XXX_Size() int {
+	return m.Size()
+}
+func (m *AnonymizeHttpQueryParameter) XXX_DiscardUnknown() {
+	xxx_messageInfo_AnonymizeHttpQueryParameter.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AnonymizeHttpQueryParameter proto.InternalMessageInfo
+
+func (m *AnonymizeHttpQueryParameter) GetQueryParamName() string {
+	if m != nil {
+		return m.QueryParamName
+	}
+	return ""
+}
+
+// AnonymizeHttpCookie
+//
+// x-displayName: "Anonymize HTTP Cookie"
+// Configure anonymization for HTTP Cookies
+type AnonymizeHttpCookie struct {
+	// cookie_name
+	//
+	// x-displayName: "Cookie Name"
+	// x-example: "value"
+	// x-required
+	// Masks the cookie value. The setting does not mask the cookie name.
+	CookieName string `protobuf:"bytes,1,opt,name=cookie_name,json=cookieName,proto3" json:"cookie_name,omitempty"`
+}
+
+func (m *AnonymizeHttpCookie) Reset()      { *m = AnonymizeHttpCookie{} }
+func (*AnonymizeHttpCookie) ProtoMessage() {}
+func (*AnonymizeHttpCookie) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f3c53032614c5085, []int{13}
+}
+func (m *AnonymizeHttpCookie) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AnonymizeHttpCookie) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *AnonymizeHttpCookie) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AnonymizeHttpCookie.Merge(m, src)
+}
+func (m *AnonymizeHttpCookie) XXX_Size() int {
+	return m.Size()
+}
+func (m *AnonymizeHttpCookie) XXX_DiscardUnknown() {
+	xxx_messageInfo_AnonymizeHttpCookie.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AnonymizeHttpCookie proto.InternalMessageInfo
+
+func (m *AnonymizeHttpCookie) GetCookieName() string {
+	if m != nil {
+		return m.CookieName
+	}
+	return ""
+}
+
+// Custom Blocking Page
+//
+// x-displayName: "Custom Blocking Response Page"
+// Custom blocking response page body
+type CustomBlockingPage struct {
+	// blocking_page
+	//
+	// x-displayName: "Blocking Response Page Body"
+	// x-example: "<html><head><title>Request Rejected</title></head><body>The requested URL was rejected. Please consult with your administrator.<br/><br/>Your support ID is: {{request_id}}<br/><br/><a href=\"javascript:history.back()\">[Go Back]</a></body></html>"
+	// Define the content of the response page (e.g., an HTML document or a JSON object), use the
+	// {{request_id}} placeholder to provide users with a unique
+	// identifier to be able to trace the blocked request in the logs.
+	// The maximum allowed size of response body is 4096 bytes after base64 encoding,
+	// which would be about 3070 bytes in plain text.
+	BlockingPage string `protobuf:"bytes,1,opt,name=blocking_page,json=blockingPage,proto3" json:"blocking_page,omitempty"`
+	// response_code
+	//
+	// x-displayName: "Response Code"
+	// x-example: 200 OK
+	// HTTP status code to be sent for blocked requests
+	ResponseCode schema.HttpStatusCode `protobuf:"varint,2,opt,name=response_code,json=responseCode,proto3,enum=ves.io.schema.HttpStatusCode" json:"response_code,omitempty"`
+}
+
+func (m *CustomBlockingPage) Reset()      { *m = CustomBlockingPage{} }
+func (*CustomBlockingPage) ProtoMessage() {}
+func (*CustomBlockingPage) Descriptor() ([]byte, []int) {
+	return fileDescriptor_f3c53032614c5085, []int{14}
+}
+func (m *CustomBlockingPage) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CustomBlockingPage) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	b = b[:cap(b)]
+	n, err := m.MarshalToSizedBuffer(b)
+	if err != nil {
+		return nil, err
+	}
+	return b[:n], nil
+}
+func (m *CustomBlockingPage) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CustomBlockingPage.Merge(m, src)
+}
+func (m *CustomBlockingPage) XXX_Size() int {
+	return m.Size()
+}
+func (m *CustomBlockingPage) XXX_DiscardUnknown() {
+	xxx_messageInfo_CustomBlockingPage.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CustomBlockingPage proto.InternalMessageInfo
+
+func (m *CustomBlockingPage) GetBlockingPage() string {
+	if m != nil {
+		return m.BlockingPage
+	}
+	return ""
+}
+
+func (m *CustomBlockingPage) GetResponseCode() schema.HttpStatusCode {
+	if m != nil {
+		return m.ResponseCode
+	}
+	return schema.EmptyStatusCode
 }
 
 // Create Application Firewall
@@ -2969,21 +2969,21 @@ func init() {
 	proto.RegisterEnum("ves.io.schema.app_firewall.AttackType", AttackType_name, AttackType_value)
 	proto.RegisterEnum("ves.io.schema.app_firewall.BotAction", BotAction_name, BotAction_value)
 	proto.RegisterEnum("ves.io.schema.app_firewall.RiskBasedBlockingAction", RiskBasedBlockingAction_name, RiskBasedBlockingAction_value)
-	proto.RegisterType((*BotProtectionSetting)(nil), "ves.io.schema.app_firewall.BotProtectionSetting")
-	proto.RegisterType((*AttackTypeSettings)(nil), "ves.io.schema.app_firewall.AttackTypeSettings")
-	proto.RegisterType((*SignatureSelectionSetting)(nil), "ves.io.schema.app_firewall.SignatureSelectionSetting")
-	proto.RegisterType((*ViolationSettings)(nil), "ves.io.schema.app_firewall.ViolationSettings")
+	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.app_firewall.GlobalSpecType")
 	proto.RegisterType((*DetectionSetting)(nil), "ves.io.schema.app_firewall.DetectionSetting")
+	proto.RegisterType((*SignatureSelectionSetting)(nil), "ves.io.schema.app_firewall.SignatureSelectionSetting")
+	proto.RegisterType((*AttackTypeSettings)(nil), "ves.io.schema.app_firewall.AttackTypeSettings")
+	proto.RegisterType((*ViolationSettings)(nil), "ves.io.schema.app_firewall.ViolationSettings")
 	proto.RegisterType((*SignaturesStagingSettings)(nil), "ves.io.schema.app_firewall.SignaturesStagingSettings")
+	proto.RegisterType((*BotProtectionSetting)(nil), "ves.io.schema.app_firewall.BotProtectionSetting")
+	proto.RegisterType((*AiRiskBasedBlocking)(nil), "ves.io.schema.app_firewall.AiRiskBasedBlocking")
 	proto.RegisterType((*AllowedResponseCodes)(nil), "ves.io.schema.app_firewall.AllowedResponseCodes")
+	proto.RegisterType((*AnonymizationSetting)(nil), "ves.io.schema.app_firewall.AnonymizationSetting")
+	proto.RegisterType((*AnonymizationConfiguration)(nil), "ves.io.schema.app_firewall.AnonymizationConfiguration")
 	proto.RegisterType((*AnonymizeHttpHeader)(nil), "ves.io.schema.app_firewall.AnonymizeHttpHeader")
 	proto.RegisterType((*AnonymizeHttpQueryParameter)(nil), "ves.io.schema.app_firewall.AnonymizeHttpQueryParameter")
 	proto.RegisterType((*AnonymizeHttpCookie)(nil), "ves.io.schema.app_firewall.AnonymizeHttpCookie")
-	proto.RegisterType((*AnonymizationConfiguration)(nil), "ves.io.schema.app_firewall.AnonymizationConfiguration")
-	proto.RegisterType((*AnonymizationSetting)(nil), "ves.io.schema.app_firewall.AnonymizationSetting")
 	proto.RegisterType((*CustomBlockingPage)(nil), "ves.io.schema.app_firewall.CustomBlockingPage")
-	proto.RegisterType((*GlobalSpecType)(nil), "ves.io.schema.app_firewall.GlobalSpecType")
-	proto.RegisterType((*AiRiskBasedBlocking)(nil), "ves.io.schema.app_firewall.AiRiskBasedBlocking")
 	proto.RegisterType((*CreateSpecType)(nil), "ves.io.schema.app_firewall.CreateSpecType")
 	proto.RegisterType((*ReplaceSpecType)(nil), "ves.io.schema.app_firewall.ReplaceSpecType")
 	proto.RegisterType((*GetSpecType)(nil), "ves.io.schema.app_firewall.GetSpecType")
@@ -2994,271 +2994,270 @@ func init() {
 }
 
 var fileDescriptor_f3c53032614c5085 = []byte{
-	// 4218 bytes of a gzipped FileDescriptorProto
+	// 4205 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xec, 0x7b, 0x4d, 0x6c, 0xe3, 0xd6,
-	0x76, 0xbf, 0xaf, 0x25, 0x7b, 0xec, 0xeb, 0x2f, 0x9a, 0xd6, 0x78, 0x64, 0xcf, 0x8c, 0xc7, 0x51,
-	0xfe, 0x99, 0x37, 0xe3, 0xe1, 0xd8, 0xfa, 0xf4, 0x47, 0xf2, 0x4f, 0x5e, 0x49, 0x89, 0x16, 0xe9,
-	0x91, 0x45, 0x99, 0xa4, 0xfc, 0x85, 0xf7, 0xca, 0x47, 0x4b, 0x1c, 0x49, 0xb1, 0x24, 0x2a, 0x12,
-	0x65, 0x8f, 0x07, 0x78, 0x78, 0xc1, 0xa0, 0x78, 0x28, 0x5e, 0x37, 0x0f, 0x59, 0x34, 0x40, 0x17,
-	0x5d, 0x74, 0xd5, 0x45, 0xbb, 0x2f, 0xaa, 0x2c, 0x06, 0x05, 0x0a, 0x3c, 0x64, 0xe5, 0x76, 0xd3,
-	0x60, 0x56, 0x2f, 0xce, 0x26, 0xdd, 0x05, 0x59, 0x05, 0xb3, 0x2a, 0x2e, 0xbf, 0x44, 0xd2, 0xb2,
-	0x66, 0x92, 0x16, 0x78, 0x28, 0xea, 0x0d, 0x41, 0xdd, 0x73, 0xce, 0xef, 0x9c, 0x7b, 0xee, 0xb9,
-	0xe7, 0x9c, 0x4b, 0x8a, 0xf0, 0xfe, 0x89, 0xd2, 0x5a, 0xae, 0xa8, 0x2b, 0xad, 0x42, 0x59, 0xa9,
-	0xc9, 0x2b, 0x72, 0xa3, 0x21, 0x3d, 0xad, 0x34, 0x95, 0x53, 0xb9, 0x5a, 0x5d, 0xd1, 0xce, 0x1a,
-	0x4a, 0x6b, 0xb9, 0xd1, 0x54, 0x35, 0x15, 0x9f, 0x37, 0xf8, 0x96, 0x0d, 0xbe, 0x65, 0x27, 0xdf,
-	0xfc, 0xe3, 0x52, 0x45, 0x2b, 0xb7, 0x8f, 0x96, 0x0b, 0x6a, 0x6d, 0xa5, 0xa4, 0x96, 0xd4, 0x15,
-	0x5d, 0xe4, 0xa8, 0xfd, 0x54, 0xff, 0xa5, 0xff, 0xd0, 0xef, 0x0c, 0xa8, 0xf9, 0x5b, 0x6e, 0x95,
-	0x75, 0x45, 0x33, 0x09, 0xb7, 0xdd, 0x04, 0xb5, 0xa1, 0x55, 0xd4, 0xba, 0x69, 0xc0, 0xfc, 0x9c,
-	0x9b, 0xe8, 0xb0, 0x6d, 0xfe, 0x8e, 0x9b, 0x74, 0x22, 0x57, 0x2b, 0x45, 0x59, 0x53, 0x4c, 0xea,
-	0xa2, 0x87, 0x5a, 0x51, 0x4e, 0x25, 0x17, 0x74, 0xe8, 0x8b, 0x41, 0x18, 0xa0, 0x54, 0x2d, 0xd7,
-	0x54, 0x35, 0xa5, 0x80, 0x08, 0x82, 0xa2, 0x69, 0x95, 0x7a, 0x09, 0x3f, 0x82, 0x81, 0x9a, 0x5c,
-	0xad, 0x14, 0x2a, 0x6a, 0xbb, 0x25, 0x1d, 0xa9, 0x9a, 0x24, 0xeb, 0xe4, 0x20, 0x58, 0x04, 0x0f,
-	0x26, 0xa3, 0xef, 0x2d, 0x5f, 0xed, 0x93, 0x65, 0x4a, 0xd5, 0x48, 0x9d, 0x99, 0x1a, 0x7d, 0xd5,
-	0x01, 0x43, 0x54, 0x86, 0x4b, 0x3e, 0xe1, 0x71, 0x1b, 0xcd, 0x26, 0xe3, 0x0a, 0xbc, 0xd9, 0x6a,
-	0xb7, 0x1a, 0x97, 0x95, 0x0c, 0xfe, 0x18, 0x25, 0xf0, 0x55, 0x07, 0x0c, 0xf3, 0x74, 0x8e, 0xe3,
-	0x45, 0x7e, 0xa6, 0x8b, 0xd7, 0x55, 0x73, 0x00, 0xa7, 0x4a, 0xaa, 0x5a, 0x74, 0x2a, 0xf0, 0xfd,
-	0x54, 0x05, 0x13, 0x08, 0xc9, 0x26, 0x85, 0x7e, 0x0b, 0x20, 0x4e, 0x6a, 0x9a, 0x5c, 0x38, 0x16,
-	0xcf, 0x1a, 0x8a, 0xe9, 0xbb, 0x16, 0xde, 0x80, 0x37, 0x8b, 0x95, 0x96, 0x7c, 0x54, 0x55, 0x8a,
-	0x92, 0xac, 0x93, 0x25, 0x7d, 0xd1, 0x82, 0x60, 0xd1, 0xf7, 0x60, 0x32, 0x7a, 0xbf, 0x9f, 0xde,
-	0x2e, 0x1c, 0x15, 0xf8, 0xe7, 0xff, 0x7c, 0xe9, 0x1b, 0xfa, 0x0c, 0x0c, 0x62, 0xb3, 0xd6, 0x5d,
-	0x10, 0xf0, 0x33, 0x16, 0x74, 0x97, 0xb3, 0x15, 0xfa, 0xce, 0x0f, 0xe7, 0x84, 0x4a, 0xa9, 0x2e,
-	0x6b, 0xed, 0xa6, 0x22, 0x28, 0x55, 0xf7, 0x62, 0x1e, 0xc0, 0xbb, 0x6a, 0xbd, 0x7a, 0x26, 0x95,
-	0x2b, 0xa5, 0xb2, 0x24, 0x17, 0x0a, 0xed, 0xa6, 0x5c, 0x38, 0x93, 0x5a, 0x16, 0x7f, 0x4b, 0x77,
-	0xf8, 0x58, 0x34, 0xe0, 0xb1, 0x8b, 0xae, 0x35, 0xb4, 0x33, 0x66, 0x80, 0x9f, 0x47, 0xc2, 0x4c,
-	0xa5, 0x54, 0x26, 0x4d, 0x51, 0x5b, 0x53, 0x0b, 0xff, 0x25, 0xbc, 0xa7, 0xa3, 0xd6, 0x94, 0x62,
-	0xa5, 0x5d, 0xeb, 0x09, 0xee, 0xeb, 0x0b, 0x7e, 0x07, 0x89, 0x6f, 0xeb, 0xd2, 0x3d, 0xe0, 0x8b,
-	0xf0, 0x5d, 0x27, 0x7c, 0x55, 0x3d, 0xed, 0xa9, 0xc2, 0xdf, 0x57, 0xc5, 0xbd, 0xae, 0x8a, 0x8c,
-	0x7a, 0xda, 0x43, 0xcb, 0x1e, 0xbc, 0x53, 0x54, 0x9e, 0xca, 0xed, 0xaa, 0xe6, 0x5c, 0x2e, 0xa9,
-	0x65, 0xae, 0x67, 0x70, 0xb8, 0x0f, 0x3c, 0xe0, 0xe7, 0x4c, 0xd9, 0x1e, 0x81, 0x70, 0x04, 0x03,
-	0x3d, 0x01, 0x47, 0x74, 0xc0, 0xe5, 0xb7, 0x8b, 0x03, 0x0b, 0x8d, 0x01, 0x3c, 0x2e, 0x5f, 0x1a,
-	0x7d, 0x7f, 0xf8, 0xfb, 0x8f, 0x7c, 0x09, 0x22, 0x42, 0xc5, 0xe1, 0x3d, 0xdb, 0x23, 0x52, 0xcb,
-	0x0a, 0x01, 0xe9, 0xe8, 0xcc, 0xf6, 0x18, 0x3e, 0xfd, 0xb2, 0x03, 0x7c, 0xe7, 0x1d, 0x00, 0x2e,
-	0x3a, 0x60, 0x28, 0x4a, 0xc4, 0x88, 0x38, 0x75, 0x1f, 0xce, 0xf4, 0xb0, 0x10, 0x9f, 0x7a, 0xd9,
-	0x01, 0xc3, 0xe7, 0x1d, 0x30, 0x74, 0xd1, 0x01, 0xbe, 0x55, 0x62, 0x7d, 0xcb, 0x3f, 0x02, 0xb0,
-	0xc1, 0x2d, 0xff, 0xc8, 0x10, 0x36, 0xbc, 0xe5, 0x1f, 0xb9, 0x81, 0x8d, 0x84, 0xfe, 0x06, 0xc0,
-	0xe9, 0xdd, 0x8a, 0x5a, 0x95, 0x1d, 0x91, 0xd6, 0xc2, 0xff, 0x02, 0xc0, 0xa0, 0x1d, 0xfb, 0x27,
-	0x16, 0xd9, 0x15, 0xfe, 0xf1, 0xbe, 0xd3, 0x6e, 0x34, 0x36, 0xcd, 0x7b, 0x1b, 0xdc, 0xb3, 0x19,
-	0x1e, 0x38, 0x36, 0xc3, 0xac, 0xa5, 0xcb, 0xc5, 0xdc, 0x0a, 0x7d, 0x0f, 0x21, 0x96, 0x52, 0x3c,
-	0x39, 0xad, 0x0d, 0x6f, 0xf7, 0xf2, 0x90, 0x39, 0x67, 0x3d, 0xb5, 0x8d, 0x45, 0x13, 0xfd, 0xac,
-	0xbb, 0x72, 0x8b, 0xf1, 0x73, 0xad, 0x2b, 0x77, 0x1f, 0x0d, 0x71, 0xa5, 0x8e, 0x8c, 0x94, 0x5a,
-	0xed, 0x46, 0xa3, 0xa9, 0xb4, 0x5a, 0x56, 0x0a, 0xba, 0x3a, 0x64, 0xa7, 0x0d, 0x09, 0xa1, 0x2b,
-	0x80, 0xa7, 0xa1, 0xb5, 0xf3, 0x5d, 0x38, 0xfd, 0x43, 0x1f, 0x37, 0x45, 0x9c, 0x40, 0x59, 0x78,
-	0xcb, 0xb4, 0x47, 0x2b, 0x37, 0x15, 0x59, 0x93, 0x0a, 0x72, 0xad, 0x21, 0x57, 0x4a, 0xf5, 0x37,
-	0x05, 0xfa, 0x4d, 0x43, 0x4c, 0xd4, 0xa5, 0x92, 0x96, 0x10, 0x9e, 0xb3, 0x57, 0xfc, 0x32, 0xe0,
-	0x8d, 0xbe, 0x80, 0xd6, 0xea, 0x79, 0x11, 0x45, 0x38, 0x6f, 0xed, 0xc7, 0x6e, 0x08, 0xd9, 0x9b,
-	0x67, 0xb4, 0x0f, 0xe6, 0x20, 0x1f, 0x34, 0x25, 0x2f, 0x87, 0xe6, 0x9f, 0x43, 0xbc, 0x07, 0xda,
-	0x98, 0x8e, 0xf6, 0xb8, 0xdf, 0xaa, 0x5f, 0x82, 0x62, 0x06, 0xf9, 0xe9, 0x93, 0x4b, 0xf8, 0x3f,
-	0x87, 0x53, 0xf6, 0x02, 0x69, 0x72, 0x09, 0x85, 0xd4, 0x44, 0x1f, 0x53, 0x7d, 0xfc, 0xa4, 0xb5,
-	0x38, 0x06, 0x37, 0x5e, 0x81, 0x01, 0x24, 0xa8, 0x48, 0x75, 0xe5, 0xd4, 0x99, 0xdd, 0x26, 0x7f,
-	0x44, 0x60, 0xb6, 0x4c, 0x30, 0xdb, 0x54, 0x1f, 0x8f, 0xeb, 0xa0, 0x59, 0xe5, 0xd4, 0x91, 0xf1,
-	0x7e, 0x03, 0x17, 0xbb, 0xaa, 0xe4, 0x7a, 0x51, 0x6a, 0x37, 0x50, 0xdf, 0x50, 0x74, 0xaa, 0x9d,
-	0xfa, 0xef, 0xa9, 0xbd, 0x63, 0xa9, 0x25, 0xeb, 0xc5, 0xbc, 0x81, 0xee, 0x30, 0x60, 0x13, 0xce,
-	0x58, 0x4b, 0x8c, 0xea, 0xb2, 0xb5, 0x07, 0xa7, 0xfb, 0x38, 0xcc, 0xcf, 0x4f, 0x9b, 0x22, 0x94,
-	0xaa, 0x59, 0x9b, 0xab, 0x0c, 0x67, 0x91, 0x7c, 0xc3, 0x6e, 0x60, 0x6c, 0x28, 0x5c, 0x87, 0x0a,
-	0xbf, 0xa1, 0xc6, 0x5f, 0xea, 0x7c, 0x18, 0x3f, 0x1f, 0x38, 0xea, 0x31, 0xfe, 0x3e, 0xf6, 0xfd,
-	0x47, 0x13, 0x11, 0x22, 0x4a, 0x44, 0xa2, 0x44, 0x82, 0x58, 0x27, 0x22, 0xab, 0xd4, 0x63, 0x38,
-	0xff, 0x54, 0xae, 0xb6, 0x14, 0xa9, 0xa1, 0xb6, 0x2a, 0x5a, 0xe5, 0xc4, 0xb5, 0x31, 0xf5, 0x14,
-	0x8a, 0x92, 0xed, 0x20, 0x4a, 0xa1, 0x28, 0xd5, 0x3e, 0x84, 0xb3, 0x9e, 0xfd, 0x21, 0x15, 0xca,
-	0x6a, 0xa5, 0xa0, 0x78, 0xb3, 0xed, 0x1a, 0xb5, 0x02, 0x6f, 0x77, 0x43, 0xb5, 0xa8, 0x78, 0xa6,
-	0x86, 0x63, 0x2f, 0x3b, 0x60, 0xf4, 0xbc, 0x03, 0x46, 0x2e, 0x3a, 0xc0, 0xbf, 0x41, 0x44, 0x22,
-	0x54, 0xcc, 0x91, 0xda, 0x5a, 0x56, 0xf8, 0xd9, 0x41, 0x8e, 0x07, 0x5e, 0x76, 0xc0, 0xc4, 0x79,
-	0x07, 0x8c, 0x5f, 0x74, 0xc0, 0x48, 0x24, 0x46, 0x44, 0xe2, 0x44, 0x24, 0x41, 0x2d, 0xc1, 0x9b,
-	0x1e, 0xdf, 0x99, 0xf6, 0xa0, 0x3a, 0x31, 0x7d, 0xde, 0x01, 0x18, 0xaa, 0x13, 0x91, 0x35, 0x22,
-	0x82, 0xf2, 0xff, 0x20, 0xe6, 0xb3, 0xf3, 0xff, 0x08, 0x36, 0xba, 0xe5, 0x1f, 0x81, 0xd8, 0xd8,
-	0x96, 0x7f, 0x64, 0x1c, 0x9b, 0xd8, 0xf2, 0x8f, 0x60, 0xd8, 0x74, 0x68, 0xdf, 0xd1, 0x83, 0x78,
-	0x03, 0x02, 0xff, 0x00, 0x4e, 0x5a, 0x66, 0x35, 0x94, 0x66, 0x45, 0x2d, 0xea, 0xf9, 0x76, 0x82,
-	0x0a, 0xbc, 0xea, 0x00, 0xb0, 0xf6, 0x97, 0x5f, 0x00, 0x3f, 0x4a, 0xeb, 0xc3, 0x4b, 0xfe, 0x60,
-	0xe0, 0x01, 0xe0, 0x27, 0x4c, 0xde, 0x9c, 0xce, 0x1a, 0xfa, 0xb7, 0x41, 0x18, 0x20, 0xab, 0x55,
-	0xf5, 0x54, 0x29, 0xf2, 0x4a, 0xab, 0xa1, 0xd6, 0x5b, 0x4a, 0x52, 0x2d, 0x2a, 0x2d, 0xfc, 0x9f,
-	0x06, 0xe1, 0x44, 0xd3, 0x1c, 0x91, 0x0a, 0x6a, 0x51, 0xd1, 0x6b, 0xcc, 0x04, 0xf5, 0xd9, 0xe0,
-	0xab, 0x0e, 0x90, 0xa2, 0xe1, 0x30, 0x11, 0x0d, 0x47, 0x88, 0x68, 0x38, 0x4a, 0x44, 0xc3, 0x31,
-	0x22, 0x1a, 0x8e, 0x13, 0xd1, 0x70, 0x82, 0x88, 0x86, 0x57, 0x89, 0x58, 0x38, 0x4c, 0xc4, 0xc2,
-	0x11, 0x22, 0x16, 0x8e, 0x12, 0xb1, 0x70, 0x8c, 0x88, 0x85, 0xe3, 0x44, 0x2c, 0xbc, 0x4e, 0xc4,
-	0xc2, 0x6b, 0x44, 0x3c, 0x1c, 0x26, 0xe2, 0xe1, 0x08, 0x11, 0x0f, 0xc7, 0x88, 0x78, 0x38, 0x4e,
-	0xc4, 0xd1, 0x58, 0x74, 0x83, 0x48, 0x84, 0xc3, 0x44, 0x22, 0x1c, 0x21, 0x12, 0xe1, 0x28, 0x91,
-	0x08, 0xc7, 0x2e, 0x3a, 0xe0, 0x19, 0xf4, 0x45, 0xc3, 0x61, 0x74, 0x89, 0xa0, 0x4b, 0x14, 0x5d,
-	0x62, 0xe8, 0x12, 0x47, 0x97, 0x04, 0xba, 0xac, 0x42, 0x5f, 0x0c, 0xb1, 0xc4, 0x10, 0x4b, 0x0c,
-	0xb1, 0xc4, 0x10, 0x4b, 0x0c, 0xb1, 0xc4, 0xc2, 0xeb, 0xe8, 0xb2, 0x06, 0x7d, 0x71, 0xc4, 0x12,
-	0x47, 0x2c, 0x71, 0x44, 0x8d, 0x23, 0x6a, 0x5c, 0x27, 0x44, 0x37, 0xa0, 0x2f, 0x81, 0xa8, 0x09,
-	0x44, 0x4d, 0x20, 0x80, 0x44, 0x38, 0xf6, 0x43, 0x07, 0x0c, 0x20, 0x87, 0x8d, 0x7f, 0x06, 0x46,
-	0x43, 0x37, 0x96, 0x86, 0x82, 0xff, 0xe1, 0x7f, 0x50, 0xb4, 0x4b, 0x64, 0xd8, 0xba, 0x1b, 0x01,
-	0x8e, 0x62, 0x39, 0xde, 0x74, 0xf8, 0x2e, 0x44, 0xc1, 0x19, 0xb2, 0xae, 0xd6, 0xcf, 0x6a, 0x95,
-	0xe7, 0x0a, 0xa3, 0x69, 0x0d, 0x46, 0x91, 0x8b, 0x4a, 0x13, 0x7f, 0x04, 0xc7, 0xca, 0xfa, 0x9d,
-	0x54, 0x97, 0x6b, 0x8a, 0xbe, 0x48, 0xa3, 0x14, 0xd4, 0x51, 0x9a, 0xbe, 0x3f, 0x00, 0xc0, 0x43,
-	0x83, 0x9c, 0x95, 0x6b, 0x4a, 0x48, 0x80, 0xb7, 0x5d, 0x18, 0x3b, 0x6d, 0xa5, 0x79, 0x96, 0x93,
-	0x9b, 0x72, 0x4d, 0xd1, 0x94, 0x26, 0x1e, 0x87, 0xd8, 0x27, 0x68, 0x44, 0x6a, 0xa0, 0xa1, 0x5e,
-	0x80, 0xc1, 0x4f, 0x07, 0xf9, 0xc9, 0x4f, 0x6c, 0x29, 0x1d, 0xd4, 0x6b, 0x58, 0x52, 0x55, 0x8f,
-	0x2b, 0x0a, 0x32, 0xac, 0xa0, 0xdf, 0x5d, 0x85, 0x03, 0x0d, 0xb2, 0x8e, 0xf1, 0x0f, 0x7e, 0x38,
-	0x6f, 0x81, 0xe8, 0xbb, 0x28, 0xa9, 0xd6, 0x9f, 0x56, 0x4a, 0xed, 0xa6, 0xfe, 0x03, 0xdf, 0x87,
-	0x63, 0x65, 0x4d, 0x6b, 0x48, 0xc6, 0x54, 0xcc, 0xf6, 0x77, 0xa5, 0x6f, 0x5f, 0x72, 0xd9, 0x55,
-	0x94, 0xff, 0xbb, 0x0e, 0x00, 0xcc, 0x00, 0x0f, 0xcb, 0x5d, 0xf7, 0x95, 0xe1, 0x94, 0x63, 0xca,
-	0xc8, 0x0b, 0x66, 0xa5, 0x5f, 0x7b, 0x6b, 0x74, 0xb7, 0x13, 0x6d, 0x2d, 0x0e, 0x37, 0xe9, 0xce,
-	0xe5, 0xe0, 0xb0, 0x31, 0x61, 0xb3, 0x05, 0x78, 0x7b, 0xf3, 0x0d, 0x87, 0xda, 0xc0, 0x26, 0xcc,
-	0xfb, 0xff, 0x0a, 0xbe, 0xec, 0x80, 0x97, 0x00, 0xfe, 0x02, 0xfa, 0x51, 0x13, 0xb5, 0x24, 0x42,
-	0x1e, 0xce, 0xbb, 0x1c, 0x15, 0x1d, 0x63, 0x44, 0x31, 0xb7, 0x68, 0x4c, 0x15, 0x86, 0x2e, 0x4d,
-	0x35, 0x3a, 0xa5, 0xdb, 0xbe, 0x68, 0x1b, 0x09, 0x31, 0xcb, 0xc8, 0xe8, 0xb0, 0xa1, 0x15, 0xfe,
-	0x0a, 0x0e, 0xed, 0xca, 0xd5, 0xb6, 0xb2, 0xb4, 0x07, 0xf3, 0x70, 0x0e, 0xde, 0x72, 0xc0, 0x2f,
-	0x3b, 0x02, 0x0f, 0x86, 0xe0, 0xa2, 0x07, 0x7d, 0xd9, 0x1b, 0x4b, 0x30, 0x00, 0x71, 0x03, 0x7d,
-	0xd9, 0x11, 0x19, 0xd4, 0x23, 0x18, 0x90, 0x9d, 0x4b, 0x6f, 0x65, 0xb5, 0x19, 0x47, 0xf7, 0x7b,
-	0x23, 0x4a, 0x2c, 0xc6, 0x88, 0xc5, 0xb8, 0xd1, 0xd7, 0x86, 0x3e, 0x07, 0x30, 0xe0, 0x0a, 0x17,
-	0xab, 0xbc, 0xfc, 0xe6, 0x12, 0x96, 0x1e, 0x47, 0x7a, 0x96, 0x19, 0x8b, 0xae, 0xbe, 0x8d, 0xcb,
-	0x2f, 0x87, 0x9f, 0xa3, 0x97, 0xfd, 0x33, 0xe7, 0xc1, 0x4e, 0xbe, 0x2c, 0x11, 0xfa, 0x6b, 0x3f,
-	0xc4, 0x93, 0xed, 0x96, 0xa6, 0xd6, 0xa8, 0xaa, 0x5a, 0x38, 0x46, 0x29, 0x51, 0x2e, 0x29, 0xf8,
-	0xdf, 0xfa, 0xe0, 0xc4, 0x91, 0x39, 0x20, 0x35, 0xe4, 0x92, 0xb5, 0x1f, 0x7e, 0x40, 0x79, 0xef,
-	0xdf, 0x07, 0x5b, 0x5a, 0x13, 0x95, 0xac, 0x95, 0x95, 0x95, 0x5c, 0xba, 0x1c, 0x3e, 0xda, 0x3b,
-	0x7d, 0x94, 0x4b, 0x97, 0xab, 0x07, 0x7b, 0x3b, 0x8f, 0x72, 0x0c, 0xdf, 0x28, 0xa6, 0x9f, 0x55,
-	0x73, 0xd5, 0xad, 0x6a, 0x61, 0x7f, 0xb7, 0x5a, 0x88, 0xed, 0x94, 0xf2, 0xb5, 0xdd, 0x4f, 0x0e,
-	0xf7, 0xb2, 0xe1, 0xc3, 0xbd, 0x9d, 0xf5, 0x4c, 0xcc, 0xa4, 0x7f, 0x7c, 0x7a, 0x22, 0xa7, 0x77,
-	0xcb, 0x87, 0xa9, 0xf8, 0xfa, 0x41, 0x6d, 0xe3, 0x58, 0x11, 0x13, 0x79, 0x39, 0x9d, 0x2f, 0x15,
-	0x6a, 0xbb, 0xcf, 0x8a, 0x7b, 0xbb, 0xcf, 0x8b, 0xe9, 0xdd, 0x63, 0x76, 0x73, 0x57, 0x10, 0x93,
-	0x54, 0xec, 0x60, 0x7f, 0x1b, 0x8d, 0x5b, 0x18, 0x6d, 0x76, 0x93, 0x6a, 0x1d, 0xee, 0x6d, 0x3e,
-	0x3f, 0x14, 0xa8, 0x8f, 0x8f, 0xa2, 0x89, 0xe7, 0xc5, 0xbd, 0x67, 0x61, 0x96, 0x29, 0x36, 0x8a,
-	0xe9, 0x52, 0x49, 0xd9, 0xdb, 0x88, 0x14, 0x2a, 0x54, 0xf9, 0x30, 0x1d, 0x69, 0x1c, 0xd5, 0xaa,
-	0xcf, 0x8b, 0xcc, 0x56, 0xb9, 0x98, 0xde, 0x38, 0xcb, 0x7c, 0xfc, 0xac, 0x52, 0xa8, 0xac, 0x3f,
-	0xca, 0xa5, 0xb7, 0xce, 0x32, 0xcf, 0x13, 0x87, 0x47, 0xb1, 0xdd, 0x33, 0x96, 0xc9, 0x46, 0x0a,
-	0x0c, 0x75, 0x52, 0xa8, 0xef, 0x94, 0x84, 0xfc, 0x4e, 0x49, 0xde, 0xdf, 0x5e, 0x65, 0x19, 0x6d,
-	0xcd, 0xb6, 0x61, 0x73, 0xa3, 0x71, 0xc8, 0x44, 0x36, 0x0c, 0x99, 0xf8, 0xfa, 0x41, 0x9d, 0x3d,
-	0xc9, 0x7d, 0xfc, 0xac, 0xcc, 0xa6, 0xcb, 0x67, 0x87, 0x7b, 0x07, 0x1b, 0x6c, 0xad, 0x51, 0x2e,
-	0xd6, 0x36, 0x9f, 0x1f, 0xc4, 0xb6, 0x1a, 0x05, 0x66, 0x67, 0x55, 0x4e, 0x57, 0x9f, 0x23, 0x5d,
-	0x8a, 0x90, 0xa8, 0x1c, 0xec, 0x65, 0x9b, 0x4f, 0x92, 0xc7, 0x95, 0x5c, 0x55, 0x63, 0x8e, 0xce,
-	0xa8, 0x24, 0xfa, 0xbd, 0x2f, 0x9e, 0x9e, 0x1c, 0x88, 0xf1, 0xf5, 0x4c, 0x74, 0xeb, 0xe4, 0x90,
-	0x39, 0x7e, 0x94, 0x4b, 0x6e, 0xa8, 0xc5, 0x74, 0xa4, 0x95, 0x2b, 0x7d, 0xf8, 0xe1, 0x0f, 0x1d,
-	0xe0, 0xff, 0xbb, 0x2f, 0xc0, 0xb8, 0xa6, 0x3c, 0xd3, 0x88, 0xc5, 0x23, 0xb9, 0xa5, 0xac, 0xc6,
-	0xd1, 0xda, 0x8d, 0x34, 0x87, 0x83, 0x9f, 0x2e, 0xfe, 0x1e, 0x00, 0x7e, 0xfc, 0xc8, 0xb9, 0x40,
-	0x7b, 0xde, 0xba, 0x64, 0x3c, 0xd3, 0xb8, 0xeb, 0x89, 0x18, 0xb4, 0x1d, 0x05, 0x4d, 0xd6, 0xda,
-	0x2d, 0x94, 0x93, 0xa9, 0x99, 0x57, 0x1d, 0x30, 0xc8, 0x3d, 0xd1, 0x81, 0x5f, 0x80, 0x21, 0x0c,
-	0x84, 0xc0, 0x80, 0x3b, 0x6d, 0xeb, 0xc7, 0xbd, 0x28, 0x11, 0x09, 0xfd, 0xe3, 0x04, 0x9c, 0x4c,
-	0x57, 0xd5, 0x23, 0xb9, 0x2a, 0x34, 0x94, 0x02, 0xda, 0xb0, 0xf8, 0x01, 0x0c, 0xb6, 0x5b, 0x8a,
-	0x54, 0x55, 0xe5, 0xe2, 0x91, 0x5c, 0x95, 0xeb, 0x05, 0xa5, 0x69, 0x77, 0x43, 0x7d, 0x4e, 0xf8,
-	0xd4, 0x8d, 0xaf, 0x7e, 0x0d, 0xbe, 0x35, 0x72, 0xc1, 0x6c, 0xbb, 0xa5, 0x64, 0x1c, 0xf2, 0xd6,
-	0x3e, 0x88, 0xc2, 0x11, 0x6b, 0x7a, 0x6f, 0x38, 0xb9, 0xd8, 0x7c, 0xf8, 0x2a, 0x84, 0x35, 0xb5,
-	0x5e, 0xd1, 0x54, 0x14, 0x8b, 0x6f, 0x38, 0xa7, 0x38, 0x38, 0x9d, 0xdd, 0xff, 0xa5, 0xd6, 0xe7,
-	0x4d, 0x47, 0x14, 0xab, 0xfb, 0xf7, 0x9e, 0xfd, 0x5a, 0xf8, 0x2f, 0x21, 0xde, 0x03, 0xcd, 0x38,
-	0x9f, 0x10, 0xfd, 0xf6, 0xb1, 0x17, 0x8a, 0x01, 0xa8, 0x0f, 0xf5, 0xc2, 0x3f, 0x85, 0xb3, 0x72,
-	0x45, 0x6a, 0x56, 0x5a, 0xc7, 0x12, 0x0a, 0x8e, 0xa2, 0x64, 0xbb, 0xeb, 0xe6, 0x5b, 0x64, 0xe7,
-	0x0a, 0x5f, 0x69, 0x1d, 0x53, 0x48, 0xce, 0xda, 0xe5, 0x0c, 0xca, 0x07, 0x97, 0x87, 0xaf, 0xea,
-	0x9b, 0xfb, 0x9f, 0x89, 0x7e, 0x54, 0xdf, 0x0c, 0x7f, 0x62, 0xdf, 0x3c, 0xd8, 0xbb, 0x6f, 0xc6,
-	0x39, 0x18, 0x94, 0xab, 0xfa, 0x83, 0x9b, 0x6a, 0x55, 0x72, 0xed, 0x89, 0x56, 0x70, 0xbc, 0xef,
-	0xf9, 0xe8, 0xa6, 0x2e, 0x47, 0x56, 0xab, 0xee, 0x9e, 0xaf, 0x0c, 0x67, 0x65, 0xa3, 0x17, 0xf4,
-	0xc2, 0x4d, 0xbc, 0xd9, 0xf4, 0x5e, 0x5d, 0x24, 0xe3, 0xe3, 0x03, 0x72, 0xaf, 0xee, 0xf2, 0x89,
-	0xfd, 0x1c, 0x4f, 0x72, 0xe5, 0x66, 0xf3, 0x68, 0x74, 0xd5, 0x31, 0x25, 0x60, 0x0a, 0xb9, 0x2a,
-	0x80, 0x0e, 0x66, 0x3d, 0x64, 0x72, 0x81, 0x61, 0x6f, 0x00, 0x33, 0x9f, 0x2e, 0xb9, 0xc0, 0x14,
-	0x18, 0x28, 0xe8, 0x55, 0xc1, 0x83, 0x35, 0xfd, 0x16, 0x1e, 0xe8, 0x51, 0xe7, 0x18, 0x3f, 0x3f,
-	0x63, 0xe0, 0xb9, 0xd5, 0xec, 0xc0, 0x39, 0x94, 0x51, 0xec, 0x88, 0x73, 0x55, 0x9c, 0x99, 0x3e,
-	0x76, 0x0f, 0xe9, 0x99, 0x24, 0x65, 0x86, 0x9d, 0x33, 0x31, 0xe6, 0xbd, 0x85, 0x2b, 0xf0, 0xe6,
-	0x67, 0x61, 0x97, 0x0b, 0x20, 0x33, 0xe4, 0xce, 0xb7, 0xef, 0xff, 0xea, 0x5f, 0x3a, 0xe0, 0x17,
-	0xf0, 0x16, 0xc4, 0xe8, 0xfa, 0x53, 0xb5, 0x59, 0x50, 0x6a, 0x4a, 0x5d, 0x5b, 0xdc, 0x56, 0x8b,
-	0x0a, 0x0e, 0x22, 0x0f, 0x00, 0xbc, 0x0b, 0x83, 0x82, 0x52, 0x68, 0x37, 0x2b, 0xda, 0xd9, 0x62,
-	0x4e, 0xad, 0x56, 0x0a, 0x67, 0x8b, 0xf6, 0xd6, 0x05, 0x09, 0x18, 0x82, 0xb3, 0x64, 0xf1, 0x04,
-	0x65, 0xbc, 0xe2, 0x62, 0xc1, 0xd5, 0x29, 0x8e, 0x44, 0x22, 0xfa, 0x69, 0x69, 0x9d, 0x5a, 0x82,
-	0xb7, 0x94, 0x2e, 0xb6, 0x54, 0x53, 0x8b, 0x8a, 0xf3, 0xfc, 0xe6, 0x37, 0x3b, 0x0b, 0x5f, 0x9c,
-	0x88, 0x51, 0xcb, 0x30, 0x78, 0x29, 0xd9, 0x58, 0xcc, 0xb8, 0xe3, 0xb0, 0x37, 0xbc, 0x4a, 0x44,
-	0x23, 0xc4, 0x1a, 0xf5, 0xf8, 0xaa, 0x93, 0x58, 0xc0, 0x73, 0xd2, 0x0b, 0xa3, 0x9e, 0x8d, 0x8a,
-	0xc2, 0xbb, 0xbd, 0x77, 0x80, 0xf3, 0x00, 0x37, 0x7e, 0xde, 0x01, 0x63, 0xfa, 0x01, 0x2e, 0x4a,
-	0x44, 0x62, 0xd4, 0x0a, 0xbc, 0xe9, 0xee, 0x64, 0xac, 0xc3, 0xe4, 0xec, 0xcb, 0x0e, 0xc0, 0xce,
-	0x3b, 0x60, 0xf2, 0xa2, 0x03, 0x60, 0x24, 0x41, 0x2c, 0x46, 0x56, 0x89, 0xc5, 0xc8, 0x1a, 0xf5,
-	0x10, 0x06, 0x5c, 0x0b, 0xe5, 0xc4, 0x9e, 0x39, 0xef, 0x00, 0x5c, 0xc7, 0xde, 0x20, 0xa2, 0x61,
-	0xcf, 0xc3, 0x41, 0xe3, 0x70, 0x38, 0x86, 0x8d, 0x6f, 0xf9, 0x47, 0x26, 0xb1, 0xa9, 0x2d, 0xff,
-	0x08, 0x8e, 0xcd, 0x84, 0xfe, 0x38, 0x08, 0x67, 0x7a, 0xe4, 0x39, 0xfc, 0x18, 0x62, 0xfa, 0x13,
-	0x5e, 0x3d, 0x75, 0xba, 0x5e, 0x32, 0xc4, 0xfa, 0x85, 0xc4, 0x25, 0x20, 0xf3, 0x61, 0xfd, 0xf8,
-	0xab, 0x0e, 0x18, 0x21, 0x59, 0xc9, 0x78, 0xeb, 0x30, 0x89, 0xa0, 0x11, 0xab, 0xf9, 0x2a, 0xa0,
-	0x01, 0x71, 0xf3, 0x49, 0xb2, 0x53, 0xdd, 0xe0, 0x4f, 0x57, 0x37, 0xf1, 0xaa, 0x03, 0x46, 0x49,
-	0x56, 0x32, 0x5f, 0x0f, 0x60, 0x06, 0xba, 0x43, 0xe3, 0xc7, 0x70, 0x0a, 0xe5, 0x3e, 0xa7, 0x3a,
-	0xdf, 0xff, 0x98, 0xba, 0x89, 0xaa, 0x7a, 0xda, 0xd5, 0x15, 0xfa, 0xdd, 0x04, 0x9c, 0x4c, 0x36,
-	0x15, 0x59, 0x53, 0xec, 0x96, 0x20, 0xf7, 0xd3, 0x5a, 0x82, 0xeb, 0x4e, 0xe0, 0xba, 0x13, 0xb8,
-	0xee, 0x04, 0xae, 0x3b, 0x81, 0xff, 0x8d, 0x9d, 0xc0, 0xf4, 0x97, 0x1f, 0x79, 0x0e, 0x46, 0xd4,
-	0xea, 0xd5, 0xa5, 0xfb, 0xf6, 0x8b, 0xd7, 0xe0, 0x2a, 0x22, 0xb5, 0xde, 0xa7, 0x8c, 0xdf, 0x79,
-	0xf1, 0x1a, 0x5c, 0x49, 0xa5, 0xa2, 0x57, 0x15, 0xf4, 0xb9, 0x17, 0xaf, 0x41, 0x6f, 0x12, 0x45,
-	0xbd, 0xa9, 0xaa, 0xbf, 0xf3, 0xe2, 0x35, 0xe8, 0xcf, 0x82, 0xf4, 0xf6, 0xae, 0xf2, 0xba, 0xde,
-	0x9e, 0x24, 0x2a, 0x7c, 0x45, 0xa1, 0x0f, 0xbe, 0x78, 0x0d, 0x7a, 0x52, 0xde, 0xaa, 0xde, 0xff,
-	0xd5, 0x04, 0x9c, 0xe2, 0x95, 0x46, 0x55, 0x2e, 0x5c, 0x57, 0xa3, 0xeb, 0x6a, 0x74, 0x5d, 0x8d,
-	0xae, 0xab, 0xd1, 0x75, 0x35, 0xba, 0xae, 0x46, 0x7f, 0xaa, 0x6a, 0xf4, 0xf9, 0x04, 0x1c, 0x4b,
-	0x2b, 0xda, 0x75, 0x25, 0xba, 0xae, 0x44, 0xd7, 0x95, 0xe8, 0xba, 0x12, 0x5d, 0x57, 0xa2, 0x3f,
-	0x51, 0x25, 0xa2, 0xae, 0xaa, 0x44, 0x0f, 0xbd, 0x0f, 0x3a, 0xff, 0x8f, 0x54, 0xa6, 0xa5, 0xcf,
-	0xc7, 0x61, 0xf0, 0xaa, 0x3f, 0x3d, 0xe2, 0x38, 0x1c, 0xdd, 0x65, 0xb9, 0x8c, 0x94, 0xe5, 0xb2,
-	0x34, 0x36, 0x30, 0xef, 0xfb, 0xf4, 0xd7, 0x00, 0x9f, 0x86, 0x13, 0xfa, 0xd8, 0x26, 0x9b, 0xa1,
-	0xc5, 0x83, 0x1c, 0x8d, 0x01, 0x7c, 0x0a, 0x8e, 0xe9, 0x43, 0xdb, 0xb4, 0xc8, 0x70, 0x29, 0x6c,
-	0x10, 0x9f, 0x83, 0x37, 0x8d, 0x01, 0x32, 0x9b, 0x22, 0x45, 0x8e, 0x3f, 0x90, 0x18, 0x9a, 0x4c,
-	0xd1, 0x3c, 0xe6, 0xc3, 0x43, 0x70, 0x4e, 0x27, 0x31, 0xa2, 0x98, 0x93, 0x78, 0x5a, 0xc8, 0x71,
-	0x59, 0x81, 0x96, 0x04, 0x91, 0x14, 0xf3, 0x02, 0xe6, 0x37, 0x54, 0xdc, 0x86, 0xb7, 0x74, 0x1e,
-	0x9e, 0xde, 0xc9, 0xd3, 0x82, 0x28, 0x6d, 0x93, 0xfb, 0x52, 0x86, 0xce, 0xa6, 0x45, 0x06, 0x1b,
-	0xc2, 0x03, 0x10, 0xb3, 0xf5, 0x4b, 0xf9, 0x5c, 0x86, 0x23, 0x53, 0xd8, 0x30, 0x7e, 0x07, 0x06,
-	0xbd, 0xa3, 0x12, 0x9b, 0x95, 0x28, 0x2e, 0x75, 0x80, 0xdd, 0xc0, 0x67, 0x21, 0xae, 0x53, 0xf7,
-	0xb7, 0x91, 0x4d, 0x99, 0x4d, 0x8e, 0xdf, 0xa6, 0x53, 0xd8, 0x08, 0x7e, 0x0b, 0xce, 0xe8, 0xe3,
-	0x5b, 0x02, 0x97, 0x75, 0x10, 0x46, 0x6d, 0x38, 0x52, 0xd8, 0x96, 0x92, 0x1c, 0xf7, 0x84, 0xa5,
-	0xa5, 0x6d, 0x2e, 0xc5, 0x6e, 0xb2, 0x74, 0x0a, 0x83, 0x38, 0x01, 0x1f, 0x74, 0xe7, 0x90, 0xe3,
-	0x39, 0x91, 0x4b, 0xa2, 0xc9, 0xe6, 0x33, 0x22, 0x9b, 0xcb, 0xd0, 0x12, 0xc3, 0x09, 0xa2, 0x39,
-	0x61, 0x01, 0x1b, 0xbb, 0x82, 0x9b, 0x22, 0x53, 0x4e, 0x46, 0x69, 0x97, 0xcc, 0xe4, 0x69, 0x6c,
-	0x02, 0x8f, 0xc0, 0xc7, 0x3d, 0xb8, 0xf3, 0xd9, 0x1c, 0xc9, 0x0b, 0x24, 0x95, 0xa1, 0x6d, 0xa7,
-	0x24, 0xb9, 0xac, 0x48, 0x67, 0x45, 0x6c, 0x0a, 0xbf, 0x0f, 0x43, 0x3d, 0x44, 0xb2, 0xf9, 0x4c,
-	0x06, 0xb9, 0xc0, 0xe4, 0xc7, 0xa6, 0xf1, 0x9f, 0xc1, 0x77, 0xaf, 0x32, 0x04, 0x8d, 0xec, 0xd2,
-	0xbc, 0xc0, 0x72, 0x59, 0x0c, 0xc7, 0x3f, 0x80, 0x6b, 0x3d, 0x18, 0x93, 0x7c, 0x66, 0x53, 0x4a,
-	0x32, 0x24, 0x4f, 0x26, 0x45, 0x9a, 0x17, 0x24, 0x8a, 0xde, 0xe4, 0xf8, 0xae, 0x3d, 0x82, 0x48,
-	0xf2, 0x22, 0x76, 0x13, 0xdf, 0x80, 0x89, 0x5e, 0xd6, 0x70, 0xae, 0xd9, 0xb2, 0x59, 0x83, 0x1e,
-	0x91, 0x22, 0xb6, 0x81, 0xb3, 0xf8, 0x1a, 0x8c, 0x5d, 0x61, 0xa0, 0xe1, 0x5b, 0x92, 0x17, 0xa5,
-	0x1c, 0xc9, 0x93, 0xdb, 0xb4, 0x6e, 0x00, 0x72, 0x09, 0x9b, 0x4d, 0x63, 0xb7, 0xf0, 0x04, 0x8c,
-	0xf4, 0x10, 0x14, 0xe8, 0x5d, 0x9a, 0x27, 0x33, 0x96, 0xa7, 0xcc, 0x10, 0xb2, 0x57, 0xe6, 0x36,
-	0x4e, 0xc2, 0x0f, 0x7b, 0xcd, 0xd3, 0xcd, 0x2e, 0x30, 0x5c, 0x3e, 0x93, 0x92, 0x28, 0x5a, 0x22,
-	0xa5, 0x1c, 0x27, 0xb0, 0x22, 0xbb, 0x4b, 0x4b, 0xd9, 0xfc, 0x36, 0x45, 0xf3, 0xd8, 0x5d, 0xfc,
-	0x3d, 0xf8, 0x8e, 0x0e, 0x41, 0xef, 0x92, 0xc8, 0x79, 0x52, 0x8a, 0xe5, 0xe9, 0xa4, 0x1e, 0xf1,
-	0x22, 0x4f, 0x22, 0x8f, 0x92, 0x19, 0x01, 0x7b, 0x0f, 0x9f, 0x87, 0xb3, 0xe6, 0x86, 0x30, 0x63,
-	0xcc, 0x9e, 0xf5, 0x7d, 0x3c, 0x04, 0x17, 0x5c, 0x10, 0x76, 0x1c, 0xa5, 0xe8, 0x24, 0x97, 0x42,
-	0x13, 0xfc, 0x19, 0x1e, 0x84, 0x53, 0x3a, 0x4f, 0x8a, 0x14, 0x49, 0x29, 0x9d, 0x27, 0xf9, 0x14,
-	0xf6, 0xc0, 0xd8, 0x2b, 0x5e, 0x69, 0x32, 0x47, 0x26, 0x19, 0x5a, 0xda, 0x63, 0x58, 0x91, 0x16,
-	0x72, 0x64, 0x92, 0xc6, 0x1e, 0xe2, 0x41, 0x18, 0xd0, 0x79, 0xbc, 0x91, 0xbc, 0x64, 0x87, 0x84,
-	0x25, 0xcd, 0xb2, 0x82, 0x94, 0xcf, 0xb2, 0x49, 0x2e, 0x45, 0x4b, 0xe8, 0x92, 0xe3, 0xd8, 0xac,
-	0x28, 0x60, 0x8f, 0xf0, 0x45, 0x78, 0xe7, 0x12, 0x23, 0x45, 0x26, 0x9f, 0x08, 0x19, 0x52, 0x60,
-	0x68, 0x01, 0x23, 0xf0, 0x77, 0xe1, 0x3d, 0x17, 0x47, 0x8e, 0xe6, 0x93, 0xc8, 0x8d, 0xf9, 0xee,
-	0x3c, 0x1e, 0x5f, 0x62, 0xa2, 0x48, 0x9e, 0x96, 0xa8, 0x03, 0xd1, 0x31, 0xd9, 0x65, 0x3b, 0x45,
-	0x74, 0x99, 0x52, 0x52, 0x3e, 0x4b, 0x0b, 0x49, 0x32, 0x47, 0x63, 0x2b, 0xc6, 0xb4, 0x29, 0xb8,
-	0xf1, 0xc6, 0x50, 0x41, 0x9e, 0xd6, 0x1d, 0x66, 0x85, 0xa8, 0x15, 0x30, 0x61, 0x03, 0x63, 0x0d,
-	0x2e, 0xf7, 0xc2, 0xe0, 0x52, 0x07, 0x28, 0x3e, 0xd3, 0xb4, 0x28, 0x71, 0xbc, 0x1e, 0x2d, 0xf6,
-	0x62, 0x45, 0x0c, 0xc1, 0xff, 0xdf, 0x33, 0x4e, 0x19, 0x36, 0xcd, 0x48, 0xa4, 0x90, 0x64, 0x59,
-	0xe7, 0x2e, 0x41, 0x91, 0x6e, 0x06, 0x5c, 0xd4, 0x90, 0x9e, 0x35, 0x13, 0x28, 0x9d, 0x35, 0x67,
-	0x1c, 0x33, 0xc6, 0x17, 0xcc, 0xa4, 0x69, 0xad, 0x92, 0x9d, 0x8e, 0xe2, 0x06, 0xfd, 0x8e, 0x99,
-	0xac, 0xd2, 0x3c, 0x99, 0x63, 0x76, 0x32, 0xfa, 0xf4, 0x48, 0x11, 0x4b, 0x18, 0xd4, 0x7b, 0x66,
-	0x84, 0x59, 0xd4, 0xae, 0xf8, 0xaa, 0xc1, 0xf0, 0x10, 0x2e, 0xba, 0x18, 0xd8, 0xac, 0xc8, 0x73,
-	0x42, 0x8e, 0x4e, 0x8a, 0xc8, 0xc7, 0x3b, 0x79, 0x9a, 0x3f, 0xc0, 0xd6, 0x74, 0xd6, 0x79, 0xff,
-	0xb7, 0x1d, 0x00, 0x96, 0x7e, 0x3b, 0x02, 0x61, 0xf7, 0x2b, 0x00, 0x7c, 0x0e, 0x62, 0xa4, 0x28,
-	0x92, 0xc9, 0x27, 0x12, 0xca, 0xfa, 0xae, 0x92, 0x10, 0x82, 0x0b, 0x1e, 0x92, 0x44, 0xf1, 0xdc,
-	0x9e, 0x40, 0xf3, 0x52, 0x32, 0xc3, 0xa2, 0x24, 0x85, 0xd4, 0xbf, 0xe7, 0xe4, 0xe1, 0x44, 0x86,
-	0xe6, 0x25, 0x32, 0x97, 0xcb, 0xb0, 0x49, 0x52, 0xb7, 0xc0, 0xa0, 0x0a, 0xd8, 0x20, 0x0a, 0x4a,
-	0x27, 0xab, 0xc8, 0x73, 0x5b, 0x64, 0x56, 0x8f, 0xb6, 0x14, 0xc7, 0xf1, 0x92, 0x90, 0x3b, 0xd8,
-	0x23, 0x79, 0x1a, 0xf3, 0xe1, 0xef, 0xc0, 0xbb, 0x4e, 0xc6, 0x14, 0x2d, 0x9a, 0xb3, 0x31, 0x23,
-	0x07, 0xf3, 0x7b, 0x4d, 0xdb, 0xcd, 0x67, 0xb2, 0x34, 0x4f, 0x52, 0x6c, 0x86, 0x15, 0x0f, 0x24,
-	0x21, 0x49, 0x66, 0xb1, 0x21, 0x94, 0x3f, 0x9d, 0x3c, 0x24, 0x95, 0x17, 0x68, 0x89, 0xdb, 0x94,
-	0x36, 0xf3, 0x59, 0x1d, 0x8e, 0x44, 0xcc, 0xd8, 0x30, 0x1e, 0x87, 0x61, 0x17, 0x5f, 0x5e, 0x64,
-	0xe8, 0xac, 0x68, 0xdb, 0x9f, 0x17, 0x19, 0x8e, 0x67, 0x0f, 0xdd, 0xb3, 0xb9, 0x81, 0xdf, 0x83,
-	0xb7, 0x9d, 0x52, 0x54, 0x7e, 0x73, 0x93, 0xe6, 0x25, 0x6e, 0x97, 0xe6, 0x37, 0x33, 0xdc, 0x1e,
-	0x36, 0x82, 0x3f, 0x86, 0x0f, 0x9d, 0x0c, 0x39, 0x9e, 0x4e, 0xb1, 0x49, 0xd1, 0xcc, 0xf5, 0x02,
-	0x97, 0xe7, 0x93, 0xb4, 0x94, 0xe1, 0x0c, 0x2d, 0xd8, 0x28, 0xda, 0x42, 0x4e, 0x76, 0x36, 0x6b,
-	0xc4, 0x01, 0x52, 0x9a, 0xa1, 0xc9, 0x27, 0x64, 0x9a, 0xc6, 0xa0, 0x77, 0xda, 0xdd, 0xac, 0xc4,
-	0x66, 0x53, 0xf4, 0x3e, 0x0a, 0xba, 0x31, 0x7c, 0x01, 0xce, 0xbb, 0xf4, 0x92, 0x22, 0xd3, 0x4d,
-	0x5a, 0xd8, 0xb8, 0xd7, 0xf0, 0x7d, 0x9d, 0x81, 0xcd, 0x6e, 0x19, 0x3e, 0xc6, 0x26, 0xbc, 0x00,
-	0x99, 0x14, 0x99, 0x73, 0xd0, 0x27, 0xf1, 0x25, 0x78, 0xdf, 0x49, 0x17, 0x68, 0x7e, 0x97, 0xe6,
-	0x25, 0x81, 0x35, 0x73, 0x8b, 0x83, 0x77, 0xca, 0xbb, 0x94, 0x49, 0x6e, 0x1b, 0xf5, 0x0e, 0x12,
-	0xbd, 0x4f, 0x27, 0xf3, 0x3a, 0x0b, 0x86, 0xdf, 0x85, 0x73, 0x2e, 0x38, 0x3d, 0x86, 0x2d, 0x84,
-	0x69, 0xfc, 0xff, 0xc1, 0x45, 0x17, 0x02, 0xcf, 0x09, 0x82, 0x24, 0xb0, 0x22, 0x2d, 0x09, 0x49,
-	0x9e, 0xcd, 0x89, 0x68, 0xd2, 0xf8, 0xe5, 0x90, 0xc9, 0xb2, 0x64, 0x06, 0x2d, 0x36, 0xb2, 0x8e,
-	0x4d, 0xd2, 0xd8, 0x8c, 0xd7, 0x77, 0xc6, 0x26, 0x27, 0x79, 0x14, 0xcd, 0xc6, 0x38, 0x16, 0xf0,
-	0xc2, 0x08, 0xb4, 0xa0, 0x67, 0x2a, 0x86, 0xdd, 0x22, 0x93, 0x4f, 0x90, 0xa6, 0x9b, 0xde, 0x28,
-	0xf6, 0xf4, 0x3b, 0xb9, 0x0c, 0x2b, 0xea, 0x26, 0xcd, 0x7a, 0xb1, 0x36, 0x39, 0x3e, 0x49, 0x6f,
-	0xe6, 0x33, 0xc6, 0x16, 0x32, 0xea, 0x9b, 0x67, 0xcd, 0x79, 0x7a, 0x9b, 0x13, 0x69, 0xa3, 0xd7,
-	0x61, 0xb3, 0xc9, 0x4c, 0x3e, 0x45, 0x63, 0x41, 0x54, 0x8a, 0x9c, 0x4c, 0xdb, 0x64, 0x86, 0x4d,
-	0xb2, 0x5c, 0x5e, 0x70, 0x75, 0x4a, 0x73, 0xf8, 0x92, 0x9b, 0xcd, 0x4a, 0x07, 0xee, 0x19, 0xce,
-	0x3b, 0x13, 0xc1, 0x32, 0x1c, 0xed, 0x7e, 0xcd, 0x36, 0x0a, 0x8d, 0x2f, 0xea, 0xb0, 0x01, 0x1c,
-	0x42, 0xf3, 0xb3, 0x34, 0x0c, 0xa0, 0x7b, 0x36, 0x9d, 0xe5, 0x78, 0x1a, 0x1b, 0x5c, 0x3a, 0x85,
-	0xb7, 0xae, 0x78, 0x81, 0x8c, 0x8f, 0x43, 0xfb, 0xe5, 0x38, 0x36, 0x80, 0x67, 0x61, 0xf7, 0x65,
-	0x32, 0x06, 0xe6, 0x7f, 0xfe, 0x65, 0x07, 0x7c, 0x30, 0xbf, 0xe1, 0x3a, 0x58, 0xb4, 0x1a, 0x4a,
-	0x61, 0xb9, 0xf7, 0xb9, 0x7d, 0xd9, 0xfb, 0xde, 0x9e, 0xfa, 0x1d, 0x38, 0xff, 0x7a, 0x61, 0xe0,
-	0xab, 0xaf, 0x17, 0x06, 0xbe, 0xfb, 0x7a, 0x01, 0x7c, 0x7a, 0xb1, 0x00, 0xfe, 0xfe, 0x62, 0x01,
-	0xfc, 0xe1, 0x62, 0x01, 0x9c, 0x5f, 0x2c, 0x80, 0xaf, 0x2e, 0x16, 0xc0, 0x1f, 0x2f, 0x16, 0xc0,
-	0xb7, 0x17, 0x0b, 0x03, 0xdf, 0x5d, 0x2c, 0x80, 0xdf, 0x7f, 0xb3, 0x30, 0x70, 0xfe, 0xcd, 0xc2,
-	0xc0, 0x57, 0xdf, 0x2c, 0x0c, 0x1c, 0xe6, 0x4a, 0x6a, 0xe3, 0xb8, 0xb4, 0x7c, 0xa2, 0x56, 0x35,
-	0xa5, 0xd9, 0x94, 0x97, 0xdb, 0xad, 0x15, 0xfd, 0xe6, 0xa9, 0xda, 0xac, 0x3d, 0x6e, 0x34, 0xd5,
-	0x93, 0x4a, 0x51, 0x69, 0x3e, 0xb6, 0xc8, 0x2b, 0x8d, 0xa3, 0x92, 0xba, 0xa2, 0x3c, 0xd3, 0xcc,
-	0x2f, 0x1b, 0x7b, 0x7c, 0xc2, 0x79, 0x34, 0xac, 0x7f, 0xe1, 0x18, 0xfb, 0xaf, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0xa7, 0x30, 0xf5, 0x78, 0xe7, 0x39, 0x00, 0x00,
+	0x76, 0xbf, 0xaf, 0x24, 0x7b, 0xe4, 0xeb, 0x2f, 0xfa, 0x5a, 0xe3, 0x91, 0x3d, 0x33, 0x1e, 0x47,
+	0xf9, 0x67, 0xde, 0x8c, 0x87, 0x63, 0xeb, 0xd3, 0x1f, 0xc9, 0x3f, 0x79, 0x25, 0x29, 0x5a, 0xa2,
+	0x47, 0x16, 0x69, 0x92, 0xf2, 0x17, 0xde, 0x2b, 0x1f, 0x2d, 0x71, 0x64, 0xc5, 0x92, 0xa8, 0xe8,
+	0xc3, 0x1e, 0x0f, 0xf0, 0xf0, 0x82, 0x41, 0xf1, 0x50, 0xbc, 0x6e, 0x1e, 0xb2, 0x68, 0x80, 0x2e,
+	0xba, 0xe8, 0xaa, 0x8b, 0x76, 0x5f, 0x54, 0x59, 0x0c, 0x0a, 0x14, 0x78, 0xc8, 0xca, 0xed, 0x2a,
+	0x98, 0xd5, 0x8b, 0xb3, 0x68, 0xba, 0x0b, 0xb2, 0x0a, 0x66, 0x55, 0x5c, 0x92, 0xa2, 0x29, 0x5a,
+	0xd6, 0x4c, 0xd2, 0x02, 0x0f, 0x45, 0xbd, 0xa1, 0xa5, 0x7b, 0xce, 0xf9, 0x9d, 0x8f, 0x7b, 0xee,
+	0x39, 0xf7, 0xea, 0xd2, 0xf0, 0xfe, 0xb1, 0xd6, 0x58, 0x2c, 0xe9, 0x4b, 0x8d, 0xfc, 0xa1, 0x56,
+	0x51, 0x97, 0xd4, 0x5a, 0x4d, 0x79, 0x5a, 0xaa, 0x6b, 0x27, 0x6a, 0xb9, 0xbc, 0xd4, 0x3c, 0xad,
+	0x69, 0x8d, 0xc5, 0x5a, 0x5d, 0x6f, 0xea, 0x68, 0xd6, 0xe4, 0x5b, 0x34, 0xf9, 0x16, 0x9d, 0x7c,
+	0xb3, 0x8f, 0x8b, 0xa5, 0xe6, 0x61, 0xeb, 0x60, 0x31, 0xaf, 0x57, 0x96, 0x8a, 0x7a, 0x51, 0x5f,
+	0x32, 0x44, 0x0e, 0x5a, 0x4f, 0x8d, 0x6f, 0xc6, 0x17, 0xe3, 0x93, 0x09, 0x35, 0x7b, 0xab, 0x5b,
+	0x65, 0x55, 0x6b, 0x5a, 0x84, 0xdb, 0xdd, 0x04, 0xbd, 0xd6, 0x2c, 0xe9, 0x55, 0xcb, 0x80, 0xd9,
+	0x99, 0x6e, 0xa2, 0xc3, 0xb6, 0xd9, 0x3b, 0xdd, 0xa4, 0x63, 0xb5, 0x5c, 0x2a, 0xa8, 0x4d, 0xcd,
+	0xa2, 0xce, 0xbb, 0xa8, 0x25, 0xed, 0x44, 0xe9, 0x82, 0x0e, 0xfd, 0xe3, 0x18, 0x1c, 0x4f, 0x95,
+	0xf5, 0x03, 0xb5, 0x2c, 0xd5, 0xb4, 0xbc, 0x7c, 0x5a, 0xd3, 0xd0, 0x1e, 0x0c, 0xb6, 0x1a, 0x9a,
+	0x52, 0xd6, 0xd5, 0xc2, 0x81, 0x5a, 0x56, 0xab, 0x79, 0xad, 0xae, 0x34, 0xb4, 0x66, 0xb3, 0x54,
+	0x2d, 0x06, 0x3d, 0xf3, 0xe0, 0xc1, 0x48, 0x34, 0xb0, 0xd8, 0x1d, 0x11, 0xb6, 0x52, 0x6b, 0x9e,
+	0xd2, 0x37, 0xbe, 0xfa, 0x35, 0xf8, 0xb6, 0x0d, 0x40, 0x7a, 0x40, 0x9c, 0x6e, 0x35, 0xb4, 0x8c,
+	0x43, 0x5e, 0x32, 0xc5, 0x51, 0x14, 0xfa, 0x0f, 0xca, 0x7a, 0xfe, 0x08, 0x43, 0x79, 0xaf, 0x86,
+	0x4a, 0x0f, 0x88, 0x36, 0x1f, 0x5a, 0x86, 0xb0, 0xa2, 0x57, 0x4b, 0x4d, 0xbd, 0x8e, 0xa5, 0x7c,
+	0x7d, 0xa5, 0x1c, 0x9c, 0x48, 0x86, 0xb3, 0x05, 0xed, 0xa9, 0xda, 0x2a, 0x37, 0x95, 0x82, 0xd6,
+	0xd4, 0xf2, 0xd8, 0xeb, 0x8e, 0x1f, 0x8d, 0xe0, 0x50, 0x1f, 0x1c, 0x20, 0x06, 0x2d, 0xc9, 0x64,
+	0x47, 0xd0, 0x72, 0xa0, 0x81, 0x7e, 0x09, 0x51, 0x0f, 0xb4, 0x1b, 0x06, 0x1a, 0xb9, 0x78, 0x75,
+	0xa2, 0x2c, 0xba, 0xa1, 0xd2, 0x40, 0x9c, 0x2c, 0x5c, 0x82, 0x7f, 0x0a, 0xa7, 0xd5, 0x92, 0x52,
+	0x2f, 0x35, 0x8e, 0x94, 0x03, 0xb5, 0xa1, 0x15, 0x14, 0x3b, 0x5c, 0x37, 0x0d, 0x15, 0x4b, 0xfd,
+	0x54, 0x50, 0x25, 0xb1, 0xd4, 0x38, 0xa2, 0xb1, 0x1c, 0x6d, 0x89, 0xa5, 0x81, 0x38, 0xa5, 0x5e,
+	0x1e, 0x46, 0xeb, 0x70, 0xaa, 0x13, 0x9c, 0x03, 0xbd, 0x69, 0x4f, 0xef, 0x70, 0x9f, 0xa8, 0x78,
+	0xb0, 0xbd, 0x86, 0x08, 0xad, 0x37, 0x3b, 0x13, 0x7a, 0x08, 0xa7, 0xb1, 0x3c, 0xce, 0xa5, 0xee,
+	0x98, 0x04, 0xa1, 0x01, 0x15, 0xee, 0x67, 0x2f, 0xad, 0x37, 0x05, 0x5b, 0xb0, 0x13, 0x16, 0x8f,
+	0x18, 0x38, 0xe8, 0x31, 0x8e, 0x78, 0x18, 0x54, 0xcb, 0x65, 0xfd, 0x44, 0x51, 0xcb, 0x65, 0xa5,
+	0xae, 0x35, 0x6a, 0x7a, 0xb5, 0xa1, 0x29, 0x79, 0xbd, 0xa0, 0x35, 0x82, 0xa3, 0x7d, 0xcc, 0xf6,
+	0x8a, 0x37, 0x0d, 0x39, 0xaa, 0x5c, 0x16, 0x2d, 0x29, 0x06, 0x0b, 0x61, 0xd3, 0x0d, 0x82, 0x56,
+	0x70, 0xc3, 0x8d, 0xbd, 0xd9, 0x74, 0xca, 0x94, 0xec, 0x42, 0x4c, 0x7b, 0xc5, 0x80, 0xda, 0x63,
+	0x1c, 0x3d, 0x81, 0x37, 0x0b, 0xa5, 0x86, 0x7a, 0x50, 0xd6, 0x14, 0xb5, 0xaa, 0x57, 0x4f, 0x2b,
+	0xa5, 0xe7, 0x2a, 0x76, 0x2d, 0x38, 0xd1, 0xc7, 0x6e, 0x9f, 0x18, 0xb0, 0x84, 0x28, 0xa7, 0x8c,
+	0x01, 0x66, 0xcd, 0x5c, 0x37, 0x18, 0xf1, 0x06, 0x30, 0x53, 0xa8, 0x1b, 0x4c, 0x83, 0x81, 0x7c,
+	0xab, 0xd1, 0xd4, 0x2b, 0x2e, 0xac, 0xc9, 0xb7, 0x88, 0x80, 0x53, 0xa0, 0x33, 0x79, 0x3e, 0x71,
+	0xca, 0xc4, 0xeb, 0x56, 0xb3, 0x05, 0x67, 0x70, 0x45, 0xb1, 0x33, 0xce, 0xca, 0x42, 0xa5, 0xa6,
+	0x16, 0xb5, 0xe0, 0x54, 0x1f, 0xbb, 0x07, 0x8d, 0x4a, 0x92, 0xb4, 0xd2, 0xce, 0x12, 0x13, 0xd4,
+	0xa2, 0x86, 0x72, 0x70, 0xac, 0x1b, 0x26, 0x60, 0xc0, 0x2c, 0xf6, 0x33, 0x99, 0x31, 0x4c, 0x73,
+	0xc2, 0xa4, 0x07, 0xc5, 0xd1, 0x03, 0xc7, 0xf7, 0xf7, 0x7f, 0xf5, 0x2f, 0x6d, 0xf0, 0x0b, 0x78,
+	0x0b, 0x12, 0x6c, 0xf5, 0xa9, 0x5e, 0xcf, 0x6b, 0x15, 0xad, 0xda, 0x9c, 0xdf, 0xd4, 0x0b, 0x1a,
+	0x02, 0x91, 0x07, 0x00, 0xde, 0x85, 0x41, 0x49, 0xcb, 0xb7, 0xea, 0xa5, 0xe6, 0xe9, 0xbc, 0xa0,
+	0x97, 0x4b, 0xf9, 0xd3, 0x79, 0x7b, 0xe9, 0x82, 0x04, 0x0c, 0xc1, 0x69, 0xaa, 0x70, 0x8c, 0x2b,
+	0x5e, 0x61, 0x3e, 0xaf, 0x57, 0x9f, 0x96, 0x8a, 0xad, 0xba, 0x19, 0x01, 0x7f, 0x24, 0x42, 0x46,
+	0xe2, 0x64, 0x64, 0x95, 0x5e, 0x80, 0xb7, 0xb4, 0x0b, 0x6c, 0xa5, 0xa2, 0x17, 0x34, 0x25, 0x7f,
+	0xa8, 0x97, 0xf2, 0x1a, 0x9a, 0x78, 0xd9, 0x06, 0xbe, 0xb3, 0x36, 0x00, 0xe7, 0x6d, 0xe0, 0x8d,
+	0x93, 0x31, 0x7a, 0x11, 0x06, 0x2f, 0x15, 0x9b, 0x0e, 0x33, 0x7a, 0xd9, 0x06, 0x43, 0x67, 0x6d,
+	0x30, 0x78, 0xde, 0x06, 0x43, 0xcb, 0x64, 0x34, 0x42, 0xae, 0xd0, 0x8f, 0xe1, 0x4d, 0xd7, 0x6a,
+	0xb4, 0x98, 0x03, 0x2f, 0xdb, 0x60, 0xf8, 0xac, 0x0d, 0xfc, 0xe7, 0x6d, 0xe0, 0x5b, 0x23, 0x23,
+	0xe1, 0xef, 0xda, 0x00, 0xd0, 0x51, 0x78, 0xb7, 0xf7, 0x0a, 0xe8, 0x88, 0x4d, 0xbe, 0x6c, 0x83,
+	0xd1, 0xb3, 0x36, 0x18, 0x39, 0x6f, 0x83, 0xc1, 0x48, 0x94, 0x8c, 0xc4, 0xe8, 0x25, 0x78, 0xb3,
+	0x2b, 0x55, 0x3a, 0x66, 0xa1, 0xe9, 0x97, 0x6d, 0x40, 0x9c, 0xb5, 0xc1, 0xf8, 0x79, 0x1b, 0xc0,
+	0x48, 0x82, 0x9c, 0x8f, 0x2c, 0x93, 0xf3, 0x91, 0x15, 0xfa, 0x21, 0x0c, 0x74, 0x4d, 0x94, 0x13,
+	0x7b, 0xea, 0xac, 0x0d, 0x90, 0x81, 0xbd, 0x46, 0x46, 0xc3, 0x1b, 0x3e, 0x3f, 0x20, 0x3c, 0x1b,
+	0x3e, 0xff, 0x20, 0x31, 0xb4, 0xe1, 0xf3, 0xfb, 0x89, 0xe1, 0x0d, 0x9f, 0x7f, 0x84, 0x18, 0xdd,
+	0xf0, 0xf9, 0xc7, 0x89, 0x89, 0x0d, 0x9f, 0x1f, 0x11, 0x53, 0xa1, 0xef, 0x21, 0x24, 0xdc, 0xa5,
+	0x14, 0xb5, 0xe0, 0xed, 0x46, 0xa9, 0x58, 0x55, 0x9b, 0xad, 0xba, 0xa6, 0x34, 0xb4, 0xb2, 0xab,
+	0x14, 0x01, 0x23, 0x35, 0x12, 0xfd, 0x52, 0x43, 0xea, 0x88, 0x4b, 0x1d, 0x69, 0x0b, 0x5b, 0x9c,
+	0x69, 0x5c, 0x45, 0x42, 0x2c, 0x44, 0x5a, 0xd5, 0x58, 0xd6, 0x8d, 0x56, 0xad, 0x56, 0xd7, 0x1a,
+	0x0d, 0xbc, 0x76, 0xfa, 0xf7, 0xb5, 0x49, 0x53, 0x42, 0xba, 0x10, 0x40, 0x29, 0x38, 0xd5, 0x29,
+	0x0f, 0x4e, 0x9c, 0xfe, 0x9d, 0x0e, 0x59, 0x22, 0x4e, 0xa0, 0x2c, 0x4e, 0x2d, 0x03, 0xa7, 0x79,
+	0x58, 0xd7, 0xd4, 0xa6, 0x92, 0x57, 0x2b, 0x35, 0xb5, 0x54, 0xac, 0xbe, 0xa9, 0xdd, 0xdd, 0x34,
+	0xc5, 0x64, 0x43, 0x8a, 0xe9, 0x08, 0x21, 0x01, 0x06, 0x3b, 0x86, 0x5d, 0x02, 0xbc, 0xd1, 0x17,
+	0x70, 0xda, 0x92, 0x73, 0x23, 0x3a, 0x7a, 0xf2, 0x71, 0x49, 0x2f, 0xab, 0xdd, 0x5d, 0xb4, 0x7f,
+	0xf7, 0xe9, 0xf4, 0xe4, 0xed, 0x8e, 0xa0, 0xbd, 0xf2, 0xfe, 0x1c, 0xa2, 0x1e, 0x68, 0x23, 0x06,
+	0xda, 0xe3, 0x7e, 0xb3, 0x7e, 0x09, 0x0a, 0x37, 0xb9, 0xe3, 0x4b, 0xf8, 0x3f, 0x87, 0x13, 0xf6,
+	0x04, 0x35, 0xd5, 0x22, 0x4e, 0xa9, 0xb1, 0xbe, 0x1d, 0x67, 0xbc, 0x33, 0x39, 0x26, 0x37, 0x2a,
+	0xc1, 0x00, 0x16, 0xd4, 0x94, 0xaa, 0x76, 0xa2, 0xd8, 0xf9, 0xd4, 0x08, 0x8e, 0xff, 0x88, 0xc4,
+	0x6c, 0x58, 0x60, 0xb6, 0xa9, 0x5e, 0x11, 0x19, 0xa0, 0x59, 0xed, 0xe4, 0x82, 0x09, 0xfd, 0x06,
+	0xce, 0x5f, 0xa8, 0x52, 0xab, 0x05, 0xa5, 0x55, 0xc3, 0xfb, 0xc1, 0x82, 0x53, 0xed, 0xc4, 0x7f,
+	0x4f, 0xed, 0x9d, 0x8e, 0x5a, 0xaa, 0x5a, 0xc8, 0x99, 0xe8, 0x0e, 0x03, 0xae, 0xd8, 0x59, 0x4c,
+	0xf6, 0xed, 0x4e, 0x3f, 0x6a, 0x67, 0x81, 0x7e, 0xe2, 0xce, 0xc2, 0xd7, 0x7b, 0x67, 0xf1, 0x3e,
+	0xf1, 0xfd, 0x47, 0x63, 0x11, 0x32, 0x4a, 0x46, 0xa2, 0x64, 0x82, 0x5c, 0x25, 0x23, 0xcb, 0xf4,
+	0x63, 0x38, 0xfb, 0x54, 0x2d, 0x37, 0x34, 0xa5, 0xa6, 0x37, 0x4a, 0xcd, 0xd2, 0x71, 0xd7, 0xc2,
+	0x34, 0xca, 0xb4, 0xf7, 0xac, 0x0d, 0x3c, 0xb8, 0x4c, 0xc7, 0xc8, 0x38, 0xfd, 0x10, 0x4e, 0xbb,
+	0xd6, 0x87, 0xb3, 0xa2, 0x77, 0x8a, 0xb4, 0x77, 0x99, 0x5c, 0xa1, 0x97, 0xe0, 0xed, 0x8b, 0x54,
+	0xbd, 0x54, 0xdb, 0x11, 0xe1, 0xaa, 0xd3, 0x11, 0x3a, 0xe6, 0x28, 0x6d, 0x8d, 0x4e, 0xfa, 0xd9,
+	0x49, 0x6e, 0x14, 0xf6, 0xb1, 0xb3, 0x36, 0x18, 0x3d, 0x6f, 0x03, 0x7f, 0x24, 0x66, 0xf4, 0x98,
+	0x04, 0xbd, 0x70, 0x55, 0x1f, 0xc0, 0x45, 0x77, 0xf2, 0xac, 0x0d, 0x08, 0xa3, 0xe8, 0xae, 0x90,
+	0x91, 0xd5, 0x0d, 0x9f, 0xdf, 0x43, 0x78, 0x5d, 0x45, 0x17, 0x12, 0x23, 0x1b, 0x3e, 0xff, 0x28,
+	0x31, 0xb6, 0xe1, 0xf3, 0x13, 0xc4, 0x64, 0xe8, 0x3b, 0x1f, 0x9c, 0xb9, 0xb2, 0x42, 0xa2, 0x3d,
+	0x78, 0x57, 0xaf, 0x96, 0x4f, 0x95, 0xc3, 0x52, 0xf1, 0x50, 0x51, 0xf3, 0xf9, 0x56, 0x5d, 0xcd,
+	0x9f, 0x3a, 0xf3, 0xcd, 0xd3, 0xb7, 0x92, 0xcd, 0x62, 0xe1, 0x74, 0xa9, 0x78, 0x48, 0x59, 0xa2,
+	0x8e, 0x64, 0xfa, 0x25, 0xbc, 0x67, 0xa0, 0x56, 0xb4, 0x42, 0xa9, 0x55, 0xe9, 0x09, 0xde, 0xbf,
+	0xdc, 0xde, 0xc1, 0xe2, 0x9b, 0x86, 0x74, 0x0f, 0xf8, 0x02, 0x7c, 0xd7, 0x09, 0x6f, 0xec, 0x2e,
+	0x7b, 0xa8, 0xe8, 0x5f, 0x89, 0xef, 0x5d, 0xa8, 0xc8, 0xe8, 0x27, 0x3d, 0xb4, 0xec, 0xc0, 0x3b,
+	0xf6, 0x8e, 0xad, 0xd9, 0x54, 0xf3, 0x47, 0x0a, 0x3e, 0xc0, 0xbd, 0xed, 0x51, 0x64, 0xa6, 0xb3,
+	0x71, 0x33, 0x44, 0xf1, 0x01, 0xcd, 0xae, 0x4b, 0x07, 0x30, 0xd0, 0x13, 0xd0, 0xff, 0xe6, 0xad,
+	0xd0, 0x65, 0xb4, 0x34, 0x10, 0x91, 0x7a, 0x69, 0xf4, 0xfd, 0xa1, 0xef, 0x3f, 0xf2, 0x26, 0xc8,
+	0x08, 0x1d, 0x87, 0xf7, 0x7a, 0xb5, 0xd8, 0x83, 0x53, 0x3b, 0x62, 0x46, 0x72, 0x79, 0xad, 0xed,
+	0xcb, 0x60, 0x94, 0xc4, 0x2b, 0xe3, 0x3e, 0x9c, 0xea, 0x61, 0xa1, 0x7b, 0x59, 0xac, 0xba, 0x3a,
+	0xff, 0x0d, 0xc2, 0x1f, 0xfa, 0x2d, 0x80, 0xa8, 0x87, 0xcb, 0x35, 0x7b, 0x2b, 0x5d, 0x70, 0x06,
+	0xb3, 0x11, 0x04, 0xf3, 0xde, 0x07, 0xe3, 0xd1, 0xfb, 0x6f, 0xe7, 0x33, 0x1d, 0xf8, 0xe7, 0xff,
+	0x7c, 0xe9, 0x1d, 0xfc, 0x0c, 0x78, 0x88, 0xe9, 0xce, 0xa7, 0x20, 0x10, 0x3b, 0x6d, 0xb8, 0x70,
+	0xc1, 0xd9, 0x08, 0xfd, 0x0d, 0x80, 0x93, 0x97, 0x5b, 0xce, 0x5f, 0x00, 0xbb, 0x37, 0x16, 0x1c,
+	0xad, 0xcc, 0x69, 0x4b, 0xbc, 0xaf, 0x2d, 0xb5, 0xda, 0xba, 0xf5, 0xd9, 0x06, 0x77, 0x59, 0xf6,
+	0xc0, 0x61, 0x59, 0xa7, 0x9f, 0x16, 0xba, 0x98, 0x1b, 0xa1, 0x5d, 0xc7, 0xba, 0x74, 0x57, 0x6a,
+	0xf4, 0x01, 0x1c, 0xef, 0xd4, 0x8b, 0x9a, 0x56, 0x2f, 0xe9, 0x05, 0x63, 0x23, 0x34, 0x46, 0x07,
+	0x5e, 0xb5, 0x01, 0x58, 0xf9, 0xcb, 0x2f, 0x80, 0x0f, 0x6b, 0x18, 0x5a, 0xf0, 0x05, 0x03, 0x0f,
+	0x80, 0x38, 0x66, 0xf1, 0x0a, 0x06, 0x6b, 0xe8, 0x0b, 0x0f, 0x0c, 0xf4, 0xaa, 0xa2, 0x38, 0xe9,
+	0x2a, 0x6a, 0xb9, 0x94, 0x2f, 0xe9, 0xad, 0x86, 0x51, 0xe1, 0x55, 0x83, 0x6c, 0x60, 0x8f, 0x47,
+	0xdf, 0x7b, 0x43, 0x55, 0xa6, 0x0c, 0x66, 0x7a, 0xf8, 0x55, 0x1b, 0x0c, 0xd2, 0x19, 0x9e, 0x79,
+	0x22, 0x22, 0x1b, 0xcd, 0x26, 0x23, 0x0d, 0xde, 0x6c, 0xb4, 0x1a, 0xb5, 0xcb, 0x4a, 0x3c, 0x3f,
+	0x46, 0x09, 0x7c, 0xd5, 0x06, 0x43, 0x5c, 0x2a, 0xcb, 0x8b, 0xac, 0x38, 0x75, 0x81, 0x77, 0xa1,
+	0x66, 0x0f, 0x4e, 0x14, 0x75, 0xbd, 0xe0, 0x54, 0xe0, 0xfd, 0xa9, 0x0a, 0xc6, 0x30, 0x92, 0x4d,
+	0x0a, 0xfd, 0xd1, 0x03, 0xa7, 0x7a, 0x1c, 0xc7, 0xd1, 0x11, 0x24, 0x8c, 0x8a, 0x63, 0x9c, 0xf0,
+	0xbb, 0x22, 0x17, 0xeb, 0xa7, 0xf3, 0x12, 0x90, 0x65, 0xc1, 0xe8, 0xab, 0x36, 0xf0, 0x53, 0x9c,
+	0x62, 0x86, 0x72, 0x1c, 0x43, 0x63, 0x56, 0xcb, 0xbf, 0x1a, 0x44, 0x56, 0x65, 0x73, 0xaa, 0xf3,
+	0xfc, 0x74, 0x75, 0x63, 0xaf, 0xda, 0x60, 0x98, 0xe2, 0x14, 0x91, 0x15, 0x78, 0x51, 0x16, 0x09,
+	0x13, 0xdd, 0xa1, 0xf1, 0x63, 0x38, 0x81, 0x8b, 0xa8, 0x53, 0x9d, 0xf7, 0x7f, 0x4c, 0xdd, 0x58,
+	0x59, 0x3f, 0xb9, 0xd0, 0x15, 0xfa, 0x37, 0x0f, 0x0c, 0xf4, 0x3a, 0x86, 0xa3, 0x7f, 0xf2, 0xc0,
+	0xb1, 0xae, 0xf3, 0x8c, 0xb1, 0x20, 0xc7, 0xe8, 0xcf, 0x3c, 0xaf, 0xda, 0x40, 0x89, 0x86, 0xc3,
+	0x64, 0x34, 0x1c, 0x21, 0xa3, 0xe1, 0x28, 0x19, 0x0d, 0xc7, 0xc8, 0x68, 0x38, 0x4e, 0x46, 0xc3,
+	0x09, 0x32, 0x1a, 0x5e, 0x26, 0x63, 0xe1, 0x30, 0x19, 0x0b, 0x47, 0xc8, 0x58, 0x38, 0x4a, 0xc6,
+	0xc2, 0x31, 0x32, 0x16, 0x8e, 0x93, 0xb1, 0xf0, 0x2a, 0x19, 0x0b, 0xaf, 0x90, 0xf1, 0x70, 0x98,
+	0x8c, 0x87, 0x23, 0x64, 0x3c, 0x1c, 0x23, 0xe3, 0xe1, 0x38, 0x19, 0xc7, 0x63, 0xd1, 0x35, 0x32,
+	0x11, 0x0e, 0x93, 0x89, 0x70, 0x84, 0x4c, 0x84, 0xa3, 0x64, 0x22, 0x1c, 0x3b, 0x6f, 0x83, 0x67,
+	0xd0, 0x1b, 0x0d, 0x87, 0xf1, 0x23, 0x82, 0x1f, 0x51, 0xfc, 0x88, 0xe1, 0x47, 0x1c, 0x3f, 0x12,
+	0xf8, 0xb1, 0x0c, 0xbd, 0x31, 0xcc, 0x12, 0xc3, 0x2c, 0x31, 0xcc, 0x12, 0xc3, 0x2c, 0x31, 0xcc,
+	0x12, 0x0b, 0xaf, 0xe2, 0xc7, 0x0a, 0xf4, 0xc6, 0x31, 0x4b, 0x1c, 0xb3, 0xc4, 0x31, 0x35, 0x8e,
+	0xa9, 0x71, 0x83, 0x10, 0x5d, 0x83, 0xde, 0x04, 0xa6, 0x26, 0x30, 0x35, 0x81, 0x01, 0x12, 0xe1,
+	0xd8, 0x0f, 0x6d, 0x30, 0x80, 0x97, 0xf4, 0xe8, 0x67, 0x60, 0x38, 0x74, 0x63, 0x61, 0x30, 0xf8,
+	0x1f, 0x37, 0x1e, 0x14, 0xec, 0x7a, 0x12, 0xee, 0x7c, 0xf2, 0x03, 0x47, 0x65, 0x19, 0xad, 0x3b,
+	0x62, 0x17, 0xfa, 0x1c, 0xc0, 0x40, 0xaf, 0x83, 0x3d, 0xfa, 0x0d, 0x0c, 0x74, 0x1f, 0xfb, 0xcc,
+	0xe3, 0xad, 0x11, 0xd9, 0x91, 0xe8, 0xf2, 0x5b, 0xff, 0x50, 0xc0, 0x38, 0x4f, 0xc5, 0x8e, 0x62,
+	0xf7, 0x67, 0xce, 0x32, 0xac, 0x5e, 0x96, 0x08, 0xfd, 0x83, 0x0f, 0xce, 0x5e, 0x8d, 0x84, 0x76,
+	0xe1, 0xc8, 0x61, 0xb3, 0x59, 0x53, 0x0e, 0x35, 0xb5, 0xa0, 0xd5, 0xad, 0x1d, 0xc7, 0xd2, 0xdb,
+	0x98, 0xa5, 0xa5, 0x9b, 0xcd, 0x5a, 0xda, 0x10, 0xa3, 0x7d, 0xdf, 0x99, 0x3f, 0x5f, 0xc2, 0x43,
+	0x7b, 0x0c, 0x1d, 0xc2, 0x89, 0x4f, 0x5a, 0x5a, 0xfd, 0x54, 0xa9, 0xa9, 0x75, 0xb5, 0xa2, 0x35,
+	0xb5, 0xba, 0xb5, 0xe5, 0x58, 0x79, 0x6b, 0xf4, 0x2d, 0x2c, 0x2f, 0x74, 0xc4, 0x6d, 0x2d, 0xe3,
+	0x9f, 0x74, 0x8d, 0x23, 0x1e, 0x0e, 0xe5, 0x75, 0xfd, 0xa8, 0xa4, 0x59, 0x1b, 0x8e, 0xb7, 0x37,
+	0x9f, 0x31, 0xc4, 0x6c, 0x60, 0x0b, 0xe6, 0xfd, 0x7f, 0x05, 0x5f, 0xb6, 0xc1, 0x4b, 0x00, 0x7f,
+	0x01, 0x7d, 0xb8, 0x5d, 0x2c, 0xc8, 0x50, 0x84, 0xb3, 0x5d, 0x81, 0x8a, 0x8e, 0xa4, 0x65, 0x59,
+	0x98, 0x37, 0x5d, 0x85, 0xa1, 0x4b, 0xae, 0x46, 0x27, 0x0c, 0xdb, 0xe7, 0x6d, 0x23, 0x21, 0xd1,
+	0x31, 0x32, 0x3a, 0x64, 0x6a, 0x85, 0xbf, 0x82, 0x83, 0xdb, 0x6a, 0xb9, 0xa5, 0x2d, 0xec, 0xc0,
+	0x1c, 0x9c, 0x81, 0xb7, 0x1c, 0xf0, 0x8b, 0xe6, 0x1f, 0xa5, 0xaa, 0x56, 0x34, 0x18, 0x82, 0xf3,
+	0x2e, 0xf4, 0x45, 0xc7, 0x77, 0x93, 0x27, 0x00, 0x91, 0x89, 0xbe, 0x68, 0xfe, 0x31, 0x46, 0xe9,
+	0x47, 0x97, 0x92, 0xcf, 0xdc, 0xcd, 0x4e, 0x39, 0x36, 0x1c, 0x37, 0xa2, 0xe4, 0x7c, 0x8c, 0x9c,
+	0x8f, 0x9b, 0x5b, 0x89, 0x10, 0x0d, 0xa7, 0x7a, 0x4c, 0x30, 0x7a, 0x04, 0x47, 0x1c, 0x26, 0x19,
+	0x95, 0x77, 0x98, 0x86, 0x46, 0xee, 0xd5, 0xbd, 0x7f, 0x00, 0x40, 0x84, 0x26, 0x39, 0xab, 0x56,
+	0xb4, 0x90, 0x04, 0x6f, 0xf7, 0x99, 0x46, 0x14, 0x87, 0x84, 0xdb, 0x7e, 0x17, 0x60, 0xf0, 0x53,
+	0x8f, 0x73, 0x92, 0x0d, 0x50, 0xb7, 0x61, 0x66, 0x10, 0xb1, 0x61, 0x0e, 0x8f, 0x7b, 0xe0, 0x40,
+	0x93, 0x6c, 0x60, 0xfc, 0xb5, 0x0f, 0xa2, 0xcb, 0xbf, 0x65, 0xa1, 0xbf, 0xf5, 0xba, 0x7f, 0x13,
+	0x33, 0x61, 0x7e, 0xc0, 0x75, 0xef, 0xdf, 0x3d, 0x8d, 0x66, 0x1d, 0x9f, 0x76, 0x96, 0x96, 0x96,
+	0x84, 0xd4, 0x61, 0xf8, 0x60, 0xe7, 0xe4, 0x91, 0x90, 0x3a, 0x2c, 0xef, 0xed, 0x6c, 0x3d, 0x12,
+	0xd2, 0x62, 0xad, 0x90, 0x7a, 0x56, 0x16, 0xca, 0x1b, 0xe5, 0xfc, 0xee, 0x76, 0x39, 0x1f, 0xdb,
+	0x2a, 0xe6, 0x2a, 0xdb, 0x9f, 0xec, 0xef, 0x64, 0xc3, 0xfb, 0x3b, 0x5b, 0xab, 0x99, 0x98, 0x45,
+	0xff, 0xf8, 0xe4, 0x58, 0x4d, 0x6d, 0x1f, 0xee, 0x27, 0xe3, 0xab, 0x7b, 0x95, 0xb5, 0x23, 0x4d,
+	0x4e, 0xe4, 0xd4, 0x54, 0xae, 0x98, 0xaf, 0x6c, 0x3f, 0x2b, 0xec, 0x6c, 0x3f, 0x2f, 0xa4, 0xb6,
+	0x8f, 0xb8, 0xf5, 0x6d, 0x49, 0x66, 0xe8, 0xd8, 0xde, 0xee, 0x26, 0x1e, 0xef, 0x60, 0xb4, 0xb8,
+	0x75, 0xba, 0xb1, 0xbf, 0xb3, 0xfe, 0x7c, 0x5f, 0xa2, 0x3f, 0x3e, 0x88, 0x26, 0x9e, 0x17, 0x76,
+	0x9e, 0x85, 0xb9, 0x74, 0xa1, 0x56, 0x48, 0x15, 0x8b, 0xda, 0xce, 0x5a, 0x24, 0x5f, 0xa2, 0x0f,
+	0xf7, 0x53, 0x91, 0xda, 0x41, 0xa5, 0xfc, 0xbc, 0x90, 0xde, 0x38, 0x2c, 0xa4, 0xd6, 0x4e, 0x33,
+	0x1f, 0x3f, 0x2b, 0xe5, 0x4b, 0xab, 0x8f, 0x84, 0xd4, 0xc6, 0x69, 0xe6, 0x79, 0x62, 0xff, 0x20,
+	0xb6, 0x7d, 0xca, 0xa5, 0xb3, 0x91, 0x7c, 0x9a, 0x3e, 0xce, 0x57, 0xb7, 0x8a, 0x52, 0x6e, 0xab,
+	0xa8, 0xee, 0x6e, 0x2e, 0x73, 0xe9, 0xe6, 0x8a, 0x6d, 0xc3, 0xfa, 0x5a, 0x6d, 0x3f, 0x1d, 0x59,
+	0x33, 0x65, 0xe2, 0xab, 0x7b, 0x55, 0xee, 0x58, 0xf8, 0xf8, 0xd9, 0x21, 0x97, 0x3a, 0x3c, 0xdd,
+	0xdf, 0xd9, 0x5b, 0xe3, 0x2a, 0xb5, 0xc3, 0x42, 0x65, 0xfd, 0xf9, 0x5e, 0x6c, 0xa3, 0x96, 0x4f,
+	0x6f, 0x2d, 0xab, 0xa9, 0xf2, 0x73, 0xac, 0x4b, 0x93, 0x12, 0xa5, 0xbd, 0x9d, 0x6c, 0xfd, 0x09,
+	0x73, 0x54, 0x12, 0xca, 0xcd, 0xf4, 0xc1, 0x29, 0xcd, 0xe0, 0xef, 0xbb, 0xf2, 0xc9, 0xf1, 0x9e,
+	0x1c, 0x5f, 0xcd, 0x44, 0x37, 0x8e, 0xf7, 0xd3, 0x47, 0x8f, 0x04, 0x66, 0x4d, 0x2f, 0xa4, 0x22,
+	0x0d, 0xa1, 0xf8, 0xe1, 0x87, 0x3f, 0xb4, 0x81, 0xef, 0xef, 0xbe, 0x00, 0xa3, 0x4d, 0xed, 0x59,
+	0x93, 0x9c, 0x3f, 0x50, 0x1b, 0xda, 0x72, 0x1c, 0x4f, 0x99, 0xbf, 0x3e, 0x14, 0xfc, 0x74, 0xfe,
+	0xf7, 0x00, 0x74, 0xff, 0xb8, 0x88, 0x76, 0xdc, 0x7d, 0xc9, 0x6c, 0xc5, 0x77, 0x5d, 0xeb, 0x1c,
+	0xa7, 0x85, 0xd4, 0x54, 0x9b, 0xad, 0x06, 0xae, 0xc9, 0xf4, 0xd4, 0xab, 0x36, 0xf0, 0xf0, 0x4f,
+	0x0c, 0xe0, 0x17, 0x60, 0x90, 0x00, 0x21, 0x30, 0xd0, 0x5d, 0xb6, 0x8d, 0x4d, 0x7a, 0x94, 0x8c,
+	0x84, 0x7e, 0x37, 0x06, 0xc7, 0x19, 0x7c, 0x10, 0xd5, 0xec, 0xcb, 0x1c, 0xe1, 0xa7, 0x5d, 0xe6,
+	0x5c, 0xdf, 0xe1, 0x5c, 0xdf, 0xe1, 0x5c, 0xdf, 0xe1, 0x5c, 0xdf, 0xe1, 0xfc, 0x6f, 0xbc, 0xc3,
+	0x99, 0xfc, 0xf2, 0x23, 0xd7, 0x95, 0x36, 0xbd, 0x7c, 0xf5, 0xa5, 0xcb, 0xed, 0x17, 0xaf, 0xc1,
+	0x55, 0x44, 0x7a, 0xb5, 0xcf, 0x05, 0xcc, 0x9d, 0x17, 0xaf, 0xc1, 0x95, 0x54, 0x3a, 0x7a, 0xd5,
+	0x4f, 0x70, 0x33, 0x2f, 0x5e, 0x83, 0xde, 0x24, 0x9a, 0x7e, 0xd3, 0x7d, 0xcc, 0x3b, 0x2f, 0x5e,
+	0x83, 0xfe, 0x2c, 0x58, 0x6f, 0xef, 0xfb, 0x19, 0x43, 0x6f, 0x4f, 0x12, 0x1d, 0xbe, 0xe2, 0x8a,
+	0x26, 0xf8, 0xe2, 0x35, 0xe8, 0x49, 0x79, 0xab, 0x9b, 0x9a, 0xbf, 0x1a, 0x83, 0x13, 0xa2, 0x56,
+	0x2b, 0xab, 0xf9, 0xeb, 0x6e, 0x74, 0xdd, 0x8d, 0xae, 0xbb, 0xd1, 0x75, 0x37, 0xba, 0xee, 0x46,
+	0xd7, 0xdd, 0xe8, 0x4f, 0xd5, 0x8d, 0x3e, 0x1f, 0x83, 0x23, 0x29, 0xad, 0x79, 0xdd, 0x89, 0xae,
+	0x3b, 0xd1, 0x75, 0x27, 0xba, 0xee, 0x44, 0xd7, 0x9d, 0xe8, 0x4f, 0xd4, 0x89, 0xe8, 0xab, 0x3a,
+	0xd1, 0x43, 0xf7, 0x2b, 0x6a, 0xff, 0x47, 0x3a, 0xd3, 0xc2, 0xe7, 0xa3, 0x30, 0x78, 0xd5, 0x75,
+	0x30, 0x42, 0x70, 0x78, 0x9b, 0xe3, 0x33, 0x4a, 0x96, 0xcf, 0xb2, 0xc4, 0xc0, 0xac, 0xf7, 0xd3,
+	0x5f, 0x03, 0x34, 0x09, 0xc7, 0x8c, 0xb1, 0x75, 0x2e, 0xc3, 0xca, 0x7b, 0x02, 0x4b, 0x00, 0x34,
+	0x01, 0x47, 0x8c, 0xa1, 0x4d, 0x56, 0x4e, 0xf3, 0x49, 0xc2, 0x83, 0x66, 0xe0, 0x4d, 0x73, 0x80,
+	0xca, 0x26, 0x29, 0x99, 0x17, 0xf7, 0x94, 0x34, 0x4b, 0x25, 0x59, 0x91, 0xf0, 0xa2, 0x10, 0x9c,
+	0x31, 0x48, 0x69, 0x59, 0x16, 0x14, 0x91, 0x95, 0x04, 0x3e, 0x2b, 0xb1, 0x8a, 0x24, 0x53, 0x72,
+	0x4e, 0x22, 0x7c, 0xa6, 0x8a, 0xdb, 0xf0, 0x96, 0xc1, 0x23, 0xb2, 0x5b, 0x39, 0x56, 0x92, 0x95,
+	0x4d, 0x6a, 0x57, 0xc9, 0xb0, 0xd9, 0x94, 0x9c, 0x26, 0x06, 0x51, 0x00, 0x12, 0xb6, 0x7e, 0x25,
+	0x27, 0x64, 0x78, 0x2a, 0x49, 0x0c, 0xa1, 0x3b, 0x30, 0xe8, 0x1e, 0x55, 0xb8, 0xac, 0x42, 0xf3,
+	0xc9, 0x3d, 0xe2, 0x06, 0x9a, 0x86, 0xc8, 0xa0, 0xee, 0x6e, 0x62, 0x9b, 0x32, 0xeb, 0xbc, 0xb8,
+	0xc9, 0x26, 0x09, 0x3f, 0xba, 0x05, 0xa7, 0x8c, 0xf1, 0x0d, 0x89, 0xcf, 0x3a, 0x08, 0xc3, 0x36,
+	0x1c, 0x25, 0x6d, 0x2a, 0x0c, 0xcf, 0x3f, 0xe1, 0x58, 0x65, 0x93, 0x4f, 0x72, 0xeb, 0x1c, 0x9b,
+	0x24, 0x20, 0x22, 0xe1, 0x83, 0x0b, 0x1f, 0x04, 0x91, 0x97, 0x79, 0x06, 0x3b, 0x9b, 0xcb, 0xc8,
+	0x9c, 0x90, 0x61, 0x95, 0x34, 0x2f, 0xc9, 0x96, 0xc3, 0x12, 0x31, 0x72, 0x05, 0x37, 0x4d, 0x25,
+	0x9d, 0x8c, 0xca, 0x36, 0x95, 0xc9, 0xb1, 0xc4, 0x18, 0x8a, 0xc0, 0xc7, 0x3d, 0xb8, 0x73, 0x59,
+	0x81, 0x12, 0x25, 0x8a, 0xce, 0xb0, 0x76, 0x50, 0x18, 0x3e, 0x2b, 0xb3, 0x59, 0x99, 0x98, 0x40,
+	0xf7, 0x61, 0xa8, 0x87, 0x48, 0x36, 0x97, 0xc9, 0xe0, 0x10, 0x58, 0xfc, 0xc4, 0x24, 0xfa, 0x19,
+	0x7c, 0xf7, 0x2a, 0x43, 0xf0, 0xc8, 0x36, 0x2b, 0x4a, 0x1c, 0x9f, 0x25, 0x10, 0xfa, 0x00, 0xae,
+	0xf4, 0x60, 0x64, 0xc4, 0xcc, 0xba, 0xc2, 0xa4, 0x29, 0x91, 0x62, 0x64, 0x56, 0x94, 0x14, 0x9a,
+	0x5d, 0xe7, 0xc5, 0x0b, 0x7b, 0x24, 0x99, 0x12, 0x65, 0xe2, 0x26, 0x5a, 0x83, 0x89, 0x5e, 0xd6,
+	0xf0, 0x5d, 0xde, 0x72, 0x59, 0x93, 0x1e, 0x51, 0x22, 0xb6, 0x81, 0xd3, 0x68, 0x05, 0xc6, 0xae,
+	0x30, 0xd0, 0x8c, 0x2d, 0x25, 0xca, 0x8a, 0x40, 0x89, 0xd4, 0x26, 0x6b, 0x18, 0x80, 0x43, 0xc2,
+	0x65, 0x53, 0xc4, 0x2d, 0x94, 0x80, 0x91, 0x1e, 0x82, 0x12, 0xbb, 0xcd, 0x8a, 0x54, 0xa6, 0x13,
+	0x29, 0x2b, 0x85, 0xec, 0x99, 0xb9, 0x8d, 0x28, 0xf8, 0x61, 0x2f, 0x3f, 0xbb, 0xd9, 0xa5, 0x34,
+	0x9f, 0xcb, 0x24, 0x15, 0x9a, 0x55, 0x28, 0x45, 0xe0, 0x25, 0x4e, 0xe6, 0xb6, 0x59, 0x25, 0x9b,
+	0xdb, 0xa4, 0x59, 0x91, 0xb8, 0x8b, 0xde, 0x83, 0xef, 0x18, 0x10, 0xec, 0x36, 0x85, 0x83, 0xa7,
+	0x24, 0x39, 0x91, 0x65, 0x8c, 0x8c, 0x97, 0x45, 0x0a, 0x47, 0x94, 0xca, 0x48, 0xc4, 0x7b, 0x68,
+	0x16, 0x4e, 0x5b, 0x0b, 0xc2, 0xca, 0x31, 0xdb, 0xeb, 0xfb, 0x28, 0x04, 0xe7, 0xba, 0x20, 0xec,
+	0x3c, 0x4a, 0xb2, 0x0c, 0x9f, 0xc4, 0x0e, 0xfe, 0x0c, 0x05, 0xe1, 0x84, 0xc1, 0x93, 0xa4, 0x64,
+	0x4a, 0x49, 0xe5, 0x28, 0x31, 0x49, 0x3c, 0x30, 0xd7, 0x8a, 0x5b, 0x9a, 0x12, 0x28, 0x26, 0xcd,
+	0x2a, 0x3b, 0x69, 0x4e, 0x66, 0x25, 0x81, 0x62, 0x58, 0xe2, 0x21, 0x0a, 0xc2, 0x80, 0xc1, 0xe3,
+	0xce, 0xe4, 0x05, 0x3b, 0x25, 0x3a, 0xd2, 0x1c, 0x27, 0x29, 0xb9, 0x2c, 0xc7, 0xf0, 0x49, 0x56,
+	0xc1, 0x0f, 0x81, 0xe7, 0xb2, 0xb2, 0x44, 0x3c, 0x42, 0xf3, 0xf0, 0xce, 0x25, 0x46, 0x9a, 0x62,
+	0x9e, 0x48, 0x19, 0x4a, 0x4a, 0xb3, 0x12, 0x41, 0xa2, 0x77, 0xe1, 0xbd, 0x2e, 0x0e, 0x81, 0x15,
+	0x19, 0x1c, 0xc6, 0xdc, 0x85, 0x1f, 0x8f, 0x2f, 0x31, 0xd1, 0x94, 0xc8, 0x2a, 0xf4, 0x9e, 0xec,
+	0x70, 0x76, 0xd1, 0x2e, 0x11, 0x17, 0x4c, 0x49, 0x25, 0x97, 0x65, 0x25, 0x86, 0x12, 0x58, 0x62,
+	0xc9, 0x74, 0x9b, 0x86, 0x6b, 0x6f, 0x4c, 0x15, 0x1c, 0x69, 0x23, 0x60, 0x9d, 0x14, 0xed, 0x24,
+	0x4c, 0xd8, 0xc4, 0x58, 0x81, 0x8b, 0xbd, 0x30, 0xf8, 0xe4, 0x1e, 0xce, 0xcf, 0x14, 0x2b, 0x2b,
+	0xbc, 0x68, 0x64, 0x8b, 0x3d, 0x59, 0x11, 0x53, 0xf0, 0xff, 0xf7, 0xcc, 0xd3, 0x34, 0x97, 0x4a,
+	0x2b, 0x94, 0xc4, 0x70, 0x9c, 0x73, 0x95, 0xe0, 0x4c, 0xb7, 0x12, 0x2e, 0x6a, 0x4a, 0x4f, 0x5b,
+	0x05, 0x94, 0xcd, 0x5a, 0x1e, 0xc7, 0xcc, 0xf1, 0x39, 0xab, 0x68, 0x76, 0x66, 0xc9, 0x2e, 0x47,
+	0x71, 0x93, 0x7e, 0xc7, 0x2a, 0x56, 0x29, 0x91, 0x12, 0xd2, 0x5b, 0x19, 0xc3, 0x3d, 0x4a, 0x26,
+	0x12, 0x26, 0xf5, 0x9e, 0x95, 0x61, 0x1d, 0xea, 0x85, 0xf8, 0xb2, 0xc9, 0xf0, 0x10, 0xce, 0x77,
+	0x31, 0x70, 0x59, 0x59, 0xe4, 0x25, 0x81, 0x65, 0x64, 0x1c, 0xe3, 0xad, 0x1c, 0x2b, 0xee, 0x11,
+	0x2b, 0x06, 0xeb, 0xac, 0xef, 0xdb, 0x36, 0x00, 0x0b, 0xbf, 0xf5, 0x43, 0x78, 0xf1, 0x2a, 0x12,
+	0x9a, 0x81, 0x04, 0x25, 0xcb, 0x14, 0xf3, 0x44, 0xc1, 0x55, 0xbf, 0xab, 0x25, 0x84, 0xe0, 0x9c,
+	0x8b, 0xa4, 0xd0, 0x22, 0xbf, 0x23, 0xb1, 0xa2, 0xc2, 0x64, 0x38, 0x5c, 0xa4, 0xb0, 0xfa, 0xf7,
+	0x9c, 0x3c, 0xbc, 0x9c, 0x66, 0x45, 0x85, 0x12, 0x84, 0x0c, 0xc7, 0x50, 0x86, 0x05, 0x26, 0x55,
+	0x22, 0x3c, 0x38, 0x29, 0x9d, 0xac, 0xb2, 0xc8, 0x6f, 0x50, 0x59, 0x23, 0xdb, 0x92, 0x3c, 0x2f,
+	0x2a, 0x92, 0xb0, 0xb7, 0x43, 0x89, 0x2c, 0xe1, 0x45, 0xef, 0xc0, 0xbb, 0x4e, 0xc6, 0x24, 0x2b,
+	0x5b, 0xde, 0x58, 0x99, 0x43, 0xf8, 0xdc, 0xa6, 0x6d, 0xe7, 0x32, 0x59, 0x56, 0xa4, 0x68, 0x2e,
+	0xc3, 0xc9, 0x7b, 0x8a, 0xc4, 0x50, 0x59, 0x62, 0x10, 0xd7, 0x4f, 0x27, 0x0f, 0x45, 0xe7, 0x24,
+	0x56, 0xe1, 0xd7, 0x95, 0xf5, 0x5c, 0xd6, 0x80, 0xa3, 0x30, 0x33, 0x31, 0x84, 0xe2, 0x30, 0xdc,
+	0xc5, 0x97, 0x93, 0xd3, 0x6c, 0x56, 0xb6, 0xed, 0xcf, 0xc9, 0x69, 0x5e, 0xe4, 0xf6, 0xbb, 0xbd,
+	0xb9, 0x81, 0xee, 0xc1, 0xdb, 0x4e, 0x29, 0x3a, 0xb7, 0xbe, 0xce, 0x8a, 0x0a, 0xbf, 0xcd, 0x8a,
+	0xeb, 0x19, 0x7e, 0x87, 0xf0, 0xa3, 0xc7, 0xf0, 0xa1, 0x93, 0x41, 0x10, 0xd9, 0x24, 0xc7, 0xc8,
+	0x56, 0xad, 0x97, 0xf8, 0x9c, 0xc8, 0xb0, 0x4a, 0x86, 0x37, 0xb5, 0x10, 0xc3, 0x78, 0x09, 0x39,
+	0xd9, 0xb9, 0xac, 0x99, 0x07, 0x58, 0x69, 0x86, 0xa5, 0x9e, 0x50, 0x29, 0x96, 0x80, 0x6e, 0xb7,
+	0x2f, 0xaa, 0x12, 0x97, 0x4d, 0xb2, 0xbb, 0x38, 0xe9, 0x46, 0xd0, 0x1c, 0x9c, 0xed, 0xd2, 0x4b,
+	0xc9, 0xe9, 0x8b, 0xa2, 0x45, 0x8c, 0xba, 0x0d, 0xdf, 0x35, 0x18, 0xb8, 0xec, 0x86, 0x19, 0x63,
+	0x62, 0xcc, 0x0d, 0x90, 0x49, 0x52, 0x82, 0x83, 0x3e, 0x8e, 0x16, 0xe0, 0x7d, 0x27, 0x5d, 0x62,
+	0xc5, 0x6d, 0x56, 0x54, 0x24, 0xce, 0xaa, 0x2d, 0x0e, 0xde, 0x09, 0xf7, 0x54, 0x32, 0xfc, 0x26,
+	0xde, 0x3b, 0x28, 0xec, 0x2e, 0xcb, 0xe4, 0x0c, 0x16, 0x02, 0xdd, 0x85, 0x33, 0x5d, 0x70, 0x46,
+	0x0e, 0x77, 0x10, 0x26, 0xd1, 0xff, 0x83, 0xf3, 0x5d, 0x08, 0x22, 0x2f, 0x49, 0x8a, 0xc4, 0xc9,
+	0xac, 0x22, 0x31, 0x22, 0x27, 0xc8, 0xd8, 0x69, 0x74, 0x39, 0x65, 0xb2, 0x1c, 0x95, 0xc1, 0x93,
+	0x8d, 0xad, 0xe3, 0x18, 0x96, 0x98, 0x72, 0xc7, 0xce, 0x5c, 0xe4, 0x94, 0x88, 0xb3, 0xd9, 0x1c,
+	0x27, 0x02, 0x6e, 0x18, 0x89, 0x95, 0x8c, 0x4a, 0x95, 0xe6, 0x36, 0x28, 0xe6, 0x09, 0xd6, 0x74,
+	0xd3, 0x9d, 0xc5, 0xae, 0xfd, 0x8e, 0x90, 0xe1, 0x64, 0xc3, 0xa4, 0x69, 0x37, 0xd6, 0x3a, 0x2f,
+	0x32, 0xec, 0x7a, 0x2e, 0x63, 0x2e, 0x21, 0xb3, 0xbf, 0xb9, 0xe6, 0x5c, 0x64, 0x37, 0x79, 0x99,
+	0x35, 0xf7, 0x3a, 0x5c, 0x96, 0xc9, 0xe4, 0x92, 0x2c, 0x11, 0xc4, 0xad, 0xc8, 0xc9, 0xb4, 0x49,
+	0x65, 0x38, 0x86, 0xe3, 0x73, 0x52, 0xd7, 0x4e, 0x69, 0x06, 0x2d, 0x74, 0xb3, 0x75, 0xca, 0x41,
+	0xb7, 0x87, 0xb3, 0xce, 0x42, 0xb0, 0x08, 0x87, 0x2f, 0xde, 0x5a, 0x1b, 0x86, 0xe6, 0x9b, 0x73,
+	0xc4, 0x00, 0x82, 0x70, 0xc8, 0x7c, 0x37, 0x8a, 0x00, 0xf8, 0xb3, 0xf9, 0x2a, 0x1a, 0xe1, 0x59,
+	0x38, 0x81, 0xb7, 0xae, 0x78, 0xa7, 0x0a, 0x8d, 0x42, 0xfb, 0x7d, 0x31, 0x62, 0x00, 0x65, 0xe1,
+	0xc5, 0xfb, 0x55, 0x04, 0x98, 0xfd, 0xf9, 0x97, 0x6d, 0xf0, 0xc1, 0xec, 0x5a, 0xd7, 0xc1, 0xa2,
+	0x51, 0xd3, 0xf2, 0x8b, 0xbd, 0xcf, 0xed, 0x8b, 0xee, 0x57, 0xd9, 0xe8, 0xdf, 0x81, 0xb3, 0xaf,
+	0xe7, 0x06, 0xbe, 0xfa, 0x7a, 0x6e, 0xe0, 0xbb, 0xaf, 0xe7, 0xc0, 0xa7, 0xe7, 0x73, 0xe0, 0xef,
+	0xcf, 0xe7, 0xc0, 0x1f, 0xce, 0xe7, 0xc0, 0xd9, 0xf9, 0x1c, 0xf8, 0xea, 0x7c, 0x0e, 0xfc, 0xf1,
+	0x7c, 0x0e, 0x7c, 0x7b, 0x3e, 0x37, 0xf0, 0xdd, 0xf9, 0x1c, 0xf8, 0xfd, 0x37, 0x73, 0x03, 0x67,
+	0xdf, 0xcc, 0x0d, 0x7c, 0xf5, 0xcd, 0xdc, 0xc0, 0xbe, 0x50, 0xd4, 0x6b, 0x47, 0xc5, 0xc5, 0x63,
+	0xbd, 0xdc, 0xd4, 0xea, 0x75, 0x75, 0xb1, 0xd5, 0x58, 0x32, 0x3e, 0x3c, 0xd5, 0xeb, 0x95, 0xc7,
+	0xb5, 0xba, 0x7e, 0x5c, 0x2a, 0x68, 0xf5, 0xc7, 0x1d, 0xf2, 0x52, 0xed, 0xa0, 0xa8, 0x2f, 0x69,
+	0xcf, 0x9a, 0xd6, 0x7f, 0x36, 0xf6, 0xf8, 0x17, 0xce, 0x83, 0x21, 0xe3, 0x3f, 0x1c, 0x63, 0xff,
+	0x15, 0x00, 0x00, 0xff, 0xff, 0x72, 0xe1, 0x6f, 0xd3, 0xe7, 0x39, 0x00, 0x00,
 }
 
 func (x AppFirewallViolationType) String() string {
@@ -3288,869 +3287,6 @@ func (x RiskBasedBlockingAction) String() string {
 		return s
 	}
 	return strconv.Itoa(int(x))
-}
-func (this *BotProtectionSetting) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*BotProtectionSetting)
-	if !ok {
-		that2, ok := that.(BotProtectionSetting)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MaliciousBotAction != that1.MaliciousBotAction {
-		return false
-	}
-	if this.SuspiciousBotAction != that1.SuspiciousBotAction {
-		return false
-	}
-	if this.GoodBotAction != that1.GoodBotAction {
-		return false
-	}
-	return true
-}
-func (this *AttackTypeSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AttackTypeSettings)
-	if !ok {
-		that2, ok := that.(AttackTypeSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.DisabledAttackTypes) != len(that1.DisabledAttackTypes) {
-		return false
-	}
-	for i := range this.DisabledAttackTypes {
-		if this.DisabledAttackTypes[i] != that1.DisabledAttackTypes[i] {
-			return false
-		}
-	}
-	return true
-}
-func (this *SignatureSelectionSetting) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SignatureSelectionSetting)
-	if !ok {
-		that2, ok := that.(SignatureSelectionSetting)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.SignatureSelectionByAccuracy == nil {
-		if this.SignatureSelectionByAccuracy != nil {
-			return false
-		}
-	} else if this.SignatureSelectionByAccuracy == nil {
-		return false
-	} else if !this.SignatureSelectionByAccuracy.Equal(that1.SignatureSelectionByAccuracy) {
-		return false
-	}
-	if that1.AttackTypeSetting == nil {
-		if this.AttackTypeSetting != nil {
-			return false
-		}
-	} else if this.AttackTypeSetting == nil {
-		return false
-	} else if !this.AttackTypeSetting.Equal(that1.AttackTypeSetting) {
-		return false
-	}
-	return true
-}
-func (this *SignatureSelectionSetting_OnlyHighAccuracySignatures) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SignatureSelectionSetting_OnlyHighAccuracySignatures)
-	if !ok {
-		that2, ok := that.(SignatureSelectionSetting_OnlyHighAccuracySignatures)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.OnlyHighAccuracySignatures.Equal(that1.OnlyHighAccuracySignatures) {
-		return false
-	}
-	return true
-}
-func (this *SignatureSelectionSetting_HighMediumAccuracySignatures) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SignatureSelectionSetting_HighMediumAccuracySignatures)
-	if !ok {
-		that2, ok := that.(SignatureSelectionSetting_HighMediumAccuracySignatures)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.HighMediumAccuracySignatures.Equal(that1.HighMediumAccuracySignatures) {
-		return false
-	}
-	return true
-}
-func (this *SignatureSelectionSetting_HighMediumLowAccuracySignatures) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SignatureSelectionSetting_HighMediumLowAccuracySignatures)
-	if !ok {
-		that2, ok := that.(SignatureSelectionSetting_HighMediumLowAccuracySignatures)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.HighMediumLowAccuracySignatures.Equal(that1.HighMediumLowAccuracySignatures) {
-		return false
-	}
-	return true
-}
-func (this *SignatureSelectionSetting_DefaultAttackTypeSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SignatureSelectionSetting_DefaultAttackTypeSettings)
-	if !ok {
-		that2, ok := that.(SignatureSelectionSetting_DefaultAttackTypeSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultAttackTypeSettings.Equal(that1.DefaultAttackTypeSettings) {
-		return false
-	}
-	return true
-}
-func (this *SignatureSelectionSetting_AttackTypeSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SignatureSelectionSetting_AttackTypeSettings)
-	if !ok {
-		that2, ok := that.(SignatureSelectionSetting_AttackTypeSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AttackTypeSettings.Equal(that1.AttackTypeSettings) {
-		return false
-	}
-	return true
-}
-func (this *ViolationSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ViolationSettings)
-	if !ok {
-		that2, ok := that.(ViolationSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.DisabledViolationTypes) != len(that1.DisabledViolationTypes) {
-		return false
-	}
-	for i := range this.DisabledViolationTypes {
-		if this.DisabledViolationTypes[i] != that1.DisabledViolationTypes[i] {
-			return false
-		}
-	}
-	return true
-}
-func (this *DetectionSetting) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DetectionSetting)
-	if !ok {
-		that2, ok := that.(DetectionSetting)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.SignatureSelectionSetting.Equal(that1.SignatureSelectionSetting) {
-		return false
-	}
-	if that1.FalsePositiveSuppression == nil {
-		if this.FalsePositiveSuppression != nil {
-			return false
-		}
-	} else if this.FalsePositiveSuppression == nil {
-		return false
-	} else if !this.FalsePositiveSuppression.Equal(that1.FalsePositiveSuppression) {
-		return false
-	}
-	if that1.ThreatCampaignChoice == nil {
-		if this.ThreatCampaignChoice != nil {
-			return false
-		}
-	} else if this.ThreatCampaignChoice == nil {
-		return false
-	} else if !this.ThreatCampaignChoice.Equal(that1.ThreatCampaignChoice) {
-		return false
-	}
-	if that1.ViolationDetectionSetting == nil {
-		if this.ViolationDetectionSetting != nil {
-			return false
-		}
-	} else if this.ViolationDetectionSetting == nil {
-		return false
-	} else if !this.ViolationDetectionSetting.Equal(that1.ViolationDetectionSetting) {
-		return false
-	}
-	if that1.SignaturesStagingSettings == nil {
-		if this.SignaturesStagingSettings != nil {
-			return false
-		}
-	} else if this.SignaturesStagingSettings == nil {
-		return false
-	} else if !this.SignaturesStagingSettings.Equal(that1.SignaturesStagingSettings) {
-		return false
-	}
-	if that1.BotProtectionChoice == nil {
-		if this.BotProtectionChoice != nil {
-			return false
-		}
-	} else if this.BotProtectionChoice == nil {
-		return false
-	} else if !this.BotProtectionChoice.Equal(that1.BotProtectionChoice) {
-		return false
-	}
-	return true
-}
-func (this *DetectionSetting_EnableSuppression) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DetectionSetting_EnableSuppression)
-	if !ok {
-		that2, ok := that.(DetectionSetting_EnableSuppression)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EnableSuppression.Equal(that1.EnableSuppression) {
-		return false
-	}
-	return true
-}
-func (this *DetectionSetting_DisableSuppression) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DetectionSetting_DisableSuppression)
-	if !ok {
-		that2, ok := that.(DetectionSetting_DisableSuppression)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableSuppression.Equal(that1.DisableSuppression) {
-		return false
-	}
-	return true
-}
-func (this *DetectionSetting_EnableThreatCampaigns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DetectionSetting_EnableThreatCampaigns)
-	if !ok {
-		that2, ok := that.(DetectionSetting_EnableThreatCampaigns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.EnableThreatCampaigns.Equal(that1.EnableThreatCampaigns) {
-		return false
-	}
-	return true
-}
-func (this *DetectionSetting_DisableThreatCampaigns) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DetectionSetting_DisableThreatCampaigns)
-	if !ok {
-		that2, ok := that.(DetectionSetting_DisableThreatCampaigns)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableThreatCampaigns.Equal(that1.DisableThreatCampaigns) {
-		return false
-	}
-	return true
-}
-func (this *DetectionSetting_DefaultViolationSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DetectionSetting_DefaultViolationSettings)
-	if !ok {
-		that2, ok := that.(DetectionSetting_DefaultViolationSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultViolationSettings.Equal(that1.DefaultViolationSettings) {
-		return false
-	}
-	return true
-}
-func (this *DetectionSetting_ViolationSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DetectionSetting_ViolationSettings)
-	if !ok {
-		that2, ok := that.(DetectionSetting_ViolationSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.ViolationSettings.Equal(that1.ViolationSettings) {
-		return false
-	}
-	return true
-}
-func (this *DetectionSetting_DisableStaging) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DetectionSetting_DisableStaging)
-	if !ok {
-		that2, ok := that.(DetectionSetting_DisableStaging)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DisableStaging.Equal(that1.DisableStaging) {
-		return false
-	}
-	return true
-}
-func (this *DetectionSetting_StageNewSignatures) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DetectionSetting_StageNewSignatures)
-	if !ok {
-		that2, ok := that.(DetectionSetting_StageNewSignatures)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.StageNewSignatures.Equal(that1.StageNewSignatures) {
-		return false
-	}
-	return true
-}
-func (this *DetectionSetting_StageNewAndUpdatedSignatures) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DetectionSetting_StageNewAndUpdatedSignatures)
-	if !ok {
-		that2, ok := that.(DetectionSetting_StageNewAndUpdatedSignatures)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.StageNewAndUpdatedSignatures.Equal(that1.StageNewAndUpdatedSignatures) {
-		return false
-	}
-	return true
-}
-func (this *DetectionSetting_DefaultBotSetting) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DetectionSetting_DefaultBotSetting)
-	if !ok {
-		that2, ok := that.(DetectionSetting_DefaultBotSetting)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.DefaultBotSetting.Equal(that1.DefaultBotSetting) {
-		return false
-	}
-	return true
-}
-func (this *DetectionSetting_BotProtectionSetting) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DetectionSetting_BotProtectionSetting)
-	if !ok {
-		that2, ok := that.(DetectionSetting_BotProtectionSetting)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.BotProtectionSetting.Equal(that1.BotProtectionSetting) {
-		return false
-	}
-	return true
-}
-func (this *SignaturesStagingSettings) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*SignaturesStagingSettings)
-	if !ok {
-		that2, ok := that.(SignaturesStagingSettings)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.StagingPeriod != that1.StagingPeriod {
-		return false
-	}
-	return true
-}
-func (this *AllowedResponseCodes) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AllowedResponseCodes)
-	if !ok {
-		that2, ok := that.(AllowedResponseCodes)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.ResponseCode) != len(that1.ResponseCode) {
-		return false
-	}
-	for i := range this.ResponseCode {
-		if this.ResponseCode[i] != that1.ResponseCode[i] {
-			return false
-		}
-	}
-	return true
-}
-func (this *AnonymizeHttpHeader) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AnonymizeHttpHeader)
-	if !ok {
-		that2, ok := that.(AnonymizeHttpHeader)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.HeaderName != that1.HeaderName {
-		return false
-	}
-	return true
-}
-func (this *AnonymizeHttpQueryParameter) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AnonymizeHttpQueryParameter)
-	if !ok {
-		that2, ok := that.(AnonymizeHttpQueryParameter)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.QueryParamName != that1.QueryParamName {
-		return false
-	}
-	return true
-}
-func (this *AnonymizeHttpCookie) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AnonymizeHttpCookie)
-	if !ok {
-		that2, ok := that.(AnonymizeHttpCookie)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.CookieName != that1.CookieName {
-		return false
-	}
-	return true
-}
-func (this *AnonymizationConfiguration) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AnonymizationConfiguration)
-	if !ok {
-		that2, ok := that.(AnonymizationConfiguration)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if that1.AnonymizationChoice == nil {
-		if this.AnonymizationChoice != nil {
-			return false
-		}
-	} else if this.AnonymizationChoice == nil {
-		return false
-	} else if !this.AnonymizationChoice.Equal(that1.AnonymizationChoice) {
-		return false
-	}
-	return true
-}
-func (this *AnonymizationConfiguration_HttpHeader) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AnonymizationConfiguration_HttpHeader)
-	if !ok {
-		that2, ok := that.(AnonymizationConfiguration_HttpHeader)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.HttpHeader.Equal(that1.HttpHeader) {
-		return false
-	}
-	return true
-}
-func (this *AnonymizationConfiguration_QueryParameter) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AnonymizationConfiguration_QueryParameter)
-	if !ok {
-		that2, ok := that.(AnonymizationConfiguration_QueryParameter)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.QueryParameter.Equal(that1.QueryParameter) {
-		return false
-	}
-	return true
-}
-func (this *AnonymizationConfiguration_Cookie) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AnonymizationConfiguration_Cookie)
-	if !ok {
-		that2, ok := that.(AnonymizationConfiguration_Cookie)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Cookie.Equal(that1.Cookie) {
-		return false
-	}
-	return true
-}
-func (this *AnonymizationSetting) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AnonymizationSetting)
-	if !ok {
-		that2, ok := that.(AnonymizationSetting)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.AnonymizationConfig) != len(that1.AnonymizationConfig) {
-		return false
-	}
-	for i := range this.AnonymizationConfig {
-		if !this.AnonymizationConfig[i].Equal(that1.AnonymizationConfig[i]) {
-			return false
-		}
-	}
-	return true
-}
-func (this *CustomBlockingPage) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CustomBlockingPage)
-	if !ok {
-		that2, ok := that.(CustomBlockingPage)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.BlockingPage != that1.BlockingPage {
-		return false
-	}
-	if this.ResponseCode != that1.ResponseCode {
-		return false
-	}
-	return true
 }
 func (this *GlobalSpecType) Equal(that interface{}) bool {
 	if that == nil {
@@ -4587,6 +3723,610 @@ func (this *GlobalSpecType_BlockingPage) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *DetectionSetting) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DetectionSetting)
+	if !ok {
+		that2, ok := that.(DetectionSetting)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.SignatureSelectionSetting.Equal(that1.SignatureSelectionSetting) {
+		return false
+	}
+	if that1.FalsePositiveSuppression == nil {
+		if this.FalsePositiveSuppression != nil {
+			return false
+		}
+	} else if this.FalsePositiveSuppression == nil {
+		return false
+	} else if !this.FalsePositiveSuppression.Equal(that1.FalsePositiveSuppression) {
+		return false
+	}
+	if that1.ThreatCampaignChoice == nil {
+		if this.ThreatCampaignChoice != nil {
+			return false
+		}
+	} else if this.ThreatCampaignChoice == nil {
+		return false
+	} else if !this.ThreatCampaignChoice.Equal(that1.ThreatCampaignChoice) {
+		return false
+	}
+	if that1.ViolationDetectionSetting == nil {
+		if this.ViolationDetectionSetting != nil {
+			return false
+		}
+	} else if this.ViolationDetectionSetting == nil {
+		return false
+	} else if !this.ViolationDetectionSetting.Equal(that1.ViolationDetectionSetting) {
+		return false
+	}
+	if that1.SignaturesStagingSettings == nil {
+		if this.SignaturesStagingSettings != nil {
+			return false
+		}
+	} else if this.SignaturesStagingSettings == nil {
+		return false
+	} else if !this.SignaturesStagingSettings.Equal(that1.SignaturesStagingSettings) {
+		return false
+	}
+	if that1.BotProtectionChoice == nil {
+		if this.BotProtectionChoice != nil {
+			return false
+		}
+	} else if this.BotProtectionChoice == nil {
+		return false
+	} else if !this.BotProtectionChoice.Equal(that1.BotProtectionChoice) {
+		return false
+	}
+	return true
+}
+func (this *DetectionSetting_EnableSuppression) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DetectionSetting_EnableSuppression)
+	if !ok {
+		that2, ok := that.(DetectionSetting_EnableSuppression)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableSuppression.Equal(that1.EnableSuppression) {
+		return false
+	}
+	return true
+}
+func (this *DetectionSetting_DisableSuppression) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DetectionSetting_DisableSuppression)
+	if !ok {
+		that2, ok := that.(DetectionSetting_DisableSuppression)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableSuppression.Equal(that1.DisableSuppression) {
+		return false
+	}
+	return true
+}
+func (this *DetectionSetting_EnableThreatCampaigns) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DetectionSetting_EnableThreatCampaigns)
+	if !ok {
+		that2, ok := that.(DetectionSetting_EnableThreatCampaigns)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.EnableThreatCampaigns.Equal(that1.EnableThreatCampaigns) {
+		return false
+	}
+	return true
+}
+func (this *DetectionSetting_DisableThreatCampaigns) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DetectionSetting_DisableThreatCampaigns)
+	if !ok {
+		that2, ok := that.(DetectionSetting_DisableThreatCampaigns)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableThreatCampaigns.Equal(that1.DisableThreatCampaigns) {
+		return false
+	}
+	return true
+}
+func (this *DetectionSetting_DefaultViolationSettings) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DetectionSetting_DefaultViolationSettings)
+	if !ok {
+		that2, ok := that.(DetectionSetting_DefaultViolationSettings)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultViolationSettings.Equal(that1.DefaultViolationSettings) {
+		return false
+	}
+	return true
+}
+func (this *DetectionSetting_ViolationSettings) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DetectionSetting_ViolationSettings)
+	if !ok {
+		that2, ok := that.(DetectionSetting_ViolationSettings)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.ViolationSettings.Equal(that1.ViolationSettings) {
+		return false
+	}
+	return true
+}
+func (this *DetectionSetting_DisableStaging) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DetectionSetting_DisableStaging)
+	if !ok {
+		that2, ok := that.(DetectionSetting_DisableStaging)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DisableStaging.Equal(that1.DisableStaging) {
+		return false
+	}
+	return true
+}
+func (this *DetectionSetting_StageNewSignatures) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DetectionSetting_StageNewSignatures)
+	if !ok {
+		that2, ok := that.(DetectionSetting_StageNewSignatures)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.StageNewSignatures.Equal(that1.StageNewSignatures) {
+		return false
+	}
+	return true
+}
+func (this *DetectionSetting_StageNewAndUpdatedSignatures) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DetectionSetting_StageNewAndUpdatedSignatures)
+	if !ok {
+		that2, ok := that.(DetectionSetting_StageNewAndUpdatedSignatures)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.StageNewAndUpdatedSignatures.Equal(that1.StageNewAndUpdatedSignatures) {
+		return false
+	}
+	return true
+}
+func (this *DetectionSetting_DefaultBotSetting) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DetectionSetting_DefaultBotSetting)
+	if !ok {
+		that2, ok := that.(DetectionSetting_DefaultBotSetting)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultBotSetting.Equal(that1.DefaultBotSetting) {
+		return false
+	}
+	return true
+}
+func (this *DetectionSetting_BotProtectionSetting) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*DetectionSetting_BotProtectionSetting)
+	if !ok {
+		that2, ok := that.(DetectionSetting_BotProtectionSetting)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.BotProtectionSetting.Equal(that1.BotProtectionSetting) {
+		return false
+	}
+	return true
+}
+func (this *SignatureSelectionSetting) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SignatureSelectionSetting)
+	if !ok {
+		that2, ok := that.(SignatureSelectionSetting)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.SignatureSelectionByAccuracy == nil {
+		if this.SignatureSelectionByAccuracy != nil {
+			return false
+		}
+	} else if this.SignatureSelectionByAccuracy == nil {
+		return false
+	} else if !this.SignatureSelectionByAccuracy.Equal(that1.SignatureSelectionByAccuracy) {
+		return false
+	}
+	if that1.AttackTypeSetting == nil {
+		if this.AttackTypeSetting != nil {
+			return false
+		}
+	} else if this.AttackTypeSetting == nil {
+		return false
+	} else if !this.AttackTypeSetting.Equal(that1.AttackTypeSetting) {
+		return false
+	}
+	return true
+}
+func (this *SignatureSelectionSetting_OnlyHighAccuracySignatures) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SignatureSelectionSetting_OnlyHighAccuracySignatures)
+	if !ok {
+		that2, ok := that.(SignatureSelectionSetting_OnlyHighAccuracySignatures)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.OnlyHighAccuracySignatures.Equal(that1.OnlyHighAccuracySignatures) {
+		return false
+	}
+	return true
+}
+func (this *SignatureSelectionSetting_HighMediumAccuracySignatures) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SignatureSelectionSetting_HighMediumAccuracySignatures)
+	if !ok {
+		that2, ok := that.(SignatureSelectionSetting_HighMediumAccuracySignatures)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HighMediumAccuracySignatures.Equal(that1.HighMediumAccuracySignatures) {
+		return false
+	}
+	return true
+}
+func (this *SignatureSelectionSetting_HighMediumLowAccuracySignatures) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SignatureSelectionSetting_HighMediumLowAccuracySignatures)
+	if !ok {
+		that2, ok := that.(SignatureSelectionSetting_HighMediumLowAccuracySignatures)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HighMediumLowAccuracySignatures.Equal(that1.HighMediumLowAccuracySignatures) {
+		return false
+	}
+	return true
+}
+func (this *SignatureSelectionSetting_DefaultAttackTypeSettings) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SignatureSelectionSetting_DefaultAttackTypeSettings)
+	if !ok {
+		that2, ok := that.(SignatureSelectionSetting_DefaultAttackTypeSettings)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.DefaultAttackTypeSettings.Equal(that1.DefaultAttackTypeSettings) {
+		return false
+	}
+	return true
+}
+func (this *SignatureSelectionSetting_AttackTypeSettings) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SignatureSelectionSetting_AttackTypeSettings)
+	if !ok {
+		that2, ok := that.(SignatureSelectionSetting_AttackTypeSettings)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.AttackTypeSettings.Equal(that1.AttackTypeSettings) {
+		return false
+	}
+	return true
+}
+func (this *AttackTypeSettings) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AttackTypeSettings)
+	if !ok {
+		that2, ok := that.(AttackTypeSettings)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.DisabledAttackTypes) != len(that1.DisabledAttackTypes) {
+		return false
+	}
+	for i := range this.DisabledAttackTypes {
+		if this.DisabledAttackTypes[i] != that1.DisabledAttackTypes[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *ViolationSettings) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*ViolationSettings)
+	if !ok {
+		that2, ok := that.(ViolationSettings)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.DisabledViolationTypes) != len(that1.DisabledViolationTypes) {
+		return false
+	}
+	for i := range this.DisabledViolationTypes {
+		if this.DisabledViolationTypes[i] != that1.DisabledViolationTypes[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *SignaturesStagingSettings) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SignaturesStagingSettings)
+	if !ok {
+		that2, ok := that.(SignaturesStagingSettings)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.StagingPeriod != that1.StagingPeriod {
+		return false
+	}
+	return true
+}
+func (this *BotProtectionSetting) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BotProtectionSetting)
+	if !ok {
+		that2, ok := that.(BotProtectionSetting)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.MaliciousBotAction != that1.MaliciousBotAction {
+		return false
+	}
+	if this.SuspiciousBotAction != that1.SuspiciousBotAction {
+		return false
+	}
+	if this.GoodBotAction != that1.GoodBotAction {
+		return false
+	}
+	return true
+}
 func (this *AiRiskBasedBlocking) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
@@ -4613,6 +4353,265 @@ func (this *AiRiskBasedBlocking) Equal(that interface{}) bool {
 		return false
 	}
 	if this.LowRiskAction != that1.LowRiskAction {
+		return false
+	}
+	return true
+}
+func (this *AllowedResponseCodes) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AllowedResponseCodes)
+	if !ok {
+		that2, ok := that.(AllowedResponseCodes)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.ResponseCode) != len(that1.ResponseCode) {
+		return false
+	}
+	for i := range this.ResponseCode {
+		if this.ResponseCode[i] != that1.ResponseCode[i] {
+			return false
+		}
+	}
+	return true
+}
+func (this *AnonymizationSetting) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AnonymizationSetting)
+	if !ok {
+		that2, ok := that.(AnonymizationSetting)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if len(this.AnonymizationConfig) != len(that1.AnonymizationConfig) {
+		return false
+	}
+	for i := range this.AnonymizationConfig {
+		if !this.AnonymizationConfig[i].Equal(that1.AnonymizationConfig[i]) {
+			return false
+		}
+	}
+	return true
+}
+func (this *AnonymizationConfiguration) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AnonymizationConfiguration)
+	if !ok {
+		that2, ok := that.(AnonymizationConfiguration)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if that1.AnonymizationChoice == nil {
+		if this.AnonymizationChoice != nil {
+			return false
+		}
+	} else if this.AnonymizationChoice == nil {
+		return false
+	} else if !this.AnonymizationChoice.Equal(that1.AnonymizationChoice) {
+		return false
+	}
+	return true
+}
+func (this *AnonymizationConfiguration_HttpHeader) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AnonymizationConfiguration_HttpHeader)
+	if !ok {
+		that2, ok := that.(AnonymizationConfiguration_HttpHeader)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.HttpHeader.Equal(that1.HttpHeader) {
+		return false
+	}
+	return true
+}
+func (this *AnonymizationConfiguration_QueryParameter) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AnonymizationConfiguration_QueryParameter)
+	if !ok {
+		that2, ok := that.(AnonymizationConfiguration_QueryParameter)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.QueryParameter.Equal(that1.QueryParameter) {
+		return false
+	}
+	return true
+}
+func (this *AnonymizationConfiguration_Cookie) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AnonymizationConfiguration_Cookie)
+	if !ok {
+		that2, ok := that.(AnonymizationConfiguration_Cookie)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Cookie.Equal(that1.Cookie) {
+		return false
+	}
+	return true
+}
+func (this *AnonymizeHttpHeader) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AnonymizeHttpHeader)
+	if !ok {
+		that2, ok := that.(AnonymizeHttpHeader)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.HeaderName != that1.HeaderName {
+		return false
+	}
+	return true
+}
+func (this *AnonymizeHttpQueryParameter) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AnonymizeHttpQueryParameter)
+	if !ok {
+		that2, ok := that.(AnonymizeHttpQueryParameter)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.QueryParamName != that1.QueryParamName {
+		return false
+	}
+	return true
+}
+func (this *AnonymizeHttpCookie) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AnonymizeHttpCookie)
+	if !ok {
+		that2, ok := that.(AnonymizeHttpCookie)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.CookieName != that1.CookieName {
+		return false
+	}
+	return true
+}
+func (this *CustomBlockingPage) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CustomBlockingPage)
+	if !ok {
+		that2, ok := that.(CustomBlockingPage)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if this.BlockingPage != that1.BlockingPage {
+		return false
+	}
+	if this.ResponseCode != that1.ResponseCode {
 		return false
 	}
 	return true
@@ -5922,317 +5921,6 @@ func (this *GetSpecType_BlockingPage) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *BotProtectionSetting) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 7)
-	s = append(s, "&app_firewall.BotProtectionSetting{")
-	s = append(s, "MaliciousBotAction: "+fmt.Sprintf("%#v", this.MaliciousBotAction)+",\n")
-	s = append(s, "SuspiciousBotAction: "+fmt.Sprintf("%#v", this.SuspiciousBotAction)+",\n")
-	s = append(s, "GoodBotAction: "+fmt.Sprintf("%#v", this.GoodBotAction)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *AttackTypeSettings) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&app_firewall.AttackTypeSettings{")
-	s = append(s, "DisabledAttackTypes: "+fmt.Sprintf("%#v", this.DisabledAttackTypes)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *SignatureSelectionSetting) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 9)
-	s = append(s, "&app_firewall.SignatureSelectionSetting{")
-	if this.SignatureSelectionByAccuracy != nil {
-		s = append(s, "SignatureSelectionByAccuracy: "+fmt.Sprintf("%#v", this.SignatureSelectionByAccuracy)+",\n")
-	}
-	if this.AttackTypeSetting != nil {
-		s = append(s, "AttackTypeSetting: "+fmt.Sprintf("%#v", this.AttackTypeSetting)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *SignatureSelectionSetting_OnlyHighAccuracySignatures) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.SignatureSelectionSetting_OnlyHighAccuracySignatures{` +
-		`OnlyHighAccuracySignatures:` + fmt.Sprintf("%#v", this.OnlyHighAccuracySignatures) + `}`}, ", ")
-	return s
-}
-func (this *SignatureSelectionSetting_HighMediumAccuracySignatures) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.SignatureSelectionSetting_HighMediumAccuracySignatures{` +
-		`HighMediumAccuracySignatures:` + fmt.Sprintf("%#v", this.HighMediumAccuracySignatures) + `}`}, ", ")
-	return s
-}
-func (this *SignatureSelectionSetting_HighMediumLowAccuracySignatures) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.SignatureSelectionSetting_HighMediumLowAccuracySignatures{` +
-		`HighMediumLowAccuracySignatures:` + fmt.Sprintf("%#v", this.HighMediumLowAccuracySignatures) + `}`}, ", ")
-	return s
-}
-func (this *SignatureSelectionSetting_DefaultAttackTypeSettings) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.SignatureSelectionSetting_DefaultAttackTypeSettings{` +
-		`DefaultAttackTypeSettings:` + fmt.Sprintf("%#v", this.DefaultAttackTypeSettings) + `}`}, ", ")
-	return s
-}
-func (this *SignatureSelectionSetting_AttackTypeSettings) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.SignatureSelectionSetting_AttackTypeSettings{` +
-		`AttackTypeSettings:` + fmt.Sprintf("%#v", this.AttackTypeSettings) + `}`}, ", ")
-	return s
-}
-func (this *ViolationSettings) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&app_firewall.ViolationSettings{")
-	s = append(s, "DisabledViolationTypes: "+fmt.Sprintf("%#v", this.DisabledViolationTypes)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *DetectionSetting) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 16)
-	s = append(s, "&app_firewall.DetectionSetting{")
-	if this.SignatureSelectionSetting != nil {
-		s = append(s, "SignatureSelectionSetting: "+fmt.Sprintf("%#v", this.SignatureSelectionSetting)+",\n")
-	}
-	if this.FalsePositiveSuppression != nil {
-		s = append(s, "FalsePositiveSuppression: "+fmt.Sprintf("%#v", this.FalsePositiveSuppression)+",\n")
-	}
-	if this.ThreatCampaignChoice != nil {
-		s = append(s, "ThreatCampaignChoice: "+fmt.Sprintf("%#v", this.ThreatCampaignChoice)+",\n")
-	}
-	if this.ViolationDetectionSetting != nil {
-		s = append(s, "ViolationDetectionSetting: "+fmt.Sprintf("%#v", this.ViolationDetectionSetting)+",\n")
-	}
-	if this.SignaturesStagingSettings != nil {
-		s = append(s, "SignaturesStagingSettings: "+fmt.Sprintf("%#v", this.SignaturesStagingSettings)+",\n")
-	}
-	if this.BotProtectionChoice != nil {
-		s = append(s, "BotProtectionChoice: "+fmt.Sprintf("%#v", this.BotProtectionChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *DetectionSetting_EnableSuppression) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.DetectionSetting_EnableSuppression{` +
-		`EnableSuppression:` + fmt.Sprintf("%#v", this.EnableSuppression) + `}`}, ", ")
-	return s
-}
-func (this *DetectionSetting_DisableSuppression) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.DetectionSetting_DisableSuppression{` +
-		`DisableSuppression:` + fmt.Sprintf("%#v", this.DisableSuppression) + `}`}, ", ")
-	return s
-}
-func (this *DetectionSetting_EnableThreatCampaigns) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.DetectionSetting_EnableThreatCampaigns{` +
-		`EnableThreatCampaigns:` + fmt.Sprintf("%#v", this.EnableThreatCampaigns) + `}`}, ", ")
-	return s
-}
-func (this *DetectionSetting_DisableThreatCampaigns) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.DetectionSetting_DisableThreatCampaigns{` +
-		`DisableThreatCampaigns:` + fmt.Sprintf("%#v", this.DisableThreatCampaigns) + `}`}, ", ")
-	return s
-}
-func (this *DetectionSetting_DefaultViolationSettings) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.DetectionSetting_DefaultViolationSettings{` +
-		`DefaultViolationSettings:` + fmt.Sprintf("%#v", this.DefaultViolationSettings) + `}`}, ", ")
-	return s
-}
-func (this *DetectionSetting_ViolationSettings) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.DetectionSetting_ViolationSettings{` +
-		`ViolationSettings:` + fmt.Sprintf("%#v", this.ViolationSettings) + `}`}, ", ")
-	return s
-}
-func (this *DetectionSetting_DisableStaging) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.DetectionSetting_DisableStaging{` +
-		`DisableStaging:` + fmt.Sprintf("%#v", this.DisableStaging) + `}`}, ", ")
-	return s
-}
-func (this *DetectionSetting_StageNewSignatures) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.DetectionSetting_StageNewSignatures{` +
-		`StageNewSignatures:` + fmt.Sprintf("%#v", this.StageNewSignatures) + `}`}, ", ")
-	return s
-}
-func (this *DetectionSetting_StageNewAndUpdatedSignatures) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.DetectionSetting_StageNewAndUpdatedSignatures{` +
-		`StageNewAndUpdatedSignatures:` + fmt.Sprintf("%#v", this.StageNewAndUpdatedSignatures) + `}`}, ", ")
-	return s
-}
-func (this *DetectionSetting_DefaultBotSetting) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.DetectionSetting_DefaultBotSetting{` +
-		`DefaultBotSetting:` + fmt.Sprintf("%#v", this.DefaultBotSetting) + `}`}, ", ")
-	return s
-}
-func (this *DetectionSetting_BotProtectionSetting) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.DetectionSetting_BotProtectionSetting{` +
-		`BotProtectionSetting:` + fmt.Sprintf("%#v", this.BotProtectionSetting) + `}`}, ", ")
-	return s
-}
-func (this *SignaturesStagingSettings) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&app_firewall.SignaturesStagingSettings{")
-	s = append(s, "StagingPeriod: "+fmt.Sprintf("%#v", this.StagingPeriod)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *AllowedResponseCodes) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&app_firewall.AllowedResponseCodes{")
-	s = append(s, "ResponseCode: "+fmt.Sprintf("%#v", this.ResponseCode)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *AnonymizeHttpHeader) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&app_firewall.AnonymizeHttpHeader{")
-	s = append(s, "HeaderName: "+fmt.Sprintf("%#v", this.HeaderName)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *AnonymizeHttpQueryParameter) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&app_firewall.AnonymizeHttpQueryParameter{")
-	s = append(s, "QueryParamName: "+fmt.Sprintf("%#v", this.QueryParamName)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *AnonymizeHttpCookie) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&app_firewall.AnonymizeHttpCookie{")
-	s = append(s, "CookieName: "+fmt.Sprintf("%#v", this.CookieName)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *AnonymizationConfiguration) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 7)
-	s = append(s, "&app_firewall.AnonymizationConfiguration{")
-	if this.AnonymizationChoice != nil {
-		s = append(s, "AnonymizationChoice: "+fmt.Sprintf("%#v", this.AnonymizationChoice)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *AnonymizationConfiguration_HttpHeader) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.AnonymizationConfiguration_HttpHeader{` +
-		`HttpHeader:` + fmt.Sprintf("%#v", this.HttpHeader) + `}`}, ", ")
-	return s
-}
-func (this *AnonymizationConfiguration_QueryParameter) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.AnonymizationConfiguration_QueryParameter{` +
-		`QueryParameter:` + fmt.Sprintf("%#v", this.QueryParameter) + `}`}, ", ")
-	return s
-}
-func (this *AnonymizationConfiguration_Cookie) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&app_firewall.AnonymizationConfiguration_Cookie{` +
-		`Cookie:` + fmt.Sprintf("%#v", this.Cookie) + `}`}, ", ")
-	return s
-}
-func (this *AnonymizationSetting) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 5)
-	s = append(s, "&app_firewall.AnonymizationSetting{")
-	if this.AnonymizationConfig != nil {
-		s = append(s, "AnonymizationConfig: "+fmt.Sprintf("%#v", this.AnonymizationConfig)+",\n")
-	}
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
-func (this *CustomBlockingPage) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := make([]string, 0, 6)
-	s = append(s, "&app_firewall.CustomBlockingPage{")
-	s = append(s, "BlockingPage: "+fmt.Sprintf("%#v", this.BlockingPage)+",\n")
-	s = append(s, "ResponseCode: "+fmt.Sprintf("%#v", this.ResponseCode)+",\n")
-	s = append(s, "}")
-	return strings.Join(s, "")
-}
 func (this *GlobalSpecType) GoString() string {
 	if this == nil {
 		return "nil"
@@ -6380,6 +6068,218 @@ func (this *GlobalSpecType_BlockingPage) GoString() string {
 		`BlockingPage:` + fmt.Sprintf("%#v", this.BlockingPage) + `}`}, ", ")
 	return s
 }
+func (this *DetectionSetting) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 16)
+	s = append(s, "&app_firewall.DetectionSetting{")
+	if this.SignatureSelectionSetting != nil {
+		s = append(s, "SignatureSelectionSetting: "+fmt.Sprintf("%#v", this.SignatureSelectionSetting)+",\n")
+	}
+	if this.FalsePositiveSuppression != nil {
+		s = append(s, "FalsePositiveSuppression: "+fmt.Sprintf("%#v", this.FalsePositiveSuppression)+",\n")
+	}
+	if this.ThreatCampaignChoice != nil {
+		s = append(s, "ThreatCampaignChoice: "+fmt.Sprintf("%#v", this.ThreatCampaignChoice)+",\n")
+	}
+	if this.ViolationDetectionSetting != nil {
+		s = append(s, "ViolationDetectionSetting: "+fmt.Sprintf("%#v", this.ViolationDetectionSetting)+",\n")
+	}
+	if this.SignaturesStagingSettings != nil {
+		s = append(s, "SignaturesStagingSettings: "+fmt.Sprintf("%#v", this.SignaturesStagingSettings)+",\n")
+	}
+	if this.BotProtectionChoice != nil {
+		s = append(s, "BotProtectionChoice: "+fmt.Sprintf("%#v", this.BotProtectionChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *DetectionSetting_EnableSuppression) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.DetectionSetting_EnableSuppression{` +
+		`EnableSuppression:` + fmt.Sprintf("%#v", this.EnableSuppression) + `}`}, ", ")
+	return s
+}
+func (this *DetectionSetting_DisableSuppression) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.DetectionSetting_DisableSuppression{` +
+		`DisableSuppression:` + fmt.Sprintf("%#v", this.DisableSuppression) + `}`}, ", ")
+	return s
+}
+func (this *DetectionSetting_EnableThreatCampaigns) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.DetectionSetting_EnableThreatCampaigns{` +
+		`EnableThreatCampaigns:` + fmt.Sprintf("%#v", this.EnableThreatCampaigns) + `}`}, ", ")
+	return s
+}
+func (this *DetectionSetting_DisableThreatCampaigns) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.DetectionSetting_DisableThreatCampaigns{` +
+		`DisableThreatCampaigns:` + fmt.Sprintf("%#v", this.DisableThreatCampaigns) + `}`}, ", ")
+	return s
+}
+func (this *DetectionSetting_DefaultViolationSettings) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.DetectionSetting_DefaultViolationSettings{` +
+		`DefaultViolationSettings:` + fmt.Sprintf("%#v", this.DefaultViolationSettings) + `}`}, ", ")
+	return s
+}
+func (this *DetectionSetting_ViolationSettings) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.DetectionSetting_ViolationSettings{` +
+		`ViolationSettings:` + fmt.Sprintf("%#v", this.ViolationSettings) + `}`}, ", ")
+	return s
+}
+func (this *DetectionSetting_DisableStaging) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.DetectionSetting_DisableStaging{` +
+		`DisableStaging:` + fmt.Sprintf("%#v", this.DisableStaging) + `}`}, ", ")
+	return s
+}
+func (this *DetectionSetting_StageNewSignatures) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.DetectionSetting_StageNewSignatures{` +
+		`StageNewSignatures:` + fmt.Sprintf("%#v", this.StageNewSignatures) + `}`}, ", ")
+	return s
+}
+func (this *DetectionSetting_StageNewAndUpdatedSignatures) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.DetectionSetting_StageNewAndUpdatedSignatures{` +
+		`StageNewAndUpdatedSignatures:` + fmt.Sprintf("%#v", this.StageNewAndUpdatedSignatures) + `}`}, ", ")
+	return s
+}
+func (this *DetectionSetting_DefaultBotSetting) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.DetectionSetting_DefaultBotSetting{` +
+		`DefaultBotSetting:` + fmt.Sprintf("%#v", this.DefaultBotSetting) + `}`}, ", ")
+	return s
+}
+func (this *DetectionSetting_BotProtectionSetting) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.DetectionSetting_BotProtectionSetting{` +
+		`BotProtectionSetting:` + fmt.Sprintf("%#v", this.BotProtectionSetting) + `}`}, ", ")
+	return s
+}
+func (this *SignatureSelectionSetting) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 9)
+	s = append(s, "&app_firewall.SignatureSelectionSetting{")
+	if this.SignatureSelectionByAccuracy != nil {
+		s = append(s, "SignatureSelectionByAccuracy: "+fmt.Sprintf("%#v", this.SignatureSelectionByAccuracy)+",\n")
+	}
+	if this.AttackTypeSetting != nil {
+		s = append(s, "AttackTypeSetting: "+fmt.Sprintf("%#v", this.AttackTypeSetting)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SignatureSelectionSetting_OnlyHighAccuracySignatures) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.SignatureSelectionSetting_OnlyHighAccuracySignatures{` +
+		`OnlyHighAccuracySignatures:` + fmt.Sprintf("%#v", this.OnlyHighAccuracySignatures) + `}`}, ", ")
+	return s
+}
+func (this *SignatureSelectionSetting_HighMediumAccuracySignatures) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.SignatureSelectionSetting_HighMediumAccuracySignatures{` +
+		`HighMediumAccuracySignatures:` + fmt.Sprintf("%#v", this.HighMediumAccuracySignatures) + `}`}, ", ")
+	return s
+}
+func (this *SignatureSelectionSetting_HighMediumLowAccuracySignatures) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.SignatureSelectionSetting_HighMediumLowAccuracySignatures{` +
+		`HighMediumLowAccuracySignatures:` + fmt.Sprintf("%#v", this.HighMediumLowAccuracySignatures) + `}`}, ", ")
+	return s
+}
+func (this *SignatureSelectionSetting_DefaultAttackTypeSettings) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.SignatureSelectionSetting_DefaultAttackTypeSettings{` +
+		`DefaultAttackTypeSettings:` + fmt.Sprintf("%#v", this.DefaultAttackTypeSettings) + `}`}, ", ")
+	return s
+}
+func (this *SignatureSelectionSetting_AttackTypeSettings) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.SignatureSelectionSetting_AttackTypeSettings{` +
+		`AttackTypeSettings:` + fmt.Sprintf("%#v", this.AttackTypeSettings) + `}`}, ", ")
+	return s
+}
+func (this *AttackTypeSettings) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&app_firewall.AttackTypeSettings{")
+	s = append(s, "DisabledAttackTypes: "+fmt.Sprintf("%#v", this.DisabledAttackTypes)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *ViolationSettings) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&app_firewall.ViolationSettings{")
+	s = append(s, "DisabledViolationTypes: "+fmt.Sprintf("%#v", this.DisabledViolationTypes)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *SignaturesStagingSettings) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&app_firewall.SignaturesStagingSettings{")
+	s = append(s, "StagingPeriod: "+fmt.Sprintf("%#v", this.StagingPeriod)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *BotProtectionSetting) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&app_firewall.BotProtectionSetting{")
+	s = append(s, "MaliciousBotAction: "+fmt.Sprintf("%#v", this.MaliciousBotAction)+",\n")
+	s = append(s, "SuspiciousBotAction: "+fmt.Sprintf("%#v", this.SuspiciousBotAction)+",\n")
+	s = append(s, "GoodBotAction: "+fmt.Sprintf("%#v", this.GoodBotAction)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
 func (this *AiRiskBasedBlocking) GoString() string {
 	if this == nil {
 		return "nil"
@@ -6389,6 +6289,105 @@ func (this *AiRiskBasedBlocking) GoString() string {
 	s = append(s, "HighRiskAction: "+fmt.Sprintf("%#v", this.HighRiskAction)+",\n")
 	s = append(s, "MediumRiskAction: "+fmt.Sprintf("%#v", this.MediumRiskAction)+",\n")
 	s = append(s, "LowRiskAction: "+fmt.Sprintf("%#v", this.LowRiskAction)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AllowedResponseCodes) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&app_firewall.AllowedResponseCodes{")
+	s = append(s, "ResponseCode: "+fmt.Sprintf("%#v", this.ResponseCode)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AnonymizationSetting) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&app_firewall.AnonymizationSetting{")
+	if this.AnonymizationConfig != nil {
+		s = append(s, "AnonymizationConfig: "+fmt.Sprintf("%#v", this.AnonymizationConfig)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AnonymizationConfiguration) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&app_firewall.AnonymizationConfiguration{")
+	if this.AnonymizationChoice != nil {
+		s = append(s, "AnonymizationChoice: "+fmt.Sprintf("%#v", this.AnonymizationChoice)+",\n")
+	}
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AnonymizationConfiguration_HttpHeader) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.AnonymizationConfiguration_HttpHeader{` +
+		`HttpHeader:` + fmt.Sprintf("%#v", this.HttpHeader) + `}`}, ", ")
+	return s
+}
+func (this *AnonymizationConfiguration_QueryParameter) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.AnonymizationConfiguration_QueryParameter{` +
+		`QueryParameter:` + fmt.Sprintf("%#v", this.QueryParameter) + `}`}, ", ")
+	return s
+}
+func (this *AnonymizationConfiguration_Cookie) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&app_firewall.AnonymizationConfiguration_Cookie{` +
+		`Cookie:` + fmt.Sprintf("%#v", this.Cookie) + `}`}, ", ")
+	return s
+}
+func (this *AnonymizeHttpHeader) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&app_firewall.AnonymizeHttpHeader{")
+	s = append(s, "HeaderName: "+fmt.Sprintf("%#v", this.HeaderName)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AnonymizeHttpQueryParameter) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&app_firewall.AnonymizeHttpQueryParameter{")
+	s = append(s, "QueryParamName: "+fmt.Sprintf("%#v", this.QueryParamName)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *AnonymizeHttpCookie) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&app_firewall.AnonymizeHttpCookie{")
+	s = append(s, "CookieName: "+fmt.Sprintf("%#v", this.CookieName)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *CustomBlockingPage) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 6)
+	s = append(s, "&app_firewall.CustomBlockingPage{")
+	s = append(s, "BlockingPage: "+fmt.Sprintf("%#v", this.BlockingPage)+",\n")
+	s = append(s, "ResponseCode: "+fmt.Sprintf("%#v", this.ResponseCode)+",\n")
 	s = append(s, "}")
 	return strings.Join(s, "")
 }
@@ -6841,913 +6840,6 @@ func valueToGoStringTypes(v interface{}, typ string) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
 }
-func (m *BotProtectionSetting) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *BotProtectionSetting) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *BotProtectionSetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.GoodBotAction != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.GoodBotAction))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.SuspiciousBotAction != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.SuspiciousBotAction))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.MaliciousBotAction != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.MaliciousBotAction))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AttackTypeSettings) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AttackTypeSettings) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AttackTypeSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.DisabledAttackTypes) > 0 {
-		dAtA2 := make([]byte, len(m.DisabledAttackTypes)*10)
-		var j1 int
-		for _, num := range m.DisabledAttackTypes {
-			for num >= 1<<7 {
-				dAtA2[j1] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j1++
-			}
-			dAtA2[j1] = uint8(num)
-			j1++
-		}
-		i -= j1
-		copy(dAtA[i:], dAtA2[:j1])
-		i = encodeVarintTypes(dAtA, i, uint64(j1))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *SignatureSelectionSetting) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *SignatureSelectionSetting) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *SignatureSelectionSetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.AttackTypeSetting != nil {
-		{
-			size := m.AttackTypeSetting.Size()
-			i -= size
-			if _, err := m.AttackTypeSetting.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.SignatureSelectionByAccuracy != nil {
-		{
-			size := m.SignatureSelectionByAccuracy.Size()
-			i -= size
-			if _, err := m.SignatureSelectionByAccuracy.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *SignatureSelectionSetting_OnlyHighAccuracySignatures) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *SignatureSelectionSetting_OnlyHighAccuracySignatures) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.OnlyHighAccuracySignatures != nil {
-		{
-			size, err := m.OnlyHighAccuracySignatures.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	return len(dAtA) - i, nil
-}
-func (m *SignatureSelectionSetting_HighMediumAccuracySignatures) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *SignatureSelectionSetting_HighMediumAccuracySignatures) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.HighMediumAccuracySignatures != nil {
-		{
-			size, err := m.HighMediumAccuracySignatures.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *SignatureSelectionSetting_HighMediumLowAccuracySignatures) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *SignatureSelectionSetting_HighMediumLowAccuracySignatures) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.HighMediumLowAccuracySignatures != nil {
-		{
-			size, err := m.HighMediumLowAccuracySignatures.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	return len(dAtA) - i, nil
-}
-func (m *SignatureSelectionSetting_DefaultAttackTypeSettings) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *SignatureSelectionSetting_DefaultAttackTypeSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DefaultAttackTypeSettings != nil {
-		{
-			size, err := m.DefaultAttackTypeSettings.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
-	}
-	return len(dAtA) - i, nil
-}
-func (m *SignatureSelectionSetting_AttackTypeSettings) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *SignatureSelectionSetting_AttackTypeSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.AttackTypeSettings != nil {
-		{
-			size, err := m.AttackTypeSettings.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x42
-	}
-	return len(dAtA) - i, nil
-}
-func (m *ViolationSettings) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *ViolationSettings) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *ViolationSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.DisabledViolationTypes) > 0 {
-		dAtA9 := make([]byte, len(m.DisabledViolationTypes)*10)
-		var j8 int
-		for _, num := range m.DisabledViolationTypes {
-			for num >= 1<<7 {
-				dAtA9[j8] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j8++
-			}
-			dAtA9[j8] = uint8(num)
-			j8++
-		}
-		i -= j8
-		copy(dAtA[i:], dAtA9[:j8])
-		i = encodeVarintTypes(dAtA, i, uint64(j8))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *DetectionSetting) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *DetectionSetting) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DetectionSetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.BotProtectionChoice != nil {
-		{
-			size := m.BotProtectionChoice.Size()
-			i -= size
-			if _, err := m.BotProtectionChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.SignaturesStagingSettings != nil {
-		{
-			size := m.SignaturesStagingSettings.Size()
-			i -= size
-			if _, err := m.SignaturesStagingSettings.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.ViolationDetectionSetting != nil {
-		{
-			size := m.ViolationDetectionSetting.Size()
-			i -= size
-			if _, err := m.ViolationDetectionSetting.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.ThreatCampaignChoice != nil {
-		{
-			size := m.ThreatCampaignChoice.Size()
-			i -= size
-			if _, err := m.ThreatCampaignChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.FalsePositiveSuppression != nil {
-		{
-			size := m.FalsePositiveSuppression.Size()
-			i -= size
-			if _, err := m.FalsePositiveSuppression.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.SignatureSelectionSetting != nil {
-		{
-			size, err := m.SignatureSelectionSetting.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *DetectionSetting_EnableSuppression) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DetectionSetting_EnableSuppression) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.EnableSuppression != nil {
-		{
-			size, err := m.EnableSuppression.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *DetectionSetting_DisableSuppression) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DetectionSetting_DisableSuppression) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DisableSuppression != nil {
-		{
-			size, err := m.DisableSuppression.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	return len(dAtA) - i, nil
-}
-func (m *DetectionSetting_EnableThreatCampaigns) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DetectionSetting_EnableThreatCampaigns) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.EnableThreatCampaigns != nil {
-		{
-			size, err := m.EnableThreatCampaigns.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
-	}
-	return len(dAtA) - i, nil
-}
-func (m *DetectionSetting_DisableThreatCampaigns) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DetectionSetting_DisableThreatCampaigns) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DisableThreatCampaigns != nil {
-		{
-			size, err := m.DisableThreatCampaigns.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *DetectionSetting_DefaultViolationSettings) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DetectionSetting_DefaultViolationSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DefaultViolationSettings != nil {
-		{
-			size, err := m.DefaultViolationSettings.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x4a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *DetectionSetting_ViolationSettings) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DetectionSetting_ViolationSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.ViolationSettings != nil {
-		{
-			size, err := m.ViolationSettings.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x5a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *DetectionSetting_DisableStaging) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DetectionSetting_DisableStaging) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DisableStaging != nil {
-		{
-			size, err := m.DisableStaging.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x6a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *DetectionSetting_StageNewSignatures) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DetectionSetting_StageNewSignatures) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.StageNewSignatures != nil {
-		{
-			size, err := m.StageNewSignatures.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x72
-	}
-	return len(dAtA) - i, nil
-}
-func (m *DetectionSetting_StageNewAndUpdatedSignatures) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DetectionSetting_StageNewAndUpdatedSignatures) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.StageNewAndUpdatedSignatures != nil {
-		{
-			size, err := m.StageNewAndUpdatedSignatures.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x7a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *DetectionSetting_DefaultBotSetting) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DetectionSetting_DefaultBotSetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DefaultBotSetting != nil {
-		{
-			size, err := m.DefaultBotSetting.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x8a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *DetectionSetting_BotProtectionSetting) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *DetectionSetting_BotProtectionSetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.BotProtectionSetting != nil {
-		{
-			size, err := m.BotProtectionSetting.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1
-		i--
-		dAtA[i] = 0x92
-	}
-	return len(dAtA) - i, nil
-}
-func (m *SignaturesStagingSettings) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *SignaturesStagingSettings) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *SignaturesStagingSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.StagingPeriod != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.StagingPeriod))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AllowedResponseCodes) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AllowedResponseCodes) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AllowedResponseCodes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ResponseCode) > 0 {
-		dAtA23 := make([]byte, len(m.ResponseCode)*10)
-		var j22 int
-		for _, num := range m.ResponseCode {
-			for num >= 1<<7 {
-				dAtA23[j22] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j22++
-			}
-			dAtA23[j22] = uint8(num)
-			j22++
-		}
-		i -= j22
-		copy(dAtA[i:], dAtA23[:j22])
-		i = encodeVarintTypes(dAtA, i, uint64(j22))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AnonymizeHttpHeader) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AnonymizeHttpHeader) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AnonymizeHttpHeader) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.HeaderName) > 0 {
-		i -= len(m.HeaderName)
-		copy(dAtA[i:], m.HeaderName)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.HeaderName)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AnonymizeHttpQueryParameter) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AnonymizeHttpQueryParameter) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AnonymizeHttpQueryParameter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.QueryParamName) > 0 {
-		i -= len(m.QueryParamName)
-		copy(dAtA[i:], m.QueryParamName)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.QueryParamName)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AnonymizeHttpCookie) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AnonymizeHttpCookie) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AnonymizeHttpCookie) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.CookieName) > 0 {
-		i -= len(m.CookieName)
-		copy(dAtA[i:], m.CookieName)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.CookieName)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AnonymizationConfiguration) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AnonymizationConfiguration) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AnonymizationConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.AnonymizationChoice != nil {
-		{
-			size := m.AnonymizationChoice.Size()
-			i -= size
-			if _, err := m.AnonymizationChoice.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *AnonymizationConfiguration_HttpHeader) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AnonymizationConfiguration_HttpHeader) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.HttpHeader != nil {
-		{
-			size, err := m.HttpHeader.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AnonymizationConfiguration_QueryParameter) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AnonymizationConfiguration_QueryParameter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.QueryParameter != nil {
-		{
-			size, err := m.QueryParameter.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AnonymizationConfiguration_Cookie) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AnonymizationConfiguration_Cookie) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Cookie != nil {
-		{
-			size, err := m.Cookie.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintTypes(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	return len(dAtA) - i, nil
-}
-func (m *AnonymizationSetting) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AnonymizationSetting) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *AnonymizationSetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.AnonymizationConfig) > 0 {
-		for iNdEx := len(m.AnonymizationConfig) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.AnonymizationConfig[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
-}
-
-func (m *CustomBlockingPage) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *CustomBlockingPage) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
-
-func (m *CustomBlockingPage) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.ResponseCode != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.ResponseCode))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.BlockingPage) > 0 {
-		i -= len(m.BlockingPage)
-		copy(dAtA[i:], m.BlockingPage)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.BlockingPage)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
-}
-
 func (m *GlobalSpecType) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -8150,6 +7242,615 @@ func (m *GlobalSpecType_AiRiskBasedBlocking) MarshalToSizedBuffer(dAtA []byte) (
 	}
 	return len(dAtA) - i, nil
 }
+func (m *DetectionSetting) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *DetectionSetting) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DetectionSetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.BotProtectionChoice != nil {
+		{
+			size := m.BotProtectionChoice.Size()
+			i -= size
+			if _, err := m.BotProtectionChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.SignaturesStagingSettings != nil {
+		{
+			size := m.SignaturesStagingSettings.Size()
+			i -= size
+			if _, err := m.SignaturesStagingSettings.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ViolationDetectionSetting != nil {
+		{
+			size := m.ViolationDetectionSetting.Size()
+			i -= size
+			if _, err := m.ViolationDetectionSetting.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.ThreatCampaignChoice != nil {
+		{
+			size := m.ThreatCampaignChoice.Size()
+			i -= size
+			if _, err := m.ThreatCampaignChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.FalsePositiveSuppression != nil {
+		{
+			size := m.FalsePositiveSuppression.Size()
+			i -= size
+			if _, err := m.FalsePositiveSuppression.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.SignatureSelectionSetting != nil {
+		{
+			size, err := m.SignatureSelectionSetting.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *DetectionSetting_EnableSuppression) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DetectionSetting_EnableSuppression) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableSuppression != nil {
+		{
+			size, err := m.EnableSuppression.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DetectionSetting_DisableSuppression) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DetectionSetting_DisableSuppression) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableSuppression != nil {
+		{
+			size, err := m.DisableSuppression.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DetectionSetting_EnableThreatCampaigns) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DetectionSetting_EnableThreatCampaigns) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.EnableThreatCampaigns != nil {
+		{
+			size, err := m.EnableThreatCampaigns.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DetectionSetting_DisableThreatCampaigns) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DetectionSetting_DisableThreatCampaigns) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableThreatCampaigns != nil {
+		{
+			size, err := m.DisableThreatCampaigns.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x3a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DetectionSetting_DefaultViolationSettings) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DetectionSetting_DefaultViolationSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultViolationSettings != nil {
+		{
+			size, err := m.DefaultViolationSettings.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x4a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DetectionSetting_ViolationSettings) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DetectionSetting_ViolationSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.ViolationSettings != nil {
+		{
+			size, err := m.ViolationSettings.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x5a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DetectionSetting_DisableStaging) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DetectionSetting_DisableStaging) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DisableStaging != nil {
+		{
+			size, err := m.DisableStaging.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x6a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DetectionSetting_StageNewSignatures) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DetectionSetting_StageNewSignatures) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.StageNewSignatures != nil {
+		{
+			size, err := m.StageNewSignatures.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x72
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DetectionSetting_StageNewAndUpdatedSignatures) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DetectionSetting_StageNewAndUpdatedSignatures) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.StageNewAndUpdatedSignatures != nil {
+		{
+			size, err := m.StageNewAndUpdatedSignatures.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x7a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DetectionSetting_DefaultBotSetting) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DetectionSetting_DefaultBotSetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultBotSetting != nil {
+		{
+			size, err := m.DefaultBotSetting.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x8a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *DetectionSetting_BotProtectionSetting) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *DetectionSetting_BotProtectionSetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.BotProtectionSetting != nil {
+		{
+			size, err := m.BotProtectionSetting.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1
+		i--
+		dAtA[i] = 0x92
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SignatureSelectionSetting) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SignatureSelectionSetting) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SignatureSelectionSetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.AttackTypeSetting != nil {
+		{
+			size := m.AttackTypeSetting.Size()
+			i -= size
+			if _, err := m.AttackTypeSetting.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	if m.SignatureSelectionByAccuracy != nil {
+		{
+			size := m.SignatureSelectionByAccuracy.Size()
+			i -= size
+			if _, err := m.SignatureSelectionByAccuracy.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SignatureSelectionSetting_OnlyHighAccuracySignatures) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SignatureSelectionSetting_OnlyHighAccuracySignatures) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.OnlyHighAccuracySignatures != nil {
+		{
+			size, err := m.OnlyHighAccuracySignatures.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SignatureSelectionSetting_HighMediumAccuracySignatures) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SignatureSelectionSetting_HighMediumAccuracySignatures) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HighMediumAccuracySignatures != nil {
+		{
+			size, err := m.HighMediumAccuracySignatures.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SignatureSelectionSetting_HighMediumLowAccuracySignatures) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SignatureSelectionSetting_HighMediumLowAccuracySignatures) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HighMediumLowAccuracySignatures != nil {
+		{
+			size, err := m.HighMediumLowAccuracySignatures.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SignatureSelectionSetting_DefaultAttackTypeSettings) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SignatureSelectionSetting_DefaultAttackTypeSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.DefaultAttackTypeSettings != nil {
+		{
+			size, err := m.DefaultAttackTypeSettings.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x32
+	}
+	return len(dAtA) - i, nil
+}
+func (m *SignatureSelectionSetting_AttackTypeSettings) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SignatureSelectionSetting_AttackTypeSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.AttackTypeSettings != nil {
+		{
+			size, err := m.AttackTypeSettings.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x42
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AttackTypeSettings) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AttackTypeSettings) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AttackTypeSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DisabledAttackTypes) > 0 {
+		dAtA34 := make([]byte, len(m.DisabledAttackTypes)*10)
+		var j33 int
+		for _, num := range m.DisabledAttackTypes {
+			for num >= 1<<7 {
+				dAtA34[j33] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j33++
+			}
+			dAtA34[j33] = uint8(num)
+			j33++
+		}
+		i -= j33
+		copy(dAtA[i:], dAtA34[:j33])
+		i = encodeVarintTypes(dAtA, i, uint64(j33))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ViolationSettings) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ViolationSettings) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ViolationSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.DisabledViolationTypes) > 0 {
+		dAtA36 := make([]byte, len(m.DisabledViolationTypes)*10)
+		var j35 int
+		for _, num := range m.DisabledViolationTypes {
+			for num >= 1<<7 {
+				dAtA36[j35] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j35++
+			}
+			dAtA36[j35] = uint8(num)
+			j35++
+		}
+		i -= j35
+		copy(dAtA[i:], dAtA36[:j35])
+		i = encodeVarintTypes(dAtA, i, uint64(j35))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *SignaturesStagingSettings) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SignaturesStagingSettings) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *SignaturesStagingSettings) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.StagingPeriod != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.StagingPeriod))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *BotProtectionSetting) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *BotProtectionSetting) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *BotProtectionSetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.GoodBotAction != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.GoodBotAction))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.SuspiciousBotAction != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.SuspiciousBotAction))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.MaliciousBotAction != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.MaliciousBotAction))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func (m *AiRiskBasedBlocking) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -8184,6 +7885,304 @@ func (m *AiRiskBasedBlocking) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 		i = encodeVarintTypes(dAtA, i, uint64(m.HighRiskAction))
 		i--
 		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AllowedResponseCodes) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AllowedResponseCodes) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AllowedResponseCodes) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.ResponseCode) > 0 {
+		dAtA38 := make([]byte, len(m.ResponseCode)*10)
+		var j37 int
+		for _, num := range m.ResponseCode {
+			for num >= 1<<7 {
+				dAtA38[j37] = uint8(uint64(num)&0x7f | 0x80)
+				num >>= 7
+				j37++
+			}
+			dAtA38[j37] = uint8(num)
+			j37++
+		}
+		i -= j37
+		copy(dAtA[i:], dAtA38[:j37])
+		i = encodeVarintTypes(dAtA, i, uint64(j37))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AnonymizationSetting) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnonymizationSetting) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AnonymizationSetting) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.AnonymizationConfig) > 0 {
+		for iNdEx := len(m.AnonymizationConfig) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.AnonymizationConfig[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintTypes(dAtA, i, uint64(size))
+			}
+			i--
+			dAtA[i] = 0xa
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AnonymizationConfiguration) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnonymizationConfiguration) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AnonymizationConfiguration) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.AnonymizationChoice != nil {
+		{
+			size := m.AnonymizationChoice.Size()
+			i -= size
+			if _, err := m.AnonymizationChoice.MarshalTo(dAtA[i:]); err != nil {
+				return 0, err
+			}
+		}
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AnonymizationConfiguration_HttpHeader) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AnonymizationConfiguration_HttpHeader) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.HttpHeader != nil {
+		{
+			size, err := m.HttpHeader.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AnonymizationConfiguration_QueryParameter) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AnonymizationConfiguration_QueryParameter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.QueryParameter != nil {
+		{
+			size, err := m.QueryParameter.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x1a
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AnonymizationConfiguration_Cookie) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AnonymizationConfiguration_Cookie) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	if m.Cookie != nil {
+		{
+			size, err := m.Cookie.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintTypes(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x22
+	}
+	return len(dAtA) - i, nil
+}
+func (m *AnonymizeHttpHeader) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnonymizeHttpHeader) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AnonymizeHttpHeader) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.HeaderName) > 0 {
+		i -= len(m.HeaderName)
+		copy(dAtA[i:], m.HeaderName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.HeaderName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AnonymizeHttpQueryParameter) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnonymizeHttpQueryParameter) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AnonymizeHttpQueryParameter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.QueryParamName) > 0 {
+		i -= len(m.QueryParamName)
+		copy(dAtA[i:], m.QueryParamName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.QueryParamName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *AnonymizeHttpCookie) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AnonymizeHttpCookie) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *AnonymizeHttpCookie) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if len(m.CookieName) > 0 {
+		i -= len(m.CookieName)
+		copy(dAtA[i:], m.CookieName)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.CookieName)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *CustomBlockingPage) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CustomBlockingPage) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *CustomBlockingPage) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ResponseCode != 0 {
+		i = encodeVarintTypes(dAtA, i, uint64(m.ResponseCode))
+		i--
+		dAtA[i] = 0x10
+	}
+	if len(m.BlockingPage) > 0 {
+		i -= len(m.BlockingPage)
+		copy(dAtA[i:], m.BlockingPage)
+		i = encodeVarintTypes(dAtA, i, uint64(len(m.BlockingPage)))
+		i--
+		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -9405,437 +9404,6 @@ func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *BotProtectionSetting) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MaliciousBotAction != 0 {
-		n += 1 + sovTypes(uint64(m.MaliciousBotAction))
-	}
-	if m.SuspiciousBotAction != 0 {
-		n += 1 + sovTypes(uint64(m.SuspiciousBotAction))
-	}
-	if m.GoodBotAction != 0 {
-		n += 1 + sovTypes(uint64(m.GoodBotAction))
-	}
-	return n
-}
-
-func (m *AttackTypeSettings) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.DisabledAttackTypes) > 0 {
-		l = 0
-		for _, e := range m.DisabledAttackTypes {
-			l += sovTypes(uint64(e))
-		}
-		n += 1 + sovTypes(uint64(l)) + l
-	}
-	return n
-}
-
-func (m *SignatureSelectionSetting) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.SignatureSelectionByAccuracy != nil {
-		n += m.SignatureSelectionByAccuracy.Size()
-	}
-	if m.AttackTypeSetting != nil {
-		n += m.AttackTypeSetting.Size()
-	}
-	return n
-}
-
-func (m *SignatureSelectionSetting_OnlyHighAccuracySignatures) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.OnlyHighAccuracySignatures != nil {
-		l = m.OnlyHighAccuracySignatures.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *SignatureSelectionSetting_HighMediumAccuracySignatures) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.HighMediumAccuracySignatures != nil {
-		l = m.HighMediumAccuracySignatures.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *SignatureSelectionSetting_HighMediumLowAccuracySignatures) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.HighMediumLowAccuracySignatures != nil {
-		l = m.HighMediumLowAccuracySignatures.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *SignatureSelectionSetting_DefaultAttackTypeSettings) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DefaultAttackTypeSettings != nil {
-		l = m.DefaultAttackTypeSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *SignatureSelectionSetting_AttackTypeSettings) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AttackTypeSettings != nil {
-		l = m.AttackTypeSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *ViolationSettings) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.DisabledViolationTypes) > 0 {
-		l = 0
-		for _, e := range m.DisabledViolationTypes {
-			l += sovTypes(uint64(e))
-		}
-		n += 1 + sovTypes(uint64(l)) + l
-	}
-	return n
-}
-
-func (m *DetectionSetting) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.SignatureSelectionSetting != nil {
-		l = m.SignatureSelectionSetting.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.FalsePositiveSuppression != nil {
-		n += m.FalsePositiveSuppression.Size()
-	}
-	if m.ThreatCampaignChoice != nil {
-		n += m.ThreatCampaignChoice.Size()
-	}
-	if m.ViolationDetectionSetting != nil {
-		n += m.ViolationDetectionSetting.Size()
-	}
-	if m.SignaturesStagingSettings != nil {
-		n += m.SignaturesStagingSettings.Size()
-	}
-	if m.BotProtectionChoice != nil {
-		n += m.BotProtectionChoice.Size()
-	}
-	return n
-}
-
-func (m *DetectionSetting_EnableSuppression) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.EnableSuppression != nil {
-		l = m.EnableSuppression.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *DetectionSetting_DisableSuppression) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DisableSuppression != nil {
-		l = m.DisableSuppression.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *DetectionSetting_EnableThreatCampaigns) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.EnableThreatCampaigns != nil {
-		l = m.EnableThreatCampaigns.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *DetectionSetting_DisableThreatCampaigns) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DisableThreatCampaigns != nil {
-		l = m.DisableThreatCampaigns.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *DetectionSetting_DefaultViolationSettings) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DefaultViolationSettings != nil {
-		l = m.DefaultViolationSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *DetectionSetting_ViolationSettings) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.ViolationSettings != nil {
-		l = m.ViolationSettings.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *DetectionSetting_DisableStaging) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DisableStaging != nil {
-		l = m.DisableStaging.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *DetectionSetting_StageNewSignatures) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.StageNewSignatures != nil {
-		l = m.StageNewSignatures.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *DetectionSetting_StageNewAndUpdatedSignatures) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.StageNewAndUpdatedSignatures != nil {
-		l = m.StageNewAndUpdatedSignatures.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *DetectionSetting_DefaultBotSetting) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DefaultBotSetting != nil {
-		l = m.DefaultBotSetting.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *DetectionSetting_BotProtectionSetting) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.BotProtectionSetting != nil {
-		l = m.BotProtectionSetting.Size()
-		n += 2 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *SignaturesStagingSettings) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.StagingPeriod != 0 {
-		n += 1 + sovTypes(uint64(m.StagingPeriod))
-	}
-	return n
-}
-
-func (m *AllowedResponseCodes) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.ResponseCode) > 0 {
-		l = 0
-		for _, e := range m.ResponseCode {
-			l += sovTypes(uint64(e))
-		}
-		n += 1 + sovTypes(uint64(l)) + l
-	}
-	return n
-}
-
-func (m *AnonymizeHttpHeader) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.HeaderName)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *AnonymizeHttpQueryParameter) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.QueryParamName)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *AnonymizeHttpCookie) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.CookieName)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-
-func (m *AnonymizationConfiguration) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AnonymizationChoice != nil {
-		n += m.AnonymizationChoice.Size()
-	}
-	return n
-}
-
-func (m *AnonymizationConfiguration_HttpHeader) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.HttpHeader != nil {
-		l = m.HttpHeader.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *AnonymizationConfiguration_QueryParameter) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.QueryParameter != nil {
-		l = m.QueryParameter.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *AnonymizationConfiguration_Cookie) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Cookie != nil {
-		l = m.Cookie.Size()
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
-func (m *AnonymizationSetting) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.AnonymizationConfig) > 0 {
-		for _, e := range m.AnonymizationConfig {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *CustomBlockingPage) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.BlockingPage)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	if m.ResponseCode != 0 {
-		n += 1 + sovTypes(uint64(m.ResponseCode))
-	}
-	return n
-}
-
 func (m *GlobalSpecType) Size() (n int) {
 	if m == nil {
 		return 0
@@ -10043,6 +9611,303 @@ func (m *GlobalSpecType_AiRiskBasedBlocking) Size() (n int) {
 	}
 	return n
 }
+func (m *DetectionSetting) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SignatureSelectionSetting != nil {
+		l = m.SignatureSelectionSetting.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.FalsePositiveSuppression != nil {
+		n += m.FalsePositiveSuppression.Size()
+	}
+	if m.ThreatCampaignChoice != nil {
+		n += m.ThreatCampaignChoice.Size()
+	}
+	if m.ViolationDetectionSetting != nil {
+		n += m.ViolationDetectionSetting.Size()
+	}
+	if m.SignaturesStagingSettings != nil {
+		n += m.SignaturesStagingSettings.Size()
+	}
+	if m.BotProtectionChoice != nil {
+		n += m.BotProtectionChoice.Size()
+	}
+	return n
+}
+
+func (m *DetectionSetting_EnableSuppression) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableSuppression != nil {
+		l = m.EnableSuppression.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DetectionSetting_DisableSuppression) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableSuppression != nil {
+		l = m.DisableSuppression.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DetectionSetting_EnableThreatCampaigns) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.EnableThreatCampaigns != nil {
+		l = m.EnableThreatCampaigns.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DetectionSetting_DisableThreatCampaigns) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableThreatCampaigns != nil {
+		l = m.DisableThreatCampaigns.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DetectionSetting_DefaultViolationSettings) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultViolationSettings != nil {
+		l = m.DefaultViolationSettings.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DetectionSetting_ViolationSettings) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.ViolationSettings != nil {
+		l = m.ViolationSettings.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DetectionSetting_DisableStaging) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DisableStaging != nil {
+		l = m.DisableStaging.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DetectionSetting_StageNewSignatures) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.StageNewSignatures != nil {
+		l = m.StageNewSignatures.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DetectionSetting_StageNewAndUpdatedSignatures) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.StageNewAndUpdatedSignatures != nil {
+		l = m.StageNewAndUpdatedSignatures.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DetectionSetting_DefaultBotSetting) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultBotSetting != nil {
+		l = m.DefaultBotSetting.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *DetectionSetting_BotProtectionSetting) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.BotProtectionSetting != nil {
+		l = m.BotProtectionSetting.Size()
+		n += 2 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SignatureSelectionSetting) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.SignatureSelectionByAccuracy != nil {
+		n += m.SignatureSelectionByAccuracy.Size()
+	}
+	if m.AttackTypeSetting != nil {
+		n += m.AttackTypeSetting.Size()
+	}
+	return n
+}
+
+func (m *SignatureSelectionSetting_OnlyHighAccuracySignatures) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.OnlyHighAccuracySignatures != nil {
+		l = m.OnlyHighAccuracySignatures.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SignatureSelectionSetting_HighMediumAccuracySignatures) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HighMediumAccuracySignatures != nil {
+		l = m.HighMediumAccuracySignatures.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SignatureSelectionSetting_HighMediumLowAccuracySignatures) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HighMediumLowAccuracySignatures != nil {
+		l = m.HighMediumLowAccuracySignatures.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SignatureSelectionSetting_DefaultAttackTypeSettings) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.DefaultAttackTypeSettings != nil {
+		l = m.DefaultAttackTypeSettings.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *SignatureSelectionSetting_AttackTypeSettings) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AttackTypeSettings != nil {
+		l = m.AttackTypeSettings.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AttackTypeSettings) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.DisabledAttackTypes) > 0 {
+		l = 0
+		for _, e := range m.DisabledAttackTypes {
+			l += sovTypes(uint64(e))
+		}
+		n += 1 + sovTypes(uint64(l)) + l
+	}
+	return n
+}
+
+func (m *ViolationSettings) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.DisabledViolationTypes) > 0 {
+		l = 0
+		for _, e := range m.DisabledViolationTypes {
+			l += sovTypes(uint64(e))
+		}
+		n += 1 + sovTypes(uint64(l)) + l
+	}
+	return n
+}
+
+func (m *SignaturesStagingSettings) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.StagingPeriod != 0 {
+		n += 1 + sovTypes(uint64(m.StagingPeriod))
+	}
+	return n
+}
+
+func (m *BotProtectionSetting) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.MaliciousBotAction != 0 {
+		n += 1 + sovTypes(uint64(m.MaliciousBotAction))
+	}
+	if m.SuspiciousBotAction != 0 {
+		n += 1 + sovTypes(uint64(m.SuspiciousBotAction))
+	}
+	if m.GoodBotAction != 0 {
+		n += 1 + sovTypes(uint64(m.GoodBotAction))
+	}
+	return n
+}
+
 func (m *AiRiskBasedBlocking) Size() (n int) {
 	if m == nil {
 		return 0
@@ -10057,6 +9922,140 @@ func (m *AiRiskBasedBlocking) Size() (n int) {
 	}
 	if m.LowRiskAction != 0 {
 		n += 1 + sovTypes(uint64(m.LowRiskAction))
+	}
+	return n
+}
+
+func (m *AllowedResponseCodes) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.ResponseCode) > 0 {
+		l = 0
+		for _, e := range m.ResponseCode {
+			l += sovTypes(uint64(e))
+		}
+		n += 1 + sovTypes(uint64(l)) + l
+	}
+	return n
+}
+
+func (m *AnonymizationSetting) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if len(m.AnonymizationConfig) > 0 {
+		for _, e := range m.AnonymizationConfig {
+			l = e.Size()
+			n += 1 + l + sovTypes(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *AnonymizationConfiguration) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.AnonymizationChoice != nil {
+		n += m.AnonymizationChoice.Size()
+	}
+	return n
+}
+
+func (m *AnonymizationConfiguration_HttpHeader) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.HttpHeader != nil {
+		l = m.HttpHeader.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AnonymizationConfiguration_QueryParameter) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.QueryParameter != nil {
+		l = m.QueryParameter.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AnonymizationConfiguration_Cookie) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Cookie != nil {
+		l = m.Cookie.Size()
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+func (m *AnonymizeHttpHeader) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.HeaderName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *AnonymizeHttpQueryParameter) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.QueryParamName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *AnonymizeHttpCookie) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.CookieName)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	return n
+}
+
+func (m *CustomBlockingPage) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.BlockingPage)
+	if l > 0 {
+		n += 1 + l + sovTypes(uint64(l))
+	}
+	if m.ResponseCode != 0 {
+		n += 1 + sovTypes(uint64(m.ResponseCode))
 	}
 	return n
 }
@@ -10689,340 +10688,6 @@ func sovTypes(x uint64) (n int) {
 func sozTypes(x uint64) (n int) {
 	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (this *BotProtectionSetting) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&BotProtectionSetting{`,
-		`MaliciousBotAction:` + fmt.Sprintf("%v", this.MaliciousBotAction) + `,`,
-		`SuspiciousBotAction:` + fmt.Sprintf("%v", this.SuspiciousBotAction) + `,`,
-		`GoodBotAction:` + fmt.Sprintf("%v", this.GoodBotAction) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AttackTypeSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AttackTypeSettings{`,
-		`DisabledAttackTypes:` + fmt.Sprintf("%v", this.DisabledAttackTypes) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SignatureSelectionSetting) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SignatureSelectionSetting{`,
-		`SignatureSelectionByAccuracy:` + fmt.Sprintf("%v", this.SignatureSelectionByAccuracy) + `,`,
-		`AttackTypeSetting:` + fmt.Sprintf("%v", this.AttackTypeSetting) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SignatureSelectionSetting_OnlyHighAccuracySignatures) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SignatureSelectionSetting_OnlyHighAccuracySignatures{`,
-		`OnlyHighAccuracySignatures:` + strings.Replace(fmt.Sprintf("%v", this.OnlyHighAccuracySignatures), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SignatureSelectionSetting_HighMediumAccuracySignatures) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SignatureSelectionSetting_HighMediumAccuracySignatures{`,
-		`HighMediumAccuracySignatures:` + strings.Replace(fmt.Sprintf("%v", this.HighMediumAccuracySignatures), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SignatureSelectionSetting_HighMediumLowAccuracySignatures) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SignatureSelectionSetting_HighMediumLowAccuracySignatures{`,
-		`HighMediumLowAccuracySignatures:` + strings.Replace(fmt.Sprintf("%v", this.HighMediumLowAccuracySignatures), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SignatureSelectionSetting_DefaultAttackTypeSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SignatureSelectionSetting_DefaultAttackTypeSettings{`,
-		`DefaultAttackTypeSettings:` + strings.Replace(fmt.Sprintf("%v", this.DefaultAttackTypeSettings), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SignatureSelectionSetting_AttackTypeSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SignatureSelectionSetting_AttackTypeSettings{`,
-		`AttackTypeSettings:` + strings.Replace(fmt.Sprintf("%v", this.AttackTypeSettings), "AttackTypeSettings", "AttackTypeSettings", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *ViolationSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&ViolationSettings{`,
-		`DisabledViolationTypes:` + fmt.Sprintf("%v", this.DisabledViolationTypes) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DetectionSetting) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DetectionSetting{`,
-		`SignatureSelectionSetting:` + strings.Replace(this.SignatureSelectionSetting.String(), "SignatureSelectionSetting", "SignatureSelectionSetting", 1) + `,`,
-		`FalsePositiveSuppression:` + fmt.Sprintf("%v", this.FalsePositiveSuppression) + `,`,
-		`ThreatCampaignChoice:` + fmt.Sprintf("%v", this.ThreatCampaignChoice) + `,`,
-		`ViolationDetectionSetting:` + fmt.Sprintf("%v", this.ViolationDetectionSetting) + `,`,
-		`SignaturesStagingSettings:` + fmt.Sprintf("%v", this.SignaturesStagingSettings) + `,`,
-		`BotProtectionChoice:` + fmt.Sprintf("%v", this.BotProtectionChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DetectionSetting_EnableSuppression) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DetectionSetting_EnableSuppression{`,
-		`EnableSuppression:` + strings.Replace(fmt.Sprintf("%v", this.EnableSuppression), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DetectionSetting_DisableSuppression) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DetectionSetting_DisableSuppression{`,
-		`DisableSuppression:` + strings.Replace(fmt.Sprintf("%v", this.DisableSuppression), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DetectionSetting_EnableThreatCampaigns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DetectionSetting_EnableThreatCampaigns{`,
-		`EnableThreatCampaigns:` + strings.Replace(fmt.Sprintf("%v", this.EnableThreatCampaigns), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DetectionSetting_DisableThreatCampaigns) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DetectionSetting_DisableThreatCampaigns{`,
-		`DisableThreatCampaigns:` + strings.Replace(fmt.Sprintf("%v", this.DisableThreatCampaigns), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DetectionSetting_DefaultViolationSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DetectionSetting_DefaultViolationSettings{`,
-		`DefaultViolationSettings:` + strings.Replace(fmt.Sprintf("%v", this.DefaultViolationSettings), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DetectionSetting_ViolationSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DetectionSetting_ViolationSettings{`,
-		`ViolationSettings:` + strings.Replace(fmt.Sprintf("%v", this.ViolationSettings), "ViolationSettings", "ViolationSettings", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DetectionSetting_DisableStaging) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DetectionSetting_DisableStaging{`,
-		`DisableStaging:` + strings.Replace(fmt.Sprintf("%v", this.DisableStaging), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DetectionSetting_StageNewSignatures) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DetectionSetting_StageNewSignatures{`,
-		`StageNewSignatures:` + strings.Replace(fmt.Sprintf("%v", this.StageNewSignatures), "SignaturesStagingSettings", "SignaturesStagingSettings", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DetectionSetting_StageNewAndUpdatedSignatures) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DetectionSetting_StageNewAndUpdatedSignatures{`,
-		`StageNewAndUpdatedSignatures:` + strings.Replace(fmt.Sprintf("%v", this.StageNewAndUpdatedSignatures), "SignaturesStagingSettings", "SignaturesStagingSettings", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DetectionSetting_DefaultBotSetting) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DetectionSetting_DefaultBotSetting{`,
-		`DefaultBotSetting:` + strings.Replace(fmt.Sprintf("%v", this.DefaultBotSetting), "Empty", "schema.Empty", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *DetectionSetting_BotProtectionSetting) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&DetectionSetting_BotProtectionSetting{`,
-		`BotProtectionSetting:` + strings.Replace(fmt.Sprintf("%v", this.BotProtectionSetting), "BotProtectionSetting", "BotProtectionSetting", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *SignaturesStagingSettings) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&SignaturesStagingSettings{`,
-		`StagingPeriod:` + fmt.Sprintf("%v", this.StagingPeriod) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AllowedResponseCodes) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AllowedResponseCodes{`,
-		`ResponseCode:` + fmt.Sprintf("%v", this.ResponseCode) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AnonymizeHttpHeader) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AnonymizeHttpHeader{`,
-		`HeaderName:` + fmt.Sprintf("%v", this.HeaderName) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AnonymizeHttpQueryParameter) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AnonymizeHttpQueryParameter{`,
-		`QueryParamName:` + fmt.Sprintf("%v", this.QueryParamName) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AnonymizeHttpCookie) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AnonymizeHttpCookie{`,
-		`CookieName:` + fmt.Sprintf("%v", this.CookieName) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AnonymizationConfiguration) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AnonymizationConfiguration{`,
-		`AnonymizationChoice:` + fmt.Sprintf("%v", this.AnonymizationChoice) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AnonymizationConfiguration_HttpHeader) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AnonymizationConfiguration_HttpHeader{`,
-		`HttpHeader:` + strings.Replace(fmt.Sprintf("%v", this.HttpHeader), "AnonymizeHttpHeader", "AnonymizeHttpHeader", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AnonymizationConfiguration_QueryParameter) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AnonymizationConfiguration_QueryParameter{`,
-		`QueryParameter:` + strings.Replace(fmt.Sprintf("%v", this.QueryParameter), "AnonymizeHttpQueryParameter", "AnonymizeHttpQueryParameter", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AnonymizationConfiguration_Cookie) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&AnonymizationConfiguration_Cookie{`,
-		`Cookie:` + strings.Replace(fmt.Sprintf("%v", this.Cookie), "AnonymizeHttpCookie", "AnonymizeHttpCookie", 1) + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *AnonymizationSetting) String() string {
-	if this == nil {
-		return "nil"
-	}
-	repeatedStringForAnonymizationConfig := "[]*AnonymizationConfiguration{"
-	for _, f := range this.AnonymizationConfig {
-		repeatedStringForAnonymizationConfig += strings.Replace(f.String(), "AnonymizationConfiguration", "AnonymizationConfiguration", 1) + ","
-	}
-	repeatedStringForAnonymizationConfig += "}"
-	s := strings.Join([]string{`&AnonymizationSetting{`,
-		`AnonymizationConfig:` + repeatedStringForAnonymizationConfig + `,`,
-		`}`,
-	}, "")
-	return s
-}
-func (this *CustomBlockingPage) String() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&CustomBlockingPage{`,
-		`BlockingPage:` + fmt.Sprintf("%v", this.BlockingPage) + `,`,
-		`ResponseCode:` + fmt.Sprintf("%v", this.ResponseCode) + `,`,
-		`}`,
-	}, "")
-	return s
-}
 func (this *GlobalSpecType) String() string {
 	if this == nil {
 		return "nil"
@@ -11188,6 +10853,234 @@ func (this *GlobalSpecType_AiRiskBasedBlocking) String() string {
 	}, "")
 	return s
 }
+func (this *DetectionSetting) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DetectionSetting{`,
+		`SignatureSelectionSetting:` + strings.Replace(this.SignatureSelectionSetting.String(), "SignatureSelectionSetting", "SignatureSelectionSetting", 1) + `,`,
+		`FalsePositiveSuppression:` + fmt.Sprintf("%v", this.FalsePositiveSuppression) + `,`,
+		`ThreatCampaignChoice:` + fmt.Sprintf("%v", this.ThreatCampaignChoice) + `,`,
+		`ViolationDetectionSetting:` + fmt.Sprintf("%v", this.ViolationDetectionSetting) + `,`,
+		`SignaturesStagingSettings:` + fmt.Sprintf("%v", this.SignaturesStagingSettings) + `,`,
+		`BotProtectionChoice:` + fmt.Sprintf("%v", this.BotProtectionChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DetectionSetting_EnableSuppression) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DetectionSetting_EnableSuppression{`,
+		`EnableSuppression:` + strings.Replace(fmt.Sprintf("%v", this.EnableSuppression), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DetectionSetting_DisableSuppression) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DetectionSetting_DisableSuppression{`,
+		`DisableSuppression:` + strings.Replace(fmt.Sprintf("%v", this.DisableSuppression), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DetectionSetting_EnableThreatCampaigns) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DetectionSetting_EnableThreatCampaigns{`,
+		`EnableThreatCampaigns:` + strings.Replace(fmt.Sprintf("%v", this.EnableThreatCampaigns), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DetectionSetting_DisableThreatCampaigns) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DetectionSetting_DisableThreatCampaigns{`,
+		`DisableThreatCampaigns:` + strings.Replace(fmt.Sprintf("%v", this.DisableThreatCampaigns), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DetectionSetting_DefaultViolationSettings) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DetectionSetting_DefaultViolationSettings{`,
+		`DefaultViolationSettings:` + strings.Replace(fmt.Sprintf("%v", this.DefaultViolationSettings), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DetectionSetting_ViolationSettings) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DetectionSetting_ViolationSettings{`,
+		`ViolationSettings:` + strings.Replace(fmt.Sprintf("%v", this.ViolationSettings), "ViolationSettings", "ViolationSettings", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DetectionSetting_DisableStaging) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DetectionSetting_DisableStaging{`,
+		`DisableStaging:` + strings.Replace(fmt.Sprintf("%v", this.DisableStaging), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DetectionSetting_StageNewSignatures) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DetectionSetting_StageNewSignatures{`,
+		`StageNewSignatures:` + strings.Replace(fmt.Sprintf("%v", this.StageNewSignatures), "SignaturesStagingSettings", "SignaturesStagingSettings", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DetectionSetting_StageNewAndUpdatedSignatures) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DetectionSetting_StageNewAndUpdatedSignatures{`,
+		`StageNewAndUpdatedSignatures:` + strings.Replace(fmt.Sprintf("%v", this.StageNewAndUpdatedSignatures), "SignaturesStagingSettings", "SignaturesStagingSettings", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DetectionSetting_DefaultBotSetting) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DetectionSetting_DefaultBotSetting{`,
+		`DefaultBotSetting:` + strings.Replace(fmt.Sprintf("%v", this.DefaultBotSetting), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *DetectionSetting_BotProtectionSetting) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&DetectionSetting_BotProtectionSetting{`,
+		`BotProtectionSetting:` + strings.Replace(fmt.Sprintf("%v", this.BotProtectionSetting), "BotProtectionSetting", "BotProtectionSetting", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SignatureSelectionSetting) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SignatureSelectionSetting{`,
+		`SignatureSelectionByAccuracy:` + fmt.Sprintf("%v", this.SignatureSelectionByAccuracy) + `,`,
+		`AttackTypeSetting:` + fmt.Sprintf("%v", this.AttackTypeSetting) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SignatureSelectionSetting_OnlyHighAccuracySignatures) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SignatureSelectionSetting_OnlyHighAccuracySignatures{`,
+		`OnlyHighAccuracySignatures:` + strings.Replace(fmt.Sprintf("%v", this.OnlyHighAccuracySignatures), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SignatureSelectionSetting_HighMediumAccuracySignatures) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SignatureSelectionSetting_HighMediumAccuracySignatures{`,
+		`HighMediumAccuracySignatures:` + strings.Replace(fmt.Sprintf("%v", this.HighMediumAccuracySignatures), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SignatureSelectionSetting_HighMediumLowAccuracySignatures) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SignatureSelectionSetting_HighMediumLowAccuracySignatures{`,
+		`HighMediumLowAccuracySignatures:` + strings.Replace(fmt.Sprintf("%v", this.HighMediumLowAccuracySignatures), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SignatureSelectionSetting_DefaultAttackTypeSettings) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SignatureSelectionSetting_DefaultAttackTypeSettings{`,
+		`DefaultAttackTypeSettings:` + strings.Replace(fmt.Sprintf("%v", this.DefaultAttackTypeSettings), "Empty", "schema.Empty", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SignatureSelectionSetting_AttackTypeSettings) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SignatureSelectionSetting_AttackTypeSettings{`,
+		`AttackTypeSettings:` + strings.Replace(fmt.Sprintf("%v", this.AttackTypeSettings), "AttackTypeSettings", "AttackTypeSettings", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AttackTypeSettings) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AttackTypeSettings{`,
+		`DisabledAttackTypes:` + fmt.Sprintf("%v", this.DisabledAttackTypes) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *ViolationSettings) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&ViolationSettings{`,
+		`DisabledViolationTypes:` + fmt.Sprintf("%v", this.DisabledViolationTypes) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SignaturesStagingSettings) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SignaturesStagingSettings{`,
+		`StagingPeriod:` + fmt.Sprintf("%v", this.StagingPeriod) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *BotProtectionSetting) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BotProtectionSetting{`,
+		`MaliciousBotAction:` + fmt.Sprintf("%v", this.MaliciousBotAction) + `,`,
+		`SuspiciousBotAction:` + fmt.Sprintf("%v", this.SuspiciousBotAction) + `,`,
+		`GoodBotAction:` + fmt.Sprintf("%v", this.GoodBotAction) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *AiRiskBasedBlocking) String() string {
 	if this == nil {
 		return "nil"
@@ -11196,6 +11089,112 @@ func (this *AiRiskBasedBlocking) String() string {
 		`HighRiskAction:` + fmt.Sprintf("%v", this.HighRiskAction) + `,`,
 		`MediumRiskAction:` + fmt.Sprintf("%v", this.MediumRiskAction) + `,`,
 		`LowRiskAction:` + fmt.Sprintf("%v", this.LowRiskAction) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AllowedResponseCodes) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AllowedResponseCodes{`,
+		`ResponseCode:` + fmt.Sprintf("%v", this.ResponseCode) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AnonymizationSetting) String() string {
+	if this == nil {
+		return "nil"
+	}
+	repeatedStringForAnonymizationConfig := "[]*AnonymizationConfiguration{"
+	for _, f := range this.AnonymizationConfig {
+		repeatedStringForAnonymizationConfig += strings.Replace(f.String(), "AnonymizationConfiguration", "AnonymizationConfiguration", 1) + ","
+	}
+	repeatedStringForAnonymizationConfig += "}"
+	s := strings.Join([]string{`&AnonymizationSetting{`,
+		`AnonymizationConfig:` + repeatedStringForAnonymizationConfig + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AnonymizationConfiguration) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AnonymizationConfiguration{`,
+		`AnonymizationChoice:` + fmt.Sprintf("%v", this.AnonymizationChoice) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AnonymizationConfiguration_HttpHeader) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AnonymizationConfiguration_HttpHeader{`,
+		`HttpHeader:` + strings.Replace(fmt.Sprintf("%v", this.HttpHeader), "AnonymizeHttpHeader", "AnonymizeHttpHeader", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AnonymizationConfiguration_QueryParameter) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AnonymizationConfiguration_QueryParameter{`,
+		`QueryParameter:` + strings.Replace(fmt.Sprintf("%v", this.QueryParameter), "AnonymizeHttpQueryParameter", "AnonymizeHttpQueryParameter", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AnonymizationConfiguration_Cookie) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AnonymizationConfiguration_Cookie{`,
+		`Cookie:` + strings.Replace(fmt.Sprintf("%v", this.Cookie), "AnonymizeHttpCookie", "AnonymizeHttpCookie", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AnonymizeHttpHeader) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AnonymizeHttpHeader{`,
+		`HeaderName:` + fmt.Sprintf("%v", this.HeaderName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AnonymizeHttpQueryParameter) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AnonymizeHttpQueryParameter{`,
+		`QueryParamName:` + fmt.Sprintf("%v", this.QueryParamName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AnonymizeHttpCookie) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AnonymizeHttpCookie{`,
+		`CookieName:` + fmt.Sprintf("%v", this.CookieName) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *CustomBlockingPage) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CustomBlockingPage{`,
+		`BlockingPage:` + fmt.Sprintf("%v", this.BlockingPage) + `,`,
+		`ResponseCode:` + fmt.Sprintf("%v", this.ResponseCode) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -11702,1867 +11701,6 @@ func valueToStringTypes(v interface{}) string {
 	}
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
-}
-func (m *BotProtectionSetting) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: BotProtectionSetting: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: BotProtectionSetting: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaliciousBotAction", wireType)
-			}
-			m.MaliciousBotAction = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaliciousBotAction |= BotAction(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SuspiciousBotAction", wireType)
-			}
-			m.SuspiciousBotAction = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SuspiciousBotAction |= BotAction(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GoodBotAction", wireType)
-			}
-			m.GoodBotAction = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.GoodBotAction |= BotAction(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AttackTypeSettings) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AttackTypeSettings: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AttackTypeSettings: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType == 0 {
-				var v AttackType
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= AttackType(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				m.DisabledAttackTypes = append(m.DisabledAttackTypes, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthTypes
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex < 0 {
-					return ErrInvalidLengthTypes
-				}
-				if postIndex > l {
-					return io.ErrUnexpectedEOF
-				}
-				var elementCount int
-				if elementCount != 0 && len(m.DisabledAttackTypes) == 0 {
-					m.DisabledAttackTypes = make([]AttackType, 0, elementCount)
-				}
-				for iNdEx < postIndex {
-					var v AttackType
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= AttackType(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.DisabledAttackTypes = append(m.DisabledAttackTypes, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisabledAttackTypes", wireType)
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SignatureSelectionSetting) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SignatureSelectionSetting: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SignatureSelectionSetting: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OnlyHighAccuracySignatures", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SignatureSelectionByAccuracy = &SignatureSelectionSetting_OnlyHighAccuracySignatures{v}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field HighMediumAccuracySignatures", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SignatureSelectionByAccuracy = &SignatureSelectionSetting_HighMediumAccuracySignatures{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field HighMediumLowAccuracySignatures", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SignatureSelectionByAccuracy = &SignatureSelectionSetting_HighMediumLowAccuracySignatures{v}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultAttackTypeSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.AttackTypeSetting = &SignatureSelectionSetting_DefaultAttackTypeSettings{v}
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AttackTypeSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &AttackTypeSettings{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.AttackTypeSetting = &SignatureSelectionSetting_AttackTypeSettings{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ViolationSettings) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ViolationSettings: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ViolationSettings: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType == 0 {
-				var v AppFirewallViolationType
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= AppFirewallViolationType(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				m.DisabledViolationTypes = append(m.DisabledViolationTypes, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthTypes
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex < 0 {
-					return ErrInvalidLengthTypes
-				}
-				if postIndex > l {
-					return io.ErrUnexpectedEOF
-				}
-				var elementCount int
-				if elementCount != 0 && len(m.DisabledViolationTypes) == 0 {
-					m.DisabledViolationTypes = make([]AppFirewallViolationType, 0, elementCount)
-				}
-				for iNdEx < postIndex {
-					var v AppFirewallViolationType
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= AppFirewallViolationType(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.DisabledViolationTypes = append(m.DisabledViolationTypes, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisabledViolationTypes", wireType)
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DetectionSetting) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DetectionSetting: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DetectionSetting: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SignatureSelectionSetting", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.SignatureSelectionSetting == nil {
-				m.SignatureSelectionSetting = &SignatureSelectionSetting{}
-			}
-			if err := m.SignatureSelectionSetting.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EnableSuppression", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FalsePositiveSuppression = &DetectionSetting_EnableSuppression{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableSuppression", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.FalsePositiveSuppression = &DetectionSetting_DisableSuppression{v}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EnableThreatCampaigns", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ThreatCampaignChoice = &DetectionSetting_EnableThreatCampaigns{v}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableThreatCampaigns", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ThreatCampaignChoice = &DetectionSetting_DisableThreatCampaigns{v}
-			iNdEx = postIndex
-		case 9:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultViolationSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ViolationDetectionSetting = &DetectionSetting_DefaultViolationSettings{v}
-			iNdEx = postIndex
-		case 11:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ViolationSettings", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ViolationSettings{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.ViolationDetectionSetting = &DetectionSetting_ViolationSettings{v}
-			iNdEx = postIndex
-		case 13:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DisableStaging", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SignaturesStagingSettings = &DetectionSetting_DisableStaging{v}
-			iNdEx = postIndex
-		case 14:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StageNewSignatures", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &SignaturesStagingSettings{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SignaturesStagingSettings = &DetectionSetting_StageNewSignatures{v}
-			iNdEx = postIndex
-		case 15:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StageNewAndUpdatedSignatures", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &SignaturesStagingSettings{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.SignaturesStagingSettings = &DetectionSetting_StageNewAndUpdatedSignatures{v}
-			iNdEx = postIndex
-		case 17:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultBotSetting", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &schema.Empty{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.BotProtectionChoice = &DetectionSetting_DefaultBotSetting{v}
-			iNdEx = postIndex
-		case 18:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BotProtectionSetting", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &BotProtectionSetting{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.BotProtectionChoice = &DetectionSetting_BotProtectionSetting{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SignaturesStagingSettings) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SignaturesStagingSettings: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SignaturesStagingSettings: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StagingPeriod", wireType)
-			}
-			m.StagingPeriod = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.StagingPeriod |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AllowedResponseCodes) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AllowedResponseCodes: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AllowedResponseCodes: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType == 0 {
-				var v uint32
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= uint32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				m.ResponseCode = append(m.ResponseCode, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowTypes
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthTypes
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex < 0 {
-					return ErrInvalidLengthTypes
-				}
-				if postIndex > l {
-					return io.ErrUnexpectedEOF
-				}
-				var elementCount int
-				var count int
-				for _, integer := range dAtA[iNdEx:postIndex] {
-					if integer < 128 {
-						count++
-					}
-				}
-				elementCount = count
-				if elementCount != 0 && len(m.ResponseCode) == 0 {
-					m.ResponseCode = make([]uint32, 0, elementCount)
-				}
-				for iNdEx < postIndex {
-					var v uint32
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowTypes
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= uint32(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.ResponseCode = append(m.ResponseCode, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field ResponseCode", wireType)
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AnonymizeHttpHeader) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AnonymizeHttpHeader: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AnonymizeHttpHeader: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field HeaderName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.HeaderName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AnonymizeHttpQueryParameter) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AnonymizeHttpQueryParameter: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AnonymizeHttpQueryParameter: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field QueryParamName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.QueryParamName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AnonymizeHttpCookie) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AnonymizeHttpCookie: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AnonymizeHttpCookie: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CookieName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CookieName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AnonymizationConfiguration) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AnonymizationConfiguration: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AnonymizationConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field HttpHeader", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &AnonymizeHttpHeader{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.AnonymizationChoice = &AnonymizationConfiguration_HttpHeader{v}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field QueryParameter", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &AnonymizeHttpQueryParameter{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.AnonymizationChoice = &AnonymizationConfiguration_QueryParameter{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Cookie", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &AnonymizeHttpCookie{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.AnonymizationChoice = &AnonymizationConfiguration_Cookie{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AnonymizationSetting) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AnonymizationSetting: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AnonymizationSetting: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AnonymizationConfig", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AnonymizationConfig = append(m.AnonymizationConfig, &AnonymizationConfiguration{})
-			if err := m.AnonymizationConfig[len(m.AnonymizationConfig)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CustomBlockingPage) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CustomBlockingPage: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CustomBlockingPage: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BlockingPage", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.BlockingPage = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ResponseCode", wireType)
-			}
-			m.ResponseCode = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ResponseCode |= schema.HttpStatusCode(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if skippy < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
 }
 func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
@@ -14142,6 +12280,1134 @@ func (m *GlobalSpecType) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *DetectionSetting) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: DetectionSetting: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: DetectionSetting: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SignatureSelectionSetting", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.SignatureSelectionSetting == nil {
+				m.SignatureSelectionSetting = &SignatureSelectionSetting{}
+			}
+			if err := m.SignatureSelectionSetting.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableSuppression", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.FalsePositiveSuppression = &DetectionSetting_EnableSuppression{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableSuppression", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.FalsePositiveSuppression = &DetectionSetting_DisableSuppression{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field EnableThreatCampaigns", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ThreatCampaignChoice = &DetectionSetting_EnableThreatCampaigns{v}
+			iNdEx = postIndex
+		case 7:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableThreatCampaigns", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ThreatCampaignChoice = &DetectionSetting_DisableThreatCampaigns{v}
+			iNdEx = postIndex
+		case 9:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultViolationSettings", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ViolationDetectionSetting = &DetectionSetting_DefaultViolationSettings{v}
+			iNdEx = postIndex
+		case 11:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ViolationSettings", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &ViolationSettings{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.ViolationDetectionSetting = &DetectionSetting_ViolationSettings{v}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisableStaging", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SignaturesStagingSettings = &DetectionSetting_DisableStaging{v}
+			iNdEx = postIndex
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StageNewSignatures", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SignaturesStagingSettings{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SignaturesStagingSettings = &DetectionSetting_StageNewSignatures{v}
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StageNewAndUpdatedSignatures", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &SignaturesStagingSettings{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SignaturesStagingSettings = &DetectionSetting_StageNewAndUpdatedSignatures{v}
+			iNdEx = postIndex
+		case 17:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultBotSetting", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BotProtectionChoice = &DetectionSetting_DefaultBotSetting{v}
+			iNdEx = postIndex
+		case 18:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BotProtectionSetting", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &BotProtectionSetting{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.BotProtectionChoice = &DetectionSetting_BotProtectionSetting{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SignatureSelectionSetting) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SignatureSelectionSetting: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SignatureSelectionSetting: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field OnlyHighAccuracySignatures", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SignatureSelectionByAccuracy = &SignatureSelectionSetting_OnlyHighAccuracySignatures{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HighMediumAccuracySignatures", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SignatureSelectionByAccuracy = &SignatureSelectionSetting_HighMediumAccuracySignatures{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HighMediumLowAccuracySignatures", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.SignatureSelectionByAccuracy = &SignatureSelectionSetting_HighMediumLowAccuracySignatures{v}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field DefaultAttackTypeSettings", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &schema.Empty{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AttackTypeSetting = &SignatureSelectionSetting_DefaultAttackTypeSettings{v}
+			iNdEx = postIndex
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AttackTypeSettings", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AttackTypeSettings{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AttackTypeSetting = &SignatureSelectionSetting_AttackTypeSettings{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AttackTypeSettings) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AttackTypeSettings: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AttackTypeSettings: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType == 0 {
+				var v AttackType
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= AttackType(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.DisabledAttackTypes = append(m.DisabledAttackTypes, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.DisabledAttackTypes) == 0 {
+					m.DisabledAttackTypes = make([]AttackType, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v AttackType
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= AttackType(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.DisabledAttackTypes = append(m.DisabledAttackTypes, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisabledAttackTypes", wireType)
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ViolationSettings) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ViolationSettings: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ViolationSettings: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType == 0 {
+				var v AppFirewallViolationType
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= AppFirewallViolationType(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.DisabledViolationTypes = append(m.DisabledViolationTypes, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				if elementCount != 0 && len(m.DisabledViolationTypes) == 0 {
+					m.DisabledViolationTypes = make([]AppFirewallViolationType, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v AppFirewallViolationType
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= AppFirewallViolationType(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.DisabledViolationTypes = append(m.DisabledViolationTypes, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field DisabledViolationTypes", wireType)
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SignaturesStagingSettings) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SignaturesStagingSettings: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SignaturesStagingSettings: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field StagingPeriod", wireType)
+			}
+			m.StagingPeriod = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.StagingPeriod |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *BotProtectionSetting) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: BotProtectionSetting: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: BotProtectionSetting: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field MaliciousBotAction", wireType)
+			}
+			m.MaliciousBotAction = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.MaliciousBotAction |= BotAction(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field SuspiciousBotAction", wireType)
+			}
+			m.SuspiciousBotAction = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.SuspiciousBotAction |= BotAction(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field GoodBotAction", wireType)
+			}
+			m.GoodBotAction = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.GoodBotAction |= BotAction(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *AiRiskBasedBlocking) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -14224,6 +13490,739 @@ func (m *AiRiskBasedBlocking) Unmarshal(dAtA []byte) error {
 				b := dAtA[iNdEx]
 				iNdEx++
 				m.LowRiskAction |= RiskBasedBlockingAction(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AllowedResponseCodes) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AllowedResponseCodes: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AllowedResponseCodes: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType == 0 {
+				var v uint32
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					v |= uint32(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				m.ResponseCode = append(m.ResponseCode, v)
+			} else if wireType == 2 {
+				var packedLen int
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return ErrIntOverflowTypes
+					}
+					if iNdEx >= l {
+						return io.ErrUnexpectedEOF
+					}
+					b := dAtA[iNdEx]
+					iNdEx++
+					packedLen |= int(b&0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				if packedLen < 0 {
+					return ErrInvalidLengthTypes
+				}
+				postIndex := iNdEx + packedLen
+				if postIndex < 0 {
+					return ErrInvalidLengthTypes
+				}
+				if postIndex > l {
+					return io.ErrUnexpectedEOF
+				}
+				var elementCount int
+				var count int
+				for _, integer := range dAtA[iNdEx:postIndex] {
+					if integer < 128 {
+						count++
+					}
+				}
+				elementCount = count
+				if elementCount != 0 && len(m.ResponseCode) == 0 {
+					m.ResponseCode = make([]uint32, 0, elementCount)
+				}
+				for iNdEx < postIndex {
+					var v uint32
+					for shift := uint(0); ; shift += 7 {
+						if shift >= 64 {
+							return ErrIntOverflowTypes
+						}
+						if iNdEx >= l {
+							return io.ErrUnexpectedEOF
+						}
+						b := dAtA[iNdEx]
+						iNdEx++
+						v |= uint32(b&0x7F) << shift
+						if b < 0x80 {
+							break
+						}
+					}
+					m.ResponseCode = append(m.ResponseCode, v)
+				}
+			} else {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseCode", wireType)
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AnonymizationSetting) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AnonymizationSetting: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AnonymizationSetting: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field AnonymizationConfig", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.AnonymizationConfig = append(m.AnonymizationConfig, &AnonymizationConfiguration{})
+			if err := m.AnonymizationConfig[len(m.AnonymizationConfig)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AnonymizationConfiguration) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AnonymizationConfiguration: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AnonymizationConfiguration: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HttpHeader", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AnonymizeHttpHeader{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AnonymizationChoice = &AnonymizationConfiguration_HttpHeader{v}
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryParameter", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AnonymizeHttpQueryParameter{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AnonymizationChoice = &AnonymizationConfiguration_QueryParameter{v}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Cookie", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			v := &AnonymizeHttpCookie{}
+			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			m.AnonymizationChoice = &AnonymizationConfiguration_Cookie{v}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AnonymizeHttpHeader) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AnonymizeHttpHeader: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AnonymizeHttpHeader: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field HeaderName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.HeaderName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AnonymizeHttpQueryParameter) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AnonymizeHttpQueryParameter: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AnonymizeHttpQueryParameter: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field QueryParamName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.QueryParamName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AnonymizeHttpCookie) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AnonymizeHttpCookie: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AnonymizeHttpCookie: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field CookieName", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.CookieName = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipTypes(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CustomBlockingPage) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowTypes
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CustomBlockingPage: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CustomBlockingPage: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BlockingPage", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthTypes
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthTypes
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BlockingPage = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ResponseCode", wireType)
+			}
+			m.ResponseCode = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowTypes
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ResponseCode |= schema.HttpStatusCode(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}

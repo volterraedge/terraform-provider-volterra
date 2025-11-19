@@ -1072,7 +1072,7 @@ type APISrv struct {
 func (s *APISrv) validateTransport(ctx context.Context) error {
 	if s.sf.IsTransportNotSupported("ves.io.schema.site.crudapi.API", server.TransportFromContext(ctx)) {
 		userMsg := fmt.Sprintf("ves.io.schema.site.crudapi.API not allowed in transport '%s'", server.TransportFromContext(ctx))
-		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf(userMsg))
+		err := svcfw.NewPermissionDeniedError(userMsg, fmt.Errorf("%s", userMsg))
 		return server.GRPCStatusFromError(err).Err()
 	}
 	return nil
@@ -3669,6 +3669,13 @@ var APISwaggerJSON string = `{
                     "$ref": "#/definitions/schemaViewRefType",
                     "x-displayname": "Owner View"
                 },
+                "revision": {
+                    "type": "string",
+                    "description": " A revision number which always increases with each modification of the object in storage\n This doesn't necessarily increase sequentially, but should always increase.\n This will be 0 when first created, and before any modifications.",
+                    "title": "revision",
+                    "format": "int64",
+                    "x-displayname": "Revision"
+                },
                 "sre_disable": {
                     "type": "boolean",
                     "description": " This should be set to true If VES/SRE operator wants to suppress an object from being\n presented to business-logic of a daemon(e.g. due to bad-form/issue-causing Object).\n This is meant only to be used in temporary situations for operational continuity till\n a fix is rolled out in business-logic.\n\nExample: - \"true\"-",
@@ -3854,7 +3861,7 @@ var APISwaggerJSON string = `{
             "properties": {
                 "address": {
                     "type": "string",
-                    "description": " Site's geographical address that can be used determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
+                    "description": " Site's geographical address that can be used to determine its latitude and longitude.\n\nExample: - \"123 Street, city, country, postal code\"-\n\nValidation Rules:\n  ves.io.schema.rules.string.max_len: 256\n",
                     "title": "address",
                     "maxLength": 256,
                     "x-displayname": "Geographical Address",
@@ -6796,6 +6803,31 @@ var APISwaggerJSON string = `{
                 }
             }
         },
+        "siteVirtualNetworkDnsServerConfigurationType": {
+            "type": "object",
+            "description": "x-displayName: \"VirtualNetworkDnsServerConfigurationType\"\nVirtualNetworkDnsServerConfigurationType holds the DNS V4 and V6 server configuration for a given virtual network",
+            "title": "VirtualNetworkDnsServerConfigurationType",
+            "properties": {
+                "nameserver": {
+                    "type": "string",
+                    "description": "x-displayName: \"DNS Server\"\nx-example: \"1.1.1.1\"\nOptional DNS server IP to be used for name resolution",
+                    "title": "nameserver"
+                },
+                "nameserver_v6": {
+                    "type": "string",
+                    "description": "x-displayName: \"DNS V6 Server\"\nx-example: \"1001::1\"\nOptional DNS V6 server IP to be used for name resolution",
+                    "title": "nameserver_v6"
+                },
+                "virtual_network": {
+                    "type": "array",
+                    "description": "x-displayName: \"Virtual Network\"\nx-required\nreference to virtual network",
+                    "title": "Virtual Network",
+                    "items": {
+                        "$ref": "#/definitions/ioschemaObjectRefType"
+                    }
+                }
+            }
+        },
         "siteVnetGatewayStatusType": {
             "type": "object",
             "x-ves-proto-message": "ves.io.schema.site.VnetGatewayStatusType",
@@ -6863,6 +6895,13 @@ var APISwaggerJSON string = `{
                     "x-ves-validation-rules": {
                         "ves.io.schema.rules.string.max_len": "256"
                     }
+                },
+                "software_version_expiry_date": {
+                    "type": "string",
+                    "description": " Expiry date of software version in YYYY-MM-DD\n\nExample: - \"2024-12-13\"-",
+                    "title": "software version expiry date",
+                    "x-displayname": "Software Version Expiry Date",
+                    "x-ves-example": "2024-12-13"
                 }
             }
         },
