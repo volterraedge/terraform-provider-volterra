@@ -48,7 +48,7 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`count_cloud_elastic_ip` - (Optional) number of Elastic Ips / Public Ips associated with this object per Node (`Int`).
+`count` - (Optional) number of Elastic Ips / Public Ips associated with this object per Node (`Int`).
 
 `site_ref` - (Required) Site to which this cloud elastic ip object is attached. See [ref](#ref) below for details.
 

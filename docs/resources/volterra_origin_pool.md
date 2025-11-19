@@ -17,20 +17,35 @@ Example Usage
 
 ```hcl
 resource "volterra_origin_pool" "example" {
-  name      = "acmecorp-web"
-  namespace = "staging"
-
-  endpoint_selection = ["endpoint_selection"]
-
+  name                   = "acmecorp-web"
+  namespace              = "staging"
+  endpoint_selection     = ["endpoint_selection"]
   loadbalancer_algorithm = ["loadbalancer_algorithm"]
 
   origin_servers {
     // One of the arguments from this list "cbip_service consul_service custom_endpoint_object k8s_service private_ip private_name public_ip public_name vn_private_ip vn_private_name" must be set
 
-    public_name {
+    private_name {
       dns_name = "value"
 
+      // One of the arguments from this list "inside_network outside_network segment" must be set
+
+      inside_network = true
       refresh_interval = "20"
+      site_locator {
+        // One of the arguments from this list "site virtual_site" must be set
+
+        site {
+          name      = "test1"
+          namespace = "staging"
+          tenant    = "acmecorp"
+        }
+      }
+      snat_pool {
+        // One of the arguments from this list "no_snat_pool snat_pool" can be set
+
+        no_snat_pool = true
+      }
     }
 
     labels = {
@@ -114,6 +129,8 @@ Advanced options configuration like timeouts, circuit breaker, subset load balan
 
 `connection_timeout` - (Optional) This is specified in milliseconds. The default value is 2 seconds (`Int`).
 
+`header_transformation_type` - (Optional) Settings to normalize the headers of upstream requests.. See [Advanced Options Header Transformation Type ](#advanced-options-header-transformation-type) below for details.(Deprecated)
+
 `http_idle_timeout` - (Optional) This is specified in milliseconds. The default value is 5 minutes. (`Int`).
 
 ###### One of the arguments from this list "auto_http_config, http1_config, http2_options" must be set
@@ -194,6 +211,20 @@ This configuration choice is for HTTP(S) LB only..
 
 `enable_conn_pool_reuse` - (Optional) Reuse upstream connection pool for multiple downstream connections (`Bool`).
 
+### Advanced Options Header Transformation Type
+
+Settings to normalize the headers of upstream requests..
+
+###### One of the arguments from this list "default_header_transformation, legacy_header_transformation, preserve_case_header_transformation, proper_case_header_transformation" must be set
+
+`default_header_transformation` - (Optional) Normalize the headers to lower case (`Bool`).
+
+`legacy_header_transformation` - (Optional) Use old header transformation if configured earlier (`Bool`).
+
+`preserve_case_header_transformation` - (Optional) Preserves the original case of headers without any modifications. (`Bool`).
+
+`proper_case_header_transformation` - (Optional) For example, “content-type” becomes “Content-Type”, and “foo$b#$are” becomes “Foo$B#$Are” (`Bool`).
+
 ### Choice Cbip Service
 
 Specify origin server with cBIP service name.
@@ -210,7 +241,7 @@ Specify origin server with Hashi Corp Consul service name and site information.
 
 `outside_network` - (Optional) Outside network on the site (`Bool`).
 
-`service_name` - (Required) cluster-id is optional. (`String`).
+`service_name` - (Required) The format is servicename:cluster-id. (`String`).
 
 `site_locator` - (Required) Site or Virtual site where this origin server is located. See [Consul Service Site Locator ](#consul-service-site-locator) below for details.
 
@@ -250,9 +281,11 @@ Specify origin server with K8s service name and site information.
 
 `protocol` - (Optional) Protocol to be used in the discovery. (`String`).
 
-###### One of the arguments from this list "service_name" must be set
+###### One of the arguments from this list "service_name, service_selector" must be set
 
 `service_name` - (Optional) Both namespace and cluster-id are optional. (`String`).
+
+`service_selector` - (Optional) discovery has to happen. This implicit label is added to service_selector. See [Service Info Service Selector ](#service-info-service-selector) below for details.(Deprecated)
 
 `site_locator` - (Required) Site or Virtual site where this origin server is located. See [K8s Service Site Locator ](#k8s-service-site-locator) below for details.
 
@@ -276,7 +309,7 @@ Specify origin server with private or public IP address and site information.
 
 `outside_network` - (Optional) Outside network on the site (`Bool`).
 
-`segment` - (Optional) Segment where this origin server is located. See [ref](#ref) below for details.
+`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
 
 ###### One of the arguments from this list "ip, ipv6" must be set
 
@@ -300,7 +333,7 @@ Specify origin server with private or public DNS name and site information.
 
 `outside_network` - (Optional) Outside network on the site (`Bool`).
 
-`segment` - (Optional) Segment where this origin server is located. See [ref](#ref) below for details.
+`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
 
 `refresh_interval` - (Optional) Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767 (`Int`).
 
@@ -576,6 +609,16 @@ x-displayName: "SNAT Pool Configuration".
 
 `snat_pool` - (Optional) Configure SNAT Pool to reach Origin Server. See [Snat Pool Choice Snat Pool ](#snat-pool-choice-snat-pool) below for details.
 
+### Private Key Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
 ### Private Name Site Locator
 
 Site or Virtual site where this origin server is located.
@@ -636,6 +679,26 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Secret Info Oneof Vault Secret Info
+
+Vault Secret is used for the secrets managed by Hashicorp Vault.
+
+`key` - (Optional) If not provided entire secret will be returned. (`String`).
+
+`location` - (Required) Path to secret in Vault. (`String`).
+
+`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
+
+`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
+
+`version` - (Optional) If not provided latest version will be returned. (`Int`).
+
+### Secret Info Oneof Wingman Secret Info
+
+Secret is given as bootstrap secret in F5XC Security Sidecar.
+
+`name` - (Required) Name of the secret. (`String`).
+
 ### Server Validation Choice Skip Server Verification
 
 Skip origin server verification.
@@ -653,6 +716,12 @@ Perform origin server verification using the provided Root CA Certificate.
 ### Server Validation Choice Volterra Trusted Ca
 
 Perform origin server verification using F5XC Default Root CA Certificate.
+
+### Service Info Service Selector
+
+discovery has to happen. This implicit label is added to service_selector.
+
+`expressions` - (Required) expressions contains the kubernetes style label expression for selections. (`String`).
 
 ### Snat Pool Choice No Snat Pool
 
@@ -696,11 +765,19 @@ Subset load balancing is enabled. Based on route, subset of origin servers will 
 
 TLS Private Key data in unencrypted PEM format including the PEM headers. The data may be optionally secured using BlindFold. TLS key has to match the accompanying certificate..
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Private Key Blindfold Secret Info Internal ](#private-key-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
 
 ### Tls Choice Use Tls
 

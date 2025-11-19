@@ -33,13 +33,13 @@ resource "volterra_alert_policy" "example" {
 
     // One of the arguments from this list "alertname alertname_regex any custom group severity" can be set
 
-    group {
-      groups = ["groups"]
+    severity {
+      severities = ["severities"]
     }
     notification_parameters {
       // One of the arguments from this list "custom default individual ves_io_group" must be set
 
-      individual = true
+      default = true
 
       group_interval = "1m"
 

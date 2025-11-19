@@ -20,7 +20,7 @@ resource "volterra_dns_domain" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
 
-  // One of the arguments from this list "volterra_managed" must be set
+  // One of the arguments from this list "route53 verification_only volterra_managed" must be set
 
   volterra_managed = true
 }
@@ -48,9 +48,29 @@ Argument Reference
 
 `dnssec_mode` - (Optional) Control whether DNSSEC is enabled on the dns domain or not (`String`).
 
-###### One of the arguments from this list "volterra_managed" must be set
+###### One of the arguments from this list "route53, verification_only, volterra_managed" must be set
+
+`route53` - (Optional) sub domain in Amazon Route 53 zone owned by users. See [Domain Choice Route53 ](#domain-choice-route53) below for details.(Deprecated)
+
+`verification_only` - (Optional) F5XC will verify this domain, but will not manage it. (`Bool`).(Deprecated)
 
 `volterra_managed` - (Optional) sub domain (`Bool`).
+
+### Domain Choice Route53
+
+sub domain in Amazon Route 53 zone owned by users.
+
+`creds` - (Optional) Reference to AWS credentials to program route53. See [ref](#ref) below for details.
+
+### Ref
+
+Reference to another volterra object is shown like below
+
+name - (Required) then name will hold the referred object's(e.g. route's) name. (String).
+
+namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
+
+tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
 
 Attribute Reference
 -------------------

@@ -19,6 +19,10 @@ Example Usage
 resource "volterra_site_mesh_group" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
+
+  // One of the arguments from this list "disable_re_fallback enable_re_fallback" must be set
+
+  enable_re_fallback = true
 }
 
 ```
@@ -42,6 +46,8 @@ Argument Reference
 
 ### Spec Argument Reference
 
+`hub` - (Optional) Hub must be empty when Site Mesh Group type is Hub or Full Mesh. See [ref](#ref) below for details.(Deprecated)
+
 ###### One of the arguments from this list "full_mesh, hub_mesh, spoke_mesh" can be set
 
 `full_mesh` - (Optional) Full mesh of tunnels are created between all sites. See [Mesh Choice Full Mesh ](#mesh-choice-full-mesh) below for details.
@@ -49,6 +55,14 @@ Argument Reference
 `hub_mesh` - (Optional) Mesh of Type Hub. See [Mesh Choice Hub Mesh ](#mesh-choice-hub-mesh) below for details.
 
 `spoke_mesh` - (Optional) Mesh of Type Spoke. See [Mesh Choice Spoke Mesh ](#mesh-choice-spoke-mesh) below for details.
+
+###### One of the arguments from this list "disable_re_fallback, enable_re_fallback" must be set
+
+`disable_re_fallback` - (Optional) Disable RE Fallback connectivity when SMG fails (`Bool`).
+
+`enable_re_fallback` - (Optional) Enable RE Fallback connectivity when SMG fails (`Bool`).
+
+`type` - (Optional) Type of Site to Site connectivity (Spoke, Hub or Full Mesh) (`String`).(Deprecated)
 
 `virtual_site` - (Optional) If 'Type' is Full Mesh, then it gives set of sites that are connected in full mesh.. See [ref](#ref) below for details.
 
@@ -59,6 +73,14 @@ and control plane peering across sites.
 ### Full Mesh Choice Data Plane Mesh
 
 Full Mesh of data plane tunnels across sites.
+
+### Hub Full Mesh Choice Control And Data Plane Mesh
+
+and control plane peering across sites.
+
+### Hub Full Mesh Choice Data Plane Mesh
+
+Hub Full Mesh of data plane tunnels across sites.
 
 ### Mesh Choice Full Mesh
 
@@ -89,6 +111,14 @@ name - (Required) then name will hold the referred object's(e.g. route's) name. 
 namespace - (Optional) then namespace will hold the referred object's(e.g. route's) namespace. (String).
 
 tenant - (Optional) then tenant will hold the referred object's(e.g. route's) tenant. (String).
+
+### Spoke Hub Mesh Choice Control And Data Plane Mesh
+
+and control plane peering with the hub site/s.
+
+### Spoke Hub Mesh Choice Data Plane Mesh
+
+Mesh of data plane tunnels to the hub site/s.
 
 Attribute Reference
 -------------------

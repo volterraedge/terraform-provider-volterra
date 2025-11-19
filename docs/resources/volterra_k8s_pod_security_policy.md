@@ -64,11 +64,11 @@ resource "volterra_k8s_pod_security_policy" "example" {
     privileged = true
     read_only_root_filesystem = true
 
-    // One of the arguments from this list "no_runtime_class" must be set
+    // One of the arguments from this list "no_runtime_class runtime_class" must be set
 
     no_runtime_class = true
 
-    // One of the arguments from this list "no_se_linux_options" must be set
+    // One of the arguments from this list "no_se_linux_options se_linux_options" must be set
 
     no_se_linux_options = true
 
@@ -182,13 +182,17 @@ Form based pod security specification.
 
 `read_only_root_filesystem` - (Optional) Containers can only run with read only root filesystem. (`Bool`).
 
-###### One of the arguments from this list "no_runtime_class" must be set
+###### One of the arguments from this list "no_runtime_class, runtime_class" must be set
 
 `no_runtime_class` - (Optional) Default K8s allowed runtime class options can be used (`Bool`).
 
-###### One of the arguments from this list "no_se_linux_options" must be set
+`runtime_class` - (Optional) Controls Allowable Runtime Class values, if not present all values are allowed. See [Runtime Class Choice Runtime Class ](#runtime-class-choice-runtime-class) below for details.(Deprecated)
+
+###### One of the arguments from this list "no_se_linux_options, se_linux_options" must be set
 
 `no_se_linux_options` - (Optional) Default K8s allowed SE Linux options can be used (`Bool`).
+
+`se_linux_options` - (Optional) Controls Allowable SE Linux labels, if not present all values are allowed. See [Se Linux Choice Se Linux Options ](#se-linux-choice-se-linux-options) below for details.(Deprecated)
 
 ###### One of the arguments from this list "no_supplemental_groups, supplemental_groups" must be set
 
@@ -284,9 +288,31 @@ List of range of ID(s).
 
 Default K8s allowed runtime class options can be used.
 
+### Runtime Class Choice Runtime Class
+
+Controls Allowable Runtime Class values, if not present all values are allowed.
+
+`allowed_runtime_class_names` - (Required) List of allowed runtime class names (`String`).
+
+`default_runtime_class_name` - (Optional) description (`String`).
+
 ### Se Linux Choice No Se Linux Options
 
 Default K8s allowed SE Linux options can be used.
+
+### Se Linux Choice Se Linux Options
+
+Controls Allowable SE Linux labels, if not present all values are allowed.
+
+`Level` - (Optional) Run as SE linux level label (`String`).
+
+`role` - (Optional) Run as SE linux label (`String`).
+
+`rule` - (Optional) Rule indicated how the FS group ID range is used (`String`).
+
+`type` - (Optional) Run as SE linux type label (`String`).
+
+`user` - (Optional) Run as SE linux user label (`String`).
 
 ### Supplemental Group Choice No Supplemental Groups
 

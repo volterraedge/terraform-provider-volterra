@@ -19,6 +19,60 @@ Example Usage
 resource "volterra_waf_exclusion_policy" "example" {
   name      = "acmecorp-web"
   namespace = "staging"
+
+  waf_exclusion_rules {
+    // One of the arguments from this list "any_domain exact_value suffix_value" must be set
+
+    any_domain = true
+
+    expiration_timestamp = "0001-01-01T00:00:00Z"
+
+    metadata {
+      description = "Virtual Host for acmecorp website"
+
+      disable = true
+
+      name = "acmecorp-web"
+    }
+
+    methods = ["GET"]
+
+    // One of the arguments from this list "any_path path_prefix path_regex" must be set
+
+    any_path = true
+
+    // One of the arguments from this list "app_firewall_detection_control waf_skip_processing" can be set
+
+    app_firewall_detection_control {
+      exclude_attack_type_contexts {
+        context = "context"
+
+        context_name = "example: user-agent for Header"
+
+        exclude_attack_type = "ATTACK_TYPE_SQL_INJECTION"
+      }
+
+      exclude_bot_name_contexts {
+        bot_name = "Hydra"
+      }
+
+      exclude_signature_contexts {
+        context = "context"
+
+        context_name = "example: user-agent for Header"
+
+        signature_id = "10000001"
+      }
+
+      exclude_violation_contexts {
+        context = "context"
+
+        context_name = "example: user-agent for Header"
+
+        exclude_violation = "VIOL_MANDATORY_HEADER"
+      }
+    }
+  }
 }
 
 ```
@@ -42,7 +96,7 @@ Argument Reference
 
 ### Spec Argument Reference
 
-`waf_exclusion_rules` - (Optional) An ordered list of rules.. See [Waf Exclusion Rules ](#waf-exclusion-rules) below for details.
+`waf_exclusion_rules` - (Required) An ordered list of rules.. See [Waf Exclusion Rules ](#waf-exclusion-rules) below for details.
 
 ### Waf Exclusion Rules
 
@@ -141,6 +195,8 @@ Skip all App Firewall processing for this request.
 Common attributes for the rule including name and description..
 
 `description` - (Optional) Human readable description. (`String`).
+
+`disable` - (Optional) A value of true will administratively disable the object that corresponds to the containing message. (`Bool`).(Deprecated)
 
 `name` - (Required) The value of name has to follow DNS-1035 format. (`String`).
 

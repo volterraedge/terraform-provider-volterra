@@ -17,9 +17,8 @@ Example Usage
 
 ```hcl
 resource "volterra_ztna_application" "example" {
-  name      = "acmecorp-web"
-  namespace = "staging"
-
+  name           = "acmecorp-web"
+  namespace      = "staging"
   transport_type = ["transport_type"]
 }
 
@@ -110,7 +109,7 @@ Do not advertise this proxy.
 
 Where should this load balancer be available.
 
-###### One of the arguments from this list "advertise_on_public, site, site_segment, virtual_network, virtual_site, virtual_site_segment, virtual_site_with_vip, vk8s_service" must be set
+###### One of the arguments from this list "advertise_on_public, cloud_edge_segment, segment, site, site_segment, virtual_network, virtual_site, virtual_site_segment, virtual_site_with_vip, vk8s_service" must be set
 
 `advertise_on_public` - (Optional) Advertise this load balancer on public network. See [Choice Advertise On Public ](#choice-advertise-on-public) below for details.
 

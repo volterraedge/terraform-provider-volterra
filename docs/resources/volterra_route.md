@@ -25,6 +25,16 @@ resource "volterra_route" "example" {
 
     inherited_bot_defense_javascript_injection = true
 
+    bot_defense_javascript_injection_inline_mode {
+      element_selector = "value"
+
+      insert_content = "value"
+
+      position = "position"
+    }
+
+    disable_custom_script = true
+
     disable_location_add = true
 
     match {
@@ -57,7 +67,7 @@ resource "volterra_route" "example" {
 
         // One of the arguments from this list "exact regex" can be set
 
-        exact = "exact"
+        regex = "regex"
       }
     }
 
@@ -92,7 +102,7 @@ resource "volterra_route" "example" {
 
       // One of the arguments from this list "add_expiry ignore_expiry" can be set
 
-      add_expiry = "add_expiry"
+      ignore_expiry = true
 
       // One of the arguments from this list "add_httponly ignore_httponly" can be set
 
@@ -106,11 +116,11 @@ resource "volterra_route" "example" {
 
       // One of the arguments from this list "add_partitioned ignore_partitioned" can be set
 
-      ignore_partitioned = true
+      add_partitioned = true
 
       // One of the arguments from this list "add_path ignore_path" can be set
 
-      ignore_path = true
+      add_path = "add_path"
 
       // One of the arguments from this list "ignore_samesite samesite_lax samesite_none samesite_strict" can be set
 
@@ -118,7 +128,7 @@ resource "volterra_route" "example" {
 
       // One of the arguments from this list "add_secure ignore_secure" can be set
 
-      add_secure = true
+      ignore_secure = true
 
       // One of the arguments from this list "ignore_value secret_value value" can be set
 
@@ -146,6 +156,8 @@ resource "volterra_route" "example" {
         disabled = true
 
         max_request_bytes = "2048"
+
+        max_request_time = "30"
       }
 
       // One of the arguments from this list "do_not_retract_cluster retract_cluster" can be set
@@ -165,6 +177,8 @@ resource "volterra_route" "example" {
         disabled = true
 
         expose_headers = "value"
+
+        max_age = "value"
 
         maximum_age = "-1"
       }
@@ -201,7 +215,7 @@ resource "volterra_route" "example" {
 
       // One of the arguments from this list "auto_host_rewrite host_rewrite" must be set
 
-      host_rewrite = "one.volterra.com"
+      auto_host_rewrite = true
       mirror_policy {
         cluster {
           name      = "test1"
@@ -219,7 +233,7 @@ resource "volterra_route" "example" {
       query_params {
         // One of the arguments from this list "remove_all_params replace_params retain_all_params" must be set
 
-        remove_all_params = true
+        retain_all_params = true
       }
       retry_policy {
         back_off {
@@ -235,6 +249,8 @@ resource "volterra_route" "example" {
         retriable_status_codes = ["403"]
 
         retry_condition = ["5xx"]
+
+        retry_on = "5xx"
       }
 
       // One of the arguments from this list "prefix_rewrite regex_rewrite" can be set
@@ -249,9 +265,20 @@ resource "volterra_route" "example" {
       }
     }
     service_policy {
-      // One of the arguments from this list "disable" can be set
+      // One of the arguments from this list "context_extensions disable" can be set
 
       disable = true
+    }
+    skip_lb_override = true
+    uuid = "fa45979f-4e41-4f4b-8b0b-c3ab844ab0aa"
+
+    // One of the arguments from this list "inherited_waf_exclusion waf_exclusion_policy" can be set
+
+    inherited_waf_exclusion = true
+    waf_exclusion_service_policy {
+      name      = "test1"
+      namespace = "staging"
+      tenant    = "acmecorp"
     }
     waf_type {
       // One of the arguments from this list "app_firewall disable_waf inherit_waf" must be set
@@ -300,6 +327,10 @@ List of routes to match for incoming request.
 
 `inherited_bot_defense_javascript_injection` - (Optional) Hence no custom configuration is applied on the route (`Bool`).
 
+`bot_defense_javascript_injection_inline_mode` - (Optional) Specifies whether bot defense js injection inline mode will be enabled. See [Routes Bot Defense Javascript Injection Inline Mode ](#routes-bot-defense-javascript-injection-inline-mode) below for details.(Deprecated)
+
+`disable_custom_script` - (Optional) disable execution of Javascript at route level, if it is configured at virtual-host level (`Bool`).(Deprecated)
+
 `disable_location_add` - (Optional) virtual-host level. This configuration is ignored on CE sites. (`Bool`).
 
 `match` - (Optional) route match condition. See [Routes Match ](#routes-match) below for details.
@@ -329,6 +360,18 @@ List of routes to match for incoming request.
 `route_redirect` - (Optional) Send redirect response. See [Route Action Route Redirect ](#route-action-route-redirect) below for details.
 
 `service_policy` - (Optional) service policy configuration at route level which overrides configuration at virtual-host level. See [Routes Service Policy ](#routes-service-policy) below for details.
+
+`skip_lb_override` - (Optional) these routes. (`Bool`).(Deprecated)
+
+`uuid` - (Optional) This field is system-managed and should not be modified or populated through API calls. (`String`).(Deprecated)
+
+###### One of the arguments from this list "inherited_waf_exclusion, waf_exclusion_policy" can be set
+
+`inherited_waf_exclusion` - (Optional) Any WAF Exclusion configuration that was configured on a higher level will be enforced (`Bool`).
+
+`waf_exclusion_policy` - (Required) A direct reference to a WAF Exclusion Policy configuration object. See [ref](#ref) below for details.
+
+`waf_exclusion_service_policy` - (Optional) A reference to service_policy objects.. See [ref](#ref) below for details.(Deprecated)
 
 `waf_type` - (Optional) waf_type specified at route level overrides waf configuration at VirtualHost level. See [Routes Waf Type ](#routes-waf-type) below for details.
 
@@ -526,6 +569,12 @@ x-displayName: "Remove All Parameters".
 
 x-displayName: "Retain All Parameters".
 
+### Query Params Strip Query Params
+
+Specifies the list of query params to be removed. Not supported.
+
+`query_params` - (Optional) Query params keys to strip while manipulating the HTTP request (`String`).
+
 ### Ref
 
 Reference to another volterra object is shown like below
@@ -610,7 +659,9 @@ Send request to one of the destination from list of destinations.
 
 Send direct response.
 
-`response_body` - (Optional) response body to send (`String`).
+`response_body` - (Optional) response body to send (`String`).(Deprecated)
+
+`response_body_encoded` - (Optional) E.g. "<p> Access Denied </p>". Base64 encoded string url for this is string:///PHA+IEFjY2VzcyBEZW5pZWQgPC9wPg== (`String`).
 
 `response_code` - (Optional) response code to send (`Int`).
 
@@ -620,15 +671,21 @@ Send redirect response.
 
 `host_redirect` - (Optional) swap host part of incoming URL in redirect URL (`String`).
 
+`port_redirect` - (Optional) Specify the port value to redirect to a URL with non default port(443) (`Int`).(Deprecated)
+
 `proto_redirect` - (Optional) When incoming-proto option is specified, swapping of protocol is not done. (`String`).
 
-###### One of the arguments from this list "remove_all_params, replace_params, retain_all_params" can be set
+###### One of the arguments from this list "all_params, remove_all_params, replace_params, retain_all_params, strip_query_params" can be set
+
+`all_params` - (Optional) be removed. Default value is false, which means query portion of the URL will NOT be removed (`Bool`).(Deprecated)
 
 `remove_all_params` - (Optional) x-displayName: "Remove All Parameters" (`Bool`).
 
 `replace_params` - (Optional) x-displayName: "Replace All Parameters" (`String`).
 
 `retain_all_params` - (Optional) x-displayName: "Retain All Parameters" (`Bool`).
+
+`strip_query_params` - (Optional) Specifies the list of query params to be removed. Not supported. See [Query Params Strip Query Params ](#query-params-strip-query-params) below for details.(Deprecated)
 
 ###### One of the arguments from this list "path_redirect, prefix_rewrite" can be set
 
@@ -645,6 +702,8 @@ Route level buffer configuration overrides any configuration at VirtualHost leve
 `disabled` - (Optional) The value of this field is ignored for virtual-host (`Bool`).
 
 `max_request_bytes` - (Optional) manager will stop buffering and return a RequestEntityTooLarge (413) response. (`Int`).
+
+`max_request_time` - (Optional) request before returning a RequestTimeout (408) response (`Int`).(Deprecated)
 
 ### Route Destination Cors Policy
 
@@ -663,6 +722,8 @@ resources from a server at a different origin.
 `disabled` - (Optional) The value of this field is ignored for virtual-host (`Bool`).
 
 `expose_headers` - (Optional) Specifies the content for the access-control-expose-headers header (`String`).
+
+`max_age` - (Optional) Specifies the content for the access-control-max-age header (`String`).(Deprecated)
 
 `maximum_age` - (Optional) Maximum permitted value is 86400 seconds (24 hours) (`Int`).
 
@@ -738,6 +799,8 @@ Indicates that the route has a retry policy..
 
 `retry_condition` - (Required) (disconnect/reset/read timeout.) (`String`).
 
+`retry_on` - (Optional) matching one defined in retriable_status_codes field (`String`).(Deprecated)
+
 ### Route Destination Spdy Config
 
 SPDY configuration for each route.
@@ -757,6 +820,16 @@ would transform "/service/foo/v1/api" into "/v1/api/instance/foo"..
 `pattern` - (Optional) The regular expression used to find portions of a string that should be replaced. (`String`).
 
 `substitution` - (Optional) substitution operation to produce a new string. (`String`).
+
+### Routes Bot Defense Javascript Injection Inline Mode
+
+Specifies whether bot defense js injection inline mode will be enabled.
+
+`element_selector` - (Required) Element selector to insert into. (`String`).
+
+`insert_content` - (Optional) HTML content to insert. (`String`).
+
+`position` - (Optional) Position of HTML content to be inserted within HTML tag. (`String`).
 
 ### Routes Match
 
@@ -886,7 +959,9 @@ enclosing VirtualHost object level.
 
 service policy configuration at route level which overrides configuration at virtual-host level.
 
-###### One of the arguments from this list "disable" can be set
+###### One of the arguments from this list "context_extensions, disable" can be set
+
+`context_extensions` - (Optional) sending additional information to the external authorization server.. See [Service Policy Choice Context Extensions ](#service-policy-choice-context-extensions) below for details.(Deprecated)
 
 `disable` - (Optional) disable service policy at route level, if it is configured at virtual-host level (`Bool`).
 
@@ -952,6 +1027,36 @@ Clear Secret is used for the secrets that are not encrypted.
 
 `url` - (Required) When asked for this secret, caller will get Secret bytes after Base64 decoding. (`String`).
 
+### Secret Info Oneof Vault Secret Info
+
+Vault Secret is used for the secrets managed by Hashicorp Vault.
+
+`key` - (Optional) If not provided entire secret will be returned. (`String`).
+
+`location` - (Required) Path to secret in Vault. (`String`).
+
+`provider` - (Required) Name of the Secret Management Access object that contains information about the backend Vault. (`String`).
+
+`secret_encoding` - (Optional) This field defines the encoding type of the secret BEFORE the secret is put into Hashicorp Vault. (`String`).
+
+`version` - (Optional) If not provided latest version will be returned. (`Int`).
+
+### Secret Info Oneof Wingman Secret Info
+
+Secret is given as bootstrap secret in F5XC Security Sidecar.
+
+`name` - (Required) Name of the secret. (`String`).
+
+### Secret Value Blindfold Secret Info Internal
+
+Blindfold Secret Internal is used for the putting re-encrypted blindfold secret.
+
+`decryption_provider` - (Optional) Name of the Secret Management Access object that contains information about the backend Secret Management service. (`String`).
+
+`location` - (Required) Or it could be a path if the store provider is an http/https location (`String`).
+
+`store_provider` - (Optional) This field needs to be provided only if the url scheme is not string:/// (`String`).
+
 ### Secure Add Secure
 
 Add secure attribute.
@@ -968,6 +1073,12 @@ x-displayName: "Add".
 
 x-displayName: "Ignore".
 
+### Service Policy Choice Context Extensions
+
+sending additional information to the external authorization server..
+
+`context_extensions` - (Optional) provide extra context for the external authorization server on specific virtual hosts or routes. (`String`).
+
 ### Value Choice Ignore Value
 
 Ignore value of cookie.
@@ -976,11 +1087,23 @@ Ignore value of cookie.
 
 Secret Value of the Cookie header.
 
-###### One of the arguments from this list "blindfold_secret_info, clear_secret_info" must be set
+`blindfold_secret_info_internal` - (Optional) Blindfold Secret Internal is used for the putting re-encrypted blindfold secret. See [Secret Value Blindfold Secret Info Internal ](#secret-value-blindfold-secret-info-internal) below for details.(Deprecated)
+
+`secret_encoding_type` - (Optional) e.g. if a secret is base64 encoded and then put into vault. (`String`).(Deprecated)
+
+###### One of the arguments from this list "blindfold_secret_info, clear_secret_info, vault_secret_info, wingman_secret_info" must be set
 
 `blindfold_secret_info` - (Optional) Blindfold Secret is used for the secrets managed by F5XC Secret Management Service. See [Secret Info Oneof Blindfold Secret Info ](#secret-info-oneof-blindfold-secret-info) below for details.
 
 `clear_secret_info` - (Optional) Clear Secret is used for the secrets that are not encrypted. See [Secret Info Oneof Clear Secret Info ](#secret-info-oneof-clear-secret-info) below for details.
+
+`vault_secret_info` - (Optional) Vault Secret is used for the secrets managed by Hashicorp Vault. See [Secret Info Oneof Vault Secret Info ](#secret-info-oneof-vault-secret-info) below for details.(Deprecated)
+
+`wingman_secret_info` - (Optional) Secret is given as bootstrap secret in F5XC Security Sidecar. See [Secret Info Oneof Wingman Secret Info ](#secret-info-oneof-wingman-secret-info) below for details.(Deprecated)
+
+### Waf Exclusion Choice Inherited Waf Exclusion
+
+Any WAF Exclusion configuration that was configured on a higher level will be enforced.
 
 Attribute Reference
 -------------------

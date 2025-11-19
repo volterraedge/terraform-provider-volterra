@@ -26,7 +26,9 @@ resource "volterra_data_type" "example" {
     key_pattern {
       // One of the arguments from this list "exact_values regex_value substring_value" must be set
 
-      regex_value = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\\\.[a-zA-Z]{2,}$"
+      exact_values {
+        exact_values = ["email, Email, EMAIL"]
+      }
     }
   }
 }

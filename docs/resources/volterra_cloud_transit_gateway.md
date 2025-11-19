@@ -43,6 +43,8 @@ resource "volterra_cloud_transit_gateway" "example" {
       vpc_id = "vpc-12345678901234567"
     }
 
+    tgw_asn = "64512"
+
     // One of the arguments from this list "existing_tgw new_tgw" must be set
 
     new_tgw {
@@ -54,6 +56,8 @@ resource "volterra_cloud_transit_gateway" "example" {
     // One of the arguments from this list "reserved_tgw_cidr tgw_cidr" must be set
 
     reserved_tgw_cidr = true
+    tgw_cidr_ipv4 = "tgw_cidr_ipv4"
+    volterra_site_asn = "64500"
   }
 }
 
@@ -114,6 +118,8 @@ AWS Backend. We use AWS Transit Gateway to attach VPC via Cloud Connect object..
 
 `service_vpc` - (Required) Service VPC info TGW attached to. See [Aws Service Vpc ](#aws-service-vpc) below for details.
 
+`tgw_asn` - (Optional) TGW ASN. Allowed range for 16-bit private ASNs include 64512 to 65534. (`Int`).(Deprecated)
+
 ###### One of the arguments from this list "existing_tgw, new_tgw" must be set
 
 `existing_tgw` - (Optional) Information about existing TGW. See [Tgw Choice Existing Tgw ](#tgw-choice-existing-tgw) below for details.
@@ -125,6 +131,10 @@ AWS Backend. We use AWS Transit Gateway to attach VPC via Cloud Connect object..
 `reserved_tgw_cidr` - (Optional) Autogenerate and reserve a TGW CIDR Block from the Primary CIDR (`Bool`).
 
 `tgw_cidr` - (Optional) Specify TGW CIDR block. See [Tgw Cidr Choice Tgw Cidr ](#tgw-cidr-choice-tgw-cidr) below for details.
+
+`tgw_cidr_ipv4` - (Optional) Allocated TGW CIDR by config service (`String`).(Deprecated)
+
+`volterra_site_asn` - (Optional) F5XC Site ASN. (`Int`).(Deprecated)
 
 ### Ref
 
