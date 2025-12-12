@@ -149,6 +149,8 @@ func FlattenAdvertiseWhere(x []*ves_io_schema_views.WhereType) []interface{} {
 	for _, val := range x {
 		mapValue := map[string]interface{}{
 			"advertise_on_public":   FlattenAdvertiseOnPublic(val.GetAdvertiseOnPublic()),
+			"cloud_edge_segment":    FlattenCloudEdgeSegment(val.GetCloudEdgeSegment()),
+			"segment":               FlattenWhSegment(val.GetSegment()),
 			"site":                  FlattenSite(val.GetSite()),
 			"site_segment":          FlattenSiteSegment(val.GetSiteSegment()),
 			"virtual_network":       FlattenVirtualNetwork(val.GetVirtualNetwork()),
@@ -388,6 +390,7 @@ func FlattenPropertyValidationSettingsCustom(x *ves_io_schema_views_common_waf.V
 	if x != nil {
 		pvsceValue := map[string]interface{}{
 			"query_parameters": FlattenQueryParameters(x.GetQueryParameters()),
+			"headers":          FlattenPVSCHeaders(x.GetHeaders()),
 		}
 		pvscValue = append(pvscValue, pvsceValue)
 	}
@@ -2877,19 +2880,20 @@ func FlattenDefaultPool(x *ves_io_schema_views_origin_pool.GlobalSpecType) []int
 	val := make([]interface{}, 0)
 	if x != nil {
 		test := map[string]interface{}{
-			"advanced_options":       FlattenDPAdvancedOption(x.GetAdvancedOptions()),
-			"endpoint_selection":     x.GetEndpointSelection().String(),
-			"health_check_port":      x.GetHealthCheckPort(),
-			"same_as_endpoint_port":  x.GetSameAsEndpointPort() != nil,
-			"healthcheck":            FlattenVObjectRefTypeList(x.GetHealthcheck()),
-			"loadbalancer_algorithm": x.GetLoadbalancerAlgorithm().String(),
-			"origin_servers":         FlattenOriginServers(x.GetOriginServers()),
-			"automatic_port":         isEmpty(x.GetAutomaticPort()),
-			"lb_port":                isEmpty(x.GetLbPort()),
-			"port":                   x.GetPort(),
-			"no_tls":                 isEmpty(x.GetNoTls()),
-			"use_tls":                FlattenUseTls(x.GetUseTls()),
-			"view_internal":          FlattenObjectRefTypeSet(x.GetViewInternal()),
+			"advanced_options":              FlattenDPAdvancedOption(x.GetAdvancedOptions()),
+			"endpoint_selection":            x.GetEndpointSelection().String(),
+			"health_check_port":             x.GetHealthCheckPort(),
+			"same_as_endpoint_port":         x.GetSameAsEndpointPort() != nil,
+			"healthcheck":                   FlattenVObjectRefTypeList(x.GetHealthcheck()),
+			"loadbalancer_algorithm":        x.GetLoadbalancerAlgorithm().String(),
+			"origin_servers":                FlattenOriginServers(x.GetOriginServers()),
+			"automatic_port":                isEmpty(x.GetAutomaticPort()),
+			"lb_port":                       isEmpty(x.GetLbPort()),
+			"port":                          x.GetPort(),
+			"no_tls":                        isEmpty(x.GetNoTls()),
+			"use_tls":                       FlattenUseTls(x.GetUseTls()),
+			"upstream_conn_pool_reuse_type": FlattenUpstreamConnPoolReuseType(x.GetUpstreamConnPoolReuseType()),
+			"view_internal":                 FlattenObjectRefTypeSet(x.GetViewInternal()),
 		}
 		val = append(val, test)
 	}
@@ -3272,6 +3276,7 @@ func FlattenRateLimiter(x *ves_io_schema_rate_limiter.RateLimitValue) []interfac
 	if x != nil {
 		rlVal := map[string]interface{}{
 			"action_block":      FlattenActionBlock(x.GetActionBlock()),
+			"disabled":          isEmpty(x.GetDisabled()),
 			"burst_multiplier":  x.GetBurstMultiplier(),
 			"period_multiplier": x.GetPeriodMultiplier(),
 			"total_number":      x.GetTotalNumber(),
@@ -3403,6 +3408,8 @@ func FlattenSRAdvancedOptions(x *ves_io_schema_views_http_loadbalancer.RouteSimp
 			"app_firewall":               FlattenObjectRefTypeSet(x.GetAppFirewall()),
 			"disable_waf":                isEmpty(x.GetDisableWaf()),
 			"inherited_waf":              isEmpty(x.GetInheritedWaf()),
+			"inherited_waf_exclusion":    isEmpty(x.GetInheritedWafExclusion()),
+			"waf_exclusion_policy":       FlattenObjectRefTypeSet(x.GetWafExclusionPolicy()),
 			"disable_web_socket_config":  isEmpty(x.GetDisableWebSocketConfig()),
 			"web_socket_config":          FlattenWebSocketConfig(x.GetWebSocketConfig()),
 		}
@@ -3575,8 +3582,9 @@ func FlattenRouteDirectResponse(x *ves_io_schema_route.RouteDirectResponse) []in
 	rdrValue := make([]interface{}, 0)
 	if x != nil {
 		rdrVal := map[string]interface{}{
-			"response_body": x.GetResponseBody(),
-			"response_code": x.GetResponseCode(),
+			"response_body":         x.GetResponseBody(),
+			"response_code":         x.GetResponseCode(),
+			"response_body_encoded": x.GetResponseBodyEncoded(),
 		}
 		rdrValue = append(rdrValue, rdrVal)
 	}
@@ -4075,6 +4083,79 @@ func FlattenCachingPolicy(x *ves_io_schema_views_http_loadbalancer.CachingPolicy
 	return rslt
 }
 
+func FlattenWAFRules(x []*ves_io_schema_policy.SimpleWafExclusionRule) []interface{} {
+	rslt := make([]interface{}, 0)
+	for _, v := range x {
+		val := map[string]interface{}{
+			"any_domain":                     isEmpty(v.GetAnyDomain()),
+			"exact_value":                    v.GetExactValue(),
+			"suffix_value":                   v.GetSuffixValue(),
+			"expiration_timestamp":           FlattenExpirationTimestamp(v.GetExpirationTimestamp()),
+			"metadata":                       FlattenMetadata(v.GetMetadata()),
+			"methods":                        FlattenMethods(v.GetMethods()),
+			"any_path":                       isEmpty(v.GetAnyPath()),
+			"path_prefix":                    v.GetPathPrefix(),
+			"path_regex":                     v.GetPathRegex(),
+			"app_firewall_detection_control": FlattenAppFirewallDetectionControl(v.GetAppFirewallDetectionControl()),
+			"waf_skip_processing":            isEmpty(v.GetWafSkipProcessing()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+}
+
+func FlattenWafExclusionInlineRules(x *ves_io_schema_views_common_waf.WafExclusionInlineRules) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"rules": FlattenWAFRules(x.GetRules()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+}
+
+func FlattenWafExclusion(x *ves_io_schema_views_common_waf.WafExclusion) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"waf_exclusion_inline_rules": FlattenWafExclusionInlineRules(x.GetWafExclusionInlineRules()),
+			"waf_exclusion_policy":       FlattenObjectRefTypeSet(x.GetWafExclusionPolicy()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+}
+
+func FlattenAdvancedMobileSdkConfig(x *ves_io_schema_views_common_security.BotAdvancedMobileSDKConfigType) []interface{} {
+	mscValue := make([]interface{}, 0)
+	if x != nil {
+		mscVal := map[string]interface{}{
+			"mobile_identifier": FlattenMobileIdentifier(x.GetMobileIdentifier()),
+		}
+		mscValue = append(mscValue, mscVal)
+	}
+	return mscValue
+}
+
+func FlattenBotDefenseAdvanced(x *ves_io_schema_views_common_security.BotDefenseAdvancedType) []interface{} {
+	rslt := make([]interface{}, 0)
+	if x != nil {
+		val := map[string]interface{}{
+			"disable_js_insert":          isEmpty(x.GetDisableJsInsert()),
+			"js_insert_all_pages":        FlattenJsInsertAllPages(x.GetJsInsertAllPages()),
+			"js_insert_all_pages_except": FlattenJsInsertAllPagesExcept(x.GetJsInsertAllPagesExcept()),
+			"js_insertion_rules":         FlattenJsInsertionRules(x.GetJsInsertionRules()),
+			"mobile":                     FlattenObjectRefTypeSet(x.GetMobile()),
+			"disable_mobile_sdk":         isEmpty(x.GetDisableMobileSdk()),
+			"mobile_sdk_config":          FlattenAdvancedMobileSdkConfig(x.GetMobileSdkConfig()),
+			"web":                        FlattenObjectRefTypeSet(x.GetWeb()),
+		}
+		rslt = append(rslt, val)
+	}
+	return rslt
+}
+
 func DriftDetectionSpec(d *schema.ResourceData, resp vesapi.GetObjectResponse) {
 	spec := resp.GetObjSpec().(*ves_io_schema_views_http_loadbalancer.SpecType)
 
@@ -4087,6 +4168,10 @@ func DriftDetectionSpec(d *schema.ResourceData, resp vesapi.GetObjectResponse) {
 	d.Set("advertise_on_public_default_vip", isEmpty(spec.GcSpec.GetAdvertiseOnPublicDefaultVip()))
 
 	d.Set("do_not_advertise", isEmpty(spec.GcSpec.GetDoNotAdvertise()))
+
+	d.Set("api_definition", FlattenObjectRefTypeSet(spec.GcSpec.GetApiDefinition()))
+
+	d.Set("api_definitions", FlattenApiDefinitions(spec.GcSpec.GetApiDefinitions()))
 
 	d.Set("api_specification", FlattenApiSpecification(spec.GcSpec.GetApiSpecification()))
 
@@ -4106,7 +4191,13 @@ func DriftDetectionSpec(d *schema.ResourceData, resp vesapi.GetObjectResponse) {
 
 	d.Set("bot_defense", FlattenBotDefense(spec.GcSpec.GetBotDefense()))
 
+	d.Set("bot_defense_advanced", FlattenBotDefenseAdvanced(spec.GcSpec.GetBotDefenseAdvanced()))
+
 	d.Set("disable_bot_defense", isEmpty(spec.GcSpec.GetDisableBotDefense()))
+
+	d.Set("caching_policy", FlattenCachingPolicy(spec.GcSpec.GetCachingPolicy()))
+
+	d.Set("disable_caching", isEmpty(spec.GcSpec.GetDisableCaching()))
 
 	d.Set("captcha_challenge", FlattenCaptchaChallenge(spec.GcSpec.GetCaptchaChallenge()))
 
@@ -4218,9 +4309,7 @@ func DriftDetectionSpec(d *schema.ResourceData, resp vesapi.GetObjectResponse) {
 
 	d.Set("disable_waf", isEmpty(spec.GcSpec.GetDisableWaf()))
 
+	d.Set("waf_exclusion", FlattenWafExclusion(spec.GcSpec.GetWafExclusion()))
+
 	d.Set("waf_exclusion_rules", FlattenWafExclusionRules(spec.GcSpec.GetWafExclusionRules()))
-
-	d.Set("caching_policy", FlattenCachingPolicy(spec.GcSpec.GetCachingPolicy()))
-
-	d.Set("disable_caching", isEmpty(spec.GcSpec.GetDisableCaching()))
 }
