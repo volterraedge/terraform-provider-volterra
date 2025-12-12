@@ -686,7 +686,7 @@ The WAF Exclusion is evaluated sequentially and can only be matched once per req
 
 `waf_exclusion_inline_rules` - (Optional) An ordered list of rules specific to this Load Balancer.. See [Waf Exclusion Choice Waf Exclusion Inline Rules ](#waf-exclusion-choice-waf-exclusion-inline-rules) below for details.
 
-`waf_exclusion_policy` - (Required) A policy containing an ordered list of rules that can be applied to one or more Load Balancers or Routes.. See [ref](#ref) below for details.
+`waf_exclusion_policy` - (Optional) A policy containing an ordered list of rules that can be applied to one or more Load Balancers or Routes.. See [ref](#ref) below for details.
 
 ### Waf Exclusion Rules
 

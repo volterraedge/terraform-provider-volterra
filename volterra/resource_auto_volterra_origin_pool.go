@@ -19,9 +19,8 @@ import (
 	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
 	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 
-	statemigration "github.com/volterraedge/terraform-provider-volterra/volterra/state_migration"
 	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
-
+	statemigration "github.com/volterraedge/terraform-provider-volterra/volterra/state_migration"
 )
 
 // resourceVolterraOriginPool is implementation of Volterra's OriginPool resources
@@ -844,7 +843,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 										Type:     schema.TypeList,
 										MaxItems: 1,
-										Required: true,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -1025,7 +1024,7 @@ func resourceVolterraOriginPool() *schema.Resource {
 
 										Type:     schema.TypeList,
 										MaxItems: 1,
-										Required: true,
+										Optional: true,
 										Elem: &schema.Resource{
 											Schema: map[string]*schema.Schema{
 
@@ -4446,7 +4445,7 @@ func setOriginPoolFields(client *APIClient, d *schema.ResourceData, resp vesapi.
 
 	d.Set("namespace", metadata.GetNamespace())
 
-	drift.DriftDetectionSpec_OriginPool(d,resp)
+	drift.DriftDetectionSpec_OriginPool(d, resp)
 
 	return nil
 }

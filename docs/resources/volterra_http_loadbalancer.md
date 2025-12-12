@@ -689,7 +689,7 @@ More options like header manipulation, compression etc..
 
 `cookies_to_modify` - (Optional) List of cookies to be modified from the HTTP response being sent towards downstream.. See [More Option Cookies To Modify ](#more-option-cookies-to-modify) below for details.(Deprecated)
 
-`custom_errors` - (Optional) matches for a request. (`String`).
+`custom_errors` - (Optional) Map of integer error codes as keys and string values that can be used to provide custom http pages for each error code. Key of the map can be either response code class or HTTP Error code. Response code classes for key is configured as follows 3 -- for 3xx response code class, 4 -- for 4xx response code class, 5 -- for 5xx response code class. Value of the map is string which represents custom HTTP responses. Specific response code takes preference when both response code and response code class matches for a request.(`map(string)`).
 
 `disable_default_error_pages` - (Optional) Disable the use of default F5XC error pages. (`Bool`).
 
@@ -833,7 +833,7 @@ The WAF Exclusion is evaluated sequentially and can only be matched once per req
 
 `waf_exclusion_inline_rules` - (Optional) An ordered list of rules specific to this Load Balancer.. See [Waf Exclusion Choice Waf Exclusion Inline Rules ](#waf-exclusion-choice-waf-exclusion-inline-rules) below for details.
 
-`waf_exclusion_policy` - (Required) A policy containing an ordered list of rules that can be applied to one or more Load Balancers or Routes.. See [ref](#ref) below for details.
+`waf_exclusion_policy` - (Optional) A policy containing an ordered list of rules that can be applied to one or more Load Balancers or Routes.. See [ref](#ref) below for details.
 
 ### Waf Exclusion Rules
 
@@ -2209,7 +2209,7 @@ Specify origin server with private or public IP address and site information.
 
 `outside_network` - (Optional) Outside network on the site (`Bool`).
 
-`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
+`segment` - (Optional) Segment where this origin server is located. See [ref](#ref) below for details.
 
 ###### One of the arguments from this list "ip, ipv6" must be set
 
@@ -2233,7 +2233,7 @@ Specify origin server with private or public DNS name and site information.
 
 `outside_network` - (Optional) Outside network on the site (`Bool`).
 
-`segment` - (Required) Segment where this origin server is located. See [ref](#ref) below for details.
+`segment` - (Optional) Segment where this origin server is located. See [ref](#ref) below for details.
 
 `refresh_interval` - (Optional) Max value is 7 days as per https://datatracker.ietf.org/doc/html/rfc8767 (`Int`).
 
@@ -5949,7 +5949,7 @@ Configure Advanced per route options.
 
 `inherited_waf_exclusion` - (Optional) Hence no custom configuration is applied on the route (`Bool`).
 
-`waf_exclusion_policy` - (Required) A reference to WAF Exclusion Policy configuration object. See [ref](#ref) below for details.
+`waf_exclusion_policy` - (Optional) A reference to WAF Exclusion Policy configuration object. See [ref](#ref) below for details.
 
 ###### One of the arguments from this list "disable_web_socket_config, web_socket_config" must be set
 
