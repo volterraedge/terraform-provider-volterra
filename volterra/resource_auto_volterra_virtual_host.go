@@ -108,7 +108,7 @@ func resourceVolterraVirtualHost() *schema.Resource {
 
 							Type:       schema.TypeList,
 							MaxItems:   1,
-							Required:   true,
+							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{

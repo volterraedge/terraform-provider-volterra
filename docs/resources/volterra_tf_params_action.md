@@ -23,7 +23,7 @@ Example Usage
 ```hcl
 resource "volterra_tf_params_action" "example" {
   site_name       = "site1"
-  site_kind       = "aws_vpc_site
+  site_kind       = "aws_vpc_site"
   action          = "plan"
   wait_for_action = true
 }

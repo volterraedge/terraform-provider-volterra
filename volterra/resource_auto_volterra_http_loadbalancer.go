@@ -11132,7 +11132,7 @@ func resourceVolterraHttpLoadbalancer() *schema.Resource {
 
 									"max_value_length": {
 										Type:       schema.TypeInt,
-										Required:   true,
+										Optional:   true,
 										Deprecated: "This field is deprecated and will be removed in future release.",
 									},
 

@@ -1767,12 +1767,12 @@ func resourceVolterraServicePolicy() *schema.Resource {
 
 															"allow_goodbot": {
 																Type:     schema.TypeBool,
-																Required: true,
+																Optional: true,
 															},
 
 															"web_scraping": {
 																Type:     schema.TypeBool,
-																Required: true,
+																Optional: true,
 															},
 
 															"flow_label": {
