@@ -12,8 +12,10 @@ import (
 	"time"
 
 	"github.com/gogo/protobuf/proto"
+	"github.com/hashicorp/terraform-plugin-log/tflog"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/moul/http2curl"
+	"golang.org/x/time/rate"
 
 	"gopkg.volterra.us/stdlib/client"
 	"gopkg.volterra.us/stdlib/client/vesapi"
@@ -23,6 +25,16 @@ import (
 
 	ves_io_schema_combined "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/combined"
 )
+
+// Create a global rate limiter instance (the bucket)
+// The limiter is initialized to allow 'Limit' events per second, with a 'Burst' capacity.
+var limiter *rate.Limiter
+
+// ProviderLimiter rate limiting configuration
+type ProviderLimiter struct {
+	Rate  rate.Limit
+	Burst int32
+}
 
 // Config data for volterra provider
 type Config struct {
@@ -36,6 +48,7 @@ type Config struct {
 	vesenv         bool
 	tenant         string
 	timeout        string
+	limiter        *ProviderLimiter
 	// mapping of protobuf service FQN to service slug(e.g. 'config') on apiGw
 	serviceSlugs map[string]string
 }
@@ -47,7 +60,14 @@ type APIClient struct {
 
 // CreateObject populates the correct slug and calls volt's CreateObject
 func (a *APIClient) CreateObject(ctx context.Context, objType string, req vesapi.CreateObjectRequest, opts ...vesapi.CallOpt) (vesapi.CreateObjectResponse, error) {
-	ctx, err := addSvcSlugToContextForCRUD(ctx, objType)
+	err := limiter.Wait(ctx)
+	if err != nil {
+		tflog.Info(ctx, fmt.Sprintf("Create request %s failed to wait: %v", objType, err))
+		return nil, err
+	}
+	tflog.Info(ctx, fmt.Sprintf("Create request %s sent at %s\n", objType, time.Now().Format("15:04:05.000")))
+
+	ctx, err = addSvcSlugToContextForCRUD(ctx, objType)
 	if err != nil {
 		return nil, err
 	}
@@ -56,7 +76,14 @@ func (a *APIClient) CreateObject(ctx context.Context, objType string, req vesapi
 
 // GetObject populates the correct slug and calls volt's GetObject
 func (a *APIClient) GetObject(ctx context.Context, objType, namespace, name string, opts ...vesapi.CallOpt) (vesapi.GetObjectResponse, error) {
-	ctx, err := addSvcSlugToContextForCRUD(ctx, objType)
+	err := limiter.Wait(ctx)
+	if err != nil {
+		tflog.Info(ctx, fmt.Sprintf("Get request %s failed to wait: %v", objType, err))
+		return nil, err
+	}
+	tflog.Info(ctx, fmt.Sprintf("Get request %s sent at %s\n", objType, time.Now().Format("15:04:05.000")))
+
+	ctx, err = addSvcSlugToContextForCRUD(ctx, objType)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +92,14 @@ func (a *APIClient) GetObject(ctx context.Context, objType, namespace, name stri
 
 // ReplaceObject populates the correct slug and calls volt's ReplaceObject
 func (a *APIClient) ReplaceObject(ctx context.Context, objType string, req vesapi.ReplaceObjectRequest, opts ...vesapi.CallOpt) error {
-	ctx, err := addSvcSlugToContextForCRUD(ctx, objType)
+	err := limiter.Wait(ctx)
+	if err != nil {
+		tflog.Info(ctx, fmt.Sprintf("Replace request %s failed to wait: %v", objType, err))
+		return err
+	}
+	tflog.Info(ctx, fmt.Sprintf("Replace request %s sent at %s\n", objType, time.Now().Format("15:04:05.000")))
+
+	ctx, err = addSvcSlugToContextForCRUD(ctx, objType)
 	if err != nil {
 		return err
 	}
@@ -75,7 +109,14 @@ func (a *APIClient) ReplaceObject(ctx context.Context, objType string, req vesap
 
 // DeleteObject populates the correct slug and calls volt's DeleteObject
 func (a *APIClient) DeleteObject(ctx context.Context, objType string, namespace, name string, opts ...vesapi.CallOpt) error {
-	ctx, err := addSvcSlugToContextForCRUD(ctx, objType)
+	err := limiter.Wait(ctx)
+	if err != nil {
+		tflog.Info(ctx, fmt.Sprintf("Delete request %s failed to wait: %v", objType, err))
+		return err
+	}
+	tflog.Info(ctx, fmt.Sprintf("Delete request %s sent at %s\n", objType, time.Now().Format("15:04:05.000")))
+
+	ctx, err = addSvcSlugToContextForCRUD(ctx, objType)
 	if err != nil {
 		return err
 	}
@@ -84,7 +125,14 @@ func (a *APIClient) DeleteObject(ctx context.Context, objType string, namespace,
 
 // ListObjects populates the correct slug and calls volt's ListObjects
 func (a *APIClient) ListObjects(ctx context.Context, objType, namespace string, opts ...vesapi.CallOpt) ([]vesapi.ListObjectItem, error) {
-	ctx, err := addSvcSlugToContextForCRUD(ctx, objType)
+	err := limiter.Wait(ctx)
+	if err != nil {
+		tflog.Info(ctx, fmt.Sprintf("List request %s failed to wait: %v", objType, err))
+		return nil, err
+	}
+	tflog.Info(ctx, fmt.Sprintf("List request %s sent at %s\n", objType, time.Now().Format("15:04:05.000")))
+
+	ctx, err = addSvcSlugToContextForCRUD(ctx, objType)
 	if err != nil {
 		return nil, err
 	}
@@ -93,7 +141,14 @@ func (a *APIClient) ListObjects(ctx context.Context, objType, namespace string, 
 
 // CustomAPI populates the correct slug and calls volt's custom API
 func (a *APIClient) CustomAPI(ctx context.Context, method, uri, rpcFQN, reqYml string, opts ...vesapi.CallOpt) (proto.Message, error) {
-	ctx, err := addSvcSlugToContextForCustom(ctx, rpcFQN)
+	err := limiter.Wait(ctx)
+	if err != nil {
+		tflog.Info(ctx, fmt.Sprintf("Custom API request %s failed to wait: %v", method, err))
+		return nil, err
+	}
+	tflog.Info(ctx, fmt.Sprintf("Custom API request %s sent at %s\n", method, time.Now().Format("15:04:05.000")))
+
+	ctx, err = addSvcSlugToContextForCustom(ctx, rpcFQN)
 	if err != nil {
 		return nil, err
 	}
@@ -223,7 +278,6 @@ func getclientOpts(c *Config) ([]vesapi.ConfigOpt, error) {
 
 // Client returns a new volt api client, which will be used to access public API's
 func (c *Config) Client() (*APIClient, diag.Diagnostics) {
-
 	var clOpts []vesapi.ConfigOpt
 	clOpts, err := getclientOpts(c)
 	if err != nil {
@@ -239,6 +293,11 @@ func (c *Config) Client() (*APIClient, diag.Diagnostics) {
 	voltAPICl, err := vesapi.NewAPIClient(c.url, ves_io_schema_combined.MDR, clOpts...)
 	if err != nil {
 		return nil, diag.FromErr(errors.Wrap(err, "Creating new Volterra APIClient"))
+	}
+
+	// Initialize the global rate limiter
+	if c.limiter != nil {
+		limiter = rate.NewLimiter(rate.Limit(c.limiter.Rate), int(c.limiter.Burst))
 	}
 
 	apiCl := &APIClient{

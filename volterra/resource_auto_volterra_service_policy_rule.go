@@ -1666,7 +1666,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"allow_goodbot": {
 							Type:       schema.TypeBool,
-							Required:   true,
+							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 
@@ -1874,7 +1874,7 @@ func resourceVolterraServicePolicyRule() *schema.Resource {
 
 						"web_scraping": {
 							Type:       schema.TypeBool,
-							Required:   true,
+							Optional:   true,
 							Deprecated: "This field is deprecated and will be removed in future release.",
 						},
 					},

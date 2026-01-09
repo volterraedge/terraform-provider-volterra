@@ -10,6 +10,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"golang.org/x/time/rate"
 )
 
 var (
@@ -108,6 +109,26 @@ func Provider() *schema.Provider {
 				DefaultFunc: schema.EnvDefaultFunc("VOLT_API_TIMEOUT", "20s"),
 				Description: "The Volt API call timeout value, by default its 20s",
 			},
+			"limiter": {
+				Type:        schema.TypeList,
+				Optional:    true,
+				MaxItems:    1,
+				Description: "The F5XC API configuration block for API rate limiting.",
+				Elem: &schema.Resource{
+					Schema: map[string]*schema.Schema{
+						"rate": {
+							Type:        schema.TypeFloat,
+							Required:    true,
+							Description: "The maximum number of requests per second.",
+						},
+						"burst": {
+							Type:        schema.TypeInt,
+							Required:    true,
+							Description: "The maximum burst size for requests.",
+						},
+					},
+				},
+			},
 		},
 		ResourcesMap: getResourceMap(),
 		DataSourcesMap: map[string]*schema.Resource{
@@ -143,6 +164,28 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 	}
 
 	config.timeout = d.Get("timeout").(string)
+
+	if v, ok := d.GetOk("limiter"); ok {
+		limiterMap, ok := v.(map[string]interface{})
+		if ok {
+			rateVal, ok := limiterMap["rate"].(float64)
+			if !ok {
+				rateVal = float64(rate.Inf)
+			}
+			burstVal, ok := limiterMap["burst"].(float64)
+			if !ok {
+				burstVal = 0
+			}
+			config.limiter = &ProviderLimiter{
+				Rate:  rate.Limit(rateVal),
+				Burst: int32(burstVal),
+			}
+		} else {
+			config.limiter = &ProviderLimiter{Rate: rate.Inf, Burst: 0}
+		}
+	} else {
+		config.limiter = &ProviderLimiter{Rate: rate.Inf, Burst: 0}
+	}
 
 	if v, ok := d.GetOk("test"); ok {
 		config.test = v.(bool)
