@@ -27,8 +27,8 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	object "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	object "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group"
 )
 
 var (

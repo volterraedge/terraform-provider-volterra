@@ -14,9 +14,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_global_log_receiver "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/global_log_receiver"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_global_log_receiver "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/global_log_receiver"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // resourceVolterraGlobalLogReceiver is implementation of Volterra's GlobalLogReceiver resources

@@ -14,12 +14,12 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_dns_proxy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_proxy"
-	ves_io_schema_healthcheck "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/healthcheck"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
-	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_dns_proxy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_proxy"
+	ves_io_schema_healthcheck "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/healthcheck"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views_origin_pool "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
+	ves_io_schema_virtual_host "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 )
 
 // resourceVolterraDnsProxy is implementation of Volterra's DnsProxy resources

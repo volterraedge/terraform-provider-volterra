@@ -14,8 +14,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_bigip_irule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigip_irule"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_bigip_irule "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/bigip_irule"
 )
 
 // resourceVolterraBigipIrule is implementation of Volterra's BigipIrule resources

@@ -14,10 +14,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
-	ves_io_schema_unified_policy_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/unified_policy_group"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	ves_io_schema_unified_policy_group "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/unified_policy_group"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // resourceVolterraUnifiedPolicyGroup is implementation of Volterra's UnifiedPolicyGroup resources

@@ -14,7 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_dns_zone "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone"
+	ves_io_schema_dns_zone "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_zone"
 )
 
 var (

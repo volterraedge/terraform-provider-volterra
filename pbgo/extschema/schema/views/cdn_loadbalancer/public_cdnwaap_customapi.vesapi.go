@@ -21,7 +21,7 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema_views_common_security "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_security"
+	ves_io_schema_views_common_security "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/common_security"
 )
 
 var (

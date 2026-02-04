@@ -14,7 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_nginx_one_nginx_instance "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_instance"
+	ves_io_schema_nginx_one_nginx_instance "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_instance"
 )
 
 var (

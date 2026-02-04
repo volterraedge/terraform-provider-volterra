@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema_api_credential "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
+	ves_io_schema_api_credential "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_credential"
 )
 
 func TestAccAPICredentialBasic(t *testing.T) {

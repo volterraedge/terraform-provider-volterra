@@ -14,10 +14,10 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_shape_bot_defense_protected_application_cloudflare "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application/cloudflare"
-	ves_io_schema_shape_bot_defense_protected_application_cloudfront "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application/cloudfront"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_shape_bot_defense_protected_application_cloudflare "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application/cloudflare"
+	ves_io_schema_shape_bot_defense_protected_application_cloudfront "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application/cloudfront"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 var (

@@ -14,7 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_views_cdn_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer"
+	ves_io_schema_views_cdn_loadbalancer "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer"
 )
 
 var (

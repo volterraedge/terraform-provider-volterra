@@ -14,8 +14,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_data_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/data_type"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_data_type "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/data_type"
 )
 
 // resourceVolterraDataType is implementation of Volterra's DataType resources

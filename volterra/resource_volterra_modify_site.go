@@ -19,8 +19,8 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_site "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site"
 )
 
 // resourceVolterraModifySite is implementation of Volterra's Site resources

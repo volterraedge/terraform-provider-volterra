@@ -18,8 +18,8 @@ import (
 	"gopkg.volterra.us/stdlib/errors"
 	"gopkg.volterra.us/stdlib/store"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	topology "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	topology "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology"
 
 	"github.com/google/uuid"
 	"gopkg.volterra.us/stdlib/db/sro"

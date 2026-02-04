@@ -6,9 +6,9 @@ package uztna_leasepool
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
-	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group_element"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_group_element"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
 	io "io"
 	math "math"
 	math_bits "math/bits"

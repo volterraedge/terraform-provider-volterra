@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema_cr "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/container_registry"
-	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
+	ves_io_schema_cr "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/container_registry"
+	ves_io_schema_ns "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/namespace"
 )
 
 // TestContainerRegistry object CRUD

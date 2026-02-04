@@ -8,15 +8,15 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema_ap "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy"
-	ves_io_schema_ap_receiver "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_receiver"
-	ves_io_schema_facl "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl"
-	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
-	ves_io_schema_np "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy"
-	ves_io_schema_policer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policer"
-	ves_io_schema_pp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/protocol_policer"
-	ves_io_schema_sp "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
-	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
+	ves_io_schema_ap "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/alert_policy"
+	ves_io_schema_ap_receiver "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/alert_receiver"
+	ves_io_schema_facl "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/fast_acl"
+	ves_io_schema_ns "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/namespace"
+	ves_io_schema_np "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_policy"
+	ves_io_schema_policer "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policer"
+	ves_io_schema_pp "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/protocol_policer"
+	ves_io_schema_sp "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
+	ves_io_schema_tenant "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/tenant"
 )
 
 // TestNamespaceCustomAPI namespace custom api test

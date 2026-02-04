@@ -6,7 +6,7 @@ package subscription
 import (
 	fmt "fmt"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 	io "io"
 	math "math"
 	math_bits "math/bits"

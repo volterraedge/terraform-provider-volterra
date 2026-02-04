@@ -4,7 +4,7 @@
 package view_internal
 
 import (
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 
 	"gopkg.volterra.us/stdlib/db"
 )

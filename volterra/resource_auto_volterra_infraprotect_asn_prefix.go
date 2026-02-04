@@ -14,9 +14,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_infraprotect_asn_prefix "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn_prefix"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_infraprotect_asn_prefix "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn_prefix"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // resourceVolterraInfraprotectAsnPrefix is implementation of Volterra's InfraprotectAsnPrefix resources

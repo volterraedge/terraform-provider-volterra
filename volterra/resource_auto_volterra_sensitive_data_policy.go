@@ -14,10 +14,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_data_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/data_type"
-	ves_io_schema_sensitive_data_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/sensitive_data_policy"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_data_type "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/data_type"
+	ves_io_schema_sensitive_data_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/sensitive_data_policy"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 // resourceVolterraSensitiveDataPolicy is implementation of Volterra's SensitiveDataPolicy resources

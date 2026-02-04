@@ -7,9 +7,9 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/access_log"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/access_log"
 	math "math"
 	strconv "strconv"
 )

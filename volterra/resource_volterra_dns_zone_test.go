@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema_dns_zone "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone"
+	ves_io_schema_dns_zone "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_zone"
 )
 
 // TestDNSZone object CRUD

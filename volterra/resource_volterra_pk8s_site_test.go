@@ -8,12 +8,12 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema_k8s_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster"
-	ves_io_schema_k8s_cluster_role "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role"
-	ves_io_schema_k8s_cluster_role_binding "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role_binding"
-	ves_io_schema_k8s_pod_security_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_policy"
-	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
-	ves_io_schema_voltstack_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site"
+	ves_io_schema_k8s_cluster "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster"
+	ves_io_schema_k8s_cluster_role "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role"
+	ves_io_schema_k8s_cluster_role_binding "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role_binding"
+	ves_io_schema_k8s_pod_security_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_policy"
+	ves_io_schema_tenant "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/tenant"
+	ves_io_schema_voltstack_site "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site"
 )
 
 func TestPK8sSite(t *testing.T) {

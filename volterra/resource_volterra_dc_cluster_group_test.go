@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema_dcg "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group"
+	ves_io_schema_dcg "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group"
 )
 
 // TestDCClusterGrp object CRUD

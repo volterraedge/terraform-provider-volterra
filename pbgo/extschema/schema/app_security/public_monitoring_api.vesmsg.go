@@ -14,9 +14,9 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_app_security_incidents "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_security/incidents"
-	ves_io_schema_app_security_suspicious_user_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_security/suspicious_user_log"
-	ves_io_schema_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log"
+	ves_io_schema_app_security_incidents "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_security/incidents"
+	ves_io_schema_app_security_suspicious_user_log "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_security/suspicious_user_log"
+	ves_io_schema_log "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log"
 )
 
 var (

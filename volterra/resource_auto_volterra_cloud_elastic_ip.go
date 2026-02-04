@@ -14,8 +14,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_cloud_elastic_ip "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_elastic_ip"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_cloud_elastic_ip "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_elastic_ip"
 )
 
 // resourceVolterraCloudElasticIp is implementation of Volterra's CloudElasticIp resources

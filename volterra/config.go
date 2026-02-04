@@ -23,7 +23,7 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	tlsutil "gopkg.volterra.us/stdlib/util/tls"
 
-	ves_io_schema_combined "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/combined"
+	ves_io_schema_combined "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/combined"
 )
 
 // Create a global rate limiter instance (the bucket)

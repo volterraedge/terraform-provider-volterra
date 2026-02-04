@@ -8,7 +8,7 @@ import (
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-	"github.com/volterraedge/terraform-provider-volterra/volterra"
+	"gopkg.volterra.us/terraform-provider-volterra/volterra"
 )
 
 func main() {

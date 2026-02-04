@@ -14,13 +14,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_cluster "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cluster"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views_origin_pool "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
 
-	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
-	statemigration "github.com/volterraedge/terraform-provider-volterra/volterra/state_migration"
+	drift "gopkg.volterra.us/terraform-provider-volterra/volterra/drift_detection"
+	statemigration "gopkg.volterra.us/terraform-provider-volterra/volterra/state_migration"
 )
 
 // resourceVolterraOriginPool is implementation of Volterra's OriginPool resources

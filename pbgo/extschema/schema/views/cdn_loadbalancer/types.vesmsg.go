@@ -14,16 +14,16 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-	ves_io_schema_views_common_cache_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_cache_rule"
-	ves_io_schema_views_common_security "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_security"
-	ves_io_schema_views_common_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
-	ves_io_schema_views_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
-	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
-	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
-	ves_io_schema_virtual_host_dns_info "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views_common_cache_rule "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/common_cache_rule"
+	ves_io_schema_views_common_security "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/common_security"
+	ves_io_schema_views_common_waf "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
+	ves_io_schema_views_http_loadbalancer "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
+	ves_io_schema_views_origin_pool "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
+	ves_io_schema_virtual_host "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
+	ves_io_schema_virtual_host_dns_info "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info"
 )
 
 var (

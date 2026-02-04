@@ -16,7 +16,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 	io "io"
 	math "math"
 	math_bits "math/bits"

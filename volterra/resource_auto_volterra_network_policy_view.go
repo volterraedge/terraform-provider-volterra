@@ -14,11 +14,11 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_network_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy"
-	ves_io_schema_network_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-	ves_io_schema_views_network_policy_view "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/network_policy_view"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_network_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_policy"
+	ves_io_schema_network_policy_rule "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_views_network_policy_view "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/network_policy_view"
 )
 
 // resourceVolterraNetworkPolicyView is implementation of Volterra's NetworkPolicyView resources

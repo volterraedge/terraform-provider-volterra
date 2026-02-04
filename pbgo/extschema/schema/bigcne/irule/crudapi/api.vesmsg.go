@@ -14,8 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_bigcne_irule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigcne/irule"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_bigcne_irule "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/bigcne/irule"
 )
 
 var (

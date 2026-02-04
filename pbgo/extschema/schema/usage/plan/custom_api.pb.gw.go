@@ -20,7 +20,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/status"
-	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	"gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 )
 
 var _ codes.Code

@@ -14,7 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
+	ves_io_schema_app_firewall "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
 )
 
 var (

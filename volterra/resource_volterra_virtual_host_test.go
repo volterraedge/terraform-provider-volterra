@@ -9,8 +9,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
-	ves_io_schema_vh "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
+	ves_io_schema_tenant "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/tenant"
+	ves_io_schema_vh "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 )
 
 func TestAccVirtualHostBasic(t *testing.T) {

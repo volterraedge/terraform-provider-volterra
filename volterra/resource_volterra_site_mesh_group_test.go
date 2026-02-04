@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema_smg "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group"
+	ves_io_schema_smg "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group"
 )
 
 // TestSiteMeshGroup object CRUD

@@ -13,10 +13,10 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
-	views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
+	views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	math "math"
 )
 

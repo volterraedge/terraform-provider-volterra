@@ -14,7 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_secret_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy_rule"
+	ves_io_schema_secret_policy_rule "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/secret_policy_rule"
 )
 
 var (

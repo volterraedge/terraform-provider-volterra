@@ -8,9 +8,9 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema_cloud_cred "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
-	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
-	ves_io_schema_gcp_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
+	ves_io_schema_cloud_cred "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials"
+	ves_io_schema_tenant "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/tenant"
+	ves_io_schema_gcp_vpc_site "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
 )
 
 func TestGCPVPCSiteState(t *testing.T) {

@@ -14,8 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_secret_management_access "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_management_access"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_secret_management_access "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/secret_management_access"
 )
 
 var (

@@ -14,7 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_quota "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/quota"
+	ves_io_schema_quota "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/quota"
 )
 
 var (

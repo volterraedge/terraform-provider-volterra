@@ -1,9 +1,13 @@
+//
+// Copyright (c) 2026 F5 Inc. All rights reserved.
+//
+
 package driftdetection
 
 import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
-	ves_io_schema_ip_prefix_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set"
+	ves_io_schema_ip_prefix_set "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set"
 )
 
 func FlattenIpv6Prefixes(x []*ves_io_schema_ip_prefix_set.Ipv6Prefix) []interface{} {

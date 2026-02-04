@@ -14,8 +14,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_cdn_cache_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cdn_cache_rule"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_cdn_cache_rule "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cdn_cache_rule"
 )
 
 // resourceVolterraCdnCacheRule is implementation of Volterra's CdnCacheRule resources

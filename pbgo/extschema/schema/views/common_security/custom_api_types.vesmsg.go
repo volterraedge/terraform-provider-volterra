@@ -14,7 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_dos_mitigation "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation"
+	ves_io_schema_dos_mitigation "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation"
 )
 
 var (

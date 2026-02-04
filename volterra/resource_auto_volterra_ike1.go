@@ -14,9 +14,9 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_ike1 "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ike1"
-	ves_io_schema_views_ike_phase1_profile "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/ike_phase1_profile"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_ike1 "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ike1"
+	ves_io_schema_views_ike_phase1_profile "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/ike_phase1_profile"
 )
 
 // resourceVolterraIke1 is implementation of Volterra's Ike1 resources

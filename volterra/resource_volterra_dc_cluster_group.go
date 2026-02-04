@@ -14,8 +14,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_dc_cluster_group "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_dc_cluster_group "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group"
 )
 
 // resourceVolterraDcClusterGroup is implementation of Volterra's DcClusterGroup resources

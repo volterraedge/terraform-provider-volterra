@@ -14,8 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log"
-	ves_io_schema_views_cdn_loadbalancer_access_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer/access_log"
+	ves_io_schema_log "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log"
+	ves_io_schema_views_cdn_loadbalancer_access_log "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer/access_log"
 )
 
 var (

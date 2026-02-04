@@ -7,7 +7,7 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema_lr "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log_receiver"
+	ves_io_schema_lr "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log_receiver"
 )
 
 // TestLogReceiver object CRUD

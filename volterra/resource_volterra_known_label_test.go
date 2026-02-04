@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema_known_label "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/known_label"
-	ves_io_schema_known_label_key "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/known_label_key"
+	ves_io_schema_known_label "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/known_label"
+	ves_io_schema_known_label_key "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/known_label_key"
 )
 
 func TestAccKnownLabelBasic(t *testing.T) {

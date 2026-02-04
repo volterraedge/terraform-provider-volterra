@@ -14,15 +14,15 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_log_access_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/access_log"
-	ves_io_schema_log_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/audit_log"
-	ves_io_schema_log_firewall_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/firewall_log"
-	ves_io_schema_log_k8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_audit_log"
-	ves_io_schema_log_k8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_events"
-	ves_io_schema_log_platform_event "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/platform_event"
-	ves_io_schema_log_vk8s_audit_log "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_audit_log"
-	ves_io_schema_log_vk8s_events "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_events"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_log_access_log "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/access_log"
+	ves_io_schema_log_audit_log "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/audit_log"
+	ves_io_schema_log_firewall_log "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/firewall_log"
+	ves_io_schema_log_k8s_audit_log "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_audit_log"
+	ves_io_schema_log_k8s_events "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_events"
+	ves_io_schema_log_platform_event "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/platform_event"
+	ves_io_schema_log_vk8s_audit_log "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_audit_log"
+	ves_io_schema_log_vk8s_events "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_events"
 )
 
 var (

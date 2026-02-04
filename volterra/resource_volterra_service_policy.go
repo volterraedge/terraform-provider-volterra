@@ -14,13 +14,13 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_app_firewall "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
-	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
-	ves_io_schema_service_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
-	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_app_firewall "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_firewall"
+	ves_io_schema_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	ves_io_schema_service_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/service_policy"
+	ves_io_schema_service_policy_rule "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	drift "gopkg.volterra.us/terraform-provider-volterra/volterra/drift_detection"
 )
 
 // resourceVolterraServicePolicy is implementation of Volterra's ServicePolicy resources

@@ -14,8 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_virtual_k8s_quota "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s_quota"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_virtual_k8s_quota "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s_quota"
 )
 
 var (

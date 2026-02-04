@@ -14,8 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_topology_topology_network_peer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_network_peer"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_topology_topology_network_peer "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_network_peer"
 )
 
 var (

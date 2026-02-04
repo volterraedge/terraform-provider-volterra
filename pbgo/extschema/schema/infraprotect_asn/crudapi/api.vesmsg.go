@@ -14,8 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_infraprotect_asn "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_infraprotect_asn "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn"
 )
 
 var (

@@ -14,10 +14,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_ip_prefix_set "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_ip_prefix_set "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set"
 
-	drift "github.com/volterraedge/terraform-provider-volterra/volterra/drift_detection"
+	drift "gopkg.volterra.us/terraform-provider-volterra/volterra/drift_detection"
 
 )
 

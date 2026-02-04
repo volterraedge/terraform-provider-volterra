@@ -14,8 +14,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_nginx_one_nginx_service_discovery "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_service_discovery"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_nginx_one_nginx_service_discovery "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_service_discovery"
 )
 
 // resourceVolterraNginxServiceDiscovery is implementation of Volterra's NginxServiceDiscovery resources

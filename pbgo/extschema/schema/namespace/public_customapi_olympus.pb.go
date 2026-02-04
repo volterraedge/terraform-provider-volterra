@@ -18,9 +18,9 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology"
-	_ "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology"
+	_ "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/vesenv"
 	math "math"
 )
 

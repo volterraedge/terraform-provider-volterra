@@ -8,11 +8,11 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema_fleet "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet"
-	ves_io_schema_ns "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace"
-	ves_io_schema_nc "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_connector"
-	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
-	ves_io_schema_vn "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_network"
+	ves_io_schema_fleet "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/fleet"
+	ves_io_schema_ns "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/namespace"
+	ves_io_schema_nc "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_connector"
+	ves_io_schema_tenant "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/tenant"
+	ves_io_schema_vn "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_network"
 )
 
 // TestFleet token creation test

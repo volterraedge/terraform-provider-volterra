@@ -8,8 +8,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
-	ves_io_schema_tenant "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant"
-	ves_io_schema_voltstack_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site"
+	ves_io_schema_tenant "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/tenant"
+	ves_io_schema_voltstack_site "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site"
 )
 
 func TestVoltstackSite(t *testing.T) {

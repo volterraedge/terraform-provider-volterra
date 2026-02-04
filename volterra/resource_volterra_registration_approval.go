@@ -16,8 +16,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"gopkg.volterra.us/stdlib/codec"
 	"gopkg.volterra.us/stdlib/svcfw"
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_registration "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/registration"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_registration "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/registration"
 )
 
 const (

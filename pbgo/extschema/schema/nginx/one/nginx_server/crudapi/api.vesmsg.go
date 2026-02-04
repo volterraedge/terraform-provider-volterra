@@ -14,8 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_nginx_one_nginx_server "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_server"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_nginx_one_nginx_server "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_server"
 )
 
 var (

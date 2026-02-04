@@ -14,8 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_uztna_uztna_policy_template "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_policy_template"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_uztna_uztna_policy_template "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_policy_template"
 )
 
 var (

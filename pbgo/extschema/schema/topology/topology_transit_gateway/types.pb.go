@@ -7,7 +7,7 @@ import (
 	fmt "fmt"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	topology "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology"
+	topology "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology"
 	io "io"
 	math "math"
 	math_bits "math/bits"

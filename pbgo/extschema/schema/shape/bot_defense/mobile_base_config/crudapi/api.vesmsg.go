@@ -14,8 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_shape_bot_defense_mobile_base_config "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/mobile_base_config"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_shape_bot_defense_mobile_base_config "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/mobile_base_config"
 )
 
 var (

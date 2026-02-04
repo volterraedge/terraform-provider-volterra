@@ -27,7 +27,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	_ = rpcInfo
 	_ = mInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema", false)
 	mdr.PkgsInfo["ves.io.schema"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cert_types.proto")
@@ -57,7 +57,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/view_options.proto")
 	pInfo.FilesInfo["ves.io/schema/view_options.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.address_allocator", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/address_allocator", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.address_allocator", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/address_allocator", false)
 	mdr.PkgsInfo["ves.io.schema.address_allocator"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/address_allocator/object.proto")
@@ -116,7 +116,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/address_allocator/types.proto")
 	pInfo.FilesInfo["ves.io/schema/address_allocator/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.address_allocator.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/address_allocator/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.address_allocator.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/address_allocator/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.address_allocator.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/address_allocator/crudapi/api.proto")
@@ -158,7 +158,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.address_allocator.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.advertise_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.advertise_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy", false)
 	mdr.PkgsInfo["ves.io.schema.advertise_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/advertise_policy/object.proto")
@@ -225,7 +225,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/advertise_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/advertise_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.advertise_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.advertise_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/advertise_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.advertise_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/advertise_policy/crudapi/api.proto")
@@ -267,7 +267,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.advertise_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.alert_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.alert_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/alert_policy", false)
 	mdr.PkgsInfo["ves.io.schema.alert_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/alert_policy/object.proto")
@@ -348,7 +348,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/alert_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/alert_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.alert_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.alert_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/alert_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.alert_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/alert_policy/crudapi/api.proto")
@@ -390,7 +390,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.alert_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.alert_policy_set", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy_set", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.alert_policy_set", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/alert_policy_set", false)
 	mdr.PkgsInfo["ves.io.schema.alert_policy_set"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/alert_policy_set/object.proto")
@@ -408,7 +408,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/alert_policy_set/types.proto")
 	pInfo.FilesInfo["ves.io/schema/alert_policy_set/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.alert_policy_set.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_policy_set/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.alert_policy_set.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/alert_policy_set/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.alert_policy_set.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/alert_policy_set/crudapi/api.proto")
@@ -450,7 +450,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.alert_policy_set.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.alert_receiver", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_receiver", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.alert_receiver", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/alert_receiver", false)
 	mdr.PkgsInfo["ves.io.schema.alert_receiver"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/alert_receiver/object.proto")
@@ -566,7 +566,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/alert_receiver/types.proto")
 	pInfo.FilesInfo["ves.io/schema/alert_receiver/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.alert_receiver.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/alert_receiver/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.alert_receiver.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/alert_receiver/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.alert_receiver.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/alert_receiver/crudapi/api.proto")
@@ -608,7 +608,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.alert_receiver.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_credential", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_credential", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_credential", false)
 	mdr.PkgsInfo["ves.io.schema.api_credential"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_credential/object.proto")
@@ -751,7 +751,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_credential/types.proto")
 	pInfo.FilesInfo["ves.io/schema/api_credential/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_credential.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_credential/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_credential.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_credential/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.api_credential.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_credential/crudapi/api.proto")
@@ -793,7 +793,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.api_credential.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_group", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_group", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_group", false)
 	mdr.PkgsInfo["ves.io.schema.api_group"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_group/object.proto")
@@ -836,7 +836,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_group/types.proto")
 	pInfo.FilesInfo["ves.io/schema/api_group/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_group.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_group.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_group/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.api_group.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_group/crudapi/api.proto")
@@ -878,7 +878,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.api_group.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_group_element", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group_element", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_group_element", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_group_element", false)
 	mdr.PkgsInfo["ves.io.schema.api_group_element"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_group_element/object.proto")
@@ -921,7 +921,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_group_element/types.proto")
 	pInfo.FilesInfo["ves.io/schema/api_group_element/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_group_element.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_group_element/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_group_element.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_group_element/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.api_group_element.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_group_element/crudapi/api.proto")
@@ -963,7 +963,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.api_group_element.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.api_crawler", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_crawler", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.api_crawler", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_crawler", false)
 	mdr.PkgsInfo["ves.io.schema.api_sec.api_crawler"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/api_crawler/object.proto")
@@ -1054,7 +1054,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/api_crawler/types.proto")
 	pInfo.FilesInfo["ves.io/schema/api_sec/api_crawler/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.api_crawler.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_crawler/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.api_crawler.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_crawler/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.api_sec.api_crawler.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/api_crawler/crudapi/api.proto")
@@ -1096,7 +1096,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.api_sec.api_crawler.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.api_discovery", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_discovery", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.api_discovery", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_discovery", false)
 	mdr.PkgsInfo["ves.io.schema.api_sec.api_discovery"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/api_discovery/object.proto")
@@ -1163,7 +1163,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/api_discovery/types.proto")
 	pInfo.FilesInfo["ves.io/schema/api_sec/api_discovery/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.api_discovery.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_discovery/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.api_discovery.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_discovery/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.api_sec.api_discovery.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/api_discovery/crudapi/api.proto")
@@ -1205,7 +1205,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.api_sec.api_discovery.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.api_testing", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_testing", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.api_testing", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_testing", false)
 	mdr.PkgsInfo["ves.io.schema.api_sec.api_testing"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/api_testing/object.proto")
@@ -1289,7 +1289,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/api_testing/types.proto")
 	pInfo.FilesInfo["ves.io/schema/api_sec/api_testing/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.api_testing.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_testing/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.api_testing.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_sec/api_testing/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.api_sec.api_testing.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/api_testing/crudapi/api.proto")
@@ -1331,7 +1331,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.api_sec.api_testing.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.code_base_integration", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/code_base_integration", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.code_base_integration", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_sec/code_base_integration", false)
 	mdr.PkgsInfo["ves.io.schema.api_sec.code_base_integration"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/code_base_integration/object.proto")
@@ -1441,7 +1441,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/code_base_integration/types.proto")
 	pInfo.FilesInfo["ves.io/schema/api_sec/code_base_integration/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.code_base_integration.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/code_base_integration/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.code_base_integration.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_sec/code_base_integration/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.api_sec.code_base_integration.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/code_base_integration/crudapi/api.proto")
@@ -1483,7 +1483,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.api_sec.code_base_integration.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.rule_suggestion", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/api_sec/rule_suggestion", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.api_sec.rule_suggestion", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/api_sec/rule_suggestion", false)
 	mdr.PkgsInfo["ves.io.schema.api_sec.rule_suggestion"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/api_sec/rule_suggestion/public_rule_suggestions_api.proto")
@@ -1515,7 +1515,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["RuleSuggestionAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.api_sec.rule_suggestion.RuleSuggestionAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_firewall", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_firewall", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_firewall", false)
 	mdr.PkgsInfo["ves.io.schema.app_firewall"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_firewall/object.proto")
@@ -1601,7 +1601,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_firewall/types.proto")
 	pInfo.FilesInfo["ves.io/schema/app_firewall/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_firewall.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_firewall/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_firewall.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_firewall/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.app_firewall.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_firewall/crudapi/api.proto")
@@ -1643,7 +1643,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.app_firewall.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_security", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_security", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_security", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_security", false)
 	mdr.PkgsInfo["ves.io.schema.app_security"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/public_api_endpoint_protection_api.proto")
@@ -1856,25 +1856,25 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/types.proto")
 	pInfo.FilesInfo["ves.io/schema/app_security/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_security.incidents", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_security/incidents", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_security.incidents", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_security/incidents", false)
 	mdr.PkgsInfo["ves.io.schema.app_security.incidents"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/incidents/types.proto")
 	pInfo.FilesInfo["ves.io/schema/app_security/incidents/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_security.metrics", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_security/metrics", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_security.metrics", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_security/metrics", false)
 	mdr.PkgsInfo["ves.io.schema.app_security.metrics"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/metrics/types.proto")
 	pInfo.FilesInfo["ves.io/schema/app_security/metrics/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_security.suspicious_user_log", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_security/suspicious_user_log", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_security.suspicious_user_log", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_security/suspicious_user_log", false)
 	mdr.PkgsInfo["ves.io.schema.app_security.suspicious_user_log"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_security/suspicious_user_log/types.proto")
 	pInfo.FilesInfo["ves.io/schema/app_security/suspicious_user_log/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_setting", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_setting", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_setting", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_setting", false)
 	mdr.PkgsInfo["ves.io.schema.app_setting"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_setting/object.proto")
@@ -1955,7 +1955,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_setting/types.proto")
 	pInfo.FilesInfo["ves.io/schema/app_setting/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_setting.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_setting/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_setting.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_setting/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.app_setting.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_setting/crudapi/api.proto")
@@ -1997,7 +1997,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.app_setting.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_type", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_type", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_type", false)
 	mdr.PkgsInfo["ves.io.schema.app_type"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_type/object.proto")
@@ -2118,7 +2118,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_type/types.proto")
 	pInfo.FilesInfo["ves.io/schema/app_type/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_type.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.app_type.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_type/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.app_type.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/app_type/crudapi/api.proto")
@@ -2160,7 +2160,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.app_type.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.authentication", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/authentication", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.authentication", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/authentication", false)
 	mdr.PkgsInfo["ves.io.schema.authentication"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/authentication/object.proto")
@@ -2227,7 +2227,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/authentication/types.proto")
 	pInfo.FilesInfo["ves.io/schema/authentication/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.authentication.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/authentication/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.authentication.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/authentication/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.authentication.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/authentication/crudapi/api.proto")
@@ -2269,7 +2269,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.authentication.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.bgp", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bgp", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/bgp", false)
 	mdr.PkgsInfo["ves.io.schema.bgp"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bgp/object.proto")
@@ -2350,7 +2350,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bgp/types.proto")
 	pInfo.FilesInfo["ves.io/schema/bgp/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.bgp.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bgp.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/bgp/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.bgp.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bgp/crudapi/api.proto")
@@ -2392,7 +2392,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.bgp.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.bgp_asn_set", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp_asn_set", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bgp_asn_set", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/bgp_asn_set", false)
 	mdr.PkgsInfo["ves.io.schema.bgp_asn_set"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bgp_asn_set/object.proto")
@@ -2459,7 +2459,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bgp_asn_set/types.proto")
 	pInfo.FilesInfo["ves.io/schema/bgp_asn_set/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.bgp_asn_set.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp_asn_set/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bgp_asn_set.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/bgp_asn_set/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.bgp_asn_set.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bgp_asn_set/crudapi/api.proto")
@@ -2501,7 +2501,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.bgp_asn_set.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.bgp_routing_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp_routing_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bgp_routing_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/bgp_routing_policy", false)
 	mdr.PkgsInfo["ves.io.schema.bgp_routing_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bgp_routing_policy/object.proto")
@@ -2564,7 +2564,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bgp_routing_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/bgp_routing_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.bgp_routing_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bgp_routing_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bgp_routing_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/bgp_routing_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.bgp_routing_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bgp_routing_policy/crudapi/api.proto")
@@ -2606,7 +2606,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.bgp_routing_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigcne.irule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigcne/irule", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigcne.irule", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/bigcne/irule", false)
 	mdr.PkgsInfo["ves.io.schema.bigcne.irule"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bigcne/irule/object.proto")
@@ -2669,7 +2669,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bigcne/irule/types.proto")
 	pInfo.FilesInfo["ves.io/schema/bigcne/irule/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigcne.irule.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigcne/irule/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigcne.irule.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/bigcne/irule/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.bigcne.irule.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bigcne/irule/crudapi/api.proto")
@@ -2711,7 +2711,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.bigcne.irule.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigip_irule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigip_irule", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigip_irule", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/bigip_irule", false)
 	mdr.PkgsInfo["ves.io.schema.bigip_irule"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bigip_irule/object.proto")
@@ -2778,7 +2778,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bigip_irule/types.proto")
 	pInfo.FilesInfo["ves.io/schema/bigip_irule/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigip_irule.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/bigip_irule/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.bigip_irule.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/bigip_irule/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.bigip_irule.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/bigip_irule/crudapi/api.proto")
@@ -2820,7 +2820,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.bigip_irule.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.billing", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/billing", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.billing", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/billing", false)
 	mdr.PkgsInfo["ves.io.schema.billing"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/billing/private_customapi.proto")
@@ -2889,7 +2889,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/billing/types.proto")
 	pInfo.FilesInfo["ves.io/schema/billing/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.billing.payment_method", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/billing/payment_method", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.billing.payment_method", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/billing/payment_method", false)
 	mdr.PkgsInfo["ves.io.schema.billing.payment_method"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/billing/payment_method/custom_api.proto")
@@ -2926,7 +2926,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.billing.payment_method.CustomAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.billing.plan_transition", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/billing/plan_transition", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.billing.plan_transition", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/billing/plan_transition", false)
 	mdr.PkgsInfo["ves.io.schema.billing.plan_transition"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/billing/plan_transition/custom_api.proto")
@@ -2948,7 +2948,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.billing.plan_transition.CustomAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cdn_cache_rule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cdn_cache_rule", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cdn_cache_rule", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cdn_cache_rule", false)
 	mdr.PkgsInfo["ves.io.schema.cdn_cache_rule"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cdn_cache_rule/object.proto")
@@ -3011,7 +3011,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cdn_cache_rule/types.proto")
 	pInfo.FilesInfo["ves.io/schema/cdn_cache_rule/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cdn_cache_rule.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cdn_cache_rule/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cdn_cache_rule.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cdn_cache_rule/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.cdn_cache_rule.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cdn_cache_rule/crudapi/api.proto")
@@ -3053,7 +3053,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.cdn_cache_rule.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.certificate", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.certificate", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/certificate", false)
 	mdr.PkgsInfo["ves.io.schema.certificate"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/certificate/object.proto")
@@ -3125,7 +3125,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/certificate/types.proto")
 	pInfo.FilesInfo["ves.io/schema/certificate/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.certificate.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.certificate.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/certificate/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.certificate.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/certificate/crudapi/api.proto")
@@ -3167,7 +3167,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.certificate.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.certificate_chain", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate_chain", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.certificate_chain", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/certificate_chain", false)
 	mdr.PkgsInfo["ves.io.schema.certificate_chain"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/certificate_chain/object.proto")
@@ -3234,7 +3234,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/certificate_chain/types.proto")
 	pInfo.FilesInfo["ves.io/schema/certificate_chain/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.certificate_chain.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certificate_chain/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.certificate_chain.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/certificate_chain/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.certificate_chain.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/certificate_chain/crudapi/api.proto")
@@ -3276,7 +3276,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.certificate_chain.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.certified_hardware", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.certified_hardware", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware", false)
 	mdr.PkgsInfo["ves.io.schema.certified_hardware"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/certified_hardware/object.proto")
@@ -3319,7 +3319,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/certified_hardware/types.proto")
 	pInfo.FilesInfo["ves.io/schema/certified_hardware/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.certified_hardware.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.certified_hardware.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/certified_hardware/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.certified_hardware.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/certified_hardware/crudapi/api.proto")
@@ -3361,7 +3361,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.certified_hardware.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_connect", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_connect", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_connect", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_connect", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_connect"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_connect/object.proto")
@@ -3495,7 +3495,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_connect/types.proto")
 	pInfo.FilesInfo["ves.io/schema/cloud_connect/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_connect.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_connect/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_connect.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_connect/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_connect.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_connect/crudapi/api.proto")
@@ -3537,7 +3537,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.cloud_connect.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_credentials", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_credentials", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_credentials"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_credentials/object.proto")
@@ -3621,7 +3621,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_credentials/types.proto")
 	pInfo.FilesInfo["ves.io/schema/cloud_credentials/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_credentials.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_credentials.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_credentials/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_credentials.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_credentials/crudapi/api.proto")
@@ -3663,7 +3663,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.cloud_credentials.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_elastic_ip", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_elastic_ip", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_elastic_ip", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_elastic_ip", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_elastic_ip"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_elastic_ip/object.proto")
@@ -3744,7 +3744,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_elastic_ip/types.proto")
 	pInfo.FilesInfo["ves.io/schema/cloud_elastic_ip/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_elastic_ip.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_elastic_ip/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_elastic_ip.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_elastic_ip/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_elastic_ip.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_elastic_ip/crudapi/api.proto")
@@ -3786,7 +3786,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.cloud_elastic_ip.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_link", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_link", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_link", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_link", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_link"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_link/object.proto")
@@ -3872,7 +3872,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_link/types.proto")
 	pInfo.FilesInfo["ves.io/schema/cloud_link/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_link.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_link/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_link.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_link/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_link.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_link/crudapi/api.proto")
@@ -3914,7 +3914,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.cloud_link.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_re_region", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_re_region", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_re_region", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_re_region", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_re_region"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_re_region/object.proto")
@@ -3932,7 +3932,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_re_region/types.proto")
 	pInfo.FilesInfo["ves.io/schema/cloud_re_region/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_re_region.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_re_region/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_re_region.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_re_region/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_re_region.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_re_region/crudapi/api.proto")
@@ -3974,7 +3974,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.cloud_re_region.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_region", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_region", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_region", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_region", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_region"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_region/object.proto")
@@ -4025,7 +4025,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_region/types.proto")
 	pInfo.FilesInfo["ves.io/schema/cloud_region/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_region.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_region/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_region.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_region/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_region.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_region/crudapi/api.proto")
@@ -4067,7 +4067,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.cloud_region.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_transit_gateway", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_transit_gateway", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_transit_gateway", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_transit_gateway", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_transit_gateway"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_transit_gateway/object.proto")
@@ -4134,7 +4134,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_transit_gateway/types.proto")
 	pInfo.FilesInfo["ves.io/schema/cloud_transit_gateway/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_transit_gateway.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cloud_transit_gateway/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cloud_transit_gateway.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cloud_transit_gateway/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.cloud_transit_gateway.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cloud_transit_gateway/crudapi/api.proto")
@@ -4176,7 +4176,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.cloud_transit_gateway.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cluster", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cluster", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cluster", false)
 	mdr.PkgsInfo["ves.io.schema.cluster"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cluster/object.proto")
@@ -4243,7 +4243,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cluster/types.proto")
 	pInfo.FilesInfo["ves.io/schema/cluster/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cluster.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cluster.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cluster/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.cluster.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cluster/crudapi/api.proto")
@@ -4285,7 +4285,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.cluster.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cminstance", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cminstance", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cminstance", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cminstance", false)
 	mdr.PkgsInfo["ves.io.schema.cminstance"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cminstance/object.proto")
@@ -4361,7 +4361,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cminstance/types.proto")
 	pInfo.FilesInfo["ves.io/schema/cminstance/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.cminstance.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cminstance/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.cminstance.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cminstance/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.cminstance.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/cminstance/crudapi/api.proto")
@@ -4403,7 +4403,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.cminstance.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.contact", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/contact", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.contact", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/contact", false)
 	mdr.PkgsInfo["ves.io.schema.contact"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/contact/object.proto")
@@ -4470,7 +4470,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/contact/types.proto")
 	pInfo.FilesInfo["ves.io/schema/contact/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.contact.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/contact/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.contact.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/contact/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.contact.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/contact/crudapi/api.proto")
@@ -4512,7 +4512,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.contact.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.container_registry", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/container_registry", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.container_registry", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/container_registry", false)
 	mdr.PkgsInfo["ves.io.schema.container_registry"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/container_registry/object.proto")
@@ -4584,7 +4584,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/container_registry/types.proto")
 	pInfo.FilesInfo["ves.io/schema/container_registry/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.container_registry.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/container_registry/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.container_registry.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/container_registry/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.container_registry.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/container_registry/crudapi/api.proto")
@@ -4626,7 +4626,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.container_registry.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.crl", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/crl", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.crl", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/crl", false)
 	mdr.PkgsInfo["ves.io.schema.crl"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/crl/object.proto")
@@ -4693,7 +4693,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/crl/types.proto")
 	pInfo.FilesInfo["ves.io/schema/crl/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.crl.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/crl/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.crl.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/crl/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.crl.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/crl/crudapi/api.proto")
@@ -4735,7 +4735,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.crl.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.customer_support", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/customer_support", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.customer_support", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/customer_support", false)
 	mdr.PkgsInfo["ves.io.schema.customer_support"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/customer_support/object.proto")
@@ -4840,7 +4840,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/customer_support/types.proto")
 	pInfo.FilesInfo["ves.io/schema/customer_support/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.customer_support.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/customer_support/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.customer_support.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/customer_support/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.customer_support.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/customer_support/crudapi/api.proto")
@@ -4882,7 +4882,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.customer_support.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.data_privacy.geo_config", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/data_privacy/geo_config", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.data_privacy.geo_config", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/data_privacy/geo_config", false)
 	mdr.PkgsInfo["ves.io.schema.data_privacy.geo_config"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/data_privacy/geo_config/object.proto")
@@ -4917,7 +4917,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/data_privacy/geo_config/types.proto")
 	pInfo.FilesInfo["ves.io/schema/data_privacy/geo_config/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.data_privacy.geo_config.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/data_privacy/geo_config/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.data_privacy.geo_config.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/data_privacy/geo_config/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.data_privacy.geo_config.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/data_privacy/geo_config/crudapi/api.proto")
@@ -4959,7 +4959,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.data_privacy.geo_config.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.data_privacy.lma_region", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/data_privacy/lma_region", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.data_privacy.lma_region", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/data_privacy/lma_region", false)
 	mdr.PkgsInfo["ves.io.schema.data_privacy.lma_region"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/data_privacy/lma_region/object.proto")
@@ -5002,7 +5002,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/data_privacy/lma_region/types.proto")
 	pInfo.FilesInfo["ves.io/schema/data_privacy/lma_region/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.data_privacy.lma_region.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/data_privacy/lma_region/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.data_privacy.lma_region.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/data_privacy/lma_region/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.data_privacy.lma_region.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/data_privacy/lma_region/crudapi/api.proto")
@@ -5044,7 +5044,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.data_privacy.lma_region.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.data_type", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/data_type", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.data_type", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/data_type", false)
 	mdr.PkgsInfo["ves.io.schema.data_type"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/data_type/object.proto")
@@ -5111,7 +5111,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/data_type/types.proto")
 	pInfo.FilesInfo["ves.io/schema/data_type/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.data_type.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/data_type/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.data_type.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/data_type/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.data_type.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/data_type/crudapi/api.proto")
@@ -5153,7 +5153,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.data_type.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dc_cluster_group", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dc_cluster_group", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group", false)
 	mdr.PkgsInfo["ves.io.schema.dc_cluster_group"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dc_cluster_group/object.proto")
@@ -5234,7 +5234,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dc_cluster_group/types.proto")
 	pInfo.FilesInfo["ves.io/schema/dc_cluster_group/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dc_cluster_group.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dc_cluster_group.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dc_cluster_group/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.dc_cluster_group.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dc_cluster_group/crudapi/api.proto")
@@ -5276,7 +5276,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.dc_cluster_group.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.discovered_service", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovered_service", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.discovered_service", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/discovered_service", false)
 	mdr.PkgsInfo["ves.io.schema.discovered_service"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/discovered_service/object.proto")
@@ -5372,7 +5372,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/discovered_service/types.proto")
 	pInfo.FilesInfo["ves.io/schema/discovered_service/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.discovered_service.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovered_service/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.discovered_service.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/discovered_service/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.discovered_service.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/discovered_service/crudapi/api.proto")
@@ -5414,7 +5414,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.discovered_service.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.discovery", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovery", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.discovery", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/discovery", false)
 	mdr.PkgsInfo["ves.io.schema.discovery"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/discovery/object.proto")
@@ -5500,7 +5500,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/discovery/types.proto")
 	pInfo.FilesInfo["ves.io/schema/discovery/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.discovery.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/discovery/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.discovery.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/discovery/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.discovery.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/discovery/crudapi/api.proto")
@@ -5542,7 +5542,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.discovery.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_compliance_checks", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_compliance_checks", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_compliance_checks", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_compliance_checks", false)
 	mdr.PkgsInfo["ves.io.schema.dns_compliance_checks"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_compliance_checks/object.proto")
@@ -5609,7 +5609,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_compliance_checks/types.proto")
 	pInfo.FilesInfo["ves.io/schema/dns_compliance_checks/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_compliance_checks.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_compliance_checks/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_compliance_checks.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_compliance_checks/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.dns_compliance_checks.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_compliance_checks/crudapi/api.proto")
@@ -5651,7 +5651,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.dns_compliance_checks.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_domain", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_domain", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_domain", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_domain", false)
 	mdr.PkgsInfo["ves.io.schema.dns_domain"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_domain/object.proto")
@@ -5732,7 +5732,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_domain/types.proto")
 	pInfo.FilesInfo["ves.io/schema/dns_domain/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_domain.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_domain/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_domain.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_domain/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.dns_domain.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_domain/crudapi/api.proto")
@@ -5774,7 +5774,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.dns_domain.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_lb_health_check", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_lb_health_check", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_lb_health_check", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_lb_health_check", false)
 	mdr.PkgsInfo["ves.io.schema.dns_lb_health_check"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_lb_health_check/object.proto")
@@ -5841,7 +5841,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_lb_health_check/types.proto")
 	pInfo.FilesInfo["ves.io/schema/dns_lb_health_check/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_lb_health_check.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_lb_health_check/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_lb_health_check.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_lb_health_check/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.dns_lb_health_check.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_lb_health_check/crudapi/api.proto")
@@ -5883,7 +5883,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.dns_lb_health_check.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_lb_pool", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_lb_pool", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_lb_pool", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_lb_pool", false)
 	mdr.PkgsInfo["ves.io.schema.dns_lb_pool"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_lb_pool/object.proto")
@@ -5950,7 +5950,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_lb_pool/types.proto")
 	pInfo.FilesInfo["ves.io/schema/dns_lb_pool/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_lb_pool.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_lb_pool/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_lb_pool.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_lb_pool/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.dns_lb_pool.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_lb_pool/crudapi/api.proto")
@@ -5992,7 +5992,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.dns_lb_pool.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_load_balancer", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_load_balancer", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_load_balancer", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_load_balancer", false)
 	mdr.PkgsInfo["ves.io.schema.dns_load_balancer"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_load_balancer/object.proto")
@@ -6107,7 +6107,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_load_balancer/types.proto")
 	pInfo.FilesInfo["ves.io/schema/dns_load_balancer/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_load_balancer.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_load_balancer/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_load_balancer.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_load_balancer/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.dns_load_balancer.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_load_balancer/crudapi/api.proto")
@@ -6149,7 +6149,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.dns_load_balancer.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_proxy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_proxy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_proxy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_proxy", false)
 	mdr.PkgsInfo["ves.io.schema.dns_proxy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_proxy/object.proto")
@@ -6216,7 +6216,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_proxy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/dns_proxy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_proxy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_proxy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_proxy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_proxy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.dns_proxy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_proxy/crudapi/api.proto")
@@ -6258,7 +6258,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.dns_proxy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_zone", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_zone", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_zone", false)
 	mdr.PkgsInfo["ves.io.schema.dns_zone"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_zone/dnssec.proto")
@@ -6396,7 +6396,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_zone/types.proto")
 	pInfo.FilesInfo["ves.io/schema/dns_zone/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_zone.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_zone.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.dns_zone.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_zone/crudapi/api.proto")
@@ -6438,7 +6438,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.dns_zone.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_zone.rrset", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/rrset", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_zone.rrset", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/rrset", false)
 	mdr.PkgsInfo["ves.io.schema.dns_zone.rrset"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_zone/rrset/public_customapi.proto")
@@ -6482,7 +6482,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	mInfo = svcfw.NewMsgInfo("ReplaceRequest")
 	mdr.MsgIdx["ves.io.schema.dns_zone.rrset.ReplaceRequest"] = mInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_zone.subscription", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/subscription", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dns_zone.subscription", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/subscription", false)
 	mdr.PkgsInfo["ves.io.schema.dns_zone.subscription"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dns_zone/subscription/public_customapi.proto")
@@ -6504,7 +6504,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.dns_zone.subscription.CustomAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dos_mitigation", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dos_mitigation", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation", false)
 	mdr.PkgsInfo["ves.io.schema.dos_mitigation"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dos_mitigation/object.proto")
@@ -6541,7 +6541,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dos_mitigation/types.proto")
 	pInfo.FilesInfo["ves.io/schema/dos_mitigation/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.dos_mitigation.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.dos_mitigation.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dos_mitigation/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.dos_mitigation.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/dos_mitigation/crudapi/api.proto")
@@ -6583,7 +6583,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.dos_mitigation.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.downstream_cos", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/downstream_cos", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.downstream_cos", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/downstream_cos", false)
 	mdr.PkgsInfo["ves.io.schema.downstream_cos"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/downstream_cos/object.proto")
@@ -6601,7 +6601,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/downstream_cos/types.proto")
 	pInfo.FilesInfo["ves.io/schema/downstream_cos/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.downstream_cos.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/downstream_cos/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.downstream_cos.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/downstream_cos/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.downstream_cos.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/downstream_cos/crudapi/api.proto")
@@ -6643,7 +6643,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.downstream_cos.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.endpoint", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/endpoint", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.endpoint", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/endpoint", false)
 	mdr.PkgsInfo["ves.io.schema.endpoint"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/endpoint/object.proto")
@@ -6710,7 +6710,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/endpoint/types.proto")
 	pInfo.FilesInfo["ves.io/schema/endpoint/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.endpoint.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/endpoint/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.endpoint.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/endpoint/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.endpoint.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/endpoint/crudapi/api.proto")
@@ -6752,7 +6752,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.endpoint.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.enhanced_firewall_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/enhanced_firewall_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.enhanced_firewall_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/enhanced_firewall_policy", false)
 	mdr.PkgsInfo["ves.io.schema.enhanced_firewall_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/enhanced_firewall_policy/object.proto")
@@ -6833,7 +6833,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/enhanced_firewall_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/enhanced_firewall_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.enhanced_firewall_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/enhanced_firewall_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.enhanced_firewall_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/enhanced_firewall_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.enhanced_firewall_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/enhanced_firewall_policy/crudapi/api.proto")
@@ -6875,7 +6875,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.enhanced_firewall_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/fast_acl", false)
 	mdr.PkgsInfo["ves.io.schema.fast_acl"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fast_acl/object.proto")
@@ -6956,7 +6956,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fast_acl/types.proto")
 	pInfo.FilesInfo["ves.io/schema/fast_acl/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/fast_acl/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.fast_acl.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fast_acl/crudapi/api.proto")
@@ -6998,7 +6998,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.fast_acl.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl_rule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_rule", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl_rule", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_rule", false)
 	mdr.PkgsInfo["ves.io.schema.fast_acl_rule"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fast_acl_rule/object.proto")
@@ -7065,7 +7065,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fast_acl_rule/types.proto")
 	pInfo.FilesInfo["ves.io/schema/fast_acl_rule/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl_rule.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_rule/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl_rule.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_rule/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.fast_acl_rule.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fast_acl_rule/crudapi/api.proto")
@@ -7107,7 +7107,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.fast_acl_rule.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl_set", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_set", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl_set", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_set", false)
 	mdr.PkgsInfo["ves.io.schema.fast_acl_set"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fast_acl_set/object.proto")
@@ -7125,7 +7125,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fast_acl_set/types.proto")
 	pInfo.FilesInfo["ves.io/schema/fast_acl_set/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl_set.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_set/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fast_acl_set.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/fast_acl_set/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.fast_acl_set.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fast_acl_set/crudapi/api.proto")
@@ -7167,7 +7167,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.fast_acl_set.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.filter_set", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/filter_set", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.filter_set", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/filter_set", false)
 	mdr.PkgsInfo["ves.io.schema.filter_set"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/filter_set/object.proto")
@@ -7248,7 +7248,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/filter_set/types.proto")
 	pInfo.FilesInfo["ves.io/schema/filter_set/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.filter_set.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/filter_set/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.filter_set.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/filter_set/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.filter_set.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/filter_set/crudapi/api.proto")
@@ -7290,7 +7290,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.filter_set.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.fleet", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fleet", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/fleet", false)
 	mdr.PkgsInfo["ves.io.schema.fleet"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fleet/object.proto")
@@ -7357,7 +7357,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fleet/types.proto")
 	pInfo.FilesInfo["ves.io/schema/fleet/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.fleet.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fleet.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/fleet/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.fleet.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fleet/crudapi/api.proto")
@@ -7399,7 +7399,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.fleet.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.fleet_default_config", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet_default_config", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fleet_default_config", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/fleet_default_config", false)
 	mdr.PkgsInfo["ves.io.schema.fleet_default_config"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fleet_default_config/object.proto")
@@ -7429,7 +7429,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.fleet_default_config.CustomAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.fleet_default_config.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/fleet_default_config/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.fleet_default_config.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/fleet_default_config/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.fleet_default_config.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/fleet_default_config/crudapi/api.proto")
@@ -7471,7 +7471,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.fleet_default_config.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.flow", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/flow", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.flow", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/flow", false)
 	mdr.PkgsInfo["ves.io.schema.flow"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/flow/public_customapi.proto")
@@ -7525,7 +7525,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/flow/types.proto")
 	pInfo.FilesInfo["ves.io/schema/flow/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.flow_anomaly", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/flow_anomaly", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.flow_anomaly", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/flow_anomaly", false)
 	mdr.PkgsInfo["ves.io.schema.flow_anomaly"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/flow_anomaly/object.proto")
@@ -7568,7 +7568,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/flow_anomaly/types.proto")
 	pInfo.FilesInfo["ves.io/schema/flow_anomaly/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.flow_anomaly.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/flow_anomaly/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.flow_anomaly.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/flow_anomaly/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.flow_anomaly.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/flow_anomaly/crudapi/api.proto")
@@ -7610,7 +7610,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.flow_anomaly.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.forwarding_class", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/forwarding_class", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.forwarding_class", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/forwarding_class", false)
 	mdr.PkgsInfo["ves.io.schema.forwarding_class"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/forwarding_class/object.proto")
@@ -7677,7 +7677,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/forwarding_class/types.proto")
 	pInfo.FilesInfo["ves.io/schema/forwarding_class/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.forwarding_class.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/forwarding_class/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.forwarding_class.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/forwarding_class/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.forwarding_class.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/forwarding_class/crudapi/api.proto")
@@ -7719,7 +7719,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.forwarding_class.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.gia", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/gia", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.gia", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/gia", false)
 	mdr.PkgsInfo["ves.io.schema.gia"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/gia/public_customapi.proto")
@@ -7741,7 +7741,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.gia.CustomAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.global_config", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/global_config", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.global_config", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/global_config", false)
 	mdr.PkgsInfo["ves.io.schema.global_config"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/global_config/ddos_types.proto")
@@ -7763,7 +7763,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/global_config/types.proto")
 	pInfo.FilesInfo["ves.io/schema/global_config/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.global_config.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/global_config/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.global_config.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/global_config/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.global_config.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/global_config/crudapi/api.proto")
@@ -7805,7 +7805,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.global_config.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.global_log_receiver", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/global_log_receiver", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.global_log_receiver", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/global_log_receiver", false)
 	mdr.PkgsInfo["ves.io.schema.global_log_receiver"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/global_log_receiver/object.proto")
@@ -7961,7 +7961,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/global_log_receiver/types.proto")
 	pInfo.FilesInfo["ves.io/schema/global_log_receiver/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.global_log_receiver.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/global_log_receiver/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.global_log_receiver.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/global_log_receiver/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.global_log_receiver.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/global_log_receiver/crudapi/api.proto")
@@ -8003,7 +8003,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.global_log_receiver.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.healthcheck", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/healthcheck", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.healthcheck", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/healthcheck", false)
 	mdr.PkgsInfo["ves.io.schema.healthcheck"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/healthcheck/object.proto")
@@ -8070,7 +8070,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/healthcheck/types.proto")
 	pInfo.FilesInfo["ves.io/schema/healthcheck/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.healthcheck.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/healthcheck/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.healthcheck.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/healthcheck/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.healthcheck.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/healthcheck/crudapi/api.proto")
@@ -8112,7 +8112,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.healthcheck.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ike1", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ike1", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ike1", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ike1", false)
 	mdr.PkgsInfo["ves.io.schema.ike1"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ike1/object.proto")
@@ -8179,7 +8179,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ike1/types.proto")
 	pInfo.FilesInfo["ves.io/schema/ike1/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ike1.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ike1/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ike1.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ike1/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.ike1.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ike1/crudapi/api.proto")
@@ -8221,7 +8221,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.ike1.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ike2", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ike2", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ike2", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ike2", false)
 	mdr.PkgsInfo["ves.io.schema.ike2"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ike2/object.proto")
@@ -8288,7 +8288,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ike2/types.proto")
 	pInfo.FilesInfo["ves.io/schema/ike2/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ike2.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ike2/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ike2.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ike2/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.ike2.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ike2/crudapi/api.proto")
@@ -8330,7 +8330,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.ike2.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.implicit_label", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/implicit_label", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.implicit_label", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/implicit_label", false)
 	mdr.PkgsInfo["ves.io.schema.implicit_label"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/implicit_label/public_customapi.proto")
@@ -8350,7 +8350,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	mInfo = svcfw.NewMsgInfo("GetRequest")
 	mdr.MsgIdx["ves.io.schema.implicit_label.GetRequest"] = mInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_asn", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_asn", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn", false)
 	mdr.PkgsInfo["ves.io.schema.infraprotect_asn"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn/object.proto")
@@ -8445,7 +8445,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn/types.proto")
 	pInfo.FilesInfo["ves.io/schema/infraprotect_asn/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_asn.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_asn.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.infraprotect_asn.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn/crudapi/api.proto")
@@ -8487,7 +8487,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.infraprotect_asn.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_asn_prefix", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn_prefix", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_asn_prefix", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn_prefix", false)
 	mdr.PkgsInfo["ves.io.schema.infraprotect_asn_prefix"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn_prefix/object.proto")
@@ -8592,7 +8592,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn_prefix/types.proto")
 	pInfo.FilesInfo["ves.io/schema/infraprotect_asn_prefix/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_asn_prefix.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn_prefix/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_asn_prefix.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_asn_prefix/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.infraprotect_asn_prefix.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_asn_prefix/crudapi/api.proto")
@@ -8634,7 +8634,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.infraprotect_asn_prefix.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_firewall_rule_group", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_rule_group", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_firewall_rule_group", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_rule_group", false)
 	mdr.PkgsInfo["ves.io.schema.infraprotect_firewall_rule_group"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_firewall_rule_group/object.proto")
@@ -8701,7 +8701,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_firewall_rule_group/types.proto")
 	pInfo.FilesInfo["ves.io/schema/infraprotect_firewall_rule_group/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_firewall_rule_group.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_rule_group/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.infraprotect_firewall_rule_group.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/infraprotect_firewall_rule_group/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.infraprotect_firewall_rule_group.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/infraprotect_firewall_rule_group/crudapi/api.proto")
@@ -8743,7 +8743,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.infraprotect_firewall_rule_group.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ip_prefix_set", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ip_prefix_set", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set", false)
 	mdr.PkgsInfo["ves.io.schema.ip_prefix_set"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ip_prefix_set/object.proto")
@@ -8810,7 +8810,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ip_prefix_set/types.proto")
 	pInfo.FilesInfo["ves.io/schema/ip_prefix_set/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ip_prefix_set.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ip_prefix_set.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ip_prefix_set/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.ip_prefix_set.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ip_prefix_set/crudapi/api.proto")
@@ -8852,7 +8852,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.ip_prefix_set.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.jwt", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/jwt", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.jwt", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/jwt", false)
 	mdr.PkgsInfo["ves.io.schema.jwt"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/jwt/object.proto")
@@ -8870,7 +8870,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/jwt/types.proto")
 	pInfo.FilesInfo["ves.io/schema/jwt/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.jwt.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/jwt/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.jwt.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/jwt/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.jwt.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/jwt/crudapi/api.proto")
@@ -8912,7 +8912,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.jwt.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.jwt_provider", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/jwt_provider", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.jwt_provider", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/jwt_provider", false)
 	mdr.PkgsInfo["ves.io.schema.jwt_provider"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/jwt_provider/object.proto")
@@ -8930,7 +8930,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/jwt_provider/types.proto")
 	pInfo.FilesInfo["ves.io/schema/jwt_provider/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.jwt_provider.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/jwt_provider/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.jwt_provider.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/jwt_provider/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.jwt_provider.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/jwt_provider/crudapi/api.proto")
@@ -8972,7 +8972,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.jwt_provider.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_cluster", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_cluster", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster", false)
 	mdr.PkgsInfo["ves.io.schema.k8s_cluster"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_cluster/object.proto")
@@ -9044,7 +9044,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_cluster/types.proto")
 	pInfo.FilesInfo["ves.io/schema/k8s_cluster/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_cluster.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_cluster.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.k8s_cluster.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_cluster/crudapi/api.proto")
@@ -9086,7 +9086,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.k8s_cluster.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_cluster_role", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_cluster_role", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role", false)
 	mdr.PkgsInfo["ves.io.schema.k8s_cluster_role"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_cluster_role/object.proto")
@@ -9153,7 +9153,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_cluster_role/types.proto")
 	pInfo.FilesInfo["ves.io/schema/k8s_cluster_role/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_cluster_role.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_cluster_role.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.k8s_cluster_role.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_cluster_role/crudapi/api.proto")
@@ -9195,7 +9195,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.k8s_cluster_role.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_cluster_role_binding", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role_binding", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_cluster_role_binding", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role_binding", false)
 	mdr.PkgsInfo["ves.io.schema.k8s_cluster_role_binding"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_cluster_role_binding/object.proto")
@@ -9262,7 +9262,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_cluster_role_binding/types.proto")
 	pInfo.FilesInfo["ves.io/schema/k8s_cluster_role_binding/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_cluster_role_binding.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role_binding/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_cluster_role_binding.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_cluster_role_binding/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.k8s_cluster_role_binding.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_cluster_role_binding/crudapi/api.proto")
@@ -9304,7 +9304,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.k8s_cluster_role_binding.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_pod_security_admission", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_admission", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_pod_security_admission", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_admission", false)
 	mdr.PkgsInfo["ves.io.schema.k8s_pod_security_admission"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_pod_security_admission/object.proto")
@@ -9371,7 +9371,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_pod_security_admission/types.proto")
 	pInfo.FilesInfo["ves.io/schema/k8s_pod_security_admission/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_pod_security_admission.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_admission/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_pod_security_admission.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_admission/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.k8s_pod_security_admission.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_pod_security_admission/crudapi/api.proto")
@@ -9413,7 +9413,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.k8s_pod_security_admission.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_pod_security_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_pod_security_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_policy", false)
 	mdr.PkgsInfo["ves.io.schema.k8s_pod_security_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_pod_security_policy/object.proto")
@@ -9480,7 +9480,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_pod_security_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/k8s_pod_security_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_pod_security_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.k8s_pod_security_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/k8s_pod_security_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.k8s_pod_security_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/k8s_pod_security_policy/crudapi/api.proto")
@@ -9522,7 +9522,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.k8s_pod_security_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.known_label", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/known_label", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.known_label", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/known_label", false)
 	mdr.PkgsInfo["ves.io.schema.known_label"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/known_label/object.proto")
@@ -9573,7 +9573,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/known_label/types.proto")
 	pInfo.FilesInfo["ves.io/schema/known_label/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.known_label.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/known_label/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.known_label.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/known_label/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.known_label.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/known_label/crudapi/api.proto")
@@ -9615,7 +9615,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.known_label.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.known_label_key", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/known_label_key", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.known_label_key", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/known_label_key", false)
 	mdr.PkgsInfo["ves.io.schema.known_label_key"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/known_label_key/object.proto")
@@ -9662,7 +9662,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/known_label_key/types.proto")
 	pInfo.FilesInfo["ves.io/schema/known_label_key/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.known_label_key.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/known_label_key/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.known_label_key.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/known_label_key/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.known_label_key.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/known_label_key/crudapi/api.proto")
@@ -9704,7 +9704,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.known_label_key.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.l7_acl", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/l7_acl", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.l7_acl", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/l7_acl", false)
 	mdr.PkgsInfo["ves.io.schema.l7_acl"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/l7_acl/object.proto")
@@ -9722,7 +9722,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/l7_acl/types.proto")
 	pInfo.FilesInfo["ves.io/schema/l7_acl/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.l7_acl.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/l7_acl/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.l7_acl.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/l7_acl/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.l7_acl.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/l7_acl/crudapi/api.proto")
@@ -9764,7 +9764,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.l7_acl.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.learnt_models", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/learnt_models", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.learnt_models", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/learnt_models", false)
 	mdr.PkgsInfo["ves.io.schema.learnt_models"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/learnt_models/object.proto")
@@ -9782,7 +9782,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/learnt_models/types.proto")
 	pInfo.FilesInfo["ves.io/schema/learnt_models/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.learnt_models.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/learnt_models/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.learnt_models.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/learnt_models/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.learnt_models.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/learnt_models/crudapi/api.proto")
@@ -9824,7 +9824,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.learnt_models.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.log", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.log", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log", false)
 	mdr.PkgsInfo["ves.io.schema.log"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/log/public_customapi.proto")
@@ -9964,55 +9964,55 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/log/types.proto")
 	pInfo.FilesInfo["ves.io/schema/log/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.access_log", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/access_log", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.access_log", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/access_log", false)
 	mdr.PkgsInfo["ves.io.schema.log.access_log"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/log/access_log/types.proto")
 	pInfo.FilesInfo["ves.io/schema/log/access_log/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.audit_log", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/audit_log", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.audit_log", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/audit_log", false)
 	mdr.PkgsInfo["ves.io.schema.log.audit_log"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/log/audit_log/types.proto")
 	pInfo.FilesInfo["ves.io/schema/log/audit_log/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.firewall_log", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/firewall_log", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.firewall_log", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/firewall_log", false)
 	mdr.PkgsInfo["ves.io.schema.log.firewall_log"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/log/firewall_log/types.proto")
 	pInfo.FilesInfo["ves.io/schema/log/firewall_log/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.k8s_audit_log", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_audit_log", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.k8s_audit_log", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_audit_log", false)
 	mdr.PkgsInfo["ves.io.schema.log.k8s_audit_log"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/log/k8s_audit_log/types.proto")
 	pInfo.FilesInfo["ves.io/schema/log/k8s_audit_log/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.k8s_events", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_events", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.k8s_events", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/k8s_events", false)
 	mdr.PkgsInfo["ves.io.schema.log.k8s_events"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/log/k8s_events/types.proto")
 	pInfo.FilesInfo["ves.io/schema/log/k8s_events/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.platform_event", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/platform_event", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.platform_event", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/platform_event", false)
 	mdr.PkgsInfo["ves.io.schema.log.platform_event"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/log/platform_event/types.proto")
 	pInfo.FilesInfo["ves.io/schema/log/platform_event/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.vk8s_audit_log", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_audit_log", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.vk8s_audit_log", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_audit_log", false)
 	mdr.PkgsInfo["ves.io.schema.log.vk8s_audit_log"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/log/vk8s_audit_log/types.proto")
 	pInfo.FilesInfo["ves.io/schema/log/vk8s_audit_log/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.vk8s_events", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_events", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.log.vk8s_events", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log/vk8s_events", false)
 	mdr.PkgsInfo["ves.io.schema.log.vk8s_events"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/log/vk8s_events/types.proto")
 	pInfo.FilesInfo["ves.io/schema/log/vk8s_events/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.log_receiver", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log_receiver", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.log_receiver", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log_receiver", false)
 	mdr.PkgsInfo["ves.io.schema.log_receiver"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/log_receiver/object.proto")
@@ -10093,7 +10093,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/log_receiver/types.proto")
 	pInfo.FilesInfo["ves.io/schema/log_receiver/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.log_receiver.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/log_receiver/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.log_receiver.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/log_receiver/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.log_receiver.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/log_receiver/crudapi/api.proto")
@@ -10135,7 +10135,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.log_receiver.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.malicious_user_mitigation", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.malicious_user_mitigation", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation", false)
 	mdr.PkgsInfo["ves.io.schema.malicious_user_mitigation"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/malicious_user_mitigation/object.proto")
@@ -10202,7 +10202,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/malicious_user_mitigation/types.proto")
 	pInfo.FilesInfo["ves.io/schema/malicious_user_mitigation/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.malicious_user_mitigation.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.malicious_user_mitigation.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/malicious_user_mitigation/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.malicious_user_mitigation.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/malicious_user_mitigation/crudapi/api.proto")
@@ -10244,7 +10244,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.malicious_user_mitigation.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.malware_protection.subscription", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/malware_protection/subscription", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.malware_protection.subscription", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/malware_protection/subscription", false)
 	mdr.PkgsInfo["ves.io.schema.malware_protection.subscription"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/malware_protection/subscription/public_customapi.proto")
@@ -10266,7 +10266,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.malware_protection.subscription.CustomAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.module_management", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/module_management", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.module_management", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/module_management", false)
 	mdr.PkgsInfo["ves.io.schema.module_management"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/module_management/custom_api.proto")
@@ -10286,7 +10286,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/module_management/types.proto")
 	pInfo.FilesInfo["ves.io/schema/module_management/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.namespace", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.namespace", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/namespace", false)
 	mdr.PkgsInfo["ves.io.schema.namespace"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/namespace/object.proto")
@@ -10506,7 +10506,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/namespace/types.proto")
 	pInfo.FilesInfo["ves.io/schema/namespace/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.namespace.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/namespace/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.namespace.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/namespace/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.namespace.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/namespace/crudapi/api.proto")
@@ -10548,7 +10548,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.namespace.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nat_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nat_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nat_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nat_policy", false)
 	mdr.PkgsInfo["ves.io.schema.nat_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nat_policy/object.proto")
@@ -10615,7 +10615,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nat_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/nat_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nat_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nat_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nat_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nat_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.nat_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nat_policy/crudapi/api.proto")
@@ -10657,7 +10657,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.nat_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_connector", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_connector", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_connector", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_connector", false)
 	mdr.PkgsInfo["ves.io.schema.network_connector"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_connector/object.proto")
@@ -10724,7 +10724,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_connector/types.proto")
 	pInfo.FilesInfo["ves.io/schema/network_connector/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_connector.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_connector/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_connector.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_connector/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.network_connector.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_connector/crudapi/api.proto")
@@ -10766,7 +10766,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.network_connector.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_firewall", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_firewall", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_firewall", false)
 	mdr.PkgsInfo["ves.io.schema.network_firewall"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_firewall/object.proto")
@@ -10833,7 +10833,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_firewall/types.proto")
 	pInfo.FilesInfo["ves.io/schema/network_firewall/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_firewall.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_firewall/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_firewall.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_firewall/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.network_firewall.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_firewall/crudapi/api.proto")
@@ -10875,7 +10875,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.network_firewall.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_interface", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_interface", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_interface", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_interface", false)
 	mdr.PkgsInfo["ves.io.schema.network_interface"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_interface/object.proto")
@@ -10942,7 +10942,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_interface/types.proto")
 	pInfo.FilesInfo["ves.io/schema/network_interface/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_interface.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_interface/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_interface.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_interface/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.network_interface.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_interface/crudapi/api.proto")
@@ -10984,7 +10984,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.network_interface.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_loadbalancer", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_loadbalancer", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_loadbalancer", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_loadbalancer", false)
 	mdr.PkgsInfo["ves.io.schema.network_loadbalancer"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_loadbalancer/object.proto")
@@ -11002,7 +11002,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_loadbalancer/types.proto")
 	pInfo.FilesInfo["ves.io/schema/network_loadbalancer/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_loadbalancer.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_loadbalancer/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_loadbalancer.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_loadbalancer/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.network_loadbalancer.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_loadbalancer/crudapi/api.proto")
@@ -11044,7 +11044,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.network_loadbalancer.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_policy", false)
 	mdr.PkgsInfo["ves.io.schema.network_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_policy/object.proto")
@@ -11125,7 +11125,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/network_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.network_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_policy/crudapi/api.proto")
@@ -11167,7 +11167,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.network_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_policy_rule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_policy_rule", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule", false)
 	mdr.PkgsInfo["ves.io.schema.network_policy_rule"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_policy_rule/object.proto")
@@ -11234,7 +11234,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_policy_rule/types.proto")
 	pInfo.FilesInfo["ves.io/schema/network_policy_rule/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_policy_rule.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_policy_rule.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_policy_rule/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.network_policy_rule.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_policy_rule/crudapi/api.proto")
@@ -11276,7 +11276,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.network_policy_rule.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_policy_set", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_set", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_policy_set", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_policy_set", false)
 	mdr.PkgsInfo["ves.io.schema.network_policy_set"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_policy_set/object.proto")
@@ -11319,7 +11319,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_policy_set/types.proto")
 	pInfo.FilesInfo["ves.io/schema/network_policy_set/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_policy_set.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/network_policy_set/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.network_policy_set.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/network_policy_set/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.network_policy_set.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/network_policy_set/crudapi/api.proto")
@@ -11361,7 +11361,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.network_policy_set.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nfv_service", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nfv_service", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nfv_service", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nfv_service", false)
 	mdr.PkgsInfo["ves.io.schema.nfv_service"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nfv_service/object.proto")
@@ -11481,7 +11481,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nfv_service/types.proto")
 	pInfo.FilesInfo["ves.io/schema/nfv_service/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nfv_service.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nfv_service/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nfv_service.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nfv_service/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.nfv_service.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nfv_service/crudapi/api.proto")
@@ -11523,7 +11523,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.nfv_service.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_csg", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_csg", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_csg", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_csg", false)
 	mdr.PkgsInfo["ves.io.schema.nginx.one.nginx_csg"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_csg/object.proto")
@@ -11562,7 +11562,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_csg/types.proto")
 	pInfo.FilesInfo["ves.io/schema/nginx/one/nginx_csg/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_csg.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_csg/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_csg.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_csg/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.nginx.one.nginx_csg.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_csg/crudapi/api.proto")
@@ -11604,7 +11604,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.nginx.one.nginx_csg.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_instance", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_instance", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_instance", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_instance", false)
 	mdr.PkgsInfo["ves.io.schema.nginx.one.nginx_instance"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_instance/object.proto")
@@ -11643,7 +11643,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_instance/types.proto")
 	pInfo.FilesInfo["ves.io/schema/nginx/one/nginx_instance/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_instance.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_instance/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_instance.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_instance/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.nginx.one.nginx_instance.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_instance/crudapi/api.proto")
@@ -11685,7 +11685,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.nginx.one.nginx_instance.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_server", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_server", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_server", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_server", false)
 	mdr.PkgsInfo["ves.io.schema.nginx.one.nginx_server"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_server/object.proto")
@@ -11742,7 +11742,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_server/types.proto")
 	pInfo.FilesInfo["ves.io/schema/nginx/one/nginx_server/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_server.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_server/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_server.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_server/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.nginx.one.nginx_server.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_server/crudapi/api.proto")
@@ -11784,7 +11784,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.nginx.one.nginx_server.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_service_discovery", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_service_discovery", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_service_discovery", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_service_discovery", false)
 	mdr.PkgsInfo["ves.io.schema.nginx.one.nginx_service_discovery"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_service_discovery/object.proto")
@@ -11851,7 +11851,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_service_discovery/types.proto")
 	pInfo.FilesInfo["ves.io/schema/nginx/one/nginx_service_discovery/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_service_discovery.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_service_discovery/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.nginx.one.nginx_service_discovery.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/nginx/one/nginx_service_discovery/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.nginx.one.nginx_service_discovery.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/nginx/one/nginx_service_discovery/crudapi/api.proto")
@@ -11893,7 +11893,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.nginx.one.nginx_service_discovery.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ocsp_response", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ocsp_response", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ocsp_response", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ocsp_response", false)
 	mdr.PkgsInfo["ves.io.schema.ocsp_response"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ocsp_response/object.proto")
@@ -11911,7 +11911,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ocsp_response/types.proto")
 	pInfo.FilesInfo["ves.io/schema/ocsp_response/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ocsp_response.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ocsp_response/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ocsp_response.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ocsp_response/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.ocsp_response.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ocsp_response/crudapi/api.proto")
@@ -11953,13 +11953,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.ocsp_response.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.pbac", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/pbac", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.pbac", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/pbac", false)
 	mdr.PkgsInfo["ves.io.schema.pbac"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/pbac/types.proto")
 	pInfo.FilesInfo["ves.io/schema/pbac/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.pbac.addon_service", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/pbac/addon_service", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.pbac.addon_service", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/pbac/addon_service", false)
 	mdr.PkgsInfo["ves.io.schema.pbac.addon_service"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/pbac/addon_service/object.proto")
@@ -12050,7 +12050,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/pbac/addon_service/types.proto")
 	pInfo.FilesInfo["ves.io/schema/pbac/addon_service/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.pbac.addon_service.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/pbac/addon_service/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.pbac.addon_service.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/pbac/addon_service/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.pbac.addon_service.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/pbac/addon_service/crudapi/api.proto")
@@ -12092,7 +12092,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.pbac.addon_service.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.policer", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policer", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.policer", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policer", false)
 	mdr.PkgsInfo["ves.io.schema.policer"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/policer/object.proto")
@@ -12159,7 +12159,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/policer/types.proto")
 	pInfo.FilesInfo["ves.io/schema/policer/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.policer.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policer/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.policer.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policer/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.policer.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/policer/crudapi/api.proto")
@@ -12201,13 +12201,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.policer.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policy", false)
 	mdr.PkgsInfo["ves.io.schema.policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.protocol_inspection", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/protocol_inspection", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.protocol_inspection", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/protocol_inspection", false)
 	mdr.PkgsInfo["ves.io.schema.protocol_inspection"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/protocol_inspection/object.proto")
@@ -12274,7 +12274,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/protocol_inspection/types.proto")
 	pInfo.FilesInfo["ves.io/schema/protocol_inspection/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.protocol_inspection.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/protocol_inspection/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.protocol_inspection.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/protocol_inspection/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.protocol_inspection.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/protocol_inspection/crudapi/api.proto")
@@ -12316,7 +12316,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.protocol_inspection.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.protocol_policer", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/protocol_policer", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.protocol_policer", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/protocol_policer", false)
 	mdr.PkgsInfo["ves.io.schema.protocol_policer"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/protocol_policer/object.proto")
@@ -12383,7 +12383,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/protocol_policer/types.proto")
 	pInfo.FilesInfo["ves.io/schema/protocol_policer/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.protocol_policer.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/protocol_policer/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.protocol_policer.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/protocol_policer/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.protocol_policer.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/protocol_policer/crudapi/api.proto")
@@ -12425,7 +12425,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.protocol_policer.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.public_ip", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/public_ip", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.public_ip", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/public_ip", false)
 	mdr.PkgsInfo["ves.io.schema.public_ip"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/public_ip/object.proto")
@@ -12476,7 +12476,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/public_ip/types.proto")
 	pInfo.FilesInfo["ves.io/schema/public_ip/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.public_ip.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/public_ip/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.public_ip.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/public_ip/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.public_ip.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/public_ip/crudapi/api.proto")
@@ -12518,7 +12518,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.public_ip.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.quota", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/quota", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.quota", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/quota", false)
 	mdr.PkgsInfo["ves.io.schema.quota"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/quota/object.proto")
@@ -12604,7 +12604,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/quota/types.proto")
 	pInfo.FilesInfo["ves.io/schema/quota/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.quota.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/quota/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.quota.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/quota/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.quota.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/quota/crudapi/api.proto")
@@ -12646,7 +12646,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.quota.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.rate_limiter", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.rate_limiter", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter", false)
 	mdr.PkgsInfo["ves.io.schema.rate_limiter"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/rate_limiter/object.proto")
@@ -12713,7 +12713,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/rate_limiter/types.proto")
 	pInfo.FilesInfo["ves.io/schema/rate_limiter/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.rate_limiter.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.rate_limiter.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.rate_limiter.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/rate_limiter/crudapi/api.proto")
@@ -12755,7 +12755,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.rate_limiter.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.registration", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/registration", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.registration", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/registration", false)
 	mdr.PkgsInfo["ves.io.schema.registration"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/registration/object.proto")
@@ -12867,7 +12867,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/registration/types.proto")
 	pInfo.FilesInfo["ves.io/schema/registration/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.registration.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/registration/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.registration.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/registration/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.registration.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/registration/crudapi/api.proto")
@@ -12909,7 +12909,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.registration.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.report", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/report", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.report", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/report", false)
 	mdr.PkgsInfo["ves.io.schema.report"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/report/atb.proto")
@@ -12963,7 +12963,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/report/waap.proto")
 	pInfo.FilesInfo["ves.io/schema/report/waap.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.report.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/report/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.report.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/report/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.report.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/report/crudapi/api.proto")
@@ -13005,7 +13005,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.report.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.report_config", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/report_config", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.report_config", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/report_config", false)
 	mdr.PkgsInfo["ves.io.schema.report_config"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/report_config/object.proto")
@@ -13101,7 +13101,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/report_config/types.proto")
 	pInfo.FilesInfo["ves.io/schema/report_config/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.report_config.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/report_config/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.report_config.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/report_config/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.report_config.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/report_config/crudapi/api.proto")
@@ -13143,7 +13143,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.report_config.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.resource_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/resource_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.resource_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/resource_policy", false)
 	mdr.PkgsInfo["ves.io.schema.resource_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/resource_policy/object.proto")
@@ -13161,7 +13161,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/resource_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/resource_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.resource_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/resource_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.resource_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/resource_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.resource_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/resource_policy/crudapi/api.proto")
@@ -13203,7 +13203,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.resource_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.role", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/role", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.role", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/role", false)
 	mdr.PkgsInfo["ves.io.schema.role"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/role/object.proto")
@@ -13299,7 +13299,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/role/types.proto")
 	pInfo.FilesInfo["ves.io/schema/role/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.role.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/role/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.role.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/role/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.role.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/role/crudapi/api.proto")
@@ -13341,7 +13341,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.role.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.route", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.route", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/route", false)
 	mdr.PkgsInfo["ves.io.schema.route"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/route/object.proto")
@@ -13408,7 +13408,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/route/types.proto")
 	pInfo.FilesInfo["ves.io/schema/route/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.route.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.route.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/route/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.route.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/route/crudapi/api.proto")
@@ -13450,7 +13450,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.route.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.saas_config", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/saas_config", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.saas_config", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/saas_config", false)
 	mdr.PkgsInfo["ves.io.schema.saas_config"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/saas_config/object.proto")
@@ -13464,7 +13464,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/saas_config/types.proto")
 	pInfo.FilesInfo["ves.io/schema/saas_config/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.saas_config.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/saas_config/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.saas_config.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/saas_config/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.saas_config.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/saas_config/crudapi/api.proto")
@@ -13506,7 +13506,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.saas_config.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_management", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_management", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_management", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/secret_management", false)
 	mdr.PkgsInfo["ves.io.schema.secret_management"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_management/public_customapi.proto")
@@ -13528,7 +13528,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.secret_management.CustomAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_management_access", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_management_access", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_management_access", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/secret_management_access", false)
 	mdr.PkgsInfo["ves.io.schema.secret_management_access"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_management_access/object.proto")
@@ -13595,7 +13595,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_management_access/types.proto")
 	pInfo.FilesInfo["ves.io/schema/secret_management_access/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_management_access.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_management_access/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_management_access.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/secret_management_access/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.secret_management_access.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_management_access/crudapi/api.proto")
@@ -13637,7 +13637,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.secret_management_access.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/secret_policy", false)
 	mdr.PkgsInfo["ves.io.schema.secret_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_policy/object.proto")
@@ -13728,7 +13728,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/secret_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/secret_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.secret_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_policy/crudapi/api.proto")
@@ -13770,7 +13770,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.secret_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_policy_rule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy_rule", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_policy_rule", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/secret_policy_rule", false)
 	mdr.PkgsInfo["ves.io.schema.secret_policy_rule"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_policy_rule/object.proto")
@@ -13837,7 +13837,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_policy_rule/types.proto")
 	pInfo.FilesInfo["ves.io/schema/secret_policy_rule/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_policy_rule.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/secret_policy_rule/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.secret_policy_rule.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/secret_policy_rule/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.secret_policy_rule.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/secret_policy_rule/crudapi/api.proto")
@@ -13879,7 +13879,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.secret_policy_rule.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.segment", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/segment", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.segment", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/segment", false)
 	mdr.PkgsInfo["ves.io.schema.segment"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/segment/object.proto")
@@ -13960,7 +13960,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/segment/types.proto")
 	pInfo.FilesInfo["ves.io/schema/segment/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.segment.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/segment/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.segment.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/segment/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.segment.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/segment/crudapi/api.proto")
@@ -14002,7 +14002,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.segment.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.segment_connection", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/segment_connection", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.segment_connection", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/segment_connection", false)
 	mdr.PkgsInfo["ves.io.schema.segment_connection"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/segment_connection/object.proto")
@@ -14053,7 +14053,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/segment_connection/types.proto")
 	pInfo.FilesInfo["ves.io/schema/segment_connection/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.segment_connection.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/segment_connection/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.segment_connection.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/segment_connection/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.segment_connection.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/segment_connection/crudapi/api.proto")
@@ -14095,7 +14095,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.segment_connection.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.sensitive_data_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/sensitive_data_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.sensitive_data_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/sensitive_data_policy", false)
 	mdr.PkgsInfo["ves.io.schema.sensitive_data_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/sensitive_data_policy/object.proto")
@@ -14162,7 +14162,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/sensitive_data_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/sensitive_data_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.sensitive_data_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/sensitive_data_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.sensitive_data_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/sensitive_data_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.sensitive_data_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/sensitive_data_policy/crudapi/api.proto")
@@ -14204,7 +14204,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.sensitive_data_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/service_policy", false)
 	mdr.PkgsInfo["ves.io.schema.service_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/service_policy/object.proto")
@@ -14290,7 +14290,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/service_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/service_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/service_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.service_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/service_policy/crudapi/api.proto")
@@ -14332,7 +14332,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.service_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy_rule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy_rule", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule", false)
 	mdr.PkgsInfo["ves.io.schema.service_policy_rule"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/service_policy_rule/object.proto")
@@ -14399,7 +14399,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/service_policy_rule/types.proto")
 	pInfo.FilesInfo["ves.io/schema/service_policy_rule/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy_rule.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy_rule.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.service_policy_rule.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/service_policy_rule/crudapi/api.proto")
@@ -14441,7 +14441,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.service_policy_rule.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy_set", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_set", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy_set", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/service_policy_set", false)
 	mdr.PkgsInfo["ves.io.schema.service_policy_set"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/service_policy_set/object.proto")
@@ -14484,7 +14484,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/service_policy_set/types.proto")
 	pInfo.FilesInfo["ves.io/schema/service_policy_set/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy_set.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_set/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.service_policy_set.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/service_policy_set/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.service_policy_set.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/service_policy_set/crudapi/api.proto")
@@ -14526,13 +14526,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.service_policy_set.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_policy.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_policy.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_allowlist_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_allowlist_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_allowlist_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_allowlist_policy", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_allowlist_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_allowlist_policy/object.proto")
@@ -14612,7 +14612,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_allowlist_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_allowlist_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_allowlist_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_allowlist_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_allowlist_policy/crudapi/api.proto")
@@ -14654,7 +14654,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_allowlist_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_endpoint_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_endpoint_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_endpoint_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_endpoint_policy", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_endpoint_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_endpoint_policy/object.proto")
@@ -14734,7 +14734,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_endpoint_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_endpoint_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_endpoint_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_endpoint_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_endpoint_policy/crudapi/api.proto")
@@ -14776,7 +14776,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_endpoint_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_infrastructure", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_infrastructure", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_infrastructure", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_infrastructure", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_infrastructure"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_infrastructure/object.proto")
@@ -14864,7 +14864,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_infrastructure/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_infrastructure/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_infrastructure/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_infrastructure/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_infrastructure/crudapi/api.proto")
@@ -14906,7 +14906,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_infrastructure.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_network_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_network_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_network_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_network_policy", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_network_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_network_policy/object.proto")
@@ -14986,7 +14986,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_network_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_network_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_network_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_network_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_network_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_network_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_network_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_network_policy/crudapi/api.proto")
@@ -15028,7 +15028,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_network_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_policy_version", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_policy_version", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_policy_version", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_policy_version", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_policy_version"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_policy_version/object.proto")
@@ -15046,7 +15046,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_policy_version/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/bot_policy_version/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_policy_version.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_policy_version/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.bot_policy_version.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_policy_version/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.bot_policy_version.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/bot_policy_version/crudapi/api.proto")
@@ -15088,7 +15088,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.shape.bot_defense.bot_policy_version.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.mobile_base_config", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/mobile_base_config", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.mobile_base_config", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/mobile_base_config", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.mobile_base_config"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/mobile_base_config/object.proto")
@@ -15165,7 +15165,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/mobile_base_config/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/mobile_base_config/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.mobile_base_config.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/mobile_base_config/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.mobile_base_config.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/mobile_base_config/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.mobile_base_config.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/mobile_base_config/crudapi/api.proto")
@@ -15207,7 +15207,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.shape.bot_defense.mobile_base_config.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.protected_application", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.protected_application", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.protected_application"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/protected_application/object.proto")
@@ -15303,19 +15303,19 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/protected_application/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/protected_application/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.protected_application.cloudflare", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application/cloudflare", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.protected_application.cloudflare", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application/cloudflare", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.protected_application.cloudflare"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/protected_application/cloudflare/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/protected_application/cloudflare/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.protected_application.cloudfront", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application/cloudfront", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.protected_application.cloudfront", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application/cloudfront", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.protected_application.cloudfront"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/protected_application/cloudfront/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/bot_defense/protected_application/cloudfront/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.protected_application.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.bot_defense.protected_application.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/protected_application/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.shape.bot_defense.protected_application.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/bot_defense/protected_application/crudapi/api.proto")
@@ -15357,7 +15357,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.shape.bot_defense.protected_application.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense", false)
 	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/public_customapi.proto")
@@ -15482,7 +15482,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.allowed_domain", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/allowed_domain", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.allowed_domain", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/allowed_domain", false)
 	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.allowed_domain"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/allowed_domain/object.proto")
@@ -15541,7 +15541,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/allowed_domain/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/allowed_domain/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.allowed_domain.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/allowed_domain/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.allowed_domain.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/allowed_domain/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.allowed_domain.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/allowed_domain/crudapi/api.proto")
@@ -15583,7 +15583,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.shape.client_side_defense.allowed_domain.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.mitigated_domain", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/mitigated_domain", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.mitigated_domain", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/mitigated_domain", false)
 	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.mitigated_domain"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/mitigated_domain/object.proto")
@@ -15642,7 +15642,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/mitigated_domain/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/mitigated_domain/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/mitigated_domain/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/mitigated_domain/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/mitigated_domain/crudapi/api.proto")
@@ -15684,7 +15684,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.shape.client_side_defense.mitigated_domain.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.protected_domain", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/protected_domain", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.protected_domain", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/protected_domain", false)
 	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.protected_domain"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/protected_domain/object.proto")
@@ -15743,7 +15743,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/protected_domain/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/protected_domain/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.protected_domain.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/protected_domain/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.protected_domain.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/protected_domain/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.protected_domain.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/protected_domain/crudapi/api.proto")
@@ -15785,7 +15785,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.shape.client_side_defense.protected_domain.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.subscription", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/subscription", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape.client_side_defense.subscription", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/client_side_defense/subscription", false)
 	mdr.PkgsInfo["ves.io.schema.shape.client_side_defense.subscription"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/subscription/public_customapi.proto")
@@ -15810,7 +15810,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape/client_side_defense/subscription/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape/client_side_defense/subscription/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape_bot_defense_instance", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape_bot_defense_instance", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape_bot_defense_instance", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape_bot_defense_instance", false)
 	mdr.PkgsInfo["ves.io.schema.shape_bot_defense_instance"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape_bot_defense_instance/object.proto")
@@ -15849,7 +15849,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape_bot_defense_instance/types.proto")
 	pInfo.FilesInfo["ves.io/schema/shape_bot_defense_instance/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape_bot_defense_instance.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape_bot_defense_instance/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.shape_bot_defense_instance.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape_bot_defense_instance/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.shape_bot_defense_instance.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/shape_bot_defense_instance/crudapi/api.proto")
@@ -15891,7 +15891,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.shape_bot_defense_instance.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.site", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site", false)
 	mdr.PkgsInfo["ves.io.schema.site"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/site/object.proto")
@@ -16164,7 +16164,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/site/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.site.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.site.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.site.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/site/crudapi/api.proto")
@@ -16206,7 +16206,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.site.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.site_mesh_group", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.site_mesh_group", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group", false)
 	mdr.PkgsInfo["ves.io.schema.site_mesh_group"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/site_mesh_group/object.proto")
@@ -16273,7 +16273,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/site_mesh_group/types.proto")
 	pInfo.FilesInfo["ves.io/schema/site_mesh_group/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.site_mesh_group.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.site_mesh_group.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site_mesh_group/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.site_mesh_group.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/site_mesh_group/crudapi/api.proto")
@@ -16315,7 +16315,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.site_mesh_group.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.site_segment_static_routes", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_segment_static_routes", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.site_segment_static_routes", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site_segment_static_routes", false)
 	mdr.PkgsInfo["ves.io.schema.site_segment_static_routes"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/site_segment_static_routes/object.proto")
@@ -16382,7 +16382,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/site_segment_static_routes/types.proto")
 	pInfo.FilesInfo["ves.io/schema/site_segment_static_routes/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.site_segment_static_routes.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_segment_static_routes/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.site_segment_static_routes.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site_segment_static_routes/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.site_segment_static_routes.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/site_segment_static_routes/crudapi/api.proto")
@@ -16424,7 +16424,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.site_segment_static_routes.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.srv6_network_slice", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/srv6_network_slice", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.srv6_network_slice", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/srv6_network_slice", false)
 	mdr.PkgsInfo["ves.io.schema.srv6_network_slice"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/srv6_network_slice/object.proto")
@@ -16491,7 +16491,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/srv6_network_slice/types.proto")
 	pInfo.FilesInfo["ves.io/schema/srv6_network_slice/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.srv6_network_slice.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/srv6_network_slice/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.srv6_network_slice.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/srv6_network_slice/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.srv6_network_slice.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/srv6_network_slice/crudapi/api.proto")
@@ -16533,7 +16533,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.srv6_network_slice.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.stored_object", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/stored_object", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.stored_object", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/stored_object", false)
 	mdr.PkgsInfo["ves.io.schema.stored_object"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/stored_object/common_types.proto")
@@ -16650,7 +16650,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/stored_object/types.proto")
 	pInfo.FilesInfo["ves.io/schema/stored_object/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.stored_object.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/stored_object/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.stored_object.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/stored_object/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.stored_object.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/stored_object/crudapi/api.proto")
@@ -16692,7 +16692,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.stored_object.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.subnet", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/subnet", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.subnet", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/subnet", false)
 	mdr.PkgsInfo["ves.io.schema.subnet"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/subnet/object.proto")
@@ -16759,7 +16759,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/subnet/types.proto")
 	pInfo.FilesInfo["ves.io/schema/subnet/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.subnet.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/subnet/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.subnet.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/subnet/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.subnet.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/subnet/crudapi/api.proto")
@@ -16801,7 +16801,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.subnet.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.tenant", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.tenant", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/tenant", false)
 	mdr.PkgsInfo["ves.io.schema.tenant"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/tenant/custom_api.proto")
@@ -16985,7 +16985,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/tenant/types.proto")
 	pInfo.FilesInfo["ves.io/schema/tenant/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.tenant.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tenant/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.tenant.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/tenant/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.tenant.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/tenant/crudapi/api.proto")
@@ -17027,7 +17027,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.tenant.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.terraform_container_version", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/terraform_container_version", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.terraform_container_version", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/terraform_container_version", false)
 	mdr.PkgsInfo["ves.io.schema.terraform_container_version"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/terraform_container_version/object.proto")
@@ -17045,7 +17045,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/terraform_container_version/types.proto")
 	pInfo.FilesInfo["ves.io/schema/terraform_container_version/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.terraform_container_version.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/terraform_container_version/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.terraform_container_version.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/terraform_container_version/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.terraform_container_version.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/terraform_container_version/crudapi/api.proto")
@@ -17087,13 +17087,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.terraform_container_version.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ticket_management", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ticket_management", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ticket_management", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ticket_management", false)
 	mdr.PkgsInfo["ves.io.schema.ticket_management"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ticket_management/types.proto")
 	pInfo.FilesInfo["ves.io/schema/ticket_management/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ticket_management.ticket", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ticket_management/ticket", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ticket_management.ticket", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ticket_management/ticket", false)
 	mdr.PkgsInfo["ves.io.schema.ticket_management.ticket"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ticket_management/ticket/object.proto")
@@ -17131,7 +17131,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ticket_management/ticket/types.proto")
 	pInfo.FilesInfo["ves.io/schema/ticket_management/ticket/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ticket_management.ticket.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ticket_management/ticket/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ticket_management.ticket.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ticket_management/ticket/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.ticket_management.ticket.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ticket_management/ticket/crudapi/api.proto")
@@ -17173,7 +17173,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.ticket_management.ticket.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ticket_management.ticket_tracking_system", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ticket_management/ticket_tracking_system", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ticket_management.ticket_tracking_system", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ticket_management/ticket_tracking_system", false)
 	mdr.PkgsInfo["ves.io.schema.ticket_management.ticket_tracking_system"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ticket_management/ticket_tracking_system/object.proto")
@@ -17255,7 +17255,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ticket_management/ticket_tracking_system/types.proto")
 	pInfo.FilesInfo["ves.io/schema/ticket_management/ticket_tracking_system/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ticket_management.ticket_tracking_system.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ticket_management/ticket_tracking_system/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ticket_management.ticket_tracking_system.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ticket_management/ticket_tracking_system/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.ticket_management.ticket_tracking_system.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ticket_management/ticket_tracking_system/crudapi/api.proto")
@@ -17297,7 +17297,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.ticket_management.ticket_tracking_system.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.token", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.token", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/token", false)
 	mdr.PkgsInfo["ves.io.schema.token"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/token/object.proto")
@@ -17383,7 +17383,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/token/types.proto")
 	pInfo.FilesInfo["ves.io/schema/token/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.token.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/token/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.token.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/token/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.token.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/token/crudapi/api.proto")
@@ -17425,7 +17425,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.token.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology", false)
 	mdr.PkgsInfo["ves.io.schema.topology"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/private_customapi.proto")
@@ -17514,7 +17514,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/types.proto")
 	pInfo.FilesInfo["ves.io/schema/topology/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_cloud_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_cloud_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_cloud_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_cloud_policy", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_cloud_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_cloud_policy/object.proto")
@@ -17528,7 +17528,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_cloud_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/topology/topology_cloud_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_cloud_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_cloud_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_cloud_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_cloud_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_cloud_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_cloud_policy/crudapi/api.proto")
@@ -17570,7 +17570,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.topology.topology_cloud_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_dc_cluster_group", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_dc_cluster_group", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_dc_cluster_group", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_dc_cluster_group", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_dc_cluster_group"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_dc_cluster_group/object.proto")
@@ -17584,7 +17584,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_dc_cluster_group/types.proto")
 	pInfo.FilesInfo["ves.io/schema/topology/topology_dc_cluster_group/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_dc_cluster_group.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_dc_cluster_group/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_dc_cluster_group.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_dc_cluster_group/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_dc_cluster_group.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_dc_cluster_group/crudapi/api.proto")
@@ -17626,7 +17626,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.topology.topology_dc_cluster_group.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_instance", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_instance", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_instance", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_instance", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_instance"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_instance/object.proto")
@@ -17640,7 +17640,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_instance/types.proto")
 	pInfo.FilesInfo["ves.io/schema/topology/topology_instance/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_instance.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_instance/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_instance.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_instance/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_instance.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_instance/crudapi/api.proto")
@@ -17682,7 +17682,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.topology.topology_instance.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_network", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_network", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_network", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_network", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_network"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_network/object.proto")
@@ -17696,7 +17696,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_network/types.proto")
 	pInfo.FilesInfo["ves.io/schema/topology/topology_network/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_network.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_network/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_network.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_network/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_network.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_network/crudapi/api.proto")
@@ -17738,7 +17738,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.topology.topology_network.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_network_peer", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_network_peer", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_network_peer", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_network_peer", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_network_peer"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_network_peer/object.proto")
@@ -17752,7 +17752,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_network_peer/types.proto")
 	pInfo.FilesInfo["ves.io/schema/topology/topology_network_peer/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_network_peer.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_network_peer/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_network_peer.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_network_peer/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_network_peer.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_network_peer/crudapi/api.proto")
@@ -17794,7 +17794,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.topology.topology_network_peer.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_region", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_region", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_region", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_region", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_region"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_region/object.proto")
@@ -17808,7 +17808,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_region/types.proto")
 	pInfo.FilesInfo["ves.io/schema/topology/topology_region/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_region.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_region/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_region.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_region/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_region.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_region/crudapi/api.proto")
@@ -17850,7 +17850,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.topology.topology_region.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_route_table", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_route_table", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_route_table", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_route_table", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_route_table"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_route_table/object.proto")
@@ -17864,7 +17864,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_route_table/types.proto")
 	pInfo.FilesInfo["ves.io/schema/topology/topology_route_table/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_route_table.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_route_table/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_route_table.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_route_table/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_route_table.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_route_table/crudapi/api.proto")
@@ -17906,7 +17906,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.topology.topology_route_table.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_site", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_site", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_site", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_site"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_site/object.proto")
@@ -17920,7 +17920,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/topology/topology_site/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_site.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_site/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_site.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_site/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_site.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_site/crudapi/api.proto")
@@ -17962,7 +17962,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.topology.topology_site.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_site_mesh_group", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_site_mesh_group", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_site_mesh_group", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_site_mesh_group", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_site_mesh_group"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_site_mesh_group/object.proto")
@@ -17976,7 +17976,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_site_mesh_group/types.proto")
 	pInfo.FilesInfo["ves.io/schema/topology/topology_site_mesh_group/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_site_mesh_group.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_site_mesh_group/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_site_mesh_group.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_site_mesh_group/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_site_mesh_group.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_site_mesh_group/crudapi/api.proto")
@@ -18018,7 +18018,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.topology.topology_site_mesh_group.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_subnet", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_subnet", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_subnet", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_subnet", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_subnet"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_subnet/object.proto")
@@ -18032,7 +18032,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_subnet/types.proto")
 	pInfo.FilesInfo["ves.io/schema/topology/topology_subnet/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_subnet.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_subnet/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_subnet.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_subnet/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_subnet.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_subnet/crudapi/api.proto")
@@ -18074,7 +18074,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.topology.topology_subnet.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_transit_gateway", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_transit_gateway", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_transit_gateway", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_transit_gateway", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_transit_gateway"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_transit_gateway/object.proto")
@@ -18088,7 +18088,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_transit_gateway/types.proto")
 	pInfo.FilesInfo["ves.io/schema/topology/topology_transit_gateway/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_transit_gateway.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_transit_gateway/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_transit_gateway.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_transit_gateway/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_transit_gateway.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_transit_gateway/crudapi/api.proto")
@@ -18130,7 +18130,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.topology.topology_transit_gateway.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_tunnel", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_tunnel", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_tunnel", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_tunnel", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_tunnel"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_tunnel/object.proto")
@@ -18144,7 +18144,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_tunnel/types.proto")
 	pInfo.FilesInfo["ves.io/schema/topology/topology_tunnel/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_tunnel.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_tunnel/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.topology.topology_tunnel.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/topology/topology_tunnel/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.topology.topology_tunnel.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/topology/topology_tunnel/crudapi/api.proto")
@@ -18186,7 +18186,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.topology.topology_tunnel.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.trusted_ca_list", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/trusted_ca_list", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.trusted_ca_list", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/trusted_ca_list", false)
 	mdr.PkgsInfo["ves.io.schema.trusted_ca_list"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/trusted_ca_list/object.proto")
@@ -18253,7 +18253,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/trusted_ca_list/types.proto")
 	pInfo.FilesInfo["ves.io/schema/trusted_ca_list/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.trusted_ca_list.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/trusted_ca_list/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.trusted_ca_list.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/trusted_ca_list/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.trusted_ca_list.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/trusted_ca_list/crudapi/api.proto")
@@ -18295,7 +18295,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.trusted_ca_list.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.tunnel", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tunnel", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.tunnel", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/tunnel", false)
 	mdr.PkgsInfo["ves.io.schema.tunnel"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/tunnel/object.proto")
@@ -18362,7 +18362,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/tunnel/types.proto")
 	pInfo.FilesInfo["ves.io/schema/tunnel/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.tunnel.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/tunnel/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.tunnel.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/tunnel/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.tunnel.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/tunnel/crudapi/api.proto")
@@ -18404,7 +18404,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.tunnel.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.unified_policy_group", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/unified_policy_group", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.unified_policy_group", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/unified_policy_group", false)
 	mdr.PkgsInfo["ves.io.schema.unified_policy_group"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/unified_policy_group/object.proto")
@@ -18471,7 +18471,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/unified_policy_group/types.proto")
 	pInfo.FilesInfo["ves.io/schema/unified_policy_group/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.unified_policy_group.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/unified_policy_group/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.unified_policy_group.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/unified_policy_group/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.unified_policy_group.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/unified_policy_group/crudapi/api.proto")
@@ -18513,7 +18513,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.unified_policy_group.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usage", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/usage", false)
 	mdr.PkgsInfo["ves.io.schema.usage"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/custom_aggregated_api.proto")
@@ -18569,7 +18569,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/types.proto")
 	pInfo.FilesInfo["ves.io/schema/usage/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usage/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/usage/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.usage.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/crudapi/api.proto")
@@ -18611,7 +18611,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.usage.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage.invoice", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usage/invoice", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage.invoice", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/usage/invoice", false)
 	mdr.PkgsInfo["ves.io.schema.usage.invoice"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/invoice/custom_api.proto")
@@ -18633,7 +18633,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.usage.invoice.CustomAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage.plan", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usage/plan", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage.plan", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/usage/plan", false)
 	mdr.PkgsInfo["ves.io.schema.usage.plan"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/plan/custom_api.proto")
@@ -18655,7 +18655,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.usage.plan.CustomAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage.subscription", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usage/subscription", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.usage.subscription", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/usage/subscription", false)
 	mdr.PkgsInfo["ves.io.schema.usage.subscription"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/usage/subscription/custom_api.proto")
@@ -18672,7 +18672,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.usage.subscription.CustomAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.usb_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.usb_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/usb_policy", false)
 	mdr.PkgsInfo["ves.io.schema.usb_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/usb_policy/object.proto")
@@ -18739,7 +18739,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/usb_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/usb_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.usb_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/usb_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.usb_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/usb_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.usb_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/usb_policy/crudapi/api.proto")
@@ -18781,7 +18781,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.usb_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.user", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.user", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/user", false)
 	mdr.PkgsInfo["ves.io.schema.user"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/user/object.proto")
@@ -18907,7 +18907,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/user/types.proto")
 	pInfo.FilesInfo["ves.io/schema/user/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.user.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.user.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/user/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.user.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/user/crudapi/api.proto")
@@ -18949,7 +18949,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.user.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.user.setting", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user/setting", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.user.setting", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/user/setting", false)
 	mdr.PkgsInfo["ves.io.schema.user.setting"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/user/setting/custom_api.proto")
@@ -19061,7 +19061,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.user.setting.CustomAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.user_identification", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user_identification", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.user_identification", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/user_identification", false)
 	mdr.PkgsInfo["ves.io.schema.user_identification"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/user_identification/object.proto")
@@ -19128,7 +19128,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/user_identification/types.proto")
 	pInfo.FilesInfo["ves.io/schema/user_identification/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.user_identification.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/user_identification/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.user_identification.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/user_identification/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.user_identification.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/user_identification/crudapi/api.proto")
@@ -19170,7 +19170,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.user_identification.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_application", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_application", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.application.uztna_application"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application/object.proto")
@@ -19188,7 +19188,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/application/uztna_application/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_application.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_application.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.application.uztna_application.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application/crudapi/api.proto")
@@ -19230,7 +19230,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.application.uztna_application.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_application_group", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application_group", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_application_group", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application_group", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.application.uztna_application_group"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application_group/object.proto")
@@ -19248,7 +19248,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application_group/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/application/uztna_application_group/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_application_group.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application_group/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_application_group.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application_group/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.application.uztna_application_group.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application_group/crudapi/api.proto")
@@ -19290,7 +19290,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.application.uztna_application_group.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_application_tag", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application_tag", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_application_tag", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application_tag", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.application.uztna_application_tag"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application_tag/object.proto")
@@ -19308,7 +19308,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application_tag/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/application/uztna_application_tag/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_application_tag.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application_tag/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_application_tag.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_application_tag/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.application.uztna_application_tag.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_application_tag/crudapi/api.proto")
@@ -19350,7 +19350,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.application.uztna_application_tag.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_snat_pool", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_snat_pool", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_snat_pool", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_snat_pool", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.application.uztna_snat_pool"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_snat_pool/object.proto")
@@ -19368,7 +19368,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_snat_pool/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/application/uztna_snat_pool/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_snat_pool.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_snat_pool/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.application.uztna_snat_pool.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/application/uztna_snat_pool/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.application.uztna_snat_pool.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/application/uztna_snat_pool/crudapi/api.proto")
@@ -19410,7 +19410,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.application.uztna_snat_pool.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_app_vip_pool", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_app_vip_pool", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_app_vip_pool", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_app_vip_pool", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_app_vip_pool"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_app_vip_pool/object.proto")
@@ -19428,7 +19428,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_app_vip_pool/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_app_vip_pool/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_app_vip_pool.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_app_vip_pool/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_app_vip_pool.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_app_vip_pool/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_app_vip_pool.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_app_vip_pool/crudapi/api.proto")
@@ -19470,7 +19470,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.uztna_app_vip_pool.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_domain", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_domain", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_domain", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_domain", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_domain"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_domain/object.proto")
@@ -19488,7 +19488,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_domain/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_domain/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_domain.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_domain/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_domain.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_domain/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_domain.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_domain/crudapi/api.proto")
@@ -19530,7 +19530,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.uztna_domain.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_flow", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_flow", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_flow", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_flow", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_flow"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_flow/geolocation.proto")
@@ -19554,7 +19554,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_flow/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_flow/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_flow.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_flow/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_flow.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_flow/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_flow.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_flow/crudapi/api.proto")
@@ -19596,7 +19596,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.uztna_flow.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_gateway", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_gateway", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_gateway", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_gateway", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_gateway"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_gateway/object.proto")
@@ -19614,7 +19614,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_gateway/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_gateway/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_gateway.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_gateway/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_gateway.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_gateway/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_gateway.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_gateway/crudapi/api.proto")
@@ -19656,7 +19656,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.uztna_gateway.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_healthcheck", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_healthcheck", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_healthcheck", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_healthcheck", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_healthcheck"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_healthcheck/object.proto")
@@ -19674,7 +19674,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_healthcheck/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_healthcheck/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_healthcheck.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_healthcheck/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_healthcheck.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_healthcheck/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_healthcheck.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_healthcheck/crudapi/api.proto")
@@ -19716,7 +19716,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.uztna_healthcheck.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_leasepool", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_leasepool", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_leasepool", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_leasepool", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_leasepool"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_leasepool/object.proto")
@@ -19734,7 +19734,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_leasepool/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_leasepool/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_leasepool.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_leasepool/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_leasepool.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_leasepool/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_leasepool.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_leasepool/crudapi/api.proto")
@@ -19776,7 +19776,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.uztna_leasepool.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_origin_pool", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_origin_pool", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_origin_pool", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_origin_pool", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_origin_pool"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_origin_pool/object.proto")
@@ -19794,7 +19794,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_origin_pool/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_origin_pool/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_origin_pool.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_origin_pool/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_origin_pool.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_origin_pool/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_origin_pool.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_origin_pool/crudapi/api.proto")
@@ -19836,7 +19836,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.uztna_origin_pool.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_policy_template", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_policy_template", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_policy_template", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_policy_template", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_policy_template"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_policy_template/object.proto")
@@ -19854,7 +19854,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_policy_template/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/uztna_policy_template/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_policy_template.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_policy_template/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.uztna_policy_template.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/uztna_policy_template/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.uztna_policy_template.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/uztna_policy_template/crudapi/api.proto")
@@ -19896,7 +19896,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.uztna_policy_template.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.views.uztna_application_view", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/views/uztna_application_view", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.views.uztna_application_view", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/views/uztna_application_view", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.views.uztna_application_view"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/views/uztna_application_view/object.proto")
@@ -19938,7 +19938,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/views/uztna_application_view/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/views/uztna_application_view/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.views.uztna_application_view.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/views/uztna_application_view/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.views.uztna_application_view.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/views/uztna_application_view/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.views.uztna_application_view.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/views/uztna_application_view/crudapi/api.proto")
@@ -19980,7 +19980,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.views.uztna_application_view.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.views.uztna_domain_view", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/views/uztna_domain_view", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.views.uztna_domain_view", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/views/uztna_domain_view", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.views.uztna_domain_view"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/views/uztna_domain_view/object.proto")
@@ -19998,7 +19998,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/views/uztna_domain_view/types.proto")
 	pInfo.FilesInfo["ves.io/schema/uztna/views/uztna_domain_view/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.views.uztna_domain_view.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/uztna/views/uztna_domain_view/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.uztna.views.uztna_domain_view.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/uztna/views/uztna_domain_view/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.uztna.views.uztna_domain_view.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/uztna/views/uztna_domain_view/crudapi/api.proto")
@@ -20040,7 +20040,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.uztna.views.uztna_domain_view.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.vesenv", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/vesenv", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.vesenv", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/vesenv", false)
 	mdr.PkgsInfo["ves.io.schema.vesenv"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/vesenv/all_addon_service_groups.proto")
@@ -20064,7 +20064,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/vesenv/quota_resource_keys.proto")
 	pInfo.FilesInfo["ves.io/schema/vesenv/quota_resource_keys.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views", false)
 	mdr.PkgsInfo["ves.io.schema.views"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/site_types.proto")
@@ -20076,7 +20076,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.api_definition", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.api_definition", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition", false)
 	mdr.PkgsInfo["ves.io.schema.views.api_definition"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/api_definition/custom_api.proto")
@@ -20225,7 +20225,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/api_definition/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/api_definition/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.api_definition.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.api_definition.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/api_definition/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.api_definition.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/api_definition/crudapi/api.proto")
@@ -20267,7 +20267,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.api_definition.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.api_inventory", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_inventory", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.api_inventory", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/api_inventory", false)
 	mdr.PkgsInfo["ves.io.schema.views.api_inventory"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/api_inventory/custom_api.proto")
@@ -20309,7 +20309,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/api_inventory/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/api_inventory/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.api_inventory.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/api_inventory/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.api_inventory.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/api_inventory/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.api_inventory.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/api_inventory/crudapi/api.proto")
@@ -20351,7 +20351,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.api_inventory.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.app_api_group", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/app_api_group", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.app_api_group", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/app_api_group", false)
 	mdr.PkgsInfo["ves.io.schema.views.app_api_group"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/app_api_group/object.proto")
@@ -20437,7 +20437,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/app_api_group/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/app_api_group/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.app_api_group.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/app_api_group/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.app_api_group.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/app_api_group/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.app_api_group.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/app_api_group/crudapi/api.proto")
@@ -20479,7 +20479,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.app_api_group.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.aws_tgw_site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.aws_tgw_site", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site", false)
 	mdr.PkgsInfo["ves.io.schema.views.aws_tgw_site"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/aws_tgw_site/object.proto")
@@ -20599,7 +20599,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/aws_tgw_site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/aws_tgw_site/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.aws_tgw_site.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.aws_tgw_site.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.aws_tgw_site.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/aws_tgw_site/crudapi/api.proto")
@@ -20641,7 +20641,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.aws_tgw_site.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.aws_vpc_site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.aws_vpc_site", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site", false)
 	mdr.PkgsInfo["ves.io.schema.views.aws_vpc_site"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/aws_vpc_site/object.proto")
@@ -20756,7 +20756,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/aws_vpc_site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/aws_vpc_site/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.aws_vpc_site.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.aws_vpc_site.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.aws_vpc_site.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/aws_vpc_site/crudapi/api.proto")
@@ -20798,7 +20798,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.aws_vpc_site.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.azure_vnet_site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.azure_vnet_site", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site", false)
 	mdr.PkgsInfo["ves.io.schema.views.azure_vnet_site"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/azure_vnet_site/object.proto")
@@ -20916,7 +20916,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/azure_vnet_site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/azure_vnet_site/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.azure_vnet_site.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.azure_vnet_site.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.azure_vnet_site.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/azure_vnet_site/crudapi/api.proto")
@@ -20958,7 +20958,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.azure_vnet_site.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_centralmanager_site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_centralmanager_site", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_centralmanager_site", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_centralmanager_site", false)
 	mdr.PkgsInfo["ves.io.schema.views.bigip_centralmanager_site"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_centralmanager_site/object.proto")
@@ -20976,7 +20976,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_centralmanager_site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/bigip_centralmanager_site/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_centralmanager_site.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_centralmanager_site/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_centralmanager_site.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_centralmanager_site/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.bigip_centralmanager_site.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_centralmanager_site/crudapi/api.proto")
@@ -21018,7 +21018,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.bigip_centralmanager_site.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_instance_site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_instance_site", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_instance_site", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_instance_site", false)
 	mdr.PkgsInfo["ves.io.schema.views.bigip_instance_site"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_instance_site/object.proto")
@@ -21036,7 +21036,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_instance_site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/bigip_instance_site/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_instance_site.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_instance_site/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_instance_site.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_instance_site/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.bigip_instance_site.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_instance_site/crudapi/api.proto")
@@ -21078,7 +21078,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.bigip_instance_site.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_site", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_site", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_site", false)
 	mdr.PkgsInfo["ves.io.schema.views.bigip_site"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_site/object.proto")
@@ -21145,7 +21145,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/bigip_site/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_site.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_site/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_site.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_site/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.bigip_site.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_site/crudapi/api.proto")
@@ -21187,7 +21187,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.bigip_site.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_virtual_server", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_virtual_server", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_virtual_server", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_virtual_server", false)
 	mdr.PkgsInfo["ves.io.schema.views.bigip_virtual_server"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_virtual_server/object.proto")
@@ -21252,7 +21252,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_virtual_server/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/bigip_virtual_server/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_virtual_server.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_virtual_server/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bigip_virtual_server.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/bigip_virtual_server/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.bigip_virtual_server.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bigip_virtual_server/crudapi/api.proto")
@@ -21294,7 +21294,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.bigip_virtual_server.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bot_defense_app_infrastructure", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bot_defense_app_infrastructure", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bot_defense_app_infrastructure", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/bot_defense_app_infrastructure", false)
 	mdr.PkgsInfo["ves.io.schema.views.bot_defense_app_infrastructure"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bot_defense_app_infrastructure/object.proto")
@@ -21357,7 +21357,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bot_defense_app_infrastructure/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/bot_defense_app_infrastructure/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bot_defense_app_infrastructure.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/bot_defense_app_infrastructure/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.bot_defense_app_infrastructure.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/bot_defense_app_infrastructure/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.bot_defense_app_infrastructure.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/bot_defense_app_infrastructure/crudapi/api.proto")
@@ -21399,7 +21399,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.bot_defense_app_infrastructure.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.cdn_loadbalancer", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.cdn_loadbalancer", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer", false)
 	mdr.PkgsInfo["ves.io.schema.views.cdn_loadbalancer"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/cdn_loadbalancer/object.proto")
@@ -21590,13 +21590,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/cdn_loadbalancer/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/cdn_loadbalancer/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.cdn_loadbalancer.access_log", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer/access_log", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.cdn_loadbalancer.access_log", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer/access_log", false)
 	mdr.PkgsInfo["ves.io.schema.views.cdn_loadbalancer.access_log"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/cdn_loadbalancer/access_log/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/cdn_loadbalancer/access_log/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.cdn_loadbalancer.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.cdn_loadbalancer.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/cdn_loadbalancer/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.cdn_loadbalancer.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/cdn_loadbalancer/crudapi/api.proto")
@@ -21638,25 +21638,25 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.cdn_loadbalancer.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.common_cache_rule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_cache_rule", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.common_cache_rule", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/common_cache_rule", false)
 	mdr.PkgsInfo["ves.io.schema.views.common_cache_rule"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/common_cache_rule/common_cache_rule_types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/common_cache_rule/common_cache_rule_types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.common_cdn", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_cdn", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.common_cdn", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/common_cdn", false)
 	mdr.PkgsInfo["ves.io.schema.views.common_cdn"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/common_cdn/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/common_cdn/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.common_node", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_node", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.common_node", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/common_node", false)
 	mdr.PkgsInfo["ves.io.schema.views.common_node"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/common_node/node_types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/common_node/node_types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.common_security", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_security", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.common_security", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/common_security", false)
 	mdr.PkgsInfo["ves.io.schema.views.common_security"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/common_security/custom_api_types.proto")
@@ -21665,13 +21665,13 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/common_security/security_types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/common_security/security_types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.common_waf", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.common_waf", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf", false)
 	mdr.PkgsInfo["ves.io.schema.views.common_waf"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/common_waf/common_waf_types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/common_waf/common_waf_types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.external_connector", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/external_connector", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.external_connector", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/external_connector", false)
 	mdr.PkgsInfo["ves.io.schema.views.external_connector"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/external_connector/object.proto")
@@ -21738,7 +21738,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/external_connector/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/external_connector/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.external_connector.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/external_connector/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.external_connector.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/external_connector/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.external_connector.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/external_connector/crudapi/api.proto")
@@ -21780,7 +21780,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.external_connector.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.forward_proxy_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/forward_proxy_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.forward_proxy_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/forward_proxy_policy", false)
 	mdr.PkgsInfo["ves.io.schema.views.forward_proxy_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/forward_proxy_policy/object.proto")
@@ -21861,7 +21861,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/forward_proxy_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/forward_proxy_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.forward_proxy_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/forward_proxy_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.forward_proxy_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/forward_proxy_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.forward_proxy_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/forward_proxy_policy/crudapi/api.proto")
@@ -21903,7 +21903,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.forward_proxy_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.gcp_vpc_site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.gcp_vpc_site", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site", false)
 	mdr.PkgsInfo["ves.io.schema.views.gcp_vpc_site"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/gcp_vpc_site/object.proto")
@@ -22008,7 +22008,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/gcp_vpc_site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/gcp_vpc_site/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.gcp_vpc_site.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.gcp_vpc_site.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.gcp_vpc_site.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/gcp_vpc_site/crudapi/api.proto")
@@ -22050,7 +22050,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.gcp_vpc_site.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.http_loadbalancer", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.http_loadbalancer", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer", false)
 	mdr.PkgsInfo["ves.io.schema.views.http_loadbalancer"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/http_loadbalancer/object.proto")
@@ -22214,7 +22214,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/http_loadbalancer/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/http_loadbalancer/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.http_loadbalancer.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.http_loadbalancer.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.http_loadbalancer.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/http_loadbalancer/crudapi/api.proto")
@@ -22256,7 +22256,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.http_loadbalancer.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.ike_phase1_profile", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/ike_phase1_profile", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.ike_phase1_profile", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/ike_phase1_profile", false)
 	mdr.PkgsInfo["ves.io.schema.views.ike_phase1_profile"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/ike_phase1_profile/object.proto")
@@ -22323,7 +22323,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/ike_phase1_profile/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/ike_phase1_profile/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.ike_phase1_profile.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/ike_phase1_profile/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.ike_phase1_profile.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/ike_phase1_profile/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.ike_phase1_profile.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/ike_phase1_profile/crudapi/api.proto")
@@ -22365,7 +22365,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.ike_phase1_profile.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.ike_phase2_profile", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/ike_phase2_profile", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.ike_phase2_profile", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/ike_phase2_profile", false)
 	mdr.PkgsInfo["ves.io.schema.views.ike_phase2_profile"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/ike_phase2_profile/object.proto")
@@ -22432,7 +22432,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/ike_phase2_profile/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/ike_phase2_profile/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.ike_phase2_profile.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/ike_phase2_profile/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.ike_phase2_profile.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/ike_phase2_profile/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.ike_phase2_profile.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/ike_phase2_profile/crudapi/api.proto")
@@ -22474,7 +22474,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.ike_phase2_profile.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.k8s_manifest_params", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/k8s_manifest_params", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.k8s_manifest_params", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/k8s_manifest_params", false)
 	mdr.PkgsInfo["ves.io.schema.views.k8s_manifest_params"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/k8s_manifest_params/object.proto")
@@ -22492,7 +22492,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/k8s_manifest_params/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/k8s_manifest_params/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.k8s_manifest_params.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/k8s_manifest_params/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.k8s_manifest_params.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/k8s_manifest_params/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.k8s_manifest_params.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/k8s_manifest_params/crudapi/api.proto")
@@ -22534,7 +22534,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.k8s_manifest_params.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.network_policy_view", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/network_policy_view", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.network_policy_view", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/network_policy_view", false)
 	mdr.PkgsInfo["ves.io.schema.views.network_policy_view"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/network_policy_view/object.proto")
@@ -22615,7 +22615,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/network_policy_view/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/network_policy_view/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.network_policy_view.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/network_policy_view/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.network_policy_view.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/network_policy_view/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.network_policy_view.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/network_policy_view/crudapi/api.proto")
@@ -22657,7 +22657,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.network_policy_view.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.origin_pool", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.origin_pool", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool", false)
 	mdr.PkgsInfo["ves.io.schema.views.origin_pool"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/origin_pool/object.proto")
@@ -22720,7 +22720,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/origin_pool/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/origin_pool/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.origin_pool.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.origin_pool.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.origin_pool.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/origin_pool/crudapi/api.proto")
@@ -22762,7 +22762,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.origin_pool.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.policy_based_routing", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/policy_based_routing", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.policy_based_routing", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/policy_based_routing", false)
 	mdr.PkgsInfo["ves.io.schema.views.policy_based_routing"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/policy_based_routing/object.proto")
@@ -22829,7 +22829,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/policy_based_routing/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/policy_based_routing/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.policy_based_routing.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/policy_based_routing/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.policy_based_routing.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/policy_based_routing/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.policy_based_routing.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/policy_based_routing/crudapi/api.proto")
@@ -22871,7 +22871,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.policy_based_routing.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.proxy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/proxy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.proxy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/proxy", false)
 	mdr.PkgsInfo["ves.io.schema.views.proxy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/proxy/object.proto")
@@ -22952,7 +22952,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/proxy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/proxy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.proxy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/proxy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.proxy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/proxy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.proxy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/proxy/crudapi/api.proto")
@@ -22994,7 +22994,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.proxy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.rate_limiter_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.rate_limiter_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy", false)
 	mdr.PkgsInfo["ves.io.schema.views.rate_limiter_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/rate_limiter_policy/object.proto")
@@ -23061,7 +23061,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/rate_limiter_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/rate_limiter_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.rate_limiter_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.rate_limiter_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.rate_limiter_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/rate_limiter_policy/crudapi/api.proto")
@@ -23103,7 +23103,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.rate_limiter_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.securemesh_site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/securemesh_site", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.securemesh_site", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/securemesh_site", false)
 	mdr.PkgsInfo["ves.io.schema.views.securemesh_site"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/securemesh_site/object.proto")
@@ -23170,7 +23170,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/securemesh_site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/securemesh_site/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.securemesh_site.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/securemesh_site/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.securemesh_site.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/securemesh_site/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.securemesh_site.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/securemesh_site/crudapi/api.proto")
@@ -23212,7 +23212,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.securemesh_site.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.securemesh_site_v2", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/securemesh_site_v2", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.securemesh_site_v2", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/securemesh_site_v2", false)
 	mdr.PkgsInfo["ves.io.schema.views.securemesh_site_v2"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/securemesh_site_v2/aws_types.proto")
@@ -23297,7 +23297,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/securemesh_site_v2/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/securemesh_site_v2/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.securemesh_site_v2.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/securemesh_site_v2/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.securemesh_site_v2.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/securemesh_site_v2/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.securemesh_site_v2.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/securemesh_site_v2/crudapi/api.proto")
@@ -23339,7 +23339,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.securemesh_site_v2.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.tcp_loadbalancer", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.tcp_loadbalancer", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer", false)
 	mdr.PkgsInfo["ves.io.schema.views.tcp_loadbalancer"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/tcp_loadbalancer/object.proto")
@@ -23420,7 +23420,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/tcp_loadbalancer/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/tcp_loadbalancer/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.tcp_loadbalancer.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.tcp_loadbalancer.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/tcp_loadbalancer/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.tcp_loadbalancer.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/tcp_loadbalancer/crudapi/api.proto")
@@ -23462,7 +23462,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.tcp_loadbalancer.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.tenant_configuration", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tenant_configuration", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.tenant_configuration", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/tenant_configuration", false)
 	mdr.PkgsInfo["ves.io.schema.views.tenant_configuration"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/tenant_configuration/object.proto")
@@ -23529,7 +23529,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/tenant_configuration/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/tenant_configuration/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.tenant_configuration.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tenant_configuration/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.tenant_configuration.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/tenant_configuration/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.tenant_configuration.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/tenant_configuration/crudapi/api.proto")
@@ -23571,7 +23571,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.tenant_configuration.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.terraform_parameters", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.terraform_parameters", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters", false)
 	mdr.PkgsInfo["ves.io.schema.views.terraform_parameters"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/terraform_parameters/aws_types.proto")
@@ -23645,7 +23645,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/terraform_parameters/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/terraform_parameters/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.terraform_parameters.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.terraform_parameters.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/terraform_parameters/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.terraform_parameters.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/terraform_parameters/crudapi/api.proto")
@@ -23702,7 +23702,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["StatusAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.terraform_parameters.crudapi.StatusAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.third_party_application", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/third_party_application", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.third_party_application", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/third_party_application", false)
 	mdr.PkgsInfo["ves.io.schema.views.third_party_application"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/third_party_application/object.proto")
@@ -23772,7 +23772,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/third_party_application/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/third_party_application/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.third_party_application.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/third_party_application/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.third_party_application.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/third_party_application/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.third_party_application.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/third_party_application/crudapi/api.proto")
@@ -23814,7 +23814,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.third_party_application.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.udp_loadbalancer", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/udp_loadbalancer", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.udp_loadbalancer", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/udp_loadbalancer", false)
 	mdr.PkgsInfo["ves.io.schema.views.udp_loadbalancer"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/udp_loadbalancer/object.proto")
@@ -23895,7 +23895,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/udp_loadbalancer/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/udp_loadbalancer/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.udp_loadbalancer.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/udp_loadbalancer/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.udp_loadbalancer.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/udp_loadbalancer/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.udp_loadbalancer.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/udp_loadbalancer/crudapi/api.proto")
@@ -23937,7 +23937,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.udp_loadbalancer.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.view_internal", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/view_internal", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.view_internal", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/view_internal", false)
 	mdr.PkgsInfo["ves.io.schema.views.view_internal"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/view_internal/object.proto")
@@ -23968,7 +23968,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/view_internal/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/view_internal/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.view_internal.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/view_internal/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.view_internal.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/view_internal/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.view_internal.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/view_internal/crudapi/api.proto")
@@ -24010,7 +24010,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.view_internal.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.voltstack_site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.voltstack_site", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site", false)
 	mdr.PkgsInfo["ves.io.schema.views.voltstack_site"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/voltstack_site/object.proto")
@@ -24077,7 +24077,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/voltstack_site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/voltstack_site/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.voltstack_site.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.voltstack_site.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/voltstack_site/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.voltstack_site.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/voltstack_site/crudapi/api.proto")
@@ -24119,7 +24119,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.voltstack_site.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.workload", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/workload", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.workload", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/workload", false)
 	mdr.PkgsInfo["ves.io.schema.views.workload"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/workload/object.proto")
@@ -24200,7 +24200,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/workload/types.proto")
 	pInfo.FilesInfo["ves.io/schema/views/workload/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.workload.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/workload/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.views.workload.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/workload/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.views.workload.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/views/workload/crudapi/api.proto")
@@ -24242,7 +24242,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.views.workload.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_host", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_host", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_host"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_host/object.proto")
@@ -24422,7 +24422,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_host/types.proto")
 	pInfo.FilesInfo["ves.io/schema/virtual_host/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_host.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_host.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_host.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_host/crudapi/api.proto")
@@ -24464,7 +24464,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.virtual_host.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_host_dns_info", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_host_dns_info", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_host_dns_info"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_host_dns_info/object.proto")
@@ -24475,7 +24475,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.ObjsInfo[svcfw.ObjType("Object")] = oInfo
 	mdr.ObjIdx["ves.io.schema.virtual_host_dns_info.Object"] = oInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_host_dns_info.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_host_dns_info.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host_dns_info/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_host_dns_info.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_host_dns_info/crudapi/api.proto")
@@ -24517,7 +24517,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.virtual_host_dns_info.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_k8s", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_k8s", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_k8s"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_k8s/object.proto")
@@ -24598,7 +24598,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_k8s/types.proto")
 	pInfo.FilesInfo["ves.io/schema/virtual_k8s/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_k8s.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_k8s.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_k8s.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_k8s/crudapi/api.proto")
@@ -24640,7 +24640,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.virtual_k8s.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_k8s_quota", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s_quota", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_k8s_quota", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s_quota", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_k8s_quota"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_k8s_quota/object.proto")
@@ -24658,7 +24658,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_k8s_quota/types.proto")
 	pInfo.FilesInfo["ves.io/schema/virtual_k8s_quota/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_k8s_quota.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s_quota/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_k8s_quota.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_k8s_quota/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_k8s_quota.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_k8s_quota/crudapi/api.proto")
@@ -24700,7 +24700,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.virtual_k8s_quota.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_network", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_network", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_network", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_network", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_network"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_network/object.proto")
@@ -24781,7 +24781,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_network/types.proto")
 	pInfo.FilesInfo["ves.io/schema/virtual_network/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_network.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_network/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_network.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_network/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_network.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_network/crudapi/api.proto")
@@ -24823,7 +24823,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.virtual_network.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_site", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_site", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_site", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_site", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_site"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_site/object.proto")
@@ -24904,7 +24904,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_site/types.proto")
 	pInfo.FilesInfo["ves.io/schema/virtual_site/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_site.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_site/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.virtual_site.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_site/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.virtual_site.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/virtual_site/crudapi/api.proto")
@@ -24946,7 +24946,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.virtual_site.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_exclusion_policy", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_exclusion_policy", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_exclusion_policy", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/waf_exclusion_policy", false)
 	mdr.PkgsInfo["ves.io.schema.waf_exclusion_policy"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_exclusion_policy/object.proto")
@@ -25013,7 +25013,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_exclusion_policy/types.proto")
 	pInfo.FilesInfo["ves.io/schema/waf_exclusion_policy/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_exclusion_policy.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_exclusion_policy/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_exclusion_policy.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/waf_exclusion_policy/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.waf_exclusion_policy.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_exclusion_policy/crudapi/api.proto")
@@ -25055,7 +25055,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.waf_exclusion_policy.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_signatures_changelog", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_signatures_changelog", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_signatures_changelog", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/waf_signatures_changelog", false)
 	mdr.PkgsInfo["ves.io.schema.waf_signatures_changelog"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_signatures_changelog/object.proto")
@@ -25106,7 +25106,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_signatures_changelog/types.proto")
 	pInfo.FilesInfo["ves.io/schema/waf_signatures_changelog/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_signatures_changelog.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_signatures_changelog/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_signatures_changelog.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/waf_signatures_changelog/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.waf_signatures_changelog.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_signatures_changelog/crudapi/api.proto")
@@ -25148,7 +25148,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.waf_signatures_changelog.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_suppression_rule", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_suppression_rule", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_suppression_rule", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/waf_suppression_rule", false)
 	mdr.PkgsInfo["ves.io.schema.waf_suppression_rule"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_suppression_rule/object.proto")
@@ -25166,7 +25166,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_suppression_rule/types.proto")
 	pInfo.FilesInfo["ves.io/schema/waf_suppression_rule/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_suppression_rule.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_suppression_rule/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_suppression_rule.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/waf_suppression_rule/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.waf_suppression_rule.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_suppression_rule/crudapi/api.proto")
@@ -25208,7 +25208,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.waf_suppression_rule.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_violations", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_violations", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_violations", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/waf_violations", false)
 	mdr.PkgsInfo["ves.io.schema.waf_violations"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_violations/object.proto")
@@ -25226,7 +25226,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_violations/types.proto")
 	pInfo.FilesInfo["ves.io/schema/waf_violations/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_violations.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/waf_violations/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.waf_violations.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/waf_violations/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.waf_violations.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/waf_violations/crudapi/api.proto")
@@ -25268,7 +25268,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.waf_violations.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.was.user_token", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/was/user_token", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.was.user_token", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/was/user_token", false)
 	mdr.PkgsInfo["ves.io.schema.was.user_token"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/was/user_token/public_customapi.proto")
@@ -25285,7 +25285,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["CustomAPI"] = aInfo
 	mdr.APIIdx["ves.io.schema.was.user_token.CustomAPI"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.workload_flavor", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/workload_flavor", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.workload_flavor", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/workload_flavor", false)
 	mdr.PkgsInfo["ves.io.schema.workload_flavor"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/workload_flavor/object.proto")
@@ -25352,7 +25352,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/workload_flavor/types.proto")
 	pInfo.FilesInfo["ves.io/schema/workload_flavor/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.workload_flavor.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/workload_flavor/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.workload_flavor.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/workload_flavor/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.workload_flavor.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/workload_flavor/crudapi/api.proto")
@@ -25394,7 +25394,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.workload_flavor.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ztna", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ztna", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ztna", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ztna", false)
 	mdr.PkgsInfo["ves.io.schema.ztna"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ztna/object.proto")
@@ -25461,7 +25461,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ztna/types.proto")
 	pInfo.FilesInfo["ves.io/schema/ztna/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ztna.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ztna/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ztna.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ztna/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.ztna.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ztna/crudapi/api.proto")
@@ -25503,7 +25503,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo.APIsInfo["API"] = aInfo
 	mdr.APIIdx["ves.io.schema.ztna.crudapi.API"] = aInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ztna_application", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ztna_application", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ztna_application", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ztna_application", false)
 	mdr.PkgsInfo["ves.io.schema.ztna_application"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ztna_application/object.proto")
@@ -25570,7 +25570,7 @@ func GetSchemaData(mdr *svcfw.MDRegistry) {
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ztna_application/types.proto")
 	pInfo.FilesInfo["ves.io/schema/ztna_application/types.proto"] = fInfo
 
-	pInfo = svcfw.NewPkgInfo("ves.io.schema.ztna_application.crudapi", "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/ztna_application/crudapi", false)
+	pInfo = svcfw.NewPkgInfo("ves.io.schema.ztna_application.crudapi", "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/ztna_application/crudapi", false)
 	mdr.PkgsInfo["ves.io.schema.ztna_application.crudapi"] = pInfo
 
 	fInfo = svcfw.NewFileInfo("ves.io/schema/ztna_application/crudapi/api.proto")

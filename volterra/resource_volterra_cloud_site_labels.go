@@ -18,10 +18,10 @@ import (
 
 	"github.com/gogo/protobuf/proto"
 
-	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
-	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
-	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
-	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
+	"gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/aws_tgw_site"
+	"gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
+	"gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
+	"gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
 )
 
 // resourceVolterraCloudSiteLabels provides a way to update cloud site labels

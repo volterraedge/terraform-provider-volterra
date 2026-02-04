@@ -14,7 +14,7 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema_rate_limiter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
+	ves_io_schema_rate_limiter "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
 )
 
 var (

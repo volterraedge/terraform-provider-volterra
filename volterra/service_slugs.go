@@ -5,7 +5,7 @@ import (
 	"context"
 	"strings"
 
-	ves_io_schema_combined "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/combined"
+	ves_io_schema_combined "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/combined"
 )
 
 var (

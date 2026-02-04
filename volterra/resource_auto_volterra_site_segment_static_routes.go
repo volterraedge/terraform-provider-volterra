@@ -14,8 +14,8 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/client/vesapi"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_site_segment_static_routes "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/site_segment_static_routes"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_site_segment_static_routes "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/site_segment_static_routes"
 )
 
 // resourceVolterraSiteSegmentStaticRoutes is implementation of Volterra's SiteSegmentStaticRoutes resources

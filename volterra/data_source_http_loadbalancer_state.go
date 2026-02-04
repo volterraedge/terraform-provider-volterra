@@ -15,8 +15,8 @@ import (
 	"gopkg.volterra.us/stdlib/client/vesapi"
 	"gopkg.volterra.us/stdlib/server"
 
-	http_lb "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
-	vh "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
+	http_lb "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
+	vh "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 )
 
 // dataSourceAddressAllocator implements read of given http loadbalancer state information

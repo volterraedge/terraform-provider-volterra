@@ -22,7 +22,7 @@ import (
 	"gopkg.volterra.us/stdlib/server"
 	"gopkg.volterra.us/stdlib/svcfw"
 
-	ves_io_schema_views_tenant_configuration "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/tenant_configuration"
+	ves_io_schema_views_tenant_configuration "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/tenant_configuration"
 )
 
 var (

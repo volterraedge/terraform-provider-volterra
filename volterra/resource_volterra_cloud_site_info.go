@@ -15,10 +15,10 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"gopkg.volterra.us/stdlib/codec"
 
-	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
-	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
-	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
+	"gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	"gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
+	"gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/azure_vnet_site"
+	"gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/gcp_vpc_site"
 )
 
 const (

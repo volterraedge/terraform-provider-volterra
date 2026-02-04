@@ -15,9 +15,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/codec"
-	ves_io_schema_dns_zone "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone"
-	ves_io_schema_dns_zone_rrset "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/rrset"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
+	ves_io_schema_dns_zone "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_zone"
+	ves_io_schema_dns_zone_rrset "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/dns_zone/rrset"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
 )
 
 const (

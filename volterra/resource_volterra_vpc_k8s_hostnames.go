@@ -14,7 +14,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"gopkg.volterra.us/stdlib/codec"
 
-	ves_io_schema_vpc_site "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
+	ves_io_schema_vpc_site "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/aws_vpc_site"
 )
 
 const (

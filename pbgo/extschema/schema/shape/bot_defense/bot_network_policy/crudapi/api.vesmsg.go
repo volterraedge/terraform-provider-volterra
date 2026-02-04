@@ -14,8 +14,8 @@ import (
 	"gopkg.volterra.us/stdlib/db"
 	"gopkg.volterra.us/stdlib/errors"
 
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_shape_bot_defense_bot_network_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_network_policy"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_shape_bot_defense_bot_network_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/shape/bot_defense/bot_network_policy"
 )
 
 var (

@@ -1,3 +1,7 @@
+//
+// Copyright (c) 2026 F5 Inc. All rights reserved.
+//
+
 package driftdetection
 
 import (
@@ -5,22 +9,22 @@ import (
 
 	"github.com/gogo/protobuf/types"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
-	ves_io_schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
-	ves_io_schema_app_type "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/app_type"
-	ves_io_schema_cluster "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/cluster"
-	ves_io_schema_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/policy"
-	ves_io_schema_rate_limiter "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
-	ves_io_schema_route "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/route"
-	ves_io_schema_service_policy_rule "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
-	ves_io_schema_views "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views"
-	"github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_cache_rule"
-	ves_io_schema_views_common_security "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_security"
-	ves_io_schema_views_common_waf "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
-	ves_io_schema_views_http_loadbalancer "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
-	ves_io_schema_views_origin_pool "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
-	ves_io_schema_rate_limiter_policy "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
-	ves_io_schema_virtual_host "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 	"gopkg.volterra.us/stdlib/client/vesapi"
+	ves_io_schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
+	ves_io_schema_app_type "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/app_type"
+	ves_io_schema_cluster "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/cluster"
+	ves_io_schema_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/policy"
+	ves_io_schema_rate_limiter "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/rate_limiter"
+	ves_io_schema_route "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/route"
+	ves_io_schema_service_policy_rule "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/service_policy_rule"
+	ves_io_schema_views "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views"
+	"gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/common_cache_rule"
+	ves_io_schema_views_common_security "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/common_security"
+	ves_io_schema_views_common_waf "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/common_waf"
+	ves_io_schema_views_http_loadbalancer "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/http_loadbalancer"
+	ves_io_schema_views_origin_pool "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/origin_pool"
+	ves_io_schema_rate_limiter_policy "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/views/rate_limiter_policy"
+	ves_io_schema_virtual_host "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema/virtual_host"
 )
 
 func FlattenVk8s(x *ves_io_schema_views.WhereVK8SService) []interface{} {
@@ -3277,6 +3281,8 @@ func FlattenRateLimiter(x *ves_io_schema_rate_limiter.RateLimitValue) []interfac
 		rlVal := map[string]interface{}{
 			"action_block":      FlattenActionBlock(x.GetActionBlock()),
 			"disabled":          isEmpty(x.GetDisabled()),
+			"leaky_bucket":      x.GetLeakyBucket().String(),
+			"token_bucket":      x.GetTokenBucket().String(),
 			"burst_multiplier":  x.GetBurstMultiplier(),
 			"period_multiplier": x.GetPeriodMultiplier(),
 			"total_number":      x.GetTotalNumber(),

@@ -11,7 +11,7 @@ import (
 	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	types "github.com/gogo/protobuf/types"
 	golang_proto "github.com/golang/protobuf/proto"
-	schema "github.com/volterraedge/terraform-provider-volterra/pbgo/extschema/schema"
+	schema "gopkg.volterra.us/terraform-provider-volterra/pbgo/extschema/schema"
 	io "io"
 	math "math"
 	math_bits "math/bits"
