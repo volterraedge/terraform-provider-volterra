@@ -1,64 +1,38 @@
-# Terraform Provider for Volterra
+<a href="https://terraform.io">
+    <img src=".github/tf.png" alt="Terraform logo" title="Terraform" align="left" height="50" />
+</a>
 
-![](https://www.volterra.io/img/main/logo.svg)
+# Terraform Provider for F5XC (formerly Volterra)
 
-Terraform provider for managing your Volterra resources.
+The F5XC Terraform Provider allows managing resources within the F5 XC Distributed Cloud Platform.
 
-## Requirements
-------------
+We recommend using the latest version of Terraform Core ([the latest version can be found here](https://developer.hashicorp.com/terraform/install)).
 
--	[Terraform](https://www.terraform.io/downloads.html) >= 0.13.x
--	[Go](https://golang.org/doc/install) >= 1.16 (to build the provider plugin)
+* [Terraform Website](https://www.terraform.io)
+* [F5XC Provider Documentation](https://registry.terraform.io/providers/volterraedge/volterra/latest/docs)
+* [F5XC Provider Usage Examples](https://github.com/volterraedge/terraform-provider-volterra/tree/main/examples)
 
-## Building The Provider
-------------------------
+## Usage Example
 
-Checkout the repository using below command:
+```hcl
+# 1. Specify the version of the F5XC Provider to use
+terraform {
+  required_providers {
+    volterra = {
+      source  = "localhost/volterraedge/volterra"
+      version = ">=0.11.47"
+    }
+  }
+}
 
-```sh
-$ git clone https://github.com/volterraedge/terraform-provider-volterra.git
+# 2. Configure the F5XC Provider
+provider "volterra" {
+  api_p12_file     = "/path/to/api_credential.p12"
+  url              = "https://<tenant_name>.console.ves.volterra.io/api"
+  limiter {
+    rate  = 30.0
+    burst = 15
+  }
+}
 ```
 
-Enter the provider directory and build the provider:
-
-```sh
-$ cd terraform-provider-volterra
-$ cd cmd/terraform-provider-volterra; go build .
-```
-
-## Using the provider
----------------------
-
-### Released provider version
-
-Run [`terraform init`](https://www.terraform.io/docs/commands/init.html) and terraform will automatically install the provider.
-
-To specify a particular provider version when installing released providers, see the [Terraform documentation on provider versioning](https://www.terraform.io/docs/configuration/providers.html#version-provider-versions).
-
-### Custom built provider in your Terraform environment
-
-Run below command
-
-```
-make install-tf-volterra
-```
-
-## Examples
-
-Check out the [examples located](examples)
-
-
-## Running Unit Tests
----------------------
-
-Execute below command to run all unit tests
-
-```sh
-$ go test -v ./...
-```
-
-To execute unit test, use `-run` flag
-
-```sh
-$ go test -v -run=TestAccNamespaceBasic ./...
-```
